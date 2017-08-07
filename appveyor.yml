@@ -1,0 +1,11 @@
+version: 1.0.{build}
+image: Visual Studio 2017
+configuration: Release
+before_build:
+- ps: dotnet restore
+build:
+  parallel: true
+  verbosity: minimal
+artifacts:
+- path: bin\**\Releases\*
+  name: Installer
