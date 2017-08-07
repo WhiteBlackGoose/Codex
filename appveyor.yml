@@ -2,10 +2,11 @@ version: 1.0.{build}
 image: Visual Studio 2017
 configuration: Release
 before_build:
-- ps: dotnet restore
+- cmd: dotnet restore
 build:
+  project: Codex.sln
   parallel: true
   verbosity: minimal
 artifacts:
-- path: bin\**\Releases\*
+- path: bin\**\*
   name: Installer
