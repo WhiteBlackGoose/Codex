@@ -21,21 +21,21 @@ namespace Codex.Application
 {
     class Program
     {
-        // Uncomment if you need to use it locally
         static string elasticSearchServer = "http://localhost:9200";
         static bool finalize = true;
-        // Set this to disable uploading to ElasticSearch
-        static bool analysisOnly = false;
+        static bool analysisOnly = false; // Set this to disable uploading to ElasticSearch
         static string repoName;
         static string rootDirectory;
         static string solutionPath;
+        static bool interactive = false;
 
         static OptionSet options = new OptionSet
         {
             { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
             { "n|name=", "Name of the project.", n => repoName = n },
             { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
-            { "s|solution=", "Optionally, path to the solution to analyze.", n => solutionPath = n }
+            { "s|solution=", "Optionally, path to the solution to analyze.", n => solutionPath = n },
+            { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
         };
 
         static void Main(string[] args)
@@ -47,7 +47,7 @@ namespace Codex.Application
 
             RunRepoImporter();
 
-            if (!analysisOnly)
+            if (interactive)
             {
                 Search();
             }
@@ -221,8 +221,6 @@ namespace Codex.Application
             ElasticsearchStorage storage = new ElasticsearchStorage(elasticSearchServer);
 
             string[] repos = new string[] { repoName.ToLowerInvariant() };
-
-            var results1 = storage.SearchAsync("Codex").Result;
 
             string line = null;
             Console.WriteLine("Please enter symbol short name: ");
