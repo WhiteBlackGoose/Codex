@@ -311,7 +311,10 @@ async function FillRightPane(url: string, symbolId: string, lineNumber: number, 
 
         let targetLocation: TargetEditorLocation = undefined;
         if (sourceFileData.span) {
-            targetLocation = {kind: 'span', value: sourceFileData.span};
+            targetLocation = { kind: 'span', value: sourceFileData.span };
+        }
+        else if (state.currentState.lineNumber) {
+            targetLocation = { kind: 'line', value: state.currentState.lineNumber };
         }
 
         if (sourceFileData.contents) {

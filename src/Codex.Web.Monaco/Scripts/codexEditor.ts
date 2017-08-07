@@ -48,7 +48,7 @@ class CodexEditor implements ICodexEditor {
         let range = (
             () => {
                 switch (targetLocation.kind) {
-                    case "line": return this.getRangeAtOffset(targetLocation.value);
+                    case "line": return this.getRangeAtLine(targetLocation.value);
                     case "symbol": return this.getSymbolRange(targetLocation.value);
                     case "span": return this.getRangeAtSpan(targetLocation.value);
 
@@ -93,8 +93,8 @@ class CodexEditor implements ICodexEditor {
     }
 
 
-    private getRangeAtOffset(offset: number): monaco.Range {
-        return this.getRangeAtSpan({ position: offset, length: 0 });
+    private getRangeAtLine(line: number): monaco.Range {
+        return new monaco.Range(Number(line), 1, Number(line), 1);
     }
 
     private getRangeAtSpan(span: Span): monaco.Range {
