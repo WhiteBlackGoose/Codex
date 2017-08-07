@@ -15,34 +15,46 @@ using Codex.Import;
 using Codex.Logging;
 using Codex.ObjectModel;
 using Codex.Storage;
+using Mono.Options;
 
 namespace Codex.Application
 {
     class Program
     {
         // Uncomment if you need to use it locally
-        static string url = "http://localhost:9200";
-
-        private static bool finalize = true;
-
+        static string elasticSearchServer = "http://localhost:9200";
+        static bool finalize = true;
         // Set this to disable uploading to ElasticSearch
-        private static bool analysisOnly = false;
+        static bool analysisOnly = false;
+        static string repoName;
+        static string rootDirectory;
+        static string solutionPath;
+
+        static OptionSet options = new OptionSet
+        {
+            { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
+            { "n|name=", "Name of the project.", n => repoName = n },
+            { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
+            { "s|solution=", "Optionally, path to the solution to analyze.", n => solutionPath = n }
+        };
 
         static void Main(string[] args)
         {
-            if (args.Length != 2 && args.Length != 3) throw new ArgumentException("Usage: codex repoName repoPath solutionPath?");
-            RunRepoImporter(args);
+            var extras = options.Parse(args);
+            if (String.IsNullOrEmpty(rootDirectory)) throw new ArgumentException("Solution path is missing. Use -p to provide it.");
+            if (String.IsNullOrEmpty(repoName)) throw new ArgumentException("Project name is missing. Use -n to provide it.");
+            if (String.IsNullOrEmpty(elasticSearchServer)) throw new ArgumentException("Elastic Search server URL is missing. Use -es to provide it.");
+
+            RunRepoImporter();
 
             if (!analysisOnly)
             {
-                Search(args);
+                Search();
             }
         }
 
-        static void RunRepoImporter(params string[] args)
+        static void RunRepoImporter()
         {
-            string repoName = args[0];
-            string rootDirectory = args[1];
             var targetIndexName = AnalysisServices.GetTargetIndexName(repoName);
 
             string[] file = new string[0];
@@ -73,7 +85,7 @@ namespace Codex.Application
                 
 
                 FileSystem fileSystem = new CachingFileSystem(
-                    new UnionFileSystem(file.Union(args.Skip(2)),
+                    new UnionFileSystem(file.Union(Enumerable.Repeat(solutionPath, String.IsNullOrEmpty(solutionPath) ? 0 : 1)),
                         new RootFileSystem(rootDirectory,
                             new MultiFileSystemFilter(
                                 new DirectoryFileSystemFilter(@"\.", ".sln"),
@@ -109,7 +121,7 @@ namespace Codex.Application
                 }
                 else
                 {
-                    ElasticsearchStorage storage = new ElasticsearchStorage(url);
+                    ElasticsearchStorage storage = new ElasticsearchStorage(elasticSearchServer);
 
                     logger.WriteLine("Removing repository");
                     ((IStorage)storage).RemoveRepository(targetIndexName).GetAwaiter().GetResult();
@@ -204,15 +216,11 @@ namespace Codex.Application
             return;
         }
 
-        static void Search(params string[] args)
+        static void Search()
         {
-            bool needImport = args.Length > 1;
+            ElasticsearchStorage storage = new ElasticsearchStorage(elasticSearchServer);
 
-            ElasticsearchStorage storage = new ElasticsearchStorage(url);
-
-            string repository = args[0];
-            repository = repository.ToLowerInvariant();
-            string[] repos = new string[] { repository };
+            string[] repos = new string[] { repoName.ToLowerInvariant() };
 
             var results1 = storage.SearchAsync("Codex").Result;
 
