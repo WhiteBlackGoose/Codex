@@ -4,4 +4,4 @@ build_script:
 - cmd: >-
     nuget restore
 
-    msbuild /m Codex.sln /bl /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+    msbuild /m /clp:v=m Codex.sln /bl /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
