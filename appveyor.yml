@@ -7,6 +7,3 @@ build:
   project: Codex.sln
   parallel: true
   verbosity: minimal
-artifacts:
-- path: bin\**\*
-  name: Installer
