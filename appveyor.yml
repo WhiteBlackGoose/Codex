@@ -5,3 +5,6 @@ build_script:
     nuget restore
 
     msbuild /m /clp:v=m Codex.sln /bl /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+artifacts:
+- path: msbuild.binlog
+  name: MSBuild Log
