@@ -21,7 +21,7 @@
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
-    <TypeScriptToolsVersion>2.4</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>2.2</TypeScriptToolsVersion>
     <PrecompileBeforePublish>true</PrecompileBeforePublish>
     <DisableRootOutputDirectory>true</DisableRootOutputDirectory>
     <OutputPath>bin\</OutputPath>
