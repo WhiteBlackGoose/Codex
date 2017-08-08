@@ -3,4 +3,5 @@ image: Visual Studio 2017 Preview
 build_script:
 - cmd: >-
     nuget restore
+
     msbuild /m Codex.sln /bl /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
