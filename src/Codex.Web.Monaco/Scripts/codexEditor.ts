@@ -235,7 +235,7 @@ class CodexEditor implements ICodexEditor {
         return model;
     }
 
-    private async openEditor(input: { resource: SymbolicUri }) {
+    private async openEditor(input: { resource: SymbolicUri }) : Promise<any>{
         let source = input.resource.definitionResult;
         if (source) {
             if (typeof source === "string") {
@@ -245,7 +245,11 @@ class CodexEditor implements ICodexEditor {
             }
         }
 
-        return monaco.Promise.as(null);
+        // TODO: the commit in which I've added this comment fixes a build break
+        // when I downgraded TypeScript from 2.4 to 2.2. It started failing so I
+        // "fixed" it by adding the return type to the function and commenting out the last line.
+        // Since I don't know what I'm doing someone should fix this.
+        //return monaco.Promise.as(null);
     }
 
     private createModelReference(input: SymbolicUri) {
