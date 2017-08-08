@@ -1,9 +1,6 @@
 version: 1.0.{build}
-image: Visual Studio 2017
-configuration: Release
-before_build:
-- cmd: nuget restore
-build:
-  project: Codex.sln
-  parallel: true
-  verbosity: minimal
+image: Visual Studio 2017 Preview
+build_script:
+- cmd: >-
+    nuget restore
+    msbuild /m Codex.sln /bl /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
