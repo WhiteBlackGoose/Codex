@@ -33,7 +33,7 @@ public class AnalysisServices
 
         public static string GetTargetIndexName(string repoName)
         {
-            return $"{repoName.ToLowerInvariant()}.{DateTime.UtcNow.ToString("yyMMdd.HH:mm:ss").Replace(":", "")}";
+            return $"{repoName.ToLowerInvariant()}.{DateTime.UtcNow.ToString("yyMMdd.HHmmss")}";
         }
 
         public AnalysisServices(string targetIndex, FileSystem fileSystem, RepoFileAnalyzer[] analyzers = null)
