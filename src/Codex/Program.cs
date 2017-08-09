@@ -45,7 +45,16 @@ namespace Codex.Application
             if (String.IsNullOrEmpty(repoName)) throw new ArgumentException("Project name is missing. Use -n to provide it.");
             if (String.IsNullOrEmpty(elasticSearchServer)) throw new ArgumentException("Elastic Search server URL is missing. Use -es to provide it.");
 
-            RunRepoImporter();
+            try
+            {
+                RunRepoImporter();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error indexing {repoName}: {ex.Message}");
+                Console.WriteLine(ex.ToString());
+                Environment.Exit(-1);
+            }
 
             if (interactive)
             {
