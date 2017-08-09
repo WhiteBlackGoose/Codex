@@ -33,7 +33,25 @@ public class AnalysisServices
 
         public static string GetTargetIndexName(string repoName)
         {
-            return $"{repoName.ToLowerInvariant()}.{DateTime.UtcNow.ToString("yyMMdd.HHmmss")}";
+            var safeName = repoName
+                .ToLowerInvariant()
+                .Replace('#', '_')
+                .Replace('.', '_')
+                .Replace(',', '_')
+                .Replace(' ', '_')
+                .Replace('\\', '_')
+                .Replace('/', '_')
+                .Replace('+', '_')
+                .Replace('*', '_')
+                .Replace('?', '_')
+                .Replace('"', '_')
+                .Replace('<', '_')
+                .Replace('>', '_')
+                .Replace('|', '_')
+                .Replace(':', '_')
+                .TrimStart('_');
+
+            return $"{safeName}.{DateTime.UtcNow.ToString("yyMMdd.HHmmss")}";
         }
 
         public AnalysisServices(string targetIndex, FileSystem fileSystem, RepoFileAnalyzer[] analyzers = null)
