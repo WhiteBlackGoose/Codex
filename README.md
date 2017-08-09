@@ -9,7 +9,11 @@ An extensible platform for indexing and exploring inspired by Source Browser.
 * Run `.\elasticsearch.bat`
 * Open **Codex.sln**
 * To index a project,
-    * Run **Codex** project, passing in repo's name and path as arguments: `-n SampleRepo -p C:\src\codex`
+    * Run **Codex** project, passing in repo's name and path as arguments `-n SampleRepo -p C:\src\codex`
+        * `-n _____` is name of your repository
+        * `-p _____` points to a location to scan
+        * `-es _____` specifies URL to the ElasticSearch server, if it runs on another machine 
+        * `-i` (without any args) lets you search through results
 * To run the Codex website,
     * Run **Codex.Web.Monaco** project
  
