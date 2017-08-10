@@ -25,9 +25,11 @@ namespace Codex.Analysis.Managed
             var invocations = new List<CompilerInvocation>();
             var reader = new BinaryLogReplayEventSource();
             var records = reader.ReadRecords(binLogFilePath);
+            var taskIdToInvocationMap = new Dictionary<int, CompilerInvocation>();
+
             foreach (var record in records)
             {
-                var invocation = TryGetInvocationFromRecord(record);
+                var invocation = TryGetInvocationFromRecord(record, taskIdToInvocationMap);
                 if (invocation != null)
                 {
                     invocations.Add(invocation);
@@ -53,9 +55,25 @@ namespace Codex.Analysis.Managed
             return invocations;
         }
 
-        private static CompilerInvocation TryGetInvocationFromRecord(Record record)
+        private static CompilerInvocation TryGetInvocationFromRecord(Record record, Dictionary<int, CompilerInvocation> taskIdToInvocationMap)
         {
-            var task = record.Args as TaskCommandLineEventArgs;
+            var args = record.Args;
+            if (args == null)
+            {
+                return null;
+            }
+
+            var taskId = args.BuildEventContext?.TaskId ?? 0;
+
+            if (args is TaskStartedEventArgs taskStarted && (taskStarted.TaskName == "Csc" || taskStarted.TaskName == "Vbc"))
+            {
+                var invocation = new CompilerInvocation();
+                taskIdToInvocationMap[taskId] = invocation;
+                invocation.ProjectFile = taskStarted.ProjectFile;
+                return null;
+            }
+
+            var task = args as TaskCommandLineEventArgs;
             if (task == null)
             {
                 return null;
@@ -70,11 +88,15 @@ namespace Codex.Analysis.Managed
             var language = name == "Csc" ? LanguageNames.CSharp : LanguageNames.VisualBasic;
             var commandLine = task.CommandLine;
             commandLine = TrimCompilerExeFromCommandLine(commandLine, language);
-            return new CompilerInvocation
+
+            if (taskIdToInvocationMap.TryGetValue(taskId, out var compilerInvocation))
             {
-                Language = language,
-                CommandLine = commandLine
-            };
+                compilerInvocation.Language = language;
+                compilerInvocation.CommandLine = commandLine;
+                taskIdToInvocationMap.Remove(taskId);
+            }
+
+            return compilerInvocation;
         }
 
         private static string TrimCompilerExeFromCommandLine(string commandLine, string language)
@@ -97,7 +119,7 @@ namespace Codex.Analysis.Managed
             return commandLine;
         }
 
-        private static CompilerInvocation TryGetInvocationFromTask(Microsoft.Build.Logging.StructuredLogger.Task task)
+        private static CompilerInvocation TryGetInvocationFromTask(Task task)
         {
             var name = task.Name;
             if (name != "Csc" && name != "Vbc")
@@ -111,7 +133,8 @@ namespace Codex.Analysis.Managed
             return new CompilerInvocation
             {
                 Language = language,
-                CommandLine = commandLine
+                CommandLine = commandLine,
+                ProjectFile = task.GetNearestParent<Microsoft.Build.Logging.StructuredLogger.Project>()?.ProjectFile
             };
         }
     }
