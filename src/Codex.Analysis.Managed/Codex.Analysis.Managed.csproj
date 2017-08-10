@@ -28,6 +28,10 @@
       <HintPath>..\..\packages\Microsoft.Build.Utilities.Core.15.1.1012\lib\net46\Microsoft.Build.Utilities.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="StructuredLogger">
+      <HintPath>..\..\packages\Microsoft.Build.Logging.StructuredLogger.1.1.138\lib\net46\StructuredLogger.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeAnalysis, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.CodeAnalysis.Common.2.3.0-beta1\lib\netstandard1.3\Microsoft.CodeAnalysis.dll</HintPath>
       <Private>True</Private>
@@ -185,16 +189,20 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="MSBuild\Codex.Managed.Extractor.targets" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompilationServices.cs" />
+    <Compile Include="CompilerInvocation.cs" />
     <Compile Include="DisplayFormats.cs" />
     <Compile Include="DocumentAnalyzer.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="ManagedAnalysisHost.cs" />
     <Compile Include="ManagedProjectAnalyzer.cs" />
     <Compile Include="ManagedSolutionProjectAnalyzer.cs" />
+    <Compile Include="MSBuildBinLog\BinLogReader.cs" />
     <Compile Include="MSBuildFileAnalyzer.cs" />
     <Compile Include="MSBuildSolutionProjectAnalyzer.cs" />
     <Compile Include="MSBuild\MSBuildExpressionParser.cs" />
