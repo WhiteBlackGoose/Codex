@@ -1,5 +1,7 @@
 # Codex
-An extensible platform for indexing and exploring inspired by Source Browser
+An extensible platform for indexing and exploring inspired by Source Browser.
+
+[![Build status](https://ci.appveyor.com/api/projects/status/bo3m3aesclsj47wm?svg=true)](https://ci.appveyor.com/project/Ref12/Codex)
 
 # Getting started
 * Install [Java JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
@@ -8,8 +10,13 @@ An extensible platform for indexing and exploring inspired by Source Browser
 * Run `.\elasticsearch.bat`
 * Open **Codex.sln**
 * To index a project,
-    * Run **Codex** project, passing in repo's name and path as arguments: `SampleRepo C:\src\codex`
-    * When all files are processed, provide a short name for the symbols, e.g. `codex`
+    * Run **Codex** project, passing in repo's name and path as arguments `-n SampleRepo -p C:\src\codex`
+        * `-n _____` is name of your repository
+        * `-p _____` points to a location to scan
+        * `-es _____` specifies URL to the ElasticSearch server, if it runs on another machine 
+        * `-i` (without any args) lets you search through results
 * To run the Codex website,
     * Run **Codex.Web** project
  
+* To run the Codex website (with [Monaco editor](https://microsoft.github.io/monaco-editor/)),
+    * Run **Codex.Web.Monaco** project
