@@ -65,7 +65,8 @@ namespace Codex.Analysis.Managed
 
             var taskId = args.BuildEventContext?.TaskId ?? 0;
 
-            if (args is TaskStartedEventArgs taskStarted && (taskStarted.TaskName == "Csc" || taskStarted.TaskName == "Vbc"))
+            TaskStartedEventArgs taskStarted = args as TaskStartedEventArgs;
+            if (taskStarted != null && (taskStarted.TaskName == "Csc" || taskStarted.TaskName == "Vbc"))
             {
                 var invocation = new CompilerInvocation();
                 taskIdToInvocationMap[taskId] = invocation;
@@ -89,7 +90,8 @@ namespace Codex.Analysis.Managed
             var commandLine = task.CommandLine;
             commandLine = TrimCompilerExeFromCommandLine(commandLine, language);
 
-            if (taskIdToInvocationMap.TryGetValue(taskId, out var compilerInvocation))
+            CompilerInvocation compilerInvocation;
+            if (taskIdToInvocationMap.TryGetValue(taskId, out compilerInvocation))
             {
                 compilerInvocation.Language = language;
                 compilerInvocation.CommandLine = commandLine;
