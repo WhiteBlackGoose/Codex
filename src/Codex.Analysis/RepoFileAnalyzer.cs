@@ -137,52 +137,10 @@ namespace Codex.Analysis.Files
         protected virtual void AnnotateFile(BoundSourceFileBuilder binder)
         {
             var text = binder.SourceFile.Content;
-            if (IsXml(text))
+            if (XmlAnalyzer.IsXml(text))
             {
                 XmlAnalyzer.Analyze(binder);
             }
-        }
-
-        private static bool IsXml(string text)
-        {
-            if (text.Length > 10)
-            {
-                if (text.StartsWith("<?xml"))
-                {
-                    return true;
-                }
-                else
-                {
-                    for (int i = 0; i < text.Length; i++)
-                    {
-                        var ch = text[i];
-                        if (ch == '<')
-                        {
-                            for (int j = text.Length - 1; j >= 0; j--)
-                            {
-                                ch = text[j];
-
-                                if (ch == '>')
-                                {
-                                    return true;
-                                }
-                                else if (!char.IsWhiteSpace(ch))
-                                {
-                                    return false;
-                                }
-                            }
-
-                            return false;
-                        }
-                        else if (!char.IsWhiteSpace(ch))
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            return false;
         }
 
         public class NullRepoFileAnalyzer : RepoFileAnalyzer
