@@ -145,7 +145,7 @@ namespace WebUI.Controllers
                     var referencesText = ReferencesController.GenerateReferencesHtml(definitions);
                     if (string.IsNullOrEmpty(referencesText))
                     {
-                        referencesText = "No defintions found.";
+                        referencesText = "No definitions found.";
                     }
                     else
                     {
