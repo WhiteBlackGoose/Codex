@@ -14,6 +14,11 @@ namespace Codex
 
         string Description { get; }
 
+        /// <summary>
+        /// Url for accessing code review in source control management (i.e. GitHub or VSO)
+        /// </summary>
+        string Url { get; }
+
         CodeReviewStatus Status { get; }
     }
 
