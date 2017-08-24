@@ -10,6 +10,7 @@ namespace Codex.Storage.DataModel
 {
     using static CustomAnalyzers;
 
+    [ElasticsearchType(Name = ElasticProviders.ElasticProvider.SearchProjectTypeName)]
     public class ProjectModel
     {
         public ProjectModel()

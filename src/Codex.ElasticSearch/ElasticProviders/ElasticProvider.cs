@@ -32,10 +32,12 @@ namespace Codex.Storage.ElasticProviders
         private const string PathToSpansDefinition = "definitions";
         private const string PathToSpansReference = "references";
 
-        public const string SearchSourceTypeName = "sources";
-        public const string SearchPropertiesTypeName = "props";
-        public const string SearchDefinitionTypeName = "defs";
-        public const string SearchReferenceTypeName = "refs";
+        public const string SearchSourceTypeName = "src";
+        public const string SearchPropertiesTypeName = "prp";
+        public const string SearchDefinitionTypeName = "def";
+        public const string SearchReferenceTypeName = "ref";
+        public const string SearchProjectTypeName = "prj";
+        public const string SearchRepositoryTypeName = "rpo";
 
         private const int SpansMaxLimit = int.MaxValue;
         private const int DefaultMaxNumberOfItems = ElasticProviderConfig.DefaultMaxNumbersOfRecordsToReturn;
@@ -44,9 +46,9 @@ namespace Codex.Storage.ElasticProviders
 
         private string Endpoint => _providerConfig.Endpoint;
         private string CoreIndexName => _providerConfig.CoreIndexName;
-        private string ProjectTypeName => _providerConfig.ProjectTypeName;
-        private string SourcesTypeName => _providerConfig.SourceTypeName;
-        private string RepositoryTypeName => _providerConfig.RepositoryTypeName;
+        //private string ProjectTypeName => _providerConfig.ProjectTypeName;
+        //private string SourcesTypeName => _providerConfig.SourceTypeName;
+        //private string RepositoryTypeName => _providerConfig.RepositoryTypeName;
         private string CombinedSourcesIndexAlias => _providerConfig.CombinedSourcesIndexAlias;
 
         // Local cache with indexName -> Task mapping
@@ -105,7 +107,7 @@ namespace Codex.Storage.ElasticProviders
                 public Serializer(IConnectionSettingsValues settings)
                     : base(settings, ModifyJsonSerializerSettings)
                 {
-                    
+
                 }
 
                 private static void ModifyJsonSerializerSettings(JsonSerializerSettings arg1, IConnectionSettingsValues arg2)
@@ -171,7 +173,7 @@ namespace Codex.Storage.ElasticProviders
                 }
 
                 return await client.IndexAsync(repoModel,
-                    p => p.Index(CoreIndexName).Type(RepositoryTypeName).Id(repoModel.SourcesIndexName));
+                    p => p.Index(CoreIndexName).Type(SearchRepositoryTypeName).Id(repoModel.SourcesIndexName));
             });
         }
 
@@ -193,14 +195,30 @@ namespace Codex.Storage.ElasticProviders
                 var indicesForAlias = await client.GetIndicesPointingToAliasAsync(repositoryName);
 
                 return await client.AliasAsync(
-                    ba => ba
-                    .ForEach(indicesForAlias, (b, index) => b.Remove(ar => ar.Index(index).Alias(repositoryName)))
-                    .ForEach(indicesForAlias, (b, index) => b.Remove(ar => ar.Index(index).Alias(CombinedSourcesIndexAlias)))
-                    .Add(a => a.Index(targetIndexName).Alias(repositoryName))
-                    .Add(a => a.Index(targetIndexName).Alias(CombinedSourcesIndexAlias))
+                    ba => ApplyAliasChanges(targetIndexName, repositoryName, ba, indicesForAlias)
                     );
+
             });
         }
+
+        private BulkAliasDescriptor ApplyAliasChanges(
+            string targetIndexName,
+            string repositoryName,
+            BulkAliasDescriptor ba,
+            IEnumerable<string> indicesForAlias)
+        {
+            foreach (var typeIndexName in TypeIndexNames())
+            {
+                ba = ba.ForEach(indicesForAlias, (b, index) => b.Remove(ar => ar.Index(GetIndexName(index, typeIndexName)).Alias(GetIndexName(repositoryName, typeIndexName))));
+                ba = ba.ForEach(indicesForAlias, (b, index) => b.Remove(ar => ar.Index(GetIndexName(index, typeIndexName)).Alias(GetIndexName(CombinedSourcesIndexAlias, typeIndexName))));
+
+                ba = ba.Add(a => a.Index(GetIndexName(targetIndexName, typeIndexName)).Alias(GetIndexName(repositoryName, typeIndexName)));
+                ba = ba.Add(a => a.Index(GetIndexName(targetIndexName, typeIndexName)).Alias(GetIndexName(CombinedSourcesIndexAlias, typeIndexName)));
+            }
+
+            return ba;
+        }
+
         public async Task DeleteRepositoryAndSourceIndexAsync(string indexName)
         {
             Contract.Requires(!string.IsNullOrEmpty(indexName));
@@ -221,8 +239,7 @@ namespace Codex.Storage.ElasticProviders
 
             var result = await client
                 .SearchAsync<RepositoryModel>(sd =>
-                    sd.Type(RepositoryTypeName)
-                      .Index(CoreIndexName))
+                    sd.Index(CoreIndexName))
                 .ThrowOnFailure();
 
             var entries = result.Hits.Select(x => x.Source).ToList();
@@ -239,7 +256,7 @@ namespace Codex.Storage.ElasticProviders
 
             var client = CreateClient();
 
-            var result = await client.GetAsync<RepositoryModel>(repoName, gd => gd.Index(CoreIndexName).Type(RepositoryTypeName)); //gd => gd CoreIndexName, RepositoryTypeName).ThrowOnFailure();
+            var result = await client.GetAsync<RepositoryModel>(repoName, gd => gd.Index(CoreIndexName)); //gd => gd CoreIndexName, RepositoryTypeName).ThrowOnFailure();
 
             return ElasticResponse.Create(result, result.Source, total: 1, operationDuration: (int)sw.ElapsedMilliseconds, backendDurationMilliseconds: null);
         }
@@ -256,7 +273,7 @@ namespace Codex.Storage.ElasticProviders
                     return existsQuery;
                 }
 
-                return await client.DeleteAsync<RepositoryModel>(repositoryName, dd => dd.Index(CoreIndexName).Type(RepositoryTypeName));
+                return await client.DeleteAsync<RepositoryModel>(repositoryName, dd => dd.Index(CoreIndexName));
             });
         }
 
@@ -305,14 +322,13 @@ namespace Codex.Storage.ElasticProviders
 
                 var bulkDescriptor = new BulkDescriptor();
                 bulkDescriptor.Index<ProjectModel>(
-                        bd => bd.Index(targetIndexName).Type(ProjectTypeName).Id(projectModel.Id).Document(projectModel));
+                        bd => bd.IndexEx(targetIndexName).Id(projectModel.Id).Document(projectModel));
 
                 foreach (var searchDefinition in projectModel.GetSearchDefinitions())
                 {
                     bulkDescriptor.Index<DefinitionSearchSpanModel>(
                         bd => bd
-                        .Index(targetIndexName)
-                        .Type(SearchDefinitionTypeName)
+                        .IndexEx(targetIndexName)
                         .Document(searchDefinition));
                 }
 
@@ -330,8 +346,7 @@ namespace Codex.Storage.ElasticProviders
 
             var result = await client
                 .SearchAsync<ProjectModel>(sd =>
-                    sd.Type(ProjectTypeName)
-                    .Query(f =>
+                    sd.Query(f =>
                         f.Bool(bq => bq.Filter(
                             f1 => f1.CaseTerm(project => project.Id, projectId))))
                       .Source(sf => sf.Excludes(fd => fd.Field(pm => pm.ReferencedProjects.First().Definitions)))
@@ -351,8 +366,7 @@ namespace Codex.Storage.ElasticProviders
 
             var result = await client
                 .SearchAsync<ProjectModel>(sd =>
-                    sd.Type(ProjectTypeName)
-                    .Query(f =>
+                    sd.Query(f =>
                         f.Bool(bq => bq.Filter(
                             f1 => f1.CaseTerm(project => project.ProjectKind, projectKind))))
                       .Source(sf => sf.Excludes(fd => fd.Field(pm => pm.ReferencedProjects.First().Definitions)))
@@ -380,7 +394,7 @@ namespace Codex.Storage.ElasticProviders
                         return existsResult;
                     }
 
-                    return await client.DeleteAsync<ProjectModel>(projectId, gd => gd.Index(targetIndex).Type(ProjectTypeName));
+                    return await client.DeleteAsync<ProjectModel>(projectId, gd => gd.Index(targetIndex));
                 });
 
                 return result;
@@ -426,6 +440,18 @@ namespace Codex.Storage.ElasticProviders
             });
         }
 
+        private async Task CreateIndexAsync<T>(ElasticClient client, string indexName) where T : class
+        {
+            string[] requestHolder = new string[1];
+
+            var response = await client
+                    .CreateIndexAsync(GetIndexName<T>(indexName),
+                        c => CustomAnalyzers.AddNGramAnalyzerFunc(c)
+                            .Mappings(m => m.Map<T>(TypeIndexName<T>(), tm => tm.AutoMapEx()))
+                            .CaptureRequest(client, requestHolder))
+                    .ThrowOnFailure();
+        }
+
         public async Task CreateSourcesIndexIfNeeded(string indexName)
         {
             Contract.Requires(indexName != null);
@@ -442,19 +468,12 @@ namespace Codex.Storage.ElasticProviders
                 string[] requestHolder = new string[1];
 
                 var client = CreateClient();
-                var response = await client
-                    .CreateIndexAsync(indexName,
-                        c => CustomAnalyzers.AddNGramAnalyzerFunc(c)
-                            .Mappings(m => m.Map<SourceFileModel>(SourcesTypeName, tm => tm.AutoMapEx())
-                                            .Map<PropertyModel>(SearchPropertiesTypeName, tm => tm.AutoMapEx())
-                                            .Map<DefinitionSearchSpanModel>(SearchDefinitionTypeName, tm => tm.AutoMapEx())
-                                            .Map<ReferenceSearchResultModel>(SearchReferenceTypeName, tm => tm.AutoMapEx())
-                                            .Map<ProjectModel>(ProjectTypeName, tm => tm.AutoMapEx())
-                                            .Map<RepositoryModel>(RepositoryTypeName, tm => tm.AutoMapEx())
-                                            )
-                            .CaptureRequest(client, requestHolder)
-                            )
-                    .ThrowOnFailure();
+
+                await CreateIndexAsync<SourceFileModel>(client, indexName);
+                await CreateIndexAsync<PropertyModel>(client, indexName);
+                await CreateIndexAsync<DefinitionSearchSpanModel>(client, indexName);
+                await CreateIndexAsync<ReferenceSearchResultModel>(client, indexName);
+                await CreateIndexAsync<ProjectModel>(client, indexName);
 
                 await client.UpdateIndexSettingsAsync(indexName, up => up.IndexSettings(id =>
                     id.RefreshInterval(TimeSpan.FromSeconds(10))));
@@ -519,7 +538,7 @@ namespace Codex.Storage.ElasticProviders
 
                 var response = await client
                     .CreateIndexAsync(indexName,
-                        c => c.Mappings(m => m.Map<RepositoryModel>(RepositoryTypeName, tm => tm.AutoMapEx()))
+                        c => c.Mappings(m => m.Map<RepositoryModel>(SearchRepositoryTypeName, tm => tm.AutoMapEx()))
                         .Aliases(ad => ad.Alias(CombinedSourcesIndexAlias)))
                     .ThrowOnFailure();
 
@@ -595,11 +614,18 @@ namespace Codex.Storage.ElasticProviders
             }
         }
 
-        private async Task<IndexName[]> GetSourceIndicesAsync(ICollection<string> repos)
+        private async Task<IndexName[]> GetSourceIndicesAsync<T>(ICollection<string> repos)
+        {
+            var result = await GetSourceIndicesAsyncCore(repos);
+
+            return result.Select(name => GetIndexName<T>(name)).ToArray();
+        }
+
+        private async Task<string[]> GetSourceIndicesAsyncCore(ICollection<string> repos)
         {
             if (repos == null || repos.Count == 0)
             {
-                return new IndexName[] { CombinedSourcesIndexAlias };
+                return new string[] { CombinedSourcesIndexAlias };
             }
 
             var tasks = repos.Select(async x =>
@@ -616,7 +642,7 @@ namespace Codex.Storage.ElasticProviders
                 throw new CantResolveIndicesException(unresolvedRepos.Select(x => x.Repo).ToList());
             }
 
-            return tasks.Select(x => x.Result).Select(x => (IndexName)x.Index).ToArray();
+            return tasks.Select(x => x.Result).Select(x => x.Index).ToArray();
         }
 
         public async Task<ElasticResponse<List<DefinitionSearchSpanModel>>> GetSourcesForProjectAsync(
@@ -628,7 +654,7 @@ namespace Codex.Storage.ElasticProviders
 
             var client = CreateClient();
 
-            var indices = await GetSourceIndicesAsync(repos);
+            var indices = await GetSourceIndicesAsync<DefinitionSearchSpanModel>(repos);
 
             var result = await client.SearchAsync<DefinitionSearchSpanModel>(
                 s => s.Query(f =>
@@ -636,7 +662,6 @@ namespace Codex.Storage.ElasticProviders
                         f1 => f1.CaseTerm(source => source.Span.Definition.ProjectId, projectId),
                         f1 => f1.CaseTerm(source => source.Span.Definition.Kind, nameof(SymbolKinds.File)))))
                     .Index(indices)
-                    .Type(SearchDefinitionTypeName)
                     .Take(3000))
                 .ThrowOnFailure();
 
@@ -680,7 +705,7 @@ namespace Codex.Storage.ElasticProviders
                                             fc => fc.Term(source => source.Path, filePath));
             }
 
-            var indices = await GetSourceIndicesAsync(repos);
+            var indices = await GetSourceIndicesAsync<SourceFileModel>(repos);
 
             var result = await client.MultiSearchAsync(ms => ms
                 .Search<SourceFileModel>(SearchSourceTypeName,
@@ -762,7 +787,7 @@ namespace Codex.Storage.ElasticProviders
 
             var client = CreateClient();
 
-            var indices = await GetSourceIndicesAsync(repos);
+            var indices = await GetSourceIndicesAsync<SourceFileModel>(repos);
 
             searchPhrase = searchPhrase.Trim();
             bool isPrefix = searchPhrase.EndsWith("*");
@@ -770,8 +795,8 @@ namespace Codex.Storage.ElasticProviders
 
             var result = await client.SearchAsync<SourceFileModel>(
                 s => s
-                    .Query(f => 
-                        f.Bool(bq => 
+                    .Query(f =>
+                        f.Bool(bq =>
                         bq.Filter(qcd => !qcd.Term(sf => sf.ExcludeFromSearch, true))
                           .Must(qcd => qcd.ConfigureIfElse(isPrefix,
                             f0 => f0.MatchPhrasePrefix(mpp => mpp.Field(sf => sf.Content).Query(searchPhrase).MaxExpansions(100)),
@@ -819,24 +844,24 @@ namespace Codex.Storage.ElasticProviders
             {
                 itemsInBatch++;
                 bulkDescriptor.Index<SourceFileModel>(
-                        bd => bd.Index(indexName).Type(SourcesTypeName).Document(source));
+                        bd => bd.IndexEx(indexName).Document(source));
 
                 foreach (var searchProperty in source.GetSearchProperties())
                 {
                     bulkDescriptor.Index<PropertyModel>(
-                        bd => bd.Index(indexName).Type(SearchPropertiesTypeName).Document(searchProperty));
+                        bd => bd.IndexEx(indexName).Type(SearchPropertiesTypeName).Document(searchProperty));
                 }
 
                 foreach (var searchReference in source.GetSearchReferences())
                 {
                     bulkDescriptor.Index<ReferenceSearchResultModel>(
-                        bd => bd.Index(indexName).Type(SearchReferenceTypeName).Document(searchReference));
+                        bd => bd.IndexEx(indexName).Type(SearchReferenceTypeName).Document(searchReference));
                 }
 
                 foreach (var searchDefinition in source.GetSearchDefinitions())
                 {
                     bulkDescriptor.Index<DefinitionSearchSpanModel>(
-                        bd => bd.Index(indexName).Type(SearchDefinitionTypeName).Document(searchDefinition));
+                        bd => bd.IndexEx(indexName).Type(SearchDefinitionTypeName).Document(searchDefinition));
                 }
             }
 
@@ -865,7 +890,7 @@ namespace Codex.Storage.ElasticProviders
 
             var client = CreateClient();
 
-            var indices = await GetSourceIndicesAsync(repos);
+            var indices = await GetSourceIndicesAsync<DefinitionSearchSpanModel>(repos);
 
             var spansName = nameof(DefinitionSearchSpanModel);
 
@@ -874,7 +899,6 @@ namespace Codex.Storage.ElasticProviders
                     s => s.Query(qcd => qcd.Bool(bq =>
                                     bq.Filter(fd => fd.CaseTerm(searchSpan => searchSpan.Span.Definition.ProjectId, projectId),
                                               fd => fd.Term(searchSpan => searchSpan.Span.Definition.Id, symbolId))))
-                         .Type(SearchDefinitionTypeName)
                          // TODO: Need to sort here and above
                          .Index(indices)
                          .Take(maxNumberOfItems))
@@ -932,11 +956,10 @@ namespace Codex.Storage.ElasticProviders
             }
 
             var client = CreateClient();
-            var indices = await GetSourceIndicesAsync(repos);
+            var indices = await GetSourceIndicesAsync<DefinitionSearchSpanModel>(repos);
 
             var definitionsResult = await client.SearchAsync<DefinitionSearchSpanModel>(s =>
                         s.Query(GetIdFilter(terms))
-                         .Type(SearchDefinitionTypeName)
                          .Index(indices)
                          .Take(DefaultMaxNumberOfItems)
                 ).ThrowOnFailure();
@@ -984,7 +1007,7 @@ namespace Codex.Storage.ElasticProviders
 
             maxNumberOfItems = maxNumberOfItems ?? DefaultMaxNumberOfItems;
 
-            var indices = await GetSourceIndicesAsync(repos);
+            var indices = await GetSourceIndicesAsync<ReferenceSearchResultModel>(repos);
 
             var spansName = nameof(ReferenceSearchResultModel);
 
@@ -999,7 +1022,6 @@ namespace Codex.Storage.ElasticProviders
                                 fq => fq.CaseTerm(searchSpan => searchSpan.Reference.ReferenceKind, referenceKind),
                                 fq => !fq.Term(searchSpan => searchSpan.Reference.ExcludeFromDefaultSearch, true)
                             )))
-                         .Type(SearchReferenceTypeName)
                          // TODO: Need to sort here and above
                          .Sort(sfd => sfd.Field(sf => sf
                             .Field(sr => sr.Reference.ReferenceKind)
@@ -1033,7 +1055,7 @@ namespace Codex.Storage.ElasticProviders
 
             var client = CreateClient();
 
-            var indices = await GetSourceIndicesAsync(repos);
+            var indices = await GetSourceIndicesAsync<DefinitionSearchSpanModel>(repos);
 
             var spansName = nameof(DefinitionSearchSpanModel);
 
@@ -1046,7 +1068,6 @@ namespace Codex.Storage.ElasticProviders
                             .Functions(sfd => sfd.Weight(wfd => wfd.Weight(2).Filter(GetTermsFilter(terms, boostOnly: true)))
 
                             )))
-                         .Type(SearchDefinitionTypeName)
                          //.Filter(fd => fd.)
                          //.Sort(sfd => sfd.Field(sf => sf.Span.Definition.ProjectId, SortOrder.Ascending))
                          .Index(indices)

@@ -70,7 +70,7 @@ namespace Codex.Storage.DataModel
         /// <summary>
         /// The identifier of the referenced project
         /// </summary>
-        [String(Index = FieldIndexOption.NotAnalyzed)]
+        [NormalizedKeyword]
         public string ProjectId { get; set; }
 
         /// <summary>
@@ -104,7 +104,6 @@ namespace Codex.Storage.DataModel
         /// <summary>
         /// The classification identifier used to colorize the span
         /// </summary>
-        [String(Index = FieldIndexOption.NotAnalyzed)]
         public string Classification { get; set; }
 
         /// <summary>
@@ -141,7 +140,7 @@ namespace Codex.Storage.DataModel
         /// TODO: Remove this. Currently, only used to carry the data until
         /// search span is created. Search span should be created directly.
         /// </summary>
-        [String(Ignore = true)]
+        [DataString]
         public string LineSpanText { get; set; }
 
         public SymbolLineSpanModel ToLineSpan()
@@ -162,7 +161,7 @@ namespace Codex.Storage.DataModel
         /// <summary>
         /// The line text
         /// </summary>
-        [String(Index = FieldIndexOption.No)]
+        [DataString]
         public string LineSpanText { get; set; }
     }
 
@@ -233,6 +232,7 @@ namespace Codex.Storage.DataModel
     //    public ReferenceSpanModel Span { get; set; }
     //}
 
+    [ElasticsearchType(Name = ElasticProviders.ElasticProvider.SearchReferenceTypeName)]
     public class ReferenceSearchResultModel : VersionedSearchModelBase
     {
         [Sortword]

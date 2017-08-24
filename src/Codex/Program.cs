@@ -41,7 +41,7 @@ namespace Codex.Application
         static void Main(string[] args)
         {
             var extras = options.Parse(args);
-            if (String.IsNullOrEmpty(rootDirectory)) throw new ArgumentException("Solution path is missing. Use -p to provide it.");
+            if (String.IsNullOrEmpty(rootDirectory)) throw new ArgumentException("Root path is missing. Use -p to provide it.");
             if (String.IsNullOrEmpty(repoName)) throw new ArgumentException("Project name is missing. Use -n to provide it.");
             if (String.IsNullOrEmpty(elasticSearchServer)) throw new ArgumentException("Elastic Search server URL is missing. Use -es to provide it.");
 

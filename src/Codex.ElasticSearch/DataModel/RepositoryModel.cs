@@ -4,6 +4,7 @@ using System;
 
 namespace Codex.Storage.DataModel
 {
+    [ElasticsearchType(Name = ElasticProviders.ElasticProvider.SearchRepositoryTypeName)]
     public class RepositoryModel
     {
         public RepositoryModel()

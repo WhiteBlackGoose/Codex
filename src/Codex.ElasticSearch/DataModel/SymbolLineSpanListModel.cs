@@ -103,7 +103,7 @@ namespace Codex.Storage.DataModel
         /// <summary>
         /// The line text
         /// </summary>
-        [String(Index = FieldIndexOption.No)]
+        [DataString]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string LineSpanText { get; set; }
     }

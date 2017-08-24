@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Linq.Expressions;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace Codex.Storage.ElasticProviders
 {
@@ -36,6 +37,44 @@ namespace Codex.Storage.ElasticProviders
 
     internal static class ElasticUtility
     {
+        private static ConcurrentQueue<string> CachedTypeIndexNames = new ConcurrentQueue<string>();
+
+        private class CachedTypeIndexName<T>
+        {
+            public static readonly string Name = ElasticsearchTypeAttribute.From(typeof(T)).Name;
+
+            static CachedTypeIndexName()
+            {
+                CachedTypeIndexNames.Enqueue(Name);
+            }
+        }
+
+        public static string[] TypeIndexNames()
+        {
+            return CachedTypeIndexNames.ToArray();
+        }
+
+        public static string TypeIndexName<T>()
+        {
+            return CachedTypeIndexName<T>.Name;
+        }
+
+        public static string GetIndexName(string baseIndexName, string typeIndexName)
+        {
+            return $"{baseIndexName}.{typeIndexName}";
+        }
+
+        public static IndexName GetIndexName<T>(string baseIndexName)
+        {
+            return new IndexName() { Name = GetIndexName(baseIndexName, TypeIndexName<T>()) };
+        }
+
+        public static BulkIndexDescriptor<T> IndexEx<T>(this BulkIndexDescriptor<T> bulk, string index)
+            where T : class
+        {
+            return bulk.Index(GetIndexName<T>(index)).Type(TypeIndexName<T>());
+        }
+
         public static string GetRequestString(byte[] request)
         {
             using (var ms = new MemoryStream(request))
@@ -175,7 +214,9 @@ namespace Codex.Storage.ElasticProviders
         public static TypeMappingDescriptor<T> AutoMapEx<T>(this TypeMappingDescriptor<T> mappingDescriptor)
             where T : class
         {
-            return mappingDescriptor.AutoMap().AllField(all => all.Enabled(false));
+            // Ensure name can be retrieved
+            var name = TypeIndexName<T>();
+            return mappingDescriptor.AutoMap();
         }
     }
 }
