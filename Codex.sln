@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Web.Monaco", "src\Cod
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Analysis.External", "Codex.Analysis.External\Codex.Analysis.External.csproj", "{CD028A30-EF26-44DE-884B-6D9C41C39D64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Framework.CodeGen", "src\Codex.Framework.CodeGen\Codex.Framework.CodeGen.csproj", "{9825B5A2-D285-4160-9602-2BCE104E17A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Framework.Types", "src\Codex.Framework.Types\Codex.Framework.Types.csproj", "{7A980065-FAA7-446C-AE92-3629146BAEA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,10 +89,10 @@ Global
 		{CD028A30-EF26-44DE-884B-6D9C41C39D64}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{CD028A30-EF26-44DE-884B-6D9C41C39D64}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{CD028A30-EF26-44DE-884B-6D9C41C39D64}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{9825B5A2-D285-4160-9602-2BCE104E17A3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{9825B5A2-D285-4160-9602-2BCE104E17A3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{9825B5A2-D285-4160-9602-2BCE104E17A3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{9825B5A2-D285-4160-9602-2BCE104E17A3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{7A980065-FAA7-446C-AE92-3629146BAEA5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{7A980065-FAA7-446C-AE92-3629146BAEA5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{7A980065-FAA7-446C-AE92-3629146BAEA5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{7A980065-FAA7-446C-AE92-3629146BAEA5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,10 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
-    <ProjectGuid>{9825B5A2-D285-4160-9602-2BCE104E17A3}</ProjectGuid>
-    <AssemblyName>Codex.Framework.CodeGen</AssemblyName>
-    <RootNamespace>Codex.Framework.CodeGen</RootNamespace>
+    <ProjectGuid>{7A980065-FAA7-446C-AE92-3629146BAEA5}</ProjectGuid>
+    <AssemblyName>Codex.Framework.Types</AssemblyName>
+    <RootNamespace>Codex.Framework.Types</RootNamespace>
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
