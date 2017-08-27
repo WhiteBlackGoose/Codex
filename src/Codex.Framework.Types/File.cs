@@ -13,9 +13,27 @@ namespace Codex
 
         IReadOnlyList<IReferenceSpan> References { get; }
 
+        // TODO: Add outlining regions
         IReadOnlyList<IDefinitionSpan> Definitions { get; }
 
         IReadOnlyList<IClassificationSpan> Classifications { get; }
+
+        IReadOnlyList<IOutliningRegion> OutliningRegions { get; }
+    }
+
+    public interface IOutliningRegion
+    {
+        string Kind { get; }
+
+        /// <summary>
+        /// Defines the region containing the header text of the outlining region
+        /// </summary>
+        ILineSpan Header { get; }
+
+        /// <summary>
+        /// Defines the region containing the collapsible content region of the outlining region
+        /// </summary>
+        ILineSpan Content { get; }
     }
 
     public interface IDefinitionSpan : ISymbolSpan<IDefinitionSymbol>
@@ -40,7 +58,7 @@ namespace Codex
 
     }
 
-    public interface ILineSpan
+    public interface ILineSpan : ISpan
     {
         int LineNumber { get; }
 

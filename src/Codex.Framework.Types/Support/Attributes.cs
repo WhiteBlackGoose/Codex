@@ -7,27 +7,27 @@ using System.Threading.Tasks;
 namespace Codex
 {
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    sealed class InlineAttribute : Attribute
+    public sealed class InlineAttribute : Attribute
     {
     }
 
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    sealed class EntityIdAttribute : Attribute
+    public sealed class EntityIdAttribute : Attribute
     {
     }
 
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    sealed class PlaceholderAttribute : Attribute
+    public sealed class PlaceholderAttribute : Attribute
     {
     }
 
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    sealed class QueryAttribute : Attribute
+    public sealed class QueryAttribute : Attribute
     {
     }
 
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    sealed class RestrictedAttribute : Attribute
+    public sealed class RestrictedAttribute : Attribute
     {
         public readonly ObjectStage AllowedStages;
 
@@ -38,7 +38,7 @@ namespace Codex
     }
 
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Interface | AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    sealed class RequiredForAttribute : Attribute
+    public sealed class RequiredForAttribute : Attribute
     {
         public readonly ObjectStage Stages;
 
@@ -54,11 +54,13 @@ namespace Codex
         Index = Analysis << 1 | Analysis,
         Upload = Index << 1 | Index,
         Search = Upload << 1 | Upload,
+        All = Search | Upload | Index | Analysis
     }
 
     public enum SearchBehavior
     {
         None,
+        Default,
         NormalizedKeyword,
         Sortword,
         HierarchicalPath,
@@ -68,7 +70,7 @@ namespace Codex
     }
 
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    sealed class SearchBehaviorAttribute : Attribute
+    public sealed class SearchBehaviorAttribute : Attribute
     {
         public readonly SearchBehavior Behavior;
 

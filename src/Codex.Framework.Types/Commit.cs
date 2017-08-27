@@ -14,6 +14,12 @@ namespace Codex
 
         string Description { get; }
 
+        [SearchBehavior(SearchBehavior.Default)]
+        DateTime DateUploaded { get; set; }
+
+        [SearchBehavior(SearchBehavior.Default)]
+        DateTime DateCommitted { get; set; }
+
         IReadOnlyList<IRef<ICommit>> Parents { get; }
     }
 
@@ -22,5 +28,8 @@ namespace Codex
         string Name { get; }
 
         string Description { get; }
+
+        [SearchBehavior(SearchBehavior.NormalizedKeyword)]
+        string CommitId { get; }
     }
 }

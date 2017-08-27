@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Codex
 {
-    public interface ISymbolSpan<TSymbol> : ISpan
+    public interface ISymbolSpan<TSymbol> : ILineSpan
         where TSymbol : ICodeSymbol
     {
         TSymbol Symbol { get; }
