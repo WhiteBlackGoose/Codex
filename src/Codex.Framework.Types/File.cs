@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Codex
 {
-    public interface IBoundSourceFile : IFileScopeEntity
+    public interface IBoundSourceFile : ITextFile, IFileScopeEntity
     {
-        [SearchBehavior(SearchBehavior.FullText)]
-        string Content { get; }
-
         IReadOnlyList<IReferenceSpan> References { get; }
 
         // TODO: Add outlining regions
@@ -19,6 +16,32 @@ namespace Codex
         IReadOnlyList<IClassificationSpan> Classifications { get; }
 
         IReadOnlyList<IOutliningRegion> OutliningRegions { get; }
+    }
+
+    public interface ITextFile
+    {
+        [SearchBehavior(SearchBehavior.FullText)]
+        string Content { get; }
+
+        /// <summary>
+        /// The number of lines in the file
+        /// </summary>
+        int LineCount { get; }
+
+        /// <summary>
+        /// The size of the file in bytes
+        /// </summary>
+        int Size { get; }
+
+        /// <summary>
+        /// The language of the file
+        /// </summary>
+        string Language { get; }
+
+        /// <summary>
+        /// The relative path to the source file in the repository
+        /// </summary>
+        string RepoRelativePath { get; }
     }
 
     public interface IOutliningRegion

@@ -28,11 +28,6 @@ namespace Codex
     public interface IFileScopeEntity : IProjectScopeEntity
     {
         /// <summary>
-        /// The language of the file
-        /// </summary>
-        string Language { get; }
-
-        /// <summary>
         /// The project relative path of the file
         /// </summary>
         string FilePath { get; }

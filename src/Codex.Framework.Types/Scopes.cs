@@ -43,19 +43,9 @@ namespace Codex
     public interface IFileScopeEntity : IProjectScopeEntity
     {
         /// <summary>
-        /// The language of the file
-        /// </summary>
-        string Language { get; }
-
-        /// <summary>
         /// The project relative path of the file
         /// </summary>
         string FilePath { get; }
-
-        /// <summary>
-        /// The repo relative path of the file
-        /// </summary>
-        string RepoRelativePath { get; }
 
         /// <summary>
         /// The unique identifier for the file

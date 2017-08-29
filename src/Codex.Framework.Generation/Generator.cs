@@ -5,6 +5,7 @@ using System.CodeDom;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Codex.Framework.Generation
 {
@@ -24,20 +25,101 @@ namespace Codex.Framework.Generation
         {
             LoadTypeInformation();
             GenerateBuilders();
+            GenerateSearchDescriptors();
         }
 
         public void LoadTypeInformation()
         {
-            var interfaces = typeof(ObjectStage)
+            Types = typeof(ObjectStage)
                 .Assembly
                 .GetTypes()
                 .Where(t => t.IsInterface)
-                .Select(ToTypeDefinition);
+                //.Where(t => t.IsAssignableFrom(typeof(ISearchEntity)))
+                .Select(ToTypeDefinition)
+                .ToList();
+
+            foreach (var typeDefinition in Types)
+            {
+                DefinitionsByType[typeDefinition.Type] = typeDefinition;
+            }
+
+            foreach (var typeDefinition in Types)
+            {
+                foreach (var property in typeDefinition.Properties)
+                {
+                    DefinitionsByType.TryGetValue(property.PropertyInfo.PropertyType, out property.PropertyTypeDefinition);
+                }
+            }
         }
 
         private TypeDefinition ToTypeDefinition(Type type)
         {
             return new TypeDefinition(type);
+        }
+
+        private void GenerateSearchDescriptors()
+        {
+            HashSet<TypeDefinition> visitedTypeDefinitions = new HashSet<TypeDefinition>();
+
+            CodeCompileUnit searchDescriptors = new CodeCompileUnit();
+            CodeNamespace searchDescriptorsNamespace = new CodeNamespace("Codex.Sdk.Search");
+            searchDescriptors.Namespaces.Add(searchDescriptorsNamespace);
+
+            foreach (var typeDefinition in Types)
+            {
+                if (typeof(ISearchEntity).IsAssignableFrom(typeDefinition.Type))
+                {
+                    CodeTypeDeclaration typeDeclaration = new CodeTypeDeclaration(typeDefinition.ClassName + "SearchDescriptor");
+                    searchDescriptorsNamespace.Types.Add(typeDeclaration);
+
+                    PopulateProperties(visitedTypeDefinitions, typeDefinition, typeDeclaration);
+                }
+            }
+
+            using (var writer = new StreamWriter("CodexSearchDescriptors.g.cs"))
+            {
+                CodeProvider.GenerateCodeFromCompileUnit(searchDescriptors, writer, new System.CodeDom.Compiler.CodeGeneratorOptions()
+                {
+                    BlankLinesBetweenMembers = true,
+                    IndentString = "    "
+                });
+            }
+        }
+
+        private void PopulateProperties(HashSet<TypeDefinition> visitedTypeDefinitions, TypeDefinition typeDefinition, CodeTypeDeclaration typeDeclaration)
+        {
+            if (visitedTypeDefinitions.Add(typeDefinition))
+            {
+                foreach (var property in typeDefinition.Properties)
+                {
+                    if (property.SearchBehavior != null)
+                    {
+                        if (property.SearchBehavior != SearchBehavior.None)
+                        {
+                            CodeMemberField codeProperty = new CodeMemberField()
+                            {
+                                Name = property.Name,
+                                Type = new CodeTypeReference(property.SearchBehavior + "IndexProperty", new CodeTypeReference(property.PropertyInfo.PropertyType)),
+                            };
+
+                            typeDeclaration.Members.Add(codeProperty);
+                        }
+                    }
+                    else if (property.PropertyTypeDefinition != null)
+                    {
+                        PopulateProperties(visitedTypeDefinitions, property.PropertyTypeDefinition, typeDeclaration);
+                    }
+                }
+
+                foreach (var type in typeDefinition.Type.GetInterfaces())
+                {
+                    TypeDefinition baseDefinition;
+                    if (DefinitionsByType.TryGetValue(type, out baseDefinition))
+                    {
+                        PopulateProperties(visitedTypeDefinitions, baseDefinition, typeDeclaration);
+                    }
+                }
+            }
         }
 
         public void GenerateBuilders()
@@ -53,6 +135,14 @@ namespace Codex.Framework.Generation
             // WIP: Private class nested in Builder type 
             builder.Attributes = MemberAttributes.Private;
 
+            var constructor = new CodeConstructor()
+            {
+                Name = builder.Name,
+                Attributes = MemberAttributes.Public,
+            };
+
+            builder.Members.Add(constructor);
+
             foreach (var property in type.Properties)
             {
                 var propertyDeclaration = new CodeMemberProperty()
@@ -63,6 +153,13 @@ namespace Codex.Framework.Generation
                     HasSet = !property.IsList,
                     Type = GetBuilderPropertyTypeName(property.PropertyInfo.PropertyType)
                 };
+
+                // Create the lists in the constructor
+                if (property.IsList)
+                {
+                    constructor.Statements.Add(
+                        new CodeObjectCreateExpression(propertyDeclaration.Type));
+                }
 
                 builder.Members.Add(propertyDeclaration);
             }

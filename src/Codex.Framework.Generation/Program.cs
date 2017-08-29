@@ -12,7 +12,8 @@ namespace Codex.Framework.Generation
     {
         static void Main(string[] args)
         {
-            CSharpCodeProvider CodeProvider = new CSharpCodeProvider();
+            //CSharpCodeProvider CodeProvider = new CSharpCodeProvider();
+            new Generator().Generate("");
         }
     }
 }

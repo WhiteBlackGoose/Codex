@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Codex
 {
-    public interface IBoundSourceFile : IFileScopeEntity
+    public interface IBoundSourceFile : IFileScopeEntity, ITextFile
     {
-        string Content { get; }
-
         IReadOnlyList<IReferenceSpan> References { get; }
 
         IReadOnlyList<IDefinitionSymbol> Definitions { get; }
@@ -21,6 +19,26 @@ namespace Codex
     {
         [SearchBehavior(SearchBehavior.FullText)]
         string Content { get; }
+
+        /// <summary>
+        /// The number of lines in the file
+        /// </summary>
+        int LineCount { get; }
+
+        /// <summary>
+        /// The size of the file in bytes
+        /// </summary>
+        int Size { get; }
+
+        /// <summary>
+        /// The language of the file
+        /// </summary>
+        string Language { get; }
+
+        /// <summary>
+        /// The relative path to the source file in the repository
+        /// </summary>
+        string RepoRelativePath { get; }
     }
 
     public interface IDefinitionSpan : ISymbolSpan<IDefinitionSymbol>

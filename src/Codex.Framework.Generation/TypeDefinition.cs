@@ -36,11 +36,13 @@ namespace Codex.Framework.Generation
     {
         public ObjectStage AllowedStages;
 
-        public SearchBehavior SearchBehavior;
+        public SearchBehavior? SearchBehavior;
 
         public string Name;
 
         public PropertyInfo PropertyInfo;
+
+        public TypeDefinition PropertyTypeDefinition;
 
         public bool IsList;
 
@@ -50,7 +52,7 @@ namespace Codex.Framework.Generation
             PropertyInfo = propertyInfo;
             AllowedStages = propertyInfo.GetAllowedStages();
             SearchBehavior = propertyInfo.GetSearchBehavior();
-            IsList = propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(IReadOnlyList<>);
+            IsList = propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(IReadOnlyList<>);
         }
 
     }
@@ -63,10 +65,10 @@ namespace Codex.Framework.Generation
             return attribute?.AllowedStages ?? ObjectStage.All;
         }
 
-        public static SearchBehavior GetSearchBehavior(this MemberInfo type)
+        public static SearchBehavior? GetSearchBehavior(this MemberInfo type)
         {
             var attribute = type.GetAttribute<SearchBehaviorAttribute>();
-            return attribute?.Behavior ?? SearchBehavior.None;
+            return attribute?.Behavior;
         }
 
         public static T GetAttribute<T>(this MemberInfo type)

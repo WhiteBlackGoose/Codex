@@ -35,6 +35,7 @@
     <Compile Include="ObjectModel\SymbolKind.cs" />
     <Compile Include="ObjectModel\Symbols.cs" />
     <Compile Include="Types\Attributes.cs" />
+    <Compile Include="Types\CodexSearchDescriptors.g.cs" />
     <Compile Include="Types\Language.cs" />
     <Compile Include="Types\Commit.cs" />
     <Compile Include="Types\Common.cs" />

@@ -18,7 +18,7 @@ namespace Codex
         public SearchType DefinitionSearch = SearchType.Create<IDefinitionSearchModel>()
             .CopyTo(ds => ds.Definition.Modifiers, ds => ds.Keywords)
             .CopyTo(ds => ds.Definition.Kind, ds => ds.Keywords)
-            .CopyTo(ds => ds.Language, ds => ds.Keywords)
+            //.CopyTo(ds => ds.Language, ds => ds.Keywords)
             .CopyTo(ds => ds.ProjectId, ds => ds.Keywords);
 
         public SearchType ReferenceSearch = SearchType.Create<IReferenceSearchModel>()
@@ -26,7 +26,7 @@ namespace Codex
             .CopyTo(rs => rs.References.First().Symbol, rs => rs.Symbol);
     }
 
-    public interface IDefinitionSearchModel : IFileScopeEntity
+    public interface IDefinitionSearchModel : IFileScopeEntity, ISearchEntity
     {
         [Inline]
         IDefinitionSymbol Definition { get; }
