@@ -32,16 +32,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Placeholders.cs" />
     <Compile Include="TypeDefinition.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Codex.Framework.Types\Codex.Framework.Types.csproj">
-      <Project>{7a980065-faa7-446c-ae92-3629146baea5}</Project>
-      <Name>Codex.Framework.Types</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <Import Project="..\..\Codex.Sdk.Types\Codex.Sdk.Types.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SrcRoot)\Common.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

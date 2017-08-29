@@ -1,13 +1,12 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Codex
+namespace Codex.ElasticSearch
 {
-    [Placeholder]
-    public class SymbolId
+    class ElasticSearchStore
     {
     }
 }

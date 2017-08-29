@@ -10,7 +10,7 @@ namespace Codex
     {
         IReadOnlyList<IReferenceSpan> References { get; }
 
-        // TODO: Add outlining regions
+        // TODO: Should this be just the symbol
         IReadOnlyList<IDefinitionSpan> Definitions { get; }
 
         IReadOnlyList<IClassificationSpan> Classifications { get; }

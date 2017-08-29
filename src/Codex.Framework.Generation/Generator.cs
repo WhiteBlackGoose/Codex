@@ -72,11 +72,12 @@ namespace Codex.Framework.Generation
                     CodeTypeDeclaration typeDeclaration = new CodeTypeDeclaration(typeDefinition.ClassName + "SearchDescriptor");
                     searchDescriptorsNamespace.Types.Add(typeDeclaration);
 
-                    PopulateProperties(visitedTypeDefinitions, typeDefinition, typeDeclaration);
+                    visitedTypeDefinitions.Clear();
+                    PopulateProperties(visitedTypeDefinitions, new CodeTypeReference(typeDeclaration.Name), typeDefinition, typeDeclaration);
                 }
             }
 
-            using (var writer = new StreamWriter("CodexSearchDescriptors.g.cs"))
+            using (var writer = new StreamWriter("SearchDescriptors.g.cs"))
             {
                 CodeProvider.GenerateCodeFromCompileUnit(searchDescriptors, writer, new System.CodeDom.Compiler.CodeGeneratorOptions()
                 {
@@ -86,7 +87,7 @@ namespace Codex.Framework.Generation
             }
         }
 
-        private void PopulateProperties(HashSet<TypeDefinition> visitedTypeDefinitions, TypeDefinition typeDefinition, CodeTypeDeclaration typeDeclaration)
+        private void PopulateProperties(HashSet<TypeDefinition> visitedTypeDefinitions, CodeTypeReference searchType, TypeDefinition typeDefinition, CodeTypeDeclaration typeDeclaration)
         {
             if (visitedTypeDefinitions.Add(typeDefinition))
             {
@@ -99,7 +100,8 @@ namespace Codex.Framework.Generation
                             CodeMemberField codeProperty = new CodeMemberField()
                             {
                                 Name = property.Name,
-                                Type = new CodeTypeReference(property.SearchBehavior + "IndexProperty", new CodeTypeReference(property.PropertyInfo.PropertyType)),
+                                Attributes = MemberAttributes.Public | MemberAttributes.Static,
+                                Type = new CodeTypeReference(property.SearchBehavior + "IndexProperty", searchType),
                             };
 
                             typeDeclaration.Members.Add(codeProperty);
@@ -107,7 +109,7 @@ namespace Codex.Framework.Generation
                     }
                     else if (property.PropertyTypeDefinition != null)
                     {
-                        PopulateProperties(visitedTypeDefinitions, property.PropertyTypeDefinition, typeDeclaration);
+                        PopulateProperties(visitedTypeDefinitions, searchType, property.PropertyTypeDefinition, typeDeclaration);
                     }
                 }
 
@@ -116,7 +118,7 @@ namespace Codex.Framework.Generation
                     TypeDefinition baseDefinition;
                     if (DefinitionsByType.TryGetValue(type, out baseDefinition))
                     {
-                        PopulateProperties(visitedTypeDefinitions, baseDefinition, typeDeclaration);
+                        PopulateProperties(visitedTypeDefinitions, searchType, baseDefinition, typeDeclaration);
                     }
                 }
             }

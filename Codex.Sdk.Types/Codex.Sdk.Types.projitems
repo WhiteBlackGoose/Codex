@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>f88fb26c-fac3-4d8a-9779-e3475d18ecb1</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Codex</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Api\ICodex.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Api\IIndex.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Api\IndexCodex.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Api\IStore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commit.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)File.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ICodeReview.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Project.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Repository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scopes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SearchTypes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Statistics.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Support\Attributes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Support\SearchTypeDescriptors.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Symbol.cs" />
+  </ItemGroup>
+</Project>

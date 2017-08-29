@@ -14,25 +14,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Api\ICodex.cs" />
-    <Compile Include="Api\IndexCodex.cs" />
-    <Compile Include="Api\IStore.cs" />
-    <Compile Include="Api\IIndex.cs" />
-    <Compile Include="ICodeReview.cs" />
-    <Compile Include="Statistics.cs" />
-    <Compile Include="Support\Attributes.cs" />
-    <Compile Include="Commit.cs" />
-    <Compile Include="Common.cs" />
-    <Compile Include="File.cs" />
-    <Compile Include="Project.cs" />
-    <Compile Include="Repository.cs" />
-    <Compile Include="Scopes.cs" />
-    <Compile Include="SearchTypes.cs" />
-    <Compile Include="Support\Placeholders.cs" />
-    <Compile Include="Support\SearchTypeDescriptors.cs" />
-    <Compile Include="Symbol.cs" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>

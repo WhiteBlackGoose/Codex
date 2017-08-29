@@ -33,11 +33,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Web.Monaco", "src\Cod
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Analysis.External", "Codex.Analysis.External\Codex.Analysis.External.csproj", "{CD028A30-EF26-44DE-884B-6D9C41C39D64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Framework.Types", "src\Codex.Framework.Types\Codex.Framework.Types.csproj", "{7A980065-FAA7-446C-AE92-3629146BAEA5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Framework.Generation", "src\Codex.Framework.Generation\Codex.Framework.Generation.csproj", "{E30939C5-042D-4EC2-817D-C5AFC509B330}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Codex.Sdk.Types", "Codex.Sdk.Types\Codex.Sdk.Types.shproj", "{F88FB26C-FAC3-4D8A-9779-E3475D18ECB1}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Codex.Sdk.Types\Codex.Sdk.Types.projitems*{2322a932-05f4-4931-8547-71377c6ab49e}*SharedItemsImports = 4
+		Codex.Sdk.Types\Codex.Sdk.Types.projitems*{e30939c5-042d-4ec2-817d-c5afc509b330}*SharedItemsImports = 4
+		Codex.Sdk.Types\Codex.Sdk.Types.projitems*{f88fb26c-fac3-4d8a-9779-e3475d18ecb1}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Release|Mixed Platforms = Release|Mixed Platforms
@@ -91,10 +96,6 @@ Global
 		{CD028A30-EF26-44DE-884B-6D9C41C39D64}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{CD028A30-EF26-44DE-884B-6D9C41C39D64}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{CD028A30-EF26-44DE-884B-6D9C41C39D64}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{7A980065-FAA7-446C-AE92-3629146BAEA5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{7A980065-FAA7-446C-AE92-3629146BAEA5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{7A980065-FAA7-446C-AE92-3629146BAEA5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{7A980065-FAA7-446C-AE92-3629146BAEA5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E30939C5-042D-4EC2-817D-C5AFC509B330}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{E30939C5-042D-4EC2-817D-C5AFC509B330}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{E30939C5-042D-4EC2-817D-C5AFC509B330}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU

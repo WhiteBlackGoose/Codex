@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,8 +16,9 @@ namespace Codex
         IReadOnlyList<IProjectReference> ProjectReferences { get; }
     }
 
-    public interface IProjectReference : IProjectScopeEntity
+    public interface IProjectReference
     {
+        [SearchBehavior(SearchBehavior.Default)]
         string ReferencedProjectId { get; }
 
         IReadOnlyList<IDefinitionSymbol> Definitions { get; }
