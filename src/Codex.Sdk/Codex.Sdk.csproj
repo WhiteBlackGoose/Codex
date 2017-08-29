@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analysis\IAnalysisTarget.cs" />
+    <Compile Include="Index\IndexCodex.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\MultiLogger.cs" />

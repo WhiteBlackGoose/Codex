@@ -36,9 +36,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\bin\Debug\Codex.Framework.Generation\SearchDescriptors.g.cs">
-      <Link>Model\SearchDescriptors.g.cs</Link>
-    </Compile>
     <Compile Include="DataModel\Attributes.cs" />
     <Compile Include="DataModel\ClassificationListModel.cs" />
     <Compile Include="DataModel\DataBehavior.cs" />
@@ -65,6 +62,8 @@
     <Compile Include="ElasticProviders\ElasticUtility.cs" />
     <Compile Include="ElasticProviders\ResponseValidator.cs" />
     <Compile Include="ElasticsearchStorage.cs" />
+    <Compile Include="ElasticSearchService.cs" />
+    <Compile Include="ElasticSearchIndex.cs" />
     <Compile Include="ElasticSearchStore.cs" />
     <Compile Include="MemoryStorage.cs" />
     <Compile Include="ModelConverter.cs" />

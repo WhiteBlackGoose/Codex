@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Codex.Framework.Types;
 
 namespace Codex.Framework.Generation
 {
@@ -62,15 +63,24 @@ namespace Codex.Framework.Generation
             HashSet<TypeDefinition> visitedTypeDefinitions = new HashSet<TypeDefinition>();
 
             CodeCompileUnit searchDescriptors = new CodeCompileUnit();
-            CodeNamespace searchDescriptorsNamespace = new CodeNamespace("Codex.Sdk.Search");
+            CodeNamespace searchDescriptorsNamespace = new CodeNamespace("Codex.Framework.Types");
             searchDescriptors.Namespaces.Add(searchDescriptorsNamespace);
+
+            CodeTypeDeclaration indexTypeDeclaration = new CodeTypeDeclaration(nameof(Index));
 
             foreach (var typeDefinition in Types)
             {
                 if (typeof(ISearchEntity).IsAssignableFrom(typeDefinition.Type))
                 {
-                    CodeTypeDeclaration typeDeclaration = new CodeTypeDeclaration(typeDefinition.ClassName + "SearchDescriptor");
+                    indexTypeDeclaration.Members.Add(new CodeMemberField(typeDefinition.SearchDescriptorName, typeDefinition.SearchDescriptorName));
+
+
+                    CodeTypeDeclaration typeDeclaration = new CodeTypeDeclaration(typeDefinition.SearchDescriptorName);
                     searchDescriptorsNamespace.Types.Add(typeDeclaration);
+
+                    var constructor = new CodeConstructor();
+                    constructor.Parameters.Add(new CodeParameterDeclarationExpression(typeof(Index), "index"));
+                    typeDeclaration.Members.Add(constructor);
 
                     visitedTypeDefinitions.Clear();
                     PopulateProperties(visitedTypeDefinitions, new CodeTypeReference(typeDeclaration.Name), typeDefinition, typeDeclaration);
@@ -100,7 +110,7 @@ namespace Codex.Framework.Generation
                             CodeMemberField codeProperty = new CodeMemberField()
                             {
                                 Name = property.Name,
-                                Attributes = MemberAttributes.Public | MemberAttributes.Static,
+                                Attributes = MemberAttributes.Public,
                                 Type = new CodeTypeReference(property.SearchBehavior + "IndexProperty", searchType),
                             };
 

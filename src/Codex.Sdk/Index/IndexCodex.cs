@@ -16,16 +16,16 @@ namespace Codex.Framework.Types.Api
             throw new NotImplementedException();
         }
 
-        public Task<IIndexQueryResult<IDefinitionSearchModel>> FindDefinitionAsync(IReferenceSpan reference)
+        public Task<IIndexQueryResult<IDefinitionSearchModel>> FindDefinitionAsync(FindDefinitionArguments arguments)
         {
             var query = Index.CreateQuery<IDefinitionSearchModel>();
-            IDefinitionSearchModel modelTerms = null;
+            //IDefinitionSearchModel modelTerms = null;
 
-            var filter = modelTerms.Definition.SymbolId.AsTerm<IDefinitionSearchModel>().Equals<SymbolId>(reference.Symbol.SymbolId) |
-            modelTerms.Definition.ProjectId.AsTerm<IDefinitionSearchModel>().Equals<string>(reference.Symbol.ProjectId);
+            //var filter = modelTerms.Definition.SymbolId.AsTerm<IDefinitionSearchModel>().Equals<SymbolId>(reference.Symbol.SymbolId) |
+            //modelTerms.Definition.ProjectId.AsTerm<IDefinitionSearchModel>().Equals<string>(reference.Symbol.ProjectId);
 
-            query.Filter = filter;
-            query.MaxResults = 1000;
+            //query.Filter = filter;
+            //query.MaxResults = 1000;
 
             return query.ExecuteAsync();
         }

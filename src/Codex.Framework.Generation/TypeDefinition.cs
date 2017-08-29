@@ -17,7 +17,10 @@ namespace Codex.Framework.Generation
         public List<PropertyDefinition> Properties;
 
         public string ClassName;
+        public string BaseName;
         public string BuilderClassName;
+
+        public string SearchDescriptorName;
 
         public TypeDefinition(Type type)
         {
@@ -25,6 +28,8 @@ namespace Codex.Framework.Generation
 
             // Remove leading I from interface name
             ClassName = type.Name.Substring(1);
+            BaseName = ClassName.Replace("SearchModel", "");
+            SearchDescriptorName = BaseName + "IndexDescriptor";
             BuilderClassName = ClassName + "Builder";
             AllowedStages = type.GetAllowedStages();
 

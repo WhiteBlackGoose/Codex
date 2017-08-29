@@ -11,7 +11,6 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Api\ICodex.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Api\IIndex.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Api\IndexCodex.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Api\IStore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Commit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common.cs" />

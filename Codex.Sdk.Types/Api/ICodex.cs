@@ -19,7 +19,7 @@ namespace Codex.Framework.Types
         /// Find definition for a symbol
         /// Usage: Documentation hover tooltip
         /// </summary>
-        Task<IIndexQueryResult<IDefinitionSearchModel>> FindDefinitionAsync(IReferenceSpan reference);
+        Task<IIndexQueryResult<IDefinitionSearchModel>> FindDefinitionAsync(FindDefinitionArguments arguments);
 
         /// <summary>
         /// Find definition location for a symbol
@@ -28,6 +28,18 @@ namespace Codex.Framework.Types
         Task<IIndexQueryResult<IReferenceSearchModel>> FindDefinitionLocationAsync(IReferenceSpan reference);
 
         Task<IIndexQueryResult<ISourceSearchModel>> GetSourceAsync(IReferenceSpan reference);
+    }
+
+    public class FindDefinitionArguments
+    {
+        public string SymbolId;
+        public string ProjectId;
+    }
+
+    public class FindAllReferencesArguments
+    {
+        public string SymbolId;
+        public string ProjectId;
     }
 
     public interface ISearchResult

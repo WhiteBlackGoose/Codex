@@ -9,27 +9,13 @@ namespace Codex.Framework.Types
     /// <summary>
     /// High level query operations for indexed code
     /// </summary>
-    public interface IIndex<T>
-    {
-        IndexQuery<T> CreateQuery();
-    }
-
-    public abstract class Index
+    public abstract partial class Index
     {
         public abstract IndexQuery<T> CreateQuery<T>();
-    }
 
-    public static class FilterAdapters
-    {
-        public static PrefixIndexProperty<T> AsPrefix<T>(this object o)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract IPrefixProperty<T> CreatePrefixProperty<T>();
 
-        public static IndexProperty<T> AsTerm<T>(this object o)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract ITermProperty<T> CreateTermProperty<T>();
     }
 
     public abstract class IndexQuery<T>
@@ -52,6 +38,16 @@ namespace Codex.Framework.Types
     public abstract class IndexProperty<T>
     {
         public abstract IndexFilter<T> Equals<TValue>(TValue value);
+    }
+
+    public interface IPrefixProperty<T> : ITermProperty<T>
+    {
+        IndexFilter<T> Prefix(string prefix);
+    }
+
+    public interface ITermProperty<T>
+    {
+        IndexFilter<T> Match<TValue>(TValue value);
     }
 
     public enum BinaryOperator

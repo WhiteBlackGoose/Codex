@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Codex
+namespace Codex.Framework.Types
 {
     // TODO: These should be search types
     public interface ICommit
