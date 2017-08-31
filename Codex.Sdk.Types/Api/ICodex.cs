@@ -6,40 +6,98 @@ using System.Threading.Tasks;
 
 namespace Codex.Framework.Types
 {
+    // TODO: Generate ASP.Net endpoint which handles all these calls. Potentially also implement
+    // caller (i.e. WebApiCodex : ICodex)
     /// <summary>
     /// High level operations for codex 
     /// </summary>
     public interface ICodex
     {
-        Task<IIndexQueryResult<ISearchResult>> SearchAsync(string searchString);
+        Task<IIndexQueryHitsResponse<ISearchResult>> SearchAsync(SearchArguments arguments);
 
-        Task<IIndexQueryResult<IReferenceSearchModel>> FindAllReferencesAsync(IReferenceSpan definition);
+        Task<IIndexQueryHitsResponse<IReferenceSearchModel>> FindAllReferencesAsync(FindAllReferencesArguments arguments);
 
         /// <summary>
         /// Find definition for a symbol
         /// Usage: Documentation hover tooltip
         /// </summary>
-        Task<IIndexQueryResult<IDefinitionSearchModel>> FindDefinitionAsync(FindDefinitionArguments arguments);
+        Task<IIndexQueryHitsResponse<IDefinitionSearchModel>> FindDefinitionAsync(FindDefinitionArguments arguments);
 
         /// <summary>
         /// Find definition location for a symbol
         /// Usage: Go To Definition
         /// </summary>
-        Task<IIndexQueryResult<IReferenceSearchModel>> FindDefinitionLocationAsync(IReferenceSpan reference);
+        Task<IIndexQueryHitsResponse<IReferenceSearchModel>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments);
 
-        Task<IIndexQueryResult<ISourceSearchModel>> GetSourceAsync(IReferenceSpan reference);
+        Task<IIndexQueryHitsResponse<ISourceSearchModel>> GetSourceAsync(GetSourceArguments arguments);
     }
 
-    public class FindDefinitionArguments
+    public class CodexArgumentsBase
     {
+        /// <summary>
+        /// The maximum number of results to return
+        /// </summary>
+        public int MaxResults;
+    }
+
+    public class ContextCodexArgumentsBase : CodexArgumentsBase
+    {
+        /// <summary>
+        /// The id of the repository referencing the symbol.
+        /// NOTE: This is used to priority inter-repository matches over
+        /// matches from outside the repository
+        /// </summary>
+        public string ReferencingRepositoryId;
+
+        /// <summary>
+        /// The id of the project referencing the symbol.
+        /// NOTE: This is used to priority inter-repository matches over
+        /// matches from outside the repository
+        /// </summary>
+        public string ReferencingProjectId;
+
+        /// <summary>
+        /// The id of the file referencing the symbol.
+        /// NOTE: This is used to priority inter-repository matches over
+        /// matches from outside the repository
+        /// </summary>
+        public string ReferencingFileId;
+    }
+
+    public class FindSymbolArgumentsBase : ContextCodexArgumentsBase
+    {
+        /// <summary>
+        /// The symbol id of the symbol
+        /// </summary>
         public string SymbolId;
+
+        /// <summary>
+        /// The project id of the symbol
+        /// </summary>
         public string ProjectId;
     }
 
-    public class FindAllReferencesArguments
+    public class FindDefinitionArguments : FindSymbolArgumentsBase
     {
-        public string SymbolId;
-        public string ProjectId;
+
+    }
+
+    public class FindAllReferencesArguments : FindSymbolArgumentsBase
+    {
+    }
+
+    public class FindDefinitionLocationArguments : FindSymbolArgumentsBase
+    {
+    }
+
+    public class SearchArguments : ContextCodexArgumentsBase
+    {
+        public string SearchString;
+    }
+
+    public class GetSourceArguments : ContextCodexArgumentsBase
+    {
+
     }
 
     public interface ISearchResult

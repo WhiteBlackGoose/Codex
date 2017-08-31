@@ -22,13 +22,13 @@ namespace Codex
             .CopyTo(ds => ds.ProjectId, ds => ds.Keywords);
 
         public SearchType ReferenceSearch = SearchType.Create<IReferenceSearchModel>()
-            .CopyTo(rs => rs.References.First().Symbol.Kind, rs => rs.Symbol.Kind)
-            .CopyTo(rs => rs.References.First().Symbol, rs => rs.Symbol);
+            .CopyTo(rs => rs.References.First().Symbol.Kind, rs => rs.ReferencedSymbol.Kind)
+            .CopyTo(rs => rs.References.First().Symbol, rs => rs.ReferencedSymbol);
     }
 
     public interface IDefinitionSearchModel : IFileScopeEntity, ISearchEntity
     {
-        [Inline]
+        [Inline(false)]
         IDefinitionSymbol Definition { get; }
 
         // TODO: Should this be here?
@@ -51,34 +51,32 @@ namespace Codex
 
     public interface IReferenceSearchModel : IFileScopeEntity, ICommitScopeEntity, ISearchEntity
     {
-        [Inline]
-        IReferenceSymbol Symbol { get; }
+        [Inline(false)]
+        IReferenceSymbol ReferencedSymbol { get; }
 
+        // TODO: Need some sort of override for searching RelatedDefinition of the
+        // ReferenceSpan
         [SearchBehavior(SearchBehavior.None)]
         IReadOnlyList<IReferenceSpan> References { get; }
     }
 
     public interface ISourceSearchModel : IFileScopeEntity, ICommitScopeEntity, ISearchEntity
     {
-        [Inline]
         IBoundSourceFile File { get; }
     }
 
     public interface IRepositorySearchModel : ISearchEntity
     {
-        [Inline]
         IRepository Repository { get; }
     }
 
     public interface IProjectSearchModel : IProjectScopeEntity, ICommitScopeEntity, ISearchEntity
     {
-        [Inline]
         IProject Project { get; }
     }
 
     public interface IProjectReferenceSearchModel : IProjectScopeEntity, ICommitScopeEntity, ISearchEntity
     {
-        [Inline]
         IProjectReference ProjectReference { get; }
     }
 }

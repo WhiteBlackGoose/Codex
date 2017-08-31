@@ -9,6 +9,12 @@ namespace Codex
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
     public sealed class InlineAttribute : Attribute
     {
+        public readonly bool Inline;
+
+        public InlineAttribute(bool inline = false)
+        {
+            Inline = inline;
+        }
     }
 
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
@@ -60,7 +66,7 @@ namespace Codex
     public enum SearchBehavior
     {
         None,
-        Default,
+        Term,
         NormalizedKeyword,
         Sortword,
         HierarchicalPath,

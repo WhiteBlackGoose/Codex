@@ -15,6 +15,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\bin\Debug\Codex.Framework.Generation\SearchDescriptors.g.cs">
+      <Link>Index\SearchDescriptors.g.cs</Link>
+    </Compile>
     <Compile Include="Analysis\IAnalysisTarget.cs" />
     <Compile Include="Index\IndexCodex.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />

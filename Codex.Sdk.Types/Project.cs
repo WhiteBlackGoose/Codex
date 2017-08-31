@@ -18,7 +18,7 @@ namespace Codex
 
     public interface IProjectReference
     {
-        [SearchBehavior(SearchBehavior.Default)]
+        [SearchBehavior(SearchBehavior.NormalizedKeyword)]
         string ReferencedProjectId { get; }
 
         IReadOnlyList<IDefinitionSymbol> Definitions { get; }

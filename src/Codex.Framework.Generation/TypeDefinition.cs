@@ -49,6 +49,8 @@ namespace Codex.Framework.Generation
 
         public TypeDefinition PropertyTypeDefinition;
 
+        public bool Inline;
+
         public bool IsList;
 
         public PropertyDefinition(PropertyInfo propertyInfo)
@@ -58,12 +60,19 @@ namespace Codex.Framework.Generation
             AllowedStages = propertyInfo.GetAllowedStages();
             SearchBehavior = propertyInfo.GetSearchBehavior();
             IsList = propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(IReadOnlyList<>);
+            Inline = propertyInfo.GetInline();
         }
 
     }
 
     public static class Helpers
     {
+        public static bool GetInline(this MemberInfo type)
+        {
+            var attribute = type.GetAttribute<InlineAttribute>();
+            return attribute?.Inline ?? true;
+        }
+
         public static ObjectStage GetAllowedStages(this MemberInfo type)
         {
             var attribute = type.GetAttribute<RestrictedAttribute>();

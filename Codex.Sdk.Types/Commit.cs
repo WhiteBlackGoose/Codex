@@ -14,10 +14,10 @@ namespace Codex.Framework.Types
 
         string Description { get; }
 
-        [SearchBehavior(SearchBehavior.Default)]
+        [SearchBehavior(SearchBehavior.Sortword)]
         DateTime DateUploaded { get; set; }
 
-        [SearchBehavior(SearchBehavior.Default)]
+        [SearchBehavior(SearchBehavior.Sortword)]
         DateTime DateCommitted { get; set; }
 
         IReadOnlyList<IRef<ICommit>> Parents { get; }

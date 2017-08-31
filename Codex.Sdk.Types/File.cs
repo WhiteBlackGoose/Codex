@@ -1,3 +1,4 @@
+using Codex.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,6 +66,11 @@ namespace Codex
 
     public interface IReferenceSpan : ISymbolSpan<IReferenceSymbol>
     {
+        /// <summary>
+        /// Gets the symbol id of the definition which provides this reference 
+        /// (i.e. method definition for interface implementation)
+        /// </summary>
+        SymbolId RelatedDefinition { get; }
     }
 
     public interface IClassificationSpan : ISpan

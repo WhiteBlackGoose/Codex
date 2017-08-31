@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Codex
 {
+    /// <summary>
+    /// Marker interface for searchable entities
+    /// TODO: Consider moving <see cref="ContentId"/> out if its not needed by all searchable entities
+    /// </summary>
     public interface ISearchEntity
     {
         string Uid { get; }
@@ -28,14 +32,12 @@ namespace Codex
     {
         [Restricted(ObjectStage.Upload)]
         string CommitId { get; }
-
-        [Restricted(ObjectStage.Upload)]
-        int StableId { get; }
     }
 
     [RequiredFor(ObjectStage.Upload)]
     public interface IProjectScopeEntity : IRepoScopeEntity
     {
+        [SearchBehavior(SearchBehavior.Sortword)]
         string ProjectId { get; }
     }
 
@@ -45,6 +47,7 @@ namespace Codex
         /// <summary>
         /// The project relative path of the file
         /// </summary>
+        [SearchBehavior(SearchBehavior.NormalizedKeyword)]
         string FilePath { get; }
 
         /// <summary>

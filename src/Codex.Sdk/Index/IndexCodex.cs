@@ -11,36 +11,44 @@ namespace Codex.Framework.Types.Api
     {
         private Index Index;
 
-        public Task<IIndexQueryResult<IReferenceSearchModel>> FindAllReferencesAsync(IReferenceSpan definition)
+        private ReferenceIndexDescriptor ReferenceIndexDescriptor;
+
+        public Task<IIndexQueryHitsResponse<IReferenceSearchModel>> FindAllReferencesAsync(FindAllReferencesArguments arguments)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IIndexQueryResult<IDefinitionSearchModel>> FindDefinitionAsync(FindDefinitionArguments arguments)
+        public Task<IIndexQueryHitsResponse<IDefinitionSearchModel>> FindDefinitionAsync(FindDefinitionArguments arguments)
         {
             var query = Index.CreateQuery<IDefinitionSearchModel>();
             //IDefinitionSearchModel modelTerms = null;
 
+            var filter = 
+                ReferenceIndexDescriptor.ReferencedSymbol.ProjectId.Match(arguments.ProjectId) &
+                ReferenceIndexDescriptor.ReferencedSymbol.SymbolId.Match(arguments.SymbolId);
             //var filter = modelTerms.Definition.SymbolId.AsTerm<IDefinitionSearchModel>().Equals<SymbolId>(reference.Symbol.SymbolId) |
             //modelTerms.Definition.ProjectId.AsTerm<IDefinitionSearchModel>().Equals<string>(reference.Symbol.ProjectId);
 
             //query.Filter = filter;
             //query.MaxResults = 1000;
 
-            return query.ExecuteAsync();
+            //return query.ExecuteAsync();
+            throw new NotImplementedException();
         }
 
-        public Task<IIndexQueryResult<IReferenceSearchModel>> FindDefinitionLocationAsync(IReferenceSpan reference)
+        public Task<IIndexQueryHitsResponse<IReferenceSearchModel>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments)
+        {
+            var query = Index.CreateQuery<IReferenceSearchModel>();
+
+            throw new NotImplementedException();
+        }
+
+        public Task<IIndexQueryHitsResponse<ISourceSearchModel>> GetSourceAsync(GetSourceArguments arguments)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IIndexQueryResult<ISourceSearchModel>> GetSourceAsync(IReferenceSpan reference)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IIndexQueryResult<ISearchResult>> SearchAsync(string searchString)
+        public Task<IIndexQueryHitsResponse<ISearchResult>> SearchAsync(SearchArguments arguments)
         {
             throw new NotImplementedException();
         }

@@ -30,14 +30,36 @@ namespace Codex.Framework.Types
         public abstract Task<IIndexQueryResult<T>> ExecuteAsync();
     }
 
-    public abstract class PrefixIndexProperty<T> : IndexProperty<T>
+    public abstract class PrefixFullNameIndexProperty<T> : TermIndexProperty<T>
+    {
+        public abstract IndexFilter<T> PrefixFullName(string prefix);
+    }
+
+    public abstract class PrefixIndexProperty<T> : TermIndexProperty<T>
     {
         public abstract IndexFilter<T> Prefix(string prefix);
     }
 
-    public abstract class IndexProperty<T>
+    public abstract class NormalizedKeywordIndexProperty<T> : TermIndexProperty<T>
     {
-        public abstract IndexFilter<T> Equals<TValue>(TValue value);
+    }
+
+    public abstract class FullTextIndexProperty<T> : TermIndexProperty<T>
+    {
+        public abstract IndexFilter<T> Contains(string phrase);
+
+        public abstract IndexFilter<T> ContainsAll(string[] terms);
+    }
+
+    public abstract class SortwordIndexProperty<T> : TermIndexProperty<T>
+    {
+
+    }
+
+
+    public abstract class TermIndexProperty<T>
+    {
+        public abstract IndexFilter<T> Match<TValue>(TValue value);
     }
 
     public interface IPrefixProperty<T> : ITermProperty<T>
@@ -92,10 +114,10 @@ namespace Codex.Framework.Types
         /// </summary>
         int MaxResults { get; set; }
 
-        Task<IIndexQueryResult<T>> ExecuteAsync();
+        Task<IIndexQueryResponse<T>> ExecuteAsync();
     }
 
-    public interface IIndexQueryResult<T>
+    public interface IIndexQueryResponse<T>
     {
         /// <summary>
         /// If the query failed, this will contain the error message
@@ -108,12 +130,6 @@ namespace Codex.Framework.Types
         string RawQuery { get; }
 
         /// <summary>
-        /// The total number of results matching the query. 
-        /// NOTE: This may be greater than the number of results returned.
-        /// </summary>
-        int HitCount { get; }
-
-        /// <summary>
         /// The spent executing the query
         /// </summary>
         TimeSpan QueryTime { get; }
@@ -121,7 +137,27 @@ namespace Codex.Framework.Types
         /// <summary>
         /// The results of the query
         /// </summary>
-        IReadOnlyList<T> Results { get; }
+        T Result { get; }
+    }
+
+    public interface IIndexQueryHits<T>
+    {
+        /// <summary>
+        /// The total number of results matching the query. 
+        /// NOTE: This may be greater than the number of hits returned.
+        /// </summary>
+        int HitCount { get; }
+
+        /// <summary>
+        /// The results of the query
+        /// </summary>
+        IReadOnlyList<T> Hits { get; }
+    }
+
+
+    public interface IIndexQueryHitsResponse<T> : IIndexQueryResponse<IIndexQueryHits<T>>
+    {
+
     }
 
     public interface IIndexQueryFilter<T>

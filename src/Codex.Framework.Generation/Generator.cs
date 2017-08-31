@@ -61,6 +61,7 @@ namespace Codex.Framework.Generation
         private void GenerateSearchDescriptors()
         {
             HashSet<TypeDefinition> visitedTypeDefinitions = new HashSet<TypeDefinition>();
+            HashSet<string> usedMemberNames = new HashSet<string>();
 
             CodeCompileUnit searchDescriptors = new CodeCompileUnit();
             CodeNamespace searchDescriptorsNamespace = new CodeNamespace("Codex.Framework.Types");
@@ -74,7 +75,6 @@ namespace Codex.Framework.Generation
                 {
                     indexTypeDeclaration.Members.Add(new CodeMemberField(typeDefinition.SearchDescriptorName, typeDefinition.SearchDescriptorName));
 
-
                     CodeTypeDeclaration typeDeclaration = new CodeTypeDeclaration(typeDefinition.SearchDescriptorName);
                     searchDescriptorsNamespace.Types.Add(typeDeclaration);
 
@@ -83,7 +83,9 @@ namespace Codex.Framework.Generation
                     typeDeclaration.Members.Add(constructor);
 
                     visitedTypeDefinitions.Clear();
-                    PopulateProperties(visitedTypeDefinitions, new CodeTypeReference(typeDeclaration.Name), typeDefinition, typeDeclaration);
+                    usedMemberNames.Clear();
+
+                    PopulateProperties(visitedTypeDefinitions, usedMemberNames, new CodeTypeReference(typeDeclaration.Name), typeDefinition, typeDeclaration);
                 }
             }
 
@@ -97,10 +99,24 @@ namespace Codex.Framework.Generation
             }
         }
 
-        private void PopulateProperties(HashSet<TypeDefinition> visitedTypeDefinitions, CodeTypeReference searchType, TypeDefinition typeDefinition, CodeTypeDeclaration typeDeclaration)
+        private void PopulateProperties(
+            HashSet<TypeDefinition> visitedTypeDefinitions, 
+            HashSet<string> usedMemberNames, 
+            CodeTypeReference searchType, 
+            TypeDefinition typeDefinition, 
+            CodeTypeDeclaration typeDeclaration)
         {
             if (visitedTypeDefinitions.Add(typeDefinition))
             {
+                foreach (var type in typeDefinition.Type.GetInterfaces())
+                {
+                    TypeDefinition baseDefinition;
+                    if (DefinitionsByType.TryGetValue(type, out baseDefinition))
+                    {
+                        PopulateProperties(visitedTypeDefinitions, usedMemberNames, searchType, baseDefinition, typeDeclaration);
+                    }
+                }
+
                 foreach (var property in typeDefinition.Properties)
                 {
                     if (property.SearchBehavior != null)
@@ -119,16 +135,23 @@ namespace Codex.Framework.Generation
                     }
                     else if (property.PropertyTypeDefinition != null)
                     {
-                        PopulateProperties(visitedTypeDefinitions, searchType, property.PropertyTypeDefinition, typeDeclaration);
-                    }
-                }
+                        if (!property.Inline)
+                        {
+                            var nestedTypeDeclaration = new CodeTypeDeclaration(property.PropertyTypeDefinition.SearchDescriptorName);
+                            typeDeclaration.Members.Add(nestedTypeDeclaration);
 
-                foreach (var type in typeDefinition.Type.GetInterfaces())
-                {
-                    TypeDefinition baseDefinition;
-                    if (DefinitionsByType.TryGetValue(type, out baseDefinition))
-                    {
-                        PopulateProperties(visitedTypeDefinitions, searchType, baseDefinition, typeDeclaration);
+                            CodeMemberField codeProperty = new CodeMemberField()
+                            {
+                                Name = property.Name,
+                                Attributes = MemberAttributes.Public,
+                                Type = new CodeTypeReference(property.PropertyTypeDefinition.SearchDescriptorName),
+                            };
+
+                            typeDeclaration.Members.Add(codeProperty);
+                            typeDeclaration = nestedTypeDeclaration;
+                        }
+
+                        PopulateProperties(visitedTypeDefinitions, usedMemberNames, searchType, property.PropertyTypeDefinition, typeDeclaration);
                     }
                 }
             }
