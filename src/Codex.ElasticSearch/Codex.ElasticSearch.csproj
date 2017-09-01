@@ -64,12 +64,14 @@
     <Compile Include="ElasticsearchStorage.cs" />
     <Compile Include="ElasticSearchService.cs" />
     <Compile Include="ElasticSearchIndex.cs" />
-    <Compile Include="ElasticSearchStore.cs" />
+    <Compile Include="Model\ElasticSearchTypeStore.cs" />
+    <Compile Include="Model\ElasticSearchStore.cs" />
     <Compile Include="MemoryStorage.cs" />
     <Compile Include="ModelConverter.cs" />
     <Compile Include="Model\Index.cs" />
     <Compile Include="Utilities\ArrayUtils.cs" />
     <Compile Include="Utilities\FullTextUtilities.cs" />
+    <Compile Include="Utilities\MappingPropertyVisitor.cs" />
     <Compile Include="Utilities\NumberUtils.cs" />
     <Compile Include="Utilities\SearchResultSorter.cs" />
     <Compile Include="Utilities\SearchUtilities.cs" />

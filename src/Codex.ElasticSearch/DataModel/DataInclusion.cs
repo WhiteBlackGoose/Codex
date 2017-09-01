@@ -6,21 +6,6 @@ using System.Threading.Tasks;
 
 namespace Codex.Storage.DataModel
 {
-    public enum DataInclusionOptions
-    {
-        None = 0,
-        Definitions = 1,
-        References = 1 << 1,
-        Classifications = 1 << 2,
-        SearchDefinitions = 1 << 3,
-        SearchReferences = 1 << 4,
-        Content = 1 << 5,
-        All = Definitions | References | Classifications | SearchDefinitions | SearchReferences | Content,
-
-        // Default does not include definitions since they can be queried lazily rather than eagerly retrieved.
-        Default = References | Classifications | SearchDefinitions | SearchReferences | Content
-    }
-
     internal static class DataInclusion
     {
         /// <summary>

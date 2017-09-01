@@ -11,6 +11,7 @@ namespace Codex
     public abstract class SearchType
     {
         public string Name { get; protected set; }
+        public string IndexName { get; protected set; }
 
         public static SearchType<T> Create<T>(List<SearchType> registeredSearchTypes, [CallerMemberName]string name = null)
             where T : class, ISearchEntity
@@ -31,6 +32,7 @@ namespace Codex
         public SearchType(string name)
         {
             Name = name;
+            IndexName = Name.ToLowerInvariant();
         }
 
         public SearchType<TSearchType> Inherit<TPRovider, T>(

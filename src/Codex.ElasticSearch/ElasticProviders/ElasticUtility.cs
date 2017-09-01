@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using Codex.Sdk.Utilities;
 
 namespace Codex.Storage.ElasticProviders
 {
@@ -194,17 +195,17 @@ namespace Codex.Storage.ElasticProviders
             }
         }
 
-        public static T CaptureRequest<T>(this T requestDescriptor, ElasticClient client, string[] requestHolder)
+        public static T CaptureRequest<T>(this T requestDescriptor, ElasticClient client, Box<string> request)
             where T : IDescriptor
         {
-            if (requestHolder.Length != 0)
+            if (request != null)
             {
                 using (var ms = new MemoryStream())
                 {
                     client.Serializer.Serialize(requestDescriptor, ms);
                     ms.Position = 0;
                     var textReader = new StreamReader(ms);
-                    requestHolder[0] = textReader.ReadToEnd();
+                    request.Value = textReader.ReadToEnd();
                 }
             }
 
@@ -217,6 +218,14 @@ namespace Codex.Storage.ElasticProviders
             // Ensure name can be retrieved
             var name = TypeIndexName<T>();
             return mappingDescriptor.AutoMap();
+        }
+
+        public static void RemoveDisabledProperties(this IProperties properties)
+        {
+            foreach (var disabledProperty in properties.Where(kvp => (kvp.Value as IObjectProperty)?.Enabled == false).ToList())
+            {
+                properties.Remove(disabledProperty.Key);
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Codex.Framework.Types;
+using Codex.Sdk.Utilities;
+using Codex.Storage.ElasticProviders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +11,8 @@ namespace Codex.ElasticSearch
 {
     class ElasticSearchStore : StoreBase
     {
-        private readonly ElasticSearchService Service;
-        private readonly ElasticSearchStoreConfiguration Configuration;
+        internal readonly ElasticSearchService Service;
+        internal readonly ElasticSearchStoreConfiguration Configuration;
 
         /// <summary>
         /// Creates an elasticsearch store with the given prefix for indices
@@ -40,6 +42,7 @@ namespace Codex.ElasticSearch
 
         public override Task<IStore<TSearchType>> CreateStoreAsync<TSearchType>(SearchType searchType)
         {
+            var store = new TypedStore<TSearchType>(this, searchType);
             throw new NotImplementedException();
         }
     }

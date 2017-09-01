@@ -22,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)SearchTypes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Statistics.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Support\Attributes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Support\DataInclusion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Support\SearchTypeDescriptors.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Symbol.cs" />
   </ItemGroup>
