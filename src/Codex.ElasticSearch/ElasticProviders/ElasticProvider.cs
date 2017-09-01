@@ -442,13 +442,11 @@ namespace Codex.Storage.ElasticProviders
 
         private async Task CreateIndexAsync<T>(ElasticClient client, string indexName) where T : class
         {
-            string[] requestHolder = new string[1];
-
             var response = await client
                     .CreateIndexAsync(GetIndexName<T>(indexName),
                         c => CustomAnalyzers.AddNGramAnalyzerFunc(c)
                             .Mappings(m => m.Map<T>(TypeIndexName<T>(), tm => tm.AutoMapEx()))
-                            .CaptureRequest(client, requestHolder))
+                            .CaptureRequest(client, null))
                     .ThrowOnFailure();
         }
 

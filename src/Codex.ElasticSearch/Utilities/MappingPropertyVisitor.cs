@@ -13,38 +13,38 @@ namespace Codex.ElasticSearch.Utilities
 {
     public class MappingPropertyVisitor : NoopPropertyVisitor
     {
+        public static readonly MappingPropertyVisitor Instance = new MappingPropertyVisitor();
+
         private static readonly IObjectProperty DisabledProperty = new ObjectProperty() { Enabled = false };
 
         private const DataInclusionOptions AlwaysInclude = DataInclusionOptions.None;
 
         public override IProperty Visit(PropertyInfo propertyInfo, ElasticsearchPropertyAttributeBase attribute)
         {
-            var searchBehavior = propertyInfo.GetSearchBehavior();
+            var searchBehavior = propertyInfo.GetSearchBehavior() ?? SearchBehavior.None;
             var dataInclusion = propertyInfo.GetDataInclusion() ?? AlwaysInclude;
-            if (searchBehavior != null)
+
+            // TODO: Add properties for all search behaviors
+            switch (searchBehavior)
             {
-                // TODO: Add properties for all search behaviors
-                switch (searchBehavior.Value)
-                {
-                    case SearchBehavior.None:
-                        break;
-                    case SearchBehavior.Term:
-                        break;
-                    case SearchBehavior.NormalizedKeyword:
-                        return new NormalizedKeywordAttribute();
-                    case SearchBehavior.Sortword:
-                        return new SortwordAttribute();
-                    case SearchBehavior.HierarchicalPath:
-                        return new HierachicalPathAttribute();
-                    case SearchBehavior.FullText:
-                        return new FullTextAttribute(dataInclusion);
-                    case SearchBehavior.Prefix:
-                        return new PrefixTextAttribute();
-                    case SearchBehavior.PrefixFullName:
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
+                case SearchBehavior.None:
+                    return DisabledProperty;
+                case SearchBehavior.Term:
+                    break;
+                case SearchBehavior.NormalizedKeyword:
+                    return new NormalizedKeywordAttribute();
+                case SearchBehavior.Sortword:
+                    return new SortwordAttribute();
+                case SearchBehavior.HierarchicalPath:
+                    return new HierachicalPathAttribute();
+                case SearchBehavior.FullText:
+                    return new FullTextAttribute(dataInclusion);
+                case SearchBehavior.Prefix:
+                    return new PrefixTextAttribute();
+                case SearchBehavior.PrefixFullName:
+                    break;
+                default:
+                    throw new NotImplementedException();
             }
 
             var property = base.Visit(propertyInfo, attribute);

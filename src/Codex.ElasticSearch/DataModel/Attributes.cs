@@ -60,7 +60,19 @@ namespace Codex.Storage.DataModel
 
         public PrefixTextAttribute()
         {
-            UsePrefix = true;
+            // TODO: Enable
+            //UsePrefix = true;
+            Analyzer = CustomAnalyzers.PrefixFilterPartialNameNGramAnalyzerName;
+        }
+    }
+
+    public class PrefixFullTextTextAttribute : SearchStringAttribute
+    {
+        public IProperty SelfProperty => this;
+
+        public PrefixFullTextTextAttribute()
+        {
+            Analyzer = CustomAnalyzers.PrefixFilterFullNameNGramAnalyzerName;
         }
     }
 

@@ -1,6 +1,8 @@
-﻿using Codex.Framework.Types;
+﻿using Codex.ElasticSearch.Utilities;
+using Codex.Framework.Types;
 using Codex.Sdk.Utilities;
 using Codex.Storage.ElasticProviders;
+using Nest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,8 @@ using System.Threading.Tasks;
 
 namespace Codex.ElasticSearch
 {
-    internal class TypedStore<TSearchType>
+    internal class TypedStore<T> : IStore<T>
+        where T : class
     {
         private readonly SearchType searchType;
         private readonly ElasticSearchStore store;
@@ -37,11 +40,26 @@ namespace Codex.ElasticSearch
             await store.Service.UseClient(async client =>
             {
                 var response = await client
-                    .CreateIndexAsync(searchType.IndexName,
+                    .CreateIndexAsync(indexName,
                         c => CustomAnalyzers.AddNGramAnalyzerFunc(c)
-                            .Mappings(m => m.Map<T>(TypeIndexName<T>(), tm => tm.AutoMapEx()))
+                            .Mappings(m => m.Map<T>(TypeName.From<T>(), tm => tm.AutoMap(MappingPropertyVisitor.Instance)))
                             .CaptureRequest(client, request))
                     .ThrowOnFailure();
+
+                return response.IsValid;
+            });
+        }
+
+        public async Task StoreAsync(T value)
+        {
+            // TODO: Batch and create commits/stored filters
+            await store.Service.UseClient(async client =>
+            {
+                var response = await client
+                    .IndexAsync(value)
+                    .ThrowOnFailure();
+
+                return response.IsValid;
             });
         }
     }

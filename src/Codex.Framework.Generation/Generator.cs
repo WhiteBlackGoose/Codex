@@ -100,8 +100,9 @@ namespace Codex.Framework.Generation
                 Name = "CreateStoreAsync",
                 Attributes = MemberAttributes.Public | MemberAttributes.Abstract,
                 ReturnType = new CodeTypeReference("Task", new CodeTypeReference(nameof(IStore<ISearchEntity>), new CodeTypeReference(new CodeTypeParameter("TSearchType")))),
+                
             }
-            .Apply(m => m.TypeParameters.Add(new CodeTypeParameter("TSearchType")))
+            .Apply(m => m.TypeParameters.Add(new CodeTypeParameter("TSearchType").WithClassConstraint()))
             .Apply(m => m.Parameters.Add(new CodeParameterDeclarationExpression(typeof(SearchType), "searchType")));
 
             storeBaseTypeDeclaration.Members.Add(storeBaseInitialize);
@@ -295,6 +296,12 @@ namespace Codex.Framework.Generation
         {
             action(codeObject);
             return codeObject;
+        }
+
+        public static CodeTypeParameter WithClassConstraint(this CodeTypeParameter ct)
+        {
+            ct.Constraints.Add(" class");
+            return ct;
         }
 
         public static CodeMemberMethod AsyncMethod(this CodeMemberMethod method)
