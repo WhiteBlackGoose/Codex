@@ -16,6 +16,17 @@ namespace Codex
     public interface IDefinitionSymbol : IReferenceSymbol
     {
         /// <summary>
+        /// The name of the type for the symbol
+        /// (i.e. return type of method)
+        /// </summary>
+        string TypeName { get; }
+
+        /// <summary>
+        /// The declaration name for the symbol
+        /// </summary>
+        string DeclarationName { get; }
+
+        /// <summary>
         /// The unique identifier for the symbol
         /// NOTE: This is not applicable to most symbols. Only set for symbols
         /// which are added in a shared context and need this for deduplication)
@@ -58,6 +69,7 @@ namespace Codex
         /// The kind of reference. This is used to group references.
         /// (i.e. for C#(aka .NET) MethodOverride, InterfaceMemberImplementation, InterfaceImplementation, etc.)
         /// </summary>
+        [SearchBehavior(SearchBehavior.Sortword)]
         string ReferenceKind { get; }
     }
 

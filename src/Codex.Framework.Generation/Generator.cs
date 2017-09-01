@@ -60,26 +60,96 @@ namespace Codex.Framework.Generation
 
         private void GenerateSearchDescriptors()
         {
+            HashSet<TypeDefinition> visitedSearchTypeDefinitions = new HashSet<TypeDefinition>();
             HashSet<TypeDefinition> visitedTypeDefinitions = new HashSet<TypeDefinition>();
             HashSet<string> usedMemberNames = new HashSet<string>();
 
             CodeCompileUnit searchDescriptors = new CodeCompileUnit();
             CodeNamespace searchDescriptorsNamespace = new CodeNamespace("Codex.Framework.Types");
             searchDescriptors.Namespaces.Add(searchDescriptorsNamespace);
+            searchDescriptorsNamespace.Imports.Add(new CodeNamespaceImport(typeof(Task<>).Namespace));
 
-            CodeTypeDeclaration indexTypeDeclaration = new CodeTypeDeclaration(nameof(Index));
-
-            foreach (var typeDefinition in Types)
+            CodeTypeDeclaration indexTypeDeclaration = new CodeTypeDeclaration(nameof(IIndex))
             {
-                if (typeof(ISearchEntity).IsAssignableFrom(typeDefinition.Type))
-                {
-                    indexTypeDeclaration.Members.Add(new CodeMemberField(typeDefinition.SearchDescriptorName, typeDefinition.SearchDescriptorName));
+                IsPartial = true,
+                IsInterface = true
+            };
 
+            CodeTypeDeclaration storeTypeDeclaration = new CodeTypeDeclaration(nameof(IStore))
+            {
+                IsPartial = true,
+                IsInterface = true
+            };
+
+            CodeTypeDeclaration storeBaseTypeDeclaration = new CodeTypeDeclaration("StoreBase")
+            {
+                IsPartial = true,
+                IsClass = true,
+                TypeAttributes = System.Reflection.TypeAttributes.Abstract | System.Reflection.TypeAttributes.Public,
+            };
+
+            var storeBaseInitialize = new CodeMemberMethod()
+            {
+                Name = "InitializeAsync",
+                Attributes = MemberAttributes.Public,
+                ReturnType = new CodeTypeReference(typeof(Task))
+            }.AsyncMethod();
+
+            var storeBaseCreateStore = new CodeMemberMethod()
+            {
+                Name = "CreateStoreAsync",
+                Attributes = MemberAttributes.Public | MemberAttributes.Abstract,
+                ReturnType = new CodeTypeReference("Task", new CodeTypeReference(nameof(IStore<ISearchEntity>), new CodeTypeReference(new CodeTypeParameter("TSearchType")))),
+            }
+            .Apply(m => m.TypeParameters.Add(new CodeTypeParameter("TSearchType")))
+            .Apply(m => m.Parameters.Add(new CodeParameterDeclarationExpression(typeof(SearchType), "searchType")));
+
+            storeBaseTypeDeclaration.Members.Add(storeBaseInitialize);
+            storeBaseTypeDeclaration.Members.Add(storeBaseCreateStore);
+
+            searchDescriptorsNamespace.Types.Add(storeTypeDeclaration);
+            searchDescriptorsNamespace.Types.Add(storeBaseTypeDeclaration);
+
+            foreach (var searchType in SearchTypes.RegisteredSearchTypes)
+            {
+                var typeDefinition = DefinitionsByType[searchType.Type];
+                indexTypeDeclaration.Members.Add(new CodeMemberField(typeDefinition.SearchDescriptorName, typeDefinition.SearchDescriptorName));
+
+                var typedStoreProperty = new CodeMemberProperty()
+                {
+                    Type = new CodeTypeReference(typeof(IStore<>).MakeGenericType(searchType.Type)),
+                    Name = searchType.Name + "Store",
+                    HasGet = true
+                };
+
+                storeTypeDeclaration.Members.Add(typedStoreProperty);
+
+                var typedStoreField = new CodeMemberField(typedStoreProperty.Type, $"m_{typedStoreProperty.Name}")
+                {
+                    Attributes = MemberAttributes.Private
+                };
+
+                storeBaseTypeDeclaration.Members.Add(typedStoreField);
+
+                storeBaseTypeDeclaration.Members.Add(new CodeMemberProperty()
+                {
+                    Type = typedStoreProperty.Type,
+                    Name = typedStoreProperty.Name,
+                    HasGet = true,
+                }.Apply(p => p.GetStatements.Add(new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), typedStoreField.Name)))));
+
+                storeBaseInitialize.Statements.Add(new CodeAssignStatement(
+                    new CodeVariableReferenceExpression(typedStoreField.Name),
+                    new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeThisReferenceExpression(), storeBaseCreateStore.Name, new CodeTypeReference(searchType.Type)),
+                        new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(typeof(SearchTypes)), searchType.Name)).AwaitExpression()));
+
+                if (visitedSearchTypeDefinitions.Add(typeDefinition))
+                {
                     CodeTypeDeclaration typeDeclaration = new CodeTypeDeclaration(typeDefinition.SearchDescriptorName);
                     searchDescriptorsNamespace.Types.Add(typeDeclaration);
 
                     var constructor = new CodeConstructor();
-                    constructor.Parameters.Add(new CodeParameterDeclarationExpression(typeof(Index), "index"));
+                    constructor.Parameters.Add(new CodeParameterDeclarationExpression(typeof(Index<bool>), "index"));
                     typeDeclaration.Members.Add(constructor);
 
                     visitedTypeDefinitions.Clear();
@@ -100,10 +170,10 @@ namespace Codex.Framework.Generation
         }
 
         private void PopulateProperties(
-            HashSet<TypeDefinition> visitedTypeDefinitions, 
-            HashSet<string> usedMemberNames, 
-            CodeTypeReference searchType, 
-            TypeDefinition typeDefinition, 
+            HashSet<TypeDefinition> visitedTypeDefinitions,
+            HashSet<string> usedMemberNames,
+            CodeTypeReference searchType,
+            TypeDefinition typeDefinition,
             CodeTypeDeclaration typeDeclaration)
         {
             if (visitedTypeDefinitions.Add(typeDefinition))
@@ -215,6 +285,32 @@ namespace Codex.Framework.Generation
             {
                 return new CodeTypeReference(type);
             }
+        }
+    }
+
+    public static class CodeDomHelper
+    {
+        public static T Apply<T>(this T codeObject, Action<T> action)
+            where T : CodeObject
+        {
+            action(codeObject);
+            return codeObject;
+        }
+
+        public static CodeMemberMethod AsyncMethod(this CodeMemberMethod method)
+        {
+            var returnTypeArgumentReferences = method.ReturnType.TypeArguments.OfType<CodeTypeReference>().ToArray();
+
+            var asyncReturnType = new CodeTypeReference($"async {method.ReturnType.BaseType}", returnTypeArgumentReferences);
+            method.ReturnType = asyncReturnType;
+            return method;
+        }
+
+        public static CodeMethodInvokeExpression AwaitExpression(this CodeMethodInvokeExpression expression)
+        {
+            var variableExpression = expression.Method.TargetObject as CodeVariableReferenceExpression;
+            expression.Method.TargetObject = new CodeVariableReferenceExpression($"await {variableExpression?.VariableName ?? "this"}");
+            return expression;
         }
     }
 }

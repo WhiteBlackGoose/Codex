@@ -9,13 +9,13 @@ namespace Codex.Framework.Types
     /// <summary>
     /// High level storage operations
     /// </summary>
-    public interface IStore<T> : IStore
+    public interface IStore<T>
     {
         // TODO: Generate preprocess
         Task StoreAsync(T value);
     }
 
-    public interface IStore
+    public partial interface IStore
     {
         Task InitializeAsync();
 

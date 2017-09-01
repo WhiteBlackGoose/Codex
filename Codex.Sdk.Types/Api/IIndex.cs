@@ -6,16 +6,21 @@ using System.Threading.Tasks;
 
 namespace Codex.Framework.Types
 {
+    public partial interface IIndex
+    {
+
+    }
+
     /// <summary>
     /// High level query operations for indexed code
     /// </summary>
-    public abstract partial class Index
+    public abstract partial class Index<T>
     {
-        public abstract IndexQuery<T> CreateQuery<T>();
+        public abstract IndexQuery<T> CreateQuery();
 
-        public abstract IPrefixProperty<T> CreatePrefixProperty<T>();
+        public abstract IPrefixProperty<T> CreatePrefixProperty();
 
-        public abstract ITermProperty<T> CreateTermProperty<T>();
+        public abstract ITermProperty<T> CreateTermProperty();
     }
 
     public abstract class IndexQuery<T>
@@ -27,7 +32,7 @@ namespace Codex.Framework.Types
         /// </summary>
         public int MaxResults { get; set; }
 
-        public abstract Task<IIndexQueryResult<T>> ExecuteAsync();
+        public abstract Task<IIndexQueryHitsResponse<T>> ExecuteAsync();
     }
 
     public abstract class PrefixFullNameIndexProperty<T> : TermIndexProperty<T>

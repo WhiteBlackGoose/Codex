@@ -13,22 +13,35 @@ namespace Codex
      * the mapping schema for indices and will generally need to be backward compatible.
      * Additions should be generally safe.
      */
-    class SearchTypes
+    public class SearchTypes
     {
-        public SearchType DefinitionSearch = SearchType.Create<IDefinitionSearchModel>()
+        public static readonly List<SearchType> RegisteredSearchTypes = new List<SearchType>();
+
+        public static SearchType Definition = SearchType.Create<IDefinitionSearchModel>(RegisteredSearchTypes)
             .CopyTo(ds => ds.Definition.Modifiers, ds => ds.Keywords)
             .CopyTo(ds => ds.Definition.Kind, ds => ds.Keywords)
             //.CopyTo(ds => ds.Language, ds => ds.Keywords)
             .CopyTo(ds => ds.ProjectId, ds => ds.Keywords);
 
-        public SearchType ReferenceSearch = SearchType.Create<IReferenceSearchModel>()
+        public static SearchType Reference = SearchType.Create<IReferenceSearchModel>(RegisteredSearchTypes)
             .CopyTo(rs => rs.References.First().Symbol.Kind, rs => rs.ReferencedSymbol.Kind)
             .CopyTo(rs => rs.References.First().Symbol, rs => rs.ReferencedSymbol);
+
+
+        public static SearchType Source = SearchType.Create<ISourceSearchModel>(RegisteredSearchTypes);
+
+        public static SearchType Language = SearchType.Create<ILanguage>(RegisteredSearchTypes);
+
+        public static SearchType Repository = SearchType.Create<IRepositorySearchModel>(RegisteredSearchTypes);
+
+        public static SearchType Project = SearchType.Create<IProjectSearchModel>(RegisteredSearchTypes);
+
+        public static SearchType ProjectReference = SearchType.Create<IProjectReferenceSearchModel>(RegisteredSearchTypes);
     }
 
     public interface IDefinitionSearchModel : IFileScopeEntity, ISearchEntity
     {
-        [Inline(false)]
+        [SearchDescriptorInline(false)]
         IDefinitionSymbol Definition { get; }
 
         // TODO: Should this be here?
@@ -51,7 +64,7 @@ namespace Codex
 
     public interface IReferenceSearchModel : IFileScopeEntity, ICommitScopeEntity, ISearchEntity
     {
-        [Inline(false)]
+        [SearchDescriptorInline(false)]
         IReferenceSymbol ReferencedSymbol { get; }
 
         // TODO: Need some sort of override for searching RelatedDefinition of the

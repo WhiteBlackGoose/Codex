@@ -8,16 +8,31 @@ using System.Threading.Tasks;
 
 namespace Codex
 {
-    public class SearchType
+    public abstract class SearchType
     {
-        public static SearchType<T> Create<T>([CallerMemberName]string name = null)
+        public string Name { get; protected set; }
+
+        public static SearchType<T> Create<T>(List<SearchType> registeredSearchTypes, [CallerMemberName]string name = null)
+            where T : class, ISearchEntity
         {
-            return new SearchType<T>();
+            var searchType = new SearchType<T>(name);
+            registeredSearchTypes.Add(searchType);
+            return searchType;
         }
+
+        public abstract Type Type { get; }
     }
 
     public class SearchType<TSearchType> : SearchType
+        where TSearchType : class, ISearchEntity
     {
+        public override Type Type => typeof(TSearchType);
+
+        public SearchType(string name)
+        {
+            Name = name;
+        }
+
         public SearchType<TSearchType> Inherit<TPRovider, T>(
             Expression<Func<TPRovider, T>> providerField,
             Expression<Func<TSearchType, T>> searchField)

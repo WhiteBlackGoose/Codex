@@ -38,6 +38,7 @@
     <Compile Include="ObjectModel\SymbolId.cs" />
     <Compile Include="ObjectModel\SymbolKind.cs" />
     <Compile Include="ObjectModel\Symbols.cs" />
+    <Compile Include="Utilities\Box.cs" />
     <Compile Include="Utilities\CollectionUtilities.cs" />
     <Compile Include="Utilities\ComparerBuilder.cs" />
     <Compile Include="Utilities\CompilerUtilities.cs" />

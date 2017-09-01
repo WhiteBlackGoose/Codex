@@ -7,14 +7,18 @@ using System.Threading.Tasks;
 
 namespace Codex.ElasticSearch
 {
-    class ElasticSearchStore : IStore
+    class ElasticSearchStore : StoreBase
     {
+        private readonly ElasticSearchService Service;
+        private readonly ElasticSearchStoreConfiguration Configuration;
+
         /// <summary>
         /// Creates an elasticsearch store with the given prefix for indices
         /// </summary>
-        public ElasticSearchStore(ElasticSearchStoreConfiguration configuration)
+        public ElasticSearchStore(ElasticSearchStoreConfiguration configuration, ElasticSearchService service)
         {
-
+            Configuration = configuration;
+            Service = service;
         }
 
         public async Task FinalizeAsync()
@@ -27,8 +31,15 @@ namespace Codex.ElasticSearch
         public async Task InitializeAsync()
         {
             // Create indices with appropriate mappings
+            if (Configuration.CreateIndices)
+            {
+            }
 
+            throw new NotImplementedException();
+        }
 
+        public override Task<IStore<TSearchType>> CreateStoreAsync<TSearchType>(SearchType searchType)
+        {
             throw new NotImplementedException();
         }
     }
@@ -36,5 +47,6 @@ namespace Codex.ElasticSearch
     class ElasticSearchStoreConfiguration
     {
         public string Prefix;
+        public bool CreateIndices = true;
     }
 }

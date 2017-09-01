@@ -38,7 +38,7 @@ namespace Codex.ElasticSearch
             throw new NotImplementedException();
         }
 
-        public ElasticSearchStore CreateStore(ElasticSearchStoreConfiguration configuration)
+        public Task<ElasticSearchStore> CreateStoreAsync(ElasticSearchStoreConfiguration configuration)
         {
             throw new NotImplementedException();
         }

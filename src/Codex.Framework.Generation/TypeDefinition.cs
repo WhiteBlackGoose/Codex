@@ -69,7 +69,7 @@ namespace Codex.Framework.Generation
     {
         public static bool GetInline(this MemberInfo type)
         {
-            var attribute = type.GetAttribute<InlineAttribute>();
+            var attribute = type.GetAttribute<SearchDescriptorInlineAttribute>();
             return attribute?.Inline ?? true;
         }
 

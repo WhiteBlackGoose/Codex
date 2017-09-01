@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace Codex
 {
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    public sealed class InlineAttribute : Attribute
+    public sealed class SearchDescriptorInlineAttribute : Attribute
     {
         public readonly bool Inline;
 
-        public InlineAttribute(bool inline = false)
+        public SearchDescriptorInlineAttribute(bool inline = false)
         {
             Inline = inline;
         }
