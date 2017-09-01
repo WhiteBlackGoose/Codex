@@ -202,7 +202,7 @@
     <Compile Include="ManagedAnalysisHost.cs" />
     <Compile Include="ManagedProjectAnalyzer.cs" />
     <Compile Include="ManagedSolutionProjectAnalyzer.cs" />
-    <Compile Include="MSBuildBinLog\BinLogReader.cs" />
+    <None Include="MSBuildBinLog\BinLogReader.cs" />
     <Compile Include="MSBuildFileAnalyzer.cs" />
     <Compile Include="MSBuildSolutionProjectAnalyzer.cs" />
     <Compile Include="MSBuild\MSBuildExpressionParser.cs" />

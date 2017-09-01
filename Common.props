@@ -30,7 +30,7 @@
     <OutputType Condition="'$(OutputType)'==''">Library</OutputType>
     <RootNamespace Condition="'$(RootNamespace)'=='' AND $(AssemblyName)!=''">$(AssemblyName)</RootNamespace>
     <TargetFrameworkVersion Condition="'$(TargetFrameworkVersion)'==''">v4.6</TargetFrameworkVersion>
-    <SignAssembly Condition="'$(SignAssembly)' == ''">false</SignAssembly>
+    <SignAssembly Condition="'$(SignAssembly)' == ''">true</SignAssembly>
     <DefineConstants Condition="'$(SignAssembly)' == 'true'">$(DefineConstants);SIGN;</DefineConstants>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>$(SrcRoot)\key.snk</AssemblyOriginatorKeyFile>
