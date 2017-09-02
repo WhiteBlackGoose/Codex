@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 		CommitModelTypes.txt = CommitModelTypes.txt
 		Ingestion.txt = Ingestion.txt
 		Roadmap.txt = Roadmap.txt
+		TODO.txt = TODO.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Web.Monaco", "src\Codex.Web.Monaco\Codex.Web.Monaco.csproj", "{BC4A8ABD-8848-4544-9F7C-FC98E3A89DF2}"

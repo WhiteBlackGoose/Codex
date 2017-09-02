@@ -23,33 +23,42 @@ namespace Codex.ElasticSearch
             Service = service;
         }
 
-        public async Task FinalizeAsync()
+        public override Task FinalizeAsync()
         {
-            // Finalize commits. Should there be a notion of sessions for commits
+            // TODO: Delta commits.
+            // TODO: Finalize commits. Should there be a notion of sessions for commits
             // rather than having the entire store be commit specific
-            throw new NotImplementedException();
+            return base.FinalizeAsync();
         }
 
-        public async Task InitializeAsync()
+        public override Task InitializeAsync()
         {
-            // Create indices with appropriate mappings
-            if (Configuration.CreateIndices)
-            {
-            }
-
-            throw new NotImplementedException();
+            return base.InitializeAsync();
         }
 
-        public override Task<IStore<TSearchType>> CreateStoreAsync<TSearchType>(SearchType searchType)
+        public override async Task<IStore<TSearchType>> CreateStoreAsync<TSearchType>(SearchType searchType)
         {
             var store = new TypedStore<TSearchType>(this, searchType);
-            throw new NotImplementedException();
+            await store.InitializeAsync();
+            return store;
         }
     }
 
     class ElasticSearchStoreConfiguration
     {
+        /// <summary>
+        /// Prefix for indices
+        /// </summary>
         public string Prefix;
+
+        /// <summary>
+        /// Indicates where indices should be created when <see cref="ElasticSearchStore.InitializeAsync"/> is called.
+        /// </summary>
         public bool CreateIndices = true;
+
+        /// <summary>
+        /// The number of shards for created indices
+        /// </summary>
+        public int? ShardCount;
     }
 }

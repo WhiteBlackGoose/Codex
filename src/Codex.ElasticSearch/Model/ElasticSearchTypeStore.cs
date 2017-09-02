@@ -4,6 +4,7 @@ using Codex.Sdk.Utilities;
 using Codex.Storage.ElasticProviders;
 using Nest;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,6 +32,14 @@ namespace Codex.ElasticSearch
             {
                 await CreateIndexAsync();
             }
+
+            // Change refresh interval
+            // Disable replicas during indexing
+        }
+
+        public async Task FinalizeAsync()
+        {
+
         }
 
         private async Task CreateIndexAsync()
@@ -43,9 +52,10 @@ namespace Codex.ElasticSearch
                     .CreateIndexAsync(indexName,
                         c => CustomAnalyzers.AddNGramAnalyzerFunc(c)
                             .Mappings(m => m.Map<T>(TypeName.From<T>(), tm => tm.AutoMap(MappingPropertyVisitor.Instance)))
+                            .Settings(s => s.NumberOfShards(store.Configuration.ShardCount).RefreshInterval(TimeSpan.FromMinutes(1)))
                             .CaptureRequest(client, request))
                     .ThrowOnFailure();
-
+                
                 return response.IsValid;
             });
         }

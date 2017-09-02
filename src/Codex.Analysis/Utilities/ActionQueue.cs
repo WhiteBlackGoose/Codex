@@ -1,3 +1,4 @@
+using Codex.Sdk.Utilities;
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace Codex.Utilities
         private ActionBlock<bool> operationBlock;
         private BlockingCollection<Func<Task>>[] priorityQueues;
         private CompletionTracker tracker;
-        private AsyncLocal<Holder<int>> asyncLocalDepth = new AsyncLocal<Holder<int>>();
+        private AsyncLocal<Box<int>> asyncLocalDepth = new AsyncLocal<Box<int>>();
 
         /// <summary>
         /// Creates a new action queue.
@@ -41,12 +42,6 @@ namespace Codex.Utilities
 
             this.tracker = tracker ?? new CompletionTracker();
         }
-
-        private class Holder<T>
-        {
-            public T Value;
-        }
-
 
         /// <summary>
         /// Returns a task the represents the completion of all current pending operations
@@ -99,7 +94,7 @@ namespace Codex.Utilities
 
             priorityQueues[priority].Add(new Func<Task>(async () =>
             {
-                asyncLocalDepth.Value = new Holder<int>() { Value = depth };
+                asyncLocalDepth.Value = new Box<int>() { Value = depth };
                 try
                 {
                     var result = await taskFactory().ConfigureAwait(continueOnCapturedContext: false);

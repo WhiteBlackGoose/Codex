@@ -1,0 +1,19 @@
+Declare index schema types separate from data types 
+
+Example:
+	interface IDefinitionIndexSchema : IIndexSchema<IDefinitionSymbol>
+	{
+		[Prefix]
+		string ShortName { get; }
+
+		[PrefixFullName]
+		string ContainerQualifiedName { get; }
+
+		[NormalizedKeyword]
+		[CopyFrom(Value.Symbol.Modifiers)] // public virtual
+		[CopyFrom(Value.ProjectId)] // Codex.Analysis.Managed
+		[CopyFrom(Value.Kind)] // class
+		[CopyFrom(Value.Language)] // csharp
+		string[] Keywords { get; }
+	
+	} 

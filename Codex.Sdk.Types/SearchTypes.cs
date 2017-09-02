@@ -39,7 +39,20 @@ namespace Codex
         public static SearchType ProjectReference = SearchType.Create<IProjectReferenceSearchModel>(RegisteredSearchTypes);
     }
 
-    public interface IDefinitionSearchModel : IFileScopeEntity, ISearchEntity
+    public class DefinitionIndexType : SearchType<IDefinitionSymbol>
+    {
+        public DefinitionIndexType(string name) : base(name)
+        {
+        }
+    }
+
+    public class IndexField<T>
+    {
+        public SearchBehavior SearchBehavior { get; }
+    }
+
+
+    public interface IDefinitionSearchModel : ISearchEntity
     {
         [SearchDescriptorInline(false)]
         IDefinitionSymbol Definition { get; }

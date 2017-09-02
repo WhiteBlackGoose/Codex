@@ -13,6 +13,8 @@ namespace Codex.Framework.Types
     {
         // TODO: Generate preprocess
         Task StoreAsync(T value);
+
+        Task FinalizeAsync();
     }
 
     public partial interface IStore

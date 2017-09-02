@@ -95,6 +95,14 @@ namespace Codex.Framework.Generation
                 ReturnType = new CodeTypeReference(typeof(Task))
             }.AsyncMethod();
 
+
+            var storeBaseFinalize = new CodeMemberMethod()
+            {
+                Name = "FinalizeAsync",
+                Attributes = MemberAttributes.Public,
+                ReturnType = new CodeTypeReference(typeof(Task))
+            }.AsyncMethod();
+
             var storeBaseCreateStore = new CodeMemberMethod()
             {
                 Name = "CreateStoreAsync",
@@ -106,6 +114,7 @@ namespace Codex.Framework.Generation
             .Apply(m => m.Parameters.Add(new CodeParameterDeclarationExpression(typeof(SearchType), "searchType")));
 
             storeBaseTypeDeclaration.Members.Add(storeBaseInitialize);
+            storeBaseTypeDeclaration.Members.Add(storeBaseFinalize);
             storeBaseTypeDeclaration.Members.Add(storeBaseCreateStore);
 
             searchDescriptorsNamespace.Types.Add(storeTypeDeclaration);
@@ -144,10 +153,13 @@ namespace Codex.Framework.Generation
                     new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeThisReferenceExpression(), storeBaseCreateStore.Name, new CodeTypeReference(searchType.Type)),
                         new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(typeof(SearchTypes)), searchType.Name)).AwaitExpression()));
 
+                storeBaseFinalize.Statements.Add(
+                    new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeVariableReferenceExpression(typedStoreField.Name), "FinalizeAsync")).AwaitExpression());
+
                 if (visitedSearchTypeDefinitions.Add(typeDefinition))
                 {
                     CodeTypeDeclaration typeDeclaration = new CodeTypeDeclaration(typeDefinition.SearchDescriptorName);
-                    searchDescriptorsNamespace.Types.Add(typeDeclaration);
+                    //searchDescriptorsNamespace.Types.Add(typeDeclaration);
 
                     var constructor = new CodeConstructor();
                     constructor.Parameters.Add(new CodeParameterDeclarationExpression(typeof(Index<bool>), "index"));
