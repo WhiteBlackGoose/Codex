@@ -1,6 +1,9 @@
-﻿using Microsoft.CodeDom.Providers.DotNetCompilerPlatform;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeDom.Providers.DotNetCompilerPlatform;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -21,6 +24,16 @@ namespace Codex.Framework.Generation
         public string BuilderClassName;
 
         public string SearchDescriptorName;
+
+        public List<CodeCommentStatement> Comments = new List<CodeCommentStatement>();
+
+        public List<CodeTypeReference> TypeParameters = new List<CodeTypeReference>();
+
+        public INamedTypeSymbol TypeSymbol;
+        public Type BaseType;
+        public TypeDefinition BaseTypeDefinition;
+
+        public List<TypeDefinition> Interfaces = new List<TypeDefinition>();
 
         public TypeDefinition(Type type)
         {
@@ -44,10 +57,18 @@ namespace Codex.Framework.Generation
         public SearchBehavior? SearchBehavior;
 
         public string Name;
+        public string BackingFieldName;
 
         public PropertyInfo PropertyInfo;
 
+        public Type PropertyType;
+
         public TypeDefinition PropertyTypeDefinition;
+
+        public CodeTypeReference ImmutablePropertyType;
+        public CodeTypeReference MutablePropertyType;
+
+        public List<CodeCommentStatement> Comments = new List<CodeCommentStatement>();
 
         public bool Inline;
 
@@ -56,17 +77,50 @@ namespace Codex.Framework.Generation
         public PropertyDefinition(PropertyInfo propertyInfo)
         {
             Name = propertyInfo.Name;
+            BackingFieldName = $"m_{Name}";
             PropertyInfo = propertyInfo;
             AllowedStages = propertyInfo.GetAllowedStages();
             SearchBehavior = propertyInfo.GetSearchBehavior();
             IsList = propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(IReadOnlyList<>);
             Inline = propertyInfo.GetInline();
+            PropertyType = IsList ?
+                PropertyInfo.PropertyType.GenericTypeArguments[0] :
+                PropertyInfo.PropertyType;
         }
-
     }
 
     public static class Helpers
     {
+        public static string GetMetadataName(this Type type)
+        {
+            if (type.IsGenericType)
+            {
+                return type.GetGenericTypeDefinition().FullName;
+            }
+
+            return type.FullName;
+        }
+
+        public static void AddComments(this List<CodeCommentStatement> comments, string commentsText)
+        {
+            if (string.IsNullOrEmpty(commentsText))
+            {
+                return;
+            }
+
+            var reader = new StringReader(commentsText);
+            string line = null;
+            while ((line = reader.ReadLine()) != null)
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    continue;
+                }
+
+                comments.Add(new CodeCommentStatement(line.Trim(), true));
+            }
+        }
+
         public static bool GetInline(this MemberInfo type)
         {
             var attribute = type.GetAttribute<SearchDescriptorInlineAttribute>();

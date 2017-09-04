@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 namespace Codex
 {
     public interface ISymbolSpan<TSymbol> : ILineSpan
-        where TSymbol : ICodeSymbol
     {
         TSymbol Symbol { get; }
     }
@@ -31,7 +30,7 @@ namespace Codex
         /// NOTE: This is not applicable to most symbols. Only set for symbols
         /// which are added in a shared context and need this for deduplication)
         /// </summary>
-        string Uid { get; set; }
+        string Uid { get; }
 
         /// <summary>
         /// The comment applied to the definition
@@ -61,7 +60,6 @@ namespace Codex
         /// Modifiers for the symbol such as public
         /// </summary>
         // TODO: Consider using single CopyTo field for keywords
-        [SearchBehavior(SearchBehavior.Term)]
         string[] Modifiers { get; }
     }
 
@@ -78,7 +76,7 @@ namespace Codex
     public interface ICodeSymbol
     {
         /// <summary>
-        /// The identifier of the referenced project
+        /// The identifier of the project in which the symbol appears
         /// </summary>
         [SearchBehavior(SearchBehavior.NormalizedKeyword)]
         string ProjectId { get; }
@@ -109,7 +107,7 @@ namespace Codex
         bool ExcludeFromSearch { get; }
 
         /// <summary>
-        /// Indicates the corresponding definitions is implicitly declared and therefore this should not be
+        /// Indicates the corresponding definition is implicitly declared and therefore this should not be
         /// used for find all references search
         /// </summary>
         [SearchBehavior(SearchBehavior.Term)]

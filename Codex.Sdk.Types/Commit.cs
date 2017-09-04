@@ -15,12 +15,12 @@ namespace Codex.Framework.Types
         string Description { get; }
 
         [SearchBehavior(SearchBehavior.Sortword)]
-        DateTime DateUploaded { get; set; }
+        DateTime DateUploaded { get; }
 
         [SearchBehavior(SearchBehavior.Sortword)]
-        DateTime DateCommitted { get; set; }
+        DateTime DateCommitted { get; }
 
-        IReadOnlyList<IRef<ICommit>> Parents { get; }
+        IReadOnlyList<string> Parents { get; }
     }
 
     public interface IBranch

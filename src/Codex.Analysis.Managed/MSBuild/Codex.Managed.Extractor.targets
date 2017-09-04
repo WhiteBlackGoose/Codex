@@ -39,7 +39,7 @@
 
     <!-- Force CoreCompile to execute (this file is declared as an output to core compile
          for use of forcing the MSBuild up to date check to force core compile to run)-->
-    <NonExistentFile>__NonExistentSubDir__\__NonExistentFile__</NonExistentFile>
+    <NonExistentFile Condition="'$(DisableForceExtractionCoreCompile)' != 'true'">__NonExistentSubDir__\__NonExistentFile__</NonExistentFile>
   </PropertyGroup>
 
   <Target Name="ExtractCommandLineArgs"
@@ -47,7 +47,7 @@
 
     <PropertyGroup>
       <CodexProjectName>$(MSBuildProjectName)</CodexProjectName>
-      <CodexProjectExtractionDirectory>$(ExtractionSourceRoot)\.vs\Codex\projects\$(CodexProjectName)</CodexProjectExtractionDirectory>
+      <CodexProjectExtractionDirectory Condition="'$(CodexProjectExtractionDirectory)' == ''">$(ExtractionSourceRoot)\.vs\Codex\projects\$(CodexProjectName)</CodexProjectExtractionDirectory>
     </PropertyGroup>
 
     <ItemGroup>

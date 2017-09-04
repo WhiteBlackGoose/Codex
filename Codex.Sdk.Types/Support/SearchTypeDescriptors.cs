@@ -29,14 +29,18 @@ namespace Codex
     {
         public override Type Type => typeof(TSearchType);
 
+        public List<Tuple<Expression<Func<TSearchType, object>>, Expression<Func<TSearchType, object>>>> CopyToFields = new List<Tuple<Expression<Func<TSearchType, object>>, Expression<Func<TSearchType, object>>>>();
+
+        public List<Tuple<Expression<Func<TSearchType, object>>, Expression<Func<TSearchType, object>>>> InheritFields = new List<Tuple<Expression<Func<TSearchType, object>>, Expression<Func<TSearchType, object>>>>();
+
         public SearchType(string name)
         {
             Name = name;
             IndexName = Name.ToLowerInvariant();
         }
 
-        public SearchType<TSearchType> Inherit<TPRovider, T>(
-            Expression<Func<TPRovider, T>> providerField,
+        public SearchType<TSearchType> Inherit<T>(
+            Expression<Func<TSearchType, T>> providerField,
             Expression<Func<TSearchType, T>> searchField)
         {
             return this;

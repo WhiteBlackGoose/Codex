@@ -11,7 +11,7 @@ namespace Codex.Framework.Types
     /// <summary>
     /// High level operations for codex 
     /// </summary>
-    public interface ICodex
+    public interface ICodexService
     {
         Task<IIndexQueryHitsResponse<ISearchResult>> SearchAsync(SearchArguments arguments);
 

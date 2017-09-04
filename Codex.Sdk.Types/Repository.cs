@@ -8,8 +8,14 @@ namespace Codex
 {
     public interface IRepository
     {
+        /// <summary>
+        /// The name fo the repository
+        /// </summary>
         string Name { get; }
 
+        /// <summary>
+        /// Describes the repository
+        /// </summary>
         string Description { get; }
 
         [EntityId]

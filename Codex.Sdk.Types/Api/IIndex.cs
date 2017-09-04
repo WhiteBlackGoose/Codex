@@ -120,6 +120,9 @@ namespace Codex.Framework.Types
         int MaxResults { get; set; }
 
         Task<IIndexQueryResponse<T>> ExecuteAsync();
+
+        void Exclude();
+
     }
 
     public interface IIndexQueryResponse<T>
@@ -143,6 +146,9 @@ namespace Codex.Framework.Types
         /// The results of the query
         /// </summary>
         T Result { get; }
+
+        void Exclude();
+
     }
 
     public interface IIndexQueryHits<T>
@@ -157,16 +163,19 @@ namespace Codex.Framework.Types
         /// The results of the query
         /// </summary>
         IReadOnlyList<T> Hits { get; }
+
+        void Exclude();
     }
 
 
     public interface IIndexQueryHitsResponse<T> : IIndexQueryResponse<IIndexQueryHits<T>>
     {
-
+        void Exclude();
     }
 
     public interface IIndexQueryFilter<T>
     {
+        void Exclude();
     }
 
 

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Codex
 {
+    /// <summary>
+    /// Represents a source file with associated semantic bindings
+    /// </summary>
     public interface IBoundSourceFile : ITextFile, IFileScopeEntity
     {
         IReadOnlyList<IReferenceSpan> References { get; }
@@ -19,7 +22,7 @@ namespace Codex
         IReadOnlyList<IOutliningRegion> OutliningRegions { get; }
     }
 
-    public interface ITextFile
+    public interface ITextFile : IFileScopeEntity
     {
         [SearchBehavior(SearchBehavior.FullText)]
         string Content { get; }
@@ -82,7 +85,7 @@ namespace Codex
         int LocalGroupId { get; }
     }
 
-    public interface ISymbolSpan : ISpan
+    public interface ISymbolSpan : ILineSpan
     {
 
     }

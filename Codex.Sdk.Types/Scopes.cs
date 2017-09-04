@@ -24,6 +24,9 @@ namespace Codex
     [RequiredFor(ObjectStage.Upload)]
     public interface IRepoScopeEntity
     {
+        /// <summary>
+        /// The name of the repository containing the entity
+        /// </summary>
         string RepositoryName { get; }
     }
 
@@ -37,6 +40,9 @@ namespace Codex
     [RequiredFor(ObjectStage.Upload)]
     public interface IProjectScopeEntity : IRepoScopeEntity
     {
+        /// <summary>
+        /// The identifier of the project containing the entity
+        /// </summary>
         [SearchBehavior(SearchBehavior.Sortword)]
         string ProjectId { get; }
     }
@@ -49,10 +55,5 @@ namespace Codex
         /// </summary>
         [SearchBehavior(SearchBehavior.NormalizedKeyword)]
         string FilePath { get; }
-
-        /// <summary>
-        /// The unique identifier for the file
-        /// </summary>
-        string FileId { get; }
     }
 }

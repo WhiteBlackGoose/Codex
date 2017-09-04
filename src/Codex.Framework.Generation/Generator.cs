@@ -7,6 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Codex.Framework.Types;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using System.Runtime.CompilerServices;
 
 namespace Codex.Framework.Generation
 {
@@ -16,9 +19,15 @@ namespace Codex.Framework.Generation
 
         public List<TypeDefinition> Types = new List<TypeDefinition>();
         public Dictionary<Type, TypeDefinition> DefinitionsByType = new Dictionary<Type, TypeDefinition>();
+        public Dictionary<string, TypeDefinition> DefinitionsByTypeMetadataName = new Dictionary<string, TypeDefinition>();
+        private CSharpCompilation Compilation;
+        private string ProjectDirectory;
 
-        public Generator()
+        private SymbolDisplayFormat TypeNameDisplayFormat = new SymbolDisplayFormat(genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters);
+
+        public Generator([CallerFilePath] string filePath = null)
         {
+            ProjectDirectory = Path.GetDirectoryName(filePath);
             CodeProvider = new CSharpCodeProvider();
         }
 
@@ -31,8 +40,15 @@ namespace Codex.Framework.Generation
 
         public void LoadTypeInformation()
         {
-            Types = typeof(ObjectStage)
-                .Assembly
+            var assembly = typeof(ObjectStage).Assembly;
+            CSharpCommandLineArguments arguments = CSharpCommandLineParser.Default.Parse(File.ReadAllLines("csc.args.txt"), ProjectDirectory, null);
+
+            Compilation = CSharpCompilation.Create("TempGeneratorAssembly").AddReferences(PortableExecutableReference.CreateFromFile(assembly.Location,
+                documentation: XmlDocumentationProvider.CreateFromFile(Path.ChangeExtension(assembly.Location, ".xml"))));
+            var symbol = Compilation.GetTypeByMetadataName(typeof(IBoundSourceFile).FullName);
+            var comment = symbol.GetDocumentationCommentXml();
+
+            Types = assembly
                 .GetTypes()
                 .Where(t => t.IsInterface)
                 //.Where(t => t.IsAssignableFrom(typeof(ISearchEntity)))
@@ -41,14 +57,100 @@ namespace Codex.Framework.Generation
 
             foreach (var typeDefinition in Types)
             {
+                typeDefinition.TypeSymbol = Compilation.GetTypeByMetadataName(typeDefinition.Type.FullName);
                 DefinitionsByType[typeDefinition.Type] = typeDefinition;
+                DefinitionsByTypeMetadataName[typeDefinition.Type.FullName] = typeDefinition;
             }
 
             foreach (var typeDefinition in Types)
             {
+                Dictionary<string, INamedTypeSymbol> interfacesByMetadataName = new Dictionary<string, INamedTypeSymbol>();
+                foreach (var baseInterface in typeDefinition.TypeSymbol.AllInterfaces)
+                {
+                    interfacesByMetadataName[baseInterface.ContainingNamespace + "." + baseInterface.MetadataName] = baseInterface;
+                }
+
+                foreach (var baseType in typeDefinition.Type.GetInterfaces())
+                {
+                    if (baseType.Assembly == assembly && baseType.IsGenericType)
+                    {
+                        if (!DefinitionsByType.ContainsKey(baseType))
+                        {
+                            var baseTypeDefinition = ToTypeDefinition(baseType);
+                            baseTypeDefinition.TypeSymbol = interfacesByMetadataName[baseType.GetMetadataName()];
+                            DefinitionsByType[baseType] = baseTypeDefinition;
+                        }
+                    }
+                }
+            }
+
+            foreach (var typeDefinition in DefinitionsByType.Values)
+            {
+                var interfaces = typeDefinition.Type.GetInterfaces();
+                Type baseType = null;
+                int baseTypeCount = 0;
+                foreach (var i in interfaces)
+                {
+                    if (i.GetInterfaces().Length == interfaces.Length - 1)
+                    {
+                        baseType = i;
+                        baseTypeCount++;
+                    }
+                }
+
+                if (baseTypeCount == 1)
+                {
+                    typeDefinition.BaseType = baseType;
+                    typeDefinition.BaseTypeDefinition = DefinitionsByType[baseType];
+                }
+                else
+                {
+                    typeDefinition.Interfaces.AddRange(interfaces.Select(t => DefinitionsByType[t]));
+                }
+            }
+
+            foreach (var typeDefinition in DefinitionsByType.Values)
+            {
+                var declarationType = typeDefinition.Type;
+                if (declarationType.IsGenericType)
+                {
+                    declarationType = declarationType.GetGenericTypeDefinition();
+                }
+
+                var typeSymbol = typeDefinition.TypeSymbol ?? Compilation.GetTypeByMetadataName(declarationType.FullName);
+                typeDefinition.ClassName = typeSymbol.ToDisplayString(TypeNameDisplayFormat).Substring(1);
+
+                foreach (var typeParameter in typeSymbol.TypeParameters)
+                {
+                    typeDefinition.TypeParameters.Add(new CodeTypeReference(new CodeTypeParameter(typeParameter.Name)));
+                }
+
+                //if (typeSymbol.Interfaces.Length == 1 && 
+                //    DefinitionsByTypeMetadataName.TryGetValue(typeSymbol.Interfaces[0].MetadataName, out typeDefinition.BaseType))
+                //{
+                //}
+                //else
+                //{
+                //    typeDefinition.Interfaces.AddRange(typeDefinition.Type.GetInterfaces().Select(t => DefinitionsByType[t]));
+                //}
+
+                typeDefinition.Comments.AddComments(typeSymbol.GetDocumentationCommentXml());
+
+                var members = typeSymbol.GetMembers()
+                    .Where(m => m.Kind == SymbolKind.Property)
+                    .ToDictionary(m => m.Name);
+
                 foreach (var property in typeDefinition.Properties)
                 {
-                    DefinitionsByType.TryGetValue(property.PropertyInfo.PropertyType, out property.PropertyTypeDefinition);
+                    DefinitionsByType.TryGetValue(property.PropertyType, out property.PropertyTypeDefinition);
+                    property.ImmutablePropertyType = new CodeTypeReference(property.PropertyInfo.PropertyType);
+                    property.Comments.AddComments(members[property.Name].GetDocumentationCommentXml());
+
+                    property.MutablePropertyType = property.PropertyTypeDefinition != null ? new CodeTypeReference(property.PropertyTypeDefinition.ClassName) : new CodeTypeReference(property.PropertyType);
+                    if (property.IsList)
+                    {
+                        property.MutablePropertyType = new CodeTypeReference(typeof(List<object>)).Apply(ct => ct.TypeArguments[0] = property.MutablePropertyType);
+                    }
                 }
             }
         }
@@ -108,7 +210,7 @@ namespace Codex.Framework.Generation
                 Name = "CreateStoreAsync",
                 Attributes = MemberAttributes.Public | MemberAttributes.Abstract,
                 ReturnType = new CodeTypeReference("Task", new CodeTypeReference(nameof(IStore<ISearchEntity>), new CodeTypeReference(new CodeTypeParameter("TSearchType")))),
-                
+
             }
             .Apply(m => m.TypeParameters.Add(new CodeTypeParameter("TSearchType").WithClassConstraint()))
             .Apply(m => m.Parameters.Add(new CodeParameterDeclarationExpression(typeof(SearchType), "searchType")));
@@ -168,8 +270,31 @@ namespace Codex.Framework.Generation
                     visitedTypeDefinitions.Clear();
                     usedMemberNames.Clear();
 
-                    PopulateProperties(visitedTypeDefinitions, usedMemberNames, new CodeTypeReference(typeDeclaration.Name), typeDefinition, typeDeclaration);
+                    PopulateIndexProperties(visitedTypeDefinitions, usedMemberNames, new CodeTypeReference(typeDeclaration.Name), typeDefinition, typeDeclaration);
                 }
+            }
+
+            foreach (var typeDefinition in this.Types)
+            {
+                // Exclude interfaces for which aren't data types
+                if (typeDefinition.Type.GetMethods().Where(m => !m.IsSpecialName).Count() != 0)
+                {
+                    continue;
+                }
+
+                visitedTypeDefinitions.Clear();
+                usedMemberNames.Clear();
+                var typeDeclaration = new CodeTypeDeclaration(typeDefinition.ClassName)
+                {
+                    IsClass = true,
+                    IsPartial = true,
+                };
+
+                typeDeclaration.Comments.AddRange(typeDefinition.Comments.ToArray());
+
+                searchDescriptorsNamespace.Types.Add(typeDeclaration);
+
+                PopulateProperties(visitedTypeDefinitions, usedMemberNames, typeDefinition, typeDeclaration);
             }
 
             using (var writer = new StreamWriter("SearchDescriptors.g.cs"))
@@ -185,6 +310,150 @@ namespace Codex.Framework.Generation
         private void PopulateProperties(
             HashSet<TypeDefinition> visitedTypeDefinitions,
             HashSet<string> usedMemberNames,
+            TypeDefinition typeDefinition,
+            CodeTypeDeclaration typeDeclaration)
+        {
+            if (!visitedTypeDefinitions.Add(typeDefinition))
+            {
+                return;
+            }
+
+            var applyMethod = new CodeMemberMethod()
+            {
+                Name = "Apply",
+                Attributes = MemberAttributes.Public,
+                ReturnType = new CodeTypeReference(typeDeclaration.Name)
+            };
+
+            applyMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeDefinition.Type.AsReference(), "value"));
+
+
+            foreach (var property in typeDefinition.Properties)
+            {
+                AddPropertyApplyStatement(applyMethod, property);
+
+                typeDeclaration.Members.Add(new CodeMemberProperty()
+                {
+                    Type = property.ImmutablePropertyType,
+                    Name = property.Name,
+                    HasGet = true,
+                    PrivateImplementationType = property.PropertyInfo.DeclaringType.AsReference()
+                }
+                .AddComments(property.Comments)
+                .Apply(p => p.GetStatements.Add(new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), property.BackingFieldName)))));
+
+                if (!usedMemberNames.Add(property.Name))
+                {
+                    continue;
+                }
+
+                CodeMemberField backingField = new CodeMemberField()
+                {
+                    Name = property.BackingFieldName,
+                    Attributes = MemberAttributes.Private,
+                    Type = property.MutablePropertyType,
+                };
+
+                if (property.IsList)
+                {
+                    backingField.InitExpression = new CodeObjectCreateExpression(backingField.Type);
+                }
+
+                typeDeclaration.Members.Add(backingField);
+
+                typeDeclaration.Members.Add(new CodeMemberProperty()
+                {
+                    Type = backingField.Type,
+                    Name = property.Name,
+                    Attributes = MemberAttributes.Public,
+                    HasGet = true,
+                }
+                .AddComments(property.Comments)
+                .Apply(p => p.GetStatements.Add(new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), backingField.Name))))
+                .Apply(p =>
+                {
+                    if (!property.IsList)
+                    {
+                        p.HasSet = true;
+                        p.SetStatements.Add(new CodeAssignStatement(left: new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), backingField.Name), right: new CodePropertySetValueReferenceExpression()));
+                    }
+                }));
+            }
+
+            if (visitedTypeDefinitions.Count == 1)
+            {
+                if (typeDefinition.BaseTypeDefinition != null)
+                {
+                    typeDeclaration.BaseTypes.Add(typeDefinition.BaseTypeDefinition.ClassName);
+                    applyMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeBaseReferenceExpression(), applyMethod.Name),
+                        new CodeCastExpression(new CodeTypeReference(typeDefinition.BaseType), new CodeVariableReferenceExpression("value"))));
+                }
+
+                typeDeclaration.BaseTypes.Add(typeDefinition.Type.AsReference());
+            }
+
+            foreach (var baseDefinition in typeDefinition.Interfaces)
+            {
+                foreach (var property in baseDefinition.Properties)
+                {
+                    AddPropertyApplyStatement(applyMethod, property);
+                }
+
+                //applyMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeThisReferenceExpression(), applyMethod.Name),
+                //    new CodeCastExpression(baseDefinition.Type, new CodeVariableReferenceExpression("value"))));
+                PopulateProperties(visitedTypeDefinitions, usedMemberNames, baseDefinition, typeDeclaration);
+            }
+
+            applyMethod.Statements.Add(new CodeMethodReturnStatement(new CodeThisReferenceExpression()));
+            typeDeclaration.Members.Add(applyMethod);
+        }
+
+        private void AddPropertyApplyStatement(CodeMemberMethod applyMethod, PropertyDefinition property)
+        {
+            applyMethod.Statements.Add(new CodeAssignStatement(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), property.BackingFieldName),
+                GetPropertyApplyExpression(property)));
+        }
+
+        private CodeExpression GetPropertyApplyExpression(PropertyDefinition property)
+        {
+            var valuePropertyReferenceExpression = new CodeFieldReferenceExpression(new CodeCastExpression(property.PropertyInfo.DeclaringType.AsReference(), new CodeVariableReferenceExpression("value")), property.Name);
+            if (!property.IsList)
+            {
+                if (property.PropertyTypeDefinition == null)
+                {
+                    // value.Property;
+                    return valuePropertyReferenceExpression;
+                }
+                else
+                {
+                    // new PropertyType().Apply(value.Property);
+                    return new CodeMethodInvokeExpression(new CodeObjectCreateExpression(property.MutablePropertyType), "Apply", valuePropertyReferenceExpression);
+                }
+            }
+            else
+            {
+
+                if (property.PropertyTypeDefinition == null)
+                {
+                    // new List<PropertyType>(value.Property);
+                    return new CodeObjectCreateExpression(property.MutablePropertyType,
+                        valuePropertyReferenceExpression);
+                }
+                else
+                {
+                    // new List<PropertyType>(value.Property.Select(v => new PropertyType().Apply(v)));
+                    return new CodeObjectCreateExpression(property.MutablePropertyType,
+                        new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeTypeReferenceExpression(typeof(Enumerable)), nameof(Enumerable.Select)),
+                        valuePropertyReferenceExpression,
+                            new CodeSnippetExpression($"v => new {property.PropertyTypeDefinition.ClassName}().Apply(v)")));
+                }
+
+            }
+        }
+
+        private void PopulateIndexProperties(
+            HashSet<TypeDefinition> visitedTypeDefinitions,
+            HashSet<string> usedMemberNames,
             CodeTypeReference searchType,
             TypeDefinition typeDefinition,
             CodeTypeDeclaration typeDeclaration)
@@ -196,7 +465,7 @@ namespace Codex.Framework.Generation
                     TypeDefinition baseDefinition;
                     if (DefinitionsByType.TryGetValue(type, out baseDefinition))
                     {
-                        PopulateProperties(visitedTypeDefinitions, usedMemberNames, searchType, baseDefinition, typeDeclaration);
+                        PopulateIndexProperties(visitedTypeDefinitions, usedMemberNames, searchType, baseDefinition, typeDeclaration);
                     }
                 }
 
@@ -234,7 +503,7 @@ namespace Codex.Framework.Generation
                             typeDeclaration = nestedTypeDeclaration;
                         }
 
-                        PopulateProperties(visitedTypeDefinitions, usedMemberNames, searchType, property.PropertyTypeDefinition, typeDeclaration);
+                        PopulateIndexProperties(visitedTypeDefinitions, usedMemberNames, searchType, property.PropertyTypeDefinition, typeDeclaration);
                     }
                 }
             }
@@ -303,10 +572,32 @@ namespace Codex.Framework.Generation
 
     public static class CodeDomHelper
     {
+        public static CodeTypeReference AsReference(this Type type)
+        {
+            var result =  new CodeTypeReference(type);
+
+            if (type.IsGenericTypeDefinition)
+            {
+                foreach (var typeParameter in type.GetGenericArguments())
+                {
+                    result.TypeArguments.Add(new CodeTypeReference(new CodeTypeParameter(typeParameter.Name)));
+                }
+            }
+
+            return result;
+        }
+
         public static T Apply<T>(this T codeObject, Action<T> action)
             where T : CodeObject
         {
             action(codeObject);
+            return codeObject;
+        }
+
+        public static T AddComments<T>(this T codeObject, IEnumerable<CodeCommentStatement> comments)
+            where T : CodeTypeMember
+        {
+            codeObject.Comments.AddRange(comments.ToArray());
             return codeObject;
         }
 
