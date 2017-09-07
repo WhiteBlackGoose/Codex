@@ -17,3 +17,5 @@ Example:
 		string[] Keywords { get; }
 	
 	} 
+
+Cumulative commit filter - a filter which includes all files in the commit and its parent commits transitively

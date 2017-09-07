@@ -12,7 +12,8 @@ namespace Codex.Framework.Types
     public interface IStore<T>
     {
         // TODO: Generate preprocess
-        Task StoreAsync(T value);
+        // TODO: Update
+        Task StoreAsync(IReadOnlyList<T> values);
 
         Task FinalizeAsync();
     }

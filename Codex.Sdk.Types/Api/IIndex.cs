@@ -56,11 +56,11 @@ namespace Codex.Framework.Types
         public abstract IndexFilter<T> ContainsAll(string[] terms);
     }
 
+    // TODO: Sortword is normally also a normalized keyword. Is this always the case?
     public abstract class SortwordIndexProperty<T> : TermIndexProperty<T>
     {
 
     }
-
 
     public abstract class TermIndexProperty<T>
     {

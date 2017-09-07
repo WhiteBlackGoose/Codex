@@ -7,20 +7,6 @@ using System.Threading.Tasks;
 
 namespace Codex.Sdk.Search
 {
-    public class IndexCodex
-    {
-        public Task FindDefinitionAsync(ReferenceSpan reference)
-        {
-            var filter = 
-                DefinitionSearchModelSearchDescriptor.SymbolId.Match(reference.Reference.Id.Value) |
-                DefinitionSearchModelSearchDescriptor.ProjectId.Match(reference.Reference.ProjectId);
-            //modelTerms.Definition.ProjectId.AsTerm<IDefinitionSearchModel>().Equals<string>(reference.Symbol.ProjectId);
-
-            throw new NotImplementedException();
-            //return query.ExecuteAsync();
-        }
-    }
-
     public abstract class PrefixIndexProperty<T> : IndexProperty<T>
     {
         public abstract IndexFilter<T> Prefix(string prefix);

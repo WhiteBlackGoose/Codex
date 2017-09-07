@@ -55,32 +55,32 @@ namespace Codex
 
     public interface ICodeReviewFile
     {
-        // ?
+        /// <summary>
+        /// The first iteration in which this file appears
+        /// </summary>
         int StartIteration { get; }
 
+        /// <summary>
+        /// The relative path in the repository
+        /// </summary>
         string RepoRelativePath { get; }
 
         // TODO: This should be a reference to the sources index
+        /// <summary>
+        /// The file id of the new version of the file
+        /// </summary>
         string FileId { get; }
 
         // TODO: This should be a reference to the sources index
+        /// <summary>
+        /// The file id of the baseline version of the file
+        /// </summary>
         string BaselineFileId { get; }
 
-        // TODO: Should this be enum?
-        string ChangeKind { get; }
-    }
-
-    public enum CodeReviewFileChangeKind
-    {
-        Edit,
-        Add,
-        Delete,
-
         /// <summary>
-        /// Move or rename
+        /// The type of change applied to the file
         /// </summary>
-        Rename,
-
+        FileChangeKind ChangeKind { get; }
     }
 
     public enum CommentImportance
@@ -119,10 +119,19 @@ namespace Codex
     // Search Type
     public interface ICodeReviewCommentThread
     {
+        /// <summary>
+        /// The original location for the comment in the originating iteration
+        /// </summary>
         ILineSpan OriginalSpan { get; }
 
+        /// <summary>
+        /// The iteration where the comment originated
+        /// </summary>
         int StartIteration { get; }
 
+        /// <summary>
+        /// The last tie
+        /// </summary>
         DateTime LastUpdated { get; }
 
         string FileRepoRelativePath { get; }
@@ -134,8 +143,19 @@ namespace Codex
     {
         string Text { get; }
 
+        /// <summary>
+        /// The name of the reviewer which made the comment
+        /// </summary>
         string Reviewer { get; }
 
+        /// <summary>
+        /// The importance of the comment
+        /// </summary>
         CommentImportance Importance { get; }
+
+        /// <summary>
+        /// The time when the comment was submitted
+        /// </summary>
+        DateTime CommentTime { get; }
     }
 }

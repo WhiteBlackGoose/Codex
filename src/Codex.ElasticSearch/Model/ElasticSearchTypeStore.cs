@@ -60,13 +60,14 @@ namespace Codex.ElasticSearch
             });
         }
 
-        public async Task StoreAsync(T value)
+        public async Task StoreAsync(IReadOnlyList<T> values)
         {
             // TODO: Batch and create commits/stored filters
+            // TODO: Handle updates
             await store.Service.UseClient(async client =>
             {
                 var response = await client
-                    .IndexAsync(value)
+                    .BulkAsync(b => b.ForEach(values, (bd, value) => bd.Create<T>(bco => bco.Document(value).Index(indexName))))
                     .ThrowOnFailure();
 
                 return response.IsValid;

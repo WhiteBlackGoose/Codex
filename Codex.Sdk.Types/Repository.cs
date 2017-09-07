@@ -23,7 +23,15 @@ namespace Codex
 
         string WebAddress { get; }
 
-        string FileWebAddressTransformRegex { get; }
+        /// <summary>
+        /// The web address for source control of the repository
+        /// </summary>
+        string SourceControlWebAddress { get; }
+
+        /// <summary>
+        /// The regex for extracting
+        /// </summary>
+        string FileWebAddressTransformInputRegex { get; }
 
         IReadOnlyList<IRepositoryReference> RepositoryReferences { get; }
     }

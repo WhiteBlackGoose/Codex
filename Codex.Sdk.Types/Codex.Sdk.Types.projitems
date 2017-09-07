@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)File.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ICodeReview.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Project.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Property.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Repository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scopes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SearchTypes.cs" />

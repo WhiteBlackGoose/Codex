@@ -21,23 +21,25 @@ namespace Codex
         string ContentId { get; }
     }
 
-    [RequiredFor(ObjectStage.Upload)]
     public interface IRepoScopeEntity
     {
         /// <summary>
         /// The name of the repository containing the entity
         /// </summary>
+        [SearchBehavior(SearchBehavior.NormalizedKeyword)]
         string RepositoryName { get; }
     }
 
-    [RequiredFor(ObjectStage.Upload)]
-    public interface ICommitScopeEntity
+    public interface ICommitScopeEntity : IRepoScopeEntity
     {
-        [Restricted(ObjectStage.Upload)]
+        /// <summary>
+        /// The unique identifier for this commit/changeset in version control
+        /// (i.e. git commit hash or TFS changeset number)
+        /// </summary>
+        [SearchBehavior(SearchBehavior.NormalizedKeyword)]
         string CommitId { get; }
     }
 
-    [RequiredFor(ObjectStage.Upload)]
     public interface IProjectScopeEntity : IRepoScopeEntity
     {
         /// <summary>
@@ -47,7 +49,6 @@ namespace Codex
         string ProjectId { get; }
     }
 
-    [RequiredFor(ObjectStage.Upload)]
     public interface IFileScopeEntity : IProjectScopeEntity
     {
         /// <summary>

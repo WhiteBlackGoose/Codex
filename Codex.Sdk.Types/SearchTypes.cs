@@ -42,7 +42,13 @@ namespace Codex
 
         public static SearchType Project = SearchType.Create<IProjectSearchModel>(RegisteredSearchTypes);
 
+        public static SearchType Commit = SearchType.Create<ICommitSearchModel>(RegisteredSearchTypes);
+
+        public static SearchType CommitFiles = SearchType.Create<ICommitFilesSearchModel>(RegisteredSearchTypes);
+
         public static SearchType ProjectReference = SearchType.Create<IProjectReferenceSearchModel>(RegisteredSearchTypes);
+
+        public static SearchType Property = SearchType.Create<IPropertySearchModel>(RegisteredSearchTypes);
     }
 
     public interface IDefinitionSearchModel : ISearchEntity
@@ -138,6 +144,19 @@ namespace Codex
     public interface IProjectReferenceSearchModel : IProjectScopeEntity, ISearchEntity
     {
         IProjectReference ProjectReference { get; }
+    }
+
+    public interface ICommitSearchModel : ISearchEntity
+    {
+        ICommit Commit { get; }
+    }
+
+    /// <summary>
+    /// The set of files present in the repository at a given commit.
+    /// </summary>
+    public interface ICommitFilesSearchModel : ICommitScopeEntity, IRepoScopeEntity, ISearchEntity
+    {
+        IReadOnlyList<ICommitFileLink> CommitFiles { get; }
     }
 }
 
