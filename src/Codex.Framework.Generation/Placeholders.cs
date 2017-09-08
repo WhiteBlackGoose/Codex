@@ -10,4 +10,9 @@ namespace Codex.ObjectModel
     public class SymbolId
     {
     }
+
+    [Placeholder]
+    public class Glyph
+    {
+    }
 }

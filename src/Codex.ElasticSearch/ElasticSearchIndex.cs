@@ -17,10 +17,10 @@ namespace Codex.ElasticSearch
 
         }
 
-        public override IndexQuery<T> CreateQuery<T>()
-        {
-            throw new NotImplementedException();
-        }
+        //public override IndexQuery<T> CreateQuery<T>()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         private class ElasticSearchProperty<T>
         {

@@ -16,10 +16,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\bin\Debug\Codex.Framework.Generation\SearchDescriptors.g.cs">
-      <Link>Index\SearchDescriptors.g.cs</Link>
+      <Link>Types\SearchDescriptors.g.cs</Link>
     </Compile>
     <Compile Include="Analysis\IAnalysisTarget.cs" />
-    <Compile Include="Index\GeneratedTypeAdapters.cs" />
+    <Compile Include="Types\Types.cs" />
     <Compile Include="Index\IndexCodex.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
     <Compile Include="Logging\Logger.cs" />

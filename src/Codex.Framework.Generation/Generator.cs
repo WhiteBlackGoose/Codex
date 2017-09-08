@@ -167,9 +167,13 @@ namespace Codex.Framework.Generation
             HashSet<string> usedMemberNames = new HashSet<string>();
 
             CodeCompileUnit searchDescriptors = new CodeCompileUnit();
-            CodeNamespace searchDescriptorsNamespace = new CodeNamespace("Codex.Framework.Types");
-            searchDescriptors.Namespaces.Add(searchDescriptorsNamespace);
-            searchDescriptorsNamespace.Imports.Add(new CodeNamespaceImport(typeof(Task<>).Namespace));
+            CodeNamespace modelNamespace = new CodeNamespace("Codex.ObjectModel");
+            CodeNamespace typesNamespace = new CodeNamespace("Codex.Framework.Types");
+            searchDescriptors.Namespaces.Add(modelNamespace);
+            searchDescriptors.Namespaces.Add(typesNamespace);
+            typesNamespace.Imports.Add(new CodeNamespaceImport(typeof(Task<>).Namespace));
+            modelNamespace.Imports.Add(new CodeNamespaceImport(typeof(Task<>).Namespace));
+            modelNamespace.Imports.Add(new CodeNamespaceImport("Codex.Framework.Types"));
 
             CodeTypeDeclaration indexTypeDeclaration = new CodeTypeDeclaration(nameof(IIndex))
             {
@@ -219,8 +223,8 @@ namespace Codex.Framework.Generation
             storeBaseTypeDeclaration.Members.Add(storeBaseFinalize);
             storeBaseTypeDeclaration.Members.Add(storeBaseCreateStore);
 
-            searchDescriptorsNamespace.Types.Add(storeTypeDeclaration);
-            searchDescriptorsNamespace.Types.Add(storeBaseTypeDeclaration);
+            typesNamespace.Types.Add(storeTypeDeclaration);
+            typesNamespace.Types.Add(storeBaseTypeDeclaration);
 
             foreach (var searchType in SearchTypes.RegisteredSearchTypes)
             {
@@ -292,7 +296,8 @@ namespace Codex.Framework.Generation
 
                 typeDeclaration.Comments.AddRange(typeDefinition.Comments.ToArray());
 
-                searchDescriptorsNamespace.Types.Add(typeDeclaration);
+                var nspace = typeDefinition.Migrated ? modelNamespace : typesNamespace;
+                nspace.Types.Add(typeDeclaration);
 
                 PopulateProperties(visitedTypeDefinitions, usedMemberNames, typeDefinition, typeDeclaration);
             }
@@ -574,7 +579,7 @@ namespace Codex.Framework.Generation
     {
         public static CodeTypeReference AsReference(this Type type)
         {
-            var result =  new CodeTypeReference(type);
+            var result = new CodeTypeReference(type);
 
             if (type.IsGenericTypeDefinition)
             {

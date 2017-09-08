@@ -27,6 +27,11 @@ namespace Codex
     {
     }
 
+    [AttributeUsage(AttributeTargets.Interface, Inherited = false, AllowMultiple = false)]
+    public sealed class MigratedAttribute : Attribute
+    {
+    }
+
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
     public sealed class QueryAttribute : Attribute
     {

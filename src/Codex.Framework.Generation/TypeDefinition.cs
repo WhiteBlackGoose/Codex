@@ -15,6 +15,8 @@ namespace Codex.Framework.Generation
     {
         public ObjectStage AllowedStages;
 
+        public bool Migrated;
+
         public Type Type;
 
         public List<PropertyDefinition> Properties;
@@ -45,6 +47,7 @@ namespace Codex.Framework.Generation
             SearchDescriptorName = BaseName + "IndexDescriptor";
             BuilderClassName = ClassName + "Builder";
             AllowedStages = type.GetAllowedStages();
+            Migrated = type.GetAttribute<MigratedAttribute>() != null;
 
             Properties = type.GetProperties().Select(p => new PropertyDefinition(p)).ToList();
         }

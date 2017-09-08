@@ -61,6 +61,16 @@ namespace Codex
         /// </summary>
         // TODO: Consider using single CopyTo field for keywords
         string[] Modifiers { get; }
+
+        /// <summary>
+        /// The glyph
+        /// </summary>
+        Glyph Glyph { get; }
+
+        /// <summary>
+        /// The depth of the symbol in its symbolic tree
+        /// </summary>
+        int SymbolDepth { get; }
     }
 
     public interface IReferenceSymbol : ICodeSymbol
@@ -73,6 +83,7 @@ namespace Codex
         string ReferenceKind { get; }
     }
 
+    [Migrated]
     public interface ICodeSymbol
     {
         /// <summary>
@@ -85,7 +96,7 @@ namespace Codex
         /// The identifier for the symbol
         /// </summary>
         [SearchBehavior(SearchBehavior.NormalizedKeyword)]
-        SymbolId SymbolId { get; }
+        SymbolId Id { get; }
 
         /// <summary>
         /// The symbol kind. (i.e. interface, method, field)
