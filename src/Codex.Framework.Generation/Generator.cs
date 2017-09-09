@@ -61,6 +61,7 @@ namespace Codex.Framework.Generation
             MigratedTypes.Add(typeof(ISourceFile));
             MigratedTypes.Add(typeof(ISourceFileInfo));
             MigratedTypes.Add(typeof(IBoundSourceFile));
+            MigratedTypes.Add(typeof(IEncodingDescription));
 
             Compilation = CSharpCompilation.Create("TempGeneratorAssembly").AddReferences(PortableExecutableReference.CreateFromFile(assembly.Location,
                 documentation: XmlDocumentationProvider.CreateFromFile(Path.ChangeExtension(assembly.Location, ".xml"))));

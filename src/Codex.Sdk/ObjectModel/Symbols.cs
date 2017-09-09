@@ -54,17 +54,6 @@ namespace Codex.ObjectModel
         }
     }
 
-    //public class SourceFile : ISourceFile
-    //{
-    //    public SourceFileInfo Info { get; set; }
-    //    public string Content { get; set; }
-
-    //    public Task<string> GetContentsAsync()
-    //    {
-    //        return Task.FromResult(Content);
-    //    }
-    //}
-
     public class ReferencedProject
     {
         /// <summary>

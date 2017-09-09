@@ -100,6 +100,22 @@ namespace Codex
     }
 
     /// <summary>
+    /// Describes encoding so that file may be reconstituted in a byte-identical form
+    /// </summary>
+    public interface IEncodingDescription
+    {
+        /// <summary>
+        /// The name of the encoding
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
+        /// The encoding preamble
+        /// </summary>
+        byte[] Preamble { get; }
+    }
+
+    /// <summary>
     /// Defines text contents of a file and associated data
     /// </summary>
     public interface ISourceFile : IFileScopeEntity
@@ -112,7 +128,7 @@ namespace Codex
         /// <summary>
         /// The encoding used for the file
         /// </summary>
-        string Encoding { get; }
+        IEncodingDescription Encoding { get; }
 
         /// <summary>
         /// The content of the file
