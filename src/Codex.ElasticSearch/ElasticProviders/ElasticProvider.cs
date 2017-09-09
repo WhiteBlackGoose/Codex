@@ -20,6 +20,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Codex.Utilities;
 using Codex.Search;
+using Codex.ElasticSearch;
 
 namespace Codex.Storage.ElasticProviders
 {
@@ -44,6 +45,9 @@ namespace Codex.Storage.ElasticProviders
 
         private const int DefaultBatchSize = 100;
 
+        public ElasticSearchService Service;
+        public ElasticSearchStore Store;
+
         private string Endpoint => _providerConfig.Endpoint;
         private string CoreIndexName => _providerConfig.CoreIndexName;
         //private string ProjectTypeName => _providerConfig.ProjectTypeName;
@@ -65,6 +69,17 @@ namespace Codex.Storage.ElasticProviders
             Contract.Requires(providerConfig != null);
             _providerConfig = providerConfig;
             Client = CreateClientCore();
+            Service = new ElasticSearchService(new ElasticSearchServiceConfiguration()
+            {
+                Endpoint = providerConfig.Endpoint
+            });
+
+            Store = Service.CreateStoreAsync(new ElasticSearchStoreConfiguration()
+            {
+                CreateIndices = true,
+                Prefix = "test",
+                ShardCount = 5
+            }).Result;
         }
 
         private ElasticClient CreateClient()

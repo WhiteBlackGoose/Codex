@@ -13,15 +13,32 @@ namespace Codex
         /// </summary>
         IReadOnlyList<IFileLink> Files { get; }
 
-        IReadOnlyList<IProjectReference> ProjectReferences { get; }
+        IReadOnlyList<IReferencedProject> ProjectReferences { get; }
     }
 
-    public interface IProjectReference
+    public interface IReferencedProject
     {
+        /// <summary>
+        /// The identifier of the referenced project
+        /// </summary>
         [SearchBehavior(SearchBehavior.NormalizedKeyword)]
-        string ReferencedProjectId { get; }
+        string ProjectId { get; }
 
+        /// <summary>
+        /// Used definitions for the project. Sorted.
+        /// </summary>
         IReadOnlyList<IDefinitionSymbol> Definitions { get; }
+
+        /// <summary>
+        /// The display name of the project
+        /// </summary>
+        string DisplayName { get; }
+
+        /// <summary>
+        /// The properties of the project. Such as Version, PublicKey, etc.
+        /// TODO: Implement maps for generated types
+        /// </summary>
+        IReadOnlyDictionary<string, string> Properties { get; }
     }
 
     public interface IFileLink

@@ -6,52 +6,78 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Codex.Utilities;
 
 namespace Codex.ElasticSearch
 {
-    class ElasticSearchService
+    public class ElasticSearchService
     {
         private ElasticClient client;
         private Stopwatch stopwatch = Stopwatch.StartNew();
 
         public ElasticSearchService(ElasticSearchServiceConfiguration configuration)
         {
-
+            client = new ElasticClient(new Uri(configuration.Endpoint));
         }
 
-        public async Task<ElasticSearchResponse<T>> UseClient<T>(Func<ElasticClient, Task<T>> useClient)
+        public async Task<ElasticSearchResponse<T>> UseClient<T>(Func<ClientContext, Task<T>> useClient)
         {
             var startTime = stopwatch.Elapsed;
             T result;
+            var context = new ClientContext()
+            {
+                Client = this.client
+            };
 
             try
             {
-                result = await useClient(this.client);
+                result = await useClient(context);
             }
-            catch
+            catch (Exception ex)
             {
-
+                return new ElasticSearchResponse<T>()
+                {
+                    Requests = context.Requests,
+                    Duration = stopwatch.Elapsed - startTime,
+                    Exception = ex
+                };
             }
 
-            var elapsed = stopwatch.Elapsed - startTime;
-
-            throw new NotImplementedException();
+            return new ElasticSearchResponse<T>()
+            {
+                Requests = context.Requests,
+                Duration = stopwatch.Elapsed - startTime,
+                Result = result
+            };
         }
 
-        public Task<ElasticSearchStore> CreateStoreAsync(ElasticSearchStoreConfiguration configuration)
+        public async Task<ElasticSearchStore> CreateStoreAsync(ElasticSearchStoreConfiguration configuration)
         {
-            throw new NotImplementedException();
+            var store = new ElasticSearchStore(configuration, this);
+            await store.InitializeAsync();
+            return store;
         }
 
     }
 
-    class ElasticSearchResponse<T>
+    public class ClientContext
     {
-
+        // TODO: Disable
+        public bool CaptureRequests = true;
+        public ElasticClient Client;
+        public List<string> Requests = new List<string>();
     }
 
-    class ElasticSearchServiceConfiguration
+    public class ElasticSearchResponse<T>
     {
+        public IReadOnlyList<string> Requests { get; set; } = CollectionUtilities.Empty<string>.Array;
+        public Exception Exception { get; set; }
+        public T Result { get; set; }
+        public TimeSpan Duration { get; set; }
+    }
 
+    public class ElasticSearchServiceConfiguration
+    {
+        public string Endpoint { get; set; }
     }
 }

@@ -143,7 +143,7 @@ namespace Codex
 
     public interface IProjectReferenceSearchModel : IProjectScopeEntity, ISearchEntity
     {
-        IProjectReference ProjectReference { get; }
+        IReferencedProject ProjectReference { get; }
     }
 
     public interface ICommitSearchModel : ISearchEntity

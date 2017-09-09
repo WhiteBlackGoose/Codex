@@ -132,6 +132,8 @@ namespace Codex.Application
                 {
                     ElasticsearchStorage storage = new ElasticsearchStorage(elasticSearchServer);
 
+                    return;
+
                     logger.WriteLine("Removing repository");
                     ((IStorage)storage).RemoveRepository(targetIndexName).GetAwaiter().GetResult();
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Codex.ElasticSearch
 {
-    class ElasticSearchStore : StoreBase
+    public class ElasticSearchStore : StoreBase
     {
         internal readonly ElasticSearchService Service;
         internal readonly ElasticSearchStoreConfiguration Configuration;
@@ -44,7 +44,7 @@ namespace Codex.ElasticSearch
         }
     }
 
-    class ElasticSearchStoreConfiguration
+    public class ElasticSearchStoreConfiguration
     {
         /// <summary>
         /// Prefix for indices

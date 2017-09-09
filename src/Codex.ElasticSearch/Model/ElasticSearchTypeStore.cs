@@ -23,7 +23,7 @@ namespace Codex.ElasticSearch
         {
             this.store = store;
             this.searchType = searchType;
-            this.indexName = store.Configuration.Prefix + indexName;
+            this.indexName = store.Configuration.Prefix + searchType.IndexName;
         }
 
         public async Task InitializeAsync()
@@ -46,14 +46,13 @@ namespace Codex.ElasticSearch
         {
             var request = new Box<string>();
 
-            await store.Service.UseClient(async client =>
+            await store.Service.UseClient(async context =>
             {
-                var response = await client
+                var response = await context.Client
                     .CreateIndexAsync(indexName,
-                        c => CustomAnalyzers.AddNGramAnalyzerFunc(c)
-                            .Mappings(m => m.Map<T>(TypeName.From<T>(), tm => tm.AutoMap(MappingPropertyVisitor.Instance)))
-                            .Settings(s => s.NumberOfShards(store.Configuration.ShardCount).RefreshInterval(TimeSpan.FromMinutes(1)))
-                            .CaptureRequest(client, request))
+                        c => c.Mappings(m => m.Map<T>(TypeName.From<T>(), tm => tm.AutoMap(MappingPropertyVisitor.Instance)))
+                            .Settings(s => s.AddAnalyzerSettings().NumberOfShards(store.Configuration.ShardCount).RefreshInterval(TimeSpan.FromMinutes(1)))
+                            .CaptureRequest(context))
                     .ThrowOnFailure();
                 
                 return response.IsValid;
@@ -64,10 +63,10 @@ namespace Codex.ElasticSearch
         {
             // TODO: Batch and create commits/stored filters
             // TODO: Handle updates
-            await store.Service.UseClient(async client =>
+            await store.Service.UseClient(async context =>
             {
-                var response = await client
-                    .BulkAsync(b => b.ForEach(values, (bd, value) => bd.Create<T>(bco => bco.Document(value).Index(indexName))))
+                var response = await context.Client
+                    .BulkAsync(b => b.ForEach(values, (bd, value) => bd.Create<T>(bco => bco.Document(value).Index(indexName))).CaptureRequest(context))
                     .ThrowOnFailure();
 
                 return response.IsValid;

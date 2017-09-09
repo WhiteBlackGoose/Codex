@@ -12,6 +12,8 @@ namespace Codex.Utilities
         public class Empty<T>
         {
             public static readonly List<T> List = new List<T>(0);
+
+            public static readonly T[] Array = new T[0];
         }
 
         public static IEnumerable<T> Interleave<T>(IEnumerable<T> spans1, IEnumerable<T> spans2)

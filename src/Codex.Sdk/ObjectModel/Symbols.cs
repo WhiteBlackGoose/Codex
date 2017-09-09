@@ -54,34 +54,6 @@ namespace Codex.ObjectModel
         }
     }
 
-    public class ReferencedProject
-    {
-        /// <summary>
-        /// The identifier of the referenced project
-        /// </summary>
-        public string ProjectId { get; set; }
-
-        /// <summary>
-        /// The display name of the project
-        /// </summary>
-        public string DisplayName { get; set; }
-
-        /// <summary>
-        /// The properties of the project
-        /// </summary>
-        public Dictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
-
-        /// <summary>
-        /// Used definitions for the project. Sorted.
-        /// </summary>
-        public List<DefinitionSymbol> Definitions { get; set; } = new List<DefinitionSymbol>();
-
-        public override string ToString()
-        {
-            return DisplayName ?? ProjectId;
-        }
-    }
-
     /// <summary>
     ///  Allows defining extension data during analysis
     /// </summary>

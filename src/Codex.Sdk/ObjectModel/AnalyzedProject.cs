@@ -19,10 +19,6 @@ namespace Codex.ObjectModel
 
         public string Id { get; set; }
 
-        public string WebAddress { get; set; }
-
-        public string DirectoryPath { get; set; }
-
         public string ProjectKind { get; set; }
 
         public List<BoundSourceFile> AdditionalSourceFiles { get; set; } = new List<BoundSourceFile>();

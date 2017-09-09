@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using Codex.Sdk.Utilities;
+using Codex.ElasticSearch;
 
 namespace Codex.Storage.ElasticProviders
 {
@@ -193,6 +194,19 @@ namespace Codex.Storage.ElasticProviders
             {
                 return elseConfigure(requestDescriptor);
             }
+        }
+
+        public static T CaptureRequest<T>(this T requestDescriptor, ClientContext context)
+            where T : IDescriptor
+        {
+            if (context.CaptureRequests)
+            {
+                Box<string> request = new Box<string>();
+                CaptureRequest(requestDescriptor, context.Client, request);
+                context.Requests.Add(request.Value);
+            }
+
+            return requestDescriptor;
         }
 
         public static T CaptureRequest<T>(this T requestDescriptor, ElasticClient client, Box<string> request)
