@@ -32,7 +32,7 @@ namespace Codex.Application
         static OptionSet options = new OptionSet
         {
             { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
-            { "n|name=", "Name of the project.", n => repoName = n },
+            { "n|name=", "Name of the repository.", n => repoName = AnalysisServices.GetSafeIndexName(n ?? string.Empty) },
             { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
             { "s|solution=", "Optionally, path to the solution to analyze.", n => solutionPath = n },
             { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
@@ -42,7 +42,7 @@ namespace Codex.Application
         {
             var extras = options.Parse(args);
             if (String.IsNullOrEmpty(rootDirectory)) throw new ArgumentException("Solution path is missing. Use -p to provide it.");
-            if (String.IsNullOrEmpty(repoName)) throw new ArgumentException("Project name is missing. Use -n to provide it.");
+            if (String.IsNullOrEmpty(repoName)) throw new ArgumentException("Repository name is missing. Use -n to provide it.");
             if (String.IsNullOrEmpty(elasticSearchServer)) throw new ArgumentException("Elastic Search server URL is missing. Use -es to provide it.");
 
             try
