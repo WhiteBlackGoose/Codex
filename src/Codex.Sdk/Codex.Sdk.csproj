@@ -29,7 +29,6 @@
     <Compile Include="ObjectModel\BoundSourceFile.cs" />
     <Compile Include="ObjectModel\Classification.cs" />
     <Compile Include="ObjectModel\EnumEx.cs" />
-    <Compile Include="ObjectModel\FileSystemSourceFile.cs" />
     <Compile Include="ObjectModel\Glyph.cs" />
     <Compile Include="ObjectModel\IStorage.cs" />
     <Compile Include="ObjectModel\LanguageDescriptor.cs" />

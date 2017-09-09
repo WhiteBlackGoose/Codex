@@ -8,7 +8,6 @@ namespace Codex
 {
     // TODO: These should be search types
     // Search Type
-    [Migrated]
     public interface ICodeReview
     {
         string Id { get; }

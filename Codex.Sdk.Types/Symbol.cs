@@ -7,11 +7,6 @@ using System.Threading.Tasks;
 
 namespace Codex
 {
-    public interface ISymbolSpan<TSymbol> : ILineSpan
-    {
-        TSymbol Symbol { get; }
-    }
-
     public interface IDefinitionSymbol : IReferenceSymbol
     {
         /// <summary>
@@ -47,6 +42,7 @@ namespace Codex
         /// This is used to find the symbol when search term does not contain '.'
         /// </summary>
         [SearchBehavior(SearchBehavior.Prefix)]
+        [CoerceGet]
         string ShortName { get; }
 
         /// <summary>
@@ -83,7 +79,7 @@ namespace Codex
         string ReferenceKind { get; }
     }
 
-    [Migrated]
+    [GeneratedClassName("Symbol")]
     public interface ICodeSymbol
     {
         /// <summary>

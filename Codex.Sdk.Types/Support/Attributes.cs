@@ -28,13 +28,35 @@ namespace Codex
     }
 
     [AttributeUsage(AttributeTargets.Interface, Inherited = false, AllowMultiple = false)]
-    public sealed class MigratedAttribute : Attribute
+    public sealed class GeneratedClassNameAttribute : Attribute
     {
+        public readonly string Name;
+
+        public GeneratedClassNameAttribute(string name)
+        {
+            Name = name;
+        }
     }
 
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
     public sealed class QueryAttribute : Attribute
     {
+    }
+
+    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+    public sealed class ReadOnlyListAttribute : Attribute
+    {
+    }
+
+    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+    public sealed class CoerceGetAttribute : Attribute
+    {
+        public readonly Type CoercedSourceType;
+
+        public CoerceGetAttribute(Type coercedSourceType = null)
+        {
+            CoercedSourceType = coercedSourceType;
+        }
     }
 
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]

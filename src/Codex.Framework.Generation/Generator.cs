@@ -18,10 +18,16 @@ namespace Codex.Framework.Generation
         public CSharpCodeProvider CodeProvider;
 
         public List<TypeDefinition> Types = new List<TypeDefinition>();
+        public HashSet<Type> MigratedTypes = new HashSet<Type>();
         public Dictionary<Type, TypeDefinition> DefinitionsByType = new Dictionary<Type, TypeDefinition>();
         public Dictionary<string, TypeDefinition> DefinitionsByTypeMetadataName = new Dictionary<string, TypeDefinition>();
         private CSharpCompilation Compilation;
         private string ProjectDirectory;
+        private CodeTypeDeclaration CodexTypeUtilitiesClass = new CodeTypeDeclaration("CodexTypeUtilities")
+        {
+            IsClass = true,
+            Attributes = MemberAttributes.Static
+        };
 
         private SymbolDisplayFormat TypeNameDisplayFormat = new SymbolDisplayFormat(genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters);
 
@@ -42,6 +48,19 @@ namespace Codex.Framework.Generation
         {
             var assembly = typeof(ObjectStage).Assembly;
             CSharpCommandLineArguments arguments = CSharpCommandLineParser.Default.Parse(File.ReadAllLines("csc.args.txt"), ProjectDirectory, null);
+
+            MigratedTypes.Add(typeof(ICodeSymbol));
+            MigratedTypes.Add(typeof(IReferenceSymbol));
+            MigratedTypes.Add(typeof(ISpan));
+            MigratedTypes.Add(typeof(IClassificationSpan));
+            MigratedTypes.Add(typeof(IReferenceSpan));
+            MigratedTypes.Add(typeof(IDefinitionSpan));
+            MigratedTypes.Add(typeof(ISymbolSpan));
+            //MigratedTypes.Add(typeof(ILineSpan));
+            MigratedTypes.Add(typeof(IDefinitionSymbol));
+            MigratedTypes.Add(typeof(ISourceFile));
+            MigratedTypes.Add(typeof(ISourceFileInfo));
+            MigratedTypes.Add(typeof(IBoundSourceFile));
 
             Compilation = CSharpCompilation.Create("TempGeneratorAssembly").AddReferences(PortableExecutableReference.CreateFromFile(assembly.Location,
                 documentation: XmlDocumentationProvider.CreateFromFile(Path.ChangeExtension(assembly.Location, ".xml"))));
@@ -111,6 +130,8 @@ namespace Codex.Framework.Generation
 
             foreach (var typeDefinition in DefinitionsByType.Values)
             {
+                typeDefinition.Migrated = MigratedTypes.Contains(typeDefinition.Type);
+
                 var declarationType = typeDefinition.Type;
                 if (declarationType.IsGenericType)
                 {
@@ -118,7 +139,7 @@ namespace Codex.Framework.Generation
                 }
 
                 var typeSymbol = typeDefinition.TypeSymbol ?? Compilation.GetTypeByMetadataName(declarationType.FullName);
-                typeDefinition.ClassName = typeSymbol.ToDisplayString(TypeNameDisplayFormat).Substring(1);
+                typeDefinition.ClassName = typeDefinition.ExplicitClassName ?? typeSymbol.ToDisplayString(TypeNameDisplayFormat).Substring(1);
 
                 foreach (var typeParameter in typeSymbol.TypeParameters)
                 {
@@ -149,7 +170,10 @@ namespace Codex.Framework.Generation
                     property.MutablePropertyType = property.PropertyTypeDefinition != null ? new CodeTypeReference(property.PropertyTypeDefinition.ClassName) : new CodeTypeReference(property.PropertyType);
                     if (property.IsList)
                     {
-                        property.MutablePropertyType = new CodeTypeReference(typeof(List<object>)).Apply(ct => ct.TypeArguments[0] = property.MutablePropertyType);
+                        property.InitPropertyType = new CodeTypeReference(typeof(List<object>)).Apply(ct => ct.TypeArguments[0] = property.MutablePropertyType);
+                        property.MutablePropertyType = property.IsReadOnlyList ?
+                            new CodeTypeReference(typeof(IReadOnlyList<object>)).Apply(ct => ct.TypeArguments[0] = property.MutablePropertyType) :
+                            property.InitPropertyType;
                     }
                 }
             }
@@ -174,6 +198,8 @@ namespace Codex.Framework.Generation
             typesNamespace.Imports.Add(new CodeNamespaceImport(typeof(Task<>).Namespace));
             modelNamespace.Imports.Add(new CodeNamespaceImport(typeof(Task<>).Namespace));
             modelNamespace.Imports.Add(new CodeNamespaceImport("Codex.Framework.Types"));
+
+            modelNamespace.Types.Add(CodexTypeUtilitiesClass);
 
             CodeTypeDeclaration indexTypeDeclaration = new CodeTypeDeclaration(nameof(IIndex))
             {
@@ -296,10 +322,22 @@ namespace Codex.Framework.Generation
 
                 typeDeclaration.Comments.AddRange(typeDefinition.Comments.ToArray());
 
+                if (typeDefinition.Migrated)
+                {
+                    typesNamespace.Imports.Add(new CodeNamespaceImport($"{typeDefinition.ClassName} = {modelNamespace.Name}.{typeDefinition.ClassName}"));
+                }
+
                 var nspace = typeDefinition.Migrated ? modelNamespace : typesNamespace;
                 nspace.Types.Add(typeDeclaration);
 
                 PopulateProperties(visitedTypeDefinitions, usedMemberNames, typeDefinition, typeDeclaration);
+
+                //if (!typeDefinition.Type.IsGenericType)
+                //{
+                //    typeDeclaration.BaseTypes.Add(new CodeTypeReference(typeof(IMutable<object, object>))
+                //        .Apply(tp => tp.TypeArguments[0] = new CodeTypeReference(typeDeclaration.Name))
+                //        .Apply(tp => tp.TypeArguments[1] = new CodeTypeReference(typeDefinition.Type)));
+                //}
             }
 
             using (var writer = new StreamWriter("SearchDescriptors.g.cs"))
@@ -325,27 +363,34 @@ namespace Codex.Framework.Generation
 
             var applyMethod = new CodeMemberMethod()
             {
-                Name = "Apply",
+                Name = "CopyFrom",
                 Attributes = MemberAttributes.Public,
-                ReturnType = new CodeTypeReference(typeDeclaration.Name)
+                ReturnType = new CodeTypeReference("TTarget")
             };
 
+            applyMethod.TypeParameters.Add(new CodeTypeParameter("TTarget").Apply(tp => tp.Constraints.Add(typeDeclaration.Name)));
             applyMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeDefinition.Type.AsReference(), "value"));
-
 
             foreach (var property in typeDefinition.Properties)
             {
                 AddPropertyApplyStatement(applyMethod, property);
 
-                typeDeclaration.Members.Add(new CodeMemberProperty()
+                if (property.PropertyTypeDefinition != null || property.IsList)
                 {
-                    Type = property.ImmutablePropertyType,
-                    Name = property.Name,
-                    HasGet = true,
-                    PrivateImplementationType = property.PropertyInfo.DeclaringType.AsReference()
+                    // Need to add explicit interface implementation for
+                    // complex property types as the interface specifies the
+                    // interface but the property specifies the class
+
+                    typeDeclaration.Members.Add(new CodeMemberProperty()
+                    {
+                        Type = property.ImmutablePropertyType,
+                        Name = property.Name,
+                        HasGet = true,
+                        PrivateImplementationType = property.PropertyInfo.DeclaringType.AsReference()
+                    }
+                    .AddComments(property.Comments)
+                    .Apply(p => p.GetStatements.Add(new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), property.Name)))));
                 }
-                .AddComments(property.Comments)
-                .Apply(p => p.GetStatements.Add(new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), property.BackingFieldName)))));
 
                 if (!usedMemberNames.Add(property.Name))
                 {
@@ -356,32 +401,32 @@ namespace Codex.Framework.Generation
                 {
                     Name = property.BackingFieldName,
                     Attributes = MemberAttributes.Private,
-                    Type = property.MutablePropertyType,
+                    Type = property.CoercedSourceType?.AsReference() ?? property.MutablePropertyType,
                 };
 
-                if (property.IsList)
+                if (property.InitPropertyType != null)
                 {
-                    backingField.InitExpression = new CodeObjectCreateExpression(backingField.Type);
+                    backingField.InitExpression = new CodeObjectCreateExpression(property.InitPropertyType);
                 }
 
                 typeDeclaration.Members.Add(backingField);
 
+                string coercePropertyMethodName = $"Coerce{property.Name}";
+
                 typeDeclaration.Members.Add(new CodeMemberProperty()
                 {
-                    Type = backingField.Type,
+                    Type = property.MutablePropertyType,
                     Name = property.Name,
                     Attributes = MemberAttributes.Public,
                     HasGet = true,
                 }
                 .AddComments(property.Comments)
-                .Apply(p => p.GetStatements.Add(new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), backingField.Name))))
+                .Apply(p => p.GetStatements.Add(new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), backingField.Name)
+                    .ApplyIf<CodeExpression>(property.CoerceGet, exp => new CodeMethodInvokeExpression(new CodeThisReferenceExpression(), coercePropertyMethodName, exp)))))
                 .Apply(p =>
                 {
-                    if (!property.IsList)
-                    {
-                        p.HasSet = true;
-                        p.SetStatements.Add(new CodeAssignStatement(left: new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), backingField.Name), right: new CodePropertySetValueReferenceExpression()));
-                    }
+                    p.HasSet = true;
+                    p.SetStatements.Add(new CodeAssignStatement(left: new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), backingField.Name), right: new CodePropertySetValueReferenceExpression()));
                 }));
             }
 
@@ -390,7 +435,8 @@ namespace Codex.Framework.Generation
                 if (typeDefinition.BaseTypeDefinition != null)
                 {
                     typeDeclaration.BaseTypes.Add(typeDefinition.BaseTypeDefinition.ClassName);
-                    applyMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeBaseReferenceExpression(), applyMethod.Name),
+                    applyMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeBaseReferenceExpression(), applyMethod.Name)
+                        .Apply(mr => mr.TypeArguments.Add(typeDefinition.BaseTypeDefinition.ClassName)),
                         new CodeCastExpression(new CodeTypeReference(typeDefinition.BaseType), new CodeVariableReferenceExpression("value"))));
                 }
 
@@ -409,7 +455,7 @@ namespace Codex.Framework.Generation
                 PopulateProperties(visitedTypeDefinitions, usedMemberNames, baseDefinition, typeDeclaration);
             }
 
-            applyMethod.Statements.Add(new CodeMethodReturnStatement(new CodeThisReferenceExpression()));
+            applyMethod.Statements.Add(new CodeMethodReturnStatement(new CodeCastExpression("TTarget", new CodeThisReferenceExpression())));
             typeDeclaration.Members.Add(applyMethod);
         }
 
@@ -431,8 +477,11 @@ namespace Codex.Framework.Generation
                 }
                 else
                 {
-                    // new PropertyType().Apply(value.Property);
-                    return new CodeMethodInvokeExpression(new CodeObjectCreateExpression(property.MutablePropertyType), "Apply", valuePropertyReferenceExpression);
+                    // new PropertyType().CopyFrom(value.Property);
+                    return new CodeMethodInvokeExpression(
+                        new CodeMethodReferenceExpression(new CodeObjectCreateExpression(property.MutablePropertyType), "CopyFrom")
+                            .Apply(mr => mr.TypeArguments.Add(property.MutablePropertyType)), 
+                        valuePropertyReferenceExpression);
                 }
             }
             else
@@ -441,16 +490,16 @@ namespace Codex.Framework.Generation
                 if (property.PropertyTypeDefinition == null)
                 {
                     // new List<PropertyType>(value.Property);
-                    return new CodeObjectCreateExpression(property.MutablePropertyType,
+                    return new CodeObjectCreateExpression(property.InitPropertyType,
                         valuePropertyReferenceExpression);
                 }
                 else
                 {
-                    // new List<PropertyType>(value.Property.Select(v => new PropertyType().Apply(v)));
-                    return new CodeObjectCreateExpression(property.MutablePropertyType,
+                    // new List<PropertyType>(value.Property.Select(v => new PropertyType().CopyFrom(v)));
+                    return new CodeObjectCreateExpression(property.InitPropertyType,
                         new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeTypeReferenceExpression(typeof(Enumerable)), nameof(Enumerable.Select)),
                         valuePropertyReferenceExpression,
-                            new CodeSnippetExpression($"v => new {property.PropertyTypeDefinition.ClassName}().Apply(v)")));
+                            new CodeSnippetExpression($"v => new {property.PropertyTypeDefinition.ClassName}().CopyFrom<{property.PropertyTypeDefinition.ClassName}>(v)")));
                 }
 
             }
@@ -592,6 +641,17 @@ namespace Codex.Framework.Generation
             return result;
         }
 
+        public static T ApplyIf<T>(this T codeObject, bool condition, Func<T, T> action)
+            where T : CodeObject
+        {
+            if (condition)
+            {
+                return action(codeObject);
+            }
+
+            return codeObject;
+        }
+
         public static T Apply<T>(this T codeObject, Action<T> action)
             where T : CodeObject
         {
@@ -610,6 +670,12 @@ namespace Codex.Framework.Generation
         {
             ct.Constraints.Add(" class");
             return ct;
+        }
+
+        public static CodeMemberMethod PartialMethod(this CodeMemberMethod method)
+        {
+            method.ReturnType = new CodeTypeReference("partial void");
+            return method;
         }
 
         public static CodeMemberMethod AsyncMethod(this CodeMemberMethod method)

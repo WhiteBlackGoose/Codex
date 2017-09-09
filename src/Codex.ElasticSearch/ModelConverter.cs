@@ -75,14 +75,14 @@ namespace Codex.Storage
             return new SourceFileModel
             {
                 Uid = boundSourceFile.Uid,
-                Content = boundSourceFile.SourceFile.GetContentsAsync().Result,
+                Content = boundSourceFile.SourceFile.Content,
                 Language = boundSourceFile.SourceFile.Info.Language,
                 Path = boundSourceFile.SourceFile.Info.Path,
                 ExcludeFromSearch = boundSourceFile.ExcludeFromSearch,
                 RepoRelativePath = boundSourceFile.SourceFile.Info.RepoRelativePath,
                 WebAddress = boundSourceFile.SourceFile.Info.WebAddress,
                 ProjectId = boundSourceFile.ProjectId,
-                Classifications = FromObjectModel(boundSourceFile.ClassificationSpans),
+                Classifications = FromObjectModel(boundSourceFile.Classifications),
                 Definitions = FromObjectModel(boundSourceFile.Definitions),
                 References = new ReferenceListModel(boundSourceFile.References),
                 SearchReferencesSource = FromObjectModel(boundSourceFile.References),
@@ -386,7 +386,7 @@ namespace Codex.Storage
                 ProjectId = sourceFile.ProjectId,
                 ExcludeFromSearch = sourceFile.ExcludeFromSearch,
                 // TODO: Possible NRE, Spans could be null
-                ClassificationSpans = IndexableListAdapter.GetSpanList(sourceFile.Classifications),
+                Classifications = IndexableListAdapter.GetSpanList(sourceFile.Classifications),
                 Definitions = sourceFile.Definitions?.Select(s => ToObjectModel(s)).ToList() ?? new List<DefinitionSpan>(0),
                 References = IndexableListAdapter.GetSpanList(sourceFile.References) ?? IndexableSpans.Empty<ReferenceSpan>()
             };

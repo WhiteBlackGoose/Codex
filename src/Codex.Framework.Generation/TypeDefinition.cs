@@ -21,9 +21,11 @@ namespace Codex.Framework.Generation
 
         public List<PropertyDefinition> Properties;
 
+        public string ExplicitClassName;
         public string ClassName;
         public string BaseName;
         public string BuilderClassName;
+        public string ApplyMethodName => $"Apply{ClassName}";
 
         public string SearchDescriptorName;
 
@@ -40,14 +42,18 @@ namespace Codex.Framework.Generation
         public TypeDefinition(Type type)
         {
             Type = type;
+            if (type == typeof(ICodeSymbol))
+            {
+
+            }
 
             // Remove leading I from interface name
-            ClassName = type.Name.Substring(1);
+            ExplicitClassName = type.GetAttribute<GeneratedClassNameAttribute>()?.Name;
+            ClassName = ExplicitClassName ?? type.GetAttribute<GeneratedClassNameAttribute>()?.Name ?? type.Name.Substring(1);
             BaseName = ClassName.Replace("SearchModel", "");
             SearchDescriptorName = BaseName + "IndexDescriptor";
             BuilderClassName = ClassName + "Builder";
             AllowedStages = type.GetAllowedStages();
-            Migrated = type.GetAttribute<MigratedAttribute>() != null;
 
             Properties = type.GetProperties().Select(p => new PropertyDefinition(p)).ToList();
         }
@@ -66,16 +72,22 @@ namespace Codex.Framework.Generation
 
         public Type PropertyType;
 
+        public Type CoercedSourceType;
+
         public TypeDefinition PropertyTypeDefinition;
 
         public CodeTypeReference ImmutablePropertyType;
         public CodeTypeReference MutablePropertyType;
+        public CodeTypeReference InitPropertyType;
 
         public List<CodeCommentStatement> Comments = new List<CodeCommentStatement>();
 
         public bool Inline;
 
+        public bool CoerceGet;
+
         public bool IsList;
+        public bool IsReadOnlyList;
 
         public PropertyDefinition(PropertyInfo propertyInfo)
         {
@@ -85,7 +97,10 @@ namespace Codex.Framework.Generation
             AllowedStages = propertyInfo.GetAllowedStages();
             SearchBehavior = propertyInfo.GetSearchBehavior();
             IsList = propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(IReadOnlyList<>);
+            IsReadOnlyList = IsList && propertyInfo.GetAttribute<ReadOnlyListAttribute>() != null;
             Inline = propertyInfo.GetInline();
+            CoerceGet = propertyInfo.GetAttribute<CoerceGetAttribute>() != null;
+            CoercedSourceType = propertyInfo.GetAttribute<CoerceGetAttribute>()?.CoercedSourceType;
             PropertyType = IsList ?
                 PropertyInfo.PropertyType.GenericTypeArguments[0] :
                 PropertyInfo.PropertyType;

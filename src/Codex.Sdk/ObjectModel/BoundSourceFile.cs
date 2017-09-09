@@ -4,72 +4,17 @@ using System.Diagnostics.Contracts;
 
 namespace Codex.ObjectModel
 {
-    public class BoundSourceFile
+    partial class BoundSourceFile
     {
-        /// <summary>
-        /// The unique identifier for the file
-        /// NOTE: This is not applicable to most files. Only set for files
-        /// which are added in a shared context and need this for deduplication)
-        /// </summary>
-        public string Uid { get; set; }
-
-        public string ProjectId { get; set; }
-
-        public ISourceFile SourceFile { get; set; }
-
-        private int? m_referenceCount;
-        public int ReferenceCount
+        public int CoerceReferenceCount(int? value)
         {
-            get
-            {
-                return References.Count;
-            }
-            set
-            {
-                m_referenceCount = value;
-            }
+            return value ?? References.Count;
         }
 
-        private int? m_definitionCount;
-        public int DefinitionCount
+        public int CoerceDefinitionCount(int? value)
         {
-            get
-            {
-                return m_definitionCount ?? Definitions.Count;
-            }
-            set
-            {
-                m_definitionCount = value;
-            }
+            return value ?? Definitions.Count;
         }
-
-        public int Lines;
-
-        public bool ExcludeFromSearch { get; set; }
-
-        /// <summary>
-        /// Classifications for the document. Sorted by start index. No overlap.
-        /// </summary>
-        public IReadOnlyList<ClassificationSpan> ClassificationSpans { get; set; } = new List<ClassificationSpan>();
-
-        /// <summary>
-        /// References for the document. Sorted. May overlap.
-        /// </summary>
-        public IReadOnlyList<ReferenceSpan> References { get; set; } = new List<ReferenceSpan>();
-
-        /// <summary>
-        /// Definitions for the document. Sorted. No overlap?
-        /// </summary>
-        public List<DefinitionSpan> Definitions { get; set; } = new List<DefinitionSpan>();
-
-        public BoundSourceFile(ISourceFile sourceFile)
-        {
-            Contract.Requires(sourceFile != null);
-            SourceFile = sourceFile;
-        }
-
-        public BoundSourceFile()
-        { }
 
         public void MakeSingleton()
         {

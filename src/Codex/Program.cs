@@ -307,11 +307,11 @@ namespace Codex.Application
 
                         Console.WriteLine($"Retrieved source file in {elapsed.TotalMilliseconds} ms");
 
-                        Console.WriteLine($"Source file has { sourceFile?.ClassificationSpans.Count ?? -1 } classifications");
-                        if (sourceFile.ClassificationSpans != null)
+                        Console.WriteLine($"Source file has { sourceFile?.Classifications.Count ?? -1 } classifications");
+                        if (sourceFile.Classifications != null)
                         {
                             ConcurrentDictionary<string, int> classificationCounters = new ConcurrentDictionary<string, int>();
-                            foreach (var cs in sourceFile.ClassificationSpans)
+                            foreach (var cs in sourceFile.Classifications)
                             {
                                 classificationCounters.AddOrUpdate(cs.Classification, 1, (k, v) => v + 1);
                             }

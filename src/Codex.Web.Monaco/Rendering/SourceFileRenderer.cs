@@ -40,7 +40,7 @@ namespace WebUI.Rendering
                 RepoRelativePath = _sourceFile.SourceFile?.Info?.RepoRelativePath
             };
 
-            string sourceText = await _sourceFile.SourceFile.GetContentsAsync();
+            string sourceText = _sourceFile.SourceFile.Content;
             int lineCount = GetLineCount(sourceText);
             var url = $"/?rightProject={HttpUtility.UrlEncode(projectId)}&file={HttpUtility.UrlEncode(filePath)}";
             model.LineNumberText = GenerateLineNumberText(lineCount, url);
@@ -54,7 +54,7 @@ namespace WebUI.Rendering
                 int referenceIndex = -1;
                 ReferenceSpan referenceSpan = null;
 
-                foreach (ClassificationSpan span in _sourceFile.ClassificationSpans.OrderBy(s => s.Start))
+                foreach (ClassificationSpan span in _sourceFile.Classifications.OrderBy(s => s.Start))
                 {
                     if (span.Start > sourceText.Length)
                     { //Not sure how this happened but a span is off the end of our text

@@ -30,7 +30,7 @@ namespace WebUI.Controllers
 
                 Responses.PrepareResponse(Response);
 
-                var fileText = await boundSourceFile.SourceFile.GetContentsAsync();
+                var fileText = boundSourceFile.SourceFile.Content;
                 var bytes = Encoding.UTF8.GetBytes(fileText);
                 return new FileContentResult(bytes, "text/plain")
                 {

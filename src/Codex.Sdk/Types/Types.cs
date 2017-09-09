@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Codex.ObjectModel;
 
 namespace Codex.ObjectModel
 {
-    public partial class Symbol : CodeSymbol
+    public partial class Symbol
     {
         /// <summary>
         /// Extension data used during analysis/search
@@ -39,6 +40,129 @@ namespace Codex.ObjectModel
         {
             return Id.Value;
         }
+    }
+
+    partial class ReferenceSymbol : Symbol
+    {
+        public override string ToString()
+        {
+            return ReferenceKind + " " + base.ToString();
+        }
+    }
+
+    partial class DefinitionSymbol
+    {
+        //public string ShortName
+        //{
+        //    get
+        //    {
+        //        return shortName ?? "";
+        //    }
+        //    set
+        //    {
+        //        shortName = value;
+        //    }
+        //}
+
+
+        public int ReferenceCount;
+
+        public DefinitionSymbol()
+        {
+            ReferenceKind = nameof(ObjectModel.ReferenceKind.Definition);
+        }
+
+        private string CoerceShortName(string value)
+        {
+            return value ?? "";
+        }
+
+        public void IncrementReferenceCount()
+        {
+            Interlocked.Increment(ref ReferenceCount);
+        }
+
+        public override string ToString()
+        {
+            return DisplayName;
+        }
+    }
+
+    public partial class Span
+    {
+        /// <summary>
+        /// The absolute character offset of the end (exclusive) of the span within the document
+        /// </summary>
+        public int End => Start + Length;
+
+        public bool Contains(Span span)
+        {
+            if (span == null)
+            {
+                return false;
+            }
+
+            return span.Start >= Start && span.End <= End;
+        }
+
+        public bool SpanEquals(Span span)
+        {
+            if (span == null)
+            {
+                return false;
+            }
+
+            return span.Start == Start && span.End == End;
+        }
+    }
+
+    partial class ClassificationSpan
+    {
+        public ClassificationSpan()
+        {
+            DefaultClassificationColor = -1;
+        }
+    }
+
+    partial class SymbolSpan
+    {
+        public int LineSpanEnd => LineSpanStart + Length;
+
+        public void Trim()
+        {
+            var initialLength = LineSpanText.Length;
+            LineSpanText = LineSpanText.TrimStart();
+            var newLength = LineSpanText.Length;
+            LineSpanStart -= (initialLength - newLength);
+            LineSpanText = LineSpanText.TrimEnd();
+            LineSpanStart = Math.Max(LineSpanStart, 0);
+            Length = Math.Min(LineSpanText.Length, Length);
+        }
+
+        public ReferenceSpan CreateReference(ReferenceSymbol referenceSymbol, SymbolId relatedDefinition = default(SymbolId))
+        {
+            return new ReferenceSpan()
+            {
+                RelatedDefinition = relatedDefinition,
+                Reference = referenceSymbol
+            }.CopyFrom<ReferenceSpan>(this);
+        }
+
+        public DefinitionSpan CreateDefinition(DefinitionSymbol definition)
+        {
+            return new DefinitionSpan()
+            {
+                Definition = definition
+            }.CopyFrom<DefinitionSpan>(this);
+        }
+    }
+
+    partial class SourceFileInfo
+    {
+        /// <summary>
+        /// Extensible key value properties for the document. TODO: Move to type definition
+        /// </summary>
+        public Dictionary<string, string> Properties = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
     }
 }
 

@@ -78,7 +78,7 @@ namespace Codex.Analysis
         public BoundSourceFileBuilder(SourceFile sourceFile, string projectId)
         {
             references = BoundSourceFile.References as List<ReferenceSpan>;
-            classifications = BoundSourceFile.ClassificationSpans as List<ClassificationSpan>;
+            classifications = BoundSourceFile.Classifications as List<ClassificationSpan>;
             if (references == null)
             {
                 references = new List<ReferenceSpan>();
@@ -88,7 +88,7 @@ namespace Codex.Analysis
             if (classifications == null)
             {
                 classifications = new List<ClassificationSpan>();
-                BoundSourceFile.ClassificationSpans = classifications;
+                BoundSourceFile.Classifications = classifications;
             }
 
             BoundSourceFile.SourceFile = sourceFile;

@@ -71,7 +71,7 @@ namespace Codex.Web.Monaco.Models
 
         public async Task Populate(BoundSourceFile boundSourceFile)
         {
-            contents = await boundSourceFile.SourceFile.GetContentsAsync();
+            contents = boundSourceFile.SourceFile.Content;
             repoRelativePath = boundSourceFile.SourceFile.Info.RepoRelativePath;
             webLink = boundSourceFile.SourceFile.Info.WebAddress;
 
@@ -79,7 +79,7 @@ namespace Codex.Web.Monaco.Models
             var segment = new SegmentModel();
             segments.Add(segment);
 
-            classifications.AddRange(boundSourceFile.ClassificationSpans.Select(classification =>
+            classifications.AddRange(boundSourceFile.Classifications.Select(classification =>
             {
                 return new ClassificationSpan()
                 {

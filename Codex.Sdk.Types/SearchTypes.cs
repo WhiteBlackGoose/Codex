@@ -28,13 +28,13 @@ namespace Codex
             .CopyTo(ds => ds.Definition.ProjectId, ds => ds.Keywords);
 
         public static SearchType Reference = SearchType.Create<IReferenceSearchModel>(RegisteredSearchTypes)
-            .Inherit<IReferenceSymbol>(rs => rs.References.First().Symbol, rs => rs);
+            .Inherit<IReferenceSymbol>(rs => rs.References.First().Reference, rs => rs);
 
         public static SearchType Source = SearchType.Create<ISourceSearchModel>(RegisteredSearchTypes)
-            .CopyTo(ss => ss.File.Content, ss => ss.Content)
-            .CopyTo(ss => ss.File.RepoRelativePath, ss => ss.RepoRelativePath)
+            .CopyTo(ss => ss.File.SourceFile.Content, ss => ss.Content)
+            .CopyTo(ss => ss.File.SourceFile.Info.RepoRelativePath, ss => ss.RepoRelativePath)
             .CopyTo(ss => ss.File.ProjectId, ss => ss.ProjectId)
-            .CopyTo(ss => ss.File.FilePath, ss => ss.FilePath);
+            .CopyTo(ss => ss.File.SourceFile.Info.Path, ss => ss.FilePath);
 
         public static SearchType Language = SearchType.Create<ILanguageSearchModel>(RegisteredSearchTypes);
 

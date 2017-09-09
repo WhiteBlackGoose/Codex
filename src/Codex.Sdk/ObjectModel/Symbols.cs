@@ -6,21 +6,6 @@ using System.Threading.Tasks;
 
 namespace Codex.ObjectModel
 {
-    public class SourceFileInfo
-    {
-        public string Path { get; set; }
-        public int Lines { get; set; }
-        public int Size { get; set; }
-        public string Language { get; set; }
-        public string WebAddress { get; set; }
-        public string RepoRelativePath { get; set; }
-
-        /// <summary>
-        /// Extensible key value properties for the document
-        /// </summary>
-        public Dictionary<string, string> Properties = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-    }
-
     public interface ISourceFile
     {
         SourceFileInfo Info { get; }
@@ -44,16 +29,41 @@ namespace Codex.ObjectModel
         }
     }
 
-    public class SourceFile : ISourceFile
+    public struct CaseInsensitiveString : IEquatable<CaseInsensitiveString>, IComparable<CaseInsensitiveString>
     {
-        public SourceFileInfo Info { get; set; }
-        public string Content { get; set; }
+        public readonly string Value;
 
-        public Task<string> GetContentsAsync()
+        public CaseInsensitiveString(string value)
         {
-            return Task.FromResult(Content);
+            Value = value;
+        }
+
+        public int CompareTo(CaseInsensitiveString other)
+        {
+            return StringComparer.OrdinalIgnoreCase.Compare(this.Value, other.Value);
+        }
+
+        public bool Equals(CaseInsensitiveString other)
+        {
+            return StringComparer.OrdinalIgnoreCase.Equals(this.Value, other.Value);
+        }
+
+        public static implicit operator string(CaseInsensitiveString value)
+        {
+            return value.Value;
         }
     }
+
+    //public class SourceFile : ISourceFile
+    //{
+    //    public SourceFileInfo Info { get; set; }
+    //    public string Content { get; set; }
+
+    //    public Task<string> GetContentsAsync()
+    //    {
+    //        return Task.FromResult(Content);
+    //    }
+    //}
 
     public class ReferencedProject
     {
@@ -83,222 +93,11 @@ namespace Codex.ObjectModel
         }
     }
 
-    public class Span
-    {
-        /// <summary>
-        /// The absolute character offset of the span within the document
-        /// </summary>
-        public int Start { get; set; }
-
-        /// <summary>
-        /// The length of the span
-        /// </summary>
-        public int Length { get; set; }
-
-        /// <summary>
-        /// The absolute character offset of the end (exclusive) of the span within the document
-        /// </summary>
-        public int End => Start + Length;
-
-        public bool Contains(Span span)
-        {
-            if (span == null)
-            {
-                return false;
-            }
-
-            return span.Start >= Start && span.End <= End;
-        }
-
-        public bool SpanEquals(Span span)
-        {
-            if (span == null)
-            {
-                return false;
-            }
-
-            return span.Start == Start && span.End == End;
-        }
-    }
-
-    public class ClassificationSpan : Span
-    {
-        /// <summary>
-        /// The identifier to the local group of spans which refer to the same common symbol
-        /// </summary>
-        public int LocalGroupId { get; set; }
-
-        /// <summary>
-        /// The classification identifier for the span
-        /// </summary>
-        public string Classification { get; set; }
-
-        /// <summary>
-        /// The default classification color for the span. This is used for
-        /// contexts where a mapping from classification id to color is not
-        /// available.
-        /// </summary>
-        public int DefaultClassificationColor { get; set; } = -1;
-    }
-
-    public class SymbolSpan : Span
-    {
-        /// <summary>
-        /// The character position where the span starts in the line text
-        /// </summary>
-        public int LineNumber { get; set; }
-
-        /// <summary>
-        /// The character position where the span starts in the line text
-        /// </summary>
-        public int LineSpanStart { get; set; }
-
-        public int LineSpanEnd => LineSpanStart + Length;
-
-        /// <summary>
-        /// The line text
-        /// </summary>
-        public string LineSpanText { get; set; }
-
-        /// <summary>
-        /// If positive, the offset of the line span from the beginning of the line
-        /// If negative, the offset of the linespan from the end of the next line
-        /// </summary>
-        public int LineOffset { get; set; }
-
-        public void Trim()
-        {
-            var initialLength = LineSpanText.Length;
-            LineSpanText = LineSpanText.TrimStart();
-            var newLength = LineSpanText.Length;
-            LineSpanStart -= (initialLength - newLength);
-            LineSpanText = LineSpanText.TrimEnd();
-            LineSpanStart = Math.Max(LineSpanStart, 0);
-            Length = Math.Min(LineSpanText.Length, Length);
-        }
-
-        public ReferenceSpan CreateReference(ReferenceSymbol referenceSymbol, SymbolId relatedDefinition = default(SymbolId))
-        {
-            return new ReferenceSpan()
-            {
-                RelatedDefinition = relatedDefinition,
-                Start = Start,
-                Length = Length,
-                LineNumber = LineNumber,
-                LineSpanStart = LineSpanStart,
-                LineSpanText = LineSpanText,
-                Reference = referenceSymbol
-            };
-        }
-
-        public DefinitionSpan CreateDefinition(DefinitionSymbol definition)
-        {
-            return new DefinitionSpan()
-            {
-                Start = Start,
-                Length = Length,
-                LineNumber = LineNumber,
-                LineSpanStart = LineSpanStart,
-                LineSpanText = LineSpanText,
-                Definition = definition
-            };
-        }
-    }
-
-    public class ReferenceSpan : SymbolSpan
-    {
-        /// <summary>
-        /// The symbol referenced by the span
-        /// </summary>
-        public ReferenceSymbol Reference { get; set; }
-
-        /// <summary>
-        /// Gets the symbol id of the definition which provides this reference 
-        /// (i.e. method definition for interface implementation)
-        /// </summary>
-        public SymbolId RelatedDefinition { get; set; }
-    }
-
-    public class DefinitionSpan : SymbolSpan
-    {
-        /// <summary>
-        /// The definition symbol
-        /// </summary>
-        public DefinitionSymbol Definition { get; set; }
-    }
-
-    public class DefinitionSymbol : ReferenceSymbol
-    {
-        /// <summary>
-        /// The unique identifier for the symbol
-        /// NOTE: This is not applicable to most symbols. Only set for symbols
-        /// which are added in a shared context and need this for deduplication)
-        /// </summary>
-        public string Uid { get; set; }
-
-        public string Comment { get; set; }
-
-        public string TypeName { get; set; }
-
-        public string DeclarationName { get; set; }
-
-        public string DisplayName { get; set; }
-        private string shortName;
-        public string ShortName
-        {
-            get
-            {
-                return shortName ?? "";
-            }
-            set
-            {
-                shortName = value;
-            }
-        }
-
-
-        public string ContainerQualifiedName { get; set; }
-
-        public Glyph Glyph { get; set; } = Glyph.Unknown;
-        public int SymbolDepth { get; set; }
-
-        public int ReferenceCount;
-
-        public DefinitionSymbol()
-        {
-            ReferenceKind = nameof(ObjectModel.ReferenceKind.Definition);
-        }
-
-        public void IncrementReferenceCount()
-        {
-            Interlocked.Increment(ref ReferenceCount);
-        }
-
-        public override string ToString()
-        {
-            return DisplayName;
-        }
-    }
-
     /// <summary>
     ///  Allows defining extension data during analysis
     /// </summary>
     public class ExtensionData
     {
-    }
-
-    public class ReferenceSymbol : Symbol
-    {
-        /// <summary>
-        /// The kind of reference. This is used to group references.
-        /// (i.e. for C#(aka .NET) MethodOverride, InterfaceMemberImplementation, InterfaceImplementation, etc.)
-        /// </summary>
-        public string ReferenceKind { get; set; }
-
-        public override string ToString()
-        {
-            return ReferenceKind + " " + base.ToString();
-        }
     }
 
     public class TextReferenceEntry
