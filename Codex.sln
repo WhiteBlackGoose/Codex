@@ -33,6 +33,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Web.Monaco", "src\Cod
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Analysis.External", "Codex.Analysis.External\Codex.Analysis.External.csproj", "{CD028A30-EF26-44DE-884B-6D9C41C39D64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodexTestCSharpLibrary", "src\TestProjects\CodexTestRepo\CodexTestCSharpLibrary\CodexTestCSharpLibrary.csproj", "{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestProjects", "TestProjects", "{93A34DFC-EDAD-41A7-ACCC-8102695590DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodexTestRepo", "CodexTestRepo", "{67C77F61-548B-4B26-96CE-E8C6B924785B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -137,8 +143,20 @@ Global
 		{CD028A30-EF26-44DE-884B-6D9C41C39D64}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CD028A30-EF26-44DE-884B-6D9C41C39D64}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{CD028A30-EF26-44DE-884B-6D9C41C39D64}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F16A9DE8-193F-4D07-9D86-1DD2FB087A96} = {67C77F61-548B-4B26-96CE-E8C6B924785B}
+		{67C77F61-548B-4B26-96CE-E8C6B924785B} = {93A34DFC-EDAD-41A7-ACCC-8102695590DD}
 	EndGlobalSection
 EndGlobal
