@@ -166,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Placeholders.cs" />
+    <Compile Include="StoreGenerator.cs" />
     <Compile Include="TypeDefinition.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="Program.cs" />

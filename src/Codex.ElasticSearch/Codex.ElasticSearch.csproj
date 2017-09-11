@@ -36,6 +36,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\bin\Debug\Codex.Framework.Generation\ElasticSearchTypes.g.cs">
+      <Link>Model\ElasticSearchTypes.g.cs</Link>
+    </Compile>
     <Compile Include="DataModel\Attributes.cs" />
     <Compile Include="DataModel\ClassificationListModel.cs" />
     <Compile Include="DataModel\DataBehavior.cs" />

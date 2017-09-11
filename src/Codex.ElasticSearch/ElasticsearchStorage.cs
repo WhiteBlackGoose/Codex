@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Codex.Analysis;
+using Codex.Framework.Types;
 using Codex.ObjectModel;
 using Codex.Storage.DataModel;
 using Codex.Storage.ElasticProviders;
@@ -234,6 +235,10 @@ namespace Codex.Storage
         public async Task UploadAsync(IRepoFile repoFile, BoundSourceFile boundSourceFile)
         {
             await Provider.AddSourcesToIndexAsync(repoFile.Repo.TargetIndex, new[] { ModelConverter.FromObjectModel(boundSourceFile) });
+            //await Provider.Store.SourceStore.StoreAsync(new[] { new SourceSearchModel()
+            //{
+            //    File = boundSourceFile,
+            //}});
         }
 
         public Task<IEnumerable<string>> GetReferencingProjects(string projectId)

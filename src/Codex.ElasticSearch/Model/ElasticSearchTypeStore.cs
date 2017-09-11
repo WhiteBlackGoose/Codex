@@ -12,14 +12,14 @@ using System.Threading.Tasks;
 
 namespace Codex.ElasticSearch
 {
-    internal class TypedStore<T> : IStore<T>
+    public class ElasticSearchTypeStore<T> : IStore<T>
         where T : class
     {
         private readonly SearchType searchType;
         private readonly ElasticSearchStore store;
         private readonly string indexName;
 
-        public TypedStore(ElasticSearchStore store, SearchType searchType)
+        public ElasticSearchTypeStore(ElasticSearchStore store, SearchType searchType)
         {
             this.store = store;
             this.searchType = searchType;
@@ -48,15 +48,33 @@ namespace Codex.ElasticSearch
 
             await store.Service.UseClient(async context =>
             {
+                var existsResponse = await context.Client.IndexExistsAsync(indexName)
+                    .ThrowOnFailure();
+
+                if (existsResponse.Exists)
+                {
+                    return false;
+                }
+
                 var response = await context.Client
                     .CreateIndexAsync(indexName,
                         c => c.Mappings(m => m.Map<T>(TypeName.From<T>(), tm => tm.AutoMap(MappingPropertyVisitor.Instance)))
                             .Settings(s => s.AddAnalyzerSettings().NumberOfShards(store.Configuration.ShardCount).RefreshInterval(TimeSpan.FromMinutes(1)))
                             .CaptureRequest(context))
-                    .ThrowOnFailure();
-                
+                            .ThrowOnFailure();
+
                 return response.IsValid;
             });
+        }
+
+        public BulkDescriptor AddCreateOperation(BulkDescriptor bd, T value)
+        {
+            return bd.Create<T>(bco => bco.Document(value).Index(indexName));
+        }
+
+        public void AddCreateOperation(ElasticSearchBatch batch, T value)
+        {
+            AddCreateOperation(batch.BulkDescriptor, value);
         }
 
         public async Task StoreAsync(IReadOnlyList<T> values)
@@ -66,7 +84,7 @@ namespace Codex.ElasticSearch
             await store.Service.UseClient(async context =>
             {
                 var response = await context.Client
-                    .BulkAsync(b => b.ForEach(values, (bd, value) => bd.Create<T>(bco => bco.Document(value).Index(indexName))).CaptureRequest(context))
+                    .BulkAsync(b => b.ForEach(values, (bd, value) => AddCreateOperation(bd, value)).CaptureRequest(context))
                     .ThrowOnFailure();
 
                 return response.IsValid;

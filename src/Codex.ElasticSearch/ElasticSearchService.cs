@@ -1,5 +1,4 @@
-﻿using Codex.Framework.Types;
-using Nest;
+﻿using Nest;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -57,7 +56,6 @@ namespace Codex.ElasticSearch
             await store.InitializeAsync();
             return store;
         }
-
     }
 
     public class ClientContext

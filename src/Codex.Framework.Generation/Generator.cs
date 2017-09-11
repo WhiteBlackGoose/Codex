@@ -18,6 +18,7 @@ namespace Codex.Framework.Generation
         public CSharpCodeProvider CodeProvider;
 
         public List<TypeDefinition> Types = new List<TypeDefinition>();
+        public List<StoreGenerator> StoreGenerators = new List<StoreGenerator>();
         public HashSet<Type> MigratedTypes = new HashSet<Type>();
         public Dictionary<Type, TypeDefinition> DefinitionsByType = new Dictionary<Type, TypeDefinition>();
         public Dictionary<string, TypeDefinition> DefinitionsByTypeMetadataName = new Dictionary<string, TypeDefinition>();
@@ -192,6 +193,10 @@ namespace Codex.Framework.Generation
             HashSet<TypeDefinition> visitedTypeDefinitions = new HashSet<TypeDefinition>();
             HashSet<string> usedMemberNames = new HashSet<string>();
 
+            CodeCompileUnit elasticSearchTypesFile = new CodeCompileUnit();
+            var elasticSearchStoreGenerator = new StoreGenerator(namespaceName: "Codex.ElasticSearch", storeTypeName: "ElasticSearchStore", genericTypedStoreName: "ElasticSearchTypeStore");
+            elasticSearchTypesFile.Namespaces.Add(elasticSearchStoreGenerator.StoreNamespace);
+
             CodeCompileUnit searchDescriptors = new CodeCompileUnit();
             CodeNamespace modelNamespace = new CodeNamespace("Codex.ObjectModel");
             CodeNamespace typesNamespace = new CodeNamespace("Codex.Framework.Types");
@@ -215,80 +220,12 @@ namespace Codex.Framework.Generation
                 IsInterface = true
             };
 
-            CodeTypeDeclaration storeBaseTypeDeclaration = new CodeTypeDeclaration("StoreBase")
-            {
-                IsPartial = true,
-                IsClass = true,
-                TypeAttributes = System.Reflection.TypeAttributes.Abstract | System.Reflection.TypeAttributes.Public,
-            };
-
-            var storeBaseInitialize = new CodeMemberMethod()
-            {
-                Name = "InitializeAsync",
-                Attributes = MemberAttributes.Public,
-                ReturnType = new CodeTypeReference(typeof(Task))
-            }.AsyncMethod();
-
-
-            var storeBaseFinalize = new CodeMemberMethod()
-            {
-                Name = "FinalizeAsync",
-                Attributes = MemberAttributes.Public,
-                ReturnType = new CodeTypeReference(typeof(Task))
-            }.AsyncMethod();
-
-            var storeBaseCreateStore = new CodeMemberMethod()
-            {
-                Name = "CreateStoreAsync",
-                Attributes = MemberAttributes.Public | MemberAttributes.Abstract,
-                ReturnType = new CodeTypeReference("Task", new CodeTypeReference(nameof(IStore<ISearchEntity>), new CodeTypeReference(new CodeTypeParameter("TSearchType")))),
-
-            }
-            .Apply(m => m.TypeParameters.Add(new CodeTypeParameter("TSearchType").WithClassConstraint()))
-            .Apply(m => m.Parameters.Add(new CodeParameterDeclarationExpression(typeof(SearchType), "searchType")));
-
-            storeBaseTypeDeclaration.Members.Add(storeBaseInitialize);
-            storeBaseTypeDeclaration.Members.Add(storeBaseFinalize);
-            storeBaseTypeDeclaration.Members.Add(storeBaseCreateStore);
-
             typesNamespace.Types.Add(storeTypeDeclaration);
-            typesNamespace.Types.Add(storeBaseTypeDeclaration);
 
             foreach (var searchType in SearchTypes.RegisteredSearchTypes)
             {
                 var typeDefinition = DefinitionsByType[searchType.Type];
                 indexTypeDeclaration.Members.Add(new CodeMemberField(typeDefinition.SearchDescriptorName, typeDefinition.SearchDescriptorName));
-
-                var typedStoreProperty = new CodeMemberProperty()
-                {
-                    Type = new CodeTypeReference(typeof(IStore<>).MakeGenericType(searchType.Type)),
-                    Name = searchType.Name + "Store",
-                    HasGet = true
-                };
-
-                storeTypeDeclaration.Members.Add(typedStoreProperty);
-
-                var typedStoreField = new CodeMemberField(typedStoreProperty.Type, $"m_{typedStoreProperty.Name}")
-                {
-                    Attributes = MemberAttributes.Private
-                };
-
-                storeBaseTypeDeclaration.Members.Add(typedStoreField);
-
-                storeBaseTypeDeclaration.Members.Add(new CodeMemberProperty()
-                {
-                    Type = typedStoreProperty.Type,
-                    Name = typedStoreProperty.Name,
-                    HasGet = true,
-                }.Apply(p => p.GetStatements.Add(new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), typedStoreField.Name)))));
-
-                storeBaseInitialize.Statements.Add(new CodeAssignStatement(
-                    new CodeVariableReferenceExpression(typedStoreField.Name),
-                    new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeThisReferenceExpression(), storeBaseCreateStore.Name, new CodeTypeReference(searchType.Type)),
-                        new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(typeof(SearchTypes)), searchType.Name)).AwaitExpression()));
-
-                storeBaseFinalize.Statements.Add(
-                    new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeVariableReferenceExpression(typedStoreField.Name), "FinalizeAsync")).AwaitExpression());
 
                 if (visitedSearchTypeDefinitions.Add(typeDefinition))
                 {
@@ -340,6 +277,15 @@ namespace Codex.Framework.Generation
                 //        .Apply(tp => tp.TypeArguments[0] = new CodeTypeReference(typeDeclaration.Name))
                 //        .Apply(tp => tp.TypeArguments[1] = new CodeTypeReference(typeDefinition.Type)));
                 //}
+            }
+
+            using (var writer = new StreamWriter("ElasticSearchTypes.g.cs"))
+            {
+                CodeProvider.GenerateCodeFromCompileUnit(elasticSearchTypesFile, writer, new System.CodeDom.Compiler.CodeGeneratorOptions()
+                {
+                    BlankLinesBetweenMembers = true,
+                    IndentString = "    "
+                });
             }
 
             using (var writer = new StreamWriter("SearchDescriptors.g.cs"))
