@@ -38,10 +38,10 @@ namespace Codex.ElasticSearch
         //    return base.InitializeAsync();
         //}
 
-        public async Task<ElasticSearchTypeStore<TSearchType>> CreateStoreAsync<TSearchType>(SearchType searchType)
+        public async Task<ElasticSearchEntityStore<TSearchType>> CreateStoreAsync<TSearchType>(SearchType searchType)
             where TSearchType : class
         {
-            var store = new ElasticSearchTypeStore<TSearchType>(this, searchType);
+            var store = new ElasticSearchEntityStore<TSearchType>(this, searchType);
             await store.InitializeAsync();
             return store;
         }
@@ -56,8 +56,6 @@ namespace Codex.ElasticSearch
             var sourceModel = CreateSourceModel(repoName, boundSourceFile);
             await Service.UseClient(async context =>
             {
-                await PlaceholderAsync();
-
                 var existingSourceTreeId = await TryGetSourceHashTreeId(sourceModel);
                 if (existingSourceTreeId != null)
                 {
@@ -80,11 +78,6 @@ namespace Codex.ElasticSearch
         {
             throw new NotImplementedException();
         }
-
-        private Task PlaceholderAsync()
-        {
-            throw new NotImplementedException();
-        }
     }
 
     public class ElasticSearchBatch
@@ -94,7 +87,7 @@ namespace Codex.ElasticSearch
         public async Task<IBulkResponse> ExecuteAsync(ClientContext context)
         {
             var response = await context.Client.BulkAsync(BulkDescriptor);
-
+            throw new NotImplementedException();
         }
     }
 

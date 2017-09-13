@@ -12,18 +12,18 @@ using System.Threading.Tasks;
 
 namespace Codex.ElasticSearch
 {
-    public class ElasticSearchTypeStore<T> : IStore<T>
+    public class ElasticSearchEntityStore<T> : IStore<T>
         where T : class
     {
         private readonly SearchType searchType;
         private readonly ElasticSearchStore store;
-        private readonly string indexName;
+        public readonly string IndexName;
 
-        public ElasticSearchTypeStore(ElasticSearchStore store, SearchType searchType)
+        public ElasticSearchEntityStore(ElasticSearchStore store, SearchType searchType)
         {
             this.store = store;
             this.searchType = searchType;
-            this.indexName = store.Configuration.Prefix + searchType.IndexName;
+            this.IndexName = store.Configuration.Prefix + searchType.IndexName;
         }
 
         public async Task InitializeAsync()
@@ -48,7 +48,7 @@ namespace Codex.ElasticSearch
 
             await store.Service.UseClient(async context =>
             {
-                var existsResponse = await context.Client.IndexExistsAsync(indexName)
+                var existsResponse = await context.Client.IndexExistsAsync(IndexName)
                     .ThrowOnFailure();
 
                 if (existsResponse.Exists)
@@ -57,7 +57,7 @@ namespace Codex.ElasticSearch
                 }
 
                 var response = await context.Client
-                    .CreateIndexAsync(indexName,
+                    .CreateIndexAsync(IndexName,
                         c => c.Mappings(m => m.Map<T>(TypeName.From<T>(), tm => tm.AutoMap(MappingPropertyVisitor.Instance)))
                             .Settings(s => s.AddAnalyzerSettings().NumberOfShards(store.Configuration.ShardCount).RefreshInterval(TimeSpan.FromMinutes(1)))
                             .CaptureRequest(context))
@@ -69,7 +69,7 @@ namespace Codex.ElasticSearch
 
         public BulkDescriptor AddCreateOperation(BulkDescriptor bd, T value)
         {
-            return bd.Create<T>(bco => bco.Document(value).Index(indexName));
+            return bd.Create<T>(bco => bco.Document(value).Index(IndexName));
         }
 
         public void AddCreateOperation(ElasticSearchBatch batch, T value)

@@ -49,6 +49,29 @@ namespace Codex
         public static SearchType ProjectReference = SearchType.Create<IProjectReferenceSearchModel>(RegisteredSearchTypes);
 
         public static SearchType Property = SearchType.Create<IPropertySearchModel>(RegisteredSearchTypes);
+
+        public static SearchType StoredFilter = SearchType.Create<IStoredFilter>(RegisteredSearchTypes);
+    }
+
+    /// <summary>
+    /// Defines a stored filter which matches entities in a particular index shard in a stable manner
+    /// </summary>
+    public interface IStoredFilter : ISearchEntity
+    {
+        /// <summary>
+        /// The name of the index to which the stored filter applies
+        /// </summary>
+        string IndexName { get; }
+
+        /// <summary>
+        /// The shard to which the stored filter applies
+        /// </summary>
+        int Shard { get; }
+
+        /// <summary>
+        /// The filter which matches entities in the index shard
+        /// </summary>
+        object Filter { get; }
     }
 
     public interface IDefinitionSearchModel : ISearchEntity

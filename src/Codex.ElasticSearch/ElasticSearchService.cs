@@ -56,6 +56,11 @@ namespace Codex.ElasticSearch
             await store.InitializeAsync();
             return store;
         }
+
+        public void UseClientBackground(Func<ClientContext, Task> useClient)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class ClientContext
