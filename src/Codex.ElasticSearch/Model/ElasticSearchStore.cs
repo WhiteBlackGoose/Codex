@@ -59,7 +59,8 @@ namespace Codex.ElasticSearch
                 var existingSourceTreeId = await TryGetSourceHashTreeId(sourceModel);
                 if (existingSourceTreeId != null)
                 {
-
+                    // TODO: Add documents to stored filter based on hash tree
+                    // which should have child nodes references the filters to add
                     return false;
                 }
 
@@ -69,9 +70,40 @@ namespace Codex.ElasticSearch
                 return true;
             });
 
-            var bd = new BulkDescriptor();
 
-            SourceStore.AddCreateOperation(bd, sourceModel);
+            var batch = new ElasticSearchBatch();
+
+            batch.Add(SourceStore, sourceModel);
+
+            foreach (var property in sourceModel.File.SourceFile.Info.Properties)
+            {
+                batch.Add(PropertyStore, new PropertySearchModel()
+                {
+                    Uid = Placeholder.Value<string>("Populate fields"),
+                    Key = property.Key,
+                    Value = property.Value,
+                    OwnerId = sourceModel.Uid,
+                });
+            }
+
+            foreach (var definitionSpan in sourceModel.File.Definitions.Where(ds => !ds.Definition.ExcludeFromSearch))
+            {
+                batch.Add(DefinitionStore, new DefinitionSearchModel()
+                {
+                    Uid = Placeholder.Value<string>("Populate fields"),
+                    Definition = definitionSpan.Definition,
+                });
+            }
+
+            foreach (var referenceSpan in sourceModel.File.References.Where(rs => !rs.Reference.ExcludeFromSearch))
+            {
+                Placeholder.NotImplemented($"Group by symbol as in {nameof(Storage.DataModel.SourceFileModel.GetSearchReferences)}");
+                batch.Add(ReferenceStore, new ReferenceSearchModel()
+                {
+                    Uid = Placeholder.Value<string>("Populate fields"),
+                    Reference = referenceSpan.Reference
+                });
+            }
         }
 
         private SourceSearchModel CreateSourceModel(string repoName, BoundSourceFile boundSourceFile)
@@ -83,6 +115,18 @@ namespace Codex.ElasticSearch
     public class ElasticSearchBatch
     {
         public BulkDescriptor BulkDescriptor = new BulkDescriptor();
+
+        public void Add<T>(ElasticSearchEntityStore<T> store, T entity)
+            where T : class, ISearchEntity
+        {
+            PopulateContentIdAndSize(entity, store);
+        }
+
+        public void PopulateContentIdAndSize<T>(T entity, ElasticSearchEntityStore<T> store)
+            where T : class, ISearchEntity
+        {
+            Placeholder.NotImplemented("Get content id, size, and store content id as Uid where appropriate");
+        }
 
         public async Task<IBulkResponse> ExecuteAsync(ClientContext context)
         {

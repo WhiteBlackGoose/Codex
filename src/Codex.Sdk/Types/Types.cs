@@ -67,9 +67,10 @@ namespace Codex.ObjectModel
 
         public int ReferenceCount;
 
-        public DefinitionSymbol()
+        protected override void Initialize()
         {
             ReferenceKind = nameof(ObjectModel.ReferenceKind.Definition);
+            base.Initialize();
         }
 
         private string CoerceShortName(string value)
@@ -118,9 +119,10 @@ namespace Codex.ObjectModel
 
     partial class ClassificationSpan
     {
-        public ClassificationSpan()
+        protected override void Initialize()
         {
             DefaultClassificationColor = -1;
+            base.Initialize();
         }
     }
 
@@ -141,19 +143,19 @@ namespace Codex.ObjectModel
 
         public ReferenceSpan CreateReference(ReferenceSymbol referenceSymbol, SymbolId relatedDefinition = default(SymbolId))
         {
-            return new ReferenceSpan()
+            return new ReferenceSpan(this)
             {
                 RelatedDefinition = relatedDefinition,
                 Reference = referenceSymbol
-            }.CopyFrom<ReferenceSpan>(this);
+            };
         }
 
         public DefinitionSpan CreateDefinition(DefinitionSymbol definition)
         {
-            return new DefinitionSpan()
+            return new DefinitionSpan(this)
             {
                 Definition = definition
-            }.CopyFrom<DefinitionSpan>(this);
+            };
         }
     }
 

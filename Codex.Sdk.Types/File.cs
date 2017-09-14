@@ -152,7 +152,7 @@ namespace Codex
         ILineSpan Content { get; }
     }
 
-    public interface IDefinitionSpan : ISymbolSpan
+    public interface IDefinitionSpan : ILineSpan
     {
         /// <summary>
         /// The definition symbol referred to by the span

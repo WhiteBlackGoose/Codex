@@ -269,6 +269,28 @@ namespace Codex.Framework.Generation
                 var nspace = typeDefinition.Migrated ? modelNamespace : typesNamespace;
                 nspace.Types.Add(typeDeclaration);
 
+                if (typeDefinition.TypeParameters.Count == 0)
+                {
+                    typeDeclaration.Members.Add(new CodeConstructor()
+                    {
+                        Attributes = MemberAttributes.Public
+                    }.EnsureInitialize(typeDefinition));
+                }
+
+                if (typeDefinition.BaseTypeDefinition == null)
+                {
+                    typeDeclaration.Members.Add(new CodeMemberMethod()
+                    {
+                        Name = "Initialize",
+                        Attributes = MemberAttributes.Family
+                    });
+                }
+
+                if (typeDefinition.Type == typeof(IReferenceSearchModel))
+                {
+
+                }
+
                 PopulateProperties(visitedTypeDefinitions, usedMemberNames, typeDefinition, typeDeclaration);
 
                 //if (!typeDefinition.Type.IsGenericType)
@@ -302,7 +324,9 @@ namespace Codex.Framework.Generation
             HashSet<TypeDefinition> visitedTypeDefinitions,
             HashSet<string> usedMemberNames,
             TypeDefinition typeDefinition,
-            CodeTypeDeclaration typeDeclaration)
+            CodeTypeDeclaration typeDeclaration,
+            TypeDefinition declarationTypeDefinition = null,
+            bool isBaseChain = false)
         {
             if (!visitedTypeDefinitions.Add(typeDefinition))
             {
@@ -316,12 +340,30 @@ namespace Codex.Framework.Generation
                 ReturnType = new CodeTypeReference("TTarget")
             };
 
+            var copyConstructor = new CodeConstructor()
+            {
+                Attributes = MemberAttributes.Public,
+            }.EnsureInitialize(declarationTypeDefinition ?? typeDefinition);
+
+            if (typeDefinition.TypeParameters.Count == 0)
+            {
+                typeDeclaration.Members.Add(copyConstructor);
+            }
+
             applyMethod.TypeParameters.Add(new CodeTypeParameter("TTarget").Apply(tp => tp.Constraints.Add(typeDeclaration.Name)));
             applyMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeDefinition.Type.AsReference(), "value"));
+            copyConstructor.Parameters.AddRange(applyMethod.Parameters);
+            copyConstructor.Statements.Add(new CodeMethodInvokeExpression(new CodeThisReferenceExpression(), applyMethod.Name, new CodeVariableReferenceExpression("value"))
+                .Apply(invoke => invoke.Method.TypeArguments.Add(new CodeTypeReference(typeDeclaration.Name))));
 
             foreach (var property in typeDefinition.Properties)
             {
                 AddPropertyApplyStatement(applyMethod, property);
+
+                if (isBaseChain)
+                {
+                    continue;
+                }
 
                 if (property.PropertyTypeDefinition != null || property.IsList)
                 {
@@ -391,6 +433,13 @@ namespace Codex.Framework.Generation
                 typeDeclaration.BaseTypes.Add(typeDefinition.Type.AsReference());
             }
 
+            if (typeDefinition.BaseTypeDefinition != null)
+            {
+                PopulateProperties(visitedTypeDefinitions, usedMemberNames, typeDefinition.BaseTypeDefinition, typeDeclaration, 
+                    declarationTypeDefinition: declarationTypeDefinition ?? typeDefinition,
+                    isBaseChain: declarationTypeDefinition == null || isBaseChain);
+            }
+
             foreach (var baseDefinition in typeDefinition.Interfaces)
             {
                 foreach (var property in baseDefinition.Properties)
@@ -400,11 +449,16 @@ namespace Codex.Framework.Generation
 
                 //applyMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeThisReferenceExpression(), applyMethod.Name),
                 //    new CodeCastExpression(baseDefinition.Type, new CodeVariableReferenceExpression("value"))));
-                PopulateProperties(visitedTypeDefinitions, usedMemberNames, baseDefinition, typeDeclaration);
+                PopulateProperties(visitedTypeDefinitions, usedMemberNames, baseDefinition, typeDeclaration, 
+                    declarationTypeDefinition: declarationTypeDefinition ?? typeDefinition, 
+                    isBaseChain: false);
             }
 
-            applyMethod.Statements.Add(new CodeMethodReturnStatement(new CodeCastExpression("TTarget", new CodeThisReferenceExpression())));
-            typeDeclaration.Members.Add(applyMethod);
+            if (!isBaseChain)
+            {
+                applyMethod.Statements.Add(new CodeMethodReturnStatement(new CodeCastExpression("TTarget", new CodeThisReferenceExpression())));
+                typeDeclaration.Members.Add(applyMethod);
+            }
         }
 
         private void AddPropertyApplyStatement(CodeMemberMethod applyMethod, PropertyDefinition property)
@@ -428,7 +482,7 @@ namespace Codex.Framework.Generation
                     // new PropertyType().CopyFrom(value.Property);
                     return new CodeMethodInvokeExpression(
                         new CodeMethodReferenceExpression(new CodeObjectCreateExpression(property.MutablePropertyType), "CopyFrom")
-                            .Apply(mr => mr.TypeArguments.Add(property.MutablePropertyType)), 
+                            .Apply(mr => mr.TypeArguments.Add(property.MutablePropertyType)),
                         valuePropertyReferenceExpression);
                 }
             }
@@ -587,6 +641,16 @@ namespace Codex.Framework.Generation
             }
 
             return result;
+        }
+
+        internal static CodeConstructor EnsureInitialize(this CodeConstructor constructor, TypeDefinition typeDefinition)
+        {
+            if (typeDefinition.BaseTypeDefinition == null)
+            {
+                constructor.Statements.Add(new CodeMethodInvokeExpression(null, "Initialize"));
+            }
+
+            return constructor;
         }
 
         public static T ApplyIf<T>(this T codeObject, bool condition, Func<T, T> action)

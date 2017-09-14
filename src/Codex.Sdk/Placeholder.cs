@@ -15,5 +15,10 @@ namespace Codex
         {
             throw new NotImplementedException();
         }
+
+        public static void NotImplemented(string message = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

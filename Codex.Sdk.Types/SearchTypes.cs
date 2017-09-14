@@ -28,7 +28,7 @@ namespace Codex
             .CopyTo(ds => ds.Definition.ProjectId, ds => ds.Keywords);
 
         public static SearchType Reference = SearchType.Create<IReferenceSearchModel>(RegisteredSearchTypes)
-            .Inherit<IReferenceSymbol>(rs => rs.References.First().Reference, rs => rs);
+            .CopyTo(rs => rs.Spans.First().Reference, rs => rs.Reference);
 
         public static SearchType Source = SearchType.Create<ISourceSearchModel>(RegisteredSearchTypes)
             .CopyTo(ss => ss.File.SourceFile.Content, ss => ss.Content)
@@ -123,12 +123,22 @@ namespace Codex
         string Name { get; }
     }
 
-    public interface IReferenceSearchModel : IReferenceSymbol, IFileScopeEntity, ISearchEntity
+    // TODO: Don't inherit reference symbol. Instead just have a member
+    public interface IReferenceSearchModel : IFileScopeEntity, ISearchEntity
     {
+        /// <summary>
+        /// The reference symbol
+        /// </summary>
+        IReferenceSymbol Reference { get; }
+
+        // TODO: Store efficient representation of list of reference spans (old implementation
+        // has two possible representations).
+        // There should probably be some placeholder interfaces in SDK for the efficient types which
+        // the JSON serializer will be customized to replace with real type
         // TODO: Need some sort of override for searching RelatedDefinition of the
         // ReferenceSpan
         [SearchBehavior(SearchBehavior.None)]
-        IReadOnlyList<IReferenceSpan> References { get; }
+        IReadOnlyList<IReferenceSpan> Spans { get; }
     }
 
     public interface ISourceSearchModel : IFileScopeEntity, ISearchEntity

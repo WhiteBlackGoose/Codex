@@ -52,6 +52,11 @@ namespace Codex.ElasticSearch
                         {
                             new StoredFilter()
                             {
+                                // TODO: We need to ensure only one thread/process is operating on a given stored filter
+                                // at a time. Otherwise, its possible for them to stomp over each other. Maybe have a
+                                // intermediate stored filter which is used to build up the value and when finalized it
+                                // will be set to the stored filter under the UID.
+                                // NOTE!!!! Intermediate stored filter should then be deleted
                                 Uid = $"{IndexName}#{shard}|{FilterName}",
                                 IndexName = IndexName,
                                 Shard = shard,
