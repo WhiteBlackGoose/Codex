@@ -1,15 +1,8 @@
-﻿using Codex.ObjectModel;
-using Codex.Storage.Utilities;
-using Nest;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Codex.Storage.Utilities.NumberUtils;
-using System.Collections;
-using Codex.Utilities;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Codex.ObjectModel;
+using Codex.Utilities;
+using static Codex.Utilities.SerializationUtilities;
 
 namespace Codex.Storage.DataModel
 {

@@ -215,31 +215,6 @@ namespace Codex.Storage.DataModel
             return new Range(segment.Starts[segmentOffset], segment.Lengths[segmentOffset]);
         }
 
-        protected static string AssignDuplicate(string value, ref string lastValue)
-        {
-            if (value == null)
-            {
-                return lastValue;
-            }
-            else
-            {
-                lastValue = value;
-                return value;
-            }
-        }
-
-        protected static string RemoveDuplicate(string value, ref string lastValue)
-        {
-            if (value == lastValue)
-            {
-                return null;
-            }
-            else
-            {
-                lastValue = value;
-                return value;
-            }
-        }
 
         private struct SpanRangeList : IIndexable<Range>
         {

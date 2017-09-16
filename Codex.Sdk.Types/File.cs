@@ -10,7 +10,15 @@ namespace Codex
     /// <summary>
     /// Represents a source file with associated semantic bindings
     /// </summary>
-    public interface IBoundSourceFile : IProjectScopeEntity
+    public interface IBoundSourceFile : IBoundSourceInfo
+    {
+        /// <summary>
+        /// The source file
+        /// </summary>
+        ISourceFile SourceFile { get; }
+    }
+
+    public interface IBoundSourceInfo : IProjectScopeEntity
     {
         /// <summary>
         /// The unique identifier for the file
@@ -18,11 +26,6 @@ namespace Codex
         /// which are added in a shared context and need this for deduplication)
         /// </summary>
         string Uid { get; }
-
-        /// <summary>
-        /// The source file
-        /// </summary>
-        ISourceFile SourceFile { get; }
 
         /// <summary>
         /// The number of references in the file
@@ -135,6 +138,12 @@ namespace Codex
         /// </summary>
         [SearchBehavior(SearchBehavior.FullText)]
         string Content { get; }
+
+        /// <summary>
+        /// Indicates that the file should be excluded from text search
+        /// </summary>
+        [SearchBehavior(SearchBehavior.Term)]
+        bool ExcludeFromSearch { get; }
     }
 
     public interface IOutliningRegion

@@ -195,7 +195,7 @@ namespace Codex.Analysis
                         var definitionReferenceSymbol = GetReferenceSymbol(symbol, referenceKind: ReferenceKind.Definition);
                         references.Add(symbolSpan.CreateReference(definitionReferenceSymbol));
 
-                        ProcessDefinitionAndAddAdditionalReferenceSymbols(symbol, definitionSpan, token);
+                        ProcessDefinitionAndAddAdditionalReferenceSymbols(symbol, symbolSpan, definitionSymbol, token);
                     }
                     else
                     {
@@ -273,14 +273,14 @@ namespace Codex.Analysis
             }
         }
 
-        private void ProcessDefinitionAndAddAdditionalReferenceSymbols(ISymbol symbol, DefinitionSpan symbolSpan, SyntaxToken token)
+        private void ProcessDefinitionAndAddAdditionalReferenceSymbols(ISymbol symbol, SymbolSpan symbolSpan, DefinitionSymbol definition, SyntaxToken token)
         {
             // Handle potentially virtual or interface member implementations
             if (symbol.Kind == SymbolKind.Method || symbol.Kind == SymbolKind.Property || symbol.Kind == SymbolKind.Event)
             {
-                AddReferencesToOverriddenMembers(symbolSpan, symbol, relatedDefinition: symbolSpan.Definition.Id);
+                AddReferencesToOverriddenMembers(symbolSpan, symbol, relatedDefinition: definition.Id);
 
-                AddReferencesToImplementedMembers(symbolSpan, symbol, symbolSpan.Definition.Id);
+                AddReferencesToImplementedMembers(symbolSpan, symbol, definition.Id);
             }
 
             if (symbol.Kind == SymbolKind.Method)
@@ -294,7 +294,7 @@ namespace Codex.Analysis
                     {
                         // Exclude constructors from default search
                         // Add a constructor reference with the containing type
-                        symbolSpan.Definition.ExcludeFromDefaultSearch = true;
+                        definition.ExcludeFromDefaultSearch = true;
                         references.Add(symbolSpan.CreateReference(GetReferenceSymbol(methodSymbol.ContainingType, ReferenceKind.Constructor)));
                     }
                 }

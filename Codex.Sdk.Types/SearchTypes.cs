@@ -17,24 +17,30 @@ namespace Codex
     {
         public static readonly List<SearchType> RegisteredSearchTypes = new List<SearchType>();
 
-        public static SearchType Definition = SearchType.Create<IDefinitionSearchModel>(RegisteredSearchTypes)
-            .CopyTo(ds => ds.Definition.Modifiers, ds => ds.Keywords)
-            .CopyTo(ds => ds.Definition.Kind, ds => ds.Kind)
-            .CopyTo(ds => ds.Definition.ExcludeFromDefaultSearch, ds => ds.ExcludeFromDefaultSearch)
-            .CopyTo(ds => ds.Definition.Kind, ds => ds.Keywords)
-            .CopyTo(ds => ds.Definition.ShortName, ds => ds.ShortName)
-            //.CopyTo(ds => ds.Language, ds => ds.Keywords)
-            .CopyTo(ds => ds.Definition.ProjectId, ds => ds.ProjectId)
-            .CopyTo(ds => ds.Definition.ProjectId, ds => ds.Keywords);
+        public static SearchType Definition = SearchType.Create<IDefinitionSearchModel>(RegisteredSearchTypes);
+        //.CopyTo(ds => ds.Definition.Modifiers, ds => ds.Keywords)
+        //.CopyTo(ds => ds.Definition.Kind, ds => ds.Kind)
+        //.CopyTo(ds => ds.Definition.ExcludeFromDefaultSearch, ds => ds.ExcludeFromDefaultSearch)
+        //.CopyTo(ds => ds.Definition.Kind, ds => ds.Keywords)
+        //.CopyTo(ds => ds.Definition.ShortName, ds => ds.ShortName)
+        ////.CopyTo(ds => ds.Language, ds => ds.Keywords)
+        //.CopyTo(ds => ds.Definition.ProjectId, ds => ds.ProjectId)
+        //.CopyTo(ds => ds.Definition.ProjectId, ds => ds.Keywords);
 
-        public static SearchType Reference = SearchType.Create<IReferenceSearchModel>(RegisteredSearchTypes)
-            .CopyTo(rs => rs.Spans.First().Reference, rs => rs.Reference);
+        public static SearchType Reference = SearchType.Create<IReferenceSearchModel>(RegisteredSearchTypes);
+        //.CopyTo(rs => rs.Spans.First().Reference, rs => rs.Reference);
 
-        public static SearchType Source = SearchType.Create<ISourceSearchModel>(RegisteredSearchTypes)
-            .CopyTo(ss => ss.File.SourceFile.Content, ss => ss.Content)
-            .CopyTo(ss => ss.File.SourceFile.Info.RepoRelativePath, ss => ss.RepoRelativePath)
-            .CopyTo(ss => ss.File.ProjectId, ss => ss.ProjectId)
-            .CopyTo(ss => ss.File.SourceFile.Info.Path, ss => ss.FilePath);
+        public static SearchType TextSource = SearchType.Create<ITextSourceSearchModel>(RegisteredSearchTypes);
+        //.CopyTo(ss => ss.File.SourceFile.Content, ss => ss.Content)
+        //.CopyTo(ss => ss.File.SourceFile.Info.RepoRelativePath, ss => ss.RepoRelativePath)
+        //.CopyTo(ss => ss.File.ProjectId, ss => ss.ProjectId)
+        //.CopyTo(ss => ss.File.Info.Path, ss => ss.FilePath);
+
+        public static SearchType BoundSource = SearchType.Create<IBoundSourceSearchModel>(RegisteredSearchTypes);
+            //.CopyTo(ss => ss.File.SourceFile.Content, ss => ss.Content)
+            //.CopyTo(ss => ss.File.SourceFile.Info.RepoRelativePath, ss => ss.RepoRelativePath)
+            //.CopyTo(ss => ss.BindingInfo.ProjectId, ss => ss.ProjectId)
+            //.CopyTo(ss => ss.FilePath, ss => ss.FilePath);
 
         public static SearchType Language = SearchType.Create<ILanguageSearchModel>(RegisteredSearchTypes);
 
@@ -79,37 +85,6 @@ namespace Codex
         IDefinitionSymbol Definition { get; }
 
         /// <summary>
-        /// The identifier of the project in which the symbol appears
-        /// </summary>
-        [SearchBehavior(SearchBehavior.NormalizedKeyword)]
-        string ProjectId { get; }
-
-        /// <summary>
-        /// The identifier for the symbol
-        /// </summary>
-        [SearchBehavior(SearchBehavior.NormalizedKeyword)]
-        string SymbolId { get; }
-
-        /// <summary>
-        /// The symbol kind. (i.e. interface, method, field)
-        /// </summary>
-        [SearchBehavior(SearchBehavior.NormalizedKeyword)]
-        string Kind { get; }
-
-        /// <summary>
-        /// Indicates if the symbol should be excluded from the definition/find all references search (by default).
-        /// Symbol will only be included if kind is explicitly specified
-        /// </summary>
-        [SearchBehavior(SearchBehavior.Term)]
-        bool ExcludeFromDefaultSearch { get; }
-
-        [SearchBehavior(SearchBehavior.Prefix)]
-        string ShortName { get; }
-
-        [SearchBehavior(SearchBehavior.PrefixFullName)]
-        string ContainerQualifiedName { get; }
-
-        /// <summary>
         /// Keywords are additional terms which can be used to find a given symbol.
         /// NOTE: Keywords can only be used to select from symbols which have
         /// a primary term match
@@ -129,7 +104,7 @@ namespace Codex
         /// <summary>
         /// The reference symbol
         /// </summary>
-        IReferenceSymbol Reference { get; }
+        ICodeSymbol Reference { get; }
 
         // TODO: Store efficient representation of list of reference spans (old implementation
         // has two possible representations).
@@ -138,30 +113,33 @@ namespace Codex
         // TODO: Need some sort of override for searching RelatedDefinition of the
         // ReferenceSpan
         [SearchBehavior(SearchBehavior.None)]
-        IReadOnlyList<IReferenceSpan> Spans { get; }
+        [ReadOnlyList]
+        [CoerceGet]
+        IReadOnlyList<ISymbolSpan> Spans { get; }
+
+        /// <summary>
+        /// Compressed list of spans
+        /// </summary>
+        [SearchBehavior(SearchBehavior.None)]
+        ISymbolLineSpanList CompressedSpans { get; }
     }
 
-    public interface ISourceSearchModel : IFileScopeEntity, ISearchEntity
+    public interface IBoundSourceSearchModel : IFileScopeEntity, ISearchEntity
     {
         /// <summary>
-        /// The content of the file
+        /// The unique identifier of the associated <see cref="ISourceFile"/>
         /// </summary>
-        [SearchBehavior(SearchBehavior.FullText)]
-        string Content { get; }
+        string TextUid { get; }
 
         /// <summary>
-        /// The language of the file
+        /// The binding info
         /// </summary>
-        [SearchBehavior(SearchBehavior.FullText)]
-        string Language { get; }
+        IBoundSourceInfo BindingInfo { get; }
+    }
 
-        /// <summary>
-        /// The relative path to the source file in the repository
-        /// </summary>
-        [SearchBehavior(SearchBehavior.HierarchicalPath)]
-        string RepoRelativePath { get; }
-
-        IBoundSourceFile File { get; }
+    public interface ITextSourceSearchModel : IFileScopeEntity, ISearchEntity
+    {
+        ISourceFile File { get; }
     }
 
     public interface IRepositorySearchModel : IRepoScopeEntity, ISearchEntity

@@ -63,7 +63,10 @@ namespace Codex.Framework.Generation
             MigratedTypes.Add(typeof(ISourceFileInfo));
             MigratedTypes.Add(typeof(IBoundSourceFile));
             MigratedTypes.Add(typeof(IEncodingDescription));
+            MigratedTypes.Add(typeof(IBoundSourceInfo));
             MigratedTypes.Add(typeof(IReferencedProject));
+            MigratedTypes.Add(typeof(ISymbolLineSpanList));
+            MigratedTypes.Add(typeof(IReferenceSearchModel));
 
             Compilation = CSharpCompilation.Create("TempGeneratorAssembly").AddReferences(PortableExecutableReference.CreateFromFile(assembly.Location,
                 documentation: XmlDocumentationProvider.CreateFromFile(Path.ChangeExtension(assembly.Location, ".xml"))));
@@ -72,7 +75,7 @@ namespace Codex.Framework.Generation
 
             Types = assembly
                 .GetTypes()
-                .Where(t => t.IsInterface)
+                .Where(t => t.IsInterface && t.GetMethods().Where(m => !m.IsSpecialName).Count() == 0)
                 //.Where(t => t.IsAssignableFrom(typeof(ISearchEntity)))
                 .Select(ToTypeDefinition)
                 .ToList();
@@ -148,15 +151,6 @@ namespace Codex.Framework.Generation
                 {
                     typeDefinition.TypeParameters.Add(new CodeTypeReference(new CodeTypeParameter(typeParameter.Name)));
                 }
-
-                //if (typeSymbol.Interfaces.Length == 1 && 
-                //    DefinitionsByTypeMetadataName.TryGetValue(typeSymbol.Interfaces[0].MetadataName, out typeDefinition.BaseType))
-                //{
-                //}
-                //else
-                //{
-                //    typeDefinition.Interfaces.AddRange(typeDefinition.Type.GetInterfaces().Select(t => DefinitionsByType[t]));
-                //}
 
                 typeDefinition.Comments.AddComments(typeSymbol.GetDocumentationCommentXml());
 
@@ -275,20 +269,6 @@ namespace Codex.Framework.Generation
                     {
                         Attributes = MemberAttributes.Public
                     }.EnsureInitialize(typeDefinition));
-                }
-
-                if (typeDefinition.BaseTypeDefinition == null)
-                {
-                    typeDeclaration.Members.Add(new CodeMemberMethod()
-                    {
-                        Name = "Initialize",
-                        Attributes = MemberAttributes.Family
-                    });
-                }
-
-                if (typeDefinition.Type == typeof(IReferenceSearchModel))
-                {
-
                 }
 
                 PopulateProperties(visitedTypeDefinitions, usedMemberNames, typeDefinition, typeDeclaration);
@@ -428,6 +408,10 @@ namespace Codex.Framework.Generation
                     applyMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeBaseReferenceExpression(), applyMethod.Name)
                         .Apply(mr => mr.TypeArguments.Add(typeDefinition.BaseTypeDefinition.ClassName)),
                         new CodeCastExpression(new CodeTypeReference(typeDefinition.BaseType), new CodeVariableReferenceExpression("value"))));
+                }
+                else
+                {
+                    typeDeclaration.BaseTypes.Add(typeof(EntityBase));
                 }
 
                 typeDeclaration.BaseTypes.Add(typeDefinition.Type.AsReference());

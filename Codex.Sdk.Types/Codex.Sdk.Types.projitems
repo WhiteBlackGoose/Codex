@@ -14,9 +14,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Api\IStore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Commit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EntityBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)File.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ICodeReview.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mutable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Placeholders.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Project.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Property.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Repository.cs" />

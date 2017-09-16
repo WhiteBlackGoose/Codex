@@ -77,6 +77,26 @@ namespace Codex
         /// </summary>
         [SearchBehavior(SearchBehavior.Sortword)]
         string ReferenceKind { get; }
+
+        /// <summary>
+        /// Indicates the corresponding definition is implicitly declared and therefore this should not be
+        /// used for find all references search
+        /// </summary>
+        [SearchBehavior(SearchBehavior.Term)]
+        bool IsImplicitlyDeclared { get; }
+
+        /// <summary>
+        /// Indicates if the symbol should be excluded from the definition/find all references search (by default).
+        /// Symbol will only be included if kind is explicitly specified
+        /// </summary>
+        [SearchBehavior(SearchBehavior.Term)]
+        bool ExcludeFromDefaultSearch { get; }
+
+        /// <summary>
+        /// Indicates if the symbol should NEVER be included in the definition/find all references search.
+        /// </summary>
+        [SearchBehavior(SearchBehavior.Term)]
+        bool ExcludeFromSearch { get; }
     }
 
     [GeneratedClassName("Symbol")]
@@ -99,25 +119,5 @@ namespace Codex
         /// </summary>
         [SearchBehavior(SearchBehavior.NormalizedKeyword)]
         string Kind { get; }
-
-        /// <summary>
-        /// Indicates if the symbol should be excluded from the definition/find all references search (by default).
-        /// Symbol will only be included if kind is explicitly specified
-        /// </summary>
-        [SearchBehavior(SearchBehavior.Term)]
-        bool ExcludeFromDefaultSearch { get; }
-
-        /// <summary>
-        /// Indicates if the symbol should NEVER be included in the definition/find all references search.
-        /// </summary>
-        [SearchBehavior(SearchBehavior.Term)]
-        bool ExcludeFromSearch { get; }
-
-        /// <summary>
-        /// Indicates the corresponding definition is implicitly declared and therefore this should not be
-        /// used for find all references search
-        /// </summary>
-        [SearchBehavior(SearchBehavior.Term)]
-        bool IsImplicitlyDeclared { get; }
     }
 }

@@ -29,7 +29,7 @@ namespace Codex.Framework.Types
         /// </summary>
         Task<IIndexQueryHitsResponse<IReferenceSearchModel>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments);
 
-        Task<IIndexQueryHitsResponse<ISourceSearchModel>> GetSourceAsync(GetSourceArguments arguments);
+        Task<IIndexQueryHitsResponse<IBoundSourceSearchModel>> GetSourceAsync(GetSourceArguments arguments);
     }
 
     public class CodexArgumentsBase

@@ -15,4 +15,9 @@ namespace Codex.ObjectModel
     public class Glyph
     {
     }
+
+    [Placeholder]
+    public class SymbolSpan
+    {
+    }
 }

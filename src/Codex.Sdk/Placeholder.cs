@@ -16,7 +16,17 @@ namespace Codex
             throw new NotImplementedException();
         }
 
+        public static Task NotImplementedAsync(string message = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public static void NotImplemented(string message = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void Todo(string message = null)
         {
             throw new NotImplementedException();
         }

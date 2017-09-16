@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Codex.ObjectModel;
 using Nest;
+using Codex.Storage.DataModel;
+using static Codex.Utilities.SerializationUtilities;
 
 namespace Codex.ElasticSearch
 {
@@ -46,17 +48,29 @@ namespace Codex.ElasticSearch
             return store;
         }
 
-        public async Task<Guid?> TryGetSourceHashTreeId(SourceSearchModel sourceModel)
+        public async Task<Guid?> TryGetSourceHashTreeId(BoundSourceSearchModel sourceModel)
         {
             throw new NotImplementedException();
         }
 
         public async Task AddBoundSourceFileAsync(string repoName, BoundSourceFile boundSourceFile)
         {
-            var sourceModel = CreateSourceModel(repoName, boundSourceFile);
+            var textModel = new TextSourceSearchModel()
+            {
+                File = boundSourceFile.SourceFile
+            };
+
+            ComputeContentId(textModel, isContentAddressed: true);
+
+            var boundSourceModel = new BoundSourceSearchModel()
+            {
+                BindingInfo = boundSourceFile,
+                TextUid = textModel.Uid
+            };
+
             await Service.UseClient(async context =>
             {
-                var existingSourceTreeId = await TryGetSourceHashTreeId(sourceModel);
+                var existingSourceTreeId = await TryGetSourceHashTreeId(boundSourceModel);
                 if (existingSourceTreeId != null)
                 {
                     // TODO: Add documents to stored filter based on hash tree
@@ -73,20 +87,21 @@ namespace Codex.ElasticSearch
 
             var batch = new ElasticSearchBatch();
 
-            batch.Add(SourceStore, sourceModel);
+            batch.Add(TextSourceStore, textModel);
+            batch.Add(BoundSourceStore, boundSourceModel);
 
-            foreach (var property in sourceModel.File.SourceFile.Info.Properties)
+            foreach (var property in boundSourceFile.SourceFile.Info.Properties)
             {
                 batch.Add(PropertyStore, new PropertySearchModel()
                 {
                     Uid = Placeholder.Value<string>("Populate fields"),
                     Key = property.Key,
                     Value = property.Value,
-                    OwnerId = sourceModel.Uid,
+                    OwnerId = boundSourceModel.Uid,
                 });
             }
 
-            foreach (var definitionSpan in sourceModel.File.Definitions.Where(ds => !ds.Definition.ExcludeFromSearch))
+            foreach (var definitionSpan in boundSourceFile.Definitions.Where(ds => !ds.Definition.ExcludeFromSearch))
             {
                 batch.Add(DefinitionStore, new DefinitionSearchModel()
                 {
@@ -95,20 +110,51 @@ namespace Codex.ElasticSearch
                 });
             }
 
-            foreach (var referenceSpan in sourceModel.File.References.Where(rs => !rs.Reference.ExcludeFromSearch))
+            var referenceLookup = boundSourceFile.References
+                .Where(r => !(r.Reference.ExcludeFromSearch))
+                .ToLookup(r => r.Reference, ReferenceListModel.ReferenceSymbolEqualityComparer);
+
+            foreach (var referenceGroup in referenceLookup)
             {
-                Placeholder.NotImplemented($"Group by symbol as in {nameof(Storage.DataModel.SourceFileModel.GetSearchReferences)}");
-                batch.Add(ReferenceStore, new ReferenceSearchModel()
+                var referenceModel = new ReferenceSearchModel((IFileScopeEntity)textModel)
                 {
                     Uid = Placeholder.Value<string>("Populate fields"),
-                    Reference = referenceSpan.Reference
-                });
+                    Reference = new Symbol(referenceGroup.Key)
+                };
+
+                Placeholder.NotImplemented($"Group by symbol as in {nameof(Storage.DataModel.SourceFileModel.GetSearchReferences)}");
+                if (referenceGroup.Count() < 10)
+                {
+                    // Small number of references, just store simple list
+                    Placeholder.Todo("Verify that this does not store the extra fields on IReferenceSpan and just the Symbol span fields");
+                    referenceModel.Spans = referenceGroup.ToList();
+
+                    string lineSpanText = null;
+                    foreach (var span in referenceModel.Spans)
+                    {
+                        span.LineSpanText = AssignDuplicate(span.LineSpanText, ref lineSpanText);
+                    }
+                }
+                else
+                {
+
+                }
+
+                batch.Add(ReferenceStore, referenceModel);
             }
         }
 
-        private SourceSearchModel CreateSourceModel(string repoName, BoundSourceFile boundSourceFile)
+        private void ComputeContentId(ISearchEntity searchEntity, bool isContentAddressed)
         {
-            throw new NotImplementedException();
+            Placeholder.NotImplemented("Serialize and hash entity");
+        }
+
+        private BoundSourceSearchModel CreateSourceModel(string repoName, BoundSourceFile boundSourceFile)
+        {
+            return new BoundSourceSearchModel()
+            {
+                BindingInfo = boundSourceFile
+            };
         }
     }
 

@@ -21,8 +21,21 @@ namespace Codex.ElasticSearch
         public ElasticSearchStore Store;
         public ElasticSearchEntityStore<T> EntityStore;
         public string FilterName;
+        public string IntermediateFilterSuffix;
 
         private ShardState[] ShardStates;
+
+        private ShardState CreateShardState(int shard)
+        {
+            var shardState = new ShardState()
+            {
+                Shard = shard,
+                ShardFilterUid = $"{IndexName}#{shard}|{FilterName}",
+                ShardIntermediateFilterUid = $"{IndexName}#{shard}|{FilterName}|{IntermediateFilterSuffix}"
+            };
+
+            return shardState;
+        }
 
         public void Add(ElasticClause clause)
         {
@@ -57,7 +70,7 @@ namespace Codex.ElasticSearch
                                 // intermediate stored filter which is used to build up the value and when finalized it
                                 // will be set to the stored filter under the UID.
                                 // NOTE!!!! Intermediate stored filter should then be deleted
-                                Uid = $"{IndexName}#{shard}|{FilterName}",
+                                Uid = shardState.ShardIntermediateFilterUid,
                                 IndexName = IndexName,
                                 Shard = shard,
                                 Filter = filter
@@ -83,11 +96,20 @@ namespace Codex.ElasticSearch
             throw new NotImplementedException();
         }
 
+        public async Task FinalizeAsync()
+        {
+            await Placeholder.NotImplementedAsync("Create new final stored filter from intermediate stored filters");
+
+            await Placeholder.NotImplementedAsync("Delete intermediate stored filters for shards");
+        }
+
         private class ShardState
         {
             public int Shard;
             public BatchQueue<ElasticClause> Queue;
             public SemaphoreSlim Mutex = TaskUtilities.CreateMutex();
+            public string ShardIntermediateFilterUid { get; set; }
+            public string ShardFilterUid { get; set; }
         }
     }
 

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Codex.ObjectModel;
+using static Codex.Utilities.SerializationUtilities;
 
 namespace Codex.ObjectModel
 {
@@ -52,19 +53,6 @@ namespace Codex.ObjectModel
 
     partial class DefinitionSymbol
     {
-        //public string ShortName
-        //{
-        //    get
-        //    {
-        //        return shortName ?? "";
-        //    }
-        //    set
-        //    {
-        //        shortName = value;
-        //    }
-        //}
-
-
         public int ReferenceCount;
 
         protected override void Initialize()
@@ -165,6 +153,44 @@ namespace Codex.ObjectModel
         /// Extensible key value properties for the document. TODO: Move to type definition
         /// </summary>
         public Dictionary<string, string> Properties = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+    }
+
+    partial class ReferenceSearchModel
+    {
+        private IReadOnlyList<SymbolSpan> CoerceSpans(IReadOnlyList<SymbolSpan> value)
+        {
+            value = value ?? CompressedSpans?.ToList();
+            this.Spans = value;
+            return value;
+        }
+
+        protected override void OnSerializingCore()
+        {
+            if (Spans != null)
+            {
+                string lineSpanText = null;
+                foreach (var span in Spans)
+                {
+                    span.LineSpanText = RemoveDuplicate(span.LineSpanText, ref lineSpanText);
+                }
+            }
+
+            base.OnSerializingCore();
+        }
+
+        protected override void OnDeserializingCore()
+        {
+            if (Spans != null)
+            {
+                string lineSpanText = null;
+                foreach (var span in Spans)
+                {
+                    span.LineSpanText = AssignDuplicate(span.LineSpanText, ref lineSpanText);
+                }
+            }
+
+            base.OnDeserializingCore();
+        }
     }
 }
 

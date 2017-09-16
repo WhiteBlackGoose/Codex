@@ -1,20 +1,13 @@
-﻿using Codex.ObjectModel;
-using Codex.Storage.Utilities;
-using Nest;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Codex.Storage.Utilities.NumberUtils;
-using System.Collections;
-using Codex.Utilities;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Codex.ObjectModel;
+using Codex.Utilities;
 using Newtonsoft.Json;
+using static Codex.Utilities.SerializationUtilities;
 
 namespace Codex.Storage.DataModel
 {
-    public class SymbolLineSpanListModel : SpanListModel<SymbolSpan, SpanListSegmentModel, SharedSymbolLineModel, int>
+    public class SymbolLineSpanListModel : SpanListModel<SymbolSpan, SpanListSegmentModel, SharedSymbolLineModel, int>, ISymbolLineSpanList
     {
         public static readonly IComparer<SharedSymbolLineModel> SharedSymbolLineModelComparer = new ComparerBuilder<SharedSymbolLineModel>()
             .CompareByAfter(s => s.LineSpanText);
@@ -85,6 +78,11 @@ namespace Codex.Storage.DataModel
             {
                 symbolLine.LineSpanText = AssignDuplicate(symbolLine.LineSpanText, ref lineSpanText);
             }
+        }
+
+        public IReadOnlyList<SymbolSpan> ToList()
+        {
+            return this.GetReadOnlyList();
         }
     }
 

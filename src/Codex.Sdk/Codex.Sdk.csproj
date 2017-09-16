@@ -19,6 +19,7 @@
       <Link>Types\SearchDescriptors.g.cs</Link>
     </Compile>
     <Compile Include="Analysis\IAnalysisTarget.cs" />
+    <Compile Include="ObjectModel\BoundSourceInfo.cs" />
     <Compile Include="Placeholder.cs" />
     <Compile Include="Types\ReferencedProject.cs" />
     <Compile Include="Types\EncodingDescription.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Utilities\Range.cs" />
     <Compile Include="Utilities\RangeHelper.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />
+    <Compile Include="Utilities\SerializationUtilities.cs" />
     <Compile Include="Utilities\SpanUtilities.cs" />
     <Compile Include="Utilities\TaskUtilities.cs" />
     <Compile Include="Utilities\TextUtilities.cs" />
