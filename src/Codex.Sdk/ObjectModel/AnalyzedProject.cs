@@ -4,7 +4,7 @@ using System.Diagnostics.Contracts;
 
 namespace Codex.ObjectModel
 {
-    public class AnalyzedProject
+    public partial class AnalyzedProject
     {
         public AnalyzedProject(string repositoryName, string projectId)
         {
@@ -12,22 +12,17 @@ namespace Codex.ObjectModel
             Contract.Requires(!string.IsNullOrEmpty(projectId));
 
             RepositoryName = repositoryName;
-            Id = projectId;
+            ProjectId = projectId;
         }
 
-        public string RepositoryName { get; set; }
-
-        public string Id { get; set; }
-
-        public string ProjectKind { get; set; }
-
+        /// <summary>
+        /// Additional source files to add to the repository
+        /// </summary>
         public List<BoundSourceFile> AdditionalSourceFiles { get; set; } = new List<BoundSourceFile>();
 
         /// <summary>
-        /// Descriptions of referenced projects and used definitions from the projects
+        /// The definitions of reference symbols
         /// </summary>
-        public List<ReferencedProject> ReferencedProjects { get; set; } = new List<ReferencedProject>();
-
         public ConcurrentDictionary<Symbol, DefinitionSymbol> ReferenceDefinitionMap = new ConcurrentDictionary<Symbol, DefinitionSymbol>();
     }
 }

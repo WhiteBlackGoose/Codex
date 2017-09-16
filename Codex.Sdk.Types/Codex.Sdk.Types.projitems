@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Placeholders.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Language.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Project.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IDocumentationInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Property.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Repository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scopes.cs" />

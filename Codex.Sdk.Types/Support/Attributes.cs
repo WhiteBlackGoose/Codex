@@ -59,12 +59,15 @@ namespace Codex
         }
     }
 
+    /// <summary>
+    /// Indicates stages for which the given property should be included
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    public sealed class RestrictedAttribute : Attribute
+    public sealed class IncludeAttribute : Attribute
     {
         public readonly ObjectStage AllowedStages;
 
-        public RestrictedAttribute(ObjectStage stages)
+        public IncludeAttribute(ObjectStage stages)
         {
             AllowedStages = stages;
         }
@@ -83,11 +86,10 @@ namespace Codex
 
     public enum ObjectStage
     {
-        Analysis = 1,
-        Index = Analysis << 1 | Analysis,
-        Upload = Index << 1 | Index,
-        Search = Upload << 1 | Upload,
-        All = Search | Upload | Index | Analysis
+        Analysis,
+        Index,
+        Search,
+        All = Search | Index | Analysis
     }
 
     public enum SearchBehavior

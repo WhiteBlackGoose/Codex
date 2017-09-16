@@ -209,7 +209,7 @@ namespace Codex.Analysis
                         references.Add(referenceSpan);
 
                         // Reference to external project
-                        if (referenceSymbol.ProjectId != _analyzedProject.Id)
+                        if (referenceSymbol.ProjectId != _analyzedProject.ProjectId)
                         {
                             if (!_analyzedProject.ReferenceDefinitionMap.ContainsKey(referenceSymbol))
                             {

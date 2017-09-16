@@ -58,7 +58,11 @@ namespace Codex.Framework.Generation
             MigratedTypes.Add(typeof(IDefinitionSpan));
             MigratedTypes.Add(typeof(ISymbolSpan));
             //MigratedTypes.Add(typeof(ILineSpan));
+            MigratedTypes.Add(typeof(IClassificationStyle));
             MigratedTypes.Add(typeof(IDefinitionSymbol));
+            MigratedTypes.Add(typeof(IProject));
+            MigratedTypes.Add(typeof(IProjectFileLink));
+            MigratedTypes.Add(typeof(ICommitFileLink));
             MigratedTypes.Add(typeof(ISourceFile));
             MigratedTypes.Add(typeof(ISourceFileInfo));
             MigratedTypes.Add(typeof(IBoundSourceFile));
@@ -333,8 +337,15 @@ namespace Codex.Framework.Generation
             applyMethod.TypeParameters.Add(new CodeTypeParameter("TTarget").Apply(tp => tp.Constraints.Add(typeDeclaration.Name)));
             applyMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeDefinition.Type.AsReference(), "value"));
             copyConstructor.Parameters.AddRange(applyMethod.Parameters);
-            copyConstructor.Statements.Add(new CodeMethodInvokeExpression(new CodeThisReferenceExpression(), applyMethod.Name, new CodeVariableReferenceExpression("value"))
-                .Apply(invoke => invoke.Method.TypeArguments.Add(new CodeTypeReference(typeDeclaration.Name))));
+            if (!isBaseChain)
+            {
+                copyConstructor.Statements.Add(new CodeMethodInvokeExpression(new CodeThisReferenceExpression(), applyMethod.Name, new CodeVariableReferenceExpression("value"))
+                    .Apply(invoke => invoke.Method.TypeArguments.Add(new CodeTypeReference(typeDeclaration.Name))));
+            }
+            else
+            {
+                copyConstructor.BaseConstructorArgs.Add(new CodeVariableReferenceExpression("value"));
+            }
 
             foreach (var property in typeDefinition.Properties)
             {

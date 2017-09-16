@@ -72,8 +72,18 @@ namespace Codex.Analysis
         protected static void UploadProject(RepoProject project, AnalyzedProject analyzedProject)
         {
             analyzedProject.ProjectKind = project.ProjectKind;
+            foreach (var file in project.Files)
+            {
+                analyzedProject.Files.Add(new ProjectFileLink()
+                {
+                    FileId = Placeholder.Value<string>("Compute and set file id"),
+                    RepoRelativePath = file.RepoRelativePath,
+                    ProjectRelativePath = file.LogicalPath
+                });
+            }
+
             project.Repo.AnalysisServices.TaskDispatcher.QueueInvoke(() =>
-                project.Repo.AnalysisServices.AnalysisTarget.AddProjectAsync(project, analyzedProject), TaskType.Upload);
+                project.Repo.AnalysisServices.RepositoryStore.AddProjectsAsync(new[] { analyzedProject }), TaskType.Upload);
         }
     }
 }

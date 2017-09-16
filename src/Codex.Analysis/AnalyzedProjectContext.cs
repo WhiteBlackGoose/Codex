@@ -86,9 +86,9 @@ namespace Codex.Analysis
 
             foreach (var referencedProject in ReferencedProjects.Values.OrderBy(rp => rp.ProjectId, StringComparer.OrdinalIgnoreCase))
             {
-                if (referencedProject.ProjectId != Project.Id)
+                if (referencedProject.ProjectId != Project.ProjectId)
                 {
-                    Project.ReferencedProjects.Add(referencedProject);
+                    Project.ProjectReferences.Add(referencedProject);
                 }
 
                 // Remove all the namespaces
@@ -144,7 +144,7 @@ namespace Codex.Analysis
                     {
                         ReferenceSymbol fileRef = project.Definitions.Count == 0 ? null : CreateFileReferenceSymbol(
                                     GetMetadataFilePath(GetProjectReferenceSymbolsPath(project.ProjectId)),
-                                    Project.Id);
+                                    Project.ProjectId);
                         el.AddElement("Project", projElement =>
                             projElement
                             .AddAttribute("ReferenceCount", project.Definitions.Count.ToString(), fileRef)
@@ -171,7 +171,7 @@ namespace Codex.Analysis
                 {
                     ProjectRelativePath = GetMetadataFilePath(fileName),
                     Language = "xml",
-                }, Project.Id);
+                }, Project.ProjectId);
 
             var repoFile = project.AddFile(
                 $@"\\Codex\ProjectMetadata\{project.ProjectId}\{metadataFileBuilder.SourceFile.Info.ProjectRelativePath}",

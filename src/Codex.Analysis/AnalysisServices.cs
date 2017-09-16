@@ -23,6 +23,8 @@ public class AnalysisServices
         public Logger Logger = Logger.Null;
         public string TargetIndex { get; }
         public IAnalysisTarget AnalysisTarget;
+        public ICodexRepositoryStore RepositoryStore;
+
         public List<RepoFileAnalyzer> FileAnalyzers { get; set; } = new List<RepoFileAnalyzer>();
         public List<RepoProjectAnalyzer> ProjectAnalyzers { get; set; } = new List<RepoProjectAnalyzer>();
         public Dictionary<string, RepoFileAnalyzer> FileAnalyzerByExtension { get; set; } = new Dictionary<string, RepoFileAnalyzer>();

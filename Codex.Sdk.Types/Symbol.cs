@@ -54,23 +54,34 @@ namespace Codex
 
         // TODO: None of the properties below are intrinsic to the definition. They should be stored separately
         // That said, it is fine to store these on the definition to provide the association. They just need to be
-        // remove before computing the content
+        // removed before computing the content id
+        // TODO: Transition to using 
+
+        /// <summary>
+        /// Documentation for the symbol (if any)
+        /// </summary>
+        [Include(ObjectStage.Analysis)]
+        IDocumentationInfo DocumentationInfo { get; }
 
         /// <summary>
         /// The name of the type for the symbol
         /// (i.e. return type of method)
         /// </summary>
+        [Include(ObjectStage.Analysis)]
         string TypeName { get; }
 
         /// <summary>
         /// The declaration name for the symbol
         /// </summary>
+        [Include(ObjectStage.Analysis)]
         string DeclarationName { get; }
 
         /// <summary>
         /// The comment applied to the definition
         /// </summary>
+        [Include(ObjectStage.Analysis)]
         string Comment { get; }
+
     }
 
     public interface IReferenceSymbol : ICodeSymbol

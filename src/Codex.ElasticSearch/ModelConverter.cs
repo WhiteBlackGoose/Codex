@@ -16,11 +16,11 @@ namespace Codex.Storage
             Contract.Ensures(Contract.Result<ProjectModel>() != null);
 
             return
-                new ProjectModel(analyzedProject.Id, analyzedProject.RepositoryName)
+                new ProjectModel(analyzedProject.ProjectId, analyzedProject.RepositoryName)
                 {
                     ProjectKind = analyzedProject.ProjectKind
                 }
-                .AddReferencedProjects(FromObjectModel(analyzedProject.ReferencedProjects).ToArray());
+                .AddReferencedProjects(FromObjectModel(analyzedProject.ProjectReferences).ToArray());
         }
 
         public static IEnumerable<ReferencedProjectModel> FromObjectModel(List<ReferencedProject> items)

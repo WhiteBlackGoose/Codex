@@ -254,8 +254,8 @@ namespace Codex.Storage
 
         private async Task AddProjectAsync(AnalyzedProject analyzedProject, string targetIndex)
         {
-            Console.WriteLine("Updating project {0}", analyzedProject.Id);
-            await Provider.RemoveProjectAsync(analyzedProject.Id, targetIndex);
+            Console.WriteLine("Updating project {0}", analyzedProject.ProjectId);
+            await Provider.RemoveProjectAsync(analyzedProject.ProjectId, targetIndex);
 
             var modelProject = ModelConverter.FromObjectModel(analyzedProject);
             modelProject.DateUploaded = DateTime.UtcNow;

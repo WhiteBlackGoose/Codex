@@ -116,9 +116,8 @@ namespace Codex.Analysis.Files
             {
                 int uploadCount = Interlocked.Increment(ref file.PrimaryProject.Repo.UploadCount);
                 file.PrimaryProject.Repo.AnalysisServices.Logger.WriteLine($"Uploading source: '{boundSourceFile.ProjectId}::{boundSourceFile.SourceFile.Info.ProjectRelativePath}' ({uploadCount} of {file.PrimaryProject.Repo.FileCount})");
-                return services.AnalysisTarget.UploadAsync(
-                    file,
-                    boundSourceFile);
+
+                return services.RepositoryStore.AddBoundFilesAsync(new[] { boundSourceFile });
             },
             TaskType.Upload);
         }

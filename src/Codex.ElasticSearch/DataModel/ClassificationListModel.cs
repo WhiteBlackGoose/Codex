@@ -12,7 +12,7 @@ using Codex.Utilities;
 
 namespace Codex.Storage.DataModel
 {
-    public class ClassificationListModel : SpanListModel<ClassificationSpan, ClassificationSpanListSegmentModel, ClassificationTypeModel, string>, IClassificationList
+    public class ClassificationListModel : SpanListModel<ClassificationSpan, ClassificationSpanListSegmentModel, ClassificationStyle, string>, IClassificationList
     {
         public ClassificationListModel()
         {
@@ -31,24 +31,24 @@ namespace Codex.Storage.DataModel
             };
         }
 
-        public override ClassificationSpan CreateSpan(int start, int length, ClassificationTypeModel shared, ClassificationSpanListSegmentModel segment, int segmentOffset)
+        public override ClassificationSpan CreateSpan(int start, int length, ClassificationStyle shared, ClassificationSpanListSegmentModel segment, int segmentOffset)
         {
             return new ClassificationSpan()
             {
                 Start = start,
                 Length = length,
                 Classification = shared.Name,
-                DefaultClassificationColor = shared.DefaultClassificationColor,
+                DefaultClassificationColor = shared.Color,
                 LocalGroupId = segment.LocalSymbolGroupIds?[segmentOffset] ?? 0
             };
         }
 
-        public override ClassificationTypeModel GetShared(ClassificationSpan span)
+        public override ClassificationStyle GetShared(ClassificationSpan span)
         {
-            return new ClassificationTypeModel()
+            return new ClassificationStyle()
             {
                 Name = span.Classification,
-                DefaultClassificationColor = span.DefaultClassificationColor
+                Color = span.DefaultClassificationColor
             };
         }
 
@@ -75,21 +75,5 @@ namespace Codex.Storage.DataModel
 
             base.ExpandLists(context);
         }
-    }
-
-
-    public class ClassificationTypeModel
-    {
-        /// <summary>
-        /// The classification identifier used to colorize the span
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// The default classification color for the span. This is used for
-        /// contexts where a mapping from classification id to color is not
-        /// available.
-        /// </summary>
-        public int DefaultClassificationColor { get; set; }
     }
 }

@@ -37,7 +37,6 @@
     <Compile Include="ObjectModel\Glyph.cs" />
     <Compile Include="ObjectModel\IStorage.cs" />
     <Compile Include="ObjectModel\LanguageDescriptor.cs" />
-    <Compile Include="ObjectModel\ProjectKind.cs" />
     <Compile Include="ObjectModel\ReferenceKind.cs" />
     <Compile Include="ObjectModel\Repository.cs" />
     <Compile Include="ObjectModel\SymbolId.cs" />

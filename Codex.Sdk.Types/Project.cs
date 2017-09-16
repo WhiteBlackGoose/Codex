@@ -6,14 +6,38 @@ using System.Threading.Tasks;
 
 namespace Codex
 {
+    [GeneratedClassName("AnalyzedProject")]
     public interface IProject : IProjectScopeEntity
     {
+        /// <summary>
+        /// The project kind (see <see cref="ObjectModel.ProjectKind"/>)
+        /// </summary>
+        string ProjectKind { get; }
+
         /// <summary>
         /// References to files in the project
         /// </summary>
         IReadOnlyList<IProjectFileLink> Files { get; }
 
+        /// <summary>
+        /// Descriptions of referenced projects and used definitions from the projects
+        /// </summary>
         IReadOnlyList<IReferencedProject> ProjectReferences { get; }
+    }
+
+    namespace ObjectModel
+    {
+        /// <summary>
+        /// Defines standard set of project kinds
+        /// </summary>
+        public enum ProjectKind
+        {
+            Source,
+
+            MetadataAsSource,
+
+            Decompilation
+        }
     }
 
     public interface IReferencedProject

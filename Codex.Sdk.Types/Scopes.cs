@@ -58,7 +58,7 @@ namespace Codex
         string RepoRelativePath { get; }
     }
 
-    public interface IProjectFileScopeEntity : IRepoFileScopeEntity
+    public interface IProjectFileScopeEntity : IRepoFileScopeEntity, IProjectScopeEntity
     {
         /// <summary>
         /// The project relative path of the file

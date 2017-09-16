@@ -30,6 +30,13 @@
         GuidUsage,
         UsingDispose,
 
+        /// <summary>
+        /// The symbol is the return type of a method or property getter
+        /// </summary>
+        ReturnType,
+
+        // ParameterType? - type of a parameter
+
         EmptyArrayAllocation,
         MSBuildPropertyAssignment,
         MSBuildPropertyUsage,

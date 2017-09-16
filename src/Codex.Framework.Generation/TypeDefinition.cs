@@ -147,7 +147,7 @@ namespace Codex.Framework.Generation
 
         public static ObjectStage GetAllowedStages(this MemberInfo type)
         {
-            var attribute = type.GetAttribute<RestrictedAttribute>();
+            var attribute = type.GetAttribute<IncludeAttribute>();
             return attribute?.AllowedStages ?? ObjectStage.All;
         }
 

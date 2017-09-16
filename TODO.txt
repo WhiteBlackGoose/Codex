@@ -1,21 +1,34 @@
-Declare index schema types separate from data types 
 
+* Generate abstract IndexBehaviors types which will require indicating behavior of indexable fields at compile time
 Example:
-	interface IDefinitionIndexSchema : IIndexSchema<IDefinitionSymbol>
-	{
-		[Prefix]
-		string ShortName { get; }
 
-		[PrefixFullName]
-		string ContainerQualifiedName { get; }
+[Generated]
+public interface IDefinitionIndexBehaviors
+{	
+	public SearchBehavior ShortName { get; }
 
-		[NormalizedKeyword]
-		[CopyFrom(Value.Symbol.Modifiers)] // public virtual
-		[CopyFrom(Value.ProjectId)] // Codex.Analysis.Managed
-		[CopyFrom(Value.Kind)] // class
-		[CopyFrom(Value.Language)] // csharp
-		string[] Keywords { get; }
-	
-	} 
+	public SearchBehavior ContainerQualifiedName { get; }
+}
 
-Cumulative commit filter - a filter which includes all files in the commit and its parent commits transitively
+[Generated]
+public class DefaultDefinitionIndexBehaviors
+{
+	// Notice that this is a field to prevent this from implementing the interface
+	// because this should be an explicit choice to make this field searchable/stored
+	public readonly SearchBehavior ShortName = SearchBehavior.Prefix;
+
+	public readonly SearchBehavior ContainerQualifiedName = SearchBehavior.PrefixFullName;
+}
+
+[UserDefined]
+public DefinitionIndexBehaviors : IDefinitionIndexBehaviors
+{
+	public readonly DefaultDefinitionIndexBehaviors Defaults;
+
+	public SearchBehavior ShortName => Defaults.ShortName;
+
+	public SearchBehavior ContainerQualifiedName => Defaults.ContainerQualifiedName;
+}
+
+* Cumulative commit filter - a filter which includes all files in the commit and its parent commits transitively
+
