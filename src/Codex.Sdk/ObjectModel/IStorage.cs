@@ -117,7 +117,7 @@ namespace Codex.ObjectModel
         {
             var definitions = await storage.GetDefinitionsAsync(projectId, symbolId);
             var definition = definitions.FirstOrDefault();
-            return definition?.File?.Path;
+            return definition?.File?.ProjectRelativePath;
         }
     }
 

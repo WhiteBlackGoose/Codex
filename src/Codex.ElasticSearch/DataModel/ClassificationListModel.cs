@@ -12,7 +12,7 @@ using Codex.Utilities;
 
 namespace Codex.Storage.DataModel
 {
-    public class ClassificationListModel : SpanListModel<ClassificationSpan, ClassificationSpanListSegmentModel, ClassificationTypeModel, string>
+    public class ClassificationListModel : SpanListModel<ClassificationSpan, ClassificationSpanListSegmentModel, ClassificationTypeModel, string>, IClassificationList
     {
         public ClassificationListModel()
         {

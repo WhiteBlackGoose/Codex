@@ -16,6 +16,18 @@ namespace Codex.Utilities
             public static readonly T[] Array = new T[0];
         }
 
+        public static IReadOnlyList<T> AsReadOnlyList<T>(this IEnumerable<T> items)
+        {
+            if (items is IReadOnlyList<T>)
+            {
+                return (IReadOnlyList<T>)items;
+            }
+            else
+            {
+                return items.ToList();
+            }
+        }
+
         public static IEnumerable<T> Interleave<T>(IEnumerable<T> spans1, IEnumerable<T> spans2)
             where T : Span
         {

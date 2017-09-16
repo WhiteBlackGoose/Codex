@@ -84,7 +84,7 @@ namespace Codex
 
         /// <summary>
         /// Unique identifer for file content as determined by version control 
-        /// (i.e. the commit hash)
+        /// (i.e. the blob hash)
         /// </summary>
         [SearchBehavior(SearchBehavior.NormalizedKeyword)]
         string VersionControlFileId { get; }

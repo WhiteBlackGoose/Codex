@@ -60,7 +60,7 @@ namespace Codex.Analysis.Files
                 Info = AugmentSourceFileInfo(new SourceFileInfo()
                 {
                     Language = "text",
-                    Path = file.LogicalPath,
+                    ProjectRelativePath = file.LogicalPath,
                     RepoRelativePath = file.RepoRelativePath
                 }),
                 Content = services.ReadAllText(file.FilePath)
@@ -115,7 +115,7 @@ namespace Codex.Analysis.Files
             services.TaskDispatcher.QueueInvoke(() =>
             {
                 int uploadCount = Interlocked.Increment(ref file.PrimaryProject.Repo.UploadCount);
-                file.PrimaryProject.Repo.AnalysisServices.Logger.WriteLine($"Uploading source: '{boundSourceFile.ProjectId}::{boundSourceFile.SourceFile.Info.Path}' ({uploadCount} of {file.PrimaryProject.Repo.FileCount})");
+                file.PrimaryProject.Repo.AnalysisServices.Logger.WriteLine($"Uploading source: '{boundSourceFile.ProjectId}::{boundSourceFile.SourceFile.Info.ProjectRelativePath}' ({uploadCount} of {file.PrimaryProject.Repo.FileCount})");
                 return services.AnalysisTarget.UploadAsync(
                     file,
                     boundSourceFile);

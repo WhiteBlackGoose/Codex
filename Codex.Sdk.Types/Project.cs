@@ -11,7 +11,7 @@ namespace Codex
         /// <summary>
         /// References to files in the project
         /// </summary>
-        IReadOnlyList<IFileLink> Files { get; }
+        IReadOnlyList<IProjectFileLink> Files { get; }
 
         IReadOnlyList<IReferencedProject> ProjectReferences { get; }
     }
@@ -41,21 +41,15 @@ namespace Codex
         IReadOnlyDictionary<string, string> Properties { get; }
     }
 
-    public interface IFileLink
+    /// <summary>
+    /// NOTE: Do not set <see cref="IRepoScopeEntity.RepositoryName"/>
+    /// </summary>
+    public interface IProjectFileLink : IProjectFileScopeEntity
     {
         /// <summary>
-        /// The virtual path to the file inside the project
-        /// </summary>
-        string Path { get; }
-
-        /// <summary>
-        /// Unique identifer for file
+        /// Unique identifier for file
+        /// TODO: What is this?
         /// </summary>
         string FileId { get; }
-
-        /// <summary>
-        /// Unique identifier of project
-        /// </summary>
-        string ProjectId { get; }
     }
 }

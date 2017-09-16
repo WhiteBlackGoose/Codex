@@ -96,7 +96,7 @@ namespace Codex.Analysis
             this.SourceFile = sourceFile;
             this.ProjectId = projectId;
 
-            AnnotateDefinition(0, 0, CreateFileDefinitionSymbol(sourceFile.Info.Path, projectId));
+            AnnotateDefinition(0, 0, CreateFileDefinitionSymbol(sourceFile.Info.ProjectRelativePath, projectId));
         }
 
         public static DefinitionSymbol CreateFileDefinitionSymbol(string logicalPath, string projectId)

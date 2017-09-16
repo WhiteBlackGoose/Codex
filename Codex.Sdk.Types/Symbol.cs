@@ -10,27 +10,11 @@ namespace Codex
     public interface IDefinitionSymbol : IReferenceSymbol
     {
         /// <summary>
-        /// The name of the type for the symbol
-        /// (i.e. return type of method)
-        /// </summary>
-        string TypeName { get; }
-
-        /// <summary>
-        /// The declaration name for the symbol
-        /// </summary>
-        string DeclarationName { get; }
-
-        /// <summary>
         /// The unique identifier for the symbol
         /// NOTE: This is not applicable to most symbols. Only set for symbols
         /// which are added in a shared context and need this for deduplication)
         /// </summary>
         string Uid { get; }
-
-        /// <summary>
-        /// The comment applied to the definition
-        /// </summary>
-        string Comment { get; }
 
         /// <summary>
         /// The display name of the symbol
@@ -67,6 +51,26 @@ namespace Codex
         /// The depth of the symbol in its symbolic tree
         /// </summary>
         int SymbolDepth { get; }
+
+        // TODO: None of the properties below are intrinsic to the definition. They should be stored separately
+        // That said, it is fine to store these on the definition to provide the association. They just need to be
+        // remove before computing the content
+
+        /// <summary>
+        /// The name of the type for the symbol
+        /// (i.e. return type of method)
+        /// </summary>
+        string TypeName { get; }
+
+        /// <summary>
+        /// The declaration name for the symbol
+        /// </summary>
+        string DeclarationName { get; }
+
+        /// <summary>
+        /// The comment applied to the definition
+        /// </summary>
+        string Comment { get; }
     }
 
     public interface IReferenceSymbol : ICodeSymbol

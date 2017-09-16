@@ -207,6 +207,11 @@ namespace Codex.Storage.DataModel
             return new ListSegment<TSpan>(this.GetReadOnlyList(), rangeListSegment.Start + spanRange.Start, spanRange.Count);
         }
 
+        public IReadOnlyList<TSpan> ToList()
+        {
+            return this.GetReadOnlyList();
+        }
+
         private Range GetRange(int index)
         {
             TSegment segment;

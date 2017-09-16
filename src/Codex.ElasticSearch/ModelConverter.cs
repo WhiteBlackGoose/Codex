@@ -77,7 +77,7 @@ namespace Codex.Storage
                 Uid = boundSourceFile.Uid,
                 Content = boundSourceFile.SourceFile.Content,
                 Language = boundSourceFile.SourceFile.Info.Language,
-                Path = boundSourceFile.SourceFile.Info.Path,
+                Path = boundSourceFile.SourceFile.Info.ProjectRelativePath,
                 ExcludeFromSearch = boundSourceFile.ExcludeFromSearch,
                 RepoRelativePath = boundSourceFile.SourceFile.Info.RepoRelativePath,
                 WebAddress = boundSourceFile.SourceFile.Info.WebAddress,
@@ -109,7 +109,7 @@ namespace Codex.Storage
         {
             Contract.Requires(sources != null);
 
-            return sources.Select(x => new SourceFileInfo() { Language = x.Language, Path = x.FilePath }).ToList();
+            return sources.Select(x => new SourceFileInfo() { Language = x.Language, ProjectRelativePath = x.FilePath }).ToList();
         }
 
         private static List<DefinitionSpanModel> FromObjectModel(List<DefinitionSpan> spans)
@@ -361,7 +361,7 @@ namespace Codex.Storage
         {
             Contract.Requires(sources != null);
 
-            return sources.Select(x => new SourceFileInfo() { Language = x.Language, Path = x.Path }).ToList();
+            return sources.Select(x => new SourceFileInfo() { Language = x.Language, ProjectRelativePath = x.Path }).ToList();
         }
 
         public static BoundSourceFile ToBoundSourceFile(SourceFileModel sourceFile)
@@ -377,7 +377,7 @@ namespace Codex.Storage
                     Info = new SourceFileInfo
                     {
                         Language = sourceFile.Language,
-                        Path = sourceFile.Path,
+                        ProjectRelativePath = sourceFile.Path,
                         WebAddress = sourceFile.WebAddress,
                         RepoRelativePath = sourceFile.RepoRelativePath
                     }
@@ -429,7 +429,7 @@ namespace Codex.Storage
                     File = new SourceFileInfo
                     {
                         Language = d.Language,
-                        Path = d.FilePath,
+                        ProjectRelativePath = d.FilePath,
                     }
                 }).ToList();
         }

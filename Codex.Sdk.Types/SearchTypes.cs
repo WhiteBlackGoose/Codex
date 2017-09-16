@@ -95,11 +95,11 @@ namespace Codex
 
     public interface ILanguageSearchModel : ISearchEntity
     {
-        string Name { get; }
+        ILanguageInfo Language { get; }
     }
 
     // TODO: Don't inherit reference symbol. Instead just have a member
-    public interface IReferenceSearchModel : IFileScopeEntity, ISearchEntity
+    public interface IReferenceSearchModel : IProjectFileScopeEntity, ISearchEntity
     {
         /// <summary>
         /// The reference symbol
@@ -124,7 +124,7 @@ namespace Codex
         ISymbolLineSpanList CompressedSpans { get; }
     }
 
-    public interface IBoundSourceSearchModel : IFileScopeEntity, ISearchEntity
+    public interface IBoundSourceSearchModel : ISearchEntity
     {
         /// <summary>
         /// The unique identifier of the associated <see cref="ISourceFile"/>
@@ -135,9 +135,15 @@ namespace Codex
         /// The binding info
         /// </summary>
         IBoundSourceInfo BindingInfo { get; }
+
+        /// <summary>
+        /// Compressed list of classification spans
+        /// </summary>
+        [SearchBehavior(SearchBehavior.None)]
+        IClassificationList CompressedClassifications { get; }
     }
 
-    public interface ITextSourceSearchModel : IFileScopeEntity, ISearchEntity
+    public interface ITextSourceSearchModel : ISearchEntity
     {
         ISourceFile File { get; }
     }
@@ -147,7 +153,7 @@ namespace Codex
         IRepository Repository { get; }
     }
 
-    public interface IProjectSearchModel : IProjectScopeEntity, ISearchEntity
+    public interface IProjectSearchModel : ISearchEntity
     {
         IProject Project { get; }
     }

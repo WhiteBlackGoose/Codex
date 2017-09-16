@@ -20,4 +20,9 @@ namespace Codex.ObjectModel
     public class SymbolSpan
     {
     }
+
+    [Placeholder]
+    public class ClassificationSpan
+    {
+    }
 }

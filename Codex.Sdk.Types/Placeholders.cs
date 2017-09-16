@@ -9,4 +9,9 @@ namespace Codex
     {
         IReadOnlyList<SymbolSpan> ToList();
     }
+
+    public interface IClassificationList
+    {
+        IReadOnlyList<ClassificationSpan> ToList();
+    }
 }

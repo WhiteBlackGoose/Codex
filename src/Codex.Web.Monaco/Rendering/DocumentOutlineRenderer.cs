@@ -61,7 +61,7 @@ namespace WebUI.Rendering
                 bool hasChildren = nextIndex != boundSourceFile.Definitions.Count &&
                     boundSourceFile.Definitions[nextIndex].Definition.SymbolDepth > depth;
 
-                WriteFolderName(text, sb, definition.Definition.Id.Value, definition.Definition.Kind.ToLowerInvariant(), definition.GetGlyph(boundSourceFile?.SourceFile?.Info?.Path), hasChildren);
+                WriteFolderName(text, sb, definition.Definition.Id.Value, definition.Definition.Kind.ToLowerInvariant(), definition.GetGlyph(boundSourceFile?.SourceFile?.Info?.ProjectRelativePath), hasChildren);
                 if (hasChildren)
                 {
                     WriteFolderChildrenContainer(sb);
@@ -75,7 +75,7 @@ namespace WebUI.Rendering
         private void WriteFolderName(string folderName, StringBuilder sb, string symbolId, string kind, string folderIcon = "202.png", bool hasChildren = false)
         {
             folderName = HttpUtility.HtmlEncode(folderName);
-            var url = $"/?left=outline&rightProject={projectId}&file={HttpUtility.UrlEncode(boundSourceFile.SourceFile.Info.Path)}&rightSymbol={symbolId}";
+            var url = $"/?left=outline&rightProject={projectId}&file={HttpUtility.UrlEncode(boundSourceFile.SourceFile.Info.ProjectRelativePath)}&rightSymbol={symbolId}";
             var folderNameText = $"<a href=\"{url}\" onclick=\"event.stopPropagation();S('{symbolId}');return false;\"><span class=\"k\">{kind}</span>&nbsp;{folderName}</a>";
             var icon = $"<img src=\"../../content/icons/{folderIcon}\" class=\"imageFolder\" />";
             if (hasChildren)

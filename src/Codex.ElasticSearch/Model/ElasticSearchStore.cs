@@ -10,6 +10,7 @@ using Codex.ObjectModel;
 using Nest;
 using Codex.Storage.DataModel;
 using static Codex.Utilities.SerializationUtilities;
+using Codex.Utilities;
 
 namespace Codex.ElasticSearch
 {
@@ -55,9 +56,18 @@ namespace Codex.ElasticSearch
 
         public async Task AddBoundSourceFileAsync(string repoName, BoundSourceFile boundSourceFile)
         {
+            var sourceFileInfo = boundSourceFile.SourceFile.Info;
+
+            boundSourceFile.RepositoryName = boundSourceFile.RepositoryName ?? sourceFileInfo.RepositoryName;
+            boundSourceFile.RepoRelativePath = boundSourceFile.RepoRelativePath ?? sourceFileInfo.RepoRelativePath;
+
+            // TODO: These properties should not be defined on ISourceFileInfo as they require binding information
+            boundSourceFile.Language = boundSourceFile.Language ?? sourceFileInfo.Language;
+            boundSourceFile.ProjectRelativePath = boundSourceFile.ProjectRelativePath ?? sourceFileInfo.ProjectRelativePath;
+
             var textModel = new TextSourceSearchModel()
             {
-                File = boundSourceFile.SourceFile
+                File = boundSourceFile.SourceFile,
             };
 
             ComputeContentId(textModel, isContentAddressed: true);
@@ -65,7 +75,8 @@ namespace Codex.ElasticSearch
             var boundSourceModel = new BoundSourceSearchModel()
             {
                 BindingInfo = boundSourceFile,
-                TextUid = textModel.Uid
+                TextUid = textModel.Uid,
+                CompressedClassifications = new ClassificationListModel(boundSourceFile.Classifications)
             };
 
             await Service.UseClient(async context =>
@@ -83,7 +94,6 @@ namespace Codex.ElasticSearch
 
                 return true;
             });
-
 
             var batch = new ElasticSearchBatch();
 
@@ -116,28 +126,24 @@ namespace Codex.ElasticSearch
 
             foreach (var referenceGroup in referenceLookup)
             {
-                var referenceModel = new ReferenceSearchModel((IFileScopeEntity)textModel)
+                var referenceModel = new ReferenceSearchModel((IProjectFileScopeEntity)textModel)
                 {
                     Uid = Placeholder.Value<string>("Populate fields"),
                     Reference = new Symbol(referenceGroup.Key)
                 };
+
+                var spanList = referenceGroup.AsReadOnlyList();
 
                 Placeholder.NotImplemented($"Group by symbol as in {nameof(Storage.DataModel.SourceFileModel.GetSearchReferences)}");
                 if (referenceGroup.Count() < 10)
                 {
                     // Small number of references, just store simple list
                     Placeholder.Todo("Verify that this does not store the extra fields on IReferenceSpan and just the Symbol span fields");
-                    referenceModel.Spans = referenceGroup.ToList();
-
-                    string lineSpanText = null;
-                    foreach (var span in referenceModel.Spans)
-                    {
-                        span.LineSpanText = AssignDuplicate(span.LineSpanText, ref lineSpanText);
-                    }
+                    referenceModel.Spans = spanList;
                 }
                 else
                 {
-
+                    referenceModel.CompressedSpans = new SymbolLineSpanListModel(spanList);
                 }
 
                 batch.Add(ReferenceStore, referenceModel);

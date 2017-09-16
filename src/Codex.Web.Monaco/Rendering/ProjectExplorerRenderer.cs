@@ -57,7 +57,7 @@ namespace WebUI.Rendering
             Folder root = new Folder();
             root.Name = projectContents.Id;
 
-            foreach (var file in projectContents.Files.Select(f => f.Path))
+            foreach (var file in projectContents.Files.Select(f => f.ProjectRelativePath))
             {
                 var parts = file.Split('\\');
                 AddDocumentToFolder(root, file, parts.Take(parts.Length - 1).ToArray());

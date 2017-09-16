@@ -169,13 +169,13 @@ namespace Codex.Analysis
             var metadataFileBuilder = elementFactory().CreateAnnotatedSourceBuilder(
                 new SourceFileInfo()
                 {
-                    Path = GetMetadataFilePath(fileName),
+                    ProjectRelativePath = GetMetadataFilePath(fileName),
                     Language = "xml",
                 }, Project.Id);
 
             var repoFile = project.AddFile(
-                $@"\\Codex\ProjectMetadata\{project.ProjectId}\{metadataFileBuilder.SourceFile.Info.Path}",
-                metadataFileBuilder.SourceFile.Info.Path);
+                $@"\\Codex\ProjectMetadata\{project.ProjectId}\{metadataFileBuilder.SourceFile.Info.ProjectRelativePath}",
+                metadataFileBuilder.SourceFile.Info.ProjectRelativePath);
 
             repoFile.InMemorySourceFileBuilder = metadataFileBuilder;
 

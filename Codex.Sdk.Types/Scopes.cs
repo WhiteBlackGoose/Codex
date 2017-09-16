@@ -49,12 +49,21 @@ namespace Codex
         string ProjectId { get; }
     }
 
-    public interface IFileScopeEntity : IProjectScopeEntity
+    public interface IRepoFileScopeEntity : IRepoScopeEntity
+    {
+        /// <summary>
+        /// The repo relative path to the file
+        /// </summary>
+        [SearchBehavior(SearchBehavior.NormalizedKeyword)]
+        string RepoRelativePath { get; }
+    }
+
+    public interface IProjectFileScopeEntity : IRepoFileScopeEntity
     {
         /// <summary>
         /// The project relative path of the file
         /// </summary>
         [SearchBehavior(SearchBehavior.NormalizedKeyword)]
-        string FilePath { get; }
+        string ProjectRelativePath { get; }
     }
 }

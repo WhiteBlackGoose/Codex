@@ -18,7 +18,7 @@ namespace Codex
         ISourceFile SourceFile { get; }
     }
 
-    public interface IBoundSourceInfo : IProjectScopeEntity
+    public interface IBoundSourceInfo : IProjectFileScopeEntity
     {
         /// <summary>
         /// The unique identifier for the file
@@ -38,6 +38,12 @@ namespace Codex
         /// </summary>
         [CoerceGet(typeof(int?))]
         int DefinitionCount { get; }
+
+        /// <summary>
+        /// The language of the file
+        /// TODO: Remove
+        /// </summary>
+        string Language { get; }
 
         /// <summary>
         /// References for the document. Sorted. May overlap.
@@ -69,13 +75,10 @@ namespace Codex
         bool ExcludeFromSearch { get; }
     }
 
-    public interface ISourceFileInfo
+    public interface ISourceFileInfo : IRepoFileScopeEntity, 
+        // TODO: Remove
+        IProjectFileScopeEntity
     {
-        /// <summary>
-        /// The path to the source file in the project
-        /// </summary>
-        string Path { get; }
-
         /// <summary>
         /// The number of lines in the file
         /// </summary>
@@ -88,6 +91,7 @@ namespace Codex
 
         /// <summary>
         /// The language of the file
+        /// TODO: Remove
         /// </summary>
         string Language { get; }
 
@@ -95,11 +99,6 @@ namespace Codex
         /// The web address of the file. TODO: Remove? Is repo relative path enough?
         /// </summary>
         string WebAddress { get; }
-
-        /// <summary>
-        /// The relative path to the source file in the repository
-        /// </summary>
-        string RepoRelativePath { get; }
     }
 
     /// <summary>
@@ -121,7 +120,7 @@ namespace Codex
     /// <summary>
     /// Defines text contents of a file and associated data
     /// </summary>
-    public interface ISourceFile : IFileScopeEntity
+    public interface ISourceFile
     {
         /// <summary>
         /// The information about the source file
@@ -200,6 +199,7 @@ namespace Codex
         /// </summary>
         string Classification { get; }
 
+        // TODO: Should locals be moved from here?
         /// <summary>
         /// The identifier to the local group of spans which refer to the same common symbol
         /// </summary>
@@ -210,6 +210,7 @@ namespace Codex
     {
         /// <summary>
         /// The line text
+        /// TODO: It would be nice to not store this here and instead apply it as a join
         /// </summary>
         string LineSpanText { get; }
     }

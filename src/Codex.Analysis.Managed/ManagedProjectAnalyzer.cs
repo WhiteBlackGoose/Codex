@@ -141,7 +141,7 @@ namespace Codex.Analysis.Projects
                             Info = AugmentSourceFileInfo(new SourceFileInfo()
                             {
                                 Language = project.Language,
-                                Path = file.LogicalPath,
+                                ProjectRelativePath = file.LogicalPath,
                                 RepoRelativePath = file.RepoRelativePath
                             }),
                         };

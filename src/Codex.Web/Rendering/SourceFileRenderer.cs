@@ -31,7 +31,7 @@ namespace WebUI.Rendering
         /// <returns></returns>
         public async Task<EditorModel> RenderAsync()
         {
-            var filePath = _sourceFile.SourceFile?.Info?.Path;
+            var filePath = _sourceFile.SourceFile?.Info?.ProjectRelativePath;
             var model = new EditorModel()
             {
                 ProjectId = projectId,
@@ -59,7 +59,7 @@ namespace WebUI.Rendering
                     if (span.Start > sourceText.Length)
                     { //Not sure how this happened but a span is off the end of our text
                         Debug.WriteLine(
-                            $"Span had Start of {span.Start}, which is greater than text length for file '{_sourceFile.SourceFile.Info.Path}'", "BoundSourceFileMarkup");
+                            $"Span had Start of {span.Start}, which is greater than text length for file '{_sourceFile.SourceFile.Info.ProjectRelativePath}'", "BoundSourceFileMarkup");
                         break;
                     }
                     if (prevSpan != null && span.Start == prevSpan.Start)
@@ -365,7 +365,7 @@ namespace WebUI.Rendering
             string url = "";
             if (isDefinition)
             {
-                url = $"/?leftProject={symbol.ProjectId}&leftSymbol={symbol.Id}&file={HttpUtility.UrlEncode(this._sourceFile.SourceFile.Info.Path)}";
+                url = $"/?leftProject={symbol.ProjectId}&leftSymbol={symbol.Id}&file={HttpUtility.UrlEncode(this._sourceFile.SourceFile.Info.ProjectRelativePath)}";
             }
             else if (isProjectScopedReference)
             {

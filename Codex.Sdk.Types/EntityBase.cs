@@ -14,7 +14,7 @@ namespace Codex
         {
         }
 
-        protected virtual void OnDeserializingCore()
+        protected virtual void OnDeserializedCore()
         {
         }
     }

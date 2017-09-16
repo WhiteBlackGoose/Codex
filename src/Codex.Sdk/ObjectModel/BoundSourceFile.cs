@@ -8,7 +8,7 @@ namespace Codex.ObjectModel
     {
         public void MakeSingleton()
         {
-            Uid = SymbolId.CreateFromId($"{ProjectId}|{SourceFile.Info.Path}").Value;
+            Uid = SymbolId.CreateFromId($"{ProjectId}|{SourceFile.Info.ProjectRelativePath}").Value;
         }
     }
 }

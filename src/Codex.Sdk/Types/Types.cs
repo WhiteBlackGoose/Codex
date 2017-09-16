@@ -13,6 +13,7 @@ namespace Codex.ObjectModel
     {
         /// <summary>
         /// Extension data used during analysis/search
+        /// TODO: Why is this needed?
         /// </summary>
         public ExtensionData ExtData { get; set; }
 
@@ -178,7 +179,7 @@ namespace Codex.ObjectModel
             base.OnSerializingCore();
         }
 
-        protected override void OnDeserializingCore()
+        protected override void OnDeserializedCore()
         {
             if (Spans != null)
             {
@@ -189,7 +190,7 @@ namespace Codex.ObjectModel
                 }
             }
 
-            base.OnDeserializingCore();
+            base.OnDeserializedCore();
         }
     }
 }

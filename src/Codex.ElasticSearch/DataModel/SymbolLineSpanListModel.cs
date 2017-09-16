@@ -79,11 +79,6 @@ namespace Codex.Storage.DataModel
                 symbolLine.LineSpanText = AssignDuplicate(symbolLine.LineSpanText, ref lineSpanText);
             }
         }
-
-        public IReadOnlyList<SymbolSpan> ToList()
-        {
-            return this.GetReadOnlyList();
-        }
     }
 
     public class SharedSymbolLineModel

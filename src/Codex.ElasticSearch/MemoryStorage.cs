@@ -28,7 +28,7 @@ namespace Codex.Storage
                                 {
                                     m_symbolsByShortName.Add(new SymbolSearchResultEntry
                                     {
-                                        File = file.SourceFile.Info.Path,
+                                        File = file.SourceFile.Info.ProjectRelativePath,
                                         Span = span,
                                     });
                                 }

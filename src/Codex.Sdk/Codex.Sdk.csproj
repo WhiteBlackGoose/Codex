@@ -18,6 +18,7 @@
     <Compile Include="..\..\bin\Debug\Codex.Framework.Generation\SearchDescriptors.g.cs">
       <Link>Types\SearchDescriptors.g.cs</Link>
     </Compile>
+    <Compile Include="Analysis\ICodexStore.cs" />
     <Compile Include="Analysis\IAnalysisTarget.cs" />
     <Compile Include="ObjectModel\BoundSourceInfo.cs" />
     <Compile Include="Placeholder.cs" />
