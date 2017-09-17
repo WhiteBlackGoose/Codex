@@ -91,7 +91,7 @@ public class AnalysisServices
 
             if (added)
             {
-                await AnalysisTarget.AddRepositiory(repo);
+                await AnalysisTarget.AddRepository(repo);
             }
 
             return repo;

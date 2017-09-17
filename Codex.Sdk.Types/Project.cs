@@ -72,6 +72,7 @@ namespace Codex
     {
         /// <summary>
         /// Unique identifier for file
+        /// TODO: Make this checksum and searchable and use for discovering commit from PDB.
         /// TODO: What is this?
         /// </summary>
         string FileId { get; }

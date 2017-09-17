@@ -11,7 +11,24 @@ namespace Codex.Analysis
 {
     public interface ICodexStore
     {
-        Task<ICodexRepositoryStore> CreateRepositoryStore(IRepository repository, ICommit commit);
+        // TODO: NOTE: Need to watch out for this deleting stored filters
+        /// <summary>
+        /// Creates a new <see cref="ICodexRepositoryStore"/> over the given repository and commit.
+        /// Entities added to the store will be accumulated with the stored filter for the commit/repo.
+        /// </summary>
+        Task<ICodexRepositoryStore> CreateRepositoryStore(IRepository repository, ICommit commit, IBranch branch);
+    }
+
+    public interface IAdministratorCodexStore
+    {
+        /// <summary>
+        /// Updates the portal to view the given commit of the repository
+        /// </summary>
+        /// <param name="portalName">the name of the portal view</param>
+        /// <param name="repositoryName">the name of the repository</param>
+        /// <param name="commitId">the commit id</param>
+        /// <param name="branchName">the name of the branch referencing the commit</param>
+        Task UpdatePortalAsync(string portalName, string repositoryName, string commitId, string branchName);
     }
 
     public interface ICodexRepositoryStore
@@ -52,7 +69,7 @@ namespace Codex.Analysis
         /// Affected search stores:
         /// <see cref="SearchTypes.Language"/>
         /// </summary>
-        Task AddLanguagesAsync(IReadOnlyList<LanguageSearchModel> files);
+        Task AddLanguagesAsync(IReadOnlyList<LanguageInfo> files);
 
         /// <summary>
         /// Explicityly adds commit files. NOTE: This is not generally necessary since <see cref="AddBoundFilesAsync(IReadOnlyList{IBoundSourceFile})"/>

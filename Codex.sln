@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Sdk", "src\Codex.Sdk\Codex.Sdk.csproj", "{2322A932-05F4-4931-8547-71377C6AB49E}"
 EndProject
@@ -24,9 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Perspectil", "src\Perspecti
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{64FF0049-1E2B-4929-B944-EFF99A45C910}"
 	ProjectSection(SolutionItems) = preProject
-		CommitModelTypes.txt = CommitModelTypes.txt
 		Ingestion.txt = Ingestion.txt
-		Roadmap.txt = Roadmap.txt
 		TODO.txt = TODO.txt
 	EndProjectSection
 EndProject
@@ -104,5 +102,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A3174031-F20E-4447-9792-761C5218548E}
 	EndGlobalSection
 EndGlobal

@@ -10,7 +10,7 @@ namespace Codex.Analysis
 {
     public interface IAnalysisTarget
     {
-        Task AddRepositiory(IRepo repo);
+        Task AddRepository(IRepo repo);
 
         Task UploadAsync(IRepoFile repoFile, BoundSourceFile boundSourceFile);
 
@@ -48,7 +48,7 @@ namespace Codex.Analysis
             return Task.FromResult(true);
         }
 
-        public Task AddRepositiory(IRepo repo)
+        public Task AddRepository(IRepo repo)
         {
             return Task.FromResult(true);
         }
@@ -78,9 +78,9 @@ namespace Codex.Analysis
             return analysisTarget.AddProjectAsync(repoProject, analyzedProject);
         }
 
-        public virtual Task AddRepositiory(IRepo repo)
+        public virtual Task AddRepository(IRepo repo)
         {
-            return analysisTarget.AddRepositiory(repo);
+            return analysisTarget.AddRepository(repo);
         }
 
         public Task FinalizeRepository(IRepo repo)

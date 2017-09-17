@@ -1,4 +1,7 @@
 
+* For the FileSystemCodexStore, it will need to also serialize any data that is currently transformed and removed prior to indexing (i.e. BoundSourceFile.Properties)
+so that it can replay those without lose of data. Check types for instances of this and handle somehow.
+
 * Generate abstract IndexBehaviors types which will require indicating behavior of indexable fields at compile time
 Example:
 
@@ -18,6 +21,9 @@ public class DefaultDefinitionIndexBehaviors
 	public readonly SearchBehavior ShortName = SearchBehavior.Prefix;
 
 	public readonly SearchBehavior ContainerQualifiedName = SearchBehavior.PrefixFullName;
+
+	// This is not really the case, but its just to show an example
+	public readonly SearchBehavior SymbolDepth = SearchBehavior.Term;
 }
 
 [UserDefined]
@@ -28,7 +34,19 @@ public DefinitionIndexBehaviors : IDefinitionIndexBehaviors
 	public SearchBehavior ShortName => Defaults.ShortName;
 
 	public SearchBehavior ContainerQualifiedName => Defaults.ContainerQualifiedName;
+
+	// Forcing this field to not be indexed
+	public SearchBehavior SymbolDepth => SearchBehavior.None;
 }
 
 * Cumulative commit filter - a filter which includes all files in the commit and its parent commits transitively
 
+* Commit, branch, repository should all have definition symbols to show up in search. They should be outside of the stored filter
+built for the commit.
+
+* When repository or branch is added, they should not overwrite properties like Description with null. Instead, they should pull the current value
+and use that.
+
+* Progress reporting on web site for ingestion.
+
+* Some sort of state for commits.

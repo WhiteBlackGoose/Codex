@@ -55,7 +55,7 @@ namespace Codex
         // TODO: None of the properties below are intrinsic to the definition. They should be stored separately
         // That said, it is fine to store these on the definition to provide the association. They just need to be
         // removed before computing the content id
-        // TODO: Transition to using 
+        // TODO: Transition to using DocumentationInfo
 
         /// <summary>
         /// Documentation for the symbol (if any)
@@ -81,7 +81,6 @@ namespace Codex
         /// </summary>
         [Include(ObjectStage.Analysis)]
         string Comment { get; }
-
     }
 
     public interface IReferenceSymbol : ICodeSymbol

@@ -262,7 +262,7 @@ namespace Codex.Storage
             await Provider.AddProjectAsync(modelProject, targetIndexName: targetIndex);
         }
 
-        public async Task AddRepositiory(IRepo repo)
+        public async Task AddRepository(IRepo repo)
         {
             Console.WriteLine($"Add repository {repo.RepositoryName} to index {repo.TargetIndex}");
             await Provider.AddRepositoryAsync(new RepositoryModel(repo.RepositoryName, repo.TargetIndex)

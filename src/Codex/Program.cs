@@ -28,6 +28,7 @@ namespace Codex.Application
         static string rootDirectory;
         static string solutionPath;
         static bool interactive = false;
+        static ICodexStore store = Placeholder.Value<ICodexStore>("Create store (FileSystem | Elasticsearch)");
 
         static OptionSet options = new OptionSet
         {
@@ -342,21 +343,21 @@ namespace Codex.Application
 
                         var symbol = result.Symbol;
                         int index = result.DisplayName.IndexOf(symbol.ShortName);
-                        if (index >= 0)
-                        {
-                            result.Span.LineSpanText = symbol.DisplayName;
-                            result.Span.LineSpanStart = index;
-                            result.Span.Length = symbol.ShortName.Length;
-                        }
+                        //if (index >= 0)
+                        //{
+                        //    result.Span.LineSpanText = symbol.DisplayName;
+                        //    result.Span.LineSpanStart = index;
+                        //    result.Span.Length = symbol.ShortName.Length;
+                        //}
 
-                        if (!string.IsNullOrEmpty(result.Span.LineSpanText))
-                        {
-                            Console.Write(result.Span.LineSpanText.Substring(0, result.Span.LineSpanStart));
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.Write(result.Span.LineSpanText.Substring(result.Span.LineSpanStart, result.Span.Length));
-                            Console.ForegroundColor = ConsoleColor.Gray;
-                            Console.WriteLine(result.Span.LineSpanText.Substring(result.Span.LineSpanStart + result.Span.Length));
-                        }
+                        //if (!string.IsNullOrEmpty(result.Span.LineSpanText))
+                        //{
+                        //    Console.Write(result.Span.LineSpanText.Substring(0, result.Span.LineSpanStart));
+                        //    Console.ForegroundColor = ConsoleColor.Yellow;
+                        //    Console.Write(result.Span.LineSpanText.Substring(result.Span.LineSpanStart, result.Span.Length));
+                        //    Console.ForegroundColor = ConsoleColor.Gray;
+                        //    Console.WriteLine(result.Span.LineSpanText.Substring(result.Span.LineSpanStart + result.Span.Length));
+                        //}
                     }
                 }
             }
