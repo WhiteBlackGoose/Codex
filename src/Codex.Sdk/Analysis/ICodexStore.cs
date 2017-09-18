@@ -7,7 +7,7 @@ using Codex.ObjectModel;
 using Codex.Utilities;
 using Codex.Framework.Types;
 
-namespace Codex.Analysis
+namespace Codex
 {
     public interface ICodexStore
     {
@@ -83,5 +83,38 @@ namespace Codex.Analysis
         /// Finalizes the store and flushes any outstanding operations
         /// </summary>
         Task FinalizeAsync();
+    }
+
+    public class NullCodexRepositoryStore : ICodexRepositoryStore
+    {
+        public Task AddBoundFilesAsync(IReadOnlyList<BoundSourceFile> files)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task AddCommitFilesAsync(IReadOnlyList<CommitFileLink> files)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task AddLanguagesAsync(IReadOnlyList<LanguageInfo> files)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task AddProjectsAsync(IReadOnlyList<AnalyzedProject> files)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task AddTextFilesAsync(IReadOnlyList<SourceFile> files)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task FinalizeAsync()
+        {
+            return Task.CompletedTask;
+        }
     }
 }

@@ -33,6 +33,11 @@ namespace Codex
         /// </summary>
         string FileWebAddressTransformInputRegex { get; }
 
+        /// <summary>
+        /// The name of the primary branch for the repository
+        /// </summary>
+        string PrimaryBranch { get; }
+
         IReadOnlyList<IRepositoryReference> RepositoryReferences { get; }
     }
 

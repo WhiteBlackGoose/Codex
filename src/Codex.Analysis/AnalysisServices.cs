@@ -22,7 +22,6 @@ public class AnalysisServices
         public FileSystem FileSystem;
         public Logger Logger = Logger.Null;
         public string TargetIndex { get; }
-        public IAnalysisTarget AnalysisTarget;
         public ICodexRepositoryStore RepositoryStore;
 
         public List<RepoFileAnalyzer> FileAnalyzers { get; set; } = new List<RepoFileAnalyzer>();
@@ -75,7 +74,7 @@ public class AnalysisServices
             }
         }
 
-        public async virtual Task<Repo> CreateRepo(string name, string root = null)
+        public Task<Repo> CreateRepo(string name, string root = null)
         {
             Repo repo;
             bool added = false;
@@ -89,12 +88,7 @@ public class AnalysisServices
                 });
             }
 
-            if (added)
-            {
-                await AnalysisTarget.AddRepository(repo);
-            }
-
-            return repo;
+            return Task.FromResult(repo);
         }
 
         public virtual RepoFileAnalyzer GetDefaultAnalyzer(string filePath)

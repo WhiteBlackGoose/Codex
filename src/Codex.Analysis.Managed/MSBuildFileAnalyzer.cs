@@ -41,33 +41,9 @@ namespace Codex.Analysis.Files
                 repo.AnalysisServices.TaskDispatcher.QueueInvoke(async () =>
                 {
                     MSBuildSharedRepo = await repo.AnalysisServices.CreateRepo(MSBuildSharedRepoName);
-                    MSBuildSharedProject = MSBuildSharedRepo.CreateRepoProject(MSBuildProjectId, @"\\msbuild\");
+                    MSBuildSharedProject = MSBuildSharedRepo.CreateRepoProject(MSBuildProjectId, @"\\[MSBuild Files]\");
                 });
             }
-        }
-
-        public override void Finalize(Repo repo)
-        {
-            //repo.AnalysisServices.TaskDispatcher.QueueInvoke(async () =>
-            //{
-            //    var target = repo.AnalysisServices.AnalysisTarget;
-
-
-            //    await target.AddRepositiory("msbuild.shared");
-
-            //    var builder = new BoundSourceFile(new SourceFile()
-            //    {
-            //        Content = string.Empty,
-            //        Info = new SourceFileInfo()
-            //        {
-            //            Path = string.Empty,
-            //            Language = "msbuild"
-            //        }
-            //    });
-
-
-            //    //repo.AnalysisServices.AnalysisTarget
-            //});
         }
 
         protected override void AnnotateFile(
@@ -308,9 +284,20 @@ namespace Codex.Analysis.Files
                             lock (MSBuildSharedProject)
                             {
                                 otherRepoFile = MSBuildSharedProject.AddFile(fullPath);
+
+                                // The file is marked with explicit in this lock so we can
+                                // use that to know whether another thread has added the file already
+                                // and we can skip redundant analysis here
+                                if (otherRepoFile.HasExplicitAnalyzer)
+                                {
+                                    continue;
+                                }
+
+                                otherRepoFile.Analyzer = this;
+                                otherRepoFile.HasExplicitAnalyzer = true;
+                                otherRepoFile.IsSingleton = true;
                             }
 
-                            otherRepoFile.IsSingleton = true;
                             otherRepoFile.Analyze();
                         }
 
@@ -444,7 +431,6 @@ namespace Codex.Analysis.Files
             return MSBuildExtensions.CreateTargetReference(name)
                 .TryAddDefinition(msbuildDefinitions, name);
         }
-
     }
 
     internal static class MSBuildFileAnalyzerExtensions
@@ -470,8 +456,8 @@ namespace Codex.Analysis.Files
 
     internal static class MSBuildExtensions
     {
-        public const string MSBuildSharedRepoName = "msbuild.shared";
-        public const string MSBuildProjectId = "MSBuild files";
+        public const string MSBuildSharedRepoName = "[MSBuild Imports]";
+        public const string MSBuildProjectId = "MSBuild Files";
         public const string MSBuildLanguage = "msbuild";
 
         public struct ProjectCollectionScope : IDisposable
@@ -496,7 +482,6 @@ namespace Codex.Analysis.Files
         private static CompletionTracker s_completionTracker;
         private static ProjectCollection s_projectCollection;
         private static int s_projectCollectionUseCount = -1;
-
 
         public static ProjectCollectionScope GetProjectCollectionScope()
         {

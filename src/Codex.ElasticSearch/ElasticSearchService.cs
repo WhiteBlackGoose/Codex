@@ -59,7 +59,7 @@ namespace Codex.ElasticSearch
 
         public void UseClientBackground(Func<ClientContext, Task> useClient)
         {
-            throw new NotImplementedException();
+            Placeholder.NotImplemented();
         }
     }
 

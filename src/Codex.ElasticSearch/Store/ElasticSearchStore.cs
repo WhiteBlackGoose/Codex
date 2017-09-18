@@ -11,10 +11,11 @@ using Nest;
 using Codex.Storage.DataModel;
 using static Codex.Utilities.SerializationUtilities;
 using Codex.Utilities;
+using Codex.Analysis;
 
 namespace Codex.ElasticSearch
 {
-    public partial class ElasticSearchStore
+    public partial class ElasticSearchStore : ICodexStore
     {
         internal readonly ElasticSearchService Service;
         internal readonly ElasticSearchStoreConfiguration Configuration;
@@ -161,6 +162,11 @@ namespace Codex.ElasticSearch
             {
                 BindingInfo = boundSourceFile
             };
+        }
+
+        public Task<ICodexRepositoryStore> CreateRepositoryStore(IRepository repository, ICommit commit, IBranch branch)
+        {
+            throw new NotImplementedException();
         }
     }
 

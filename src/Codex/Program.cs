@@ -124,10 +124,10 @@ namespace Codex.Application
                     projectAnalyzers.Add(new MetadataAsSourceProjectAnalyzer(file));
                 }
 
-                IAnalysisTarget analysisTarget = null;
+                ICodexRepositoryStore analysisTarget = null;
                 if (analysisOnly)
                 {
-                    analysisTarget = new NullAnalysisTarget();
+                    analysisTarget = new NullCodexRepositoryStore();
                 }
                 else
                 {

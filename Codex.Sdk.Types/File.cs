@@ -76,7 +76,7 @@ namespace Codex
     }
 
     public interface ISourceFileInfo : IRepoFileScopeEntity, 
-        // TODO: Remove
+        // TODO: Remove and join source files by repository relative path with mapping from repository relative path to (project, project relative path)
         IProjectFileScopeEntity
     {
         /// <summary>

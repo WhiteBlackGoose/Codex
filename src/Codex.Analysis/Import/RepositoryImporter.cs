@@ -215,14 +215,16 @@ namespace Codex.Import
             await AnalysisServices.TaskDispatcher.OnCompletion();
 
             logger.WriteLine($"Finalized Analyzers. Operation: {watch.Elapsed} Total: {totalWatch.Elapsed}");
+            watch.Restart();
 
             await AnalysisServices.RepositoryStore.FinalizeAsync();
+
+            logger.WriteLine($"Finalized Repository. Operation: {watch.Elapsed} Total: {totalWatch.Elapsed}");
 
             if (finalizeImport)
             {
                 await AnalysisServices.AnalysisTarget.FinalizeRepository(repo);
 
-                logger.WriteLine($"Finalized Repository. Operation: {watch.Elapsed} Total: {totalWatch.Elapsed}");
             }
 
             return true;
