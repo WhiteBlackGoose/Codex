@@ -77,6 +77,16 @@ namespace Codex.ElasticSearch
             AddCreateOperation(batch.BulkDescriptor, value);
         }
 
+        public void SetIds(IEnumerable<T> entities)
+        {
+            Placeholder.Todo("Set content id and uid");
+        }
+
+        public void SetId(T entity)
+        {
+            Placeholder.Todo("Set content id and uid");
+        }
+
         public async Task StoreAsync(IReadOnlyList<T> values)
         {
             // TODO: Batch and create commits/stored filters

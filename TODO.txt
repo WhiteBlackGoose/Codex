@@ -1,5 +1,5 @@
 
-* For the FileSystemCodexStore, it will need to also serialize any data that is currently transformed and removed prior to indexing (i.e. BoundSourceFile.Properties)
+* For the FileSystemCodexStore, it will need to also serialize any data that is currently transformed and removed prior to indexing (i.e. SourceFileInfo.Properties)
 so that it can replay those without lose of data. Check types for instances of this and handle somehow.
 
 * Generate abstract IndexBehaviors types which will require indicating behavior of indexable fields at compile time
@@ -41,7 +41,7 @@ public DefinitionIndexBehaviors : IDefinitionIndexBehaviors
 
 * Cumulative commit filter - a filter which includes all files in the commit and its parent commits transitively
 
-* Commit, branch, repository should all have definition symbols to show up in search. They should be outside of the stored filter
+* Commit, branch, repository should all have definition symbols which show up in search. They should be outside of the stored filter
 built for the commit.
 
 * When repository or branch is added, they should not overwrite properties like Description with null. Instead, they should pull the current value
@@ -50,3 +50,5 @@ and use that.
 * Progress reporting on web site for ingestion.
 
 * Some sort of state for commits.
+
+* Adding to batch should implicitly set Uid and ContentId

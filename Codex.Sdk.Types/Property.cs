@@ -24,4 +24,10 @@ namespace Codex
         [SearchBehavior(SearchBehavior.NormalizedKeyword)]
         string OwnerId { get; }
     }
+
+    [AdapterType]
+    public interface IPropertyMap
+    {
+
+    }
 }

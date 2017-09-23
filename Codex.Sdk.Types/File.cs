@@ -99,6 +99,12 @@ namespace Codex
         /// The web address of the file. TODO: Remove? Is repo relative path enough?
         /// </summary>
         string WebAddress { get; }
+
+        /// <summary>
+        /// Extensible key value properties for the document.
+        /// </summary>
+        [Attached]
+        IPropertyMap Properties { get; }
     }
 
     /// <summary>

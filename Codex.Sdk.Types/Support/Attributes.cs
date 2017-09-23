@@ -28,6 +28,11 @@ namespace Codex
     }
 
     [AttributeUsage(AttributeTargets.Interface, Inherited = false, AllowMultiple = false)]
+    public sealed class AdapterTypeAttribute : Attribute
+    {
+    }
+
+    [AttributeUsage(AttributeTargets.Interface, Inherited = false, AllowMultiple = false)]
     public sealed class GeneratedClassNameAttribute : Attribute
     {
         public readonly string Name;
@@ -36,6 +41,15 @@ namespace Codex
         {
             Name = name;
         }
+    }
+
+    /// <summary>
+    /// Indicates an attached property which is not intrinsic to the parent object and should be
+    /// excluded when computing the <see cref="ISearchEntity.ContentId"/>
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+    public sealed class AttachedAttribute : Attribute
+    {
     }
 
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]

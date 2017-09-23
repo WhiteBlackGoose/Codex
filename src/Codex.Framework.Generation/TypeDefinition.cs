@@ -36,6 +36,7 @@ namespace Codex.Framework.Generation
         public INamedTypeSymbol TypeSymbol;
         public Type BaseType;
         public TypeDefinition BaseTypeDefinition;
+        public bool IsAdapter;
 
         public List<TypeDefinition> Interfaces = new List<TypeDefinition>();
 
@@ -54,6 +55,7 @@ namespace Codex.Framework.Generation
             SearchDescriptorName = BaseName + "IndexDescriptor";
             BuilderClassName = ClassName + "Builder";
             AllowedStages = type.GetAllowedStages();
+            IsAdapter = type.GetAttribute<AdapterTypeAttribute>() != null;
 
             Properties = type.GetProperties().Select(p => new PropertyDefinition(p)).ToList();
         }

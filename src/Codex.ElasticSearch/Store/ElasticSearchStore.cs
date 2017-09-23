@@ -174,6 +174,13 @@ namespace Codex.ElasticSearch
     {
         public BulkDescriptor BulkDescriptor = new BulkDescriptor();
 
+        public Task AddAsync<T>(ElasticSearchEntityStore<T> store, T entity, Action<T> onAdded = null)
+            where T : class, ISearchEntity
+        {
+            PopulateContentIdAndSize(entity, store);
+            return Placeholder.NotImplementedAsync();
+        }
+
         public void Add<T>(ElasticSearchEntityStore<T> store, T entity)
             where T : class, ISearchEntity
         {
@@ -190,6 +197,13 @@ namespace Codex.ElasticSearch
         {
             var response = await context.Client.BulkAsync(BulkDescriptor);
             throw new NotImplementedException();
+        }
+
+        public async Task FlushAsync()
+        {
+            await Placeholder.NotImplementedAsync("Flush entities");
+            await Placeholder.NotImplementedAsync("Trigger onAdded callbacks");
+            await Placeholder.NotImplementedAsync("Flush stored filters");
         }
     }
 

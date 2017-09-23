@@ -201,6 +201,12 @@ namespace Codex.Storage.Utilities
             };
         }
 
+        public static SourceFile EnableFullTextSearch(this SourceFile sourceFile)
+        {
+            sourceFile.Content = EncodeFullTextString(sourceFile.Content);
+            return sourceFile;
+        }
+
         public static string DecodeFullTextString(string str)
         {
             if (string.IsNullOrEmpty(str))

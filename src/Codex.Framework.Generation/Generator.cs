@@ -60,6 +60,7 @@ namespace Codex.Framework.Generation
             //MigratedTypes.Add(typeof(ILineSpan));
             MigratedTypes.Add(typeof(IClassificationStyle));
             MigratedTypes.Add(typeof(IDefinitionSymbol));
+            MigratedTypes.Add(typeof(IPropertyMap));
             MigratedTypes.Add(typeof(IProject));
             MigratedTypes.Add(typeof(IProjectFileLink));
             MigratedTypes.Add(typeof(ICommitFileLink));
@@ -71,6 +72,7 @@ namespace Codex.Framework.Generation
             MigratedTypes.Add(typeof(IReferencedProject));
             MigratedTypes.Add(typeof(ISymbolLineSpanList));
             MigratedTypes.Add(typeof(IReferenceSearchModel));
+            MigratedTypes.Add(typeof(ITextSourceSearchModel));
 
             Compilation = CSharpCompilation.Create("TempGeneratorAssembly").AddReferences(PortableExecutableReference.CreateFromFile(assembly.Location,
                 documentation: XmlDocumentationProvider.CreateFromFile(Path.ChangeExtension(assembly.Location, ".xml"))));
@@ -420,7 +422,7 @@ namespace Codex.Framework.Generation
                         .Apply(mr => mr.TypeArguments.Add(typeDefinition.BaseTypeDefinition.ClassName)),
                         new CodeCastExpression(new CodeTypeReference(typeDefinition.BaseType), new CodeVariableReferenceExpression("value"))));
                 }
-                else
+                else if (!typeDefinition.IsAdapter)
                 {
                     typeDeclaration.BaseTypes.Add(typeof(EntityBase));
                 }

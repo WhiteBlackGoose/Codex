@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Codex.ObjectModel;
+using Codex.ElasticSearch;
 
 namespace Codex.Search
 {
@@ -37,5 +38,7 @@ namespace Codex.Search
         {
             return symbol.ExtData as ReferenceSearchExtensionData;
         }
+
+        
     }
 }

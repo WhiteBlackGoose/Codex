@@ -148,13 +148,33 @@ namespace Codex.ObjectModel
         }
     }
 
-    partial class SourceFileInfo
+    public class PropertyMapBase : Dictionary<string, string>
     {
-        /// <summary>
-        /// Extensible key value properties for the document. TODO: Move to type definition
-        /// </summary>
-        public Dictionary<string, string> Properties = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        public PropertyMapBase() : base(StringComparer.OrdinalIgnoreCase)
+        {
+        }
     }
+
+    partial class PropertyMap : PropertyMapBase
+    {
+        protected void Initialize()
+        {
+        }
+    }
+
+    //partial class TextSourceSearchModel
+    //{
+    //    protected override void OnDeserializedCore()
+    //    {
+    //        base.OnDeserializedCore();
+    //    }
+
+    //    protected override void OnSerializingCore()
+    //    {
+    //        File.Content = 
+    //        base.OnSerializingCore();
+    //    }
+    //}
 
     partial class ReferenceSearchModel
     {

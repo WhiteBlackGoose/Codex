@@ -51,6 +51,7 @@ namespace Codex
         /// <summary>
         /// Used definitions for the project. Sorted.
         /// </summary>
+        [Attached]
         IReadOnlyList<IDefinitionSymbol> Definitions { get; }
 
         /// <summary>

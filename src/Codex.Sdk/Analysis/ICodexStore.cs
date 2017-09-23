@@ -60,24 +60,25 @@ namespace Codex
         /// <see cref="SearchTypes.Project"/>
         /// <see cref="SearchTypes.ProjectReference"/>
         /// <see cref="SearchTypes.Property"/> ?
-        /// May also call <see cref="AddBoundFilesAsync(IReadOnlyList{IBoundSourceFile})"/> for additional source files
+        /// <see cref="SearchTypes.Definition"/> (for <see cref="IReferencedProject.Definitions"/> on <see cref="IProject.ProjectReferences"/>)
+        /// May also call <see cref="AddBoundFilesAsync"/> for additional source files
         /// </summary>
-        Task AddProjectsAsync(IReadOnlyList<AnalyzedProject> files);
+        Task AddProjectsAsync(IReadOnlyList<AnalyzedProject> projects);
 
         /// <summary>
         /// Adds language information
         /// Affected search stores:
         /// <see cref="SearchTypes.Language"/>
         /// </summary>
-        Task AddLanguagesAsync(IReadOnlyList<LanguageInfo> files);
+        Task AddLanguagesAsync(IReadOnlyList<LanguageInfo> languages);
 
         /// <summary>
-        /// Explicityly adds commit files. NOTE: This is not generally necessary since <see cref="AddBoundFilesAsync(IReadOnlyList{IBoundSourceFile})"/>
+        /// Explicityly adds commit files. NOTE: This is not generally necessary since <see cref="AddBoundFilesAsync"/>
         /// and <see cref="AddTextFilesAsync(IReadOnlyList{ISourceFile})"/> implicitly add commit files.
         /// Affected search stores:
         /// <see cref="SearchTypes.CommitFiles"/>
         /// </summary>
-        Task AddCommitFilesAsync(IReadOnlyList<CommitFileLink> files);
+        Task AddCommitFilesAsync(IReadOnlyList<CommitFileLink> links);
 
         /// <summary>
         /// Finalizes the store and flushes any outstanding operations

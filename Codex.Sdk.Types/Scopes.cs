@@ -12,13 +12,13 @@ namespace Codex
     /// </summary>
     public interface ISearchEntity
     {
-        string Uid { get; }
+        string Uid { get; set; }
 
         /// <summary>
         /// Defines the content addressable identifier for the entity. This is used
         /// to determine if an entity with the same <see cref="Uid"/> should be updated
         /// </summary>
-        string ContentId { get; }
+        string ContentId { get; set; }
     }
 
     public interface IRepoScopeEntity

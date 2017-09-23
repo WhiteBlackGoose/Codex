@@ -16,6 +16,19 @@ namespace Codex.Utilities
             public static readonly T[] Array = new T[0];
         }
 
+        public static IReadOnlyList<TResult> SelectList<T, TResult>(this IReadOnlyCollection<T> items, Func<T, TResult> selector)
+        {
+            TResult[] results = new TResult[items.Count];
+            int i = 0;
+            foreach (var item in items)
+            {
+                results[i] = selector(item);
+                i++;
+            }
+
+            return results;
+        }
+
         public static IReadOnlyList<T> AsReadOnlyList<T>(this IEnumerable<T> items)
         {
             if (items is IReadOnlyList<T>)

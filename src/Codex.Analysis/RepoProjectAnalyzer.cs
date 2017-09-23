@@ -64,7 +64,9 @@ namespace Codex.Analysis
 
         public virtual void UploadProject(RepoProject project)
         {
-            AnalyzedProject analyzedProject = new AnalyzedProject(project.Repo.Name, project.ProjectId);
+            AnalyzedProject analyzedProject = new AnalyzedProject(
+                repositoryName: project.Repo.Name, 
+                projectId: project.ProjectId);
 
             UploadProject(project, analyzedProject);
         }
@@ -76,10 +78,21 @@ namespace Codex.Analysis
             {
                 analyzedProject.Files.Add(new ProjectFileLink()
                 {
-                    FileId = Placeholder.Value<string>("Compute and set file id"),
                     RepoRelativePath = file.RepoRelativePath,
                     ProjectRelativePath = file.LogicalPath
                 });
+            }
+
+            if (analyzedProject.AdditionalSourceFiles.Count != 0)
+            {
+                project.Repo.AnalysisServices.TaskDispatcher.QueueInvoke(() =>
+                    project.Repo.AnalysisServices.RepositoryStore.AddBoundFilesAsync(analyzedProject.AdditionalSourceFiles), TaskType.Upload);
+            }
+
+            if (analyzedProject.ReferenceDefinitionMap.Count != 0)
+            {
+                project.Repo.AnalysisServices.TaskDispatcher.QueueInvoke(() =>
+                    project.Repo.AnalysisServices.RepositoryStore.AddBoundFilesAsync(analyzedProject.AdditionalSourceFiles), TaskType.Upload);
             }
 
             project.Repo.AnalysisServices.TaskDispatcher.QueueInvoke(() =>

@@ -46,7 +46,8 @@ namespace Codex
 
         public static SearchType Repository = SearchType.Create<IRepositorySearchModel>(RegisteredSearchTypes);
 
-        public static SearchType Project = SearchType.Create<IProjectSearchModel>(RegisteredSearchTypes);
+        public static SearchType Project = SearchType.Create<IProjectSearchModel>(RegisteredSearchTypes)
+            .Exclude(sm => sm.Project.ProjectReferences.First().Definitions);
 
         public static SearchType Commit = SearchType.Create<ICommitSearchModel>(RegisteredSearchTypes);
 
@@ -84,13 +85,14 @@ namespace Codex
     {
         IDefinitionSymbol Definition { get; }
 
-        /// <summary>
-        /// Keywords are additional terms which can be used to find a given symbol.
-        /// NOTE: Keywords can only be used to select from symbols which have
-        /// a primary term match
-        /// </summary>
-        [SearchBehavior(SearchBehavior.NormalizedKeyword)]
-        IReadOnlyList<string> Keywords { get; }
+        // TODO: Not sure that this is actually needed
+        ///// <summary>
+        ///// Keywords are additional terms which can be used to find a given symbol.
+        ///// NOTE: Keywords can only be used to select from symbols which have
+        ///// a primary term match
+        ///// </summary>
+        //[SearchBehavior(SearchBehavior.NormalizedKeyword)]
+        //IReadOnlyList<string> Keywords { get; }
     }
 
     public interface ILanguageSearchModel : ISearchEntity

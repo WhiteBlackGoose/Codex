@@ -53,6 +53,12 @@ namespace Codex
             return this;
         }
 
+        public SearchType<TSearchType> Exclude(
+            Expression<Func<TSearchType, object>> searchField)
+        {
+            return this;
+        }
+
         public SearchType<TSearchType> SearchAs<T>(
             Expression<Func<TSearchType, T>> searchField,
             SearchBehavior behavior)
