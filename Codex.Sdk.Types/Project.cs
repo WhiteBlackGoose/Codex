@@ -61,9 +61,8 @@ namespace Codex
 
         /// <summary>
         /// The properties of the project. Such as Version, PublicKey, etc.
-        /// TODO: Implement maps for generated types
         /// </summary>
-        IReadOnlyDictionary<string, string> Properties { get; }
+        IPropertyMap Properties { get; }
     }
 
     /// <summary>

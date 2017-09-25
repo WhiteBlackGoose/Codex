@@ -15,20 +15,21 @@ namespace Codex.ElasticSearch
     public class ElasticSearchEntityStore<T> : IStore<T>
         where T : class
     {
-        private readonly SearchType searchType;
-        private readonly ElasticSearchStore store;
+        internal readonly SearchType searchType;
+        internal readonly ElasticSearchStore Store;
         public readonly string IndexName;
+        public int ShardCount => Placeholder.Value<int>("Get shard count during initialize. May be different than configuration");
 
         public ElasticSearchEntityStore(ElasticSearchStore store, SearchType searchType)
         {
-            this.store = store;
+            this.Store = store;
             this.searchType = searchType;
             this.IndexName = store.Configuration.Prefix + searchType.IndexName;
         }
 
         public async Task InitializeAsync()
         {
-            if (store.Configuration.CreateIndices)
+            if (Store.Configuration.CreateIndices)
             {
                 await CreateIndexAsync();
             }
@@ -46,7 +47,7 @@ namespace Codex.ElasticSearch
         {
             var request = new Box<string>();
 
-            await store.Service.UseClient(async context =>
+            await Store.Service.UseClient(async context =>
             {
                 var existsResponse = await context.Client.IndexExistsAsync(IndexName)
                     .ThrowOnFailure();
@@ -59,7 +60,7 @@ namespace Codex.ElasticSearch
                 var response = await context.Client
                     .CreateIndexAsync(IndexName,
                         c => c.Mappings(m => m.Map<T>(TypeName.From<T>(), tm => tm.AutoMap(MappingPropertyVisitor.Instance)))
-                            .Settings(s => s.AddAnalyzerSettings().NumberOfShards(store.Configuration.ShardCount).RefreshInterval(TimeSpan.FromMinutes(1)))
+                            .Settings(s => s.AddAnalyzerSettings().NumberOfShards(Store.Configuration.ShardCount).RefreshInterval(TimeSpan.FromMinutes(1)))
                             .CaptureRequest(context))
                             .ThrowOnFailure();
 
@@ -91,7 +92,7 @@ namespace Codex.ElasticSearch
         {
             // TODO: Batch and create commits/stored filters
             // TODO: Handle updates
-            await store.Service.UseClient(async context =>
+            await Store.Service.UseClient(async context =>
             {
                 var response = await context.Client
                     .BulkAsync(b => b.ForEach(values, (bd, value) => AddCreateOperation(bd, value)).CaptureRequest(context))

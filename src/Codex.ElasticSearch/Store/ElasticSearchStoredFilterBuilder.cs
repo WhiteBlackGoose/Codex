@@ -14,16 +14,26 @@ using Codex.Utilities;
 
 namespace Codex.ElasticSearch
 {
-    public class ElasticSearchStoredFilterBuilder<T>
+    internal class ElasticSearchStoredFilterBuilder<T>
         where T : class
     {
-        public string IndexName;
-        public ElasticSearchStore Store;
-        public ElasticSearchEntityStore<T> EntityStore;
-        public string FilterName;
-        public string IntermediateFilterSuffix;
+        public string IndexName => EntityStore.IndexName;
+        public ElasticSearchStore Store => EntityStore.Store;
+        public readonly ElasticSearchEntityStore<T> EntityStore;
+        public readonly string FilterName;
+        public readonly string IntermediateFilterSuffix;
 
-        private ShardState[] ShardStates;
+        private readonly ShardState[] ShardStates;
+
+        public ElasticSearchStoredFilterBuilder(ElasticSearchEntityStore<T> entityStore, string filterName)
+        {
+            EntityStore = entityStore;
+            FilterName = filterName;
+
+            IntermediateFilterSuffix = Guid.NewGuid().ToString();
+
+            ShardStates = Enumerable.Range(0, entityStore.ShardCount).Select(shard => CreateShardState(shard)).ToArray();
+        }
 
         private ShardState CreateShardState(int shard)
         {
@@ -61,6 +71,7 @@ namespace Codex.ElasticSearch
 
                         AddBatchClauses(batch, filterDescriptor, ref filter);
 
+                        Placeholder.Todo("Add date updated to stored filter to allow garbage collection/TTL");
                         await Store.StoredFilterStore.StoreAsync(new[]
                         {
                             new StoredFilter()

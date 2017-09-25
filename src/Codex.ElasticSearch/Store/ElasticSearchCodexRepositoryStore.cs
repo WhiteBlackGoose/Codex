@@ -26,6 +26,7 @@ namespace Codex.ElasticSearch
             this.store = store;
             this.repository = repository;
             this.commit = commit;
+            Placeholder.Todo("Add commit bound source document (with links to changed files in commit, commit stats [lines added/removed], link to commit portal, link to diff view).");
         }
 
         public async Task AddBoundFilesAsync(IReadOnlyList<BoundSourceFile> files)
@@ -73,14 +74,15 @@ namespace Codex.ElasticSearch
         {
             foreach (var file in files)
             {
-                var storedFile = new TextSourceSearchModel()
+                var textModel = new TextSourceSearchModel()
                 {
                     // TODO: This should probably be handled by custom serializer
                     File = file.EnableFullTextSearch()
                 };
 
-                await batch.AddAsync(store.TextSourceStore, storedFile);
-                AddProperties(storedFile, file.Info.Properties);
+                await batch.AddAsync(store.TextSourceStore, textModel);
+                UpdateCommitFile(textModel);
+                AddProperties(textModel, file.Info.Properties);
             }
         }
 
@@ -132,6 +134,7 @@ namespace Codex.ElasticSearch
             };
 
             batch.Add(store.TextSourceStore, textModel);
+            UpdateCommitFile(textModel);
 
             var boundSourceModel = new BoundSourceSearchModel()
             {
@@ -144,6 +147,15 @@ namespace Codex.ElasticSearch
             {
                 AddBoundSourceFileAssociatedData(boundSourceFile, boundSourceModel);
             });
+        }
+
+        private void UpdateCommitFile(TextSourceSearchModel sourceSearchModel)
+        {
+            CommitFileLink commitFileLink;
+            if (commitFilesByRepoRelativePath.TryGetValue(sourceSearchModel.File.Info.RepoRelativePath, out commitFileLink))
+            {
+                commitFileLink.FileId = sourceSearchModel.Uid;
+            }
         }
 
         private void AddBoundSourceFileAssociatedData(BoundSourceFile boundSourceFile, BoundSourceSearchModel boundSourceModel)
@@ -182,6 +194,7 @@ namespace Codex.ElasticSearch
 
         public async Task FinalizeAsync()
         {
+            Placeholder.Todo($"Add commit files from {nameof(commitFilesByRepoRelativePath)}");
             await batch.FlushAsync();
         }
     }

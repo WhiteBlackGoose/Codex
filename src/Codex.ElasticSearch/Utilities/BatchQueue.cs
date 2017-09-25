@@ -15,6 +15,11 @@ namespace Codex.ElasticSearch.Utilities
         private int batchSize;
         private ConcurrentQueue<T> queue = new ConcurrentQueue<T>();
 
+        public BatchQueue(int batchSize)
+        {
+            this.batchSize = batchSize;
+        }
+
         public bool AddAndTryGetBatch(T item, out IReadOnlyList<T> batch)
         {
             queue.Enqueue(item);
