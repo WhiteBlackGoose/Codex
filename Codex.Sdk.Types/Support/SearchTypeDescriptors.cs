@@ -12,11 +12,13 @@ namespace Codex
     {
         public string Name { get; protected set; }
         public string IndexName { get; protected set; }
+        public int Id { get; protected set; }
 
         public static SearchType<T> Create<T>(List<SearchType> registeredSearchTypes, [CallerMemberName]string name = null)
             where T : class, ISearchEntity
         {
             var searchType = new SearchType<T>(name);
+            searchType.Id = registeredSearchTypes.Count;
             registeredSearchTypes.Add(searchType);
             return searchType;
         }

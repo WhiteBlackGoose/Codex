@@ -14,18 +14,17 @@ using Codex.Utilities;
 
 namespace Codex.ElasticSearch
 {
-    internal class ElasticSearchStoredFilterBuilder<T>
-        where T : class
+    internal class ElasticSearchStoredFilterBuilder
     {
         public string IndexName => EntityStore.IndexName;
         public ElasticSearchStore Store => EntityStore.Store;
-        public readonly ElasticSearchEntityStore<T> EntityStore;
+        public readonly ElasticSearchEntityStore EntityStore;
         public readonly string FilterName;
         public readonly string IntermediateFilterSuffix;
 
         private readonly ShardState[] ShardStates;
 
-        public ElasticSearchStoredFilterBuilder(ElasticSearchEntityStore<T> entityStore, string filterName)
+        public ElasticSearchStoredFilterBuilder(ElasticSearchEntityStore entityStore, string filterName)
         {
             EntityStore = entityStore;
             FilterName = filterName;

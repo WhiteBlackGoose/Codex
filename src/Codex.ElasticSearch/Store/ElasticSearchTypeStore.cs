@@ -12,8 +12,7 @@ using System.Threading.Tasks;
 
 namespace Codex.ElasticSearch
 {
-    public class ElasticSearchEntityStore<T> : IStore<T>
-        where T : class
+    public class ElasticSearchEntityStore
     {
         internal readonly SearchType searchType;
         internal readonly ElasticSearchStore Store;
@@ -25,6 +24,16 @@ namespace Codex.ElasticSearch
             this.Store = store;
             this.searchType = searchType;
             this.IndexName = store.Configuration.Prefix + searchType.IndexName;
+        }
+
+    }
+
+        public class ElasticSearchEntityStore<T> : ElasticSearchEntityStore, IStore<T>
+        where T : class
+    {
+        public ElasticSearchEntityStore(ElasticSearchStore store, SearchType searchType)
+            : base(store, searchType)
+        {
         }
 
         public async Task InitializeAsync()
@@ -73,7 +82,7 @@ namespace Codex.ElasticSearch
             return bd.Create<T>(bco => bco.Document(value).Index(IndexName));
         }
 
-        public void AddCreateOperation(ElasticSearchBatch batch, T value)
+        public void AddCreateOperation(ElasticSearchBatcher batch, T value)
         {
             AddCreateOperation(batch.BulkDescriptor, value);
         }

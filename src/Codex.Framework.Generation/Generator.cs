@@ -120,8 +120,16 @@ namespace Codex.Framework.Generation
                 var interfaces = typeDefinition.Type.GetInterfaces();
                 Type baseType = null;
                 int baseTypeCount = 0;
+                IEnumerable<Type> baseTypeEnumerable = Enumerable.Empty<Type>();
                 foreach (var i in interfaces)
                 {
+                    if (i == typeof(ISearchEntity))
+                    {
+                        baseType = i;
+                        baseTypeCount = 1;
+                        break;
+                    }
+
                     if (i.GetInterfaces().Length == interfaces.Length - 1)
                     {
                         baseType = i;
@@ -133,11 +141,10 @@ namespace Codex.Framework.Generation
                 {
                     typeDefinition.BaseType = baseType;
                     typeDefinition.BaseTypeDefinition = DefinitionsByType[baseType];
+                    baseTypeEnumerable = new[] { baseType }.Concat(baseType.GetInterfaces());
                 }
-                else
-                {
-                    typeDefinition.Interfaces.AddRange(interfaces.Select(t => DefinitionsByType[t]));
-                }
+
+                typeDefinition.Interfaces.AddRange(interfaces.Except(baseTypeEnumerable).Select(t => DefinitionsByType[t]));
             }
 
             foreach (var typeDefinition in DefinitionsByType.Values)

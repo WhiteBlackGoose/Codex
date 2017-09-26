@@ -92,8 +92,6 @@ namespace Codex.Application
                     new ConsoleLogger(),
                     new TextLogger(TextWriter.Synchronized(writer)));
 
-                
-
                 FileSystem fileSystem = new CachingFileSystem(
                     new UnionFileSystem(file.Union(Enumerable.Repeat(solutionPath, String.IsNullOrEmpty(solutionPath) ? 0 : 1)),
                         new RootFileSystem(rootDirectory,

@@ -16,7 +16,7 @@ namespace Codex.ElasticSearch
     class ElasticSearchCodexRepositoryStore : ICodexRepositoryStore
     {
         private readonly ElasticSearchStore store;
-        private readonly ElasticSearchBatch batch;
+        private readonly ElasticSearchBatcher batcher;
         private readonly IRepository repository;
         private readonly ICommit commit;
         private readonly ConcurrentDictionary<string, CommitFileLink> commitFilesByRepoRelativePath = new ConcurrentDictionary<string, CommitFileLink>(StringComparer.OrdinalIgnoreCase);
@@ -56,11 +56,11 @@ namespace Codex.ElasticSearch
         {
             foreach (var project in projects)
             {
-                await batch.AddAsync(store.ProjectStore, new ProjectSearchModel() { Project = project });
+                await batcher.AddAsync(store.ProjectStore, new ProjectSearchModel() { Project = project });
 
                 foreach (var projectReference in project.ProjectReferences)
                 {
-                    batch.Add(store.ProjectReferenceStore, new ProjectReferenceSearchModel(project)
+                    batcher.Add(store.ProjectReferenceStore, new ProjectReferenceSearchModel(project)
                     {
                         ProjectReference = projectReference
                     });
@@ -80,7 +80,7 @@ namespace Codex.ElasticSearch
                     File = file.EnableFullTextSearch()
                 };
 
-                await batch.AddAsync(store.TextSourceStore, textModel);
+                await batcher.AddAsync(store.TextSourceStore, textModel);
                 UpdateCommitFile(textModel);
                 AddProperties(textModel, file.Info.Properties);
             }
@@ -91,7 +91,7 @@ namespace Codex.ElasticSearch
             Placeholder.Todo("Add declared/reference definitions to separate stored filters");
             foreach (var definition in definitions)
             {
-                batch.Add(store.DefinitionStore, new DefinitionSearchModel()
+                batcher.Add(store.DefinitionStore, new DefinitionSearchModel()
                 {
                     Definition = definition,
                 });
@@ -107,7 +107,7 @@ namespace Codex.ElasticSearch
 
             foreach (var property in properties)
             {
-                batch.Add(store.PropertyStore, new PropertySearchModel()
+                batcher.Add(store.PropertyStore, new PropertySearchModel()
                 {
                     Key = property.Key,
                     Value = property.Value,
@@ -133,7 +133,7 @@ namespace Codex.ElasticSearch
                 File = boundSourceFile.SourceFile.EnableFullTextSearch(),
             };
 
-            batch.Add(store.TextSourceStore, textModel);
+            batcher.Add(store.TextSourceStore, textModel);
             UpdateCommitFile(textModel);
 
             var boundSourceModel = new BoundSourceSearchModel()
@@ -143,7 +143,7 @@ namespace Codex.ElasticSearch
                 CompressedClassifications = new ClassificationListModel(boundSourceFile.Classifications)
             };
 
-            await batch.AddAsync(store.BoundSourceStore, boundSourceModel, onAdded: _ =>
+            await batcher.AddAsync(store.BoundSourceStore, boundSourceModel, onAdded: _ =>
             {
                 AddBoundSourceFileAssociatedData(boundSourceFile, boundSourceModel);
             });
@@ -180,7 +180,6 @@ namespace Codex.ElasticSearch
                 if (referenceGroup.Count() < 10)
                 {
                     // Small number of references, just store simple list
-                    Placeholder.Todo("Verify that this does not store the extra fields on IReferenceSpan and just the Symbol span fields");
                     referenceModel.Spans = spanList;
                 }
                 else
@@ -188,14 +187,18 @@ namespace Codex.ElasticSearch
                     referenceModel.CompressedSpans = new SymbolLineSpanListModel(spanList);
                 }
 
-                batch.Add(store.ReferenceStore, referenceModel);
+                batcher.Add(store.ReferenceStore, referenceModel);
             }
         }
 
         public async Task FinalizeAsync()
         {
-            Placeholder.Todo($"Add commit files from {nameof(commitFilesByRepoRelativePath)}");
-            await batch.FlushAsync();
+            await batcher.AddAsync(store.CommitFilesStore, new CommitFilesSearchModel(this.commit)
+            {
+                CommitFiles = commitFilesByRepoRelativePath.Values.OrderBy(cf => cf.RepoRelativePath, StringComparer.OrdinalIgnoreCase).ToList()
+            });
+
+            await batcher.FlushAsync();
         }
     }
 }
