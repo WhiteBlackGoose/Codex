@@ -121,6 +121,7 @@ namespace Codex.Analysis
                 ProjectId = projectId,
                 ReferenceKind = isDefinition ? nameof(ReferenceKind.Definition) : nameof(ReferenceKind.Reference),
                 Kind = nameof(SymbolKinds.File),
+                IsImplicitlyDeclared = true,
             };
         }
 
