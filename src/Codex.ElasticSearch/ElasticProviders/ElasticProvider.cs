@@ -374,7 +374,7 @@ namespace Codex.Storage.ElasticProviders
             {
                 var result = await UseElasticClient(async client =>
                 {
-                    var existsResult = await client.DocumentExistsAsync<ProjectModel>(projectId);
+                    var existsResult = await client.DocumentExistsAsync<ProjectModel>(projectId, desc => desc.Index(targetIndex).Type(ProjectTypeName));
                     if (!existsResult.Exists)
                     {
                         return existsResult;
