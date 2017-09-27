@@ -75,7 +75,7 @@ namespace Codex
         bool ExcludeFromSearch { get; }
     }
 
-    public interface ISourceFileInfo : IRepoFileScopeEntity, 
+    public interface ISourceFileInfo : IRepoFileScopeEntity,
         // TODO: Remove and join source files by repository relative path with mapping from repository relative path to (project, project relative path)
         IProjectFileScopeEntity
     {
@@ -172,6 +172,30 @@ namespace Codex
         /// The definition symbol referred to by the span
         /// </summary>
         IDefinitionSymbol Definition { get; }
+
+        /// <summary>
+        /// Gets the definitions for parameters
+        /// </summary>
+        [ReadOnlyList]
+        IReadOnlyList<IParameterDefinitionSpan> Parameters { get; }
+    }
+
+    /// <summary>
+    /// A specialized definition span referring to a parameter of a method/property
+    /// </summary>
+    public interface IParameterDefinitionSpan : ILineSpan
+    {
+        // TODO: This is in theory implied from the ordering in IDefinitionSpan.Parameters. So no need
+        // to serialize if its the same as the implied value
+        /// <summary>
+        /// The index of the parameter in the list of parameters for the method
+        /// </summary>
+        int ParameterIndex { get; }
+
+        /// <summary>
+        /// The name of the parameter
+        /// </summary>
+        string Name { get; }
     }
 
     public interface IReferenceSpan : ISymbolSpan
