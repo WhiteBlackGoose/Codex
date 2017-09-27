@@ -107,8 +107,8 @@ namespace Codex.Application
 
                 List<RepoProjectAnalyzer> projectAnalyzers = new List<RepoProjectAnalyzer>()
                 {
-                    new MSBuildSolutionProjectAnalyzer()
-                    //new ManagedSolutionProjectAnalyzer()
+                    //new MSBuildSolutionProjectAnalyzer()
+                    new BinLogSolutionProjectAnalyzer()
                             {
                                 RequireProjectFilesExist = requireProjectsExist
                             }
