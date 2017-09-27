@@ -10,7 +10,7 @@ namespace Codex
     /// Marker interface for searchable entities
     /// TODO: Consider moving <see cref="ContentId"/> out if its not needed by all searchable entities
     /// </summary>
-    public interface ISearchEntity
+    public partial interface ISearchEntity
     {
         string Uid { get; set; }
 

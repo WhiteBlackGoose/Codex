@@ -143,7 +143,7 @@ namespace Codex.ElasticSearch
                 CompressedClassifications = new ClassificationListModel(boundSourceFile.Classifications)
             };
 
-            await batcher.AddAsync(store.BoundSourceStore, boundSourceModel, onAdded: _ =>
+            await batcher.AddAsync(store.BoundSourceStore, boundSourceModel, onAdded: () =>
             {
                 AddBoundSourceFileAssociatedData(boundSourceFile, boundSourceModel);
             });

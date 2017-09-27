@@ -10,6 +10,7 @@ using Codex.Framework.Types;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System.Runtime.CompilerServices;
+using Codex.Utilities;
 
 namespace Codex.Framework.Generation
 {
@@ -50,6 +51,7 @@ namespace Codex.Framework.Generation
             var assembly = typeof(ObjectStage).Assembly;
             CSharpCommandLineArguments arguments = CSharpCommandLineParser.Default.Parse(File.ReadAllLines("csc.args.txt"), ProjectDirectory, null);
 
+            MigratedTypes.Add(typeof(ISearchEntity));
             MigratedTypes.Add(typeof(ICodeSymbol));
             MigratedTypes.Add(typeof(IReferenceSymbol));
             MigratedTypes.Add(typeof(ISpan));
@@ -396,7 +398,16 @@ namespace Codex.Framework.Generation
 
                 if (property.InitPropertyType != null)
                 {
-                    backingField.InitExpression = new CodeObjectCreateExpression(property.InitPropertyType);
+                    if (property.IsReadOnlyList)
+                    {
+                        backingField.InitExpression = new CodePropertyReferenceExpression(
+                            new CodeTypeReferenceExpression(typeof(CollectionUtilities.Empty<>).MakeGenericTypeReference(property.MutablePropertyType.TypeArguments[0])),
+                            nameof(CollectionUtilities.Empty<int>.Array));
+                    }
+                    else
+                    {
+                        backingField.InitExpression = new CodeObjectCreateExpression(property.InitPropertyType);
+                    }
                 }
 
                 typeDeclaration.Members.Add(backingField);
@@ -644,6 +655,14 @@ namespace Codex.Framework.Generation
                 }
             }
 
+            return result;
+        }
+
+        public static CodeTypeReference MakeGenericTypeReference(this Type genericType, params CodeTypeReference[] typeArguments)
+        {
+            var result = new CodeTypeReference(genericType);
+            result.TypeArguments.Clear();
+            result.TypeArguments.AddRange(typeArguments);
             return result;
         }
 

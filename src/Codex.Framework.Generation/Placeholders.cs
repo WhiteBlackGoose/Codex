@@ -26,3 +26,14 @@ namespace Codex.ObjectModel
     {
     }
 }
+
+namespace Codex.Utilities
+{
+    public static class CollectionUtilities
+    {
+        public class Empty<T>
+        {
+            public static readonly T[] Array = new T[0];
+        }
+    }
+}

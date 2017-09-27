@@ -186,6 +186,24 @@ namespace Codex
         /// The reference symbol referred to by the span
         /// </summary>
         IReferenceSymbol Reference { get; }
+
+        /// <summary>
+        /// Gets the references to parameters
+        /// </summary>
+        [ReadOnlyList]
+        IReadOnlyList<IParameterReferenceSpan> Parameters { get; }
+    }
+
+    /// <summary>
+    /// A specialized reference span referring to a parameter to a method/property
+    /// </summary>
+    public interface IParameterReferenceSpan : ISymbolSpan
+    {
+        /// <summary>
+        /// The index of the parameter in the list of parameters for the method
+        /// </summary>
+        [SearchBehavior(SearchBehavior.Term)]
+        int ParameterIndex { get; }
     }
 
     /// <summary>

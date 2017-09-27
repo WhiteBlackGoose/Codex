@@ -22,6 +22,7 @@
     <Compile Include="Analysis\IAnalysisTarget.cs" />
     <Compile Include="ObjectModel\BoundSourceInfo.cs" />
     <Compile Include="Placeholder.cs" />
+    <Compile Include="Types\SearchEntity.cs" />
     <Compile Include="Types\ReferencedProject.cs" />
     <Compile Include="Types\EncodingDescription.cs" />
     <Compile Include="Types\Types.cs" />

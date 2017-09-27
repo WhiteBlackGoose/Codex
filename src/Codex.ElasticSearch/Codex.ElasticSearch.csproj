@@ -67,6 +67,8 @@
     <Compile Include="Old\ElasticsearchStorage.cs" />
     <Compile Include="ElasticSearchService.cs" />
     <Compile Include="ElasticSearchIndex.cs" />
+    <Compile Include="Store\ElasticSearchBatch.cs" />
+    <Compile Include="Store\ElasticSearchBatcher.cs" />
     <Compile Include="Store\ElasticSearchCodexRepositoryStore.cs" />
     <Compile Include="Store\ElasticSearchStoredFilterBuilder.cs" />
     <Compile Include="Store\ElasticSearchTypeStore.cs" />
