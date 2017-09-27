@@ -105,7 +105,7 @@ namespace Codex.Storage.ElasticProviders
                 public Serializer(IConnectionSettingsValues settings)
                     : base(settings, ModifyJsonSerializerSettings)
                 {
-                    
+
                 }
 
                 private static void ModifyJsonSerializerSettings(JsonSerializerSettings arg1, IConnectionSettingsValues arg2)
@@ -320,6 +320,19 @@ namespace Codex.Storage.ElasticProviders
             });
         }
 
+        public async Task<IEnumerable<(string IndexName, bool IsActive)>> GetIndicesAsync()
+        {
+            var client = CreateClient();
+
+            var result = await client.GetAliasAsync().ThrowOnFailure();
+
+            return result.Indices.Select(kvp =>
+            (
+                IndexName: kvp.Key,
+                IsActive: kvp.Value.Any(alias => alias.Name == CombinedSourcesIndexAlias)
+            )).OrderBy(v => v.IndexName, StringComparer.OrdinalIgnoreCase).ToList();
+        }
+
         public async Task<ElasticResponse<ProjectModel>> GetProjectAsync(string projectId)
         {
             Contract.Requires(projectId != null);
@@ -411,9 +424,10 @@ namespace Codex.Storage.ElasticProviders
             return await DeleteIndexAsync(sourceIndexName);
         }
 
-        public Task<ElasticResponse> DeleteIndexAsync(string indexName)
+        public async Task<ElasticResponse> DeleteIndexAsync(string indexName)
         {
-            return UseElasticClient(async client =>
+            bool deleted = false;
+            var result = await UseElasticClient(async client =>
             {
                 var existsQuery = (await client.IndexExistsAsync(indexName)).ThrowOnFailure();
                 if (!existsQuery.Exists)
@@ -422,8 +436,13 @@ namespace Codex.Storage.ElasticProviders
                 }
 
                 await client.DeleteIndexAsync(indexName, d => d).ThrowOnFailure();
+                deleted = true;
                 return await client.FlushAsync(AllIndices);
             });
+
+            result.Succeeded = deleted;
+
+            return result;
         }
 
         public async Task CreateSourcesIndexIfNeeded(string indexName)
@@ -770,8 +789,8 @@ namespace Codex.Storage.ElasticProviders
 
             var result = await client.SearchAsync<SourceFileModel>(
                 s => s
-                    .Query(f => 
-                        f.Bool(bq => 
+                    .Query(f =>
+                        f.Bool(bq =>
                         bq.Filter(qcd => !qcd.Term(sf => sf.ExcludeFromSearch, true))
                           .Must(qcd => qcd.ConfigureIfElse(isPrefix,
                             f0 => f0.MatchPhrasePrefix(mpp => mpp.Field(sf => sf.Content).Query(searchPhrase).MaxExpansions(100)),

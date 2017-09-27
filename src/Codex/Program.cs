@@ -28,9 +28,13 @@ namespace Codex.Application
         static string rootDirectory;
         static string solutionPath;
         static bool interactive = false;
+        static bool listIndices = false;
+        static List<string> deleteIndices = new List<string>();
 
         static OptionSet options = new OptionSet
         {
+            { "l|list", "List the indices.", n => listIndices = n != null },
+            { "d=", "List the indices to delete.", n => deleteIndices.Add(n) },
             { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
             { "n|name=", "Name of the repository.", n => repoName = AnalysisServices.GetSafeIndexName(n ?? string.Empty) },
             { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
@@ -44,6 +48,21 @@ namespace Codex.Application
             if (String.IsNullOrEmpty(rootDirectory)) throw new ArgumentException("Solution path is missing. Use -p to provide it.");
             if (String.IsNullOrEmpty(repoName)) throw new ArgumentException("Repository name is missing. Use -n to provide it.");
             if (String.IsNullOrEmpty(elasticSearchServer)) throw new ArgumentException("Elastic Search server URL is missing. Use -es to provide it.");
+
+            if (listIndices)
+            {
+                ListIndices();
+                return;
+            }
+
+            if (deleteIndices.Count != 0)
+            {
+                DeleteIndices();
+
+                Console.WriteLine("Remaining Indices:");
+                ListIndices();
+                return;
+            }
 
             try
             {
@@ -60,6 +79,42 @@ namespace Codex.Application
             {
                 Search();
             }
+        }
+
+        private static void DeleteIndices()
+        {
+            ElasticsearchStorage storage = GetStorage();
+
+            foreach (var index in deleteIndices)
+            {
+                Console.Write($"Deleting {index}... ");
+                var deleted = storage.Provider.DeleteIndexAsync(index).GetAwaiter().GetResult().Succeeded;
+                if (deleted)
+                {
+                    Console.WriteLine($"Success");
+                }
+                else
+                {
+                    Console.WriteLine($"Not Found");
+                }
+            }
+        }
+
+        private static void ListIndices()
+        {
+            ElasticsearchStorage storage = GetStorage();
+
+            var indices = storage.Provider.GetIndicesAsync().GetAwaiter().GetResult();
+
+            foreach (var index in indices)
+            {
+                Console.WriteLine(index.IndexName + (index.IsActive ? " (IsActive)" : ""));
+            }
+        }
+
+        private static ElasticsearchStorage GetStorage()
+        {
+            return new ElasticsearchStorage(elasticSearchServer);
         }
 
         static void RunRepoImporter()
@@ -130,7 +185,7 @@ namespace Codex.Application
                 }
                 else
                 {
-                    ElasticsearchStorage storage = new ElasticsearchStorage(elasticSearchServer);
+                    ElasticsearchStorage storage = GetStorage();
 
                     logger.WriteLine("Removing repository");
                     ((IStorage)storage).RemoveRepository(targetIndexName).GetAwaiter().GetResult();

@@ -8,6 +8,8 @@ namespace Codex.Storage.ElasticProviders
 {
     public class ElasticResponse
     {
+        public bool Succeeded { get; set; }
+
         protected ElasticResponse(IResponse response, int operationDuration, long? backendDuration = null)
         {
             OperationDuration = operationDuration;
