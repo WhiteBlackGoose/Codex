@@ -2,9 +2,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Sdk", "src\Codex.Sdk\Codex.Sdk.csproj", "{2322A932-05F4-4931-8547-71377C6AB49E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex", "src\Codex\Codex.csproj", "{18F9B5DD-54B9-49F3-B788-8A066314BB98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Sdk", "src\Codex.Sdk\Codex.Sdk.csproj", "{2322A932-05F4-4931-8547-71377C6AB49E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Analysis", "src\Codex.Analysis\Codex.Analysis.csproj", "{2016A682-4D9F-4A65-A03D-D65FF2948269}"
 EndProject
