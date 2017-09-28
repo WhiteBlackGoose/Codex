@@ -43,6 +43,7 @@
     <Compile Include="ObjectModel\SymbolId.cs" />
     <Compile Include="ObjectModel\SymbolKind.cs" />
     <Compile Include="ObjectModel\Symbols.cs" />
+    <Compile Include="Utilities\AtomicBool.cs" />
     <Compile Include="Utilities\Box.cs" />
     <Compile Include="Utilities\CollectionUtilities.cs" />
     <Compile Include="Utilities\ComparerBuilder.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="Utilities\ListSegment.cs" />
     <Compile Include="Utilities\MultiDictionary.cs" />
     <Compile Include="Utilities\MurmurHash.cs" />
+    <Compile Include="Utilities\None.cs" />
     <Compile Include="Utilities\Paths.cs" />
     <Compile Include="Utilities\PathUtilities.cs" />
     <Compile Include="Utilities\Range.cs" />

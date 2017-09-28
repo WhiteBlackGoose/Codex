@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Nest;
 using System.Diagnostics.Contracts;
+using Codex.Sdk.Utilities;
 
 namespace Codex.ElasticSearch
 {
@@ -12,6 +13,13 @@ namespace Codex.ElasticSearch
         public BulkDescriptor BulkDescriptor = new BulkDescriptor();
 
         public List<Item> Items = new List<Item>();
+
+        private AtomicBool canReserveExecute = new AtomicBool();
+
+        public bool TryReserveExecute()
+        {
+            return canReserveExecute.TrySet(value: true);
+        }
 
         public async Task<IBulkResponse> ExecuteAsync(ClientContext context)
         {
@@ -35,15 +43,6 @@ namespace Codex.ElasticSearch
             throw Placeholder.NotImplemented("Check if item was added or not");
         }
 
-        public class Item
-        {
-            public int BatchIndex { get; set; }
-            public ISearchEntity Entity { get; set; }
-            public ElasticSearchEntityStore EntityStore { get; set; }
-            public Action OnAdded { get; set; }
-            public int[] AdditionalStoredFilterBuilderIds { get; set; }
-        }
-
         public bool TryAdd<T>(ElasticSearchEntityStore<T> store, T entity, Action onAdded = null)
             where T : class, ISearchEntity
         {
@@ -65,6 +64,15 @@ namespace Codex.ElasticSearch
                 store.AddCreateOperation(BulkDescriptor, entity);
                 return true;
             }
+        }
+
+        public class Item
+        {
+            public int BatchIndex { get; set; }
+            public ISearchEntity Entity { get; set; }
+            public ElasticSearchEntityStore EntityStore { get; set; }
+            public Action OnAdded { get; set; }
+            public int[] AdditionalStoredFilterBuilderIds { get; set; }
         }
     }
 }
