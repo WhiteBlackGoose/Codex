@@ -94,7 +94,10 @@ namespace Codex.ElasticSearch
                 batcher.Add(store.DefinitionStore, new DefinitionSearchModel()
                 {
                     Definition = definition,
-                });
+                }, 
+                // If definition is declared in this code base, add it to declared def filter for use when boosting or searching
+                // only definitions that have source associated with them
+                declared ? batcher.DeclaredDefinitionStoredFilter : batcher.EmptyStoredFilters);
             }
         }
 

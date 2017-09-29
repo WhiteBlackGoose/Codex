@@ -76,6 +76,11 @@ namespace Codex
         int Shard { get; }
 
         /// <summary>
+        /// List of stable ids to include in the stored filter.
+        /// </summary>
+        IReadOnlyList<long> StableIds { get; }
+
+        /// <summary>
         /// The filter which matches entities in the index shard
         /// </summary>
         object Filter { get; }

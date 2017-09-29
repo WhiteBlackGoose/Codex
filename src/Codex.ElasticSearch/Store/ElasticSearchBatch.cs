@@ -10,11 +10,13 @@ namespace Codex.ElasticSearch
 {
     internal class ElasticSearchBatch
     {
-        public BulkDescriptor BulkDescriptor = new BulkDescriptor();
+        public readonly BulkDescriptor BulkDescriptor = new BulkDescriptor();
 
-        public List<Item> Items = new List<Item>();
+        public readonly List<Item> Items = new List<Item>();
 
-        private AtomicBool canReserveExecute = new AtomicBool();
+        private readonly AtomicBool canReserveExecute = new AtomicBool();
+
+        private readonly ElasticSearchBatcher batcher;
 
         public bool TryReserveExecute()
         {
@@ -35,6 +37,8 @@ namespace Codex.ElasticSearch
                 }
             }
 
+            Placeholder.Todo("For all the items, add to appropriate stored filters");
+
             return response;
         }
 
@@ -43,7 +47,17 @@ namespace Codex.ElasticSearch
             throw Placeholder.NotImplemented("Check if item was added or not");
         }
 
-        public bool TryAdd<T>(ElasticSearchEntityStore<T> store, T entity, Action onAdded = null)
+        private int GetShard(BulkResponseItemBase item)
+        {
+            throw Placeholder.NotImplemented("Need to add this in ElasticSearch and Nest");
+        }
+
+        private long GetStableId(BulkResponseItemBase item)
+        {
+            throw Placeholder.NotImplemented("Need to add this in ElasticSearch (derived from sequence number) and Nest");
+        }
+
+        public bool TryAdd<T>(ElasticSearchEntityStore<T> store, T entity, Action onAdded, ElasticSearchStoredFilterBuilder[] additionalStoredFilters)
             where T : class, ISearchEntity
         {
             lock (this)
@@ -56,7 +70,7 @@ namespace Codex.ElasticSearch
                     Entity = entity,
                     EntityStore = store,
                     OnAdded = onAdded,
-                    AdditionalStoredFilterBuilderIds = Placeholder.Value<int[]>("Populate")
+                    AdditionalStoredFilters = additionalStoredFilters
                 };
 
                 Items.Add(item);
@@ -72,7 +86,7 @@ namespace Codex.ElasticSearch
             public ISearchEntity Entity { get; set; }
             public ElasticSearchEntityStore EntityStore { get; set; }
             public Action OnAdded { get; set; }
-            public int[] AdditionalStoredFilterBuilderIds { get; set; }
+            public ElasticSearchStoredFilterBuilder[] AdditionalStoredFilters { get; set; }
         }
     }
 }

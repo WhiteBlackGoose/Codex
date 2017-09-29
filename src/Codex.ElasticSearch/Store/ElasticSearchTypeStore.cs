@@ -28,7 +28,7 @@ namespace Codex.ElasticSearch
 
     }
 
-        public class ElasticSearchEntityStore<T> : ElasticSearchEntityStore, IStore<T>
+    public class ElasticSearchEntityStore<T> : ElasticSearchEntityStore, IStore<T>
         where T : class
     {
         public ElasticSearchEntityStore(ElasticSearchStore store, SearchType searchType)
