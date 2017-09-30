@@ -29,7 +29,7 @@ namespace Codex.ElasticSearch
         private ConcurrentQueue<Task> storedFilterUpdateTasks = new ConcurrentQueue<Task>();
         private readonly string[] unionFilterNames;
 
-        public ElasticSearchStoredFilterBuilder(ElasticSearchEntityStore entityStore, string filterName, string[] unionFilterNames)
+        public ElasticSearchStoredFilterBuilder(ElasticSearchEntityStore entityStore, string filterName, params string[] unionFilterNames)
         {
             EntityStore = entityStore;
             FilterName = filterName;
@@ -63,8 +63,7 @@ namespace Codex.ElasticSearch
 
         public void Add(ElasticEntityRef entityRef)
         {
-            var shard = entityRef.Shard;
-            var shardState = ShardStates[shard];
+            var shardState = ShardStates[entityRef.Shard];
             IReadOnlyList<ElasticEntityRef> batch;
             if (shardState.Queue.AddAndTryGetBatch(entityRef, out batch))
             {
@@ -73,9 +72,16 @@ namespace Codex.ElasticSearch
                     var client = context.Client;
                     using (await shardState.Mutex.AcquireAsync())
                     {
-                        // Refresh the entity and stored filter stores as the filter may
-                        // query entities or prior stored filter
-                        await client.RefreshAsync(IndexName).ThrowOnFailure();
+                        // Only refresh if there are changes
+                        if (shardState.LastQueueTotalCount != shardState.Queue.TotalCount)
+                        {
+                            // Refresh the entity and stored filter stores as the filter may
+                            // query entities or prior stored filter
+                            await client.RefreshAsync(IndexName).ThrowOnFailure();
+
+                            shardState.LastQueueTotalCount = shardState.Queue.TotalCount;
+                        }
+
                         await RefreshStoredFilterIndex();
 
                         var filter = shardState.Filter;
@@ -133,8 +139,7 @@ namespace Codex.ElasticSearch
 
             await RefreshStoredFilterIndex();
 
-            await Placeholder.NotImplementedAsync("Delete intermediate stored filters for shards");
-
+            await EntityStore.DeleteAsync(ShardStates.Select(ss => ss.ShardIntermediateFilterUid));
         }
 
         private async Task RefreshStoredFilterIndex()
@@ -155,6 +160,7 @@ namespace Codex.ElasticSearch
             public string[] UnionFilterUids { get; set; }
             public string ShardIntermediateFilterUid { get; set; }
             public string ShardFilterUid { get; set; }
+            public int LastQueueTotalCount;
 
             public StoredFilter CreateStoredFilter(string filterUid, params string[] additionalBaseUids)
             {

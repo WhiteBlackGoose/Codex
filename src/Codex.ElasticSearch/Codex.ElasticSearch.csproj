@@ -74,7 +74,7 @@
     <Compile Include="Store\ElasticSearchBatcher.cs" />
     <Compile Include="Store\ElasticSearchCodexRepositoryStore.cs" />
     <Compile Include="Store\ElasticSearchStoredFilterBuilder.cs" />
-    <Compile Include="Store\ElasticSearchTypeStore.cs" />
+    <Compile Include="Store\ElasticSearchEntityStore.cs" />
     <Compile Include="Store\ElasticSearchStore.cs" />
     <Compile Include="Old\MemoryStorage.cs" />
     <Compile Include="Old\ModelConverter.cs" />

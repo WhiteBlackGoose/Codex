@@ -55,7 +55,8 @@ namespace Codex.ElasticSearch
 
         private bool IsAdded(BulkResponseItemBase item)
         {
-
+            BulkIndexResponseItem
+            if (item.Status
             throw Placeholder.NotImplemented("Check if item was added or not");
         }
 

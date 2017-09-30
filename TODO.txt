@@ -39,10 +39,8 @@ public DefinitionIndexBehaviors : IDefinitionIndexBehaviors
 	public SearchBehavior SymbolDepth => SearchBehavior.None;
 }
 
-* Cumulative commit filter - a filter which includes all files in the commit and its parent commits transitively
-
 * Commit, branch, repository should all have definition symbols which show up in search. They should be outside of the stored filter
-built for the commit.
+built for the commit (except for the commit stored filter which should be inside the stored filter as well).
 
 * When repository or branch is added, they should not overwrite properties like Description with null. Instead, they should pull the current value
 and use that.
@@ -52,3 +50,14 @@ and use that.
 * Some sort of state for commits.
 
 * Adding to batch should implicitly set Uid and ContentId
+
+IMPORTANT!!!
+* Cumulative commit filter - a filter which includes all files in the commit and its parent commits transitively
+	This is complicated when commits are indexed out of order. When indexed in order, the current commit can just union with the cumulative commits of parents
+	but this is not possible if the parent commits are not yet indexed. Naturally, text can always be indexed in order (though should NOT be a requirement because you don't want to
+	have to index all of history in order to see the latest info), but semantic info would likely be added retroactively for commits prior to the start of using Codex. It does not scale to have to modify
+	all the transitive child commit stored filters in this case so I'm thinking this should be done on demand (i.e. when doing an operation which specifically needs to know the cumulative stored filter). Even
+	then the question becomes how to efficiently compute the cumulative stored filter.
+	Idea: Have cron job rewalk history from beginning to end to reconstruct cumulative filters in order. Its worth noting that if a descendant commit already has integrated a prior commits incomplete cumululative filter.
+	Its sufficient to just union with the updated cumulative filter rather than reconstructing from scratch. Luckily, the cumulative stored filter is mainly useful for viewing history which is based off of git data
+	that doesn't require any special analysis.

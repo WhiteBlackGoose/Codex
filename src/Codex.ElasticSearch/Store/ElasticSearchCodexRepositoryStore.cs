@@ -201,7 +201,7 @@ namespace Codex.ElasticSearch
                 CommitFiles = commitFilesByRepoRelativePath.Values.OrderBy(cf => cf.RepoRelativePath, StringComparer.OrdinalIgnoreCase).ToList()
             });
 
-            await batcher.FlushAsync();
+            await batcher.FinalizeAsync();
         }
     }
 }

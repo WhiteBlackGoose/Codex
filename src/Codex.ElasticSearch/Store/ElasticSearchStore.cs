@@ -18,6 +18,8 @@ namespace Codex.ElasticSearch
         internal readonly ElasticSearchService Service;
         internal readonly ElasticSearchStoreConfiguration Configuration;
 
+        internal readonly ElasticSearchEntityStore[] EntityStores = new ElasticSearchEntityStore[SearchTypes.RegisteredSearchTypes.Count];
+
         /// <summary>
         /// Creates an elasticsearch store with the given prefix for indices
         /// </summary>
@@ -32,6 +34,7 @@ namespace Codex.ElasticSearch
         {
             var store = new ElasticSearchEntityStore<TSearchType>(this, searchType);
             await store.InitializeAsync();
+            EntityStores[store.SearchType.Id] = store;
             return store;
         }
 
@@ -57,5 +60,7 @@ namespace Codex.ElasticSearch
         /// The number of shards for created indices
         /// </summary>
         public int? ShardCount;
+
+        public string DeclaredDefinitionFilterName { get; } = "AllDeclaredDefs";
     }
 }

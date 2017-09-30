@@ -20,6 +20,8 @@ namespace Codex.ElasticSearch.Utilities
             this.batchSize = batchSize;
         }
 
+        public int TotalCount => totalCount;
+
         public bool AddAndTryGetBatch(T item, out IReadOnlyList<T> batch)
         {
             queue.Enqueue(item);

@@ -1,6 +1,7 @@
 ﻿using Codex.Sdk.Utilities;
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Codex.ElasticSearch
@@ -32,15 +33,23 @@ namespace Codex.ElasticSearch
 
         private ElasticSearchBatch currentBatch;
 
-        public ElasticSearchBatcher(ElasticSearchStore store)
+        public ElasticSearchBatcher(ElasticSearchStore store, string commitFilterName, string repositoryFilterName, string cumulativeCommitFilterName)
         {
             this.store = store;
             service = store.Service;
             currentBatch = new ElasticSearchBatch(this);
 
-            Placeholder.Todo("Initialize fields (i.e. stored filter builders)");
+            CommitSearchTypeStoredFilters = store.EntityStores.Select(entityStore =>
+            {
+                return new ElasticSearchStoredFilterBuilder(
+                    entityStore, 
+                    filterName: commitFilterName, 
+                    unionFilterNames: new[] { repositoryFilterName, cumulativeCommitFilterName });
+            }).ToArray();
 
-            Placeholder.Todo("Merge stored filters into other supplemental filters (i.e. this filter, the current commit filter, needs to be merged with the repository filter and cumulative commit filter");
+            DeclaredDefinitionStoredFilter = new[] { new ElasticSearchStoredFilterBuilder(
+                    store.DefinitionStore,
+                    filterName: commitFilterName) };
         }
 
         public async ValueTask<None> AddAsync<T>(ElasticSearchEntityStore<T> store, T entity, Action onAdded = null, params ElasticSearchStoredFilterBuilder[] additionalStoredFilters)
@@ -87,7 +96,7 @@ namespace Codex.ElasticSearch
             Placeholder.NotImplemented("Get content id, size, and store content id as Uid where appropriate");
         }
 
-        public async Task FlushAsync()
+        public async Task FinalizeAsync()
         {
             // Flush any background operations
             while (backgroundTasks.TryDequeue(out var backgroundTask))
@@ -95,14 +104,11 @@ namespace Codex.ElasticSearch
                 await backgroundTask;
             }
 
-            // Repository stored filter (just OR the commit stored filter with current repository stored filter at the end)
-            // Cumulative commit stored filter (just OR the commit stored filter with parent commit CUMULATIVE stored filters at the end)
-            // Cumulative commit stored filters are complicated because prior commits can be indexed after the current commit!
-            Placeholder.Todo("Union stored filters for current commit with stored filters for repository and create cumulative commit stored filter");
-
-            await Placeholder.NotImplementedAsync("Flush stored filters. Just make them a background task");
-
-            await Placeholder.NotImplementedAsync("Wait for background operations to complete and flush again");
+            // Finalize the stored filters
+            foreach (var filter in CommitSearchTypeStoredFilters.Concat(DeclaredDefinitionStoredFilter))
+            {
+                await filter.FinalizeAsync();
+            }
         }
     }
 }

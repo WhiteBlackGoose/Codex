@@ -26,6 +26,17 @@ namespace Codex.ElasticSearch
             this.IndexName = store.Configuration.Prefix + searchType.IndexName;
         }
 
+        public async Task DeleteAsync(IEnumerable<string> uids)
+        {
+            await Store.Service.UseClient(async context =>
+            {
+                var response = await context.Client
+                    .BulkAsync(b => b.DeleteMany(uids, (bd, uid) => bd.Id(uid).Index(IndexName)).CaptureRequest(context))
+                    .ThrowOnFailure();
+
+                return response.IsValid;
+            });
+        }
     }
 
     public class ElasticSearchEntityStore<T> : ElasticSearchEntityStore, IStore<T>
@@ -63,6 +74,7 @@ namespace Codex.ElasticSearch
 
                 if (existsResponse.Exists)
                 {
+                    Placeholder.Todo("Update mappings?");
                     return false;
                 }
 
@@ -80,11 +92,6 @@ namespace Codex.ElasticSearch
         public BulkDescriptor AddCreateOperation(BulkDescriptor bd, T value)
         {
             return bd.Create<T>(bco => bco.Document(value).Index(IndexName));
-        }
-
-        public void AddCreateOperation(ElasticSearchBatcher batch, T value)
-        {
-            AddCreateOperation(batch.BulkDescriptor, value);
         }
 
         public void SetIds(IEnumerable<T> entities)
