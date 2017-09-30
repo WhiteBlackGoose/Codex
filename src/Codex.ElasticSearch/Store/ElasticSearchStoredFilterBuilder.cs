@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using Codex.Utilities;
+using System.Diagnostics.Contracts;
 
 namespace Codex.ElasticSearch
 {
@@ -22,12 +23,17 @@ namespace Codex.ElasticSearch
         public readonly string FilterName;
         public readonly string IntermediateFilterSuffix;
 
-        private readonly ShardState[] ShardStates;
+        private const int BatchSize = 10000;
 
-        public ElasticSearchStoredFilterBuilder(ElasticSearchEntityStore entityStore, string filterName)
+        private readonly ShardState[] ShardStates;
+        private ConcurrentQueue<Task> storedFilterUpdateTasks = new ConcurrentQueue<Task>();
+        private readonly string[] unionFilterNames;
+
+        public ElasticSearchStoredFilterBuilder(ElasticSearchEntityStore entityStore, string filterName, string[] unionFilterNames)
         {
             EntityStore = entityStore;
             FilterName = filterName;
+            this.unionFilterNames = unionFilterNames;
 
             IntermediateFilterSuffix = Guid.NewGuid().ToString();
 
@@ -36,24 +42,33 @@ namespace Codex.ElasticSearch
 
         private ShardState CreateShardState(int shard)
         {
+            string filterQualifier = $"{IndexName}#{shard}";
             var shardState = new ShardState()
             {
                 Shard = shard,
-                ShardFilterUid = $"{IndexName}#{shard}|{FilterName}",
-                ShardIntermediateFilterUid = $"{IndexName}#{shard}|{FilterName}|{IntermediateFilterSuffix}"
+                ShardFilterUid = GetFilterUid(filterQualifier, FilterName),
+                ShardIntermediateFilterUid = $"{filterQualifier}|{FilterName}|{IntermediateFilterSuffix}",
+                UnionFilterUids = unionFilterNames.Select(filterName => GetFilterUid(filterQualifier, filterName)).ToArray(),
+                Queue = new BatchQueue<ElasticEntityRef>(BatchSize)
             };
 
+            shardState.Filter = shardState.CreateStoredFilter(shardState.ShardIntermediateFilterUid);
             return shardState;
         }
 
-        public void Add(ElasticClause clause)
+        private string GetFilterUid(string filterQualifier, string filterName)
         {
-            var shard = clause.Shard;
+            return $"{filterQualifier}|{filterName}";
+        }
+
+        public void Add(ElasticEntityRef entityRef)
+        {
+            var shard = entityRef.Shard;
             var shardState = ShardStates[shard];
-            IReadOnlyList<ElasticClause> batch;
-            if (shardState.Queue.AddAndTryGetBatch(clause, out batch))
+            IReadOnlyList<ElasticEntityRef> batch;
+            if (shardState.Queue.AddAndTryGetBatch(entityRef, out batch))
             {
-                Store.Service.UseClientBackground(async context =>
+                storedFilterUpdateTasks.Enqueue(Store.Service.UseClient(async context =>
                 {
                     var client = context.Client;
                     using (await shardState.Mutex.AcquireAsync())
@@ -61,75 +76,112 @@ namespace Codex.ElasticSearch
                         // Refresh the entity and stored filter stores as the filter may
                         // query entities or prior stored filter
                         await client.RefreshAsync(IndexName).ThrowOnFailure();
-                        await client.RefreshAsync(Store.StoredFilterStore.IndexName).ThrowOnFailure();
+                        await RefreshStoredFilterIndex();
 
-                        QueryContainerDescriptor<T> filterDescriptor = new QueryContainerDescriptor<T>();
-                        QueryContainer filter = filterDescriptor;
+                        var filter = shardState.Filter;
+                        filter.DateUpdated = DateTime.UtcNow;
 
-                        AddPriorStoredFilterIncludeClause(shardState, filterDescriptor, ref filter);
-
-                        AddBatchClauses(batch, filterDescriptor, ref filter);
-
-                        Placeholder.Todo("Add date updated to stored filter to allow garbage collection/TTL");
-                        await Store.StoredFilterStore.StoreAsync(new[]
+                        filter.StableIds.Clear();
+                        foreach (var batchEntityRef in batch)
                         {
-                            new StoredFilter()
-                            {
-                                // TODO: We need to ensure only one thread/process is operating on a given stored filter
-                                // at a time. Otherwise, its possible for them to stomp over each other. Maybe have a
-                                // intermediate stored filter which is used to build up the value and when finalized it
-                                // will be set to the stored filter under the UID.
-                                // NOTE!!!! Intermediate stored filter should then be deleted
-                                Uid = shardState.ShardIntermediateFilterUid,
-                                IndexName = IndexName,
-                                Shard = shard,
-                                Filter = filter
-                            }
-                        });
+                            filter.StableIds.Add(batchEntityRef.StableId);
+                        }
+
+                        await UpdateFilters(filter);
+
+                        return None.Value;
                     }
-                });
+                }));
             }
         }
 
-        private void AddBatchClauses(IReadOnlyList<ElasticClause> batch, QueryContainerDescriptor<T> filterDescriptor, ref QueryContainer filter)
+        private async Task UpdateFilters(params StoredFilter[] filters)
         {
-            throw new NotImplementedException();
+            Placeholder.Todo("Need to use update operation rather than just store");
+
+            await Store.StoredFilterStore.StoreAsync(filters);
         }
 
-        private void AddPriorStoredFilterIncludeClause(ShardState shardState, QueryContainerDescriptor<T> filterDescriptor, ref QueryContainer filter)
+        public async Task FlushAsync()
         {
-            throw new NotImplementedException();
-        }
-
-        public Task FlushAsync()
-        {
-            throw new NotImplementedException();
+            foreach (var task in storedFilterUpdateTasks)
+            {
+                await task;
+            }
         }
 
         public async Task FinalizeAsync()
         {
-            await Placeholder.NotImplementedAsync("Create new final stored filter from intermediate stored filters");
+            await FlushAsync();
+
+            await RefreshStoredFilterIndex();
+
+            var filters = ShardStates.SelectMany(shardState =>
+            {
+                var filter = shardState.Filter;
+
+                // Set Uid to final value
+                filter.Uid = shardState.ShardFilterUid;
+
+                return new[] { filter }.Concat(shardState.UnionFilterUids.Select(unionFilterUid =>
+                {
+                    return shardState.CreateStoredFilter(unionFilterUid, shardState.ShardIntermediateFilterUid);
+                }));
+            }).ToArray();
+
+            await UpdateFilters(filters);
+
+            await RefreshStoredFilterIndex();
 
             await Placeholder.NotImplementedAsync("Delete intermediate stored filters for shards");
+
+        }
+
+        private async Task RefreshStoredFilterIndex()
+        {
+            await Store.Service.UseClient(async context =>
+            {
+                return await context.Client.RefreshAsync(Store.StoredFilterStore.IndexName).ThrowOnFailure();
+            });
         }
 
         private class ShardState
         {
             public int Shard;
-            public BatchQueue<ElasticClause> Queue;
+            public string IndexName;
+            public BatchQueue<ElasticEntityRef> Queue;
             public SemaphoreSlim Mutex = TaskUtilities.CreateMutex();
+            public StoredFilter Filter { get; set; }
+            public string[] UnionFilterUids { get; set; }
             public string ShardIntermediateFilterUid { get; set; }
             public string ShardFilterUid { get; set; }
+
+            public StoredFilter CreateStoredFilter(string filterUid, params string[] additionalBaseUids)
+            {
+                var filter = new StoredFilter()
+                {
+                    Uid = filterUid,
+                    IndexName = IndexName,
+                    Shard = Shard,
+                };
+
+                filter.BaseUids.Add(filterUid);
+                filter.BaseUids.AddRange(additionalBaseUids);
+
+                return filter;
+            }
         }
     }
 
-    public class ElasticClause
+    public struct ElasticEntityRef
     {
         public int Shard;
-    }
+        public long StableId;
 
-    public class ElasticIdentity : ElasticClause
-    {
-        public string Id;
+        public ElasticEntityRef(int shard, long stableId)
+        {
+            Shard = shard;
+            StableId = stableId;
+        }
     }
 }

@@ -30,12 +30,17 @@ namespace Codex.ElasticSearch
         private readonly ElasticSearchService service;
         private readonly ElasticSearchStore store;
 
-        private ElasticSearchBatch currentBatch = new ElasticSearchBatch();
+        private ElasticSearchBatch currentBatch;
 
         public ElasticSearchBatcher(ElasticSearchStore store)
         {
             this.store = store;
             service = store.Service;
+            currentBatch = new ElasticSearchBatch(this);
+
+            Placeholder.Todo("Initialize fields (i.e. stored filter builders)");
+
+            Placeholder.Todo("Merge stored filters into other supplemental filters (i.e. this filter, the current commit filter, needs to be merged with the repository filter and cumulative commit filter");
         }
 
         public async ValueTask<None> AddAsync<T>(ElasticSearchEntityStore<T> store, T entity, Action onAdded = null, params ElasticSearchStoredFilterBuilder[] additionalStoredFilters)
@@ -52,7 +57,7 @@ namespace Codex.ElasticSearch
                 {
                     if (batch.TryReserveExecute())
                     {
-                        currentBatch = new ElasticSearchBatch();
+                        currentBatch = new ElasticSearchBatch(this);
                         await store.Store.Service.UseClient(batch.ExecuteAsync);
 
                         return None.Value;

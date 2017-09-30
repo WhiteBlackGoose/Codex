@@ -14,7 +14,7 @@ namespace Codex.ElasticSearch
 {
     public class ElasticSearchEntityStore
     {
-        internal readonly SearchType searchType;
+        internal readonly SearchType SearchType;
         internal readonly ElasticSearchStore Store;
         public readonly string IndexName;
         public int ShardCount => Placeholder.Value<int>("Get shard count during initialize. May be different than configuration");
@@ -22,7 +22,7 @@ namespace Codex.ElasticSearch
         public ElasticSearchEntityStore(ElasticSearchStore store, SearchType searchType)
         {
             this.Store = store;
-            this.searchType = searchType;
+            this.SearchType = searchType;
             this.IndexName = store.Configuration.Prefix + searchType.IndexName;
         }
 

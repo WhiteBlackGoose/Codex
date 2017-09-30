@@ -66,6 +66,11 @@ namespace Codex
     public interface IStoredFilter : ISearchEntity
     {
         /// <summary>
+        /// The time of the last update to the stored filter
+        /// </summary>
+        DateTime DateUpdated { get; set; }
+
+        /// <summary>
         /// The name of the index to which the stored filter applies
         /// </summary>
         string IndexName { get; }
@@ -79,6 +84,11 @@ namespace Codex
         /// List of stable ids to include in the stored filter.
         /// </summary>
         IReadOnlyList<long> StableIds { get; }
+
+        /// <summary>
+        /// List of uids to for stored filters which will be unioned with the given stored filter
+        /// </summary>
+        IReadOnlyList<string> BaseUids { get; }
 
         /// <summary>
         /// The filter which matches entities in the index shard

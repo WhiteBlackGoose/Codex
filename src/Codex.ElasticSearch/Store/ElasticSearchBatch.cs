@@ -12,11 +12,16 @@ namespace Codex.ElasticSearch
     {
         public readonly BulkDescriptor BulkDescriptor = new BulkDescriptor();
 
-        public readonly List<Item> Items = new List<Item>();
+        public readonly List<Item> EntityItem = new List<Item>();
 
         private readonly AtomicBool canReserveExecute = new AtomicBool();
 
         private readonly ElasticSearchBatcher batcher;
+
+        public ElasticSearchBatch(ElasticSearchBatcher batcher)
+        {
+            this.batcher = batcher;
+        }
 
         public bool TryReserveExecute()
         {
@@ -26,24 +31,31 @@ namespace Codex.ElasticSearch
         public async Task<IBulkResponse> ExecuteAsync(ClientContext context)
         {
             var response = await context.Client.BulkAsync(BulkDescriptor);
-            Contract.Assert(Items.Count == response.Items.Count);
+            Contract.Assert(EntityItem.Count == response.Items.Count);
 
             int batchIndex = 0;
-            foreach (var item in response.Items)
+            foreach (var responseItem in response.Items)
             {
-                if (IsAdded(item))
-                {
-                    Items[batchIndex].OnAdded?.Invoke();
-                }
-            }
+                var item = EntityItem[batchIndex];
+                batcher.CommitSearchTypeStoredFilters[item.SearchType.Id].Add(
+                    new ElasticEntityRef(
+                        shard: GetShard(responseItem),
+                        stableId: GetStableId(responseItem)));
 
-            Placeholder.Todo("For all the items, add to appropriate stored filters");
+                if (IsAdded(responseItem))
+                {
+                    item.OnAdded?.Invoke();
+                }
+
+                batchIndex++;
+            }
 
             return response;
         }
 
         private bool IsAdded(BulkResponseItemBase item)
         {
+
             throw Placeholder.NotImplemented("Check if item was added or not");
         }
 
@@ -66,14 +78,14 @@ namespace Codex.ElasticSearch
 
                 var item = new Item()
                 {
-                    BatchIndex = Items.Count,
+                    BatchIndex = EntityItem.Count,
                     Entity = entity,
                     EntityStore = store,
                     OnAdded = onAdded,
                     AdditionalStoredFilters = additionalStoredFilters
                 };
 
-                Items.Add(item);
+                EntityItem.Add(item);
 
                 store.AddCreateOperation(BulkDescriptor, entity);
                 return true;
@@ -84,6 +96,7 @@ namespace Codex.ElasticSearch
         {
             public int BatchIndex { get; set; }
             public ISearchEntity Entity { get; set; }
+            public SearchType SearchType => EntityStore.SearchType;
             public ElasticSearchEntityStore EntityStore { get; set; }
             public Action OnAdded { get; set; }
             public ElasticSearchStoredFilterBuilder[] AdditionalStoredFilters { get; set; }
