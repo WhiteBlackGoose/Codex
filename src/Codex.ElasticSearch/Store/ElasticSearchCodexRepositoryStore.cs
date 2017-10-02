@@ -88,7 +88,6 @@ namespace Codex.ElasticSearch
 
         private void AddDefinitions(IEnumerable<DefinitionSymbol> definitions, bool declared)
         {
-            Placeholder.Todo("Add declared/reference definitions to separate stored filters");
             foreach (var definition in definitions)
             {
                 batcher.Add(store.DefinitionStore, new DefinitionSearchModel()

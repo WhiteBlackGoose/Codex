@@ -54,6 +54,15 @@ namespace Codex.ElasticSearch
                 await CreateIndexAsync();
             }
 
+            await Store.Service.UseClient(async context =>
+            {
+                var client = context.Client;
+
+                await Placeholder.NotImplementedAsync("Get shard count");
+
+                return None.Value;
+            });
+
             // Change refresh interval
             // Disable replicas during indexing
         }
@@ -74,7 +83,7 @@ namespace Codex.ElasticSearch
 
                 if (existsResponse.Exists)
                 {
-                    Placeholder.Todo("Update mappings?");
+                    Placeholder.NotImplemented("Update mappings?");
                     return false;
                 }
 
@@ -96,12 +105,12 @@ namespace Codex.ElasticSearch
 
         public void SetIds(IEnumerable<T> entities)
         {
-            Placeholder.Todo("Set content id and uid");
+            Placeholder.NotImplemented("Set content id and uid");
         }
 
         public void SetId(T entity)
         {
-            Placeholder.Todo("Set content id and uid");
+            Placeholder.NotImplemented("Set content id and uid");
         }
 
         public async Task StoreAsync(IReadOnlyList<T> values)
