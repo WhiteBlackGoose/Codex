@@ -1,4 +1,4 @@
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
     <ProjectGuid>{4573F8BC-6B87-4526-A815-42F473452F8C}</ProjectGuid>
@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Elasticsearch.Net" Version="6.0.0-alpha1" />
     <PackageReference Include="NEST" Version="6.0.0-alpha1" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.4.0" />
   </ItemGroup>
   <ItemGroup>

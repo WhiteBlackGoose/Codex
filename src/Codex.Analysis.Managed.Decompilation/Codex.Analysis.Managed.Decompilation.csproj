@@ -1,4 +1,4 @@
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
     <ProjectGuid>{CE20F5F8-917F-4E24-8374-B60B698ACBA6}</ProjectGuid>
@@ -10,12 +10,12 @@
     <PackageReference Include="ManagedEsent" Version="1.9.4" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="2.3.0-beta1" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="1.1.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.3.0-beta1" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.3.0-beta1" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.3.0-beta1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.3.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.3.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.3.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="2.3.0-beta1" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" Version="2.3.0-beta1" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="2.3.0-beta1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="2.3.2" />
     <PackageReference Include="Microsoft.Composition" Version="1.0.27" />
     <PackageReference Include="Mono.Cecil" Version="0.10.0-beta6" />
     <PackageReference Include="System.AppContext" Version="4.3.0" />
