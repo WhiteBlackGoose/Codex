@@ -20,8 +20,6 @@ namespace Codex
 
     public interface IBoundSourceInfo : IProjectFileScopeEntity
     {
-        bool IsSingleton { get; }
-
         /// <summary>
         /// The unique identifier for the file
         /// NOTE: This is not applicable to most files. Only set for files

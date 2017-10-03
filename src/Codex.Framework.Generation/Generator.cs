@@ -286,6 +286,11 @@ namespace Codex.Framework.Generation
                     }.EnsureInitialize(typeDefinition));
                 }
 
+                if (typeDefinition.Type == typeof(IRepositorySearchModel))
+                {
+
+                }
+
                 PopulateProperties(visitedTypeDefinitions, usedMemberNames, typeDefinition, typeDeclaration);
 
                 //if (!typeDefinition.Type.IsGenericType)
@@ -364,6 +369,7 @@ namespace Codex.Framework.Generation
 
                 if (isBaseChain)
                 {
+                    usedMemberNames.Add(property.Name);
                     continue;
                 }
 
@@ -450,27 +456,27 @@ namespace Codex.Framework.Generation
 
             if (typeDefinition.BaseTypeDefinition != null)
             {
-                PopulateProperties(visitedTypeDefinitions, usedMemberNames, typeDefinition.BaseTypeDefinition, typeDeclaration, 
+                PopulateProperties(visitedTypeDefinitions, usedMemberNames, typeDefinition.BaseTypeDefinition, typeDeclaration,
                     declarationTypeDefinition: declarationTypeDefinition ?? typeDefinition,
                     isBaseChain: declarationTypeDefinition == null || isBaseChain);
             }
 
-            foreach (var baseDefinition in typeDefinition.Interfaces)
-            {
-                foreach (var property in baseDefinition.Properties)
-                {
-                    AddPropertyApplyStatement(applyMethod, property);
-                }
-
-                //applyMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeThisReferenceExpression(), applyMethod.Name),
-                //    new CodeCastExpression(baseDefinition.Type, new CodeVariableReferenceExpression("value"))));
-                PopulateProperties(visitedTypeDefinitions, usedMemberNames, baseDefinition, typeDeclaration, 
-                    declarationTypeDefinition: declarationTypeDefinition ?? typeDefinition, 
-                    isBaseChain: false);
-            }
-
             if (!isBaseChain)
             {
+                foreach (var baseDefinition in typeDefinition.Interfaces)
+                {
+                    foreach (var property in baseDefinition.Properties)
+                    {
+                        AddPropertyApplyStatement(applyMethod, property);
+                    }
+
+                    //applyMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeThisReferenceExpression(), applyMethod.Name),
+                    //    new CodeCastExpression(baseDefinition.Type, new CodeVariableReferenceExpression("value"))));
+                    PopulateProperties(visitedTypeDefinitions, usedMemberNames, baseDefinition, typeDeclaration,
+                        declarationTypeDefinition: declarationTypeDefinition ?? typeDefinition,
+                        isBaseChain: false);
+                }
+
                 applyMethod.Statements.Add(new CodeMethodReturnStatement(new CodeCastExpression("TTarget", new CodeThisReferenceExpression())));
                 typeDeclaration.Members.Add(applyMethod);
             }

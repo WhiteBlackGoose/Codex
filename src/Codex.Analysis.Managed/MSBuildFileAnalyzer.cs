@@ -295,7 +295,8 @@ namespace Codex.Analysis.Files
 
                                 otherRepoFile.Analyzer = this;
                                 otherRepoFile.HasExplicitAnalyzer = true;
-                                otherRepoFile.IsSingleton = true;
+
+                                Placeholder.NotImplemented("Normalize imports to remove any references to repo specific files. Check if project is MSBuildSharedProject in order to determine if normalization is needed");
                             }
 
                             otherRepoFile.Analyze();

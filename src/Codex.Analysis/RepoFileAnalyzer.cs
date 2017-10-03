@@ -107,10 +107,8 @@ namespace Codex.Analysis.Files
 
         protected static void UploadSourceFile(AnalysisServices services, RepoFile file, BoundSourceFile boundSourceFile)
         {
-            if (file.IsSingleton)
-            {
-                boundSourceFile.MakeSingleton();
-            }
+            boundSourceFile.RepositoryName = file.PrimaryProject.Repo.Name;
+            boundSourceFile.SourceFile.Info.RepositoryName = file.PrimaryProject.Repo.Name;
 
             services.TaskDispatcher.QueueInvoke(() =>
             {

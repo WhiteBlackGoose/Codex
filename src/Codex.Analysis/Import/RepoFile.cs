@@ -75,7 +75,6 @@ namespace Codex.Import
         public BoundSourceFileBuilder InMemorySourceFileBuilder;
         public bool Ignored { get; set; }
         public bool HasExplicitAnalyzer { get; set; }
-        public bool IsSingleton { get; set; }
 
         IRepo IRepoFile.Repo
         {

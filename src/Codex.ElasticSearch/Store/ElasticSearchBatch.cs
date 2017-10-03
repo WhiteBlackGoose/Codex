@@ -55,16 +55,17 @@ namespace Codex.ElasticSearch
 
         private bool IsAdded(BulkResponseItemBase item)
         {
-            throw Placeholder.NotImplemented("Check if item was added or not");
+            return (item as BulkCreateResponseItem).Created;
         }
 
         private int GetShard(BulkResponseItemBase item)
         {
-            throw Placeholder.NotImplemented("Need to add this in ElasticSearch and Nest");
+            return item.Shard;
         }
 
         private long GetStableId(BulkResponseItemBase item)
         {
+            return item.StableId;
             throw Placeholder.NotImplemented("Need to add this in ElasticSearch (derived from sequence number) and Nest");
         }
 
