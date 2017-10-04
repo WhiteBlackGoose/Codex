@@ -270,6 +270,11 @@ namespace Codex.Framework.Generation
 
                 typeDeclaration.Comments.AddRange(typeDefinition.Comments.ToArray());
 
+                typeDeclaration.CustomAttributes.Add(
+                    new CodeAttributeDeclaration(
+                        typeof(SerializationInterfaceAttribute).AsReference(),
+                        new CodeAttributeArgument(new CodeTypeOfExpression(typeDefinition.Type))));
+
                 if (typeDefinition.Migrated)
                 {
                     typesNamespace.Imports.Add(new CodeNamespaceImport($"{typeDefinition.ClassName} = {modelNamespace.Name}.{typeDefinition.ClassName}"));
@@ -284,11 +289,6 @@ namespace Codex.Framework.Generation
                     {
                         Attributes = MemberAttributes.Public
                     }.EnsureInitialize(typeDefinition));
-                }
-
-                if (typeDefinition.Type == typeof(IRepositorySearchModel))
-                {
-
                 }
 
                 PopulateProperties(visitedTypeDefinitions, usedMemberNames, typeDefinition, typeDeclaration);

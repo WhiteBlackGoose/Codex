@@ -1,0 +1,36 @@
+﻿<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
+    <ProjectGuid>{8EDF4429-251A-416D-BB68-93F227191BCF}</ProjectGuid>
+    <AssemblyName>Codex.ElasticSearch.Tests</AssemblyName>
+    <RootNamespace>Codex.ElasticSearch.Tests</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(SrcRoot)\Common.props" />
+  <ItemGroup>
+    <PackageReference Include="NUnit" Version="3.6.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="SerializationTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Codex.ElasticSearch\Codex.ElasticSearch.csproj">
+      <Project>{4573f8bc-6b87-4526-a815-42f473452f8c}</Project>
+      <Name>Codex.ElasticSearch</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj">
+      <Project>{2322a932-05f4-4931-8547-71377c6ab49e}</Project>
+      <Name>Codex.Sdk</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SrcRoot)\Common.targets" />
+</Project>

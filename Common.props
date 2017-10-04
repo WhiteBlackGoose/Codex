@@ -11,13 +11,13 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Intermediate Output directory">
-    <IntermediateOutputRoot>$(SrcRoot)\obj</IntermediateOutputRoot>
+    <IntermediateOutputRoot>$(SrcRoot)\out\obj</IntermediateOutputRoot>
     <IntermediateOutputPath>$(IntermediateOutputRoot)\$(Configuration)\$(MSBuildProjectName)</IntermediateOutputPath>
     <AssemblyInfoPath Condition="'$(AssemblyInfoPath)' == ''">$(IntermediateOutputRoot)\GlobalAssemblyInfo.cs</AssemblyInfoPath>
   </PropertyGroup>
 
   <PropertyGroup Label="Output directory" Condition="'$(DisableRootOutputDirectory)' != 'true'">
-    <BinariesFolder>$(SrcRoot)\bin</BinariesFolder>
+    <BinariesFolder>$(SrcRoot)\out\bin</BinariesFolder>
     <CommonOutputDirectory>$(BinariesFolder)\$(Configuration)</CommonOutputDirectory>
     <BuildToCommonOutputDirectory Condition="'$(BuildToCommonOutputDirectory)' == ''">false</BuildToCommonOutputDirectory>
     <OutputPath Condition="'$(OutputPath)' == ''">$(CommonOutputDirectory)\$(AssemblyName)</OutputPath>

@@ -27,6 +27,17 @@ namespace Codex
     {
     }
 
+    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    public sealed class SerializationInterfaceAttribute : Attribute
+    {
+        public readonly Type Type;
+
+        public SerializationInterfaceAttribute(Type type)
+        {
+            Type = type;
+        }
+    }
+
     [AttributeUsage(AttributeTargets.Interface, Inherited = false, AllowMultiple = false)]
     public sealed class AdapterTypeAttribute : Attribute
     {
