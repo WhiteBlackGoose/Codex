@@ -163,6 +163,8 @@ namespace Codex.Analysis.Files
 
                 foreach (var taskElement in target.Elements.Where(el => el.Name != "PropertyGroup" && el.Name != "ItemGroup"))
                 {
+                    Placeholder.Todo("Add references to task class and parameters");
+
                     binder.AddElementNameReferences(taskElement,
                         new ReferenceSymbol()
                         {

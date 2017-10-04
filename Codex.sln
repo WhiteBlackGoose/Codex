@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Framework.Generation"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Codex.Sdk.Types", "Codex.Sdk.Types\Codex.Sdk.Types.shproj", "{F88FB26C-FAC3-4D8A-9779-E3475D18ECB1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7F4060A4-602D-4A7C-8ACF-7956D9F8D757}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Codex.Sdk.Types\Codex.Sdk.Types.projitems*{2322a932-05f4-4931-8547-71377c6ab49e}*SharedItemsImports = 4

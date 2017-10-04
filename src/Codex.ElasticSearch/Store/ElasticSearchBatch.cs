@@ -87,7 +87,7 @@ namespace Codex.ElasticSearch
 
                 EntityItem.Add(item);
 
-                store.AddCreateOperation(BulkDescriptor, entity);
+                store.AddIndexOperation(BulkDescriptor, entity);
                 return true;
             }
         }

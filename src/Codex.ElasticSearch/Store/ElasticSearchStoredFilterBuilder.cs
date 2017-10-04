@@ -103,9 +103,8 @@ namespace Codex.ElasticSearch
 
         private async Task UpdateFilters(params StoredFilter[] filters)
         {
-            Placeholder.NotImplemented("Need to use update operation rather than just store");
-
-            await Store.StoredFilterStore.StoreAsync(filters);
+            Placeholder.NotImplemented("Proper handling of stored filter replacement");
+            await Store.StoredFilterStore.StoreAsync(filters, replace: true);
         }
 
         public async Task FlushAsync()

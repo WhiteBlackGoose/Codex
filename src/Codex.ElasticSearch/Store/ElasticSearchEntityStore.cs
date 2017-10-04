@@ -2,6 +2,7 @@
 using Codex.Framework.Types;
 using Codex.Sdk.Utilities;
 using Codex.Storage.ElasticProviders;
+using Elasticsearch.Net;
 using Nest;
 using System;
 using System.Collections.Concurrent;
@@ -17,13 +18,13 @@ namespace Codex.ElasticSearch
         internal readonly SearchType SearchType;
         internal readonly ElasticSearchStore Store;
         public readonly string IndexName;
-        public int ShardCount => Placeholder.Value<int>("Get shard count during initialize. May be different than configuration");
+        public int ShardCount { get; protected set; }
 
         public ElasticSearchEntityStore(ElasticSearchStore store, SearchType searchType)
         {
             this.Store = store;
             this.SearchType = searchType;
-            this.IndexName = store.Configuration.Prefix + searchType.IndexName;
+            this.IndexName = (store.Configuration.Prefix + searchType.IndexName).ToLowerInvariant();
         }
 
         public async Task DeleteAsync(IEnumerable<string> uids)
@@ -54,17 +55,17 @@ namespace Codex.ElasticSearch
                 await CreateIndexAsync();
             }
 
-            await Store.Service.UseClient(async context =>
+            var settings = await Store.Service.UseClient(async context =>
             {
                 var client = context.Client;
-
-                await Placeholder.NotImplementedAsync("Get shard count");
-
-                return None.Value;
+                return await client.GetIndexSettingsAsync(r => r.Index(IndexName).Name("_settings"));
             });
 
-            // Change refresh interval
-            // Disable replicas during indexing
+            ShardCount = settings.Result.Indices[IndexName].Settings.NumberOfShards.Value;
+
+            Placeholder.Todo("Add some indication to configuration indicating whether this store was opened for write");
+            Placeholder.Todo("Change refresh interval");
+            Placeholder.Todo("Disable replicas");
         }
 
         public async Task FinalizeAsync()
@@ -83,7 +84,7 @@ namespace Codex.ElasticSearch
 
                 if (existsResponse.Exists)
                 {
-                    Placeholder.NotImplemented("Update mappings?");
+                    Placeholder.Todo("Update mappings?");
                     return false;
                 }
 
@@ -98,9 +99,16 @@ namespace Codex.ElasticSearch
             });
         }
 
-        public BulkDescriptor AddCreateOperation(BulkDescriptor bd, T value)
+        public BulkDescriptor AddIndexOperation(BulkDescriptor bd, T value, bool replace = false)
         {
-            return bd.Create<T>(bco => bco.Document(value).Index(IndexName));
+            if (replace)
+            {
+                return bd.Index<T>(bco => bco.Document(value).Index(IndexName));
+            }
+            else
+            {
+                return bd.Create<T>(bco => bco.Document(value).Index(IndexName));
+            }
         }
 
         public void SetIds(IEnumerable<T> entities)
@@ -113,14 +121,12 @@ namespace Codex.ElasticSearch
             Placeholder.NotImplemented("Set content id and uid");
         }
 
-        public async Task StoreAsync(IReadOnlyList<T> values)
+        public async Task StoreAsync(IReadOnlyList<T> values, bool replace = false)
         {
-            // TODO: Batch and create commits/stored filters
-            // TODO: Handle updates
             await Store.Service.UseClient(async context =>
             {
                 var response = await context.Client
-                    .BulkAsync(b => b.ForEach(values, (bd, value) => AddCreateOperation(bd, value)).CaptureRequest(context))
+                    .BulkAsync(b => b.ForEach(values, (bd, value) => AddIndexOperation(bd, value, replace)).CaptureRequest(context))
                     .ThrowOnFailure();
 
                 return response.IsValid;
