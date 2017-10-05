@@ -132,5 +132,10 @@ namespace Codex.ElasticSearch
                 return response.IsValid;
             });
         }
+
+        public Task StoreAsync(IReadOnlyList<T> values)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

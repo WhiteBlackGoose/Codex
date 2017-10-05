@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,8 @@ namespace Codex
         {
             throw new NotImplementedException();
         }
-
+        
+        [Conditional("TODO")]
         public static void Todo(string message = null)
         {
             throw new NotImplementedException();

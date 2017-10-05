@@ -8,7 +8,7 @@ namespace Codex
 {
     /// <summary>
     /// Marker interface for searchable entities
-    /// TODO: Consider moving <see cref="ContentId"/> out if its not needed by all searchable entities
+    /// TODO: Consider moving <see cref="EntityContentId"/> out if its not needed by all searchable entities
     /// </summary>
     public partial interface ISearchEntity
     {
@@ -18,7 +18,12 @@ namespace Codex
         /// Defines the content addressable identifier for the entity. This is used
         /// to determine if an entity with the same <see cref="Uid"/> should be updated
         /// </summary>
-        string ContentId { get; set; }
+        string EntityContentId { get; }
+
+        /// <summary>
+        /// Defines the size of the raw serialized entity.
+        /// </summary>
+        int EntityContentSize { get; }
     }
 
     public interface IRepoScopeEntity

@@ -126,7 +126,6 @@ namespace Codex.Storage
                     Start = s.Start,
                     Length = s.Length,
                     LineNumber = s.LineNumber,
-                    LineSpanText = s.LineSpanText,
                     LineSpanStart = s.LineSpanStart,
                 }).ToList();
         }
@@ -243,7 +242,6 @@ namespace Codex.Storage
                 Start = model.Start,
                 Length = model.Length,
                 LineNumber = model.LineNumber,
-                LineSpanText = model.LineSpanText,
                 LineSpanStart = model.LineSpanStart
             };
         }

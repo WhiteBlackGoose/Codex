@@ -56,7 +56,7 @@ namespace Codex
 
     /// <summary>
     /// Indicates an attached property which is not intrinsic to the parent object and should be
-    /// excluded when computing the <see cref="ISearchEntity.ContentId"/>
+    /// excluded when computing the <see cref="ISearchEntity.EntityContentId"/>
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
     public sealed class AttachedAttribute : Attribute
