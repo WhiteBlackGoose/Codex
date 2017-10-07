@@ -16,7 +16,7 @@ namespace Codex
         /// Creates a new <see cref="ICodexRepositoryStore"/> over the given repository and commit.
         /// Entities added to the store will be accumulated with the stored filter for the commit/repo.
         /// </summary>
-        Task<ICodexRepositoryStore> CreateRepositoryStore(IRepository repository, ICommit commit, IBranch branch);
+        Task<ICodexRepositoryStore> CreateRepositoryStore(Repository repository, Commit commit, Branch branch);
     }
 
     public interface IAdministratorCodexStore

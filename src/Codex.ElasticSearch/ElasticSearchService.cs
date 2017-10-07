@@ -6,6 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Codex.Utilities;
+using Elasticsearch.Net;
+using Newtonsoft.Json;
+using Codex.Serialization;
 
 namespace Codex.ElasticSearch
 {
@@ -13,10 +16,20 @@ namespace Codex.ElasticSearch
     {
         private ElasticClient client;
         private Stopwatch stopwatch = Stopwatch.StartNew();
+        private readonly ElasticSearchServiceConfiguration configuration;
 
         public ElasticSearchService(ElasticSearchServiceConfiguration configuration)
         {
-            client = new ElasticClient(new Uri(configuration.Endpoint));
+            this.configuration = configuration;
+            var settings = new OverrideConnectionSettings(new Uri(configuration.Endpoint))
+                .EnableHttpCompression();
+
+            if (configuration.CaptureRequests)
+            {
+                settings = settings.PrettyJson().DisableDirectStreaming();
+            }
+
+            client = new ElasticClient(settings);
         }
 
         public async Task<ElasticSearchResponse<T>> UseClient<T>(Func<ClientContext, Task<T>> useClient)
@@ -25,6 +38,7 @@ namespace Codex.ElasticSearch
             T result;
             var context = new ClientContext()
             {
+                CaptureRequests = configuration.CaptureRequests,
                 Client = this.client
             };
 
@@ -56,6 +70,39 @@ namespace Codex.ElasticSearch
             await store.InitializeAsync();
             return store;
         }
+
+        private class OverrideConnectionSettings : ConnectionSettings
+        {
+            private Serializer SharedSerializer;
+            public OverrideConnectionSettings(Uri uri = null) : base(uri)
+            {
+            }
+            protected override IElasticsearchSerializer DefaultSerializer(ConnectionSettings settings)
+            {
+                if (SharedSerializer == null)
+                {
+                    SharedSerializer = new Serializer(settings);
+                }
+
+                return SharedSerializer;
+            }
+
+            private class Serializer : JsonNetSerializer
+            {
+
+                public Serializer(IConnectionSettingsValues settings)
+                    : base(settings, ModifyJsonSerializerSettings)
+                {
+                }
+
+                private static void ModifyJsonSerializerSettings(JsonSerializerSettings arg1, IConnectionSettingsValues arg2)
+                {
+                    arg1.ContractResolver = new CachingContractResolver(new CompositeEntityResolver(
+                        new EntityContractResolver(ObjectStage.Index),
+                        arg1.ContractResolver));
+                }
+            }
+        }
     }
 
     public class ClientContext
@@ -77,6 +124,7 @@ namespace Codex.ElasticSearch
     public class ElasticSearchServiceConfiguration
     {
         public string Endpoint { get; set; }
+        public bool CaptureRequests { get; set; }
 
         public ElasticSearchServiceConfiguration(string endpoint)
         {

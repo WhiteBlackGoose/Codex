@@ -17,15 +17,36 @@ namespace Codex.ElasticSearch
     {
         private readonly ElasticSearchStore store;
         private readonly ElasticSearchBatcher batcher;
-        private readonly IRepository repository;
-        private readonly ICommit commit;
+        private readonly Repository repository;
+        private readonly Commit commit;
+        private readonly Branch branch;
         private readonly ConcurrentDictionary<string, CommitFileLink> commitFilesByRepoRelativePath = new ConcurrentDictionary<string, CommitFileLink>(StringComparer.OrdinalIgnoreCase);
 
-        public ElasticSearchCodexRepositoryStore(ElasticSearchStore store, IRepository repository, ICommit commit)
+        public ElasticSearchCodexRepositoryStore(ElasticSearchStore store, Repository repository, Commit commit, Branch branch)
         {
             this.store = store;
             this.repository = repository;
             this.commit = commit;
+            this.branch = branch;
+
+            batcher.Add(store.RepositoryStore, new RepositorySearchModel()
+            {
+                Repository = repository,
+            });
+
+            if (commit != null)
+            {
+                batcher.Add(store.CommitStore, new CommitSearchModel()
+                {
+                    Commit = commit,
+                });
+            }
+
+            if (branch != null)
+            {
+                Placeholder.Todo("Add branch store and add branch to branch store");
+            }
+
             Placeholder.Todo("Add commit bound source document (with links to changed files in commit, commit stats [lines added/removed], link to commit portal, link to diff view).");
         }
 

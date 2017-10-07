@@ -32,6 +32,11 @@ namespace Codex.ObjectModel
 
             return type;
         }
+
+        public static bool IsEntityType(Type type)
+        {
+            return s_typeMappings.ContainsKey(type);
+        }
     }
 
     public partial class Symbol

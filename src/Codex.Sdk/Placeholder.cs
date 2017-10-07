@@ -14,7 +14,7 @@ namespace Codex
     {
         public static T Value<T>(string message = null)
         {
-            throw new NotImplementedException();
+            return default(T);
         }
 
         public static bool MissingFeature(string message = null)

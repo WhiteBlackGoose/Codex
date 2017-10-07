@@ -38,9 +38,9 @@ namespace Codex.ElasticSearch
             return store;
         }
 
-        public Task<ICodexRepositoryStore> CreateRepositoryStore(IRepository repository, ICommit commit, IBranch branch)
+        public async Task<ICodexRepositoryStore> CreateRepositoryStore(Repository repository, Commit commit, Branch branch)
         {
-            throw new NotImplementedException();
+            return new ElasticSearchCodexRepositoryStore(this, repository, commit, branch);
         }
     }
 

@@ -165,7 +165,7 @@ namespace Codex
         ISourceFile File { get; }
     }
 
-    public interface IRepositorySearchModel : IRepoScopeEntity, ISearchEntity
+    public interface IRepositorySearchModel : ISearchEntity
     {
         IRepository Repository { get; }
     }

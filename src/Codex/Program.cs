@@ -38,8 +38,16 @@ namespace Codex.Application
             { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
             { "n|name=", "Name of the project.", n => repoName = n },
             { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
-            { "s|solution=", "Optionally, path to the solution to analyze.", n => solutionPath = n },
+            { "s|solution", "Optionally, path to the solution to analyze.", n => solutionPath = n },
             { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
+        };
+
+        static OptionSet analysisOptions = new OptionSet
+        {
+            { "es|elasticsearch", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
+            { "n|name=", "Name of the project.", n => repoName = n },
+            { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
+            { "s|solution", "Optionally, path to the solution to analyze.", n => solutionPath = n },
         };
 
         static OptionSet searchOptions = new OptionSet
@@ -63,7 +71,11 @@ namespace Codex.Application
                     Index(remaining);
                     return;
                 case "search":
-                    Search();
+                    Search(remaining);
+                    return;
+                case "dryRun":
+                    analysisOnly = true;
+                    Index(remaining);
                     return;
                 default:
                     Console.Error.WriteLine($"Invalid verb '{args[0]}'");
@@ -81,6 +93,10 @@ namespace Codex.Application
             Console.WriteLine("codex search {options}");
             Console.WriteLine("Options:");
             searchOptions.WriteOptionDescriptions(Console.Out);
+            Console.WriteLine("codex dryrun {options}");
+            Console.WriteLine("Options:");
+            analysisOptions.WriteOptionDescriptions(Console.Out);
+            Console.WriteLine();
         }
 
         static void Index(string[] args)
@@ -91,13 +107,6 @@ namespace Codex.Application
             if (String.IsNullOrEmpty(elasticSearchServer)) throw new ArgumentException("Elastic Search server URL is missing. Use -es to provide it.");
 
             service = new ElasticSearchService(new ElasticSearchServiceConfiguration(elasticSearchServer));
-            store = new ElasticSearchStore(new ElasticSearchStoreConfiguration()
-            {
-                CreateIndices = true,
-                ShardCount = 5,
-                Prefix = "test."
-            },
-            service);
 
             try
             {
@@ -119,6 +128,13 @@ namespace Codex.Application
         static async Task RunRepoImporter()
         {
             var targetIndexName = AnalysisServices.GetTargetIndexName(repoName);
+
+            store = await service.CreateStoreAsync(new ElasticSearchStoreConfiguration()
+            {
+                CreateIndices = true,
+                ShardCount = 5,
+                Prefix = "test."
+            });
 
             string[] file = new string[0];
 
@@ -183,19 +199,17 @@ namespace Codex.Application
                 else
                 {
                     Placeholder.Todo("Populate commit/repo/branch with full set of real values");
-                    var anonymousGuid = Guid.NewGuid();
-                    var anonymousCommitId = $"AnonymousCommit_{anonymousGuid}";
                     analysisTarget = await store.CreateRepositoryStore(
                         new Repository(repoName),
                         new Commit()
                         {
                             RepositoryName = repoName,
-                            CommitId = anonymousCommitId,
+                            CommitId = targetIndexName,
                             DateUploaded = DateTime.UtcNow,
                         },
                         new Branch()
                         {
-                            CommitId = anonymousCommitId,
+                            CommitId = targetIndexName,
                         });
                 }
 
@@ -284,7 +298,7 @@ namespace Codex.Application
         //    return;
         //}
 
-        static void Search()
+        static void Search(string[] args = null)
         {
             //ElasticsearchStorage storage = new ElasticsearchStorage(elasticSearchServer);
 

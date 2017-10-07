@@ -58,7 +58,7 @@ namespace Codex.ElasticSearch
             var settings = await Store.Service.UseClient(async context =>
             {
                 var client = context.Client;
-                return await client.GetIndexSettingsAsync(r => r.Index(IndexName).Name("_settings"));
+                return await client.GetIndexSettingsAsync(r => r.Index(IndexName));
             });
 
             ShardCount = settings.Result.Indices[IndexName].Settings.NumberOfShards.Value;
@@ -90,7 +90,7 @@ namespace Codex.ElasticSearch
 
                 var response = await context.Client
                     .CreateIndexAsync(IndexName,
-                        c => c.Mappings(m => m.Map<T>(TypeName.From<T>(), tm => tm.AutoMap(MappingPropertyVisitor.Instance)))
+                        c => c.Mappings(m => m.Map<T>(SearchType.IndexName, tm => tm.AutoMap(MappingPropertyVisitor.Instance)))
                             .Settings(s => s.AddAnalyzerSettings().NumberOfShards(Store.Configuration.ShardCount).RefreshInterval(TimeSpan.FromMinutes(1)))
                             .CaptureRequest(context))
                             .ThrowOnFailure();

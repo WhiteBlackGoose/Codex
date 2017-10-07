@@ -90,6 +90,30 @@ namespace Codex.Serialization
         }
     }
 
+    public class CompositeEntityResolver : IContractResolver
+    {
+        private readonly EntityContractResolver entityContractResolver;
+        private readonly IContractResolver fallContractResolver;
+
+        public CompositeEntityResolver(EntityContractResolver entityContractResolver, IContractResolver fallContractResolver)
+        {
+            this.entityContractResolver = entityContractResolver;
+            this.fallContractResolver = fallContractResolver;
+        }
+
+        public JsonContract ResolveContract(Type type)
+        {
+            if (CodexTypeUtilities.IsEntityType(type))
+            {
+                return entityContractResolver.ResolveContract(type);
+            }
+            else
+            {
+                return fallContractResolver.ResolveContract(type);
+            }
+        }
+    }
+
     public class EntityContractResolver : DefaultContractResolver
     {
         private readonly ObjectStage stage;
