@@ -9,6 +9,31 @@ using static Codex.Utilities.SerializationUtilities;
 
 namespace Codex.ObjectModel
 {
+    public partial class CodexTypeUtilities
+    {
+        public static Type GetInterfaceType(Type type)
+        {
+            if (!type.IsInterface)
+            {
+                s_typeMappings.TryGetValue(type, out var result);
+                return result ?? type;
+            }
+
+            return type;
+        }
+
+        public static Type GetImplementationType(Type type)
+        {
+            if (type.IsInterface)
+            {
+                s_typeMappings.TryGetValue(type, out var result);
+                return result ?? type;
+            }
+
+            return type;
+        }
+    }
+
     public partial class Symbol
     {
         /// <summary>

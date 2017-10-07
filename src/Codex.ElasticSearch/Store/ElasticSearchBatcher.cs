@@ -1,4 +1,6 @@
 ﻿using Codex.Sdk.Utilities;
+using Codex.Serialization;
+using Codex.Utilities;
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
@@ -93,7 +95,7 @@ namespace Codex.ElasticSearch
         public void PopulateContentIdAndSize<T>(T entity, ElasticSearchEntityStore<T> store)
             where T : class, ISearchEntity
         {
-            Placeholder.NotImplemented("Get content id, size, and store content id as Uid where appropriate");
+            entity.PopulateContentIdAndSize();
         }
 
         public async Task FinalizeAsync()

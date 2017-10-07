@@ -15,14 +15,13 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\bin\Debug\Codex.Framework.Generation\SearchDescriptors.g.cs">
-      <Link>Types\SearchDescriptors.g.cs</Link>
+    <Compile Include="..\..\out\bin\Debug\Codex.Framework.Generation\EntityTypes.g.cs">
+      <Link>Types\EntityTypes.g.cs</Link>
     </Compile>
     <Compile Include="Analysis\ICodexStore.cs" />
     <Compile Include="Analysis\IAnalysisTarget.cs" />
     <Compile Include="ObjectModel\BoundSourceInfo.cs" />
     <Compile Include="Placeholder.cs" />
-    <Compile Include="Types\SearchEntity.cs" />
     <Compile Include="Types\ReferencedProject.cs" />
     <Compile Include="Types\EncodingDescription.cs" />
     <Compile Include="Types\Types.cs" />
@@ -44,10 +43,12 @@
     <Compile Include="ObjectModel\SymbolKind.cs" />
     <Compile Include="ObjectModel\Symbols.cs" />
     <Compile Include="Utilities\AtomicBool.cs" />
+    <Compile Include="Utilities\Base64.cs" />
     <Compile Include="Utilities\Box.cs" />
     <Compile Include="Utilities\CollectionUtilities.cs" />
     <Compile Include="Utilities\ComparerBuilder.cs" />
     <Compile Include="Utilities\CompilerUtilities.cs" />
+    <Compile Include="Utilities\EncoderContext.cs" />
     <Compile Include="Utilities\EqualityComparerBuilder.cs" />
     <Compile Include="Utilities\IIndexable.cs" />
     <Compile Include="Utilities\IndexableListAdapter.cs" />
@@ -59,8 +60,10 @@
     <Compile Include="Utilities\MultiDictionary.cs" />
     <Compile Include="Utilities\MurmurHash.cs" />
     <Compile Include="Utilities\None.cs" />
+    <Compile Include="Utilities\ObjectPool.cs" />
     <Compile Include="Utilities\Paths.cs" />
     <Compile Include="Utilities\PathUtilities.cs" />
+    <Compile Include="Utilities\Pools.cs" />
     <Compile Include="Utilities\Range.cs" />
     <Compile Include="Utilities\RangeHelper.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />

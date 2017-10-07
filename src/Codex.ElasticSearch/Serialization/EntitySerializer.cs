@@ -10,6 +10,8 @@ using System.Reflection;
 using Nest;
 using Codex.ObjectModel;
 using System.IO;
+using Codex.Utilities;
+using Codex.Sdk.Utilities;
 
 namespace Codex.Serialization
 {
@@ -65,18 +67,46 @@ namespace Codex.Serialization
         }
     }
 
+    public class CachingContractResolver : IContractResolver
+    {
+        private IContractResolver m_inner;
+        private ConcurrentDictionary<Type, JsonContract> ContractsByType
+            = new ConcurrentDictionary<System.Type, JsonContract>();
+
+        public CachingContractResolver(IContractResolver inner)
+        {
+            m_inner = inner;
+        }
+
+        public JsonContract ResolveContract(Type objectType)
+        {
+            JsonContract contract;
+            if (!ContractsByType.TryGetValue(objectType, out contract))
+            {
+                contract = ContractsByType.GetOrAdd(objectType, m_inner.ResolveContract(objectType));
+            }
+
+            return contract;
+        }
+    }
+
     public class EntityContractResolver : DefaultContractResolver
     {
-        private Dictionary<Type, JsonConverter> m_primitives = new Dictionary<Type, JsonConverter>();
+        private readonly ObjectStage stage;
+        private readonly Dictionary<Type, JsonConverter> primitives = new Dictionary<Type, JsonConverter>();
 
-        public EntityContractResolver()
+        private readonly IComparer<MemberInfo> MemberComparer = new ComparerBuilder<MemberInfo>()
+            .CompareByAfter(m => m.Name, StringComparer.Ordinal);
+
+        public EntityContractResolver(ObjectStage stage)
         {
+            this.stage = stage;
             AddPrimitive(r => SymbolId.UnsafeCreateWithValue((string)r.Value), (w, id) => w.WriteValue(id.Value));
         }
 
         private void AddPrimitive<TType>(Func<JsonReader, TType> read, Action<JsonWriter, TType> write)
         {
-            m_primitives[typeof(TType)] = new JsonPrimitiveConverter<TType>(write, read);
+            primitives[typeof(TType)] = new JsonPrimitiveConverter<TType>(write, read);
         }
 
         protected override JsonConverter ResolveContractConverter(Type objectType)
@@ -86,7 +116,9 @@ namespace Codex.Serialization
 
         protected override JsonContract CreateContract(Type objectType)
         {
-            if (m_primitives.TryGetValue(objectType, out var converter))
+            objectType = CodexTypeUtilities.GetImplementationType(objectType);
+
+            if (primitives.TryGetValue(objectType, out var converter))
             {
                 var contract = CreatePrimitiveContract(objectType);
                 contract.Converter = converter;
@@ -105,11 +137,28 @@ namespace Codex.Serialization
             {
                 var serializationInterfaceType = serializationInterfaceAttribute.Type;
 
-                var memberNames = new HashSet<string>(new[] { serializationInterfaceType }.Concat(serializationInterfaceType.GetInterfaces())
-                    .SelectMany(i => i.GetProperties()).Select(p => p.Name));
+                Dictionary<string, MemberInfo> interfaceMemberMap = new Dictionary<string, MemberInfo>();
+                foreach (var property in new[] { serializationInterfaceType }.Concat(serializationInterfaceType.GetInterfaces())
+                    .SelectMany(i => i.GetProperties()))
+                {
+                    if (!interfaceMemberMap.ContainsKey(property.Name))
+                    {
+                        interfaceMemberMap.Add(property.Name, property);
+                    }
+                }
 
-                members.RemoveAll(m => !memberNames.Contains(m.Name));
+                members.RemoveAll(m =>
+                {
+                    if (interfaceMemberMap.TryGetValue(m.Name, out var interfaceProperty))
+                    {
+                        return (interfaceProperty.GetAllowedStages() & stage) == 0;
+                    }
+
+                    return true;
+                });
             }
+
+            members.Sort(MemberComparer);
 
             return members;
         }
@@ -117,6 +166,23 @@ namespace Codex.Serialization
 
     public static class EntityReflectionHelpers
     {
+        private static readonly JsonSerializer[] StageSerializers = GetSerializers();
+
+        private static JsonSerializer[] GetSerializers()
+        {
+            var serializers = new JsonSerializer[(int)ObjectStage.All + 1];
+            for (int stage = 0; stage <= (int)ObjectStage.All; stage++)
+            {
+                serializers[stage] = JsonSerializer.Create(new JsonSerializerSettings()
+                {
+                    ContractResolver = new CachingContractResolver(new EntityContractResolver((ObjectStage)stage)),
+                    DefaultValueHandling = DefaultValueHandling.Ignore
+                });
+            }
+
+            return serializers;
+        }
+
         public static string GetMetadataName(this Type type)
         {
             if (type.IsGenericType)
@@ -145,6 +211,36 @@ namespace Codex.Serialization
             return attribute?.Behavior;
         }
 
+        public static void PopulateContentIdAndSize<T>(this T entity)
+            where T : class, ISearchEntity
+        {
+            if (entity.EntityContentId == null || entity.EntityContentSize == 0)
+            {
+                using (var lease = Pools.EncoderContextPool.Acquire())
+                {
+                    var encoderContext = lease.Instance;
+                    entity.SerializeEntityTo(encoderContext.Writer, stage: ObjectStage.Index);
+                    entity.EntityContentId = encoderContext.ToBase64HashString();
+                    entity.EntityContentSize = encoderContext.StringBuilder.Length;
+
+                    if (entity.Uid == null)
+                    {
+                        entity.Uid = entity.EntityContentId;
+                    }
+                }
+            }
+        }
+
+        public static string SerializeEntity(this object entity, ObjectStage stage = ObjectStage.All)
+        {
+            return StageSerializers[(int)stage].Serialize(entity);
+        }
+
+        public static void SerializeEntityTo(this object entity, TextWriter writer, ObjectStage stage = ObjectStage.All)
+        {
+            StageSerializers[(int)stage].Serialize(writer, entity);
+        }
+
         public static string Serialize(this JsonSerializer serializer, object entity)
         {
             Placeholder.Todo("Pool string writers");
@@ -160,7 +256,6 @@ namespace Codex.Serialization
             return type.GetCustomAttributes(typeof(T), inherit: false).OfType<T>().FirstOrDefault();
         }
     }
-
 
     //internal class CachingResolver : IContractResolver
     //{

@@ -6,13 +6,4 @@ using System.Threading.Tasks;
 
 namespace Codex.Framework.Types
 {
-    public interface IRef<T>
-    {
-        string Id { get; }
-    }
-
-    public interface INested<TContainer>
-    {
-
-    }
 }

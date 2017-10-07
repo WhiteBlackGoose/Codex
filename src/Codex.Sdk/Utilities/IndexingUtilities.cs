@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Codex.Sdk.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -74,19 +75,46 @@ namespace Codex.Utilities
 
         public static string ComputeSymbolUid(string symbolIdName)
         {
-            var max = Math.Max(MurmurHash.BYTE_LENGTH, Encoding.UTF8.GetMaxByteCount(symbolIdName.Length));
-            byte[] buffer = new byte[max];
-            var hash = ComputeFullHash(symbolIdName, buffer);
+            //using (var leasedBuffer = Pools.ByteArrayPool.Acquire())
+            //{
+            //    var buffer = leasedBuffer.Instance;
+            //    var max = Encoding.UTF8.GetMaxByteCount(symbolIdName.Length);
 
-            for (int i = 0; i < MurmurHash.BYTE_LENGTH; i++)
+            //}
+
+            Placeholder.Todo("Use more efficient method of computing symbol UID with fewer allocations");
+            return ComputeSymbolUidOld(symbolIdName);
+        }
+
+        public static string ToBase64HashString(this EncoderContext context)
+        {
+            return new Murmur3().ComputeHash(GetByteStream(context)).ToBase64String();
+        }
+
+        public static IEnumerable<ArraySegment<byte>> GetByteStream(EncoderContext context)
+        {
+            int offset = 0;
+            int remainingChars = context.StringBuilder.Length;
+            var builder = context.StringBuilder;
+            var chars = context.CharBuffer;
+            var bytes = context.ByteBuffer;
+            while (remainingChars > 0)
             {
-                buffer[i] = hash.GetByte(i);
+                var copiedChars = Math.Min(remainingChars, chars.Length);
+                builder.CopyTo(offset, chars, 0, copiedChars);
+                var byteLength = Encoding.UTF8.GetBytes(chars, 0, copiedChars, bytes, 0);
+                yield return new ArraySegment<byte>(bytes, 0, byteLength);
+                offset += copiedChars;
+                remainingChars -= copiedChars;
             }
+        }
 
-            var uidPadded = Convert.ToBase64String(buffer, 0, MurmurHash.BYTE_LENGTH);
+        public static string ComputeSymbolUidOld(string symbolIdName)
+        {
+            string uidPadded = ComputeHashString(symbolIdName);
 
             char[] uidChars = uidPadded.ToCharArray(0, UidLength);
-            for (int i = 0; i < UidLength; i++)
+            for (int i = 0; i < uidChars.Length; i++)
             {
                 char c = uidChars[i];
                 if (i == 0 && char.IsNumber(c))
@@ -112,6 +140,21 @@ namespace Codex.Utilities
             return new string(uidChars);
         }
 
+        public static string ComputeHashString(string symbolIdName)
+        {
+            var max = Math.Max(MurmurHash.BYTE_LENGTH, Encoding.UTF8.GetMaxByteCount(symbolIdName.Length));
+            byte[] buffer = new byte[max];
+            var hash = ComputeFullHash(symbolIdName, buffer);
+
+            for (int i = 0; i < MurmurHash.BYTE_LENGTH; i++)
+            {
+                buffer[i] = hash.GetByte(i);
+            }
+
+            var uidPadded = Convert.ToBase64String(buffer, 0, MurmurHash.BYTE_LENGTH);
+            return uidPadded;
+        }
+
         public static MurmurHash ComputeFullHash(string value, byte[] buffer = null)
         {
             var max = Encoding.UTF8.GetMaxByteCount(value.Length);
@@ -121,9 +164,16 @@ namespace Codex.Utilities
             }
 
             int byteLength = Encoding.UTF8.GetBytes(value, 0, value.Length, buffer, 0);
+            if (buffer.Length < 1000)
+            {
+                // For backward compatibility with old code which would use the full buffer when calculating
+                // the hash rather than just the portion which is occupied by the serialized bytes.
+                // Use the more efficient mechanism for large strings
+                byteLength = buffer.Length;
+            }
 
             var hasher = new Murmur3();
-            return hasher.ComputeHash(buffer);
+            return hasher.ComputeHash(buffer, length: byteLength);
         }
 
         public static MurmurHash ComputePrefixHash(string value, byte[] buffer = null)

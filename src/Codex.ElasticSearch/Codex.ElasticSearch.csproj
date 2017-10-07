@@ -70,6 +70,7 @@
     <Compile Include="Model\Index.cs" />
     <Compile Include="Utilities\ArrayUtils.cs" />
     <Compile Include="Utilities\BatchQueue.cs" />
+    <Compile Include="Utilities\ElasticConstants.cs" />
     <Compile Include="Utilities\FullTextUtilities.cs" />
     <Compile Include="Utilities\MappingPropertyVisitor.cs" />
     <Compile Include="Utilities\NumberUtils.cs" />

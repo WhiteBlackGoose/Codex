@@ -111,16 +111,6 @@ namespace Codex.ElasticSearch
             }
         }
 
-        public void SetIds(IEnumerable<T> entities)
-        {
-            Placeholder.NotImplemented("Set content id and uid");
-        }
-
-        public void SetId(T entity)
-        {
-            Placeholder.NotImplemented("Set content id and uid");
-        }
-
         public async Task StoreAsync(IReadOnlyList<T> values, bool replace = false)
         {
             await Store.Service.UseClient(async context =>

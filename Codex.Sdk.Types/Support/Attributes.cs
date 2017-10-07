@@ -111,9 +111,10 @@ namespace Codex
 
     public enum ObjectStage
     {
-        Analysis,
-        Index,
-        Search,
+        None = 0,
+        Analysis = 1,
+        Index = 1 << 1,
+        Search = 1 << 2,
         All = Search | Index | Analysis
     }
 

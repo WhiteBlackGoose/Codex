@@ -18,12 +18,12 @@ namespace Codex
         /// Defines the content addressable identifier for the entity. This is used
         /// to determine if an entity with the same <see cref="Uid"/> should be updated
         /// </summary>
-        string EntityContentId { get; }
+        string EntityContentId { get; set; }
 
         /// <summary>
         /// Defines the size of the raw serialized entity.
         /// </summary>
-        int EntityContentSize { get; }
+        int EntityContentSize { get; set; }
     }
 
     public interface IRepoScopeEntity

@@ -442,14 +442,10 @@ namespace Codex.Analysis.Files
         {
             if (!symbolMap.ContainsKey(referenceSymbol.Id.Value))
             {
-                symbolMap.TryAdd(referenceSymbol.Id.Value, new DefinitionSymbol()
+                symbolMap.TryAdd(referenceSymbol.Id.Value, new DefinitionSymbol(referenceSymbol)
                 {
-                    Id = SymbolId.UnsafeCreateWithValue(referenceSymbol.Id.Value),
-                    Kind = referenceSymbol.Kind,
-                    ProjectId = referenceSymbol.ProjectId,
                     ShortName = shortName,
                     ContainerQualifiedName = containerName,
-                    Uid = referenceSymbol.Id.Value,
                 });
             }
 

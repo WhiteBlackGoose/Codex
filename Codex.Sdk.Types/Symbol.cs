@@ -40,6 +40,7 @@ namespace Codex
         /// Modifiers for the symbol such as public
         /// </summary>
         // TODO: Consider using single CopyTo field for keywords
+        [SearchBehavior(SearchBehavior.NormalizedKeyword)]
         string[] Modifiers { get; }
 
         /// <summary>

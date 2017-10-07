@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Nest;
 using System.Diagnostics.Contracts;
 using Codex.Sdk.Utilities;
+using Codex.ElasticSearch.Utilities;
 
 namespace Codex.ElasticSearch
 {
@@ -15,6 +16,8 @@ namespace Codex.ElasticSearch
         public readonly List<Item> EntityItem = new List<Item>();
 
         private readonly AtomicBool canReserveExecute = new AtomicBool();
+
+        private int CurrentSize = 0;
 
         private readonly ElasticSearchBatcher batcher;
 
@@ -37,10 +40,18 @@ namespace Codex.ElasticSearch
             foreach (var responseItem in response.Items)
             {
                 var item = EntityItem[batchIndex];
-                batcher.CommitSearchTypeStoredFilters[item.SearchType.Id].Add(
-                    new ElasticEntityRef(
-                        shard: GetShard(responseItem),
-                        stableId: GetStableId(responseItem)));
+
+                if (Placeholder.MissingFeature("Need to implement stored filter support"))
+                {
+                    var entityRef = new ElasticEntityRef(
+                            shard: GetShard(responseItem),
+                            stableId: GetStableId(responseItem));
+                    batcher.CommitSearchTypeStoredFilters[item.SearchType.Id].Add(entityRef);
+                    foreach (var additionalStoredFilter in item.AdditionalStoredFilters)
+                    {
+                        additionalStoredFilter.Add(entityRef);
+                    }
+                }
 
                 if (IsAdded(responseItem))
                 {
@@ -72,9 +83,19 @@ namespace Codex.ElasticSearch
         public bool TryAdd<T>(ElasticSearchEntityStore<T> store, T entity, Action onAdded, ElasticSearchStoredFilterBuilder[] additionalStoredFilters)
             where T : class, ISearchEntity
         {
+            if (!CanFit(entity))
+            {
+                return false;
+            }
+
             lock (this)
             {
-                Placeholder.NotImplemented("Ensure batch size");
+                if (!CanFit(entity))
+                {
+                    return false;
+                }
+
+                CurrentSize += entity.EntityContentSize;
 
                 var item = new Item()
                 {
@@ -90,6 +111,17 @@ namespace Codex.ElasticSearch
                 store.AddIndexOperation(BulkDescriptor, entity);
                 return true;
             }
+        }
+
+        private bool CanFit<T>(T entity) where T : class, ISearchEntity
+        {
+            var size = CurrentSize;
+            if (size != 0 && size + entity.EntityContentSize > ElasticConstants.BatchSizeBytes)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public class Item

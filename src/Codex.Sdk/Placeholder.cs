@@ -17,6 +17,11 @@ namespace Codex
             throw new NotImplementedException();
         }
 
+        public static bool MissingFeature(string message = null)
+        {
+            return false;
+        }
+
         public static Task NotImplementedAsync(string message = null)
         {
             throw new NotImplementedException();

@@ -1,3 +1,4 @@
+using Codex.Sdk.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -26,6 +27,18 @@ namespace Codex.Utilities
         {
             Reset();
             ProcessBytes(bb, start, length < 0 ? bb.Length : length);
+            ProcessFinal();
+            return Hash;
+        }
+
+        public MurmurHash ComputeHash(IEnumerable<ArraySegment<byte>> byteSegments)
+        {
+            Reset();
+            foreach (var byteSegment in byteSegments)
+            {
+                ProcessBytes(byteSegment.Array, byteSegment.Offset, byteSegment.Count);
+            }
+
             ProcessFinal();
             return Hash;
         }
@@ -204,6 +217,8 @@ namespace Codex.Utilities
     {
         public const int BYTE_LENGTH = 16;
 
+        private static readonly char[] s_paddingChars = new[] { '=' };
+
         [FieldOffset(0)]
         public ulong High;
 
@@ -245,6 +260,19 @@ namespace Codex.Utilities
         public override string ToString()
         {
             return guid.ToString();
+        }
+
+        public string ToBase64String()
+        {
+            return ToBase64String(maxCharLength: null, format: Base64.Format.UrlSafe);
+        }
+
+        internal unsafe string ToBase64String(int? maxCharLength = null, Base64.Format format = Base64.Format.UrlSafe)
+        {
+            fixed (byte* b = bytes)
+            {
+                return Base64.ToBase64String(b, 0, BYTE_LENGTH, maxCharLength, format);
+            }
         }
 
         public uint GetInt(int i)

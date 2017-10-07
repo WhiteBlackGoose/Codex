@@ -93,7 +93,10 @@ namespace Codex.ElasticSearch
                             filter.StableIds.Add(batchEntityRef.StableId);
                         }
 
-                        await UpdateFilters(filter);
+                        if (Placeholder.MissingFeature("Proper handling of stored filter replacement"))
+                        {
+                            await UpdateFilters(filter);
+                        }
 
                         return None.Value;
                     }

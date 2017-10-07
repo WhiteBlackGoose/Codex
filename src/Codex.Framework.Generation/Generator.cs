@@ -28,6 +28,7 @@ namespace Codex.Framework.Generation
         private CodeTypeDeclaration CodexTypeUtilitiesClass = new CodeTypeDeclaration("CodexTypeUtilities")
         {
             IsClass = true,
+            IsPartial = true,
             Attributes = MemberAttributes.Static
         };
 
@@ -217,6 +218,28 @@ namespace Codex.Framework.Generation
 
             modelNamespace.Types.Add(CodexTypeUtilitiesClass);
 
+            var typeMappingCreatorMethod = new CodeMemberMethod()
+            {
+                Name = "CreateTypeMapping",
+                Attributes = MemberAttributes.Static | MemberAttributes.Private,
+                ReturnType = typeof(Dictionary<Type, Type>).AsReference()
+            };
+
+            var typeMappingVariableName = "typeMapping";
+            typeMappingCreatorMethod.Statements.Add(
+                new CodeVariableDeclarationStatement(typeof(Dictionary<Type, Type>),
+                typeMappingVariableName,
+                new CodeObjectCreateExpression(typeof(Dictionary<Type, Type>))));
+
+            var typeMapping = new CodeMemberField(typeof(IReadOnlyDictionary<Type, Type>), "s_typeMappings")
+            {
+                InitExpression = new CodeMethodInvokeExpression(null, typeMappingCreatorMethod.Name),
+                Attributes = MemberAttributes.Static | MemberAttributes.Private
+            };
+
+            CodexTypeUtilitiesClass.Members.Add(typeMapping);
+            CodexTypeUtilitiesClass.Members.Add(typeMappingCreatorMethod);
+
             CodeTypeDeclaration indexTypeDeclaration = new CodeTypeDeclaration(nameof(IIndex))
             {
                 IsPartial = true,
@@ -275,6 +298,18 @@ namespace Codex.Framework.Generation
                         typeof(SerializationInterfaceAttribute).AsReference(),
                         new CodeAttributeArgument(new CodeTypeOfExpression(typeDefinition.Type))));
 
+                typeMappingCreatorMethod.Statements.Add(new CodeMethodInvokeExpression(
+                    new CodeVariableReferenceExpression(typeMappingVariableName), 
+                    "Add", 
+                    new CodeTypeOfExpression(typeDefinition.Type), 
+                    new CodeTypeOfExpression(typeDefinition.ClassName)));
+
+                typeMappingCreatorMethod.Statements.Add(new CodeMethodInvokeExpression(
+                    new CodeVariableReferenceExpression(typeMappingVariableName),
+                    "Add",
+                    new CodeTypeOfExpression(typeDefinition.ClassName),
+                    new CodeTypeOfExpression(typeDefinition.Type)));
+
                 if (typeDefinition.Migrated)
                 {
                     typesNamespace.Imports.Add(new CodeNamespaceImport($"{typeDefinition.ClassName} = {modelNamespace.Name}.{typeDefinition.ClassName}"));
@@ -292,7 +327,6 @@ namespace Codex.Framework.Generation
                 }
 
                 PopulateProperties(visitedTypeDefinitions, usedMemberNames, typeDefinition, typeDeclaration);
-
                 //if (!typeDefinition.Type.IsGenericType)
                 //{
                 //    typeDeclaration.BaseTypes.Add(new CodeTypeReference(typeof(IMutable<object, object>))
@@ -300,6 +334,8 @@ namespace Codex.Framework.Generation
                 //        .Apply(tp => tp.TypeArguments[1] = new CodeTypeReference(typeDefinition.Type)));
                 //}
             }
+
+            typeMappingCreatorMethod.Statements.Add(new CodeMethodReturnStatement(new CodeVariableReferenceExpression(typeMappingVariableName)));
 
             using (var writer = new StreamWriter("ElasticSearchTypes.g.cs"))
             {
@@ -310,7 +346,7 @@ namespace Codex.Framework.Generation
                 });
             }
 
-            using (var writer = new StreamWriter("SearchDescriptors.g.cs"))
+            using (var writer = new StreamWriter("EntityTypes.g.cs"))
             {
                 CodeProvider.GenerateCodeFromCompileUnit(searchDescriptors, writer, new System.CodeDom.Compiler.CodeGeneratorOptions()
                 {
