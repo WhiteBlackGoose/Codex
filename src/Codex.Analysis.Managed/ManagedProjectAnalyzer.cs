@@ -65,7 +65,7 @@ namespace Codex.Analysis.Projects
                                 {
                                     ProjectId = reference.Name,
                                     DisplayName = reference.GetDisplayName(),
-                                    Properties = new Dictionary<string, string>()
+                                    Properties = new PropertyMap()
                                     {
                                         { "PublicKey", string.Concat(reference.PublicKey.Select(b => b.ToString("X2"))) }
                                     }

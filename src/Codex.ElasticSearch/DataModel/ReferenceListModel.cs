@@ -6,7 +6,7 @@ using static Codex.Utilities.SerializationUtilities;
 
 namespace Codex.Storage.DataModel
 {
-    public class ReferenceListModel : SpanListModel<ReferenceSpan, SpanListSegmentModel, ReferenceSymbolModel, ReferenceSymbol>
+    public class ReferenceListModel : SpanListModel<ReferenceSpan, SpanListSegmentModel, ReferenceSymbol, ReferenceSymbol>
     {
         public static readonly IEqualityComparer<ReferenceSymbol> ReferenceSymbolEqualityComparer = new EqualityComparerBuilder<ReferenceSymbol>()
             .CompareByAfter(s => s.ProjectId)
@@ -19,7 +19,7 @@ namespace Codex.Storage.DataModel
             .CompareByAfter(s => s.Id.Value)
             .CompareByAfter(s => s.ReferenceKind);
 
-        public static readonly IEqualityComparer<ReferenceSymbolModel> ReferenceSymbolModelComparer = new EqualityComparerBuilder<ReferenceSymbolModel>()
+        public static readonly IEqualityComparer<ReferenceSymbol> ReferenceSymbolModelComparer = new EqualityComparerBuilder<ReferenceSymbol>()
             .CompareByAfter(s => s.ProjectId)
             .CompareByAfter(s => s.Id)
             .CompareByAfter(s => s.ReferenceKind);
@@ -40,7 +40,7 @@ namespace Codex.Storage.DataModel
             string projectId = null;
             string kind = null;
             string referenceKind = null;
-            string id = null;
+            SymbolId id = default(SymbolId);
             foreach (var reference in SharedValues)
             {
                 reference.ProjectId = RemoveDuplicate(reference.ProjectId, ref projectId);
@@ -56,7 +56,7 @@ namespace Codex.Storage.DataModel
             string projectId = null;
             string kind = null;
             string referenceKind = null;
-            string id = null;
+            SymbolId id = default(SymbolId);
             foreach (var reference in SharedValues)
             {
                 reference.ProjectId = AssignDuplicate(reference.ProjectId, ref projectId);
@@ -71,7 +71,7 @@ namespace Codex.Storage.DataModel
             return new SpanListSegmentModel();
         }
 
-        public override ReferenceSpan CreateSpan(int start, int length, ReferenceSymbolModel shared, SpanListSegmentModel segment, int segmentOffset)
+        public override ReferenceSpan CreateSpan(int start, int length, ReferenceSymbol shared, SpanListSegmentModel segment, int segmentOffset)
         {
             if (shared.ProjectId == null || shared.Kind == null || shared.ReferenceKind == null)
             {
@@ -82,7 +82,8 @@ namespace Codex.Storage.DataModel
             {
                 Start = start,
                 Length = length,
-                Reference = ModelConverter.ToObjectModel(shared),
+                Reference = shared,
+                
                 // TODO: Should these be set here
                 //LineNumber = 0,
                 //LineSpanStart = 0,
@@ -93,9 +94,9 @@ namespace Codex.Storage.DataModel
             };
         }
 
-        public override ReferenceSymbolModel GetShared(ReferenceSpan span)
+        public override ReferenceSymbol GetShared(ReferenceSpan span)
         {
-            return ModelConverter.FromObjectModel(span.Reference);
+            return span.Reference;
         }
 
         public override ReferenceSymbol GetSharedKey(ReferenceSpan span)

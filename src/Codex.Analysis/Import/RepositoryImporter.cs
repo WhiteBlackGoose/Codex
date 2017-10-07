@@ -221,12 +221,6 @@ namespace Codex.Import
 
             logger.WriteLine($"Finalized Repository. Operation: {watch.Elapsed} Total: {totalWatch.Elapsed}");
 
-            if (finalizeImport)
-            {
-                await AnalysisServices.AnalysisTarget.FinalizeRepository(repo);
-
-            }
-
             return true;
         }
 

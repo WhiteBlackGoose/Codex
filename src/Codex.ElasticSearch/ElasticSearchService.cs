@@ -77,5 +77,10 @@ namespace Codex.ElasticSearch
     public class ElasticSearchServiceConfiguration
     {
         public string Endpoint { get; set; }
+
+        public ElasticSearchServiceConfiguration(string endpoint)
+        {
+            Endpoint = endpoint;
+        }
     }
 }

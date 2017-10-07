@@ -1,8 +1,9 @@
 ﻿using Codex.Utilities;
+using System;
 
 namespace Codex.ObjectModel
 {
-    public struct SymbolId
+    public struct SymbolId : IEquatable<SymbolId>
     {
         public readonly string Value;
 
@@ -20,6 +21,11 @@ namespace Codex.ObjectModel
         public static SymbolId UnsafeCreateWithValue(string value)
         {
             return new SymbolId(value);
+        }
+
+        public bool Equals(SymbolId other)
+        {
+            return Value == other.Value;
         }
 
         public override string ToString()

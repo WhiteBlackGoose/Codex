@@ -16,6 +16,8 @@ using Codex.Logging;
 using Codex.ObjectModel;
 using Codex.Storage;
 using Mono.Options;
+using Codex.ElasticSearch;
+using System.Threading.Tasks;
 
 namespace Codex.Application
 {
@@ -28,9 +30,10 @@ namespace Codex.Application
         static string rootDirectory;
         static string solutionPath;
         static bool interactive = false;
-        static ICodexStore store = Placeholder.Value<ICodexStore>("Create store (FileSystem | Elasticsearch)");
+        static ElasticSearchStore store = Placeholder.Value<ElasticSearchStore>("Create store (FileSystem | Elasticsearch)");
+        static ElasticSearchService service;
 
-        static OptionSet options = new OptionSet
+        static OptionSet indexOptions = new OptionSet
         {
             { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
             { "n|name=", "Name of the project.", n => repoName = n },
@@ -39,16 +42,66 @@ namespace Codex.Application
             { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
         };
 
+        static OptionSet searchOptions = new OptionSet
+        {
+            { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
+            { "n|name=", "Name of the project to search.", n => repoName = n },
+        };
+
         static void Main(string[] args)
         {
-            var extras = options.Parse(args);
+            if (args.Length == 0)
+            {
+                WriteHelpText();
+                return;
+            }
+
+            var remaining = args.Skip(1).ToArray();
+            switch (args[0].ToLowerInvariant())
+            {
+                case "index":
+                    Index(remaining);
+                    return;
+                case "search":
+                    Search();
+                    return;
+                default:
+                    Console.Error.WriteLine($"Invalid verb '{args[0]}'");
+                    WriteHelpText();
+                    return;
+            }
+        }
+
+        private static void WriteHelpText()
+        {
+            Console.WriteLine("codex index {options}");
+            Console.WriteLine("Options:");
+            indexOptions.WriteOptionDescriptions(Console.Out);
+            Console.WriteLine();
+            Console.WriteLine("codex search {options}");
+            Console.WriteLine("Options:");
+            searchOptions.WriteOptionDescriptions(Console.Out);
+        }
+
+        static void Index(string[] args)
+        {
+            var extras = indexOptions.Parse(args);
             if (String.IsNullOrEmpty(rootDirectory)) throw new ArgumentException("Root path is missing. Use -p to provide it.");
             if (String.IsNullOrEmpty(repoName)) throw new ArgumentException("Project name is missing. Use -n to provide it.");
             if (String.IsNullOrEmpty(elasticSearchServer)) throw new ArgumentException("Elastic Search server URL is missing. Use -es to provide it.");
 
+            service = new ElasticSearchService(new ElasticSearchServiceConfiguration(elasticSearchServer));
+            store = new ElasticSearchStore(new ElasticSearchStoreConfiguration()
+            {
+                CreateIndices = true,
+                ShardCount = 5,
+                Prefix = "test."
+            },
+            service);
+
             try
             {
-                RunRepoImporter();
+                RunRepoImporter().GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
@@ -63,7 +116,7 @@ namespace Codex.Application
             }
         }
 
-        static void RunRepoImporter()
+        static async Task RunRepoImporter()
         {
             var targetIndexName = AnalysisServices.GetTargetIndexName(repoName);
 
@@ -129,16 +182,21 @@ namespace Codex.Application
                 }
                 else
                 {
-                    ElasticsearchStorage storage = new ElasticsearchStorage(elasticSearchServer);
-
-                    return;
-
-                    logger.WriteLine("Removing repository");
-                    ((IStorage)storage).RemoveRepository(targetIndexName).GetAwaiter().GetResult();
-
-                    logger.WriteLine("Removed repository");
-
-                    analysisTarget = storage;
+                    Placeholder.Todo("Populate commit/repo/branch with full set of real values");
+                    var anonymousGuid = Guid.NewGuid();
+                    var anonymousCommitId = $"AnonymousCommit_{anonymousGuid}";
+                    analysisTarget = await store.CreateRepositoryStore(
+                        new Repository(repoName),
+                        new Commit()
+                        {
+                            RepositoryName = repoName,
+                            CommitId = anonymousCommitId,
+                            DateUploaded = DateTime.UtcNow,
+                        },
+                        new Branch()
+                        {
+                            CommitId = anonymousCommitId,
+                        });
                 }
 
                 RepositoryImporter importer = new RepositoryImporter(repoName,
@@ -156,209 +214,209 @@ namespace Codex.Application
                             ".config",
                             ".settings"),
                         })
-                        //new ExternalRepoFileAnalyzer(new[] { @"d:\temp\Codex" }), // This indexer allows an external tool to write out codex spans for importing. We sill need to add support for a 'marker' file so we don't have to pass a folder.
+                    //new ExternalRepoFileAnalyzer(new[] { @"d:\temp\Codex" }), // This indexer allows an external tool to write out codex spans for importing. We sill need to add support for a 'marker' file so we don't have to pass a folder.
                     {
-                        AnalysisTarget = analysisTarget,
+                        RepositoryStore = analysisTarget,
                         Logger = logger,
                     })
                 {
                     AnalyzerDatas = projectAnalyzers.Select(a => new AnalyzerData() { Analyzer = a }).ToList()
                 };
 
-                importer.Import(finalizeImport: finalize).GetAwaiter().GetResult();
+                await importer.Import(finalizeImport: finalize);
             }
         }
 
-        private static void ComputeMissingProjects(ElasticsearchStorage storage)
-        {
-            storage.UpdateProjectsAsync(force: true).GetAwaiter().GetResult();
+        //private static void ComputeMissingProjects(ElasticsearchStorage storage)
+        //{
+        //    storage.UpdateProjectsAsync(force: true).GetAwaiter().GetResult();
 
-            var projectsResponse = storage.Provider.GetProjectsAsync(projectKind: nameof(ProjectKind.Source)).GetAwaiter().GetResult();
+        //    var projectsResponse = storage.Provider.GetProjectsAsync(projectKind: nameof(ProjectKind.Source)).GetAwaiter().GetResult();
 
-            var projectMap = storage.Projects;
-            var projects = projectsResponse.Result;
+        //    var projectMap = storage.Projects;
+        //    var projects = projectsResponse.Result;
 
-            HashSet<string> processedReferences = new HashSet<string>();
-            HashSet<string> hasProjectInfoProjects = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            HashSet<string> missingProjects = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        //    HashSet<string> processedReferences = new HashSet<string>();
+        //    HashSet<string> hasProjectInfoProjects = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        //    HashSet<string> missingProjects = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-            int i = 0;
-            foreach (var project in projects)
-            {
-                Console.WriteLine($"Processing {project.Id} ({i++}/{projects.Count})");
-                foreach (var referencedProject in project.ReferencedProjects)
-                {
-                    if (!processedReferences.Add(referencedProject.ProjectId))
-                    {
-                        continue;
-                    }
+        //    int i = 0;
+        //    foreach (var project in projects)
+        //    {
+        //        Console.WriteLine($"Processing {project.Id} ({i++}/{projects.Count})");
+        //        foreach (var referencedProject in project.ReferencedProjects)
+        //        {
+        //            if (!processedReferences.Add(referencedProject.ProjectId))
+        //            {
+        //                continue;
+        //            }
 
-                    if (!projectMap.ContainsKey(referencedProject.ProjectId)
-                        && !referencedProject.ProjectId.EndsWith(".Fakes", StringComparison.OrdinalIgnoreCase))
-                    {
-                        if (missingProjects.Add(referencedProject.ProjectId))
-                        {
-                            Console.WriteLine("Missing: " + referencedProject.ProjectId);
-                        }
-                    }
+        //            if (!projectMap.ContainsKey(referencedProject.ProjectId)
+        //                && !referencedProject.ProjectId.EndsWith(".Fakes", StringComparison.OrdinalIgnoreCase))
+        //            {
+        //                if (missingProjects.Add(referencedProject.ProjectId))
+        //                {
+        //                    Console.WriteLine("Missing: " + referencedProject.ProjectId);
+        //                }
+        //            }
 
-                    var references = storage.GetReferencesToSymbolAsync(new Symbol()
-                    {
-                        ProjectId = referencedProject.ProjectId,
-                        Kind = nameof(ReferenceKind.Definition)
-                    }, 1).GetAwaiter().GetResult();
+        //            var references = storage.GetReferencesToSymbolAsync(new Symbol()
+        //            {
+        //                ProjectId = referencedProject.ProjectId,
+        //                Kind = nameof(ReferenceKind.Definition)
+        //            }, 1).GetAwaiter().GetResult();
 
-                    if (references.Total == 0
-                        && !referencedProject.ProjectId.EndsWith(".Fakes", StringComparison.OrdinalIgnoreCase))
-                    {
-                        if (missingProjects.Add(referencedProject.ProjectId))
-                        {
-                            Console.WriteLine("Missing total: " + referencedProject.ProjectId);
-                        }
-                    }
-                }
-            }
+        //            if (references.Total == 0
+        //                && !referencedProject.ProjectId.EndsWith(".Fakes", StringComparison.OrdinalIgnoreCase))
+        //            {
+        //                if (missingProjects.Add(referencedProject.ProjectId))
+        //                {
+        //                    Console.WriteLine("Missing total: " + referencedProject.ProjectId);
+        //                }
+        //            }
+        //        }
+        //    }
 
-            File.WriteAllLines("AllProjects.txt", projects.OrderBy(p => p.Id, StringComparer.OrdinalIgnoreCase).Select(
-                p => $"{p.Id} (Has Definitions: {!missingProjects.Contains(p.Id)})"));
-            File.WriteAllLines("MissingProjects.txt", missingProjects.OrderBy(p => p, StringComparer.OrdinalIgnoreCase));
+        //    File.WriteAllLines("AllProjects.txt", projects.OrderBy(p => p.Id, StringComparer.OrdinalIgnoreCase).Select(
+        //        p => $"{p.Id} (Has Definitions: {!missingProjects.Contains(p.Id)})"));
+        //    File.WriteAllLines("MissingProjects.txt", missingProjects.OrderBy(p => p, StringComparer.OrdinalIgnoreCase));
 
-            return;
-        }
+        //    return;
+        //}
 
         static void Search()
         {
-            ElasticsearchStorage storage = new ElasticsearchStorage(elasticSearchServer);
+            //ElasticsearchStorage storage = new ElasticsearchStorage(elasticSearchServer);
 
-            string[] repos = new string[] { repoName.ToLowerInvariant() };
+            //string[] repos = new string[] { repoName.ToLowerInvariant() };
 
-            string line = null;
-            Console.WriteLine("Please enter symbol short name: ");
-            while ((line = Console.ReadLine()) != null)
-            {
-                if (line.Contains("`"))
-                {
-                    //results = storage.SearchAsync(repos, line, classification: null).Result;
-                    var results = ((ElasticsearchStorage)storage).TextSearchAsync(repos, line.TrimStart('`')).Result;
-                    Console.WriteLine($"Found {results.Count} matches");
-                    foreach (var result in results)
-                    {
-                        Console.WriteLine($"{result.File} ({result.Span.LineNumber}, {result.Span.LineSpanStart})");
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($"{result.ReferringFilePath} in '{result.ReferringProjectId}'");
-                        Console.ForegroundColor = ConsoleColor.Gray;
+            //string line = null;
+            //Console.WriteLine("Please enter symbol short name: ");
+            //while ((line = Console.ReadLine()) != null)
+            //{
+            //    if (line.Contains("`"))
+            //    {
+            //        //results = storage.SearchAsync(repos, line, classification: null).Result;
+            //        var results = ((ElasticsearchStorage)storage).TextSearchAsync(repos, line.TrimStart('`')).Result;
+            //        Console.WriteLine($"Found {results.Count} matches");
+            //        foreach (var result in results)
+            //        {
+            //            Console.WriteLine($"{result.File} ({result.Span.LineNumber}, {result.Span.LineSpanStart})");
+            //            Console.ForegroundColor = ConsoleColor.Green;
+            //            Console.WriteLine($"{result.ReferringFilePath} in '{result.ReferringProjectId}'");
+            //            Console.ForegroundColor = ConsoleColor.Gray;
 
-                        var bsf = storage.GetBoundSourceFileAsync(result.ReferringProjectId, result.ReferringFilePath).Result;
+            //            var bsf = storage.GetBoundSourceFileAsync(result.ReferringProjectId, result.ReferringFilePath).Result;
 
-                        if (!string.IsNullOrEmpty(result.Span.LineSpanText))
-                        {
-                            Console.Write(result.Span.LineSpanText.Substring(0, result.Span.LineSpanStart));
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.Write(result.Span.LineSpanText.Substring(result.Span.LineSpanStart, result.Span.Length));
-                            Console.ForegroundColor = ConsoleColor.Gray;
-                            Console.WriteLine(result.Span.LineSpanText.Substring(result.Span.LineSpanStart + result.Span.Length));
-                        }
-                    }
-                }
-                else if (line.Contains("|"))
-                {
-                    var parts = line.Split('|');
-                    var symbolId = SymbolId.UnsafeCreateWithValue(parts[0]);
-                    var projectId = parts[1];
+            //            if (!string.IsNullOrEmpty(result.Span.LineSpanText))
+            //            {
+            //                Console.Write(result.Span.LineSpanText.Substring(0, result.Span.LineSpanStart));
+            //                Console.ForegroundColor = ConsoleColor.Yellow;
+            //                Console.Write(result.Span.LineSpanText.Substring(result.Span.LineSpanStart, result.Span.Length));
+            //                Console.ForegroundColor = ConsoleColor.Gray;
+            //                Console.WriteLine(result.Span.LineSpanText.Substring(result.Span.LineSpanStart + result.Span.Length));
+            //            }
+            //        }
+            //    }
+            //    else if (line.Contains("|"))
+            //    {
+            //        var parts = line.Split('|');
+            //        var symbolId = SymbolId.UnsafeCreateWithValue(parts[0]);
+            //        var projectId = parts[1];
 
-                    var results = storage.GetReferencesToSymbolAsync(repos, new Symbol() { Id = symbolId, ProjectId = projectId }).GetAwaiter().GetResult();
+            //        var results = storage.GetReferencesToSymbolAsync(repos, new Symbol() { Id = symbolId, ProjectId = projectId }).GetAwaiter().GetResult();
 
-                    var relatedDefinitions = storage.GetRelatedDefinitions(repos,
-                            symbolId.Value,
-                            projectId).GetAwaiter().GetResult();
+            //        var relatedDefinitions = storage.GetRelatedDefinitions(repos,
+            //                symbolId.Value,
+            //                projectId).GetAwaiter().GetResult();
 
-                    var definition = results.Entries
-                        .Where(e => e.Span.Reference.ReferenceKind == nameof(ReferenceKind.Definition))
-                        .Select(e => e.Span.Reference)
-                        .FirstOrDefault();
+            //        var definition = results.Entries
+            //            .Where(e => e.Span.Reference.ReferenceKind == nameof(ReferenceKind.Definition))
+            //            .Select(e => e.Span.Reference)
+            //            .FirstOrDefault();
 
-                    if (definition != null)
-                    {
-                        var relatedDefs = storage.Provider.GetRelatedDefinitions(repos, definition.Id.Value, definition.ProjectId)
-                            .GetAwaiter().GetResult();
-                    }
+            //        if (definition != null)
+            //        {
+            //            var relatedDefs = storage.Provider.GetRelatedDefinitions(repos, definition.Id.Value, definition.ProjectId)
+            //                .GetAwaiter().GetResult();
+            //        }
 
-                    Console.WriteLine($"Found {results.Total} matches");
-                    foreach (var result in results.Entries)
-                    {
-                        Console.WriteLine($"{result.File} ({result.Span.LineNumber}, {result.Span.LineSpanStart})");
-                        if (!string.IsNullOrEmpty(result.Span.LineSpanText))
-                        {
-                            Console.Write(result.Span.LineSpanText.Substring(0, result.Span.LineSpanStart));
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.Write(result.Span.LineSpanText.Substring(result.Span.LineSpanStart, result.Span.Length));
-                            Console.ForegroundColor = ConsoleColor.Gray;
-                            Console.WriteLine(result.Span.LineSpanText.Substring(result.Span.LineSpanStart + result.Span.Length));
-                        }
-                    }
+            //        Console.WriteLine($"Found {results.Total} matches");
+            //        foreach (var result in results.Entries)
+            //        {
+            //            Console.WriteLine($"{result.File} ({result.Span.LineNumber}, {result.Span.LineSpanStart})");
+            //            if (!string.IsNullOrEmpty(result.Span.LineSpanText))
+            //            {
+            //                Console.Write(result.Span.LineSpanText.Substring(0, result.Span.LineSpanStart));
+            //                Console.ForegroundColor = ConsoleColor.Yellow;
+            //                Console.Write(result.Span.LineSpanText.Substring(result.Span.LineSpanStart, result.Span.Length));
+            //                Console.ForegroundColor = ConsoleColor.Gray;
+            //                Console.WriteLine(result.Span.LineSpanText.Substring(result.Span.LineSpanStart + result.Span.Length));
+            //            }
+            //        }
 
-                    if (results.Entries.Count != 0)
-                    {
-                        var result = results.Entries[0];
-                        Console.WriteLine($"Retrieving source file {result.ReferringFilePath} in {result.ReferringProjectId}");
+            //        if (results.Entries.Count != 0)
+            //        {
+            //            var result = results.Entries[0];
+            //            Console.WriteLine($"Retrieving source file {result.ReferringFilePath} in {result.ReferringProjectId}");
 
-                        var stopwatch = Stopwatch.StartNew();
-                        var sourceFile = storage.GetBoundSourceFileAsync(repos, result.ReferringProjectId, result.ReferringFilePath).GetAwaiter().GetResult();
-                        var elapsed = stopwatch.Elapsed;
+            //            var stopwatch = Stopwatch.StartNew();
+            //            var sourceFile = storage.GetBoundSourceFileAsync(repos, result.ReferringProjectId, result.ReferringFilePath).GetAwaiter().GetResult();
+            //            var elapsed = stopwatch.Elapsed;
 
-                        Console.WriteLine($"Retrieved source file in {elapsed.TotalMilliseconds} ms");
+            //            Console.WriteLine($"Retrieved source file in {elapsed.TotalMilliseconds} ms");
 
-                        Console.WriteLine($"Source file has { sourceFile?.Classifications.Count ?? -1 } classifications");
-                        if (sourceFile.Classifications != null)
-                        {
-                            ConcurrentDictionary<string, int> classificationCounters = new ConcurrentDictionary<string, int>();
-                            foreach (var cs in sourceFile.Classifications)
-                            {
-                                classificationCounters.AddOrUpdate(cs.Classification, 1, (k, v) => v + 1);
-                            }
+            //            Console.WriteLine($"Source file has { sourceFile?.Classifications.Count ?? -1 } classifications");
+            //            if (sourceFile.Classifications != null)
+            //            {
+            //                ConcurrentDictionary<string, int> classificationCounters = new ConcurrentDictionary<string, int>();
+            //                foreach (var cs in sourceFile.Classifications)
+            //                {
+            //                    classificationCounters.AddOrUpdate(cs.Classification, 1, (k, v) => v + 1);
+            //                }
 
-                            foreach (var counter in classificationCounters)
-                            {
-                                Console.WriteLine($"Source file has {counter.Value} {counter.Key} classifications");
-                            }
-                        }
+            //                foreach (var counter in classificationCounters)
+            //                {
+            //                    Console.WriteLine($"Source file has {counter.Value} {counter.Key} classifications");
+            //                }
+            //            }
 
-                        Console.WriteLine($"Source file has { sourceFile?.References.Count ?? -1 } references");
-                        Console.WriteLine($"Source file has { sourceFile?.Definitions.Count ?? -1 } definitions");
-                    }
-                }
-                else
-                {
-                    //results = storage.SearchAsync(repos, line, classification: null).Result;
-                    var results = storage.SearchAsync(repos, line, null).Result;
-                    Console.WriteLine($"Found {results.Total} matches");
-                    foreach (var result in results.Entries)
-                    {
-                        Console.WriteLine($"{result.File} ({result.Span.LineNumber}, {result.Span.LineSpanStart})");
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($"{result.Symbol.Id}|{result.Symbol.ProjectId}");
-                        Console.ForegroundColor = ConsoleColor.Gray;
+            //            Console.WriteLine($"Source file has { sourceFile?.References.Count ?? -1 } references");
+            //            Console.WriteLine($"Source file has { sourceFile?.Definitions.Count ?? -1 } definitions");
+            //        }
+            //    }
+            //    else
+            //    {
+            //        //results = storage.SearchAsync(repos, line, classification: null).Result;
+            //        var results = storage.SearchAsync(repos, line, null).Result;
+            //        Console.WriteLine($"Found {results.Total} matches");
+            //        foreach (var result in results.Entries)
+            //        {
+            //            Console.WriteLine($"{result.File} ({result.Span.LineNumber}, {result.Span.LineSpanStart})");
+            //            Console.ForegroundColor = ConsoleColor.Green;
+            //            Console.WriteLine($"{result.Symbol.Id}|{result.Symbol.ProjectId}");
+            //            Console.ForegroundColor = ConsoleColor.Gray;
 
-                        var symbol = result.Symbol;
-                        int index = result.DisplayName.IndexOf(symbol.ShortName);
-                        //if (index >= 0)
-                        //{
-                        //    result.Span.LineSpanText = symbol.DisplayName;
-                        //    result.Span.LineSpanStart = index;
-                        //    result.Span.Length = symbol.ShortName.Length;
-                        //}
+            //            var symbol = result.Symbol;
+            //            int index = result.DisplayName.IndexOf(symbol.ShortName);
+            //            //if (index >= 0)
+            //            //{
+            //            //    result.Span.LineSpanText = symbol.DisplayName;
+            //            //    result.Span.LineSpanStart = index;
+            //            //    result.Span.Length = symbol.ShortName.Length;
+            //            //}
 
-                        //if (!string.IsNullOrEmpty(result.Span.LineSpanText))
-                        //{
-                        //    Console.Write(result.Span.LineSpanText.Substring(0, result.Span.LineSpanStart));
-                        //    Console.ForegroundColor = ConsoleColor.Yellow;
-                        //    Console.Write(result.Span.LineSpanText.Substring(result.Span.LineSpanStart, result.Span.Length));
-                        //    Console.ForegroundColor = ConsoleColor.Gray;
-                        //    Console.WriteLine(result.Span.LineSpanText.Substring(result.Span.LineSpanStart + result.Span.Length));
-                        //}
-                    }
-                }
-            }
+            //            //if (!string.IsNullOrEmpty(result.Span.LineSpanText))
+            //            //{
+            //            //    Console.Write(result.Span.LineSpanText.Substring(0, result.Span.LineSpanStart));
+            //            //    Console.ForegroundColor = ConsoleColor.Yellow;
+            //            //    Console.Write(result.Span.LineSpanText.Substring(result.Span.LineSpanStart, result.Span.Length));
+            //            //    Console.ForegroundColor = ConsoleColor.Gray;
+            //            //    Console.WriteLine(result.Span.LineSpanText.Substring(result.Span.LineSpanStart + result.Span.Length));
+            //            //}
+            //        }
+            //    }
+            //}
         }
     }
 }

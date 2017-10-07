@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Codex.Utilities;
 using System.Diagnostics.Contracts;
+using Codex.ObjectModel;
 
 namespace Codex.ElasticSearch
 {

@@ -152,7 +152,7 @@ namespace Codex.Framework.Generation
 
             foreach (var typeDefinition in DefinitionsByType.Values)
             {
-                typeDefinition.Migrated = MigratedTypes.Contains(typeDefinition.Type);
+                typeDefinition.Migrated = true;// MigratedTypes.Contains(typeDefinition.Type);
 
                 var declarationType = typeDefinition.Type;
                 if (declarationType.IsGenericType)

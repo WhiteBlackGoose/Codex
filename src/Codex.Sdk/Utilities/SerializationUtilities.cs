@@ -8,9 +8,9 @@ namespace Codex.Utilities
 {
     public static class SerializationUtilities
     {
-        public static string AssignDuplicate(string value, ref string lastValue)
+        public static T AssignDuplicate<T>(T value, ref T lastValue)
         {
-            if (value == null)
+            if (EqualityComparer<T>.Default.Equals(value, default(T)))
             {
                 return lastValue;
             }
@@ -21,11 +21,11 @@ namespace Codex.Utilities
             }
         }
 
-        public static string RemoveDuplicate(string value, ref string lastValue)
+        public static T RemoveDuplicate<T>(T value, ref T lastValue)
         {
-            if (value == lastValue)
+            if (EqualityComparer<T>.Default.Equals(value, default(T)))
             {
-                return null;
+                return default(T);
             }
             else
             {
