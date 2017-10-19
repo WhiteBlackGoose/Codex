@@ -29,22 +29,27 @@ namespace Codex.View
         {
         }
 
+        private void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("Hello world");
+        }
+
         //private void Border_SizeChanged(object sender, SizeChangedEventArgs e)
         //{
         //}
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-        }
+        //private void Window_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //}
 
-        private void Window_Initialized(object sender, EventArgs e)
-        {
-        }
+        //private void Window_Initialized(object sender, EventArgs e)
+        //{
+        //}
 
-        protected override Size ArrangeOverride(Size arrangeBounds)
-        {
-            var result = base.ArrangeOverride(arrangeBounds);
-            return result;
-        }
+        //protected override Size ArrangeOverride(Size arrangeBounds)
+        //{
+        //    var result = base.ArrangeOverride(arrangeBounds);
+        //    return result;
+        //}
     }
 }

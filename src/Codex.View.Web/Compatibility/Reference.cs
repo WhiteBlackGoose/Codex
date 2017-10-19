@@ -1,4 +1,5 @@
 ﻿using Granular.Host;
+using Granular.Presentation.Generic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace Codex.View.Web.Compatibility
     class Reference
     {
         // Reference host project in order to ensure it included
-        private static HtmlValueConverter HostReference;
+        private static BulletChrome GranularPresentationGenericReference;
     }
 }

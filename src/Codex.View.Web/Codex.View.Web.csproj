@@ -3,16 +3,9 @@
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
     <ProjectGuid>{796AA891-1AF9-4949-A817-EBF065AE2312}</ProjectGuid>
-    <AssemblyName>Codex.View</AssemblyName>
+    <AssemblyName>Codex.View.Web</AssemblyName>
     <RootNamespace>Codex.View.Web</RootNamespace>
     <_FindDependencies>true</_FindDependencies>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <NoStdLib>true</NoStdLib>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <PropertyGroup>
@@ -46,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compatibility\Reference.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SrcRoot)\Common.targets" />
