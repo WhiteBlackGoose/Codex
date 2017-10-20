@@ -25,7 +25,8 @@
                 <Border  VerticalAlignment="Center" Margin="10" Width="95.5">
                     <Image Source="Images/microsoftlogo.png" />
                 </Border>
-                <TextBlock Text="Codex" Foreground="White" VerticalAlignment="Center" FontSize="20" Width="56" Margin="0, 0, 0, 4" />
+                <TextBlock Text="Codex" Foreground="White" 
+                           VerticalAlignment="Center" FontSize="20" Width="56" Margin="0, 0, 0, 4" />
             </StackPanel>
         </Grid>
         <Grid>
@@ -36,6 +37,11 @@
             </Grid.ColumnDefinitions>
 
             <Border Background="#EEEEEE" Grid.Column="1" />
+            <Border Background="#FFFFE0" BorderBrush="#F0E68C" BorderThickness="1" Margin="8" VerticalAlignment="Top" Height="38" Padding="8, 0" >
+                <TextBlock Text="Enter a search string. Start with ` for full text search results only."
+                           VerticalAlignment="Center"
+                           FontSize="16" />
+            </Border>
         </Grid>
     </DockPanel>
 </Window>
