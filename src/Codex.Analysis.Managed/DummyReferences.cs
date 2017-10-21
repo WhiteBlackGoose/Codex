@@ -13,6 +13,7 @@ namespace Codex.Analysis
     /// </summary>
     public class DummyReferences
     {
+#pragma warning disable 0169
         private CS.Formatting.BinaryOperatorSpacingOptions csbs;
         private Microsoft.CodeAnalysis.Completion.CompletionService cacs;
     }

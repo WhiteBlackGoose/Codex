@@ -228,6 +228,7 @@ namespace Codex.Analysis
             if (checksumKey != null)
             {
                 var checksum = text.GetChecksum().ToHex();
+                info.Properties = info.Properties ?? new PropertyMap();
                 info.Properties[checksumKey] = checksum;
 
                 AnnotateDefinition(0, 0,

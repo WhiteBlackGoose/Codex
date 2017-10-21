@@ -29,6 +29,9 @@ namespace Codex.ElasticSearch
             this.commit = commit;
             this.branch = branch;
 
+            Placeholder.Todo("Choose real values for the parameters");
+            this.batcher = new ElasticSearchBatcher(store, commit.CommitId, repository.Name, $"{commit.CommitId}#Cumulative");
+
             batcher.Add(store.RepositoryStore, new RepositorySearchModel()
             {
                 Repository = repository,

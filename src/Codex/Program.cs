@@ -129,11 +129,13 @@ namespace Codex.Application
         {
             var targetIndexName = AnalysisServices.GetTargetIndexName(repoName);
 
+            await service.ClearAsync();
+
             store = await service.CreateStoreAsync(new ElasticSearchStoreConfiguration()
             {
                 CreateIndices = true,
                 ShardCount = 5,
-                Prefix = "test."
+                Prefix = targetIndexName
             });
 
             string[] file = new string[0];

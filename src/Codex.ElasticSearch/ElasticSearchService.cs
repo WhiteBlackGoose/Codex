@@ -9,6 +9,7 @@ using Codex.Utilities;
 using Elasticsearch.Net;
 using Newtonsoft.Json;
 using Codex.Serialization;
+using Codex.Storage.ElasticProviders;
 
 namespace Codex.ElasticSearch
 {
@@ -62,6 +63,16 @@ namespace Codex.ElasticSearch
                 Duration = stopwatch.Elapsed - startTime,
                 Result = result
             };
+        }
+
+        public Task ClearAsync()
+        {
+            return UseClient(async context =>
+            {
+                var response = await context.Client.DeleteIndexAsync(Indices.All);
+                response.ThrowOnFailure();
+                return true;
+            });
         }
 
         public async Task<ElasticSearchStore> CreateStoreAsync(ElasticSearchStoreConfiguration configuration)

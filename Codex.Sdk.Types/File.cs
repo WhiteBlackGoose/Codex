@@ -103,7 +103,7 @@ namespace Codex
         /// <summary>
         /// Extensible key value properties for the document.
         /// </summary>
-        [Attached]
+        [Include(ObjectStage.Analysis)]
         IPropertyMap Properties { get; }
     }
 

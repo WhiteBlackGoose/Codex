@@ -91,7 +91,11 @@ namespace Codex.ElasticSearch
                 var response = await context.Client
                     .CreateIndexAsync(IndexName,
                         c => c.Mappings(m => m.Map<T>(SearchType.IndexName, tm => tm.AutoMap(MappingPropertyVisitor.Instance)))
-                            .Settings(s => s.AddAnalyzerSettings().NumberOfShards(Store.Configuration.ShardCount).RefreshInterval(TimeSpan.FromMinutes(1)))
+                            .Settings(s => s
+                                .AddAnalyzerSettings()
+                                .Setting("index.mapper.dynamic", false)
+                                .NumberOfShards(Store.Configuration.ShardCount)
+                                .RefreshInterval(TimeSpan.FromMinutes(1)))
                             .CaptureRequest(context))
                             .ThrowOnFailure();
 

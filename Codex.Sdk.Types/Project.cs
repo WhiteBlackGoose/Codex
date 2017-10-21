@@ -51,7 +51,7 @@ namespace Codex
         /// <summary>
         /// Used definitions for the project. Sorted.
         /// </summary>
-        [Attached]
+        [Include(ObjectStage.Analysis)]
         IReadOnlyList<IDefinitionSymbol> Definitions { get; }
 
         /// <summary>

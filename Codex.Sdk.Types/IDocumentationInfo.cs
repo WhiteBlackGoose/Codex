@@ -90,7 +90,7 @@ namespace Codex
     public interface IDocumentationReferenceSymbol : IReferenceSymbol
     {
         /// <summary>
-        /// The display name of the symbol reference as it should appear in documenation
+        /// The display name of the symbol reference as it should appear in documentation
         /// </summary>
         string DisplayName { get; }
 

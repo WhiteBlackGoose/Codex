@@ -7,9 +7,9 @@
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
-    <PackageReference Include="Ref12.Codex.Elasticsearch.Net" Version="6.0.0-beta1-b27" />
-    <PackageReference Include="Ref12.Codex.NEST" Version="6.0.0-beta1-b27" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+    <PackageReference Include="Ref12.Codex.Elasticsearch.Net" Version="6.0.0-beta1-b42" />
+    <PackageReference Include="Ref12.Codex.NEST" Version="6.0.0-beta1-b42" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.4.0" />
   </ItemGroup>
   <ItemGroup>
@@ -27,7 +27,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Compile Include="..\..\bin\Debug\Codex.Framework.Generation\ElasticSearchTypes.g.cs">
+    <Compile Include="$(OutDir)\..\Codex.Framework.Generation\ElasticSearchTypes.g.cs">
       <Link>Model\ElasticSearchTypes.g.cs</Link>
     </Compile>
     <Compile Include="DataModel\Attributes.cs" />

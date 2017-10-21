@@ -1,13 +1,17 @@
-﻿using System;
+﻿extern alias binlog;
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging;
 using Microsoft.Build.Logging.StructuredLogger;
 using Microsoft.CodeAnalysis;
+using BinaryLogReplayEventSource = binlog::Microsoft.Build.Logging.BinaryLogReplayEventSource;
 
 namespace Codex.Analysis.Managed
 {
+
     public class BinLogReader
     {
         public static IEnumerable<CompilerInvocation> ExtractInvocations(string binLogFilePath)

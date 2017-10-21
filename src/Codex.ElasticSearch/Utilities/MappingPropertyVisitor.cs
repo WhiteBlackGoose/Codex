@@ -21,33 +21,42 @@ namespace Codex.ElasticSearch.Utilities
 
         public override IProperty Visit(PropertyInfo propertyInfo, ElasticsearchPropertyAttributeBase attribute)
         {
-            var searchBehavior = propertyInfo.GetSearchBehavior() ?? SearchBehavior.None;
+            var searchBehavior = propertyInfo.GetSearchBehavior();
             var dataInclusion = propertyInfo.GetDataInclusion() ?? AlwaysInclude;
 
-            // TODO: Add properties for all search behaviors
-            switch (searchBehavior)
+            Placeholder.Todo("Disable dynamic mappings");
+            Placeholder.Todo("Verify mappings");
+            Placeholder.Todo("Add properties for all search behaviors");
+            if (searchBehavior.HasValue)
             {
-                case SearchBehavior.None:
-                    return DisabledProperty;
-                case SearchBehavior.Term:
-                    break;
-                case SearchBehavior.NormalizedKeyword:
-                    return new NormalizedKeywordAttribute();
-                case SearchBehavior.Sortword:
-                    return new SortwordAttribute();
-                case SearchBehavior.HierarchicalPath:
-                    return new HierachicalPathAttribute();
-                case SearchBehavior.FullText:
-                    return new FullTextAttribute(dataInclusion);
-                case SearchBehavior.Prefix:
-                    return new PrefixTextAttribute();
-                case SearchBehavior.PrefixFullName:
-                    break;
-                default:
-                    throw new NotImplementedException();
+                switch (searchBehavior.Value)
+                {
+                    case SearchBehavior.None:
+                        return DisabledProperty;
+                    case SearchBehavior.Term:
+                        break;
+                    case SearchBehavior.NormalizedKeyword:
+                        return new NormalizedKeywordAttribute();
+                    case SearchBehavior.Sortword:
+                        return new SortwordAttribute();
+                    case SearchBehavior.HierarchicalPath:
+                        return new HierachicalPathAttribute();
+                    case SearchBehavior.FullText:
+                        return new FullTextAttribute(dataInclusion);
+                    case SearchBehavior.Prefix:
+                        return new PrefixTextAttribute();
+                    case SearchBehavior.PrefixFullName:
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
             }
 
             var property = base.Visit(propertyInfo, attribute);
+            if (!(property is IObjectProperty) && !searchBehavior.HasValue)
+            {
+                return DisabledProperty;
+            }
 
             return property;
         }
