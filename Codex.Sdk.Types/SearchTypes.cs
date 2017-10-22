@@ -158,6 +158,12 @@ namespace Codex
         /// </summary>
         [SearchBehavior(SearchBehavior.None)]
         IClassificationList CompressedClassifications { get; }
+
+        /// <summary>
+        /// Compressed list of reference spans
+        /// </summary>
+        [SearchBehavior(SearchBehavior.None)]
+        IReferenceList CompressedReferences { get; }
     }
 
     public interface ITextSourceSearchModel : ISearchEntity

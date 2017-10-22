@@ -15,7 +15,7 @@ namespace Codex.ElasticSearch.Utilities
     {
         public static readonly MappingPropertyVisitor Instance = new MappingPropertyVisitor();
 
-        private static readonly IObjectProperty DisabledProperty = new ObjectProperty() { Enabled = false };
+        private static readonly IProperty IgnoredProperty = PropertyWalker.IgnoredPropertyInstance;
 
         private const DataInclusionOptions AlwaysInclude = DataInclusionOptions.None;
 
@@ -24,7 +24,6 @@ namespace Codex.ElasticSearch.Utilities
             var searchBehavior = propertyInfo.GetSearchBehavior();
             var dataInclusion = propertyInfo.GetDataInclusion() ?? AlwaysInclude;
 
-            Placeholder.Todo("Disable dynamic mappings");
             Placeholder.Todo("Verify mappings");
             Placeholder.Todo("Add properties for all search behaviors");
             if (searchBehavior.HasValue)
@@ -32,7 +31,7 @@ namespace Codex.ElasticSearch.Utilities
                 switch (searchBehavior.Value)
                 {
                     case SearchBehavior.None:
-                        return DisabledProperty;
+                        return IgnoredProperty;
                     case SearchBehavior.Term:
                         break;
                     case SearchBehavior.NormalizedKeyword:
@@ -53,9 +52,17 @@ namespace Codex.ElasticSearch.Utilities
             }
 
             var property = base.Visit(propertyInfo, attribute);
+            if (property is IObjectProperty)
+            {
+                if (((IObjectProperty)property).Properties.Count == 0)
+                {
+                    return IgnoredProperty;
+                }
+            }
+
             if (!(property is IObjectProperty) && !searchBehavior.HasValue)
             {
-                return DisabledProperty;
+                return IgnoredProperty;
             }
 
             return property;

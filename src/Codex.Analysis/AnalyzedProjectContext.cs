@@ -169,6 +169,7 @@ namespace Codex.Analysis
             var metadataFileBuilder = elementFactory().CreateAnnotatedSourceBuilder(
                 new SourceFileInfo()
                 {
+                    RepoRelativePath =  $@"{project.Repo.GetLogicalPath(project.ProjectDirectory)}\{GetMetadataFilePath(fileName)}",
                     ProjectRelativePath = GetMetadataFilePath(fileName),
                     Language = "xml",
                 }, Project.ProjectId);

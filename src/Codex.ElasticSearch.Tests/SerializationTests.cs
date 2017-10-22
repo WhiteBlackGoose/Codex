@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,11 +29,26 @@ namespace Codex.ElasticSearch.Tests
             };
 
             var entityResult = symbol.SerializeEntity();
-            var defaultResult = DefaultSerialize(symbol);
+            var defaultResult = symbol.DefaultSerialize();
 
             Assert.AreNotEqual(entityResult, defaultResult, "Members not on serialization interface should be excluded");
             Assert.False(entityResult.ToLowerInvariant().Contains("value"), "SymbolId should be serialized as string rather than object");
             Assert.Pass(entityResult);
+        }
+
+        [Test]
+        public void TestDefaultValueSerialization()
+        {
+            var entity = new BoundSourceInfo()
+            {
+                ProjectId = "testProjectId"
+            };
+
+            var entityResult = entity.SerializeEntity();
+            var elasticResult = entity.ElasticSerialize();
+
+            Assert.Pass(elasticResult);
+
         }
 
         [Test]
@@ -102,12 +118,33 @@ namespace Codex.ElasticSearch.Tests
             Assert.Pass(definition1.SerializeEntity(ObjectStage.Index));
         }
 
-        private string DefaultSerialize(object obj)
+        
+    }
+
+    internal static class TestSerializerExtensions
+    {
+        public static string ElasticSerialize(this object data)
+        {
+            using (var stream = new MemoryStream())
+            {
+                OverrideConnectionSettings ocs = new OverrideConnectionSettings(new Uri("http://localhost:0"));
+                ocs.GetSerializer().Serialize(data, stream);
+
+                stream.Position = 0;
+                using (var sr = new StreamReader(stream))
+                {
+                    return sr.ReadToEnd();
+                }
+            }
+        }
+
+        public static string DefaultSerialize(this EntityBase obj)
         {
             var serializer = JsonSerializer.CreateDefault();
 
             return serializer.Serialize(obj);
         }
     }
+
 
 }

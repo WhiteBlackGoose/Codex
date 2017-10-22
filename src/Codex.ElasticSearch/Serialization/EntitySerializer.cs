@@ -12,6 +12,7 @@ using Codex.ObjectModel;
 using System.IO;
 using Codex.Utilities;
 using Codex.Sdk.Utilities;
+using System.Collections;
 
 namespace Codex.Serialization
 {
@@ -67,6 +68,22 @@ namespace Codex.Serialization
         }
     }
 
+    public class CachingElasticContractResolver : ElasticContractResolver
+    {
+        private IContractResolver m_inner;
+
+        public CachingElasticContractResolver(IContractResolver inner, IConnectionSettingsValues connectionSettings = null, IList<Func<Type, JsonConverter>> contractConverters = null)
+            : base (connectionSettings ?? new ConnectionSettings(), contractConverters)
+        {
+            m_inner = new CachingContractResolver(inner);
+        }
+
+        public override JsonContract ResolveContract(Type objectType)
+        {
+            return m_inner.ResolveContract(objectType);
+        }
+    }
+
     public class CachingContractResolver : IContractResolver
     {
         private IContractResolver m_inner;
@@ -114,7 +131,7 @@ namespace Codex.Serialization
         }
     }
 
-    public class EntityContractResolver : DefaultContractResolver
+    public class EntityContractResolver : ElasticContractResolver
     {
         private readonly ObjectStage stage;
         private readonly Dictionary<Type, JsonConverter> primitives = new Dictionary<Type, JsonConverter>();
@@ -123,6 +140,7 @@ namespace Codex.Serialization
             .CompareByAfter(m => m.Name, StringComparer.Ordinal);
 
         public EntityContractResolver(ObjectStage stage)
+            : base (new ConnectionSettings(), null)
         {
             this.stage = stage;
             AddPrimitive(r => SymbolId.UnsafeCreateWithValue((string)r.Value), (w, id) => w.WriteValue(id.Value));
@@ -144,12 +162,82 @@ namespace Codex.Serialization
 
             if (primitives.TryGetValue(objectType, out var converter))
             {
-                var contract = CreatePrimitiveContract(objectType);
-                contract.Converter = converter;
-                return contract;
+                var primitiveContract = CreatePrimitiveContract(objectType);
+                primitiveContract.Converter = converter;
+                return primitiveContract;
             }
 
-            return base.CreateContract(objectType);
+            var contract = base.CreateContract(objectType);
+
+            if (contract != null && CodexTypeUtilities.IsEntityType(objectType))
+            {
+                contract.OnSerializingCallbacks.Add((obj, context) =>
+                {
+                    (obj as ISerializableEntity)?.OnSerializing();
+                });
+
+                contract.OnDeserializedCallbacks.Add((obj, context) =>
+                {
+                    (obj as ISerializableEntity)?.OnDeserialized();
+                });
+            }
+
+            return contract;
+        }
+
+        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+        {
+            var property = base.CreateProperty(member, memberSerialization);
+
+            if (property != null)
+            {
+                property.DefaultValueHandling = DefaultValueHandling.Ignore;
+
+                if (property.PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+                {
+                    property.ShouldSerialize = instance =>
+                    {
+                        if (member.Name == "References")
+                        {
+
+                        }
+
+                        IEnumerable enumerable = null;
+
+                        // this value could be in a public field or public property
+                        switch (member.MemberType)
+                        {
+                            case MemberTypes.Property:
+                                enumerable = instance
+                                    .GetType()
+                                    .GetProperty(member.Name)
+                                    .GetValue(instance, null) as IEnumerable;
+                                break;
+                            case MemberTypes.Field:
+                                enumerable = instance
+                                    .GetType()
+                                    .GetField(member.Name)
+                                    .GetValue(instance) as IEnumerable;
+                                break;
+                            default:
+                                break;
+
+                        }
+
+                        if (enumerable == null || (enumerable as ICollection)?.Count == 0)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            // check to see if there is at least one item in the Enumerable
+                            return enumerable.GetEnumerator().MoveNext();
+                        }
+                    };
+                }
+            }
+
+            return property;
         }
 
         protected override List<MemberInfo> GetSerializableMembers(Type objectType)
@@ -199,7 +287,7 @@ namespace Codex.Serialization
             {
                 serializers[stage] = JsonSerializer.Create(new JsonSerializerSettings()
                 {
-                    ContractResolver = new CachingContractResolver(new EntityContractResolver((ObjectStage)stage)),
+                    ContractResolver = new CachingElasticContractResolver(new EntityContractResolver((ObjectStage)stage)),
                     DefaultValueHandling = DefaultValueHandling.Ignore
                 });
             }

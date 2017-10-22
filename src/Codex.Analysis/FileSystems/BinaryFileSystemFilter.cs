@@ -33,7 +33,8 @@ namespace Codex.Analysis.FileSystems
             using (var stream = fileSystem.OpenFile(filePath))
             using (var reader = new StreamReader(stream))
             {
-                if (stream.Length == 0)
+                // Empty files and files over 10 MB are excluded
+                if (stream.Length == 0 || stream.Length > 10_000_000)
                 {
                     return false;
                 }

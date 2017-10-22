@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Codex
 {
-    public class EntityBase
+    public class EntityBase : ISerializableEntity
     {
         protected virtual void Initialize()
         {
@@ -17,5 +17,23 @@ namespace Codex
         protected virtual void OnDeserializedCore()
         {
         }
+
+        void ISerializableEntity.OnSerializing()
+        {
+            OnSerializingCore();
+        }
+
+        void ISerializableEntity.OnDeserialized()
+        {
+            OnDeserializedCore();
+        }
     }
+
+    public interface ISerializableEntity
+    {
+        void OnDeserialized();
+
+        void OnSerializing();
+    }
+
 }

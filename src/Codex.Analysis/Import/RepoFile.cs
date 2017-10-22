@@ -20,6 +20,8 @@ namespace Codex.Import
         private string logicalPath;
 
         private string filePath;
+
+        public int? Length;
         public string FilePath
         {
             get
@@ -48,7 +50,7 @@ namespace Codex.Import
             get
             {
                 var repoRoot = PrimaryProject.Repo.DefaultRepoProject.ProjectDirectory;
-                return PathUtilities.GetRelativePath(repoRoot, FilePath);
+                return PrimaryProject.Repo.DefaultRepoProject.GetLogicalPath(FilePath);
             }
         }
 

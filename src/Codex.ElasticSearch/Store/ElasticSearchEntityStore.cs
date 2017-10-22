@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Codex.ElasticSearch
 {
-    public class ElasticSearchEntityStore
+    public abstract class ElasticSearchEntityStore
     {
         internal readonly SearchType SearchType;
         internal readonly ElasticSearchStore Store;
@@ -27,17 +27,7 @@ namespace Codex.ElasticSearch
             this.IndexName = (store.Configuration.Prefix + searchType.IndexName).ToLowerInvariant();
         }
 
-        public async Task DeleteAsync(IEnumerable<string> uids)
-        {
-            await Store.Service.UseClient(async context =>
-            {
-                var response = await context.Client
-                    .BulkAsync(b => b.DeleteMany(uids, (bd, uid) => bd.Id(uid).Index(IndexName)).CaptureRequest(context))
-                    .ThrowOnFailure();
-
-                return response.IsValid;
-            });
-        }
+        public abstract Task DeleteAsync(IEnumerable<string> uids);
     }
 
     public class ElasticSearchEntityStore<T> : ElasticSearchEntityStore, IStore<T>
@@ -98,6 +88,18 @@ namespace Codex.ElasticSearch
                                 .RefreshInterval(TimeSpan.FromMinutes(1)))
                             .CaptureRequest(context))
                             .ThrowOnFailure();
+
+                return response.IsValid;
+            });
+        }
+
+        public override async Task DeleteAsync(IEnumerable<string> uids)
+        {
+            await Store.Service.UseClient(async context =>
+            {
+                var response = await context.Client
+                    .BulkAsync(b => b.DeleteMany<T>(uids, (bd, uid) => bd.Id(uid).Index(IndexName)).CaptureRequest(context))
+                    .ThrowOnFailure();
 
                 return response.IsValid;
             });

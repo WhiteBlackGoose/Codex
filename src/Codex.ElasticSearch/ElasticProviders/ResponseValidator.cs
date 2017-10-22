@@ -17,7 +17,7 @@ namespace Codex.Storage.ElasticProviders
                 return default(T);
             }
 
-            if (!result.ApiCall.Success)
+            if (!result.ApiCall.Success || !result.IsValid)
             {
                 throw new ElasticProviderCommunicationException(result, result.DebugInformation);
             }

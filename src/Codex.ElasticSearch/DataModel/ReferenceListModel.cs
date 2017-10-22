@@ -6,7 +6,7 @@ using static Codex.Utilities.SerializationUtilities;
 
 namespace Codex.Storage.DataModel
 {
-    public class ReferenceListModel : SpanListModel<ReferenceSpan, SpanListSegmentModel, ReferenceSymbol, ReferenceSymbol>
+    public class ReferenceListModel : SpanListModel<ReferenceSpan, SpanListSegmentModel, ReferenceSymbol, ReferenceSymbol>, IReferenceList
     {
         public static readonly IEqualityComparer<ReferenceSymbol> ReferenceSymbolEqualityComparer = new EqualityComparerBuilder<ReferenceSymbol>()
             .CompareByAfter(s => s.ProjectId)

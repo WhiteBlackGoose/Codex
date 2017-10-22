@@ -14,4 +14,9 @@ namespace Codex
     {
         IReadOnlyList<ClassificationSpan> ToList();
     }
+
+    public interface IReferenceList
+    {
+        IReadOnlyList<ReferenceSpan> ToList();
+    }
 }

@@ -31,7 +31,6 @@
     <Compile Include="Logging\MultiLogger.cs" />
     <Compile Include="Logging\TextLogger.cs" />
     <Compile Include="ObjectModel\AnalyzedProject.cs" />
-    <Compile Include="ObjectModel\BoundSourceFile.cs" />
     <Compile Include="ObjectModel\Classification.cs" />
     <Compile Include="ObjectModel\EnumEx.cs" />
     <Compile Include="ObjectModel\Glyph.cs" />

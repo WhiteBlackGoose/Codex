@@ -9,7 +9,7 @@ using static Codex.Utilities.SerializationUtilities;
 
 namespace Codex.ObjectModel
 {
-    public partial class CodexTypeUtilities
+    public static partial class CodexTypeUtilities
     {
         public static Type GetInterfaceType(Type type)
         {

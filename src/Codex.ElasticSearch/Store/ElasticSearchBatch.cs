@@ -6,6 +6,7 @@ using Nest;
 using System.Diagnostics.Contracts;
 using Codex.Sdk.Utilities;
 using Codex.ElasticSearch.Utilities;
+using Codex.Storage.ElasticProviders;
 
 namespace Codex.ElasticSearch
 {
@@ -13,7 +14,7 @@ namespace Codex.ElasticSearch
     {
         public readonly BulkDescriptor BulkDescriptor = new BulkDescriptor();
 
-        public readonly List<Item> EntityItem = new List<Item>();
+        public readonly List<Item> EntityItems = new List<Item>();
 
         private readonly AtomicBool canReserveExecute = new AtomicBool();
 
@@ -33,13 +34,21 @@ namespace Codex.ElasticSearch
 
         public async Task<IBulkResponse> ExecuteAsync(ClientContext context)
         {
-            var response = await context.Client.BulkAsync(BulkDescriptor);
-            Contract.Assert(EntityItem.Count == response.Items.Count);
+            lock(this)
+            {
+                // Prevent any subsequent additions by calling this in the lock.
+                // Generally, TryReserveExecute would already be called except
+                // for final batch which may not reach capacity before being flushed
+                TryReserveExecute();
+            }
+
+            var response = await context.Client.BulkAsync(BulkDescriptor.CaptureRequest(context)).ThrowOnFailure();
+            Contract.Assert(EntityItems.Count == response.Items.Count);
 
             int batchIndex = 0;
             foreach (var responseItem in response.Items)
             {
-                var item = EntityItem[batchIndex];
+                var item = EntityItems[batchIndex];
 
                 if (Placeholder.MissingFeature("Need to implement stored filter support"))
                 {
@@ -76,8 +85,8 @@ namespace Codex.ElasticSearch
 
         private long GetStableId(BulkResponseItemBase item)
         {
+            Placeholder.NotImplemented("Need to add this in ElasticSearch (derived from sequence number) and Nest");
             return item.StableId;
-            throw Placeholder.NotImplemented("Need to add this in ElasticSearch (derived from sequence number) and Nest");
         }
 
         public bool TryAdd<T>(ElasticSearchEntityStore<T> store, T entity, Action onAdded, ElasticSearchStoredFilterBuilder[] additionalStoredFilters)
@@ -99,14 +108,14 @@ namespace Codex.ElasticSearch
 
                 var item = new Item()
                 {
-                    BatchIndex = EntityItem.Count,
+                    BatchIndex = EntityItems.Count,
                     Entity = entity,
                     EntityStore = store,
                     OnAdded = onAdded,
                     AdditionalStoredFilters = additionalStoredFilters
                 };
 
-                EntityItem.Add(item);
+                EntityItems.Add(item);
 
                 store.AddIndexOperation(BulkDescriptor, entity);
                 return true;
@@ -118,6 +127,12 @@ namespace Codex.ElasticSearch
             var size = CurrentSize;
             if (size != 0 && size + entity.EntityContentSize > ElasticConstants.BatchSizeBytes)
             {
+                return false;
+            }
+
+            if (canReserveExecute.Value)
+            {
+                // Already reserved for execution
                 return false;
             }
 

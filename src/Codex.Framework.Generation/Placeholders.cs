@@ -25,6 +25,11 @@ namespace Codex.ObjectModel
     public class ClassificationSpan
     {
     }
+
+    [Placeholder]
+    public class ReferenceSpan
+    {
+    }
 }
 
 namespace Codex.Utilities

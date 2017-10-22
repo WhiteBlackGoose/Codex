@@ -66,13 +66,7 @@ namespace Codex.ElasticSearch
                 var batch = currentBatch;
                 if (!batch.TryAdd(store, entity, onAdded, additionalStoredFilters))
                 {
-                    if (batch.TryReserveExecute())
-                    {
-                        currentBatch = new ElasticSearchBatch(this);
-                        await store.Store.Service.UseClient(batch.ExecuteAsync);
-
-                        return None.Value;
-                    }
+                    await ExecuteBatchAsync(batch);
                 }
                 else
                 {
@@ -80,6 +74,17 @@ namespace Codex.ElasticSearch
                     return None.Value;
                 }
             }
+        }
+
+        private async ValueTask<None> ExecuteBatchAsync(ElasticSearchBatch batch) 
+        {
+            if (batch.TryReserveExecute())
+            {
+                currentBatch = new ElasticSearchBatch(this);
+                await service.UseClient(batch.ExecuteAsync);
+            }
+
+            return None.Value;
         }
 
         public void Add<T>(ElasticSearchEntityStore<T> store, T entity, params ElasticSearchStoredFilterBuilder[] additionalStoredFilters)
@@ -100,10 +105,20 @@ namespace Codex.ElasticSearch
 
         public async Task FinalizeAsync()
         {
-            // Flush any background operations
-            while (backgroundTasks.TryDequeue(out var backgroundTask))
+            while (true)
             {
-                await backgroundTask;
+                // Flush any background operations
+                while (backgroundTasks.TryDequeue(out var backgroundTask))
+                {
+                    await backgroundTask;
+                }
+
+                if (currentBatch.EntityItems.Count == 0)
+                {
+                    break;
+                }
+
+                await ExecuteBatchAsync(currentBatch);
             }
 
             // Finalize the stored filters

@@ -110,6 +110,11 @@ namespace Codex.Import
         private RepoFile CreateNewProjectFile(string filePath, string logicalPath)
         {
             var file = new RepoFile(this, filePath, logicalPath);
+            if (!string.IsNullOrEmpty(filePath) && filePath.Length > 2 && filePath[1] == ':')
+            {
+                file.Length = (int)new FileInfo(filePath).Length;
+            }
+
             AddFile(file);
             return file;
         }

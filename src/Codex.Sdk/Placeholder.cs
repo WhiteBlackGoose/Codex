@@ -27,7 +27,8 @@ namespace Codex
             throw new NotImplementedException();
         }
 
-        public static Exception NotImplemented(string message = null)
+        [Conditional("NOTIMPLEMENTED")]
+        public static void NotImplemented(string message = null)
         {
             throw new NotImplementedException();
         }

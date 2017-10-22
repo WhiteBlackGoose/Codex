@@ -230,6 +230,7 @@ namespace Codex.Analysis
                 var checksum = text.GetChecksum().ToHex();
                 info.Properties = info.Properties ?? new PropertyMap();
                 info.Properties[checksumKey] = checksum;
+                info.Lines = text.Lines.Count;
 
                 AnnotateDefinition(0, 0,
                     new DefinitionSymbol()
