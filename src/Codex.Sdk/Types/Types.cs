@@ -9,33 +9,38 @@ using static Codex.Utilities.SerializationUtilities;
 
 namespace Codex.ObjectModel
 {
-    public static partial class CodexTypeUtilities
+    public abstract partial class CodexTypeUtilities
     {
-        public static Type GetInterfaceType(Type type)
+        public Type GetInterfaceType(Type type)
         {
             if (!type.IsInterface)
             {
-                s_typeMappings.TryGetValue(type, out var result);
+                TryGetMappedType(type, out var result);
                 return result ?? type;
             }
 
             return type;
         }
 
-        public static Type GetImplementationType(Type type)
+        public Type GetImplementationType(Type type)
         {
             if (type.IsInterface)
             {
-                s_typeMappings.TryGetValue(type, out var result);
+                TryGetMappedType(type, out var result);
                 return result ?? type;
             }
 
             return type;
         }
 
-        public static bool IsEntityType(Type type)
+        public bool IsEntityType(Type type)
         {
-            return s_typeMappings.ContainsKey(type);
+            return TryGetMappedType(type, out var mappedType);
+        }
+
+        protected virtual bool TryGetMappedType(Type type, out Type mappedType)
+        {
+            return s_typeMappings.TryGetValue(type, out mappedType);
         }
     }
 

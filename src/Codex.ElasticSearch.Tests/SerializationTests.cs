@@ -2,6 +2,7 @@
 using Codex.ObjectModel;
 using Codex.Sdk.Utilities;
 using Codex.Serialization;
+using Codex.Storage.DataModel;
 using Codex.Utilities;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -33,6 +34,36 @@ namespace Codex.ElasticSearch.Tests
 
             Assert.AreNotEqual(entityResult, defaultResult, "Members not on serialization interface should be excluded");
             Assert.False(entityResult.ToLowerInvariant().Contains("value"), "SymbolId should be serialized as string rather than object");
+            Assert.Pass(entityResult);
+        }
+
+        [Test]
+        public void TestMembersSerializedByPropertyType()
+        {
+            var boundInfo = new BoundSourceInfo()
+            {
+                ProjectId = "testProjectId",
+                References = new[]
+                    {
+                        new ReferenceSpan()
+                        {
+                            Reference = new DefinitionSymbol()
+                            {
+                                ContainerQualifiedName = "cqn",
+                                ReferenceKind = "refKind"
+                            }
+                        }
+                    }
+            };
+
+            var entity = new BoundSourceSearchModel()
+            {
+                BindingInfo = boundInfo,
+                CompressedReferences = new ReferenceListModel(boundInfo.References)
+            };
+
+            var entityResult = entity.ElasticSerialize();
+            Assert.False(entityResult.ToLowerInvariant().Contains("cqn"), "Property of DefinitionSymbol should not be serialized when the property type is ReferenceSymbol");
             Assert.Pass(entityResult);
         }
 

@@ -35,14 +35,14 @@ namespace Codex.ElasticSearch
                     foreach (var searchType in SearchTypes.RegisteredSearchTypes)
                     {
                         typeNames[searchType.Type] = searchType.Name.ToLowerInvariant();
-                        typeNames[CodexTypeUtilities.GetImplementationType(searchType.Type)] = searchType.Name.ToLowerInvariant();
+                        typeNames[ElasticCodexTypeUtilities.Instance.GetImplementationType(searchType.Type)] = searchType.Name.ToLowerInvariant();
                     }
                 });
             }
 
             foreach (var searchType in SearchTypes.RegisteredSearchTypes)
             {
-                var mapper = (IdMapper)Activator.CreateInstance(typeof(IdMapper<>).MakeGenericType(CodexTypeUtilities.GetImplementationType(searchType.Type)));
+                var mapper = (IdMapper)Activator.CreateInstance(typeof(IdMapper<>).MakeGenericType(ElasticCodexTypeUtilities.Instance.GetImplementationType(searchType.Type)));
                 settings = mapper.MapId(settings);
             }
 

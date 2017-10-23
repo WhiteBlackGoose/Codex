@@ -13,6 +13,9 @@ using System.IO;
 using Codex.Utilities;
 using Codex.Sdk.Utilities;
 using System.Collections;
+using System.Linq.Expressions;
+using Codex.Storage.DataModel;
+using Codex.ElasticSearch.Utilities;
 
 namespace Codex.Serialization
 {
@@ -120,13 +123,21 @@ namespace Codex.Serialization
 
         public JsonContract ResolveContract(Type type)
         {
-            if (CodexTypeUtilities.IsEntityType(type))
+            if (entityContractResolver.HandlesType(type))
             {
                 return entityContractResolver.ResolveContract(type);
             }
             else
             {
-                return fallContractResolver.ResolveContract(type);
+                var contract = fallContractResolver.ResolveContract(type);
+                var arrayContract = contract as JsonArrayContract;
+                if (arrayContract?.CollectionItemType != null &&
+                    entityContractResolver.HandlesType(arrayContract.CollectionItemType))
+                {
+                    return entityContractResolver.ResolveContract(type);
+                }
+
+                return contract;
             }
         }
     }
@@ -135,6 +146,10 @@ namespace Codex.Serialization
     {
         private readonly ObjectStage stage;
         private readonly Dictionary<Type, JsonConverter> primitives = new Dictionary<Type, JsonConverter>();
+
+        private readonly Action<JsonContract, bool> isSealedFieldSetter = EntityReflectionHelpers.CreateFieldSetter<JsonContract, bool>("IsSealed");
+        private readonly Action<JsonContainerContract, JsonContract> finalItemContractFieldSetter = EntityReflectionHelpers.CreateFieldSetter<JsonContainerContract, JsonContract>("_finalItemContract");
+        private readonly Action<JsonContainerContract, JsonContract> itemContractFieldSetter = EntityReflectionHelpers.CreateFieldSetter<JsonContainerContract, JsonContract>("_itemContract");
 
         private readonly IComparer<MemberInfo> MemberComparer = new ComparerBuilder<MemberInfo>()
             .CompareByAfter(m => m.Name, StringComparer.Ordinal);
@@ -151,14 +166,42 @@ namespace Codex.Serialization
             primitives[typeof(TType)] = new JsonPrimitiveConverter<TType>(write, read);
         }
 
+        internal bool HandlesType(Type objectType)
+        {
+            return primitives.ContainsKey(objectType) || ElasticCodexTypeUtilities.Instance.IsEntityType(objectType);
+        }
+
         protected override JsonConverter ResolveContractConverter(Type objectType)
         {
-            return base.ResolveContractConverter(objectType);
+            var result = base.ResolveContractConverter(objectType);
+            return result;
+        }
+
+        protected override JsonObjectContract CreateObjectContract(Type objectType)
+        {
+            return base.CreateObjectContract(objectType);
+        }
+
+        protected override JsonArrayContract CreateArrayContract(Type objectType)
+        {
+            var arrayContract = base.CreateArrayContract(objectType);
+            if (HandlesType(arrayContract.CollectionItemType))
+            {
+                var itemContract = CreateContract(arrayContract.CollectionItemType);
+
+                // Set the item contract and final item contract, so collection items
+                // are serialized based on collection item type rather than type of 
+                // actual member
+                itemContractFieldSetter(arrayContract, itemContract);
+                finalItemContractFieldSetter(arrayContract, itemContract);
+            }
+
+            return arrayContract;
         }
 
         protected override JsonContract CreateContract(Type objectType)
         {
-            objectType = CodexTypeUtilities.GetImplementationType(objectType);
+            objectType = ElasticCodexTypeUtilities.Instance.GetImplementationType(objectType);
 
             if (primitives.TryGetValue(objectType, out var converter))
             {
@@ -169,8 +212,11 @@ namespace Codex.Serialization
 
             var contract = base.CreateContract(objectType);
 
-            if (contract != null && CodexTypeUtilities.IsEntityType(objectType))
+            if (contract != null && ElasticCodexTypeUtilities.Instance.IsEntityType(objectType))
             {
+                // Set JsonContract.IsSealed=true, so members are serialized via their property type (not the type
+                // of the actual object)
+                isSealedFieldSetter(contract, true);
                 contract.OnSerializingCallbacks.Add((obj, context) =>
                 {
                     (obj as ISerializableEntity)?.OnSerializing();
@@ -197,11 +243,6 @@ namespace Codex.Serialization
                 {
                     property.ShouldSerialize = instance =>
                     {
-                        if (member.Name == "References")
-                        {
-
-                        }
-
                         IEnumerable enumerable = null;
 
                         // this value could be in a public field or public property
@@ -293,6 +334,18 @@ namespace Codex.Serialization
             }
 
             return serializers;
+        }
+
+        public static Action<TType, TFieldType> CreateFieldSetter<TType, TFieldType>(string fieldName)
+        {
+            var objectParameter = Expression.Parameter(typeof(TType), "obj");
+            var fieldValueParameter = Expression.Parameter(typeof(TFieldType), "value");
+            return Expression.Lambda< Action<TType, TFieldType>>(
+                Expression.Assign(
+                    Expression.Field(objectParameter, fieldName), 
+                    fieldValueParameter), 
+                objectParameter, 
+                fieldValueParameter).Compile();
         }
 
         public static string GetMetadataName(this Type type)
