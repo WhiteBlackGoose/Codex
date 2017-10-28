@@ -6,6 +6,7 @@ using Codex.Serialization;
 using Codex.Storage.ElasticProviders;
 using Codex.Utilities;
 using Nest;
+using static Nest.Infer;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
@@ -23,7 +24,7 @@ namespace Codex.ElasticSearch.Tests
         [Test]
         public void TestMappings()
         {
-            var mapping = new TypeMappingDescriptor<IBoundSourceSearchModel>().AutoMap(MappingPropertyVisitor.Instance);
+            var mapping = new TypeMappingDescriptor<IDefinitionSearchModel>().AutoMapEx();
             Assert.Pass(mapping.ElasticSerialize());
         }
     }

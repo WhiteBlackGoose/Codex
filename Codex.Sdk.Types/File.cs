@@ -21,13 +21,6 @@ namespace Codex
     public interface IBoundSourceInfo : IProjectFileScopeEntity
     {
         /// <summary>
-        /// The unique identifier for the file
-        /// NOTE: This is not applicable to most files. Only set for files
-        /// which are added in a shared context and need this for deduplication)
-        /// </summary>
-        string Uid { get; }
-
-        /// <summary>
         /// The number of references in the file
         /// </summary>
         [CoerceGet(typeof(int?))]
@@ -49,23 +42,27 @@ namespace Codex
         /// References for the document. Sorted. May overlap.
         /// </summary>
         [ReadOnlyList]
+        [SearchBehavior(SearchBehavior.None)]
         IReadOnlyList<IReferenceSpan> References { get; }
 
         // TODO: Should this be just the symbol
         /// <summary>
         /// Definitions for the document. Sorted. No overlap?
         /// </summary>
+        [SearchBehavior(SearchBehavior.None)]
         IReadOnlyList<IDefinitionSpan> Definitions { get; }
 
         /// <summary>
         /// Classifications for the document. Sorted by start index. No overlap.
         /// </summary>
         [ReadOnlyList]
+        [SearchBehavior(SearchBehavior.None)]
         IReadOnlyList<IClassificationSpan> Classifications { get; }
 
         /// <summary>
         /// Outlining regions for the document. May overlap.
         /// </summary>
+        [SearchBehavior(SearchBehavior.None)]
         IReadOnlyList<IOutliningRegion> OutliningRegions { get; }
 
         /// <summary>

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using Codex.Sdk.Utilities;
 using Codex.ElasticSearch;
+using Codex.ElasticSearch.Utilities;
 
 namespace Codex.Storage.ElasticProviders
 {
@@ -37,9 +38,12 @@ namespace Codex.Storage.ElasticProviders
         }
     }
 
-    internal static class ElasticUtility
+    public static class ElasticUtility
     {
-        private static ConcurrentQueue<string> CachedTypeIndexNames = new ConcurrentQueue<string>();
+        private class Inner
+        {
+            public static readonly ConcurrentQueue<string> CachedTypeIndexNames = new ConcurrentQueue<string>();
+        }
 
         private class CachedTypeIndexName<T>
         {
@@ -47,13 +51,13 @@ namespace Codex.Storage.ElasticProviders
 
             static CachedTypeIndexName()
             {
-                CachedTypeIndexNames.Enqueue(Name);
+                Inner.CachedTypeIndexNames.Enqueue(Name);
             }
         }
 
         public static string[] TypeIndexNames()
         {
-            return CachedTypeIndexNames.ToArray();
+            return Inner.CachedTypeIndexNames.ToArray();
         }
 
         public static string TypeIndexName<T>()
@@ -229,17 +233,28 @@ namespace Codex.Storage.ElasticProviders
         public static TypeMappingDescriptor<T> AutoMapEx<T>(this TypeMappingDescriptor<T> mappingDescriptor)
             where T : class
         {
-            // Ensure name can be retrieved
-            var name = TypeIndexName<T>();
-            return mappingDescriptor.AutoMap();
+            return mappingDescriptor.Properties(pd => new PropertiesDescriptor<T>(MappingPropertyVisitor.GetProperties(typeof(T))));
         }
 
-        public static void RemoveDisabledProperties(this IProperties properties)
+        public static IPromise<IProperties> RemoveDisabledProperties(this IPromise<IProperties> properties)
         {
-            foreach (var disabledProperty in properties.Where(kvp => (kvp.Value as IObjectProperty)?.Enabled == false).ToList())
+            return new PropertiesDescriptor<object>(properties.Value.RemoveDisabledProperties());
+        }
+
+        public static IProperties RemoveDisabledProperties(this IProperties properties)
+        {
+            foreach (var kvp in properties.ToList())
             {
-                properties.Remove(disabledProperty.Key);
+                var key = kvp.Key;
+                var property = kvp.Value;
+                if ((property as IObjectProperty)?.Enabled == false 
+                    || property.LocalMetadata?.TryGetValue(MappingPropertyVisitor.DisabledPropertyKey, out var value) == true)
+                {
+                    properties.Remove(key);
+                }
             }
+
+            return properties;
         }
     }
 }

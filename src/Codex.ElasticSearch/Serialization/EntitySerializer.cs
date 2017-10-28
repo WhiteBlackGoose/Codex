@@ -370,12 +370,6 @@ namespace Codex.Serialization
             return attribute?.AllowedStages ?? ObjectStage.All;
         }
 
-        public static SearchBehavior? GetSearchBehavior(this MemberInfo type)
-        {
-            var attribute = type.GetAttribute<SearchBehaviorAttribute>();
-            return attribute?.Behavior;
-        }
-
         public static void PopulateContentIdAndSize<T>(this T entity)
             where T : class, ISearchEntity
         {
