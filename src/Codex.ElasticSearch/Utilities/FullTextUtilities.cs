@@ -48,13 +48,13 @@ namespace Codex.Storage.Utilities
             return StartOfLineSpecifierChar + lineSpecifier + EndOfLineSpecifierChar;
         }
 
-        public static IEnumerable<SymbolSpan> ParseHighlightSpans(string highlight)
+        public static IEnumerable<TextLineSpan> ParseHighlightSpans(string highlight)
         {
             highlight = highlight.Replace(HighlightStartTag, HighlightStartTagCharString);
             highlight = highlight.Replace(HighlightEndTag, HighlightEndTagCharString);
             highlight += "\n";
 
-            List<SymbolSpan> spans = new List<SymbolSpan>(1);
+            List<TextLineSpan> spans = new List<TextLineSpan>(1);
             StringBuilder builder = new StringBuilder();
             SymbolSpan currentSpan = new SymbolSpan();
 
@@ -137,12 +137,12 @@ namespace Codex.Storage.Utilities
             return spans.Where(s => s.Length != 0);
         }
 
-        public static SymbolSpan ParseHighlightSpan(string highlight)
+        public static TextLineSpan ParseHighlightSpan(string highlight)
         {
             return ParseHighlightSpan(highlight, new StringBuilder());
         }
 
-        private static SymbolSpan ParseHighlightSpan(string highlight, StringBuilder builder)
+        private static TextLineSpan ParseHighlightSpan(string highlight, StringBuilder builder)
         {
             builder.Clear();
             int lineNumber = -1;
@@ -192,7 +192,7 @@ namespace Codex.Storage.Utilities
                 lineSpanText = lineSpanText.Substring(0, firstNewLineAfterEndTag);
             }
 
-            return new SymbolSpan()
+            return new TextLineSpan()
             {
                 LineNumber = lineNumber >= 0 ? lineNumber : 0,
                 LineSpanText = lineSpanText,

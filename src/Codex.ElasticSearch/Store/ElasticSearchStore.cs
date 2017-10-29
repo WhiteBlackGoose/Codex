@@ -49,7 +49,7 @@ namespace Codex.ElasticSearch
         /// <summary>
         /// Prefix for indices
         /// </summary>
-        public string Prefix;
+        public string Prefix = string.Empty;
 
         /// <summary>
         /// Indicates where indices should be created when <see cref="ElasticSearchStore.InitializeAsync"/> is called.

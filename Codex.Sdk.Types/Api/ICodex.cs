@@ -4,32 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Codex.Framework.Types
+namespace Codex.Sdk.Search
 {
     // +TODO: Generate ASP.Net endpoint which handles all these calls. Potentially also implement
     // caller (i.e. WebApiCodex : ICodex)
     /// <summary>
     /// High level operations for codex 
     /// </summary>
-    public interface ICodexService
+    public interface ICodex
     {
-        Task<IIndexQueryHitsResponse<ISearchResult>> SearchAsync(SearchArguments arguments);
+        Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync(SearchArguments arguments);
 
-        Task<IIndexQueryHitsResponse<IReferenceSearchModel>> FindAllReferencesAsync(FindAllReferencesArguments arguments);
+        Task<IndexQueryHitsResponse<IReferenceSearchModel>> FindAllReferencesAsync(FindAllReferencesArguments arguments);
 
         /// <summary>
         /// Find definition for a symbol
         /// Usage: Documentation hover tooltip
         /// </summary>
-        Task<IIndexQueryHitsResponse<IDefinitionSearchModel>> FindDefinitionAsync(FindDefinitionArguments arguments);
+        Task<IndexQueryHitsResponse<IDefinitionSearchModel>> FindDefinitionAsync(FindDefinitionArguments arguments);
 
         /// <summary>
         /// Find definition location for a symbol
         /// Usage: Go To Definition
         /// </summary>
-        Task<IIndexQueryHitsResponse<IReferenceSearchModel>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments);
+        Task<IndexQueryHitsResponse<IReferenceSearchModel>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments);
 
-        Task<IIndexQueryHitsResponse<IBoundSourceSearchModel>> GetSourceAsync(GetSourceArguments arguments);
+        Task<IndexQueryHitsResponse<IBoundSourceSearchModel>> GetSourceAsync(GetSourceArguments arguments);
     }
 
     public class CodexArgumentsBase
@@ -37,7 +37,7 @@ namespace Codex.Framework.Types
         /// <summary>
         /// The maximum number of results to return
         /// </summary>
-        public int MaxResults;
+        public int MaxResults = 100;
     }
 
     public class ContextCodexArgumentsBase : CodexArgumentsBase
@@ -100,8 +100,57 @@ namespace Codex.Framework.Types
 
     }
 
-    public interface ISearchResult
+    public interface ISearchResult : IProjectFileScopeEntity
     {
+        /// <summary>
+        /// The text span for a text result
+        /// </summary>
+        ITextLineSpan TextSpan { get; }
+    }
 
+    public class IndexQueryResponse<T>
+    {
+        /// <summary>
+        /// If the query failed, this will contain the error message
+        /// </summary>
+        public string Error { get; set; }
+
+        /// <summary>
+        /// The raw query sent to the index server
+        /// </summary>
+        public IReadOnlyList<string> RawQueries { get; set; }
+
+        /// <summary>
+        /// The spent executing the query
+        /// </summary>
+        public TimeSpan Duration { get; set; }
+
+        /// <summary>
+        /// The spent executing the query
+        /// </summary>
+        public TimeSpan ServerTime { get; set; }
+
+        /// <summary>
+        /// The results of the query
+        /// </summary>
+        public T Result { get; set; }
+    }
+
+    public class IndexQueryHits<T>
+    {
+        /// <summary>
+        /// The total number of results matching the query. 
+        /// NOTE: This may be greater than the number of hits returned.
+        /// </summary>
+        public int Total { get; set; }
+
+        /// <summary>
+        /// The results of the query
+        /// </summary>
+        public IReadOnlyList<T> Hits { get; set; }
+    }
+
+    public class IndexQueryHitsResponse<T> : IndexQueryResponse<IndexQueryHits<T>>
+    {
     }
 }

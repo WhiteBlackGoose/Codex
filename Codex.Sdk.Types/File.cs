@@ -251,7 +251,11 @@ namespace Codex
         int LocalGroupId { get; }
     }
 
-    public interface ISymbolSpan : ILineSpan
+    public interface ISymbolSpan : ITextLineSpan
+    {
+    }
+
+    public interface ITextLineSpan : ILineSpan
     {
         /// <summary>
         /// The line text

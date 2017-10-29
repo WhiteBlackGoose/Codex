@@ -18,6 +18,7 @@ using Codex.Storage;
 using Mono.Options;
 using Codex.ElasticSearch;
 using System.Threading.Tasks;
+using Codex.Sdk.Search;
 
 namespace Codex.Application
 {
@@ -71,7 +72,7 @@ namespace Codex.Application
                     Index(remaining);
                     return;
                 case "search":
-                    Search(remaining);
+                    Search(remaining).Wait();
                     return;
                 case "dryRun":
                     analysisOnly = true;
@@ -104,9 +105,7 @@ namespace Codex.Application
             var extras = indexOptions.Parse(args);
             if (String.IsNullOrEmpty(rootDirectory)) throw new ArgumentException("Root path is missing. Use -p to provide it.");
             if (String.IsNullOrEmpty(repoName)) throw new ArgumentException("Project name is missing. Use -n to provide it.");
-            if (String.IsNullOrEmpty(elasticSearchServer)) throw new ArgumentException("Elastic Search server URL is missing. Use -es to provide it.");
-
-            service = new ElasticSearchService(new ElasticSearchServiceConfiguration(elasticSearchServer));
+            InitService();
 
             try
             {
@@ -125,6 +124,13 @@ namespace Codex.Application
             }
         }
 
+        private static void InitService()
+        {
+            if (String.IsNullOrEmpty(elasticSearchServer)) throw new ArgumentException("Elastic Search server URL is missing. Use -es to provide it.");
+
+            service = new ElasticSearchService(new ElasticSearchServiceConfiguration(elasticSearchServer));
+        }
+
         static async Task RunRepoImporter()
         {
             var targetIndexName = AnalysisServices.GetTargetIndexName(repoName);
@@ -135,7 +141,7 @@ namespace Codex.Application
             {
                 CreateIndices = true,
                 ShardCount = 5,
-                Prefix = targetIndexName
+                Prefix = string.Empty
             });
 
             string[] file = new string[0];
@@ -300,8 +306,44 @@ namespace Codex.Application
         //    return;
         //}
 
-        static void Search(string[] args = null)
+        static async Task Search(string[] args = null)
         {
+            InitService();
+
+            var codex = await service.CreateCodexAsync(new ElasticSearchStoreConfiguration()
+            {
+            });
+
+            string line;
+            while ((line = Console.ReadLine()) != null)
+            {
+                var response = await codex.SearchAsync(new SearchArguments() { SearchString = line });
+                var results = response.Result;
+                Console.WriteLine($"Found {results.Total} matches");
+                foreach (var result in results.Hits)
+                {
+                    Console.WriteLine($@"\\{result.RepositoryName}\{result.RepoRelativePath}");
+                    Console.WriteLine($"{result.ProjectId}:{result.ProjectRelativePath} ({result.TextSpan.LineNumber}, {result.TextSpan.LineSpanStart})");
+
+                    if (!string.IsNullOrEmpty(result.TextSpan.LineSpanText))
+                    {
+                        Console.Write(result.TextSpan.LineSpanText.Substring(0, result.TextSpan.LineSpanStart));
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(result.TextSpan.LineSpanText.Substring(result.TextSpan.LineSpanStart, result.TextSpan.Length));
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                        Console.WriteLine(result.TextSpan.LineSpanText.Substring(result.TextSpan.LineSpanStart + result.TextSpan.Length));
+                    }
+                }
+
+                if (results.Total == 0)
+                {
+                    foreach (var rawQuery in response.RawQueries)
+                    {
+                        Console.WriteLine(rawQuery);
+                    }
+                }
+            }
+
             //ElasticsearchStorage storage = new ElasticsearchStorage(elasticSearchServer);
 
             //string[] repos = new string[] { repoName.ToLowerInvariant() };

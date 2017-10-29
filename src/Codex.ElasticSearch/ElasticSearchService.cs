@@ -12,6 +12,7 @@ using Codex.Serialization;
 using Codex.Storage.ElasticProviders;
 using Codex.ElasticSearch.Utilities;
 using Codex.ObjectModel;
+using Codex.ElasticSearch.Search;
 
 namespace Codex.ElasticSearch
 {
@@ -83,6 +84,12 @@ namespace Codex.ElasticSearch
         {
             var store = new ElasticSearchStore(configuration, this);
             await store.InitializeAsync();
+            return store;
+        }
+
+        public async Task<ElasticSearchCodex> CreateCodexAsync(ElasticSearchStoreConfiguration configuration)
+        {
+            var store = new ElasticSearchCodex(configuration, this);
             return store;
         }
     }

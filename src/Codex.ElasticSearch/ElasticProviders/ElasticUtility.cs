@@ -233,28 +233,7 @@ namespace Codex.Storage.ElasticProviders
         public static TypeMappingDescriptor<T> AutoMapEx<T>(this TypeMappingDescriptor<T> mappingDescriptor)
             where T : class
         {
-            return mappingDescriptor.Properties(pd => new PropertiesDescriptor<T>(MappingPropertyVisitor.GetProperties(typeof(T))));
-        }
-
-        public static IPromise<IProperties> RemoveDisabledProperties(this IPromise<IProperties> properties)
-        {
-            return new PropertiesDescriptor<object>(properties.Value.RemoveDisabledProperties());
-        }
-
-        public static IProperties RemoveDisabledProperties(this IProperties properties)
-        {
-            foreach (var kvp in properties.ToList())
-            {
-                var key = kvp.Key;
-                var property = kvp.Value;
-                if ((property as IObjectProperty)?.Enabled == false 
-                    || property.LocalMetadata?.TryGetValue(MappingPropertyVisitor.DisabledPropertyKey, out var value) == true)
-                {
-                    properties.Remove(key);
-                }
-            }
-
-            return properties;
+            return mappingDescriptor.Properties(pd => new PropertiesDescriptor<T>(MappingPropertyVisitor.GetProperties(typeof(T)))).Dynamic(false);
         }
     }
 }

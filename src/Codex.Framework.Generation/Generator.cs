@@ -11,6 +11,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System.Runtime.CompilerServices;
 using Codex.Utilities;
+using Codex.Sdk.Search;
 
 namespace Codex.Framework.Generation
 {

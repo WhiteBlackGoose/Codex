@@ -13,20 +13,8 @@ using System.Collections;
 
 namespace Codex.ElasticSearch.Utilities
 {
-    public class MappingPropertyVisitor : NoopPropertyVisitor, IPropertyVisitor
+    public static class MappingPropertyVisitor
     {
-        public static readonly MappingPropertyVisitor Instance = new MappingPropertyVisitor();
-
-        private static readonly IProperty IgnoredProperty = PropertyWalker.IgnoredPropertyInstance;
-        private static readonly IProperty DisabledProperty = new ObjectProperty();
-
-        public const string DisabledPropertyKey = "IsDisabled";
-
-        private static IDictionary<string, object> DisabledLocalMetadata = new Dictionary<string, object>()
-        {
-            { DisabledPropertyKey, true }
-        };
-
         private const DataInclusionOptions AlwaysInclude = DataInclusionOptions.None;
 
         public static IProperties GetProperties(Type type, int recursionDepth = 0)
@@ -111,107 +99,6 @@ namespace Codex.ElasticSearch.Utilities
             }
 
             return null;
-        }
-
-        public override IProperty Visit(PropertyInfo propertyInfo, ElasticsearchPropertyAttributeBase attribute)
-        {
-            var searchBehavior = propertyInfo.GetSearchBehavior();
-            var dataInclusion = propertyInfo.GetDataInclusion() ?? AlwaysInclude;
-
-            Placeholder.Todo("Verify mappings");
-            Placeholder.Todo("Add properties for all search behaviors");
-            if (searchBehavior.HasValue)
-            {
-                switch (searchBehavior.Value)
-                {
-                    case SearchBehavior.None:
-                        return IgnoredProperty;
-                    case SearchBehavior.Term:
-                        return null;
-                    case SearchBehavior.NormalizedKeyword:
-                        return new NormalizedKeywordAttribute();
-                    case SearchBehavior.Sortword:
-                        return new SortwordAttribute();
-                    case SearchBehavior.HierarchicalPath:
-                        return new HierachicalPathAttribute();
-                    case SearchBehavior.FullText:
-                        return new FullTextAttribute(dataInclusion);
-                    case SearchBehavior.Prefix:
-                        return new PrefixTextAttribute();
-                    case SearchBehavior.PrefixFullName:
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            if (ElasticCodexTypeUtilities.Instance.IsEntityType(GetUnderlyingType(propertyInfo.PropertyType)))
-            {
-                // Infer's object
-                return null;
-            }
-
-            return IgnoredProperty;
-        }
-
-        void IPropertyVisitor.Visit(IProperty type, PropertyInfo propertyInfo, ElasticsearchPropertyAttributeBase attribute)
-        {
-            var searchBehavior = propertyInfo.GetSearchBehavior();
-            var dataInclusion = propertyInfo.GetDataInclusion() ?? AlwaysInclude;
-            Placeholder.Todo("Add properties for all search behaviors");
-            var allowedStages = propertyInfo.GetAllowedStages();
-
-            if ((allowedStages & ObjectStage.Index) == 0)
-            {
-                DisableProperty(type);
-            }
-
-            if (searchBehavior.HasValue)
-            {
-                switch (searchBehavior.Value)
-                {
-                    case SearchBehavior.Term:
-                    case SearchBehavior.NormalizedKeyword:
-                    case SearchBehavior.Sortword:
-                    case SearchBehavior.HierarchicalPath:
-                    case SearchBehavior.FullText:
-                    case SearchBehavior.Prefix:
-                    case SearchBehavior.PrefixFullName:
-                        break;
-                    case SearchBehavior.None:
-                        DisableProperty(type);
-                        break;
-                    default:
-                        if (!(type is IObjectProperty))
-                        {
-                            DisableProperty(type);
-                        }
-                        break;
-                }
-            }
-            else if (!(type is IObjectProperty))
-            {
-                DisableProperty(type);
-            }
-            else
-            {
-                Visit((IObjectProperty)type, propertyInfo, attribute);
-            }
-        }
-
-        private static void DisableProperty(IProperty type)
-        {
-            type.LocalMetadata = DisabledLocalMetadata;
-        }
-
-        public override void Visit(IObjectProperty type, PropertyInfo propertyInfo, ElasticsearchPropertyAttributeBase attribute)
-        {
-            type.Properties.RemoveDisabledProperties();
-
-            if (type.Properties.Count == 0)
-            {
-                DisableProperty(type);
-            }
         }
 
         private static Type GetUnderlyingType(Type type)
