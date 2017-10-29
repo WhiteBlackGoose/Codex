@@ -71,8 +71,8 @@
     <Compile Include="AnalysisServices.cs" />
     <Compile Include="AnalyzedProjectContext.cs" />
     <Compile Include="BoundSourceFileBuilder.cs" />
-    <Compile Include="External\CodexTypeAdapter.cs" />
-    <Compile Include="External\ExternalRepoFileAnalyzer.cs" />
+    <None Include="External\CodexTypeAdapter.cs" />
+    <None Include="External\ExternalRepoFileAnalyzer.cs" />
     <Compile Include="FileSystems\BinaryFileSystemFilter.cs" />
     <Compile Include="FileSystems\DirectoryFilter.cs" />
     <Compile Include="FileSystems\FileSystem.cs" />

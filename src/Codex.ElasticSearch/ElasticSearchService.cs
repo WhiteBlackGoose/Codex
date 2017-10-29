@@ -72,12 +72,43 @@ namespace Codex.ElasticSearch
 
         public Task ClearAsync()
         {
-            return UseClient(async context =>
+            return DeleteIndexAsync(Indices.All);
+        }
+
+        public async Task<bool> DeleteIndexAsync(Indices indices)
+        {
+            var result = await UseClient(async context =>
             {
-                var response = await context.Client.DeleteIndexAsync(Indices.All);
+                var existsQuery = (await client.IndexExistsAsync(indices)).ThrowOnFailure();
+                if (!existsQuery.Exists)
+                {
+                    return false;
+                }
+
+                var response = await context.Client.DeleteIndexAsync(indices);
                 response.ThrowOnFailure();
                 return true;
             });
+
+            return result.Result;
+        }
+
+        public async Task<IEnumerable<(string IndexName, bool IsActive)>> GetIndicesAsync()
+        {
+            var response = await UseClient(async context =>
+            {
+                var client = context.Client;
+
+                var result = await client.GetAliasAsync().ThrowOnFailure();
+
+                return result.Indices.Select(kvp =>
+                (
+                    IndexName: kvp.Key,
+                    IsActive: Placeholder.Value<bool>("Is this still applicable?")
+                )).OrderBy(v => v.IndexName, StringComparer.OrdinalIgnoreCase).ToList();
+            });
+
+            return response.Result;
         }
 
         public async Task<ElasticSearchStore> CreateStoreAsync(ElasticSearchStoreConfiguration configuration)

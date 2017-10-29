@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Codex.Analysis;
-using Codex.Analysis.External;
 using Codex.Analysis.Files;
 using Codex.Analysis.FileSystems;
 using Codex.Analysis.Managed;
@@ -36,29 +35,66 @@ namespace Codex.Application
         static bool listIndices = false;
         static List<string> deleteIndices = new List<string>();
 
-        static OptionSet indexOptions = new OptionSet
+        static Dictionary<string, (Action act, OptionSet options)> actions = new Dictionary<string, (Action, OptionSet)>(StringComparer.OrdinalIgnoreCase)
         {
-            { "l|list", "List the indices.", n => listIndices = n != null },
-            { "d=", "List the indices to delete.", n => deleteIndices.Add(n) },
-            { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
-            { "n|name=", "Name of the repository.", n => repoName = AnalysisServices.GetSafeIndexName(n ?? string.Empty) },
-            { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
-            { "s|solution", "Optionally, path to the solution to analyze.", n => solutionPath = n },
-            { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
-        };
-
-        static OptionSet analysisOptions = new OptionSet
-        {
-            { "es|elasticsearch", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
-            { "n|name=", "Name of the project.", n => repoName = n },
-            { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
-            { "s|solution", "Optionally, path to the solution to analyze.", n => solutionPath = n },
-        };
-
-        static OptionSet searchOptions = new OptionSet
-        {
-            { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
-            { "n|name=", "Name of the project to search.", n => repoName = n },
+            {
+                "index",
+                (
+                    new Action(() => Index()),
+                    new OptionSet
+                    {
+                        { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
+                        { "n|name=", "Name of the repository.", n => repoName = AnalysisServices.GetSafeIndexName(n ?? string.Empty) },
+                        { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
+                        { "s|solution", "Optionally, path to the solution to analyze.", n => solutionPath = n },
+                        { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
+                    }
+                )
+            },
+            {
+                "dryRun",
+                (
+                    new Action(() => Analyze()),
+                    new OptionSet
+                    {
+                        { "n|name=", "Name of the project.", n => repoName = n },
+                        { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
+                        { "s|solution", "Optionally, path to the solution to analyze.", n => solutionPath = n },
+                    }
+                )
+            },
+            {
+                "delete",
+                (
+                    new Action(() => DeleteIndices()),
+                    new OptionSet
+                    {
+                        { "es|elasticsearch", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
+                        { "d=", "List the indices to delete.", n => deleteIndices.Add(n) },
+                    }
+                )
+            },
+            {
+                "search",
+                (
+                    new Action(() => Search()),
+                    new OptionSet
+                    {
+                        { "es|elasticsearch", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
+                        { "n|name=", "Name of the project to search.", n => repoName = n },
+                    }
+                )
+            },
+            {
+                "list",
+                (
+                    new Action(() => ListIndices()),
+                    new OptionSet
+                    {
+                        { "es|elasticsearch", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
+                    }
+                )
+            }
         };
 
         static void Main(string[] args)
@@ -70,55 +106,50 @@ namespace Codex.Application
             }
 
             var remaining = args.Skip(1).ToArray();
-            switch (args[0].ToLowerInvariant())
+            var verb = args[0].ToLowerInvariant();
+            if (actions.TryGetValue(verb, out var action))
             {
-                case "index":
-                    Index(remaining);
-                    return;
-                case "list":
-                    ListIndices();
-                    return;
-                case "delete":
-                    if (deleteIndices.Count != 0)
-                    {
-                        DeleteIndices();
-
-                        Console.WriteLine("Remaining Indices:");
-                        ListIndices();
-                        return;
-                    }
-                case "search":
-                    Search(remaining).Wait();
-                    return;
-                case "dryRun":
-                    analysisOnly = true;
-                    Index(remaining);
-                    return;
-                default:
-                    Console.Error.WriteLine($"Invalid verb '{args[0]}'");
-                    WriteHelpText();
-                    return;
+                action.options.Parse(remaining);
+                action.act();
+            }
+            else
+            {
+                Console.Error.WriteLine($"Invalid verb '{verb}'");
+                WriteHelpText();
             }
         }
 
         private static void WriteHelpText()
         {
-            Console.WriteLine("codex index {options}");
-            Console.WriteLine("Options:");
-            indexOptions.WriteOptionDescriptions(Console.Out);
-            Console.WriteLine();
-            Console.WriteLine("codex search {options}");
-            Console.WriteLine("Options:");
-            searchOptions.WriteOptionDescriptions(Console.Out);
-            Console.WriteLine("codex dryrun {options}");
-            Console.WriteLine("Options:");
-            analysisOptions.WriteOptionDescriptions(Console.Out);
-            Console.WriteLine();
+            foreach (var actionEntry in actions)
+            {
+                Console.WriteLine($"codex {actionEntry.Key} {{options}}");
+                Console.WriteLine("Options:");
+                actionEntry.Value.options.WriteOptionDescriptions(Console.Out);
+                Console.WriteLine();
+            }
         }
 
-        static void Index(string[] args)
+        static void Delete()
         {
-            var extras = indexOptions.Parse(args);
+            if (deleteIndices.Count != 0)
+            {
+                DeleteIndices();
+
+                Console.WriteLine("Remaining Indices:");
+                ListIndices();
+                return;
+            }
+        }
+
+        static void Analyze()
+        {
+            analysisOnly = true;
+            Index();
+        }
+
+        static void Index()
+        {
             if (String.IsNullOrEmpty(rootDirectory)) throw new ArgumentException("Root path is missing. Use -p to provide it.");
             if (String.IsNullOrEmpty(repoName)) throw new ArgumentException("Project name is missing. Use -n to provide it.");
             InitService();
@@ -142,12 +173,12 @@ namespace Codex.Application
 
         private static void DeleteIndices()
         {
-            ElasticsearchStorage storage = GetStorage();
+            InitService();
 
             foreach (var index in deleteIndices)
             {
                 Console.Write($"Deleting {index}... ");
-                var deleted = storage.Provider.DeleteIndexAsync(index).GetAwaiter().GetResult().Succeeded;
+                var deleted = service.DeleteIndexAsync(index).GetAwaiter().GetResult();
                 if (deleted)
                 {
                     Console.WriteLine($"Success");
@@ -161,19 +192,14 @@ namespace Codex.Application
 
         private static void ListIndices()
         {
-            ElasticsearchStorage storage = GetStorage();
+            InitService();
 
-            var indices = storage.Provider.GetIndicesAsync().GetAwaiter().GetResult();
+            var indices = service.GetIndicesAsync().GetAwaiter().GetResult();
 
             foreach (var index in indices)
             {
                 Console.WriteLine(index.IndexName + (index.IsActive ? " (IsActive)" : ""));
             }
-        }
-
-        private static ElasticsearchStorage GetStorage()
-        {
-            return new ElasticsearchStorage(elasticSearchServer);
         }
 
         private static void InitService()
@@ -301,64 +327,12 @@ namespace Codex.Application
             }
         }
 
-        //private static void ComputeMissingProjects(ElasticsearchStorage storage)
-        //{
-        //    storage.UpdateProjectsAsync(force: true).GetAwaiter().GetResult();
+        static void Search()
+        {
+            SearchAsync().Wait();
+        }
 
-        //    var projectsResponse = storage.Provider.GetProjectsAsync(projectKind: nameof(ProjectKind.Source)).GetAwaiter().GetResult();
-
-        //    var projectMap = storage.Projects;
-        //    var projects = projectsResponse.Result;
-
-        //    HashSet<string> processedReferences = new HashSet<string>();
-        //    HashSet<string> hasProjectInfoProjects = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        //    HashSet<string> missingProjects = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
-        //    int i = 0;
-        //    foreach (var project in projects)
-        //    {
-        //        Console.WriteLine($"Processing {project.Id} ({i++}/{projects.Count})");
-        //        foreach (var referencedProject in project.ReferencedProjects)
-        //        {
-        //            if (!processedReferences.Add(referencedProject.ProjectId))
-        //            {
-        //                continue;
-        //            }
-
-        //            if (!projectMap.ContainsKey(referencedProject.ProjectId)
-        //                && !referencedProject.ProjectId.EndsWith(".Fakes", StringComparison.OrdinalIgnoreCase))
-        //            {
-        //                if (missingProjects.Add(referencedProject.ProjectId))
-        //                {
-        //                    Console.WriteLine("Missing: " + referencedProject.ProjectId);
-        //                }
-        //            }
-
-        //            var references = storage.GetReferencesToSymbolAsync(new Symbol()
-        //            {
-        //                ProjectId = referencedProject.ProjectId,
-        //                Kind = nameof(ReferenceKind.Definition)
-        //            }, 1).GetAwaiter().GetResult();
-
-        //            if (references.Total == 0
-        //                && !referencedProject.ProjectId.EndsWith(".Fakes", StringComparison.OrdinalIgnoreCase))
-        //            {
-        //                if (missingProjects.Add(referencedProject.ProjectId))
-        //                {
-        //                    Console.WriteLine("Missing total: " + referencedProject.ProjectId);
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    File.WriteAllLines("AllProjects.txt", projects.OrderBy(p => p.Id, StringComparer.OrdinalIgnoreCase).Select(
-        //        p => $"{p.Id} (Has Definitions: {!missingProjects.Contains(p.Id)})"));
-        //    File.WriteAllLines("MissingProjects.txt", missingProjects.OrderBy(p => p, StringComparer.OrdinalIgnoreCase));
-
-        //    return;
-        //}
-
-        static async Task Search(string[] args = null)
+        static async Task SearchAsync()
         {
             InitService();
 
