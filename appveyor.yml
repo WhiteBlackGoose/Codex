@@ -8,3 +8,5 @@ build_script:
 artifacts:
 - path: msbuild.binlog
   name: MSBuild Log
+on_failure:
+- appveyor PushArtifact msbuild.binlog

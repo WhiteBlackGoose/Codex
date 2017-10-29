@@ -20,7 +20,7 @@
     <BinariesFolder>$(SrcRoot)\out\bin</BinariesFolder>
     <CommonOutputDirectory>$(BinariesFolder)\$(Configuration)</CommonOutputDirectory>
     <BuildToCommonOutputDirectory Condition="'$(BuildToCommonOutputDirectory)' == ''">false</BuildToCommonOutputDirectory>
-    <OutputPath Condition="'$(OutputPath)' == ''">$(CommonOutputDirectory)\$(AssemblyName)</OutputPath>
+    <OutputPath Condition="'$(OutputPath)' == ''">$(CommonOutputDirectory)\$(MSBuildProjectName)</OutputPath>
     <OutputPath Condition="'$(BuildToCommonOutputDirectory)' == 'true'">$(CommonOutputDirectory)</OutputPath>
     <OutDir>$(OutputPath)\</OutDir>
     <_FindDependencies>true</_FindDependencies>
@@ -30,7 +30,7 @@
     <OutputType Condition="'$(OutputType)'==''">Library</OutputType>
     <RootNamespace Condition="'$(RootNamespace)'=='' AND $(AssemblyName)!=''">$(AssemblyName)</RootNamespace>
     <TargetFrameworkVersion Condition="'$(TargetFrameworkVersion)'==''">v4.6</TargetFrameworkVersion>
-    <SignAssembly Condition="'$(SignAssembly)' == ''">false</SignAssembly>
+    <SignAssembly Condition="'$(SignAssembly)' == ''">true</SignAssembly>
     <DefineConstants Condition="'$(SignAssembly)' == 'true'">$(DefineConstants);SIGN;</DefineConstants>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>$(SrcRoot)\key.snk</AssemblyOriginatorKeyFile>

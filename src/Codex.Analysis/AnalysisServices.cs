@@ -32,7 +32,7 @@ public class AnalysisServices
 
         public ConcurrentDictionary<string, Repo> ReposByName = new ConcurrentDictionary<string, Repo>(StringComparer.OrdinalIgnoreCase);
 
-        public static string GetTargetIndexName(string repoName)
+        public static string GetSafeIndexName(string repoName)
         {
             var safeName = repoName
                 .ToLowerInvariant()
@@ -52,7 +52,12 @@ public class AnalysisServices
                 .Replace(':', '_')
                 .TrimStart('_');
 
-            return $"{safeName}.{DateTime.UtcNow.ToString("yyMMdd.HHmmss")}";
+            return safeName;
+        }
+
+        public static string GetTargetIndexName(string repoName)
+        {
+            return $"{GetSafeIndexName(repoName)}.{DateTime.UtcNow.ToString("yyMMdd.HHmmss")}";
         }
 
         public AnalysisServices(string targetIndex, FileSystem fileSystem, RepoFileAnalyzer[] analyzers = null)

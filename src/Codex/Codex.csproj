@@ -12,6 +12,9 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
     <PackageReference Include="ManagedEsent" Version="1.9.4" />

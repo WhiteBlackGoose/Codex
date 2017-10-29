@@ -33,11 +33,15 @@ namespace Codex.Application
         static bool interactive = false;
         static ElasticSearchStore store = Placeholder.Value<ElasticSearchStore>("Create store (FileSystem | Elasticsearch)");
         static ElasticSearchService service;
+        static bool listIndices = false;
+        static List<string> deleteIndices = new List<string>();
 
         static OptionSet indexOptions = new OptionSet
         {
+            { "l|list", "List the indices.", n => listIndices = n != null },
+            { "d=", "List the indices to delete.", n => deleteIndices.Add(n) },
             { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
-            { "n|name=", "Name of the project.", n => repoName = n },
+            { "n|name=", "Name of the repository.", n => repoName = AnalysisServices.GetSafeIndexName(n ?? string.Empty) },
             { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
             { "s|solution", "Optionally, path to the solution to analyze.", n => solutionPath = n },
             { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
@@ -71,6 +75,18 @@ namespace Codex.Application
                 case "index":
                     Index(remaining);
                     return;
+                case "list":
+                    ListIndices();
+                    return;
+                case "delete":
+                    if (deleteIndices.Count != 0)
+                    {
+                        DeleteIndices();
+
+                        Console.WriteLine("Remaining Indices:");
+                        ListIndices();
+                        return;
+                    }
                 case "search":
                     Search(remaining).Wait();
                     return;
@@ -122,6 +138,42 @@ namespace Codex.Application
             {
                 Search();
             }
+        }
+
+        private static void DeleteIndices()
+        {
+            ElasticsearchStorage storage = GetStorage();
+
+            foreach (var index in deleteIndices)
+            {
+                Console.Write($"Deleting {index}... ");
+                var deleted = storage.Provider.DeleteIndexAsync(index).GetAwaiter().GetResult().Succeeded;
+                if (deleted)
+                {
+                    Console.WriteLine($"Success");
+                }
+                else
+                {
+                    Console.WriteLine($"Not Found");
+                }
+            }
+        }
+
+        private static void ListIndices()
+        {
+            ElasticsearchStorage storage = GetStorage();
+
+            var indices = storage.Provider.GetIndicesAsync().GetAwaiter().GetResult();
+
+            foreach (var index in indices)
+            {
+                Console.WriteLine(index.IndexName + (index.IsActive ? " (IsActive)" : ""));
+            }
+        }
+
+        private static ElasticsearchStorage GetStorage()
+        {
+            return new ElasticsearchStorage(elasticSearchServer);
         }
 
         private static void InitService()
@@ -183,8 +235,8 @@ namespace Codex.Application
 
                 List<RepoProjectAnalyzer> projectAnalyzers = new List<RepoProjectAnalyzer>()
                 {
-                    new MSBuildSolutionProjectAnalyzer()
-                    //new ManagedSolutionProjectAnalyzer()
+                    //new MSBuildSolutionProjectAnalyzer()
+                    new BinLogSolutionProjectAnalyzer()
                             {
                                 RequireProjectFilesExist = requireProjectsExist
                             }

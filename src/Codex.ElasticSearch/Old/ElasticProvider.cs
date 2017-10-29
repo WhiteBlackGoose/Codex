@@ -351,6 +351,19 @@ namespace Codex.Storage.ElasticProviders
             });
         }
 
+        public async Task<IEnumerable<(string IndexName, bool IsActive)>> GetIndicesAsync()
+        {
+            var client = CreateClient();
+
+            var result = await client.GetAliasAsync().ThrowOnFailure();
+
+            return result.Indices.Select(kvp =>
+            (
+                IndexName: kvp.Key,
+                IsActive: kvp.Value.Any(alias => alias.Name == CombinedSourcesIndexAlias)
+            )).OrderBy(v => v.IndexName, StringComparer.OrdinalIgnoreCase).ToList();
+        }
+
         public async Task<ElasticResponse<ProjectModel>> GetProjectAsync(string projectId)
         {
             Contract.Requires(projectId != null);
@@ -403,7 +416,7 @@ namespace Codex.Storage.ElasticProviders
             {
                 var result = await UseElasticClient(async client =>
                 {
-                    var existsResult = await client.DocumentExistsAsync<ProjectModel>(projectId);
+                    var existsResult = await client.DocumentExistsAsync<ProjectModel>(projectId, desc => desc.Index(targetIndex).Type(ProjectTypeName));
                     if (!existsResult.Exists)
                     {
                         return existsResult;
@@ -440,9 +453,10 @@ namespace Codex.Storage.ElasticProviders
             return await DeleteIndexAsync(sourceIndexName);
         }
 
-        public Task<ElasticResponse> DeleteIndexAsync(string indexName)
+        public async Task<ElasticResponse> DeleteIndexAsync(string indexName)
         {
-            return UseElasticClient(async client =>
+            bool deleted = false;
+            var result = await UseElasticClient(async client =>
             {
                 var existsQuery = (await client.IndexExistsAsync(indexName)).ThrowOnFailure();
                 if (!existsQuery.Exists)
@@ -451,8 +465,13 @@ namespace Codex.Storage.ElasticProviders
                 }
 
                 await client.DeleteIndexAsync(indexName, d => d).ThrowOnFailure();
+                deleted = true;
                 return await client.FlushAsync(AllIndices);
             });
+
+            result.Succeeded = deleted;
+
+            return result;
         }
 
         private async Task CreateIndexAsync<T>(ElasticClient client, string indexName) where T : class

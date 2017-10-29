@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -13,10 +14,15 @@ namespace Codex.Analysis.Managed
         public string ProjectFile { get; internal set; }
         public string ProjectDirectory => Path.GetDirectoryName(ProjectFile);
 
-        public CommandLineArguments GetCommandLineArguments()
+        public string[] GetCommandLineArguments()
+        {
+            return CommandLineParser.SplitCommandLineIntoArguments(CommandLine, removeHashComments: false).ToArray();
+        }
+
+        public CommandLineArguments GetParsedCommandLineArguments()
         {
             var sdkDirectory = RuntimeEnvironment.GetRuntimeDirectory();
-            var args = CommandLineParser.SplitCommandLineIntoArguments(CommandLine, removeHashComments: false);
+            var args = GetCommandLineArguments();
             CommandLineArguments arguments;
             if (Language == LanguageNames.CSharp)
             {

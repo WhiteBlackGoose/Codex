@@ -98,6 +98,7 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="ManagedAnalysisHost.cs" />
     <Compile Include="ManagedProjectAnalyzer.cs" />
+    <Compile Include="BinLogSolutionProjectAnalyzer.cs" />
     <Compile Include="ManagedSolutionProjectAnalyzer.cs" />
     <Compile Include="MSBuildBinLog\BinLogReader.cs" />
     <Compile Include="MSBuildFileAnalyzer.cs" />
