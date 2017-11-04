@@ -10,24 +10,22 @@
     </NuGetPackageImportStamp>
     <Use64BitIISExpress />
   </PropertyGroup>
-  <PropertyGroup Condition="$(APPVEYOR) != true">
-    <MvcBuildViews>true</MvcBuildViews>
-  </PropertyGroup>
   <PropertyGroup>
     <ProjectGuid>{887A8565-4A10-44C8-82EF-F2F2D1D2BFBF}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode />
+    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <UseGlobalApplicationHostFile />
     <TypeScriptToolsVersion>2.2</TypeScriptToolsVersion>
     <PrecompileBeforePublish>true</PrecompileBeforePublish>
     <DisableRootOutputDirectory>true</DisableRootOutputDirectory>
     <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
@@ -60,6 +58,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Modules\Bootstrapper.cs" />
     <Compile Include="Modules\IndexModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\StringExtensions.cs" />
@@ -378,6 +377,12 @@
       <Project>{2322a932-05f4-4931-8547-71377c6ab49e}</Project>
       <Name>Codex.Sdk</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Codex.View.Web\Codex.View.Web.csproj">
+      <Project>{796aa891-1af9-4949-a817-ebf065ae2312}</Project>
+      <Name>Codex.View.Web</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <OutputItemType>_WebAssetProjectOutput</OutputItemType>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -386,8 +391,16 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
-  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
-    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  <Target Name="CopyWebAssets" BeforeTargets="GetCopyToOutputDirectoryItems">
+    <ItemGroup>
+      <_WebAssetDirectories Include="@(_WebAssetProjectOutput -> '%(RootDir)%(Directory)')" />
+
+      <_WebAssetFiles Include="%(_WebAssetDirectories.Identity)\bridge\**\*.*" />
+      <ContentWithTargetPath Include="@(_WebAssetFiles)">
+        <TargetPath>View\%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </ContentWithTargetPath>
+    </ItemGroup>
   </Target>
   <ProjectExtensions>
     <VisualStudio>
