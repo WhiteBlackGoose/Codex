@@ -14,12 +14,14 @@
     <MvcBuildViews>true</MvcBuildViews>
   </PropertyGroup>
   <PropertyGroup>
-    <ProjectGuid>{36AA953D-48F4-4FEE-91E4-BF14AABDE35A}</ProjectGuid>
+    <ProjectGuid>{887A8565-4A10-44C8-82EF-F2F2D1D2BFBF}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <TypeScriptToolsVersion>2.2</TypeScriptToolsVersion>
@@ -31,30 +33,6 @@
   <ItemGroup>
     <PackageReference Include="Nancy" Version="1.4.3" />
     <PackageReference Include="Nancy.Hosting.Aspnet" Version="1.4.1" />
-    <PackageReference Include="Antlr" Version="3.5.0.2" />
-    <PackageReference Include="Autofac" Version="4.6.2" />
-    <PackageReference Include="Autofac.Mvc5" Version="4.0.2" />
-    <PackageReference Include="bootstrap" Version="4.0.0-beta" />
-    <PackageReference Include="jQuery" Version="3.2.1" />
-    <PackageReference Include="jQuery.Validation" Version="1.16.0" />
-    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
-    <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.3" />
-    <PackageReference Include="Microsoft.AspNet.Web.Optimization" Version="1.1.3" />
-    <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.3" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.3" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.3" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.WebHost" Version="5.2.3" />
-    <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.3" />
-    <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="1.0.8" />
-    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Validation" Version="3.2.3" />
-    <PackageReference Include="Microsoft.Net.Compilers" Version="2.4.0" />
-    <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
-    <PackageReference Include="Modernizr" Version="2.8.3" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Respond" Version="1.4.2" />
-    <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
-    <PackageReference Include="System.Reflection.Metadata" Version="1.5.0" />
-    <PackageReference Include="WebGrease" Version="1.6.0" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -82,35 +60,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="App_Start\ElasticSearchModule.cs" />
-    <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\NamespacesController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\DocumentOutlineController.cs" />
-    <Compile Include="Controllers\DownloadController.cs" />
-    <Compile Include="Controllers\AboutController.cs" />
-    <Compile Include="Controllers\OverviewController.cs" />
-    <Compile Include="Controllers\ProjectExplorerController.cs" />
-    <Compile Include="Controllers\ReferencesController.cs" />
-    <Compile Include="Controllers\SearchController.cs" />
-    <Compile Include="Controllers\SourceController.cs" />
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Models\EditorModel.cs" />
-    <Compile Include="Models\StateModel.cs" />
+    <Compile Include="Modules\IndexModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rendering\DocumentOutlineRenderer.cs" />
-    <Compile Include="Rendering\Folder.cs" />
-    <Compile Include="Rendering\HtmlElementInfo.cs" />
-    <Compile Include="Rendering\NamespacesRenderer.cs" />
-    <Compile Include="Rendering\ProjectExplorerRenderer.cs" />
-    <Compile Include="Rendering\Responses.cs" />
-    <Compile Include="Rendering\SourceFileRenderer.cs" />
-    <Compile Include="Util\Requests.cs" />
-    <Compile Include="Util\ScopeHelpers.cs" />
     <Compile Include="Util\StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -380,8 +331,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Global.asax" />
-    <Content Include="packages.config" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -398,17 +347,6 @@
     <Content Include="Scripts\scripts.js" />
     <Content Include="Scripts\search.js" />
     <Content Include="Scripts\split.js" />
-    <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\About\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\ProjectExplorer\ProjectExplorer.cshtml" />
-    <Content Include="Views\References\References.cshtml" />
-    <Content Include="Views\Search\ResultsAsHtml.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Source\Index.cshtml" />
-    <Content Include="Views\Web.config" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -424,10 +362,6 @@
     <None Include="Properties\PublishProfiles\test.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Views\DocumentOutline\DocumentOutline.cshtml" />
-    <Content Include="Views\Namespaces\Namespaces.cshtml" />
-    <Content Include="Views\Overview\Overview.cshtml" />
-    <Content Include="Views\Admin\Admin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
