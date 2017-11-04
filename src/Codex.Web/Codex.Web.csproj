@@ -29,6 +29,8 @@
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
+    <PackageReference Include="Nancy" Version="1.4.3" />
+    <PackageReference Include="Nancy.Hosting.Aspnet" Version="1.4.1" />
     <PackageReference Include="Antlr" Version="3.5.0.2" />
     <PackageReference Include="Autofac" Version="4.6.2" />
     <PackageReference Include="Autofac.Mvc5" Version="4.0.2" />
