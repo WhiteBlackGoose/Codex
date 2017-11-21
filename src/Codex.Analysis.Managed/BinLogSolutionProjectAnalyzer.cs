@@ -23,13 +23,13 @@ namespace Codex.Analysis.Projects
         {
             if (binLogFinder == null)
             {
-                binLogFinder = FindDefaultBinLog;
+                binLogFinder = FindBinLogDefault;
             }
 
             this.binLogFinder = binLogFinder;
         }
 
-        private static string FindDefaultBinLog(string solutionFilePath)
+        public static string FindBinLogDefault(string solutionFilePath)
         {
             var candidate = Path.ChangeExtension(solutionFilePath, ".binlog");
             if (File.Exists(candidate))
