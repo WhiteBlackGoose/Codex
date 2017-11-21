@@ -14,11 +14,36 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace Codex.Analysis.Projects
 {
-    public class BinLogSolutionProjectAnalyzer : SolutionProjectAnalyzer
+    public class BinLogSolutionProjectAnalyzer : MSBuildSolutionProjectAnalyzer
     {
-        public BinLogSolutionProjectAnalyzer(string[] includedSolutions = null)
+        private readonly Func<string, string> binLogFinder;
+
+        public BinLogSolutionProjectAnalyzer(string[] includedSolutions = null, Func<string, string> binLogFinder = null)
             : base(includedSolutions)
         {
+            if (binLogFinder == null)
+            {
+                binLogFinder = FindDefaultBinLog;
+            }
+
+            this.binLogFinder = binLogFinder;
+        }
+
+        private static string FindDefaultBinLog(string solutionFilePath)
+        {
+            var candidate = Path.ChangeExtension(solutionFilePath, ".binlog");
+            if (File.Exists(candidate))
+            {
+                return candidate;
+            }
+
+            candidate = Directory.GetFiles(Path.GetDirectoryName(solutionFilePath), "*.binlog").SingleOrDefault();
+            if (File.Exists(candidate))
+            {
+                return candidate;
+            }
+
+            return null;
         }
 
         protected override Task<SolutionInfo> GetSolutionInfoAsync(RepoFile repoFile)
@@ -28,9 +53,17 @@ namespace Codex.Analysis.Projects
             var services = repo.AnalysisServices;
             var logger = repo.AnalysisServices.Logger;
 
-            var solutionFile = SolutionFile.Parse(new SourceTextReader(SourceText.From(services.ReadAllText(repoFile.FilePath))));
+            var solutionFilePath = repoFile.FilePath;
+            var binLog = binLogFinder?.Invoke(solutionFilePath);
+            if (!File.Exists(binLog))
+            {
+                logger?.LogWarning($"Couldn't find .binlog for {solutionFilePath}, reverting to MSBuildWorkspace");
+                return base.GetSolutionInfoAsync(repoFile);
+            }
 
-            SolutionInfoBuilder solutionInfo = new SolutionInfoBuilder(repoFile.FilePath, repo);
+            var solutionFile = SolutionFile.Parse(new SourceTextReader(SourceText.From(services.ReadAllText(solutionFilePath))));
+
+            SolutionInfoBuilder solutionInfo = new SolutionInfoBuilder(solutionFilePath, repo, binLog);
 
             foreach (var projectBlock in solutionFile.ProjectBlocks)
             {
@@ -57,13 +90,12 @@ namespace Codex.Analysis.Projects
 
             public bool HasProjects => ProjectInfoByAssemblyNameMap.Count != 0;
 
-            public SolutionInfoBuilder(string filePath, Repo repo)
+            public SolutionInfoBuilder(string filePath, Repo repo, string binLogFilePath)
             {
                 this.solutionPath = filePath;
                 this.solutionDirectory = Path.GetDirectoryName(solutionPath);
                 this.repo = repo;
-                this.binLogPath = Directory.GetFiles(solutionDirectory, "*.binlog", SearchOption.TopDirectoryOnly)
-                    .SingleOrDefault();
+                this.binLogPath = binLogFilePath;
 
                 workspace = new AdhocWorkspace(DesktopMefHostServices.DefaultServices);
 
