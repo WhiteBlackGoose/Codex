@@ -18,6 +18,7 @@ namespace Codex.ElasticSearch
         internal readonly SearchType SearchType;
         internal readonly ElasticSearchStore Store;
         public readonly string IndexName;
+        public readonly string RegistryIndexName;
         public int ShardCount { get; protected set; }
 
         public ElasticSearchEntityStore(ElasticSearchStore store, SearchType searchType)
@@ -25,17 +26,22 @@ namespace Codex.ElasticSearch
             this.Store = store;
             this.SearchType = searchType;
             this.IndexName = (store.Configuration.Prefix + searchType.IndexName).ToLowerInvariant();
+            this.RegistryIndexName = IndexName + ".reg";
         }
 
         public abstract Task DeleteAsync(IEnumerable<string> uids);
     }
 
     public class ElasticSearchEntityStore<T> : ElasticSearchEntityStore, IStore<T>
-        where T : class
+        where T : class, ISearchEntity
     {
+        private readonly string m_pipeline;
+
         public ElasticSearchEntityStore(ElasticSearchStore store, SearchType searchType)
             : base(store, searchType)
         {
+            m_pipeline = searchType == SearchTypes.StoredFilter ?
+                store.StoredFilterPipelineId : null;
         }
 
         public async Task InitializeAsync()
@@ -89,6 +95,17 @@ namespace Codex.ElasticSearch
                             .CaptureRequest(context))
                             .ThrowOnFailure();
 
+                response = await context.Client
+                .CreateIndexAsync(RegistryIndexName,
+                    c => c.Mappings(m => m.Map<IRegisteredEntity>(SearchTypes.RegisteredEntity.IndexName, tm => tm.AutoMapEx()))
+                        .Settings(s => s
+                            .AddAnalyzerSettings()
+                            .Setting("index.mapper.dynamic", false)
+                            .NumberOfShards(Store.Configuration.ShardCount)
+                            .RefreshInterval(TimeSpan.FromMinutes(1)))
+                        .CaptureRequest(context))
+                        .ThrowOnFailure();
+
                 return response.IsValid;
             });
         }
@@ -109,12 +126,17 @@ namespace Codex.ElasticSearch
         {
             if (replace)
             {
-                return bd.Index<T>(bco => bco.Document(value).Index(IndexName));
+                return bd.Update<T>(bco => bco.Doc(value).Id(value.Uid).DocAsUpsert().Index(IndexName).Pipeline(m_pipeline));
             }
             else
             {
-                return bd.Create<T>(bco => bco.Document(value).Index(IndexName));
+                return bd.Create<T>(bco => bco.Document(value).Id(value.Uid).Index(IndexName).Pipeline(m_pipeline));
             }
+        }
+
+        public BulkDescriptor AddRegisterOperation(BulkDescriptor bd, IRegisteredEntity value)
+        {
+            return bd.Create<IRegisteredEntity>(bco => bco.Document(value).Index(RegistryIndexName).Id(value.Uid));
         }
 
         public async Task StoreAsync(IReadOnlyList<T> values, bool replace = false)

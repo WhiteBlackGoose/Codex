@@ -7,12 +7,15 @@ using System.Diagnostics.Contracts;
 using Codex.Sdk.Utilities;
 using Codex.ElasticSearch.Utilities;
 using Codex.Storage.ElasticProviders;
+using Codex.ObjectModel;
 
 namespace Codex.ElasticSearch
 {
     internal class ElasticSearchBatch
     {
         public readonly BulkDescriptor BulkDescriptor = new BulkDescriptor();
+
+        public readonly BulkDescriptor RegistryBulkDescriptor = new BulkDescriptor();
 
         public readonly List<Item> EntityItems = new List<Item>();
 
@@ -42,19 +45,33 @@ namespace Codex.ElasticSearch
                 TryReserveExecute();
             }
 
+            var registerResponse = await context.Client.BulkAsync(RegistryBulkDescriptor.CaptureRequest(context)).ThrowOnFailure();
+            Contract.Assert(EntityItems.Count == registerResponse.Items.Count);
+
+            int batchIndex = 0;
+            foreach (var registerResponseItem in registerResponse.Items)
+            {
+                var item = EntityItems[batchIndex];
+                batchIndex++;
+
+                // Use the sequence number of the registered item as the stable id
+                item.Entity.ShardStableId = registerResponseItem.SequenceNumber;
+            }
+
             var response = await context.Client.BulkAsync(BulkDescriptor.CaptureRequest(context)).ThrowOnFailure();
             Contract.Assert(EntityItems.Count == response.Items.Count);
 
-            int batchIndex = 0;
+            batchIndex = 0;
             foreach (var responseItem in response.Items)
             {
                 var item = EntityItems[batchIndex];
+                batchIndex++;
 
                 if (Placeholder.MissingFeature("Need to implement stored filter support"))
                 {
                     var entityRef = new ElasticEntityRef(
                             shard: GetShard(responseItem),
-                            stableId: GetStableId(responseItem));
+                            stableId: item.Entity.ShardStableId);
                     batcher.CommitSearchTypeStoredFilters[item.SearchType.Id].Add(entityRef);
                     foreach (var additionalStoredFilter in item.AdditionalStoredFilters)
                     {
@@ -66,8 +83,6 @@ namespace Codex.ElasticSearch
                 {
                     item.OnAdded?.Invoke();
                 }
-
-                batchIndex++;
             }
 
             return response;
@@ -81,12 +96,6 @@ namespace Codex.ElasticSearch
         private int GetShard(BulkResponseItemBase item)
         {
             return item.Shard;
-        }
-
-        private long GetStableId(BulkResponseItemBase item)
-        {
-            Placeholder.NotImplemented("Need to add this in ElasticSearch (derived from sequence number) and Nest");
-            return item.StableId;
         }
 
         public bool TryAdd<T>(ElasticSearchEntityStore<T> store, T entity, Action onAdded, ElasticSearchStoredFilterBuilder[] additionalStoredFilters)
@@ -116,6 +125,11 @@ namespace Codex.ElasticSearch
                 };
 
                 EntityItems.Add(item);
+
+                store.AddRegisterOperation(RegistryBulkDescriptor, new RegisteredEntity(item.Entity)
+                {
+                    DateAdded = DateTime.UtcNow
+                });
 
                 store.AddIndexOperation(BulkDescriptor, entity);
                 return true;

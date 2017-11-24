@@ -99,6 +99,7 @@ namespace Codex.Application
 
         static void Main(string[] args)
         {
+            Debugger.Launch();
             if (args.Length == 0)
             {
                 WriteHelpText();
@@ -218,7 +219,7 @@ namespace Codex.Application
             store = await service.CreateStoreAsync(new ElasticSearchStoreConfiguration()
             {
                 CreateIndices = true,
-                ShardCount = 5,
+                ShardCount = 2,
                 Prefix = string.Empty
             });
 

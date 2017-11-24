@@ -10,27 +10,72 @@ using static Codex.Utilities.SerializationUtilities;
 using Codex.Utilities;
 using Codex.Analysis;
 using System.Collections.Concurrent;
+using Nest;
 
 namespace Codex.ElasticSearch
 {
-    public partial class ElasticSearchStore : ICodexStore
+    public abstract partial class ElasticSearchStoreBase
     {
         internal readonly ElasticSearchService Service;
         internal readonly ElasticSearchStoreConfiguration Configuration;
 
-        internal readonly ElasticSearchEntityStore[] EntityStores = new ElasticSearchEntityStore[SearchTypes.RegisteredSearchTypes.Count];
-
         /// <summary>
         /// Creates an elasticsearch store with the given prefix for indices
         /// </summary>
-        public ElasticSearchStore(ElasticSearchStoreConfiguration configuration, ElasticSearchService service)
+        public ElasticSearchStoreBase(ElasticSearchStoreConfiguration configuration, ElasticSearchService service)
         {
             Configuration = configuration;
             Service = service;
         }
 
-        public async Task<ElasticSearchEntityStore<TSearchType>> CreateStoreAsync<TSearchType>(SearchType searchType)
-            where TSearchType : class
+        public abstract Task<ElasticSearchEntityStore<TSearchType>> CreateStoreAsync<TSearchType>(SearchType searchType)
+            where TSearchType : class, ISearchEntity;
+    }
+
+    public class ElasticSearchStore : ElasticSearchStoreBase, ICodexStore
+    {
+        internal readonly ElasticSearchEntityStore[] EntityStores = new ElasticSearchEntityStore[SearchTypes.RegisteredSearchTypes.Count];
+        public readonly string StoredFilterPipelineId;
+
+        public ElasticSearchStore(ElasticSearchStoreConfiguration configuration, ElasticSearchService service) 
+            : base(configuration, service)
+        {
+
+            StoredFilterPipelineId = configuration.Prefix + "StoredFilterPipeline";
+        }
+
+        public override async Task InitializeAsync()
+        {
+            if (Configuration.CreateIndices)
+            {
+                await Service.UseClient(async context =>
+                {
+                    var client = context.Client;
+
+                    // TODO: Remove
+                    Placeholder.Todo("Remove the line below before running in production");
+                    client.DeleteIndex(Indices.All);
+
+                    var getPipelineResult = await client.GetPipelineAsync(gp => gp.Id(StoredFilterPipelineId));
+                    if (getPipelineResult.IsValid)
+                    {
+                        return false;
+                    }
+
+                    await client.PutPipelineAsync(StoredFilterPipelineId, ppd =>
+                        ppd.Processors(pd => pd.BinarySequence<IStoredFilter>(bsp => bsp
+                            .IncludeField(sf => sf.StableIds)
+                            .TargetField(sf => sf.Filter))))
+                        .ThrowOnFailure();
+
+                    return true;
+                });
+            }
+
+            await base.InitializeAsync();
+        }
+
+        public override async Task<ElasticSearchEntityStore<TSearchType>> CreateStoreAsync<TSearchType>(SearchType searchType)
         {
             var store = new ElasticSearchEntityStore<TSearchType>(this, searchType);
             await store.InitializeAsync();

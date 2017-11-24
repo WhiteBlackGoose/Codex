@@ -148,6 +148,7 @@ namespace Codex.Serialization
         private readonly Dictionary<Type, JsonConverter> primitives = new Dictionary<Type, JsonConverter>();
 
         private readonly Action<JsonContract, bool> isSealedFieldSetter = EntityReflectionHelpers.CreateFieldSetter<JsonContract, bool>("IsSealed");
+        private readonly Func<JsonContract, bool> isSealedFieldGetter = EntityReflectionHelpers.CreateFieldGetter<JsonContract, bool>("IsSealed");
         private readonly Action<JsonContainerContract, JsonContract> finalItemContractFieldSetter = EntityReflectionHelpers.CreateFieldSetter<JsonContainerContract, JsonContract>("_finalItemContract");
         private readonly Action<JsonContainerContract, JsonContract> itemContractFieldSetter = EntityReflectionHelpers.CreateFieldSetter<JsonContainerContract, JsonContract>("_itemContract");
 
@@ -214,18 +215,21 @@ namespace Codex.Serialization
 
             if (contract != null && ElasticCodexTypeUtilities.Instance.IsEntityType(objectType))
             {
-                // Set JsonContract.IsSealed=true, so members are serialized via their property type (not the type
-                // of the actual object)
-                isSealedFieldSetter(contract, true);
-                contract.OnSerializingCallbacks.Add((obj, context) =>
+                if (!isSealedFieldGetter(contract))
                 {
-                    (obj as ISerializableEntity)?.OnSerializing();
-                });
+                    // Set JsonContract.IsSealed=true, so members are serialized via their property type (not the type
+                    // of the actual object)
+                    isSealedFieldSetter(contract, true);
+                    contract.OnSerializingCallbacks.Add((obj, context) =>
+                    {
+                        (obj as ISerializableEntity)?.OnSerializing();
+                    });
 
-                contract.OnDeserializedCallbacks.Add((obj, context) =>
-                {
-                    (obj as ISerializableEntity)?.OnDeserialized();
-                });
+                    contract.OnDeserializedCallbacks.Add((obj, context) =>
+                    {
+                        (obj as ISerializableEntity)?.OnDeserialized();
+                    });
+                }
             }
 
             return contract;
@@ -346,6 +350,12 @@ namespace Codex.Serialization
                     fieldValueParameter), 
                 objectParameter, 
                 fieldValueParameter).Compile();
+        }
+
+        public static Func<TType, TFieldType> CreateFieldGetter<TType, TFieldType>(string fieldName)
+        {
+            var objectParameter = Expression.Parameter(typeof(TType), "obj");
+            return Expression.Lambda<Func<TType, TFieldType>>(Expression.Field(objectParameter, fieldName), objectParameter).Compile();
         }
 
         public static string GetMetadataName(this Type type)

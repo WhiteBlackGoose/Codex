@@ -205,7 +205,7 @@ namespace Codex.Framework.Generation
             HashSet<string> usedMemberNames = new HashSet<string>();
 
             CodeCompileUnit elasticSearchTypesFile = new CodeCompileUnit();
-            var elasticSearchStoreGenerator = new StoreGenerator(namespaceName: "Codex.ElasticSearch", storeTypeName: "ElasticSearchStore", genericTypedStoreName: "ElasticSearchEntityStore");
+            var elasticSearchStoreGenerator = new StoreGenerator(namespaceName: "Codex.ElasticSearch", storeTypeName: "ElasticSearchStoreBase", genericTypedStoreName: "ElasticSearchEntityStore");
             elasticSearchTypesFile.Namespaces.Add(elasticSearchStoreGenerator.StoreNamespace);
 
             CodeCompileUnit searchDescriptors = new CodeCompileUnit();

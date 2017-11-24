@@ -24,6 +24,11 @@ namespace Codex
         /// Defines the size of the raw serialized entity.
         /// </summary>
         int EntityContentSize { get; set; }
+
+        /// <summary>
+        /// The per-shard stable identity (derived from ElasticSearch sequence number)
+        /// </summary>
+        long ShardStableId { get; set; }
     }
 
     public interface IRepoScopeEntity

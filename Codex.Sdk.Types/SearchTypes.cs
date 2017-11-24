@@ -58,6 +58,19 @@ namespace Codex
         public static SearchType Property = SearchType.Create<IPropertySearchModel>(RegisteredSearchTypes);
 
         public static SearchType StoredFilter = SearchType.Create<IStoredFilter>(RegisteredSearchTypes);
+
+        public static SearchType RegisteredEntity = SearchType.Create<IRegisteredEntity>(RegisteredSearchTypes);
+    }
+
+    /// <summary>
+    /// Defines a stored filter which matches entities in a particular index shard in a stable manner
+    /// </summary>
+    public interface IRegisteredEntity : ISearchEntity
+    {
+        /// <summary>
+        /// The date in which the entity was registered (i.e. added to the store)
+        /// </summary>
+        DateTime DateAdded { get; set; }
     }
 
     /// <summary>
