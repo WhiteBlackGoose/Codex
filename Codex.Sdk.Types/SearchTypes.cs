@@ -104,9 +104,9 @@ namespace Codex
         IReadOnlyList<string> BaseUids { get; }
 
         /// <summary>
-        /// The filter which matches entities in the index shard
+        /// The stored filter bit set which matches the stored filter documents
         /// </summary>
-        object Filter { get; }
+        byte[] Filter { get; }
     }
 
     public interface IDefinitionSearchModel : ISearchEntity

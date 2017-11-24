@@ -110,6 +110,15 @@ namespace Codex.ElasticSearch
             });
         }
 
+        public async Task RefreshAsync()
+        {
+            await Store.Service.UseClient(async context =>
+            {
+                var response = await context.Client.RefreshAsync(IndexName).ThrowOnFailure();
+                return response.IsValid;
+            });
+        }
+
         public override async Task DeleteAsync(IEnumerable<string> uids)
         {
             await Store.Service.UseClient(async context =>
@@ -139,7 +148,7 @@ namespace Codex.ElasticSearch
             return bd.Create<IRegisteredEntity>(bco => bco.Document(value).Index(RegistryIndexName).Id(value.Uid));
         }
 
-        public async Task StoreAsync(IReadOnlyList<T> values, bool replace = false)
+        public async Task StoreAsync(IReadOnlyList<T> values, bool replace)
         {
             await Store.Service.UseClient(async context =>
             {
@@ -153,7 +162,7 @@ namespace Codex.ElasticSearch
 
         public Task StoreAsync(IReadOnlyList<T> values)
         {
-            throw new NotImplementedException();
+            return StoreAsync(values, replace: false);
         }
     }
 }

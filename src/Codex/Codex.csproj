@@ -103,7 +103,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="CodexApplication.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

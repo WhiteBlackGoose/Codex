@@ -37,24 +37,41 @@ namespace Codex.ElasticSearch
         internal readonly ElasticSearchEntityStore[] EntityStores = new ElasticSearchEntityStore[SearchTypes.RegisteredSearchTypes.Count];
         public readonly string StoredFilterPipelineId;
 
-        public ElasticSearchStore(ElasticSearchStoreConfiguration configuration, ElasticSearchService service) 
+        public ElasticSearchStore(ElasticSearchStoreConfiguration configuration, ElasticSearchService service)
             : base(configuration, service)
         {
 
             StoredFilterPipelineId = configuration.Prefix + "StoredFilterPipeline";
         }
 
+        public async Task Clear()
+        {
+            await Service.UseClient(async context =>
+            {
+                var client = context.Client;
+
+                await client.DeletePipelineAsync(StoredFilterPipelineId);
+
+                // TODO: Remove
+                Placeholder.Todo("Remove the line below before running in production");
+                client.DeleteIndex(string.IsNullOrEmpty(Configuration.Prefix) ? Indices.All : Configuration.Prefix + "*").ThrowOnFailure();
+
+                return true;
+            });
+        }
+
         public override async Task InitializeAsync()
         {
+            if (Configuration.ClearIndicesBeforeUse)
+            {
+                await Clear();
+            }
+
             if (Configuration.CreateIndices)
             {
                 await Service.UseClient(async context =>
                 {
                     var client = context.Client;
-
-                    // TODO: Remove
-                    Placeholder.Todo("Remove the line below before running in production");
-                    client.DeleteIndex(Indices.All);
 
                     var getPipelineResult = await client.GetPipelineAsync(gp => gp.Id(StoredFilterPipelineId));
                     if (getPipelineResult.IsValid)
@@ -100,6 +117,8 @@ namespace Codex.ElasticSearch
         /// Indicates where indices should be created when <see cref="ElasticSearchStore.InitializeAsync"/> is called.
         /// </summary>
         public bool CreateIndices = true;
+
+        public bool ClearIndicesBeforeUse = true;
 
         /// <summary>
         /// The number of shards for created indices

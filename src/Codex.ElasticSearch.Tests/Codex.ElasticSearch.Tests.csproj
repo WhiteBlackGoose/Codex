@@ -13,6 +13,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EsIntegrationTests.cs" />
     <Compile Include="MappingTests.cs" />
     <Compile Include="SerializationTests.cs" />
   </ItemGroup>

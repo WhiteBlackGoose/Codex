@@ -21,7 +21,7 @@ using Codex.Sdk.Search;
 
 namespace Codex.Application
 {
-    class Program
+    class CodexApplication
     {
         static string elasticSearchServer = "http://localhost:9200";
         static bool finalize = true;

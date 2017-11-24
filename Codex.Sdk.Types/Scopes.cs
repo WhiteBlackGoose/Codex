@@ -28,6 +28,7 @@ namespace Codex
         /// <summary>
         /// The per-shard stable identity (derived from ElasticSearch sequence number)
         /// </summary>
+        [SearchBehavior(SearchBehavior.Term)]
         long ShardStableId { get; set; }
     }
 
