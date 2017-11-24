@@ -7,8 +7,8 @@
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
-    <PackageReference Include="Ref12.Codex.Elasticsearch.Net" Version="6.0.0-beta1-b46" />
-    <PackageReference Include="Ref12.Codex.NEST" Version="6.0.0-beta1-b52" />
+    <PackageReference Include="Ref12.Codex.Elasticsearch.Net" Version="6.0.0-beta1-b53" />
+    <PackageReference Include="Ref12.Codex.NEST" Version="6.0.0-beta1-b53" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.4.0" />
     <PackageReference Include="System.ValueTuple">
