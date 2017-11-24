@@ -119,6 +119,18 @@ namespace Codex.ElasticSearch
             });
         }
 
+        public Task<ElasticSearchResponse<T>> GetAsync(string uid)
+        {
+            return Store.Service.UseClient(async context =>
+            {
+                var response = await context.Client
+                    .GetAsync<T>(uid, g => g.Index(IndexName))
+                    .ThrowOnFailure();
+
+                return response.Source;
+            });
+        }
+
         public override async Task DeleteAsync(IEnumerable<string> uids)
         {
             await Store.Service.UseClient(async context =>
@@ -135,11 +147,21 @@ namespace Codex.ElasticSearch
         {
             if (replace)
             {
-                return bd.Update<T>(bco => bco.Doc(value).Id(value.Uid).DocAsUpsert().Index(IndexName).Pipeline(m_pipeline));
+                return bd.Index<T>(bco => bco
+                    .Document(value)
+                    .Id(value.Uid)
+                    .Index(IndexName)
+                    .Version(value.EntityVersion)
+                    .Pipeline(m_pipeline));
             }
             else
             {
-                return bd.Create<T>(bco => bco.Document(value).Id(value.Uid).Index(IndexName).Pipeline(m_pipeline));
+                return bd.Create<T>(bco => bco
+                    .Document(value)
+                    .Id(value.Uid)
+                    .Index(IndexName)
+                    .Version(value.EntityVersion)
+                    .Pipeline(m_pipeline));
             }
         }
 
@@ -148,13 +170,54 @@ namespace Codex.ElasticSearch
             return bd.Create<IRegisteredEntity>(bco => bco.Document(value).Index(RegistryIndexName).Id(value.Uid));
         }
 
-        public async Task StoreAsync(IReadOnlyList<T> values, bool replace)
+        public async Task StoreAsync(IReadOnlyList<T> values, UpdateMergeFunction<T> updateMergeFunction)
         {
             await Store.Service.UseClient(async context =>
             {
-                var response = await context.Client
-                    .BulkAsync(b => b.ForEach(values, (bd, value) => AddIndexOperation(bd, value, replace)).CaptureRequest(context))
-                    .ThrowOnFailure();
+                bool update = updateMergeFunction != null;
+                var client = context.Client;
+
+
+                if (update)
+                {
+                    T[] updatedValues = new T[values.Count];
+
+                    var getResponse = client
+                        .MultiGet(mg => mg.GetMany<T>(values.Select(value => value.Uid)).Index(IndexName))
+                        .ThrowOnFailure();
+
+                    int index = 0;
+                    foreach (var item in getResponse.Documents)
+                    {
+                        int currentIndex = index;
+                        index++;
+                        T value;
+                        if (item.Found)
+                        {
+                            var oldValue = (T)item.Source;
+                            value = updateMergeFunction(oldValue, values[currentIndex]);
+                            value.EntityVersion = item.Version;
+                        }
+                        else
+                        {
+                            value = values[currentIndex];
+                        }
+
+                        updatedValues[currentIndex] = value;
+
+                    }
+
+                    values = updatedValues;
+                }
+
+
+                var response = await client
+                    .BulkAsync(b => b.ForEach(values, (bd, value) => AddIndexOperation(bd, value, update)).CaptureRequest(context));
+
+                if (update || !response.ApiCall.Success)
+                {
+                    response.ThrowOnFailure();
+                }
 
                 return response.IsValid;
             });
@@ -162,7 +225,7 @@ namespace Codex.ElasticSearch
 
         public Task StoreAsync(IReadOnlyList<T> values)
         {
-            return StoreAsync(values, replace: false);
+            return StoreAsync(values, updateMergeFunction: null);
         }
     }
 }

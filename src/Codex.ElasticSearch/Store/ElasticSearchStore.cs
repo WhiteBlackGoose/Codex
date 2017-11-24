@@ -82,6 +82,9 @@ namespace Codex.ElasticSearch
                     await client.PutPipelineAsync(StoredFilterPipelineId, ppd =>
                         ppd.Processors(pd => pd.BinarySequence<IStoredFilter>(bsp => bsp
                             .IncludeField(sf => sf.StableIds)
+                            .UnionField(sf => sf.UnionFilters)
+                            .TargetHashField(sf => sf.FilterHash)
+                            .TargetCountField(sf => sf.FilterCount)
                             .TargetField(sf => sf.Filter))))
                         .ThrowOnFailure();
 

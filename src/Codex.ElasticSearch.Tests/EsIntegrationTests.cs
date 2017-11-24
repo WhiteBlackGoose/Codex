@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,13 +30,30 @@ namespace Codex.ElasticSearch.Tests
             Random random = new Random(12);
 
             HashSet<long> values = new HashSet<long>();
+            HashSet<long> valuesToStore = new HashSet<long>();
+
             for (int i = 0; i < 10; i++)
             {
-                values.Add(random.Next(0, 100000));
+                valuesToStore.Add(random.Next(0, 100000));
             }
 
+            // Store initial filter
+            var filter1 = await StoreAndVerifyFilter(store, values, valuesToStore);
+
+            // Verify that adding same values does not change filter
+            var filter2 = await StoreAndVerifyFilter(store, values, valuesToStore);
+
+            Assert.AreEqual(filter1.FilterHash, filter2.FilterHash);
+
+            Assert.True(filter1.Filter.SequenceEqual(filter2.Filter), "Filter should be the same if unioned with same values");
+        }
+
+        private async Task<IStoredFilter> StoreAndVerifyFilter(ElasticSearchStore store, HashSet<long> values, HashSet<long> valuesToStore, [CallerLineNumber] int line = 0)
+        {
+            values.UnionWith(valuesToStore);
+
             await store.RegisteredEntityStore.StoreAsync(
-                values.Select(stableId =>
+                valuesToStore.Select(stableId =>
                 {
                     return new RegisteredEntity()
                     {
@@ -48,14 +66,23 @@ namespace Codex.ElasticSearch.Tests
             await store.RegisteredEntityStore.RefreshAsync();
 
             string storedFilterId = "TEST_STORED_FILTER1";
-            await store.StoredFilterStore.StoreAsync(new[]
+            await store.StoredFilterStore.UpdateStoredFiltersAsync(new[]
             {
                 new StoredFilter()
                 {
                     Uid = storedFilterId,
-                    StableIds = values.ToList()
+                    StableIds = valuesToStore.ToList(),
+                    FilterHash = string.Empty,
                 }
             });
+
+            var retrievedFilterResponse = await store.StoredFilterStore.GetAsync(storedFilterId);
+            var retrievedFilter = retrievedFilterResponse.Result;
+
+            Assert.AreEqual(values.Count, retrievedFilter.FilterCount, $"Caller Line: {line}");
+            Assert.AreNotEqual(string.Empty, retrievedFilter.FilterHash, $"Caller Line: {line}");
+
+            return retrievedFilter;
         }
 
         private string GetUidFromStableId(long stableId)

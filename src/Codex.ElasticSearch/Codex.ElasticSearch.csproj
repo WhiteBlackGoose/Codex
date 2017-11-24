@@ -8,7 +8,7 @@
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
     <PackageReference Include="Ref12.Codex.Elasticsearch.Net" Version="6.0.0-beta1-b53" />
-    <PackageReference Include="Ref12.Codex.NEST" Version="6.0.0-beta1-b53" />
+    <PackageReference Include="Ref12.Codex.NEST" Version="6.0.0-beta1-b55" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.4.0" />
     <PackageReference Include="System.ValueTuple">
@@ -71,6 +71,8 @@
     <Compile Include="Store\ElasticSearchEntityStore.cs" />
     <Compile Include="Store\ElasticSearchStore.cs" />
     <Compile Include="Model\Index.cs" />
+    <Compile Include="Store\StoreExtensions.cs" />
+    <Compile Include="Utilities\UpdateMergeFunction.cs" />
     <Compile Include="Utilities\ArrayUtils.cs" />
     <Compile Include="Utilities\BatchQueue.cs" />
     <Compile Include="Utilities\ElasticCodexTypeUtilities.cs" />

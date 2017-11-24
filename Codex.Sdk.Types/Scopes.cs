@@ -26,6 +26,13 @@ namespace Codex
         int EntityContentSize { get; set; }
 
         /// <summary>
+        /// The version number used when storing the entity (for use by ElasticSearch concurrency control
+        /// to prevent races when storing values)
+        /// </summary>
+        [SearchBehavior(SearchBehavior.None)]
+        long? EntityVersion { get; set; }
+
+        /// <summary>
         /// The per-shard stable identity (derived from ElasticSearch sequence number)
         /// </summary>
         [SearchBehavior(SearchBehavior.Term)]

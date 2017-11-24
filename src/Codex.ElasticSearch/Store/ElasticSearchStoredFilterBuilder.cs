@@ -46,6 +46,7 @@ namespace Codex.ElasticSearch
             string filterQualifier = $"{IndexName}#{shard}";
             var shardState = new ShardState()
             {
+                IndexName = IndexName,
                 Shard = shard,
                 ShardFilterUid = GetFilterUid(filterQualifier, FilterName),
                 ShardIntermediateFilterUid = $"{filterQualifier}|{FilterName}|{IntermediateFilterSuffix}",
@@ -107,8 +108,8 @@ namespace Codex.ElasticSearch
 
         private async Task UpdateFilters(params StoredFilter[] filters)
         {
-            Placeholder.NotImplemented("Proper handling of stored filter replacement");
-            await Store.StoredFilterStore.StoreAsync(filters, replace: true);
+            Placeholder.NotImplemented("Proper handling of stored filter replacement. Need to clear when storing initial values");
+            await Store.StoredFilterStore.UpdateStoredFiltersAsync(filters);
         }
 
         public async Task FlushAsync()

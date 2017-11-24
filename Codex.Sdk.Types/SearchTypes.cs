@@ -108,9 +108,24 @@ namespace Codex
         IReadOnlyList<string> BaseUids { get; }
 
         /// <summary>
+        /// List of stored filters which will be unioned with the given stored filter
+        /// </summary>
+        IReadOnlyList<byte[]> UnionFilters { get; }
+
+        /// <summary>
         /// The stored filter bit set which matches the stored filter documents
         /// </summary>
         byte[] Filter { get; }
+
+        /// <summary>
+        /// The hash of <see cref="Filter"/>
+        /// </summary>
+        string FilterHash { get; }
+
+        /// <summary>
+        /// The count of elements matched by <see cref="Filter"/>
+        /// </summary>
+        int FilterCount { get; }
     }
 
     public interface IDefinitionSearchModel : ISearchEntity
