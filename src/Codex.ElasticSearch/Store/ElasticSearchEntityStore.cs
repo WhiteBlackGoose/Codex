@@ -170,7 +170,8 @@ namespace Codex.ElasticSearch
             return bd.Create<IRegisteredEntity>(bco => bco.Document(value).Index(RegistryIndexName).Id(value.Uid));
         }
 
-        public async Task StoreAsync(IReadOnlyList<T> values, UpdateMergeFunction<T> updateMergeFunction)
+        public async Task StoreAsync<TOut>(IReadOnlyList<T> values, UpdateMergeFunction<T> updateMergeFunction)
+            where TOut : class, T
         {
             await Store.Service.UseClient(async context =>
             {
@@ -183,7 +184,7 @@ namespace Codex.ElasticSearch
                     T[] updatedValues = new T[values.Count];
 
                     var getResponse = client
-                        .MultiGet(mg => mg.GetMany<T>(values.Select(value => value.Uid)).Index(IndexName))
+                        .MultiGet(mg => mg.GetMany<TOut>(values.Select(value => value.Uid)).Index(IndexName))
                         .ThrowOnFailure();
 
                     int index = 0;
@@ -225,7 +226,7 @@ namespace Codex.ElasticSearch
 
         public Task StoreAsync(IReadOnlyList<T> values)
         {
-            return StoreAsync(values, updateMergeFunction: null);
+            return StoreAsync<T>(values, updateMergeFunction: null);
         }
     }
 }

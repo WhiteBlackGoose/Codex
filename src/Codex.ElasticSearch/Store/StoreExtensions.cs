@@ -12,7 +12,7 @@ namespace Codex.ElasticSearch
     {
         public static Task UpdateStoredFiltersAsync(this ElasticSearchEntityStore<IStoredFilter> storedFilterStore, IReadOnlyList<IStoredFilter> storedFilters)
         {
-            return storedFilterStore.StoreAsync(storedFilters, UpdateMergeStoredFilter);
+            return storedFilterStore.StoreAsync<StoredFilter>(storedFilters, UpdateMergeStoredFilter);
         }
 
         public static IStoredFilter UpdateMergeStoredFilter(IStoredFilter oldValue, IStoredFilter newValue)

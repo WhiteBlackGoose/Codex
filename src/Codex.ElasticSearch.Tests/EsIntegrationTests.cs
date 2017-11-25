@@ -16,6 +16,8 @@ namespace Codex.ElasticSearch.Tests
         [Test]
         public async Task StoredFilterTest()
         {
+            const int valuesToAdd = 1000;
+
             var store = new ElasticSearchStore(new ElasticSearchStoreConfiguration()
             {
                 CreateIndices = true,
@@ -32,9 +34,9 @@ namespace Codex.ElasticSearch.Tests
             HashSet<long> values = new HashSet<long>();
             HashSet<long> valuesToStore = new HashSet<long>();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < valuesToAdd; i++)
             {
-                valuesToStore.Add(random.Next(0, 100000));
+                valuesToStore.Add(random.Next(0, valuesToAdd * 100));
             }
 
             // Store initial filter
@@ -46,6 +48,17 @@ namespace Codex.ElasticSearch.Tests
             Assert.AreEqual(filter1.FilterHash, filter2.FilterHash);
 
             Assert.True(filter1.Filter.SequenceEqual(filter2.Filter), "Filter should be the same if unioned with same values");
+
+            for (int i = 0; i < valuesToAdd; i++)
+            {
+                valuesToStore.Add(random.Next(valuesToAdd * 100, valuesToAdd * 200));
+            }
+
+            // Verify that adding different values does change filter
+            var filter3 = await StoreAndVerifyFilter(store, values, valuesToStore);
+
+            Assert.AreNotEqual(filter1.FilterHash, filter3.FilterHash);
+            Assert.False(filter1.Filter.SequenceEqual(filter3.Filter), "Filter should be the same if unioned with same values");
         }
 
         private async Task<IStoredFilter> StoreAndVerifyFilter(ElasticSearchStore store, HashSet<long> values, HashSet<long> valuesToStore, [CallerLineNumber] int line = 0)
