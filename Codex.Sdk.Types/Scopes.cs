@@ -18,6 +18,7 @@ namespace Codex
         /// Defines the content addressable identifier for the entity. This is used
         /// to determine if an entity with the same <see cref="Uid"/> should be updated
         /// </summary>
+        [SearchBehavior(SearchBehavior.Term)]
         string EntityContentId { get; set; }
 
         /// <summary>

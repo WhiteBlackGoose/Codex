@@ -173,12 +173,25 @@ namespace Codex
         ISymbolLineSpanList CompressedSpans { get; }
     }
 
-    public interface IBoundSourceSearchModel : ISearchEntity
+    public interface ISourceSearchModelBase : ISearchEntity
+    {
+        /// <summary>
+        /// Information about the source file from source control provider (may be null)
+        /// </summary>
+        ISourceControlFileInfo SourceControlInfo { get; }
+    }
+
+    public interface IBoundSourceSearchModel : ISourceSearchModelBase
     {
         /// <summary>
         /// The unique identifier of the associated <see cref="ISourceFile"/>
         /// </summary>
         string TextUid { get; }
+
+        /// <summary>
+        /// Information about the source file
+        /// </summary>
+        ISourceFileInfo SourceInfo { get; }
 
         /// <summary>
         /// The binding info
@@ -198,7 +211,7 @@ namespace Codex
         IReferenceList CompressedReferences { get; }
     }
 
-    public interface ITextSourceSearchModel : ISearchEntity
+    public interface ITextSourceSearchModel : ISourceSearchModelBase
     {
         ISourceFile File { get; }
     }

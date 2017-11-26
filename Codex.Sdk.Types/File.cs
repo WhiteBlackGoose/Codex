@@ -72,7 +72,18 @@ namespace Codex
         bool ExcludeFromSearch { get; }
     }
 
-    public interface ISourceFileInfo : IRepoFileScopeEntity,
+    /// <summary>
+    /// Information about a source file as defined by the source control provider
+    /// </summary>
+    public interface ISourceControlFileInfo
+    {
+        /// <summary>
+        /// Unique id for the source file content as defined by the source control provider (i.e. git SHA)
+        /// </summary>
+        string SourceControlContentId { get; }
+    }
+
+    public interface ISourceFileInfo : IRepoFileScopeEntity, ISourceControlFileInfo,
         // TODO: Remove and join source files by repository relative path with mapping from repository relative path to (project, project relative path)
         IProjectFileScopeEntity
     {
@@ -96,6 +107,11 @@ namespace Codex
         /// The web address of the file. TODO: Remove? Is repo relative path enough?
         /// </summary>
         string WebAddress { get; }
+
+        /// <summary>
+        /// The encoding used for the file
+        /// </summary>
+        IEncodingDescription Encoding { get; }
 
         /// <summary>
         /// Extensible key value properties for the document.
@@ -128,12 +144,8 @@ namespace Codex
         /// <summary>
         /// The information about the source file
         /// </summary>
+        [SearchBehavior(SearchBehavior.None)]
         ISourceFileInfo Info { get; }
-
-        /// <summary>
-        /// The encoding used for the file
-        /// </summary>
-        IEncodingDescription Encoding { get; }
 
         /// <summary>
         /// The content of the file

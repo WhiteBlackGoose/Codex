@@ -1,4 +1,5 @@
 ﻿using Codex.ObjectModel;
+using Codex.Utilities;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace Codex.ElasticSearch.Tests
         [Test]
         public async Task StoredFilterTest()
         {
-            const int valuesToAdd = 1000;
+            const int valuesToAdd = 1012;
 
             var store = new ElasticSearchStore(new ElasticSearchStoreConfiguration()
             {
@@ -31,38 +32,59 @@ namespace Codex.ElasticSearch.Tests
 
             Random random = new Random(12);
 
-            HashSet<long> values = new HashSet<long>();
+            Dictionary<int, HashSet<long>> valuesMap = new Dictionary<int, HashSet<long>>();
+
             HashSet<long> valuesToStore = new HashSet<long>();
-
-            for (int i = 0; i < valuesToAdd; i++)
-            {
-                valuesToStore.Add(random.Next(0, valuesToAdd * 100));
-            }
-
-            // Store initial filter
-            var filter1 = await StoreAndVerifyFilter(store, values, valuesToStore);
-
-            // Verify that adding same values does not change filter
-            var filter2 = await StoreAndVerifyFilter(store, values, valuesToStore);
-
-            Assert.AreEqual(filter1.FilterHash, filter2.FilterHash);
-
-            Assert.True(filter1.Filter.SequenceEqual(filter2.Filter), "Filter should be the same if unioned with same values");
 
             for (int i = 0; i < valuesToAdd; i++)
             {
                 valuesToStore.Add(random.Next(valuesToAdd * 100, valuesToAdd * 200));
             }
 
-            // Verify that adding different values does change filter
-            var filter3 = await StoreAndVerifyFilter(store, values, valuesToStore);
+            // Store initial filter
+            var filter1 = await StoreAndVerifyFilter(store, valuesMap, valuesToStore);
 
-            Assert.AreNotEqual(filter1.FilterHash, filter3.FilterHash);
-            Assert.False(filter1.Filter.SequenceEqual(filter3.Filter), "Filter should be the same if unioned with same values");
+            // Verify that adding same values DOES NOT change filter
+            var filter1_same = await StoreAndVerifyFilter(store, valuesMap, valuesToStore);
+
+            Assert.AreEqual(filter1.FilterHash, filter1_same.FilterHash);
+
+            Assert.True(filter1.Filter.SequenceEqual(filter1_same.Filter), "Filter should be the same if unioned with same values");
+
+            valuesToStore.Clear();
+            for (int i = 0; i < valuesToAdd; i++)
+            {
+                valuesToStore.Add(random.Next(valuesToAdd * 200, valuesToAdd * 300));
+            }
+
+            // Store initial filter
+            var filter2 = await StoreAndVerifyFilter(store, valuesMap, valuesToStore, filterId: 2);
+
+            Assert.AreNotEqual(filter1.FilterHash, filter2.FilterHash);
+
+            valuesToStore.Clear();
+            for (int i = 0; i < valuesToAdd; i++)
+            {
+                valuesToStore.Add(random.Next(valuesToAdd * 200, valuesToAdd * 300));
+            }
+
+            // Verify that adding different values DOES change filter
+            var filter1b = await StoreAndVerifyFilter(store, valuesMap, valuesToStore);
+
+            Assert.AreNotEqual(filter1.FilterHash, filter1b.FilterHash);
+            Assert.False(filter1.Filter.SequenceEqual(filter1b.Filter), "Filter should be the same if unioned with same values");
         }
 
-        private async Task<IStoredFilter> StoreAndVerifyFilter(ElasticSearchStore store, HashSet<long> values, HashSet<long> valuesToStore, [CallerLineNumber] int line = 0)
+        private async Task<IStoredFilter> StoreAndVerifyFilter(
+            ElasticSearchStore store,
+            Dictionary<int, HashSet<long>> valuesMap, 
+            IEnumerable<long> valuesToStore,
+            int filterId = 1,
+            [CallerLineNumber] int line = 0)
         {
+            var values = valuesMap.GetOrAdd(filterId, new HashSet<long>());
+            valuesToStore = valuesToStore.ToList();
+
             values.UnionWith(valuesToStore);
 
             await store.RegisteredEntityStore.StoreAsync(
@@ -76,9 +98,10 @@ namespace Codex.ElasticSearch.Tests
                     };
                 }).ToArray());
 
-            await store.RegisteredEntityStore.RefreshAsync();
+            await store.StoredFilterStore.RefreshAsync();
 
-            string storedFilterId = "TEST_STORED_FILTER1";
+            string baseFilterId = "TEST_STORED_FILTER#" + filterId;
+            string storedFilterId = StoredFilterUtilities.GetFilterId(baseFilterId, store.RegisteredEntityStore.IndexName, 0);
             await store.StoredFilterStore.UpdateStoredFiltersAsync(new[]
             {
                 new StoredFilter()
@@ -92,8 +115,29 @@ namespace Codex.ElasticSearch.Tests
             var retrievedFilterResponse = await store.StoredFilterStore.GetAsync(storedFilterId);
             var retrievedFilter = retrievedFilterResponse.Result;
 
+            await store.StoredFilterStore.RefreshAsync();
+            var retrievedRefreshFilter = (await store.StoredFilterStore.GetAsync(storedFilterId)).Result;
+
+            Assert.AreEqual(values.Count, retrievedRefreshFilter.FilterCount, $"Caller Line: {line}");// Sequence: '{string.Join(", ", values.OrderBy(v => v))}'");
             Assert.AreEqual(values.Count, retrievedFilter.FilterCount, $"Caller Line: {line}");
             Assert.AreNotEqual(string.Empty, retrievedFilter.FilterHash, $"Caller Line: {line}");
+
+            await store.RegisteredEntityStore.RefreshAsync();
+
+            var filteredEntitiesResponse = await store.RegisteredEntityStore.GetStoredFilterEntities(baseFilterId, 
+                // Ensure that if there are more matches than expected that the API would return those results
+                maxCount: values.Count + 1);
+            var filteredEntities = filteredEntitiesResponse.Result;
+
+            var filteredEntityIds = new HashSet<long>(filteredEntities.Select(e => e.ShardStableId));
+
+            var missingFilteredEntityIds = values.Except(filteredEntityIds).ToList();
+            Assert.IsEmpty(missingFilteredEntityIds);
+
+            var extraFilteredEntityIds = filteredEntityIds.Except(values).ToList();
+            Assert.IsEmpty(extraFilteredEntityIds);
+
+            Assert.AreEqual(values.Count, filteredEntities.Count, $"Caller Line: {line}");
 
             return retrievedFilter;
         }

@@ -14,6 +14,8 @@ using Codex.Utilities;
 using System.Diagnostics.Contracts;
 using Codex.ObjectModel;
 
+using static Codex.ElasticSearch.StoredFilterUtilities;
+
 namespace Codex.ElasticSearch
 {
     internal class ElasticSearchStoredFilterBuilder
@@ -43,24 +45,19 @@ namespace Codex.ElasticSearch
 
         private ShardState CreateShardState(int shard)
         {
-            string filterQualifier = $"{IndexName}#{shard}";
+            var shardFilterId = GetFilterId(FilterName, IndexName, shard);
             var shardState = new ShardState()
             {
                 IndexName = IndexName,
                 Shard = shard,
-                ShardFilterUid = GetFilterUid(filterQualifier, FilterName),
-                ShardIntermediateFilterUid = $"{filterQualifier}|{FilterName}|{IntermediateFilterSuffix}",
-                UnionFilterUids = unionFilterNames.Select(filterName => GetFilterUid(filterQualifier, filterName)).ToArray(),
+                ShardFilterUid = shardFilterId,
+                ShardIntermediateFilterUid = $"{shardFilterId}[{IntermediateFilterSuffix}]",
+                UnionFilterUids = unionFilterNames.Select(name => GetFilterId(name, IndexName, shard)).ToArray(),
                 Queue = new BatchQueue<ElasticEntityRef>(BatchSize)
             };
 
             shardState.Filter = shardState.CreateStoredFilter(shardState.ShardIntermediateFilterUid);
             return shardState;
-        }
-
-        private string GetFilterUid(string filterQualifier, string filterName)
-        {
-            return $"{filterQualifier}|{filterName}";
         }
 
         public void Add(ElasticEntityRef entityRef)

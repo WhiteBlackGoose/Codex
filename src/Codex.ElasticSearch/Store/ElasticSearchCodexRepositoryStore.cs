@@ -153,16 +153,18 @@ namespace Codex.ElasticSearch
             boundSourceFile.Language = boundSourceFile.Language ?? sourceFileInfo.Language;
             boundSourceFile.ProjectRelativePath = boundSourceFile.ProjectRelativePath ?? sourceFileInfo.ProjectRelativePath;
 
+            Placeholder.Todo($"Get {nameof(ISourceControlFileInfo.SourceControlContentId)} from source control provider during analysis");
             var textModel = new TextSourceSearchModel()
             {
                 // TODO: This should probably be handled by custom serializer
                 File = boundSourceFile.SourceFile.EnableFullTextSearch(),
+                SourceControlInfo = new SourceControlFileInfo(sourceFileInfo)
             };
 
             batcher.Add(store.TextSourceStore, textModel);
             UpdateCommitFile(textModel);
 
-            var boundSourceModel = new BoundSourceSearchModel()
+            var boundSourceModel = new BoundSourceSearchModel(textModel)
             {
                 BindingInfo = boundSourceFile,
                 TextUid = textModel.Uid,
