@@ -40,6 +40,9 @@
     <ErrorReport>prompt</ErrorReport>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <WarningLevel>4</WarningLevel>
+    <!-- 1591: Suppress missing documentation commment warning-->
+    <NoWarn>1591;$(NoWarn)</NoWarn>
+    <DocumentationFile Condition="'$(GenerateDocumentation)' == 'true'">$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
     <Prefer32Bit Condition="'$(Prefer32Bit)'==''">false</Prefer32Bit>
   </PropertyGroup>
 

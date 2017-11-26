@@ -4,6 +4,8 @@
     <ProjectGuid>{E30939C5-042D-4EC2-817D-C5AFC509B330}</ProjectGuid>
     <AssemblyName>Codex.Framework.Generation</AssemblyName>
     <RootNamespace>Codex.Framework.Generation</RootNamespace>
+    <!-- Generate documentation so generated types acquire documentation -->
+    <GenerateDocumentation>true</GenerateDocumentation>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>

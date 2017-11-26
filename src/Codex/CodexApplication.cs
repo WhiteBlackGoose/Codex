@@ -296,7 +296,7 @@ namespace Codex.Application
                         },
                         new Branch()
                         {
-                            CommitId = targetIndexName,
+                            HeadCommitId = targetIndexName,
                         });
                 }
 

@@ -109,6 +109,6 @@ namespace Codex
         /// The head commit of the branch
         /// </summary>
         [SearchBehavior(SearchBehavior.NormalizedKeyword)]
-        string CommitId { get; }
+        string HeadCommitId { get; }
     }
 }

@@ -80,6 +80,7 @@ namespace Codex
         /// <summary>
         /// Unique id for the source file content as defined by the source control provider (i.e. git SHA)
         /// </summary>
+        [SearchBehavior(SearchBehavior.NormalizedKeyword)]
         string SourceControlContentId { get; }
     }
 
