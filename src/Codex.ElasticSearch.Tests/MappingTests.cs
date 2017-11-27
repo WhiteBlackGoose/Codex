@@ -19,8 +19,11 @@ using System.Threading.Tasks;
 namespace Codex.ElasticSearch.Tests
 {
     [TestFixture]
-    public class MappingTets
+    public class MappingTests
     {
+        /// <summary>
+        /// This test doesn't actually verify anything. It just provides an easy way of viewing mappings
+        /// </summary>
         [Test]
         public void TestMappings()
         {

@@ -104,6 +104,18 @@ namespace Codex.Serialization
             if (!ContractsByType.TryGetValue(objectType, out contract))
             {
                 contract = ContractsByType.GetOrAdd(objectType, m_inner.ResolveContract(objectType));
+
+                var objectContract = contract as JsonObjectContract;
+                if (objectContract != null)
+                {
+                    var sortedProperties = objectContract.Properties.ToList();
+                    sortedProperties.Sort((p1, p2) => StringComparer.OrdinalIgnoreCase.Compare(p1.PropertyName, p2.PropertyName));
+                    objectContract.Properties.Clear();
+                    foreach (var property in sortedProperties)
+                    {
+                        objectContract.Properties.Add(property);
+                    }
+                }
             }
 
             return contract;

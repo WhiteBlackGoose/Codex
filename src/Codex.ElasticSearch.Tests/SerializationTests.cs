@@ -79,7 +79,6 @@ namespace Codex.ElasticSearch.Tests
             var elasticResult = entity.ElasticSerialize();
 
             Assert.Pass(elasticResult);
-
         }
 
         [Test]
@@ -148,8 +147,6 @@ namespace Codex.ElasticSearch.Tests
 
             Assert.Pass(definition1.SerializeEntity(ObjectStage.Index));
         }
-
-        
     }
 
     internal static class TestSerializerExtensions
@@ -176,6 +173,4 @@ namespace Codex.ElasticSearch.Tests
             return serializer.Serialize(obj);
         }
     }
-
-
 }
