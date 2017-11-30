@@ -92,14 +92,22 @@ namespace Codex.ElasticSearch
                 });
             }
 
+            Placeholder.Todo("Configure each store with its specific index sort. Consider defining that on search type");
+
+            foreach (var store in EntityStores)
+            {
+                // Creates the index
+                await store.InitializeAsync();
+            }
+
             await base.InitializeAsync();
         }
 
         public override async Task<ElasticSearchEntityStore<TSearchType>> CreateStoreAsync<TSearchType>(SearchType searchType)
         {
             var store = new ElasticSearchEntityStore<TSearchType>(this, searchType);
-            await store.InitializeAsync();
             EntityStores[store.SearchType.Id] = store;
+            await Task.CompletedTask;
             return store;
         }
 

@@ -64,6 +64,7 @@
     <None Include="Old\MemoryStorage.cs" />
     <None Include="Old\ModelConverter.cs" />
     <Compile Include="Serialization\EntitySerializer.cs" />
+    <Compile Include="Store\Directory\DirectoryCodexStore.cs" />
     <Compile Include="Store\ElasticSearchBatch.cs" />
     <Compile Include="Store\ElasticSearchBatcher.cs" />
     <Compile Include="Store\ElasticSearchCodexRepositoryStore.cs" />

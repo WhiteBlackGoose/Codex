@@ -27,6 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scopes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SearchTypes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Statistics.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StoreTypes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Support\Attributes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Support\DataInclusion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Support\SearchTypeDescriptors.cs" />

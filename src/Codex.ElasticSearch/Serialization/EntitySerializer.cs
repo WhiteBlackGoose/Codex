@@ -412,6 +412,16 @@ namespace Codex.Serialization
             }
         }
 
+        public static string GetEntityContentId(this EntityBase entity, ObjectStage stage = ObjectStage.All)
+        {
+            using (var lease = Pools.EncoderContextPool.Acquire())
+            {
+                var encoderContext = lease.Instance;
+                entity.SerializeEntityTo(encoderContext.Writer, stage: ObjectStage.Index);
+                return encoderContext.ToBase64HashString();
+            }
+        }
+
         public static string SerializeEntity(this object entity, ObjectStage stage = ObjectStage.All)
         {
             return StageSerializers[(int)stage].Serialize(entity);

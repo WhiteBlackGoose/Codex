@@ -30,6 +30,8 @@ namespace Codex.ElasticSearch
         }
 
         public abstract Task DeleteAsync(IEnumerable<string> uids);
+
+        public abstract Task InitializeAsync();
     }
 
     public class ElasticSearchEntityStore<T> : ElasticSearchEntityStore, IStore<T>
@@ -44,7 +46,7 @@ namespace Codex.ElasticSearch
                 store.StoredFilterPipelineId : null;
         }
 
-        public async Task InitializeAsync()
+        public override async Task InitializeAsync()
         {
             if (Store.Configuration.CreateIndices)
             {
