@@ -116,54 +116,55 @@
       ],
       "sharedValues": [
         {
-          "lineNumber": 10,
+          "lineNumber": 11,
           "lineSpanText": "[assembly: AssemblyCompany(\"\")]"
         },
         {
-          "lineNumber": 9,
+          "lineNumber": 10,
           "lineSpanText": "[assembly: AssemblyConfiguration(\"\")]"
         },
         {
-          "lineNumber": 12,
+          "lineNumber": 13,
           "lineSpanText": "[assembly: AssemblyCopyright(\"Copyright ©  2017\")]"
         },
         {
-          "lineNumber": 14,
+          "lineNumber": 15,
           "lineSpanText": "[assembly: AssemblyCulture(\"\")]"
         },
         {
-          "lineNumber": 8,
+          "lineNumber": 9,
           "lineSpanText": "[assembly: AssemblyDescription(\"\")]"
         },
         {
-          "lineNumber": 35,
+          "lineNumber": 36,
           "lineSpanText": "[assembly: AssemblyFileVersion(\"1.0.0.0\")]"
         },
         {
-          "lineNumber": 11,
+          "lineNumber": 12,
           "lineSpanText": "[assembly: AssemblyProduct(\"CodexTestCSharpLibrary\")]"
         },
         {
-          "lineNumber": 7,
+          "lineNumber": 8,
           "lineSpanText": "[assembly: AssemblyTitle(\"CodexTestCSharpLibrary\")]"
         },
         {
-          "lineNumber": 13,
+          "lineNumber": 14,
           "lineSpanText": "[assembly: AssemblyTrademark(\"\")]"
         },
         {
-          "lineNumber": 34,
+          "lineNumber": 35,
           "lineSpanText": "[assembly: AssemblyVersion(\"1.0.0.0\")]"
         },
         {
-          "lineNumber": 19,
+          "lineNumber": 20,
           "lineSpanText": "[assembly: ComVisible(false)]"
         },
         {
-          "lineNumber": 22,
+          "lineNumber": 23,
           "lineSpanText": "[assembly: Guid(\"f16a9de8-193f-4d07-9d86-1dd2fb087a96\")]"
         },
         {
+          "lineNumber": 1,
           "lineSpanText": "using System.Reflection;"
         }
       ]

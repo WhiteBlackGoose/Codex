@@ -150,6 +150,55 @@ namespace Codex.ObjectModel
         }
     }
 
+    partial class LineSpan
+    {
+        private int CoerceLineIndex(int? value)
+        {
+            if (value == null)
+            {
+                if (m_LineNumber != null)
+                {
+                    // Line number is 1-based whereas this value is 0-based
+                    return m_LineNumber.Value - 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+
+            return value.Value;
+        }
+
+        private int CoerceLineNumber(int? value)
+        {
+            if (value == null)
+            {
+                if (m_LineIndex != null)
+                {
+                    // Line index is 0-based whereas this value is 1-based
+                    return m_LineIndex.Value + 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+
+            return value.Value;
+        }
+
+        protected override void OnDeserializedCore()
+        {
+            base.OnDeserializedCore();
+        }
+
+        protected override void OnSerializingCore()
+        {
+            base.OnSerializingCore();
+        }
+    }
+
     partial class SymbolSpan
     {
         public int LineSpanEnd => LineSpanStart + Length;

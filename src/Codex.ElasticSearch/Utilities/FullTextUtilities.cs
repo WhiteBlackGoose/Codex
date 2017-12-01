@@ -71,7 +71,7 @@ namespace Codex.Storage.Utilities
                             var lineNumberString = highlight.Substring(i + 1, endOfLineSpecifierIndex - (i + 1));
                             if (int.TryParse(lineNumberString, out lineNumber))
                             {
-                                currentSpan.LineNumber = lineNumber;
+                                currentSpan.LineIndex = lineNumber;
                             }
 
                             i = endOfLineSpecifierIndex;
@@ -104,13 +104,13 @@ namespace Codex.Storage.Utilities
                         if (spans.Count != 0)
                         {
                             var priorSpan = spans[spans.Count - 1];
-                            if (currentSpan.LineNumber != 0)
+                            if (currentSpan.LineIndex != 0)
                             {
-                                priorSpan.LineNumber = currentSpan.LineNumber - 1;
+                                priorSpan.LineIndex = currentSpan.LineIndex - 1;
                             }
                             else
                             {
-                                currentSpan.LineNumber = priorSpan.LineNumber + 1;
+                                currentSpan.LineIndex = priorSpan.LineIndex + 1;
                             }
                         }
 
@@ -145,7 +145,7 @@ namespace Codex.Storage.Utilities
         private static TextLineSpan ParseHighlightSpan(string highlight, StringBuilder builder)
         {
             builder.Clear();
-            int lineNumber = -1;
+            int lineIndex = -1;
             int lineStart = highlight.IndexOf(HighlightStartTag);
 
             for (int i = 0; i < highlight.Length; i++)
@@ -158,11 +158,11 @@ namespace Codex.Storage.Utilities
                     {
                         if (highlight[i] == EndOfLineSpecifierChar)
                         {
-                            if (lineNumber == -1 || i < lineStart)
+                            if (lineIndex == -1 || i < lineStart)
                             {
-                                if (!int.TryParse(highlight.Substring(lineSpecifierStartIndex, lineSpecifierLength), out lineNumber))
+                                if (!int.TryParse(highlight.Substring(lineSpecifierStartIndex, lineSpecifierLength), out lineIndex))
                                 {
-                                    lineNumber = -1;
+                                    lineIndex = -1;
                                 }
                             }
                             break;
@@ -194,7 +194,7 @@ namespace Codex.Storage.Utilities
 
             return new TextLineSpan()
             {
-                LineNumber = lineNumber >= 0 ? lineNumber : 0,
+                LineIndex = lineIndex >= 0 ? lineIndex : 0,
                 LineSpanText = lineSpanText,
                 LineSpanStart = lineStart,
                 Length = length,

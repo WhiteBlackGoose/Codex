@@ -38,8 +38,6 @@
           "shortName": "IXedoc"
         },
         "length": 6,
-        "lineNumber": 8,
-        "lineSpanStart": 21,
         "start": 181
       },
       {
@@ -56,8 +54,6 @@
           "shortName": "ITypeWithParams<T0, T1>"
         },
         "length": 15,
-        "lineNumber": 13,
-        "lineSpanStart": 21,
         "start": 228
       },
       {
@@ -74,8 +70,6 @@
           "shortName": "XedocImpl"
         },
         "length": 9,
-        "lineNumber": 18,
-        "lineSpanStart": 21,
         "start": 410
       }
     ],
@@ -170,18 +164,19 @@
       ],
       "sharedValues": [
         {
-          "lineNumber": 13,
+          "lineNumber": 14,
           "lineSpanText": "public interface ITypeWithParams<T0, T1>"
         },
         {
-          "lineNumber": 8,
+          "lineNumber": 9,
           "lineSpanText": "public interface IXedoc"
         },
         {
-          "lineNumber": 18,
+          "lineNumber": 19,
           "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>"
         },
         {
+          "lineNumber": 1,
           "lineSpanText": "using System;"
         }
       ]

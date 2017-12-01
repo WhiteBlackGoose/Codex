@@ -116,14 +116,15 @@
       ],
       "sharedValues": [
         {
-          "lineNumber": 3,
+          "lineNumber": 4,
           "lineSpanText": "<Project ReferenceCount=\"28\" Name=\"mscorlib\" FullName=\"mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />"
         },
         {
-          "lineNumber": 1,
+          "lineNumber": 2,
           "lineSpanText": "<Project ReferenceCount=\"3\" Name=\"CodexTestCSharpLibrary\" FullName=\"CodexTestCSharpLibrary\" />"
         },
         {
+          "lineNumber": 1,
           "lineSpanText": "<ReferenceProjects>"
         }
       ]

@@ -123,150 +123,151 @@
       ],
       "sharedValues": [
         {
+          "lineNumber": 1,
           "lineSpanText": "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
         },
         {
-          "lineNumber": 8,
+          "lineNumber": 9,
           "lineSpanText": "<AppDesignerFolder>Properties</AppDesignerFolder>"
         },
         {
-          "lineNumber": 10,
+          "lineNumber": 11,
           "lineSpanText": "<AssemblyName>CodexTestCSharpLibrary</AssemblyName>"
         },
         {
-          "lineNumber": 42,
+          "lineNumber": 43,
           "lineSpanText": "<Compile Include=\"Cases.cs\" />"
         },
         {
-          "lineNumber": 43,
+          "lineNumber": 44,
           "lineSpanText": "<Compile Include=\"Properties\\AssemblyInfo.cs\" />"
         },
         {
-          "lineNumber": 4,
+          "lineNumber": 5,
           "lineSpanText": "<Configuration Condition=\" '$(Configuration)' == '' \">Debug</Configuration>"
         },
         {
-          "lineNumber": 15,
+          "lineNumber": 16,
           "lineSpanText": "<DebugSymbols>true</DebugSymbols>"
         },
         {
-          "lineNumber": 16,
+          "lineNumber": 17,
           "lineSpanText": "<DebugType>full</DebugType>"
         },
         {
-          "lineNumber": 24,
+          "lineNumber": 25,
           "lineSpanText": "<DebugType>pdbonly</DebugType>"
         },
         {
-          "lineNumber": 19,
+          "lineNumber": 20,
           "lineSpanText": "<DefineConstants>DEBUG;TRACE</DefineConstants>"
         },
         {
-          "lineNumber": 27,
+          "lineNumber": 28,
           "lineSpanText": "<DefineConstants>TRACE</DefineConstants>"
         },
         {
-          "lineNumber": 28,
-          "lineSpanText": "<ErrorReport>prompt</ErrorReport>"
-        },
-        {
-          "lineNumber": 20,
-          "lineSpanText": "<ErrorReport>prompt</ErrorReport>"
-        },
-        {
-          "lineNumber": 12,
-          "lineSpanText": "<FileAlignment>512</FileAlignment>"
-        },
-        {
-          "lineNumber": 2,
-          "lineSpanText": "<Import Project=\"$(MSBuildExtensionsPath)\\$(MSBuildToolsVersion)\\Microsoft.Common.props\" Condition=\"Exists('$(MSBuildExtensionsPath)\\$(MSBuildToolsVersion)\\Microsoft.Common.props')\" />"
-        },
-        {
-          "lineNumber": 45,
-          "lineSpanText": "<Import Project=\"$(MSBuildToolsPath)\\Microsoft.CSharp.targets\" />"
-        },
-        {
-          "lineNumber": 17,
-          "lineSpanText": "<Optimize>false</Optimize>"
-        },
-        {
-          "lineNumber": 25,
-          "lineSpanText": "<Optimize>true</Optimize>"
-        },
-        {
-          "lineNumber": 18,
-          "lineSpanText": "<OutputPath>bin\\Debug\\</OutputPath>"
-        },
-        {
-          "lineNumber": 26,
-          "lineSpanText": "<OutputPath>bin\\Release\\</OutputPath>"
-        },
-        {
-          "lineNumber": 7,
-          "lineSpanText": "<OutputType>Library</OutputType>"
-        },
-        {
-          "lineNumber": 5,
-          "lineSpanText": "<Platform Condition=\" '$(Platform)' == '' \">AnyCPU</Platform>"
-        },
-        {
-          "lineNumber": 6,
-          "lineSpanText": "<ProjectGuid>{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}</ProjectGuid>"
-        },
-        {
-          "lineNumber": 14,
-          "lineSpanText": "<PropertyGroup Condition=\" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' \">"
-        },
-        {
-          "lineNumber": 23,
-          "lineSpanText": "<PropertyGroup Condition=\" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' \">"
-        },
-        {
-          "lineNumber": 36,
-          "lineSpanText": "<Reference Include=\"Microsoft.CSharp\" />"
-        },
-        {
-          "lineNumber": 32,
-          "lineSpanText": "<Reference Include=\"System\" />"
-        },
-        {
-          "lineNumber": 33,
-          "lineSpanText": "<Reference Include=\"System.Core\" />"
-        },
-        {
-          "lineNumber": 37,
-          "lineSpanText": "<Reference Include=\"System.Data\" />"
-        },
-        {
-          "lineNumber": 35,
-          "lineSpanText": "<Reference Include=\"System.Data.DataSetExtensions\" />"
-        },
-        {
-          "lineNumber": 38,
-          "lineSpanText": "<Reference Include=\"System.Net.Http\" />"
-        },
-        {
-          "lineNumber": 39,
-          "lineSpanText": "<Reference Include=\"System.Xml\" />"
-        },
-        {
-          "lineNumber": 34,
-          "lineSpanText": "<Reference Include=\"System.Xml.Linq\" />"
-        },
-        {
-          "lineNumber": 9,
-          "lineSpanText": "<RootNamespace>CodexTestCSharpLibrary</RootNamespace>"
-        },
-        {
-          "lineNumber": 11,
-          "lineSpanText": "<TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>"
-        },
-        {
           "lineNumber": 29,
-          "lineSpanText": "<WarningLevel>4</WarningLevel>"
+          "lineSpanText": "<ErrorReport>prompt</ErrorReport>"
         },
         {
           "lineNumber": 21,
+          "lineSpanText": "<ErrorReport>prompt</ErrorReport>"
+        },
+        {
+          "lineNumber": 13,
+          "lineSpanText": "<FileAlignment>512</FileAlignment>"
+        },
+        {
+          "lineNumber": 3,
+          "lineSpanText": "<Import Project=\"$(MSBuildExtensionsPath)\\$(MSBuildToolsVersion)\\Microsoft.Common.props\" Condition=\"Exists('$(MSBuildExtensionsPath)\\$(MSBuildToolsVersion)\\Microsoft.Common.props')\" />"
+        },
+        {
+          "lineNumber": 46,
+          "lineSpanText": "<Import Project=\"$(MSBuildToolsPath)\\Microsoft.CSharp.targets\" />"
+        },
+        {
+          "lineNumber": 18,
+          "lineSpanText": "<Optimize>false</Optimize>"
+        },
+        {
+          "lineNumber": 26,
+          "lineSpanText": "<Optimize>true</Optimize>"
+        },
+        {
+          "lineNumber": 19,
+          "lineSpanText": "<OutputPath>bin\\Debug\\</OutputPath>"
+        },
+        {
+          "lineNumber": 27,
+          "lineSpanText": "<OutputPath>bin\\Release\\</OutputPath>"
+        },
+        {
+          "lineNumber": 8,
+          "lineSpanText": "<OutputType>Library</OutputType>"
+        },
+        {
+          "lineNumber": 6,
+          "lineSpanText": "<Platform Condition=\" '$(Platform)' == '' \">AnyCPU</Platform>"
+        },
+        {
+          "lineNumber": 7,
+          "lineSpanText": "<ProjectGuid>{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}</ProjectGuid>"
+        },
+        {
+          "lineNumber": 15,
+          "lineSpanText": "<PropertyGroup Condition=\" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' \">"
+        },
+        {
+          "lineNumber": 24,
+          "lineSpanText": "<PropertyGroup Condition=\" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' \">"
+        },
+        {
+          "lineNumber": 37,
+          "lineSpanText": "<Reference Include=\"Microsoft.CSharp\" />"
+        },
+        {
+          "lineNumber": 33,
+          "lineSpanText": "<Reference Include=\"System\" />"
+        },
+        {
+          "lineNumber": 34,
+          "lineSpanText": "<Reference Include=\"System.Core\" />"
+        },
+        {
+          "lineNumber": 38,
+          "lineSpanText": "<Reference Include=\"System.Data\" />"
+        },
+        {
+          "lineNumber": 36,
+          "lineSpanText": "<Reference Include=\"System.Data.DataSetExtensions\" />"
+        },
+        {
+          "lineNumber": 39,
+          "lineSpanText": "<Reference Include=\"System.Net.Http\" />"
+        },
+        {
+          "lineNumber": 40,
+          "lineSpanText": "<Reference Include=\"System.Xml\" />"
+        },
+        {
+          "lineNumber": 35,
+          "lineSpanText": "<Reference Include=\"System.Xml.Linq\" />"
+        },
+        {
+          "lineNumber": 10,
+          "lineSpanText": "<RootNamespace>CodexTestCSharpLibrary</RootNamespace>"
+        },
+        {
+          "lineNumber": 12,
+          "lineSpanText": "<TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>"
+        },
+        {
+          "lineNumber": 30,
+          "lineSpanText": "<WarningLevel>4</WarningLevel>"
+        },
+        {
+          "lineNumber": 22,
           "lineSpanText": "<WarningLevel>4</WarningLevel>"
         }
       ]

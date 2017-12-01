@@ -256,22 +256,22 @@ namespace Codex.Analysis
             {
                 if (lastReference?.Start == reference.Start)
                 {
-                    reference.LineNumber = lastReference.LineNumber;
+                    reference.LineIndex = lastReference.LineIndex;
                     reference.LineSpanStart = lastReference.LineSpanStart;
                     reference.LineSpanText = lastReference.LineSpanText;
                     continue;
                 }
 
                 var line = text.Lines.GetLineFromPosition(reference.Start);
-                if (lastReference?.LineNumber == line.LineNumber)
+                if (lastReference?.LineIndex == line.LineNumber)
                 {
-                    reference.LineNumber = line.LineNumber;
+                    reference.LineIndex = line.LineNumber;
                     reference.LineSpanStart = lastReference.LineSpanStart + (reference.Start - lastReference.Start);
                     reference.LineSpanText = lastReference.LineSpanText;
                     continue;
                 }
 
-                reference.LineNumber = line.LineNumber;
+                reference.LineIndex = line.LineNumber;
                 reference.LineSpanStart = reference.Start - line.Start;
                 reference.LineSpanText = line.ToString();
                 reference.Trim();
@@ -281,7 +281,7 @@ namespace Codex.Analysis
             {
                 definitionSpan.Definition.ProjectId = definitionSpan.Definition.ProjectId ?? ProjectId;
                 var line = text.Lines.GetLineFromPosition(definitionSpan.Start);
-                definitionSpan.LineNumber = line.LineNumber;
+                definitionSpan.LineIndex = line.LineNumber;
                 definitionSpan.LineSpanStart = definitionSpan.Start - line.Start;
             }
 

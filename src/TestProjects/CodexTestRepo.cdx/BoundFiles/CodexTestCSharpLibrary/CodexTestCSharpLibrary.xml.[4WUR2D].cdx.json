@@ -116,18 +116,19 @@
       ],
       "sharedValues": [
         {
+          "lineNumber": 1,
           "lineSpanText": "<ReferenceSymbols Count=\"3\">"
         },
         {
-          "lineNumber": 2,
+          "lineNumber": 3,
           "lineSpanText": "<Symbol Name=\"ITypeWithParams˂T0, T1˃\" ReferenceCount=\"1\" />"
         },
         {
-          "lineNumber": 3,
+          "lineNumber": 4,
           "lineSpanText": "<Symbol Name=\"IXedoc\" ReferenceCount=\"2\" />"
         },
         {
-          "lineNumber": 4,
+          "lineNumber": 5,
           "lineSpanText": "<Symbol Name=\"XedocImpl\" ReferenceCount=\"0\" />"
         }
       ]

@@ -176,7 +176,7 @@ namespace Codex
         ILineSpan Content { get; }
     }
 
-    public interface IDefinitionSpan : ILineSpan
+    public interface IDefinitionSpan : ISpan
     {
         /// <summary>
         /// The definition symbol referred to by the span
@@ -280,8 +280,16 @@ namespace Codex
     public interface ILineSpan : ISpan
     {
         /// <summary>
-        /// The character position where the span starts in the line text
+        /// The 0-based index of the line containing the span
         /// </summary>
+        [Include(ObjectStage.None)]
+        [CoerceGet(typeof(int?))]
+        int LineIndex { get; }
+
+        /// <summary>
+        /// The 1-based line number of the line containing the span
+        /// </summary>
+        [CoerceGet(typeof(int?))]
         int LineNumber { get; }
 
         /// <summary>

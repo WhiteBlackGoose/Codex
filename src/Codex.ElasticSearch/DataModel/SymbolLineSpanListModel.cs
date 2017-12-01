@@ -36,7 +36,7 @@ namespace Codex.Storage.DataModel
                 LineSpanStart = start,
                 Length = length,
                 LineSpanText = shared.LineSpanText,
-                LineNumber = shared.LineNumber
+                LineIndex = shared.LineIndex
             };
         }
 
@@ -45,7 +45,7 @@ namespace Codex.Storage.DataModel
             return new SymbolSpan()
             {
                 LineSpanText = span.LineSpanText,
-                LineNumber = span.LineNumber,
+                LineIndex = span.LineIndex,
                 Start = span.Start - span.LineSpanStart
             };
         }
@@ -57,7 +57,7 @@ namespace Codex.Storage.DataModel
 
         public override int GetSharedKey(SymbolSpan span)
         {
-            return span.LineNumber;
+            return span.LineIndex;
         }
 
         [OnSerializing]

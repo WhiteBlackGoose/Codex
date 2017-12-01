@@ -172,7 +172,9 @@ namespace Codex.Application
 
                 store = service.CreateStoreAsync(new ElasticSearchStoreConfiguration()
                 {
+                    // TODO: Remove these for production. Indices should be created by a single setup process
                     CreateIndices = true,
+                    ClearIndicesBeforeUse = true,
                     ShardCount = 2,
                     Prefix = string.Empty
                 }).GetAwaiter().GetResult();
@@ -383,7 +385,7 @@ namespace Codex.Application
                 foreach (var result in results.Hits)
                 {
                     Console.WriteLine($@"\\{result.RepositoryName}\{result.RepoRelativePath}");
-                    Console.WriteLine($"{result.ProjectId}:{result.ProjectRelativePath} ({result.TextSpan.LineNumber}, {result.TextSpan.LineSpanStart})");
+                    Console.WriteLine($"{result.ProjectId}:{result.ProjectRelativePath} ({result.TextSpan.LineIndex}, {result.TextSpan.LineSpanStart})");
 
                     if (!string.IsNullOrEmpty(result.TextSpan.LineSpanText))
                     {

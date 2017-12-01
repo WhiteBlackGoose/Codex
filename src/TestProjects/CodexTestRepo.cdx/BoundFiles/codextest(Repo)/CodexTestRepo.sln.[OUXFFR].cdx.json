@@ -92,10 +92,11 @@
       ],
       "sharedValues": [
         {
+          "lineNumber": 1,
           "lineSpanText": ""
         },
         {
-          "lineNumber": 5,
+          "lineNumber": 6,
           "lineSpanText": "Project(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"CodexTestCSharpLibrary\", \"CodexTestCSharpLibrary\\CodexTestCSharpLibrary.csproj\", \"{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}\""
         }
       ]
