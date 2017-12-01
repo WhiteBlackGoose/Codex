@@ -73,6 +73,7 @@
     <Compile Include="Store\ElasticSearchStore.cs" />
     <Compile Include="Model\Index.cs" />
     <Compile Include="Store\StoredFilterUtilities.cs" />
+    <Compile Include="Utilities\EntityTypeExtensions.cs" />
     <Compile Include="Utilities\UpdateMergeFunction.cs" />
     <Compile Include="Utilities\ArrayUtils.cs" />
     <Compile Include="Utilities\BatchQueue.cs" />

@@ -300,5 +300,14 @@ namespace Codex.Utilities
                 return bytes[i];
             }
         }
+
+        public static MurmurHash operator ^(MurmurHash hash1, MurmurHash hash2)
+        {
+            return new MurmurHash()
+            {
+                High = hash1.High ^ hash2.High,
+                Low = hash1.Low ^ hash2.Low
+            };
+        }
     }
 }

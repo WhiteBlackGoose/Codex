@@ -26,7 +26,10 @@
       }
     ],
     "excludeFromSearch": true,
+    "language": "xml",
     "projectId": "CodexTestCSharpLibrary",
+    "projectRelativePath": "[Metadata]\\ReferenceSymbols\\CodexTestCSharpLibrary.xml",
+    "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceSymbols\\CodexTestCSharpLibrary.xml",
     "repositoryName": "codextest",
     "sourceFile": {
       "content": "<ReferenceSymbols Count=\"3\">\r\n  <Namespace Name=\"CodexTestCSharpLibrary\">\r\n    <Symbol Name=\"ITypeWithParams˂T0, T1˃\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"IXedoc\" ReferenceCount=\"2\" />\r\n    <Symbol Name=\"XedocImpl\" ReferenceCount=\"0\" />\r\n  </Namespace>\r\n</ReferenceSymbols>",
@@ -105,16 +108,8 @@
       "segments": [
         {
           "fullLength": 217,
-          "lengths": {
-            "data": "AAAXBgk=",
-            "valueByteWidth": 1
-          },
           "sharedIndices": {
             "data": "AAABAgM=",
-            "valueByteWidth": 1
-          },
-          "starts": {
-            "data": "AAAODg4=",
             "valueByteWidth": 1
           }
         }
@@ -125,18 +120,15 @@
         },
         {
           "lineNumber": 2,
-          "lineSpanText": "<Symbol Name=\"ITypeWithParams˂T0, T1˃\" ReferenceCount=\"1\" />",
-          "start": 79
+          "lineSpanText": "<Symbol Name=\"ITypeWithParams˂T0, T1˃\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 3,
-          "lineSpanText": "<Symbol Name=\"IXedoc\" ReferenceCount=\"2\" />",
-          "start": 145
+          "lineSpanText": "<Symbol Name=\"IXedoc\" ReferenceCount=\"2\" />"
         },
         {
           "lineNumber": 4,
-          "lineSpanText": "<Symbol Name=\"XedocImpl\" ReferenceCount=\"0\" />",
-          "start": 194
+          "lineSpanText": "<Symbol Name=\"XedocImpl\" ReferenceCount=\"0\" />"
         }
       ]
     },

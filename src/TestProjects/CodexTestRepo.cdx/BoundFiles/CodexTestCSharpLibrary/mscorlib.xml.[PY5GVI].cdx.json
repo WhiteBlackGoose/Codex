@@ -26,7 +26,10 @@
       }
     ],
     "excludeFromSearch": true,
+    "language": "xml",
     "projectId": "CodexTestCSharpLibrary",
+    "projectRelativePath": "[Metadata]\\ReferenceSymbols\\mscorlib.xml",
+    "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceSymbols\\mscorlib.xml",
     "repositoryName": "codextest",
     "sourceFile": {
       "content": "<ReferenceSymbols Count=\"28\">\r\n  <Namespace Name=\"System.Reflection\">\r\n    <Symbol Name=\"AssemblyCompanyAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyCompanyAttribute.AssemblyCompanyAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyConfigurationAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyConfigurationAttribute.AssemblyConfigurationAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyCopyrightAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyCopyrightAttribute.AssemblyCopyrightAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyCultureAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyCultureAttribute.AssemblyCultureAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyDescriptionAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyDescriptionAttribute.AssemblyDescriptionAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyFileVersionAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyFileVersionAttribute.AssemblyFileVersionAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyProductAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyProductAttribute.AssemblyProductAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyTitleAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyTitleAttribute.AssemblyTitleAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyTrademarkAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyTrademarkAttribute.AssemblyTrademarkAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyVersionAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyVersionAttribute.AssemblyVersionAttribute(System.String)\" ReferenceCount=\"1\" />\r\n  </Namespace>\r\n  <Namespace Name=\"System.Runtime.InteropServices\">\r\n    <Symbol Name=\"ComVisibleAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"ComVisibleAttribute.ComVisibleAttribute(System.Boolean)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"GuidAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"GuidAttribute.GuidAttribute(System.String)\" ReferenceCount=\"1\" />\r\n  </Namespace>\r\n  <Namespace Name=\"System.Runtime.Versioning\">\r\n    <Symbol Name=\"TargetFrameworkAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"TargetFrameworkAttribute.FrameworkDisplayName\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"TargetFrameworkAttribute.TargetFrameworkAttribute(System.String)\" ReferenceCount=\"1\" />\r\n  </Namespace>\r\n  <Namespace Name=\"System\">\r\n    <Symbol Name=\"String\" ReferenceCount=\"1\" />\r\n  </Namespace>\r\n</ReferenceSymbols>",
@@ -105,16 +108,8 @@
       "segments": [
         {
           "fullLength": 2624,
-          "lengths": {
-            "data": "AAAYQB5MGkQYQBxIHEgYQBY8GkQYQBM3DSoYLUAG",
-            "valueByteWidth": 1
-          },
           "sharedIndices": {
             "data": "AAABAgMEBQYHCAkKCwwNDg8QERITFBUWFxgaGxwZ",
-            "valueByteWidth": 1
-          },
-          "starts": {
-            "data": "AAAODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4O",
             "valueByteWidth": 1
           }
         }
@@ -125,143 +120,115 @@
         },
         {
           "lineNumber": 2,
-          "lineSpanText": "<Symbol Name=\"AssemblyCompanyAttribute\" ReferenceCount=\"1\" />",
-          "start": 75
+          "lineSpanText": "<Symbol Name=\"AssemblyCompanyAttribute\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 3,
-          "lineSpanText": "<Symbol Name=\"AssemblyCompanyAttribute.AssemblyCompanyAttribute(System.String)\" ReferenceCount=\"1\" />",
-          "start": 142
+          "lineSpanText": "<Symbol Name=\"AssemblyCompanyAttribute.AssemblyCompanyAttribute(System.String)\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 4,
-          "lineSpanText": "<Symbol Name=\"AssemblyConfigurationAttribute\" ReferenceCount=\"1\" />",
-          "start": 249
+          "lineSpanText": "<Symbol Name=\"AssemblyConfigurationAttribute\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 5,
-          "lineSpanText": "<Symbol Name=\"AssemblyConfigurationAttribute.AssemblyConfigurationAttribute(System.String)\" ReferenceCount=\"1\" />",
-          "start": 322
+          "lineSpanText": "<Symbol Name=\"AssemblyConfigurationAttribute.AssemblyConfigurationAttribute(System.String)\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 6,
-          "lineSpanText": "<Symbol Name=\"AssemblyCopyrightAttribute\" ReferenceCount=\"1\" />",
-          "start": 441
+          "lineSpanText": "<Symbol Name=\"AssemblyCopyrightAttribute\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 7,
-          "lineSpanText": "<Symbol Name=\"AssemblyCopyrightAttribute.AssemblyCopyrightAttribute(System.String)\" ReferenceCount=\"1\" />",
-          "start": 510
+          "lineSpanText": "<Symbol Name=\"AssemblyCopyrightAttribute.AssemblyCopyrightAttribute(System.String)\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 8,
-          "lineSpanText": "<Symbol Name=\"AssemblyCultureAttribute\" ReferenceCount=\"1\" />",
-          "start": 621
+          "lineSpanText": "<Symbol Name=\"AssemblyCultureAttribute\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 9,
-          "lineSpanText": "<Symbol Name=\"AssemblyCultureAttribute.AssemblyCultureAttribute(System.String)\" ReferenceCount=\"1\" />",
-          "start": 688
+          "lineSpanText": "<Symbol Name=\"AssemblyCultureAttribute.AssemblyCultureAttribute(System.String)\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 10,
-          "lineSpanText": "<Symbol Name=\"AssemblyDescriptionAttribute\" ReferenceCount=\"1\" />",
-          "start": 795
+          "lineSpanText": "<Symbol Name=\"AssemblyDescriptionAttribute\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 11,
-          "lineSpanText": "<Symbol Name=\"AssemblyDescriptionAttribute.AssemblyDescriptionAttribute(System.String)\" ReferenceCount=\"1\" />",
-          "start": 866
+          "lineSpanText": "<Symbol Name=\"AssemblyDescriptionAttribute.AssemblyDescriptionAttribute(System.String)\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 12,
-          "lineSpanText": "<Symbol Name=\"AssemblyFileVersionAttribute\" ReferenceCount=\"1\" />",
-          "start": 981
+          "lineSpanText": "<Symbol Name=\"AssemblyFileVersionAttribute\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 13,
-          "lineSpanText": "<Symbol Name=\"AssemblyFileVersionAttribute.AssemblyFileVersionAttribute(System.String)\" ReferenceCount=\"1\" />",
-          "start": 1052
+          "lineSpanText": "<Symbol Name=\"AssemblyFileVersionAttribute.AssemblyFileVersionAttribute(System.String)\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 14,
-          "lineSpanText": "<Symbol Name=\"AssemblyProductAttribute\" ReferenceCount=\"1\" />",
-          "start": 1167
+          "lineSpanText": "<Symbol Name=\"AssemblyProductAttribute\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 15,
-          "lineSpanText": "<Symbol Name=\"AssemblyProductAttribute.AssemblyProductAttribute(System.String)\" ReferenceCount=\"1\" />",
-          "start": 1234
+          "lineSpanText": "<Symbol Name=\"AssemblyProductAttribute.AssemblyProductAttribute(System.String)\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 16,
-          "lineSpanText": "<Symbol Name=\"AssemblyTitleAttribute\" ReferenceCount=\"1\" />",
-          "start": 1341
+          "lineSpanText": "<Symbol Name=\"AssemblyTitleAttribute\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 17,
-          "lineSpanText": "<Symbol Name=\"AssemblyTitleAttribute.AssemblyTitleAttribute(System.String)\" ReferenceCount=\"1\" />",
-          "start": 1406
+          "lineSpanText": "<Symbol Name=\"AssemblyTitleAttribute.AssemblyTitleAttribute(System.String)\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 18,
-          "lineSpanText": "<Symbol Name=\"AssemblyTrademarkAttribute\" ReferenceCount=\"1\" />",
-          "start": 1509
+          "lineSpanText": "<Symbol Name=\"AssemblyTrademarkAttribute\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 19,
-          "lineSpanText": "<Symbol Name=\"AssemblyTrademarkAttribute.AssemblyTrademarkAttribute(System.String)\" ReferenceCount=\"1\" />",
-          "start": 1578
+          "lineSpanText": "<Symbol Name=\"AssemblyTrademarkAttribute.AssemblyTrademarkAttribute(System.String)\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 20,
-          "lineSpanText": "<Symbol Name=\"AssemblyVersionAttribute\" ReferenceCount=\"1\" />",
-          "start": 1689
+          "lineSpanText": "<Symbol Name=\"AssemblyVersionAttribute\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 21,
-          "lineSpanText": "<Symbol Name=\"AssemblyVersionAttribute.AssemblyVersionAttribute(System.String)\" ReferenceCount=\"1\" />",
-          "start": 1756
+          "lineSpanText": "<Symbol Name=\"AssemblyVersionAttribute.AssemblyVersionAttribute(System.String)\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 24,
-          "lineSpanText": "<Symbol Name=\"ComVisibleAttribute\" ReferenceCount=\"1\" />",
-          "start": 1932
+          "lineSpanText": "<Symbol Name=\"ComVisibleAttribute\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 25,
-          "lineSpanText": "<Symbol Name=\"ComVisibleAttribute.ComVisibleAttribute(System.Boolean)\" ReferenceCount=\"1\" />",
-          "start": 1994
+          "lineSpanText": "<Symbol Name=\"ComVisibleAttribute.ComVisibleAttribute(System.Boolean)\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 26,
-          "lineSpanText": "<Symbol Name=\"GuidAttribute\" ReferenceCount=\"1\" />",
-          "start": 2092
+          "lineSpanText": "<Symbol Name=\"GuidAttribute\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 27,
-          "lineSpanText": "<Symbol Name=\"GuidAttribute.GuidAttribute(System.String)\" ReferenceCount=\"1\" />",
-          "start": 2148
+          "lineSpanText": "<Symbol Name=\"GuidAttribute.GuidAttribute(System.String)\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 35,
-          "lineSpanText": "<Symbol Name=\"String\" ReferenceCount=\"1\" />",
-          "start": 2604
+          "lineSpanText": "<Symbol Name=\"String\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 30,
-          "lineSpanText": "<Symbol Name=\"TargetFrameworkAttribute\" ReferenceCount=\"1\" />",
-          "start": 2297
+          "lineSpanText": "<Symbol Name=\"TargetFrameworkAttribute\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 31,
-          "lineSpanText": "<Symbol Name=\"TargetFrameworkAttribute.FrameworkDisplayName\" ReferenceCount=\"1\" />",
-          "start": 2364
+          "lineSpanText": "<Symbol Name=\"TargetFrameworkAttribute.FrameworkDisplayName\" ReferenceCount=\"1\" />"
         },
         {
           "lineNumber": 32,
-          "lineSpanText": "<Symbol Name=\"TargetFrameworkAttribute.TargetFrameworkAttribute(System.String)\" ReferenceCount=\"1\" />",
-          "start": 2452
+          "lineSpanText": "<Symbol Name=\"TargetFrameworkAttribute.TargetFrameworkAttribute(System.String)\" ReferenceCount=\"1\" />"
         }
       ]
     },

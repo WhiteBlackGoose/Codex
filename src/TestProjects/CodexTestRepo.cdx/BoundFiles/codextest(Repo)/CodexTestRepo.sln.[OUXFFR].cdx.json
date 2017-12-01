@@ -25,7 +25,10 @@
         }
       }
     ],
+    "language": "sln",
     "projectId": "codextest(Repo)",
+    "projectRelativePath": "CodexTestRepo.sln",
+    "repoRelativePath": "CodexTestRepo.sln",
     "repositoryName": "codextest",
     "sourceFile": {
       "content": "\r\nMicrosoft Visual Studio Solution File, Format Version 12.00\r\n# Visual Studio 14\r\nVisualStudioVersion = 14.0.25420.1\r\nMinimumVisualStudioVersion = 10.0.40219.1\r\nProject(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"CodexTestCSharpLibrary\", \"CodexTestCSharpLibrary\\CodexTestCSharpLibrary.csproj\", \"{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}\"\r\nEndProject\r\nGlobal\r\n\tGlobalSection(SolutionConfigurationPlatforms) = preSolution\r\n\t\tDebug|Any CPU = Debug|Any CPU\r\n\t\tRelease|Any CPU = Release|Any CPU\r\n\tEndGlobalSection\r\n\tGlobalSection(ProjectConfigurationPlatforms) = postSolution\r\n\t\t{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU\r\n\t\t{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}.Debug|Any CPU.Build.0 = Debug|Any CPU\r\n\t\t{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}.Release|Any CPU.ActiveCfg = Release|Any CPU\r\n\t\t{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}.Release|Any CPU.Build.0 = Release|Any CPU\r\n\tEndGlobalSection\r\n\tGlobalSection(SolutionProperties) = preSolution\r\n\t\tHideSolutionNode = FALSE\r\n\tEndGlobalSection\r\nEndGlobal\r\n",
@@ -81,16 +84,8 @@
       "segments": [
         {
           "fullLength": 293,
-          "lengths": {
-            "data": "AAAWNA==",
-            "valueByteWidth": 1
-          },
           "sharedIndices": {
             "data": "AAABAQ==",
-            "valueByteWidth": 1
-          },
-          "starts": {
-            "data": "AAA1Tw==",
             "valueByteWidth": 1
           }
         }
@@ -101,8 +96,7 @@
         },
         {
           "lineNumber": 5,
-          "lineSpanText": "Project(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"CodexTestCSharpLibrary\", \"CodexTestCSharpLibrary\\CodexTestCSharpLibrary.csproj\", \"{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}\"",
-          "start": 162
+          "lineSpanText": "Project(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"CodexTestCSharpLibrary\", \"CodexTestCSharpLibrary\\CodexTestCSharpLibrary.csproj\", \"{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}\""
         }
       ]
     },

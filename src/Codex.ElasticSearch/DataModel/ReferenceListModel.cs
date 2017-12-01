@@ -97,14 +97,6 @@ namespace Codex.Storage.DataModel
                 Start = start,
                 Length = length,
                 Reference = shared,
-
-                // TODO: Should these be set here
-                //LineNumber = 0,
-                //LineSpanStart = 0,
-
-                // Definitely DON'T set LineSpanText. Since this structure is intended to be used
-                // in source file model which has full text content of source file
-                //LineSpanText = null;
             };
         }
 

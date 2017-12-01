@@ -17,6 +17,7 @@ namespace Codex.Search
 
         public static Symbol SetProjectScope(this Symbol symbol, string projectScope)
         {
+            // TODO[LANCEC]: What is this for?
             var refData = symbol.GetReferenceSearchExtensionData();
             if (refData == null)
             {

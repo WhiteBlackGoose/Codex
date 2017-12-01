@@ -10,6 +10,7 @@ using Codex.Utilities;
 using Codex.Storage.DataModel;
 using Codex.Storage.Utilities;
 using System.Collections.Concurrent;
+using Codex.ElasticSearch.Utilities;
 
 namespace Codex.ElasticSearch
 {
@@ -145,13 +146,7 @@ namespace Codex.ElasticSearch
         public async Task AddBoundSourceFileAsync(BoundSourceFile boundSourceFile)
         {
             var sourceFileInfo = boundSourceFile.SourceFile.Info;
-
-            boundSourceFile.RepositoryName = boundSourceFile.RepositoryName ?? sourceFileInfo.RepositoryName;
-            boundSourceFile.RepoRelativePath = boundSourceFile.RepoRelativePath ?? sourceFileInfo.RepoRelativePath;
-
-            // TODO: These properties should not be defined on ISourceFileInfo as they require binding information
-            boundSourceFile.Language = boundSourceFile.Language ?? sourceFileInfo.Language;
-            boundSourceFile.ProjectRelativePath = boundSourceFile.ProjectRelativePath ?? sourceFileInfo.ProjectRelativePath;
+            boundSourceFile.ApplySourceFileInfo();
 
             Placeholder.Todo($"Get {nameof(ISourceControlFileInfo.SourceControlContentId)} from source control provider during analysis");
             var textModel = new TextSourceSearchModel()

@@ -13,6 +13,7 @@ using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 using Codex.Storage.DataModel;
+using Codex.ElasticSearch.Utilities;
 
 namespace Codex.ElasticSearch.Store
 {
@@ -91,10 +92,10 @@ namespace Codex.ElasticSearch.Store
         {
             foreach (var entity in entities)
             {
-                var contentId = entity.GetEntityContentId();
+                var stableId = kind.GetEntityStableId(entity);
                 var pathPart = pathGenerator(entity);
 
-                Write(Path.Combine(kind.Name, pathPart + contentId + EntityFileExtension), entity);
+                Write(Path.Combine(kind.Name, $"{pathPart}.{stableId}{EntityFileExtension}"), entity);
             }
 
             return Task.CompletedTask;
@@ -128,6 +129,7 @@ namespace Codex.ElasticSearch.Store
 
         private StoredBoundSourceFile CreateStoredBoundFile(BoundSourceFile boundSourceFile)
         {
+            boundSourceFile.ApplySourceFileInfo();
             var result = new StoredBoundSourceFile()
             {
                 BoundSourceFile = boundSourceFile,
@@ -194,20 +196,39 @@ namespace Codex.ElasticSearch.Store
             Write(RepositoryInfoFileName, m_storeInfo);
         }
 
+        private static string ToStableId(params string[] values)
+        {
+            var rawSanitizedId = Paths.SanitizeFileName(IndexingUtilities.ComputeHashString(
+                string.Join("|", values.Where(v => v != null).Select(v => v.ToLowerInvariant())))
+                .Substring(0, 6)
+                .Replace("\\", "_")
+                .ToUpperInvariant());
+
+            return $"[{rawSanitizedId}]";
+        }
+
         #endregion ICodexRepositoryStore Members
 
         private abstract class StoredEntityKind
         {
-            public static readonly StoredEntityKind<StoredBoundSourceFile> BoundFiles = Create<StoredBoundSourceFile>((entity, repositoryStore) => repositoryStore.AddBoundFilesAsync(new[] { entity.BoundSourceFile }));
-            public static readonly StoredEntityKind<AnalyzedProject> Projects = Create<AnalyzedProject>((entity, repositoryStore) => repositoryStore.AddProjectsAsync(new[] { entity }));
-            public static readonly StoredEntityKind<SourceFile> TextFiles = Create<SourceFile>((entity, repositoryStore) => repositoryStore.AddTextFilesAsync(new[] { entity }));
-            public static readonly StoredEntityKind<CommitFilesDirectory> CommitDirectories = Create<CommitFilesDirectory>((entity, repositoryStore) => repositoryStore.AddCommitFilesAsync(entity.Files));
+            public static readonly StoredEntityKind<StoredBoundSourceFile> BoundFiles = Create<StoredBoundSourceFile>(
+                (entity) => ToStableId(entity.BoundSourceFile.ProjectId, entity.BoundSourceFile.ProjectRelativePath),
+                (entity, repositoryStore) => repositoryStore.AddBoundFilesAsync(new[] { entity.BoundSourceFile }));
+            public static readonly StoredEntityKind<AnalyzedProject> Projects = Create<AnalyzedProject>(
+                (entity) => ToStableId(entity.ProjectId),
+                (entity, repositoryStore) => repositoryStore.AddProjectsAsync(new[] { entity }));
+            public static readonly StoredEntityKind<SourceFile> TextFiles = Create<SourceFile>(
+                (entity) => ToStableId(entity.Info.RepoRelativePath, entity.Info.ProjectRelativePath),
+                (entity, repositoryStore) => repositoryStore.AddTextFilesAsync(new[] { entity }));
+            public static readonly StoredEntityKind<CommitFilesDirectory> CommitDirectories = Create<CommitFilesDirectory>(
+                (entity) => ToStableId(entity.RepoRelativePath),
+                (entity, repositoryStore) => repositoryStore.AddCommitFilesAsync(entity.Files));
 
             public static IReadOnlyList<StoredEntityKind> Kinds => Inner.Kinds;
 
-            public static StoredEntityKind<T> Create<T>(Func<T, ICodexRepositoryStore, Task> add, [CallerMemberName] string name = null)
+            public static StoredEntityKind<T> Create<T>(Func<T, string> getEntityStableId, Func<T, ICodexRepositoryStore, Task> add, [CallerMemberName] string name = null)
             {
-                var kind = new StoredEntityKind<T>(add, name);
+                var kind = new StoredEntityKind<T>(getEntityStableId, add, name);
                 Inner.Kinds.Add(kind);
                 return kind;
             }
@@ -228,10 +249,13 @@ namespace Codex.ElasticSearch.Store
 
             private Func<T, ICodexRepositoryStore, Task> add;
 
-            public StoredEntityKind(Func<T, ICodexRepositoryStore, Task> add, string name)
+            public readonly Func<T, string> GetEntityStableId;
+
+            public StoredEntityKind(Func<T, string> getEntityStableId, Func<T, ICodexRepositoryStore, Task> add, string name)
             {
                 Name = name;
                 this.add = add;
+                GetEntityStableId = getEntityStableId;
             }
 
             public override Task Add(DirectoryCodexStore store, string fullPath, ICodexRepositoryStore repositoryStore)

@@ -25,7 +25,10 @@
         }
       }
     ],
+    "language": "C#",
     "projectId": "CodexTestCSharpLibrary",
+    "projectRelativePath": "Properties\\AssemblyInfo.cs",
+    "repoRelativePath": "CodexTestCSharpLibrary\\Properties\\AssemblyInfo.cs",
     "repositoryName": "codextest",
     "sourceFile": {
       "content": "using System.Reflection;\r\nusing System.Runtime.CompilerServices;\r\nusing System.Runtime.InteropServices;\r\n\r\n// General Information about an assembly is controlled through the following \r\n// set of attributes. Change these attribute values to modify the information\r\n// associated with an assembly.\r\n[assembly: AssemblyTitle(\"CodexTestCSharpLibrary\")]\r\n[assembly: AssemblyDescription(\"\")]\r\n[assembly: AssemblyConfiguration(\"\")]\r\n[assembly: AssemblyCompany(\"\")]\r\n[assembly: AssemblyProduct(\"CodexTestCSharpLibrary\")]\r\n[assembly: AssemblyCopyright(\"Copyright ©  2017\")]\r\n[assembly: AssemblyTrademark(\"\")]\r\n[assembly: AssemblyCulture(\"\")]\r\n\r\n// Setting ComVisible to false makes the types in this assembly not visible \r\n// to COM components.  If you need to access a type in this assembly from \r\n// COM, set the ComVisible attribute to true on that type.\r\n[assembly: ComVisible(false)]\r\n\r\n// The following GUID is for the ID of the typelib if this project is exposed to COM\r\n[assembly: Guid(\"f16a9de8-193f-4d07-9d86-1dd2fb087a96\")]\r\n\r\n// Version information for an assembly consists of the following four values:\r\n//\r\n//      Major Version\r\n//      Minor Version \r\n//      Build Number\r\n//      Revision\r\n//\r\n// You can specify all the values or you can default the Build and Revision Numbers \r\n// by using the '*' as shown below:\r\n// [assembly: AssemblyVersion(\"1.0.*\")]\r\n[assembly: AssemblyVersion(\"1.0.0.0\")]\r\n[assembly: AssemblyFileVersion(\"1.0.0.0\")]\r\n",
@@ -105,16 +108,8 @@
       "segments": [
         {
           "fullLength": 1438,
-          "lengths": {
-            "data": "AAAADQ0TExUVDw8PDxEREREPDwoKBAQPDxMT",
-            "valueByteWidth": 1
-          },
           "sharedIndices": {
             "data": "DAwMBwcEBAEBAAAGBgICCAgDAwoKCwsJCQUF",
-            "valueByteWidth": 1
-          },
-          "starts": {
-            "data": "AAAACwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsL",
             "valueByteWidth": 1
           }
         }
@@ -122,63 +117,51 @@
       "sharedValues": [
         {
           "lineNumber": 10,
-          "lineSpanText": "[assembly: AssemblyCompany(\"\")]",
-          "start": 427
+          "lineSpanText": "[assembly: AssemblyCompany(\"\")]"
         },
         {
           "lineNumber": 9,
-          "lineSpanText": "[assembly: AssemblyConfiguration(\"\")]",
-          "start": 388
+          "lineSpanText": "[assembly: AssemblyConfiguration(\"\")]"
         },
         {
           "lineNumber": 12,
-          "lineSpanText": "[assembly: AssemblyCopyright(\"Copyright ©  2017\")]",
-          "start": 515
+          "lineSpanText": "[assembly: AssemblyCopyright(\"Copyright ©  2017\")]"
         },
         {
           "lineNumber": 14,
-          "lineSpanText": "[assembly: AssemblyCulture(\"\")]",
-          "start": 602
+          "lineSpanText": "[assembly: AssemblyCulture(\"\")]"
         },
         {
           "lineNumber": 8,
-          "lineSpanText": "[assembly: AssemblyDescription(\"\")]",
-          "start": 351
+          "lineSpanText": "[assembly: AssemblyDescription(\"\")]"
         },
         {
           "lineNumber": 35,
-          "lineSpanText": "[assembly: AssemblyFileVersion(\"1.0.0.0\")]",
-          "start": 1408
+          "lineSpanText": "[assembly: AssemblyFileVersion(\"1.0.0.0\")]"
         },
         {
           "lineNumber": 11,
-          "lineSpanText": "[assembly: AssemblyProduct(\"CodexTestCSharpLibrary\")]",
-          "start": 460
+          "lineSpanText": "[assembly: AssemblyProduct(\"CodexTestCSharpLibrary\")]"
         },
         {
           "lineNumber": 7,
-          "lineSpanText": "[assembly: AssemblyTitle(\"CodexTestCSharpLibrary\")]",
-          "start": 298
+          "lineSpanText": "[assembly: AssemblyTitle(\"CodexTestCSharpLibrary\")]"
         },
         {
           "lineNumber": 13,
-          "lineSpanText": "[assembly: AssemblyTrademark(\"\")]",
-          "start": 567
+          "lineSpanText": "[assembly: AssemblyTrademark(\"\")]"
         },
         {
           "lineNumber": 34,
-          "lineSpanText": "[assembly: AssemblyVersion(\"1.0.0.0\")]",
-          "start": 1368
+          "lineSpanText": "[assembly: AssemblyVersion(\"1.0.0.0\")]"
         },
         {
           "lineNumber": 19,
-          "lineSpanText": "[assembly: ComVisible(false)]",
-          "start": 851
+          "lineSpanText": "[assembly: ComVisible(false)]"
         },
         {
           "lineNumber": 22,
-          "lineSpanText": "[assembly: Guid(\"f16a9de8-193f-4d07-9d86-1dd2fb087a96\")]",
-          "start": 970
+          "lineSpanText": "[assembly: Guid(\"f16a9de8-193f-4d07-9d86-1dd2fb087a96\")]"
         },
         {
           "lineSpanText": "using System.Reflection;"

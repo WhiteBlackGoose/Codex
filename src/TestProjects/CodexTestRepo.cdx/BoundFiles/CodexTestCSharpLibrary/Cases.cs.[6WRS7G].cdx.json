@@ -79,7 +79,10 @@
         "start": 410
       }
     ],
+    "language": "C#",
     "projectId": "CodexTestCSharpLibrary",
+    "projectRelativePath": "Cases.cs",
+    "repoRelativePath": "CodexTestCSharpLibrary\\Cases.cs",
     "repositoryName": "codextest",
     "sourceFile": {
       "content": "using System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing System.Text;\r\nusing System.Threading.Tasks;\r\n\r\nnamespace CodexTestCSharpLibrary\r\n{\r\n    public interface IXedoc\r\n    {\r\n\r\n    }\r\n\r\n    public interface ITypeWithParams<T0, T1>\r\n    {\r\n    }\r\n\r\n    // Test interface implementations only applies to actual base types and not those which appear as type parameters \r\n    public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>\r\n    {\r\n\r\n    }\r\n}\r\n",
@@ -159,16 +162,8 @@
       "segments": [
         {
           "fullLength": 460,
-          "lengths": {
-            "data": "AAAABg8JBg8GBg==",
-            "valueByteWidth": 1
-          },
           "sharedIndices": {
             "data": "AwMDAQACAgICAg==",
-            "valueByteWidth": 1
-          },
-          "starts": {
-            "data": "AAAAERERHSU1PQ==",
             "valueByteWidth": 1
           }
         }
@@ -176,18 +171,15 @@
       "sharedValues": [
         {
           "lineNumber": 13,
-          "lineSpanText": "public interface ITypeWithParams<T0, T1>",
-          "start": 211
+          "lineSpanText": "public interface ITypeWithParams<T0, T1>"
         },
         {
           "lineNumber": 8,
-          "lineSpanText": "public interface IXedoc",
-          "start": 164
+          "lineSpanText": "public interface IXedoc"
         },
         {
           "lineNumber": 18,
-          "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
-          "start": 393
+          "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>"
         },
         {
           "lineSpanText": "using System;"
