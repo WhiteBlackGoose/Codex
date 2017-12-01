@@ -132,13 +132,23 @@ namespace Codex.ElasticSearch.Store
             {
                 BoundSourceFile = boundSourceFile,
                 CompressedClassifications = new ClassificationListModel(boundSourceFile.Classifications),
-                CompressedReferences = new ReferenceListModel(boundSourceFile.References)
+                CompressedReferences = new ReferenceListModel(boundSourceFile.References, includeLineInfo: true),
             };
 
             boundSourceFile.References = CollectionUtilities.Empty<ReferenceSpan>.Array;
             boundSourceFile.Classifications = CollectionUtilities.Empty<ClassificationSpan>.Array;
 
             return result;
+        }
+
+        private BoundSourceFile FromStoredBoundFile(StoredBoundSourceFile storedBoundFile)
+        {
+            var boundSourceFile = storedBoundFile.BoundSourceFile;
+
+            boundSourceFile.Classifications = storedBoundFile.CompressedClassifications.ToList();
+            boundSourceFile.References = storedBoundFile.CompressedReferences.ToList();
+
+            return boundSourceFile;
         }
 
         public Task AddCommitFilesAsync(IReadOnlyList<CommitFileLink> links)

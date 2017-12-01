@@ -7,9 +7,9 @@ using static Codex.Utilities.SerializationUtilities;
 
 namespace Codex.Storage.DataModel
 {
-    public class SymbolLineSpanListModel : SpanListModel<SymbolSpan, SpanListSegmentModel, SharedSymbolLineModel, int>, ISymbolLineSpanList
+    public class SymbolLineSpanListModel : SpanListModel<SymbolSpan, SpanListSegmentModel, SymbolSpan, int>, ISymbolLineSpanList
     {
-        public static readonly IComparer<SharedSymbolLineModel> SharedSymbolLineModelComparer = new ComparerBuilder<SharedSymbolLineModel>()
+        public static readonly IComparer<SymbolSpan> SharedSymbolLineModelComparer = new ComparerBuilder<SymbolSpan>()
             .CompareByAfter(s => s.LineSpanText);
 
         public SymbolLineSpanListModel()
@@ -28,11 +28,11 @@ namespace Codex.Storage.DataModel
             return new SpanListSegmentModel();
         }
 
-        public override SymbolSpan CreateSpan(int start, int length, SharedSymbolLineModel shared, SpanListSegmentModel segment, int segmentOffset)
+        public override SymbolSpan CreateSpan(int start, int length, SymbolSpan shared, SpanListSegmentModel segment, int segmentOffset)
         {
             return new SymbolSpan()
             {
-                Start = shared.LineStart + start,
+                Start = shared.Start + start,
                 LineSpanStart = start,
                 Length = length,
                 LineSpanText = shared.LineSpanText,
@@ -40,19 +40,19 @@ namespace Codex.Storage.DataModel
             };
         }
 
-        public override SharedSymbolLineModel GetShared(SymbolSpan span)
+        public override SymbolSpan GetShared(SymbolSpan span)
         {
-            return new SharedSymbolLineModel()
+            return new SymbolSpan()
             {
                 LineSpanText = span.LineSpanText,
                 LineNumber = span.LineNumber,
-                LineStart = span.Start - span.LineSpanStart
+                Start = IncludeSpanRanges ? span.Start - span.LineSpanStart : 0
             };
         }
 
-        public override int GetStart(SymbolSpan span, SharedSymbolLineModel shared)
+        public override int GetStart(SymbolSpan span, SymbolSpan shared)
         {
-            return span.Start - shared.LineStart;
+            return span.Start - shared.Start;
         }
 
         public override int GetSharedKey(SymbolSpan span)
@@ -79,25 +79,5 @@ namespace Codex.Storage.DataModel
                 symbolLine.LineSpanText = AssignDuplicate(symbolLine.LineSpanText, ref lineSpanText);
             }
         }
-    }
-
-    public class SharedSymbolLineModel
-    {
-        /// <summary>
-        /// The absolute character position where the line starts in the text
-        /// </summary>
-        public int LineStart { get; set; }
-
-        /// <summary>
-        /// The character position where the span starts in the line text
-        /// </summary>
-        public int LineNumber { get; set; }
-
-        /// <summary>
-        /// The line text
-        /// </summary>
-        [DataString]
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string LineSpanText { get; set; }
     }
 }

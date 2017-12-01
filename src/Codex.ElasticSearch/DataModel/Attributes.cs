@@ -137,6 +137,7 @@ namespace Codex.Storage.DataModel
             IndexOptions = IndexOptions.Offsets;
             TermVector = TermVectorOption.WithPositionsOffsets;
             Analyzer = CustomAnalyzers.EncodedFullTextAnalyzerName;
+            PositionIncrementGap = 0;
             if (!DataInclusion.HasOption(option))
             {
                 Ignore = true;

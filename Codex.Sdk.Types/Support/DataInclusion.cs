@@ -6,6 +6,9 @@ namespace Codex
 {
     public enum DataInclusionOptions
     {
+        /// <summary>
+        /// Data should always be included
+        /// </summary>
         None = 0,
         Definitions = 1,
         References = 1 << 1,

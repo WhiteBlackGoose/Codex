@@ -100,6 +100,91 @@
   },
   "compressedReferences": {
     "count": 27,
+    "lineSpanModel": {
+      "count": 27,
+      "segments": [
+        {
+          "fullLength": 1438,
+          "lengths": {
+            "data": "AAAADQ0TExUVDw8PDxEREREPDwoKBAQPDxMT",
+            "valueByteWidth": 1
+          },
+          "sharedIndices": {
+            "data": "DAwMBwcEBAEBAAAGBgICCAgDAwoKCwsJCQUF",
+            "valueByteWidth": 1
+          },
+          "starts": {
+            "data": "AAAACwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsL",
+            "valueByteWidth": 1
+          }
+        }
+      ],
+      "sharedValues": [
+        {
+          "lineNumber": 10,
+          "lineSpanText": "[assembly: AssemblyCompany(\"\")]",
+          "start": 427
+        },
+        {
+          "lineNumber": 9,
+          "lineSpanText": "[assembly: AssemblyConfiguration(\"\")]",
+          "start": 388
+        },
+        {
+          "lineNumber": 12,
+          "lineSpanText": "[assembly: AssemblyCopyright(\"Copyright ©  2017\")]",
+          "start": 515
+        },
+        {
+          "lineNumber": 14,
+          "lineSpanText": "[assembly: AssemblyCulture(\"\")]",
+          "start": 602
+        },
+        {
+          "lineNumber": 8,
+          "lineSpanText": "[assembly: AssemblyDescription(\"\")]",
+          "start": 351
+        },
+        {
+          "lineNumber": 35,
+          "lineSpanText": "[assembly: AssemblyFileVersion(\"1.0.0.0\")]",
+          "start": 1408
+        },
+        {
+          "lineNumber": 11,
+          "lineSpanText": "[assembly: AssemblyProduct(\"CodexTestCSharpLibrary\")]",
+          "start": 460
+        },
+        {
+          "lineNumber": 7,
+          "lineSpanText": "[assembly: AssemblyTitle(\"CodexTestCSharpLibrary\")]",
+          "start": 298
+        },
+        {
+          "lineNumber": 13,
+          "lineSpanText": "[assembly: AssemblyTrademark(\"\")]",
+          "start": 567
+        },
+        {
+          "lineNumber": 34,
+          "lineSpanText": "[assembly: AssemblyVersion(\"1.0.0.0\")]",
+          "start": 1368
+        },
+        {
+          "lineNumber": 19,
+          "lineSpanText": "[assembly: ComVisible(false)]",
+          "start": 851
+        },
+        {
+          "lineNumber": 22,
+          "lineSpanText": "[assembly: Guid(\"f16a9de8-193f-4d07-9d86-1dd2fb087a96\")]",
+          "start": 970
+        },
+        {
+          "lineSpanText": "using System.Reflection;"
+        }
+      ]
+    },
     "segments": [
       {
         "fullLength": 1438,

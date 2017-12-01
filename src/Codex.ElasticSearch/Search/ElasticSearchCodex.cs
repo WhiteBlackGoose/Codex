@@ -50,6 +50,7 @@ namespace Codex.ElasticSearch.Search
             {
                 Placeholder.Todo("Do definitions search");
                 Placeholder.Todo("Allow filtering text matches by extension/path");
+                Placeholder.Todo("Extract method for getting index name from search type");
 
                 var indices = (Configuration.Prefix + SearchTypes.TextSource.IndexName).ToLowerInvariant();
 

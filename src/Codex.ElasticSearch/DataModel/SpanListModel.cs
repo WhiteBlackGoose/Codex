@@ -34,6 +34,9 @@ namespace Codex.Storage.DataModel
         [JsonIgnore]
         public bool Optimize { get; set; } = true;
 
+        [JsonIgnore]
+        public bool IncludeSpanRanges { get; set; } = true;
+
         public TSpan this[int index]
         {
             get
@@ -54,10 +57,23 @@ namespace Codex.Storage.DataModel
             shared = SharedValues[sharedIndex];
         }
 
+        public TShared GetShared(int index)
+        {
+            TSegment segment;
+            int segmentOffset;
+            GetSegmentAndOffset(index, out segment, out segmentOffset);
+            var sharedIndex = segment.SharedIndices[segmentOffset];
+            return SharedValues[sharedIndex];
+        }
+
         private void GetSegmentAndOffset(int index, out TSegment segment, out int segmentOffset)
         {
             var segmentIndex = index >> SegmentSpanCountBitWidth;
             segment = Segments[segmentIndex];
+            if (segment.SegmentStartIndex < 0)
+            {
+                segment.SegmentStartIndex = segmentIndex << SegmentSpanCountBitWidth;
+            }
 
             if (segment.Optimized)
             {
@@ -89,6 +105,14 @@ namespace Codex.Storage.DataModel
                 foreach (var segment in Segments)
                 {
                     segment.Optimize(optimizationContext);
+                }
+            }
+            else if (!IncludeSpanRanges)
+            {
+                foreach (var segment in Segments)
+                {
+                    segment.Starts = null;
+                    segment.Lengths = null;
                 }
             }
         }
@@ -280,6 +304,12 @@ namespace Codex.Storage.DataModel
         public bool Optimized { get; set; }
 
         public int FullLength { get; set; }
+
+        /// <summary>
+        /// The index of the first span in the segment
+        /// </summary>
+        [JsonIgnore]
+        public int SegmentStartIndex { get; set; } = -1;
 
         [JsonIgnore]
         public bool ExpandedLengths { get; set; }

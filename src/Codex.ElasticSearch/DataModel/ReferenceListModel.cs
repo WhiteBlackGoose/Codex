@@ -24,13 +24,25 @@ namespace Codex.Storage.DataModel
             .CompareByAfter(s => s.Id)
             .CompareByAfter(s => s.ReferenceKind);
 
+        private static readonly SymbolSpan EmptySymbolSpan = new SymbolSpan();
+
+        public SymbolLineSpanListModel LineSpanModel { get; set; }
+
         public ReferenceListModel()
         {
         }
 
-        public ReferenceListModel(IReadOnlyList<ReferenceSpan> spans)
+        public ReferenceListModel(IReadOnlyList<ReferenceSpan> spans, bool includeLineInfo = false)
             : base(spans, ReferenceSymbolEqualityComparer, ReferenceSymbolComparer)
         {
+            if (includeLineInfo)
+            {
+                LineSpanModel = new SymbolLineSpanListModel(spans)
+                {
+                    // Start/length already captured. No need for it in the line data
+                    IncludeSpanRanges = false
+                };
+            }
             //PostProcessReferences();
         }
 
@@ -78,12 +90,14 @@ namespace Codex.Storage.DataModel
                 MakeReferences(default(StreamingContext));
             }
 
-            return new ReferenceSpan()
+            var index = segment.SegmentStartIndex + segmentOffset;
+
+            return new ReferenceSpan(LineSpanModel?.GetShared(index) ?? EmptySymbolSpan)
             {
                 Start = start,
                 Length = length,
                 Reference = shared,
-                
+
                 // TODO: Should these be set here
                 //LineNumber = 0,
                 //LineSpanStart = 0,

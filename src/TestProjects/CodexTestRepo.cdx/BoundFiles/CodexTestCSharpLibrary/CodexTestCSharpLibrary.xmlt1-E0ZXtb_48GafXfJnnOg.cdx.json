@@ -100,6 +100,46 @@
   },
   "compressedReferences": {
     "count": 5,
+    "lineSpanModel": {
+      "count": 5,
+      "segments": [
+        {
+          "fullLength": 217,
+          "lengths": {
+            "data": "AAAXBgk=",
+            "valueByteWidth": 1
+          },
+          "sharedIndices": {
+            "data": "AAABAgM=",
+            "valueByteWidth": 1
+          },
+          "starts": {
+            "data": "AAAODg4=",
+            "valueByteWidth": 1
+          }
+        }
+      ],
+      "sharedValues": [
+        {
+          "lineSpanText": "<ReferenceSymbols Count=\"3\">"
+        },
+        {
+          "lineNumber": 2,
+          "lineSpanText": "<Symbol Name=\"ITypeWithParams˂T0, T1˃\" ReferenceCount=\"1\" />",
+          "start": 79
+        },
+        {
+          "lineNumber": 3,
+          "lineSpanText": "<Symbol Name=\"IXedoc\" ReferenceCount=\"2\" />",
+          "start": 145
+        },
+        {
+          "lineNumber": 4,
+          "lineSpanText": "<Symbol Name=\"XedocImpl\" ReferenceCount=\"0\" />",
+          "start": 194
+        }
+      ]
+    },
     "segments": [
       {
         "fullLength": 217,

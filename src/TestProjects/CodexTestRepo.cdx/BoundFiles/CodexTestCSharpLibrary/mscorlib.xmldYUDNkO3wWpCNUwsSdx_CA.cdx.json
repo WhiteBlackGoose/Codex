@@ -100,6 +100,171 @@
   },
   "compressedReferences": {
     "count": 30,
+    "lineSpanModel": {
+      "count": 30,
+      "segments": [
+        {
+          "fullLength": 2624,
+          "lengths": {
+            "data": "AAAYQB5MGkQYQBxIHEgYQBY8GkQYQBM3DSoYLUAG",
+            "valueByteWidth": 1
+          },
+          "sharedIndices": {
+            "data": "AAABAgMEBQYHCAkKCwwNDg8QERITFBUWFxgaGxwZ",
+            "valueByteWidth": 1
+          },
+          "starts": {
+            "data": "AAAODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4O",
+            "valueByteWidth": 1
+          }
+        }
+      ],
+      "sharedValues": [
+        {
+          "lineSpanText": "<ReferenceSymbols Count=\"28\">"
+        },
+        {
+          "lineNumber": 2,
+          "lineSpanText": "<Symbol Name=\"AssemblyCompanyAttribute\" ReferenceCount=\"1\" />",
+          "start": 75
+        },
+        {
+          "lineNumber": 3,
+          "lineSpanText": "<Symbol Name=\"AssemblyCompanyAttribute.AssemblyCompanyAttribute(System.String)\" ReferenceCount=\"1\" />",
+          "start": 142
+        },
+        {
+          "lineNumber": 4,
+          "lineSpanText": "<Symbol Name=\"AssemblyConfigurationAttribute\" ReferenceCount=\"1\" />",
+          "start": 249
+        },
+        {
+          "lineNumber": 5,
+          "lineSpanText": "<Symbol Name=\"AssemblyConfigurationAttribute.AssemblyConfigurationAttribute(System.String)\" ReferenceCount=\"1\" />",
+          "start": 322
+        },
+        {
+          "lineNumber": 6,
+          "lineSpanText": "<Symbol Name=\"AssemblyCopyrightAttribute\" ReferenceCount=\"1\" />",
+          "start": 441
+        },
+        {
+          "lineNumber": 7,
+          "lineSpanText": "<Symbol Name=\"AssemblyCopyrightAttribute.AssemblyCopyrightAttribute(System.String)\" ReferenceCount=\"1\" />",
+          "start": 510
+        },
+        {
+          "lineNumber": 8,
+          "lineSpanText": "<Symbol Name=\"AssemblyCultureAttribute\" ReferenceCount=\"1\" />",
+          "start": 621
+        },
+        {
+          "lineNumber": 9,
+          "lineSpanText": "<Symbol Name=\"AssemblyCultureAttribute.AssemblyCultureAttribute(System.String)\" ReferenceCount=\"1\" />",
+          "start": 688
+        },
+        {
+          "lineNumber": 10,
+          "lineSpanText": "<Symbol Name=\"AssemblyDescriptionAttribute\" ReferenceCount=\"1\" />",
+          "start": 795
+        },
+        {
+          "lineNumber": 11,
+          "lineSpanText": "<Symbol Name=\"AssemblyDescriptionAttribute.AssemblyDescriptionAttribute(System.String)\" ReferenceCount=\"1\" />",
+          "start": 866
+        },
+        {
+          "lineNumber": 12,
+          "lineSpanText": "<Symbol Name=\"AssemblyFileVersionAttribute\" ReferenceCount=\"1\" />",
+          "start": 981
+        },
+        {
+          "lineNumber": 13,
+          "lineSpanText": "<Symbol Name=\"AssemblyFileVersionAttribute.AssemblyFileVersionAttribute(System.String)\" ReferenceCount=\"1\" />",
+          "start": 1052
+        },
+        {
+          "lineNumber": 14,
+          "lineSpanText": "<Symbol Name=\"AssemblyProductAttribute\" ReferenceCount=\"1\" />",
+          "start": 1167
+        },
+        {
+          "lineNumber": 15,
+          "lineSpanText": "<Symbol Name=\"AssemblyProductAttribute.AssemblyProductAttribute(System.String)\" ReferenceCount=\"1\" />",
+          "start": 1234
+        },
+        {
+          "lineNumber": 16,
+          "lineSpanText": "<Symbol Name=\"AssemblyTitleAttribute\" ReferenceCount=\"1\" />",
+          "start": 1341
+        },
+        {
+          "lineNumber": 17,
+          "lineSpanText": "<Symbol Name=\"AssemblyTitleAttribute.AssemblyTitleAttribute(System.String)\" ReferenceCount=\"1\" />",
+          "start": 1406
+        },
+        {
+          "lineNumber": 18,
+          "lineSpanText": "<Symbol Name=\"AssemblyTrademarkAttribute\" ReferenceCount=\"1\" />",
+          "start": 1509
+        },
+        {
+          "lineNumber": 19,
+          "lineSpanText": "<Symbol Name=\"AssemblyTrademarkAttribute.AssemblyTrademarkAttribute(System.String)\" ReferenceCount=\"1\" />",
+          "start": 1578
+        },
+        {
+          "lineNumber": 20,
+          "lineSpanText": "<Symbol Name=\"AssemblyVersionAttribute\" ReferenceCount=\"1\" />",
+          "start": 1689
+        },
+        {
+          "lineNumber": 21,
+          "lineSpanText": "<Symbol Name=\"AssemblyVersionAttribute.AssemblyVersionAttribute(System.String)\" ReferenceCount=\"1\" />",
+          "start": 1756
+        },
+        {
+          "lineNumber": 24,
+          "lineSpanText": "<Symbol Name=\"ComVisibleAttribute\" ReferenceCount=\"1\" />",
+          "start": 1932
+        },
+        {
+          "lineNumber": 25,
+          "lineSpanText": "<Symbol Name=\"ComVisibleAttribute.ComVisibleAttribute(System.Boolean)\" ReferenceCount=\"1\" />",
+          "start": 1994
+        },
+        {
+          "lineNumber": 26,
+          "lineSpanText": "<Symbol Name=\"GuidAttribute\" ReferenceCount=\"1\" />",
+          "start": 2092
+        },
+        {
+          "lineNumber": 27,
+          "lineSpanText": "<Symbol Name=\"GuidAttribute.GuidAttribute(System.String)\" ReferenceCount=\"1\" />",
+          "start": 2148
+        },
+        {
+          "lineNumber": 35,
+          "lineSpanText": "<Symbol Name=\"String\" ReferenceCount=\"1\" />",
+          "start": 2604
+        },
+        {
+          "lineNumber": 30,
+          "lineSpanText": "<Symbol Name=\"TargetFrameworkAttribute\" ReferenceCount=\"1\" />",
+          "start": 2297
+        },
+        {
+          "lineNumber": 31,
+          "lineSpanText": "<Symbol Name=\"TargetFrameworkAttribute.FrameworkDisplayName\" ReferenceCount=\"1\" />",
+          "start": 2364
+        },
+        {
+          "lineNumber": 32,
+          "lineSpanText": "<Symbol Name=\"TargetFrameworkAttribute.TargetFrameworkAttribute(System.String)\" ReferenceCount=\"1\" />",
+          "start": 2452
+        }
+      ]
+    },
     "segments": [
       {
         "fullLength": 2624,

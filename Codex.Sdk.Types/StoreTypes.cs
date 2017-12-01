@@ -36,6 +36,7 @@ namespace Codex
         IReadOnlyList<ICommitFileLink> Files { get; }
     }
 
+    // TODO: Need to persist full data for classifications and references for accurate replay
     public interface IStoredBoundSourceFile
     {
         IBoundSourceFile BoundSourceFile { get; }
@@ -49,5 +50,10 @@ namespace Codex
         /// Compressed list of reference spans
         /// </summary>
         IReferenceList CompressedReferences { get; }
+
+        /// <summary>
+        /// Line data for <see cref="CompressedReferences"/>
+        /// </summary>
+        ISymbolLineSpanList CompressedReferencesLines { get; }
     }
 }

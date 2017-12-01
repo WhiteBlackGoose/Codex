@@ -100,6 +100,41 @@
   },
   "compressedReferences": {
     "count": 4,
+    "lineSpanModel": {
+      "count": 4,
+      "segments": [
+        {
+          "fullLength": 301,
+          "lengths": {
+            "data": "AAABAg==",
+            "valueByteWidth": 1
+          },
+          "sharedIndices": {
+            "data": "AgIBAA==",
+            "valueByteWidth": 1
+          },
+          "starts": {
+            "data": "AAAZGQ==",
+            "valueByteWidth": 1
+          }
+        }
+      ],
+      "sharedValues": [
+        {
+          "lineNumber": 3,
+          "lineSpanText": "<Project ReferenceCount=\"28\" Name=\"mscorlib\" FullName=\"mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />",
+          "start": 274
+        },
+        {
+          "lineNumber": 1,
+          "lineSpanText": "<Project ReferenceCount=\"3\" Name=\"CodexTestCSharpLibrary\" FullName=\"CodexTestCSharpLibrary\" />",
+          "start": 23
+        },
+        {
+          "lineSpanText": "<ReferenceProjects>"
+        }
+      ]
+    },
     "segments": [
       {
         "fullLength": 301,

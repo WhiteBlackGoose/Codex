@@ -154,6 +154,46 @@
   },
   "compressedReferences": {
     "count": 10,
+    "lineSpanModel": {
+      "count": 10,
+      "segments": [
+        {
+          "fullLength": 460,
+          "lengths": {
+            "data": "AAAABg8JBg8GBg==",
+            "valueByteWidth": 1
+          },
+          "sharedIndices": {
+            "data": "AwMDAQACAgICAg==",
+            "valueByteWidth": 1
+          },
+          "starts": {
+            "data": "AAAAERERHSU1PQ==",
+            "valueByteWidth": 1
+          }
+        }
+      ],
+      "sharedValues": [
+        {
+          "lineNumber": 13,
+          "lineSpanText": "public interface ITypeWithParams<T0, T1>",
+          "start": 211
+        },
+        {
+          "lineNumber": 8,
+          "lineSpanText": "public interface IXedoc",
+          "start": 164
+        },
+        {
+          "lineNumber": 18,
+          "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
+          "start": 393
+        },
+        {
+          "lineSpanText": "using System;"
+        }
+      ]
+    },
     "segments": [
       {
         "fullLength": 460,

@@ -147,7 +147,6 @@ namespace Codex
         ILanguageInfo Language { get; }
     }
 
-    // TODO: Don't inherit reference symbol. Instead just have a member
     public interface IReferenceSearchModel : IProjectFileScopeEntity, ISearchEntity
     {
         /// <summary>

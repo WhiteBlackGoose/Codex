@@ -211,17 +211,6 @@ namespace Codex.ObjectModel
     //    }
     //}
 
-    partial class StoredBoundSourceFile
-    {
-        protected override void OnDeserializedCore()
-        {
-            BoundSourceFile.Classifications = CompressedClassifications.ToList();
-            BoundSourceFile.References = CompressedReferences.ToList();
-
-            base.OnDeserializedCore();
-        }
-    }
-
     partial class ReferenceSearchModel
     {
         private IReadOnlyList<SymbolSpan> CoerceSpans(IReadOnlyList<SymbolSpan> value)
