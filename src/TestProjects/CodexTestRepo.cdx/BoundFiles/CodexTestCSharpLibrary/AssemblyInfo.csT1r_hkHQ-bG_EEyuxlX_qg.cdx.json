@@ -1,0 +1,293 @@
+{
+  "boundSourceFile": {
+    "definitionCount": 2,
+    "definitions": [
+      {
+        "definition": {
+          "containerQualifiedName": "Properties",
+          "id": "fj6tjzorh59i",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
+          "shortName": "AssemblyInfo.cs"
+        }
+      },
+      {
+        "definition": {
+          "containerQualifiedName": "Checksum.Sha1",
+          "id": "nevkzgkgawuz",
+          "isImplicitlyDeclared": true,
+          "kind": "Checksum.Sha1",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
+          "shortName": "BAA9D4B4B4C30D2D7DEECFE82B254A4CA08102A5"
+        }
+      }
+    ],
+    "projectId": "CodexTestCSharpLibrary",
+    "repositoryName": "codextest",
+    "sourceFile": {
+      "content": "using System.Reflection;\r\nusing System.Runtime.CompilerServices;\r\nusing System.Runtime.InteropServices;\r\n\r\n// General Information about an assembly is controlled through the following \r\n// set of attributes. Change these attribute values to modify the information\r\n// associated with an assembly.\r\n[assembly: AssemblyTitle(\"CodexTestCSharpLibrary\")]\r\n[assembly: AssemblyDescription(\"\")]\r\n[assembly: AssemblyConfiguration(\"\")]\r\n[assembly: AssemblyCompany(\"\")]\r\n[assembly: AssemblyProduct(\"CodexTestCSharpLibrary\")]\r\n[assembly: AssemblyCopyright(\"Copyright ©  2017\")]\r\n[assembly: AssemblyTrademark(\"\")]\r\n[assembly: AssemblyCulture(\"\")]\r\n\r\n// Setting ComVisible to false makes the types in this assembly not visible \r\n// to COM components.  If you need to access a type in this assembly from \r\n// COM, set the ComVisible attribute to true on that type.\r\n[assembly: ComVisible(false)]\r\n\r\n// The following GUID is for the ID of the typelib if this project is exposed to COM\r\n[assembly: Guid(\"f16a9de8-193f-4d07-9d86-1dd2fb087a96\")]\r\n\r\n// Version information for an assembly consists of the following four values:\r\n//\r\n//      Major Version\r\n//      Minor Version \r\n//      Build Number\r\n//      Revision\r\n//\r\n// You can specify all the values or you can default the Build and Revision Numbers \r\n// by using the '*' as shown below:\r\n// [assembly: AssemblyVersion(\"1.0.*\")]\r\n[assembly: AssemblyVersion(\"1.0.0.0\")]\r\n[assembly: AssemblyFileVersion(\"1.0.0.0\")]\r\n",
+      "info": {
+        "language": "C#",
+        "lines": 37,
+        "projectRelativePath": "Properties\\AssemblyInfo.cs",
+        "properties": {
+          "Checksum.Sha1": "BAA9D4B4B4C30D2D7DEECFE82B254A4CA08102A5"
+        },
+        "repoRelativePath": "CodexTestCSharpLibrary\\Properties\\AssemblyInfo.cs",
+        "repositoryName": "codextest",
+        "size": 1452
+      }
+    }
+  },
+  "compressedClassifications": {
+    "count": 51,
+    "segments": [
+      {
+        "fullLength": 1448,
+        "lengths": {
+          "cdata": "Y2ZgYeBgYAaSrAx8UJqXYTcDGwM3gxiQFGRgAJLCYJIXSoLE+YEyIBImfglIg8wJAtJMDCoMfowgcXawCewMAA==",
+          "compressedLength": 64,
+          "decompressedLength": 102,
+          "minValue": 2,
+          "valueByteWidth": 2
+        },
+        "localSymbolGroupIds": {
+          "cdata": "Y2AgGQAA",
+          "compressedLength": 6,
+          "decompressedLength": 51,
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "Y2BkZGCEYCYGZhasCCjBwAShQVwA",
+          "compressedLength": 21,
+          "decompressedLength": 51,
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "Y2BgAkIWMImg2YAsZjBNLMkO1YFOQ2QB",
+          "compressedLength": 24,
+          "decompressedLength": 102,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "color": -1,
+        "name": "keyword"
+      },
+      {
+        "color": -1,
+        "name": "identifier"
+      },
+      {
+        "color": -1,
+        "name": "comment"
+      },
+      {
+        "color": -1,
+        "name": "class name"
+      },
+      {
+        "color": -1,
+        "name": "string"
+      }
+    ]
+  },
+  "compressedReferences": {
+    "count": 27,
+    "segments": [
+      {
+        "fullLength": 1438,
+        "lengths": {
+          "cdata": "Y2Bg4OUVFhYV5QcCQSDg5+fiYmHh5xcWBgA=",
+          "compressedLength": 26,
+          "decompressedLength": 27,
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "AgEAEwcUDhYKFQ0SDAMaBhcYCBkLDwQQCREF",
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "Y2AAATNGBgZNIC2MhEF8FSj7NRDnAXE3UJ0UkAYA",
+          "compressedLength": 30,
+          "decompressedLength": 54,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "id": "jt014kvrjbyh",
+        "isImplicitlyDeclared": true,
+        "kind": "File",
+        "projectId": "codextest(Repo)",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "nevkzgkgawuz",
+        "isImplicitlyDeclared": true,
+        "kind": "Checksum.Sha1",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "fj6tjzorh59i",
+        "isImplicitlyDeclared": true,
+        "kind": "File",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "cekgdiwfsy8q",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "Instantiation"
+      },
+      {
+        "id": "d7zlvzfupcol",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "Instantiation"
+      },
+      {
+        "id": "g1uxbc9evuqp",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "Instantiation"
+      },
+      {
+        "id": "gbbsioq1lr7p",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "Instantiation"
+      },
+      {
+        "id": "iggnvlryy8pl",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "Instantiation"
+      },
+      {
+        "id": "ilzi8qywxj5d",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "Instantiation"
+      },
+      {
+        "id": "oxstkbpff3nk",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "Instantiation"
+      },
+      {
+        "id": "ugc4cfruh6uv",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "Instantiation"
+      },
+      {
+        "id": "vhsblzyr6fft",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "Instantiation"
+      },
+      {
+        "id": "xxbdd8vgzz9q",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "Instantiation"
+      },
+      {
+        "id": "ymmm1xbqot1r",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "Instantiation"
+      },
+      {
+        "id": "zpyv4zicoqy4",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "Instantiation"
+      },
+      {
+        "id": "bv3kxqc9ozrz",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "Reference"
+      },
+      {
+        "id": "c38l4kmhtlby",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "Reference"
+      },
+      {
+        "id": "exjoiusmafos",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "Reference"
+      },
+      {
+        "id": "gvbjpbcxwy2k",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "Reference"
+      },
+      {
+        "id": "i65jqbopyhle",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "Reference"
+      },
+      {
+        "id": "ifegugrv95ue",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "Reference"
+      },
+      {
+        "id": "jyyyk9k2knea",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "Reference"
+      },
+      {
+        "id": "k95qbgte30kn",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "Reference"
+      },
+      {
+        "id": "rhqleoomjaub",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "Reference"
+      },
+      {
+        "id": "t2nno4ugsft3",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "Reference"
+      },
+      {
+        "id": "y42a7756tggw",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "Reference"
+      },
+      {
+        "id": "yxt4gpkb4tiv",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "Reference"
+      }
+    ]
+  }
+}

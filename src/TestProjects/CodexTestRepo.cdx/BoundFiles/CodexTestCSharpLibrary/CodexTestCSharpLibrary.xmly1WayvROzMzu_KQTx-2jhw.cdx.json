@@ -1,0 +1,159 @@
+{
+  "boundSourceFile": {
+    "definitionCount": 2,
+    "definitions": [
+      {
+        "definition": {
+          "containerQualifiedName": "[Metadata]\\ReferenceSymbols",
+          "id": "d2xcyy2aphpa",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
+          "shortName": "CodexTestCSharpLibrary.xml"
+        }
+      },
+      {
+        "definition": {
+          "containerQualifiedName": "Checksum.Sha1",
+          "id": "dfic9igrfvye",
+          "isImplicitlyDeclared": true,
+          "kind": "Checksum.Sha1",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
+          "shortName": "C1F13CA56A53698E4D0977CDF4F34D324C9E2D8B"
+        }
+      }
+    ],
+    "excludeFromSearch": true,
+    "projectId": "CodexTestCSharpLibrary",
+    "repositoryName": "codextest",
+    "sourceFile": {
+      "content": "<ReferenceSymbols Count=\"3\">\r\n  <Namespace Name=\"CodexTestCSharpLibrary\">\r\n    <Symbol Name=\"ITypeWithParams˂T0, T1˃\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"IXedoc\" ReferenceCount=\"2\" />\r\n    <Symbol Name=\"XedocImpl\" ReferenceCount=\"0\" />\r\n  </Namespace>\r\n</ReferenceSymbols>",
+      "info": {
+        "language": "xml",
+        "lines": 7,
+        "projectRelativePath": "[Metadata]\\ReferenceSymbols\\CodexTestCSharpLibrary.xml",
+        "properties": {
+          "Checksum.Sha1": "C1F13CA56A53698E4D0977CDF4F34D324C9E2D8B"
+        },
+        "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceSymbols\\CodexTestCSharpLibrary.xml",
+        "repositoryName": "codextest"
+      }
+    }
+  },
+  "compressedClassifications": {
+    "count": 61,
+    "segments": [
+      {
+        "fullLength": 277,
+        "lengths": {
+          "cdata": "Y+BnYQADDmYGBlEgzQqkxRh4QUKMYA4rMocDymHkYGDkZwAA",
+          "compressedLength": 36,
+          "decompressedLength": 61,
+          "minValue": 1,
+          "valueByteWidth": 1
+        },
+        "localSymbolGroupIds": {
+          "cdata": "Y2CgAAAA",
+          "compressedLength": 6,
+          "decompressedLength": 61,
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "Y2BkYmBmYWZgQKUJc0AIAA==",
+          "compressedLength": 16,
+          "decompressedLength": 61,
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "Y2BgZGACYhhkReOzo/CRWeTIsIJpZjAJAA==",
+          "compressedLength": 25,
+          "decompressedLength": 122,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "color": -1,
+        "name": "xml - delimiter"
+      },
+      {
+        "color": -1,
+        "name": "xml - name"
+      },
+      {
+        "color": -1,
+        "name": "xml - attribute name"
+      },
+      {
+        "color": -1,
+        "name": "xml - attribute quotes"
+      },
+      {
+        "color": -1,
+        "name": "xml - attribute value"
+      }
+    ]
+  },
+  "compressedReferences": {
+    "count": 5,
+    "segments": [
+      {
+        "fullLength": 217,
+        "lengths": {
+          "cdata": "AAAXBgk=",
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "AQACAwQ=",
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "AABeLCw=",
+          "valueByteWidth": 1
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "id": "dfic9igrfvye",
+        "isImplicitlyDeclared": true,
+        "kind": "Checksum.Sha1",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "d2xcyy2aphpa",
+        "isImplicitlyDeclared": true,
+        "kind": "File",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Definition"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "fdzoyyrcywtf",
+        "kind": "Interface",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "qjxntd4ra1hl",
+        "kind": "Interface",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "qrlrsnmhwayc",
+        "kind": "Interface",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "ProjectLevelReference"
+      }
+    ]
+  }
+}

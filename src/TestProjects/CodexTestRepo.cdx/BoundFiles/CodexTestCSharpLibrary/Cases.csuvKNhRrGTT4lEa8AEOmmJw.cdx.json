@@ -1,0 +1,243 @@
+{
+  "boundSourceFile": {
+    "definitionCount": 5,
+    "definitions": [
+      {
+        "definition": {
+          "containerQualifiedName": "",
+          "id": "tiitsqdl784z",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
+          "shortName": "Cases.cs"
+        }
+      },
+      {
+        "definition": {
+          "containerQualifiedName": "Checksum.Sha1",
+          "id": "x2imq0zfxrey",
+          "isImplicitlyDeclared": true,
+          "kind": "Checksum.Sha1",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
+          "shortName": "A11C83D26BF1B95E4426AFF5CBDD2E8BA90DA001"
+        }
+      },
+      {
+        "definition": {
+          "comment": "",
+          "containerQualifiedName": "CodexTestCSharpLibrary",
+          "declarationName": "public interface CodexTestCSharpLibrary.IXedoc",
+          "displayName": "CodexTestCSharpLibrary.IXedoc",
+          "glyph": 35,
+          "id": "qjxntd4ra1hl",
+          "kind": "Interface",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
+          "shortName": "IXedoc"
+        },
+        "length": 6,
+        "lineNumber": 8,
+        "lineSpanStart": 21,
+        "start": 181
+      },
+      {
+        "definition": {
+          "comment": "",
+          "containerQualifiedName": "CodexTestCSharpLibrary",
+          "declarationName": "public interface CodexTestCSharpLibrary.ITypeWithParams<T0, T1>",
+          "displayName": "CodexTestCSharpLibrary.ITypeWithParams<T0, T1>",
+          "glyph": 35,
+          "id": "fdzoyyrcywtf",
+          "kind": "Interface",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
+          "shortName": "ITypeWithParams<T0, T1>"
+        },
+        "length": 15,
+        "lineNumber": 13,
+        "lineSpanStart": 21,
+        "start": 228
+      },
+      {
+        "definition": {
+          "comment": "",
+          "containerQualifiedName": "CodexTestCSharpLibrary",
+          "declarationName": "public interface CodexTestCSharpLibrary.XedocImpl",
+          "displayName": "CodexTestCSharpLibrary.XedocImpl",
+          "glyph": 35,
+          "id": "qrlrsnmhwayc",
+          "kind": "Interface",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
+          "shortName": "XedocImpl"
+        },
+        "length": 9,
+        "lineNumber": 18,
+        "lineSpanStart": 21,
+        "start": 410
+      }
+    ],
+    "projectId": "CodexTestCSharpLibrary",
+    "repositoryName": "codextest",
+    "sourceFile": {
+      "content": "using System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing System.Text;\r\nusing System.Threading.Tasks;\r\n\r\nnamespace CodexTestCSharpLibrary\r\n{\r\n    public interface IXedoc\r\n    {\r\n\r\n    }\r\n\r\n    public interface ITypeWithParams<T0, T1>\r\n    {\r\n    }\r\n\r\n    // Test interface implementations only applies to actual base types and not those which appear as type parameters \r\n    public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>\r\n    {\r\n\r\n    }\r\n}\r\n",
+      "info": {
+        "language": "C#",
+        "lines": 24,
+        "projectRelativePath": "Cases.cs",
+        "properties": {
+          "Checksum.Sha1": "A11C83D26BF1B95E4426AFF5CBDD2E8BA90DA001"
+        },
+        "repoRelativePath": "CodexTestCSharpLibrary\\Cases.cs",
+        "repositoryName": "codextest",
+        "size": 482
+      }
+    }
+  },
+  "compressedClassifications": {
+    "count": 34,
+    "segments": [
+      {
+        "fullLength": 460,
+        "lengths": {
+          "cdata": "Y2ZhZuFkZWZhAiN2ZnYRFnYWFnZeBoYCFnZ2Fl4WFgA=",
+          "compressedLength": 32,
+          "decompressedLength": 34,
+          "minValue": 2,
+          "valueByteWidth": 1
+        },
+        "localSymbolGroupIds": {
+          "cdata": "Y2DADhiZYCwA",
+          "compressedLength": 9,
+          "decompressedLength": 34,
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "Y2BkYGQEYQgCYgYGJiBiZmYBkkDAAAA=",
+          "compressedLength": 23,
+          "decompressedLength": 34,
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "Y2BgYmABYiY4jUwyMbABMReYJQkVYWaQYGCHqmEG8wE=",
+          "compressedLength": 32,
+          "decompressedLength": 68,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "color": -1,
+        "name": "keyword"
+      },
+      {
+        "color": -1,
+        "name": "identifier"
+      },
+      {
+        "color": -1,
+        "name": "interface name"
+      },
+      {
+        "color": -1,
+        "name": "type parameter name"
+      },
+      {
+        "color": -1,
+        "name": "comment"
+      }
+    ]
+  },
+  "compressedReferences": {
+    "count": 10,
+    "segments": [
+      {
+        "fullLength": 460,
+        "lengths": {
+          "cdata": "AAAABg8JBg8GBg==",
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "AgABBQMIBgQHCQ==",
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "Y2AAgW0MWgwrGFgYmBmYgBgA",
+          "compressedLength": 18,
+          "decompressedLength": 20,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "id": "jiphajk0kuy9",
+        "isImplicitlyDeclared": true,
+        "kind": "File",
+        "projectId": "codextest(Repo)",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "x2imq0zfxrey",
+        "isImplicitlyDeclared": true,
+        "kind": "Checksum.Sha1",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "tiitsqdl784z",
+        "isImplicitlyDeclared": true,
+        "kind": "File",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "fdzoyyrcywtf",
+        "kind": "Interface",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "fdzoyyrcywtf",
+        "kind": "Interface",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "InterfaceInheritance"
+      },
+      {
+        "id": "qjxntd4ra1hl",
+        "kind": "Interface",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "qjxntd4ra1hl",
+        "kind": "Interface",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "InterfaceInheritance"
+      },
+      {
+        "id": "qjxntd4ra1hl",
+        "kind": "Interface",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Reference"
+      },
+      {
+        "id": "qrlrsnmhwayc",
+        "kind": "Interface",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "cuycniiqolxa",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "Reference"
+      }
+    ]
+  }
+}

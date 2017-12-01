@@ -1,0 +1,338 @@
+{
+  "boundSourceFile": {
+    "definitionCount": 2,
+    "definitions": [
+      {
+        "definition": {
+          "containerQualifiedName": "[Metadata]\\ReferenceSymbols",
+          "id": "zmsmzhdzwdzx",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
+          "shortName": "mscorlib.xml"
+        }
+      },
+      {
+        "definition": {
+          "containerQualifiedName": "Checksum.Sha1",
+          "id": "hobzikb3ubag",
+          "isImplicitlyDeclared": true,
+          "kind": "Checksum.Sha1",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
+          "shortName": "3DEC235A815B4877F048F77C14997EC5479542A1"
+        }
+      }
+    ],
+    "excludeFromSearch": true,
+    "projectId": "CodexTestCSharpLibrary",
+    "repositoryName": "codextest",
+    "sourceFile": {
+      "content": "<ReferenceSymbols Count=\"28\">\r\n  <Namespace Name=\"System.Reflection\">\r\n    <Symbol Name=\"AssemblyCompanyAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyCompanyAttribute.AssemblyCompanyAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyConfigurationAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyConfigurationAttribute.AssemblyConfigurationAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyCopyrightAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyCopyrightAttribute.AssemblyCopyrightAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyCultureAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyCultureAttribute.AssemblyCultureAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyDescriptionAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyDescriptionAttribute.AssemblyDescriptionAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyFileVersionAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyFileVersionAttribute.AssemblyFileVersionAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyProductAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyProductAttribute.AssemblyProductAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyTitleAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyTitleAttribute.AssemblyTitleAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyTrademarkAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyTrademarkAttribute.AssemblyTrademarkAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyVersionAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyVersionAttribute.AssemblyVersionAttribute(System.String)\" ReferenceCount=\"1\" />\r\n  </Namespace>\r\n  <Namespace Name=\"System.Runtime.InteropServices\">\r\n    <Symbol Name=\"ComVisibleAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"ComVisibleAttribute.ComVisibleAttribute(System.Boolean)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"GuidAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"GuidAttribute.GuidAttribute(System.String)\" ReferenceCount=\"1\" />\r\n  </Namespace>\r\n  <Namespace Name=\"System.Runtime.Versioning\">\r\n    <Symbol Name=\"TargetFrameworkAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"TargetFrameworkAttribute.FrameworkDisplayName\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"TargetFrameworkAttribute.TargetFrameworkAttribute(System.String)\" ReferenceCount=\"1\" />\r\n  </Namespace>\r\n  <Namespace Name=\"System\">\r\n    <Symbol Name=\"String\" ReferenceCount=\"1\" />\r\n  </Namespace>\r\n</ReferenceSymbols>",
+      "info": {
+        "language": "xml",
+        "lines": 38,
+        "projectRelativePath": "[Metadata]\\ReferenceSymbols\\mscorlib.xml",
+        "properties": {
+          "Checksum.Sha1": "3DEC235A815B4877F048F77C14997EC5479542A1"
+        },
+        "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceSymbols\\mscorlib.xml",
+        "repositoryName": "codextest"
+      }
+    }
+  },
+  "compressedClassifications": {
+    "count": 419,
+    "segments": [
+      {
+        "fullLength": 2684,
+        "lengths": {
+          "cdata": "Y+BnYWBgZGBg4GBmYBAA0qxAWpyBF8gCCoM49sgcWWSONzJHEpnjjMzBbZo0MsedOBncpokic6wpcBsjByQ4ZKHBIYSsyAyZw4PM0UTTLoEtNHXwWcgK1cGKEGfkZwAA",
+          "compressedLength": 96,
+          "decompressedLength": 419,
+          "minValue": 1,
+          "valueByteWidth": 1
+        },
+        "localSymbolGroupIds": {
+          "cdata": "Y2AYBYMcAAA=",
+          "compressedLength": 8,
+          "decompressedLength": 419,
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "Y2BkYmBmYWZgQKVHOIfC4CBdOy4dIAQA",
+          "compressedLength": 24,
+          "decompressedLength": 419,
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "Y2BgZGACYhhkReOzo/CRWaMyI0mGlWEgUwc9bCfVDoh6ZjAJAA==",
+          "compressedLength": 37,
+          "decompressedLength": 838,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "color": -1,
+        "name": "xml - delimiter"
+      },
+      {
+        "color": -1,
+        "name": "xml - name"
+      },
+      {
+        "color": -1,
+        "name": "xml - attribute name"
+      },
+      {
+        "color": -1,
+        "name": "xml - attribute quotes"
+      },
+      {
+        "color": -1,
+        "name": "xml - attribute value"
+      }
+    ]
+  },
+  "compressedReferences": {
+    "count": 30,
+    "segments": [
+      {
+        "fullLength": 2624,
+        "lengths": {
+          "cdata": "Y2CQcJDzkXKRcJDxkPGQcBCzAbGFzXm1JHQd2AA=",
+          "compressedLength": 29,
+          "decompressedLength": 30,
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "AQANFgoXAhwIGg8VBRIMEwcUBhkJEQsbBBAOHRgD",
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "Y2BgYIhi0CEKFkLpHDAZyQAA",
+          "compressedLength": 18,
+          "decompressedLength": 60,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "id": "hobzikb3ubag",
+        "isImplicitlyDeclared": true,
+        "kind": "Checksum.Sha1",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "zmsmzhdzwdzx",
+        "isImplicitlyDeclared": true,
+        "kind": "File",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Definition"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "cekgdiwfsy8q",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "cuycniiqolxa",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "d7zlvzfupcol",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "g1uxbc9evuqp",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "gbbsioq1lr7p",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "iggnvlryy8pl",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "ilzi8qywxj5d",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "oxstkbpff3nk",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "ugc4cfruh6uv",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "vhsblzyr6fft",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "xxbdd8vgzz9q",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "ymmm1xbqot1r",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "zng0jvzsohnn",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "zpyv4zicoqy4",
+        "kind": "Class",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "bv3kxqc9ozrz",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "c38l4kmhtlby",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "exjoiusmafos",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "gvbjpbcxwy2k",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "i65jqbopyhle",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "ifegugrv95ue",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "jyyyk9k2knea",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "k95qbgte30kn",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "oxmmbdshugky",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "rhqleoomjaub",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "t2nno4ugsft3",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "y42a7756tggw",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "yxt4gpkb4tiv",
+        "kind": "Constructor",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "i7vzz3amryno",
+        "kind": "Property",
+        "projectId": "mscorlib",
+        "referenceKind": "ProjectLevelReference"
+      }
+    ]
+  }
+}

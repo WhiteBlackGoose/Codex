@@ -1,0 +1,121 @@
+{
+  "boundSourceFile": {
+    "definitionCount": 2,
+    "definitions": [
+      {
+        "definition": {
+          "containerQualifiedName": "",
+          "id": "zbury1mkviqo",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "projectId": "codextest(Repo)",
+          "referenceKind": "Definition",
+          "shortName": "CodexTestRepo.sln"
+        }
+      },
+      {
+        "definition": {
+          "containerQualifiedName": "Checksum.Sha1",
+          "id": "xfnkzuywvmuy",
+          "isImplicitlyDeclared": true,
+          "kind": "Checksum.Sha1",
+          "projectId": "codextest(Repo)",
+          "referenceKind": "Definition",
+          "shortName": "46EF8D8E2CA88EDFAB8680A788650147C405FF27"
+        }
+      }
+    ],
+    "projectId": "codextest(Repo)",
+    "repositoryName": "codextest",
+    "sourceFile": {
+      "content": "\r\nMicrosoft Visual Studio Solution File, Format Version 12.00\r\n# Visual Studio 14\r\nVisualStudioVersion = 14.0.25420.1\r\nMinimumVisualStudioVersion = 10.0.40219.1\r\nProject(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"CodexTestCSharpLibrary\", \"CodexTestCSharpLibrary\\CodexTestCSharpLibrary.csproj\", \"{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}\"\r\nEndProject\r\nGlobal\r\n\tGlobalSection(SolutionConfigurationPlatforms) = preSolution\r\n\t\tDebug|Any CPU = Debug|Any CPU\r\n\t\tRelease|Any CPU = Release|Any CPU\r\n\tEndGlobalSection\r\n\tGlobalSection(ProjectConfigurationPlatforms) = postSolution\r\n\t\t{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU\r\n\t\t{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}.Debug|Any CPU.Build.0 = Debug|Any CPU\r\n\t\t{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}.Release|Any CPU.ActiveCfg = Release|Any CPU\r\n\t\t{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}.Release|Any CPU.Build.0 = Release|Any CPU\r\n\tEndGlobalSection\r\n\tGlobalSection(SolutionProperties) = preSolution\r\n\t\tHideSolutionNode = FALSE\r\n\tEndGlobalSection\r\nEndGlobal\r\n",
+      "info": {
+        "language": "sln",
+        "lines": 23,
+        "projectRelativePath": "CodexTestRepo.sln",
+        "properties": {
+          "Checksum.Sha1": "46EF8D8E2CA88EDFAB8680A788650147C405FF27"
+        },
+        "repoRelativePath": "CodexTestRepo.sln",
+        "repositoryName": "codextest"
+      }
+    }
+  },
+  "compressedClassifications": {
+    "count": 2,
+    "segments": [
+      {
+        "fullLength": 78,
+        "lengths": {
+          "cdata": "AB4=",
+          "minValue": 22,
+          "valueByteWidth": 1
+        },
+        "localSymbolGroupIds": {
+          "cdata": "AAA=",
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "AAA=",
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "AAU=",
+          "minValue": 215,
+          "valueByteWidth": 1
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "color": -1,
+        "name": "xml literal - attribute value"
+      }
+    ]
+  },
+  "compressedReferences": {
+    "count": 4,
+    "segments": [
+      {
+        "fullLength": 293,
+        "lengths": {
+          "cdata": "AAAWNA==",
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "AgABAQ==",
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "AADYBQ==",
+          "valueByteWidth": 1
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "id": "xfnkzuywvmuy",
+        "isImplicitlyDeclared": true,
+        "kind": "Checksum.Sha1",
+        "projectId": "codextest(Repo)",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "oojcfpqfkvvk",
+        "isImplicitlyDeclared": true,
+        "kind": "File",
+        "projectId": "codextest(Repo)",
+        "referenceKind": "Reference"
+      },
+      {
+        "id": "zbury1mkviqo",
+        "isImplicitlyDeclared": true,
+        "kind": "File",
+        "projectId": "codextest(Repo)",
+        "referenceKind": "Definition"
+      }
+    ]
+  }
+}

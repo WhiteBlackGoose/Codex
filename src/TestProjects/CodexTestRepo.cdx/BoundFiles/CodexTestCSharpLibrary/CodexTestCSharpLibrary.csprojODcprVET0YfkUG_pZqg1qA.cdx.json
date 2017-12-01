@@ -1,0 +1,310 @@
+{
+  "boundSourceFile": {
+    "definitionCount": 2,
+    "definitions": [
+      {
+        "definition": {
+          "containerQualifiedName": "",
+          "id": "tyldgiuze05e",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
+          "shortName": "CodexTestCSharpLibrary.csproj"
+        }
+      },
+      {
+        "definition": {
+          "containerQualifiedName": "Checksum.Sha1",
+          "id": "eedycmm7jesz",
+          "isImplicitlyDeclared": true,
+          "kind": "Checksum.Sha1",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
+          "shortName": "7E9DDF11D72C3F17AB22CA0647EEE95BB52B5EDD"
+        }
+      }
+    ],
+    "projectId": "CodexTestCSharpLibrary",
+    "repositoryName": "codextest",
+    "sourceFile": {
+      "content": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<Project ToolsVersion=\"14.0\" DefaultTargets=\"Build\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">\r\n  <Import Project=\"$(MSBuildExtensionsPath)\\$(MSBuildToolsVersion)\\Microsoft.Common.props\" Condition=\"Exists('$(MSBuildExtensionsPath)\\$(MSBuildToolsVersion)\\Microsoft.Common.props')\" />\r\n  <PropertyGroup>\r\n    <Configuration Condition=\" '$(Configuration)' == '' \">Debug</Configuration>\r\n    <Platform Condition=\" '$(Platform)' == '' \">AnyCPU</Platform>\r\n    <ProjectGuid>{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}</ProjectGuid>\r\n    <OutputType>Library</OutputType>\r\n    <AppDesignerFolder>Properties</AppDesignerFolder>\r\n    <RootNamespace>CodexTestCSharpLibrary</RootNamespace>\r\n    <AssemblyName>CodexTestCSharpLibrary</AssemblyName>\r\n    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>\r\n    <FileAlignment>512</FileAlignment>\r\n  </PropertyGroup>\r\n  <PropertyGroup Condition=\" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' \">\r\n    <DebugSymbols>true</DebugSymbols>\r\n    <DebugType>full</DebugType>\r\n    <Optimize>false</Optimize>\r\n    <OutputPath>bin\\Debug\\</OutputPath>\r\n    <DefineConstants>DEBUG;TRACE</DefineConstants>\r\n    <ErrorReport>prompt</ErrorReport>\r\n    <WarningLevel>4</WarningLevel>\r\n  </PropertyGroup>\r\n  <PropertyGroup Condition=\" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' \">\r\n    <DebugType>pdbonly</DebugType>\r\n    <Optimize>true</Optimize>\r\n    <OutputPath>bin\\Release\\</OutputPath>\r\n    <DefineConstants>TRACE</DefineConstants>\r\n    <ErrorReport>prompt</ErrorReport>\r\n    <WarningLevel>4</WarningLevel>\r\n  </PropertyGroup>\r\n  <ItemGroup>\r\n    <Reference Include=\"System\" />\r\n    <Reference Include=\"System.Core\" />\r\n    <Reference Include=\"System.Xml.Linq\" />\r\n    <Reference Include=\"System.Data.DataSetExtensions\" />\r\n    <Reference Include=\"Microsoft.CSharp\" />\r\n    <Reference Include=\"System.Data\" />\r\n    <Reference Include=\"System.Net.Http\" />\r\n    <Reference Include=\"System.Xml\" />\r\n  </ItemGroup>\r\n  <ItemGroup>\r\n    <Compile Include=\"Cases.cs\" />\r\n    <Compile Include=\"Properties\\AssemblyInfo.cs\" />\r\n  </ItemGroup>\r\n  <Import Project=\"$(MSBuildToolsPath)\\Microsoft.CSharp.targets\" />\r\n  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. \r\n       Other similar extension points exist, see Microsoft.Common.targets.\r\n  <Target Name=\"BeforeBuild\">\r\n  </Target>\r\n  <Target Name=\"AfterBuild\">\r\n  </Target>\r\n  -->\r\n</Project>",
+      "info": {
+        "language": "msbuild",
+        "lines": 54,
+        "projectRelativePath": "CodexTestCSharpLibrary.csproj",
+        "properties": {
+          "Checksum.Sha1": "7E9DDF11D72C3F17AB22CA0647EEE95BB52B5EDD"
+        },
+        "repoRelativePath": "CodexTestCSharpLibrary\\CodexTestCSharpLibrary.csproj",
+        "repositoryName": "codextest"
+      }
+    }
+  },
+  "compressedClassifications": {
+    "count": 342,
+    "segments": [
+      {
+        "fullLength": 2476,
+        "lengths": {
+          "cdata": "lVLLEoIwDEx4lEIRPciBGa+ePKnf4Nn//xvLZonSm50JyYYku6GoVBJkPVW2DlGTTbMFScB1toO/aRA9xE7L7le2iOjN7hFoZHZhvzLfMX/mFCX3kO2a0QDUQ4XCi5yQUXibP/u8RGSKZ86cvbJipRa67twjYc+tPxJFajXlnWvqXdMEzQpv6ltXb7NsZsn7JG/khl+meseUdkzNH0yRz8AvbLey4aHAU4EvBT7+2d8Dq6sQ7Bl8S/3By652+6NuyNbS6np3a+4D",
+          "compressedLength": 201,
+          "decompressedLength": 684,
+          "minValue": 1,
+          "valueByteWidth": 2
+        },
+        "localSymbolGroupIds": {
+          "cdata": "Y2AYBdQHAA==",
+          "compressedLength": 7,
+          "decompressedLength": 342,
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "Y2BkYmBmYQYTDAxIHEwRIAfGZ2DFYJNOwfTTTS+KPnJp7KYgmGwgHgA=",
+          "compressedLength": 41,
+          "decompressedLength": 342,
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "Y2BgZGACYghEsBgZmHHIIKthxamGFUyzo6mHQXzitOWxYnH38LKXFYlEDWcmuvNJcQu2EIKJMoNJAA==",
+          "compressedLength": 58,
+          "decompressedLength": 684,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "color": -1,
+        "name": "xml - delimiter"
+      },
+      {
+        "color": -1,
+        "name": "xml - name"
+      },
+      {
+        "color": -1,
+        "name": "xml - attribute name"
+      },
+      {
+        "color": -1,
+        "name": "xml - attribute quotes"
+      },
+      {
+        "color": -1,
+        "name": "xml - attribute value"
+      },
+      {
+        "color": -1,
+        "name": "xml - text"
+      },
+      {
+        "color": -1,
+        "name": "xml - comment"
+      }
+    ]
+  },
+  "compressedReferences": {
+    "count": 48,
+    "segments": [
+      {
+        "fullLength": 2161,
+        "lengths": {
+          "cdata": "Y2BgEBUWFebl5eDg5hLk5REDsng4Obj4uXl4OSA0JxSwA4EAAA==",
+          "compressedLength": 37,
+          "decompressedLength": 48,
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "Y2Fk4BDhEOHj5eKUEBMUEudm5+WU4hGQ5heW5OWE0GxQwMrMyiQKAA==",
+          "compressedLength": 40,
+          "decompressedLength": 48,
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "FYk5CoBAEAQLwQeYiILigVekgpGgmC74WZ9o7QxFz1RDnI+UXU4yFhm4qZnZWP1fm4aK0m2ZbIKm0xT0mprLu2PksI35kJBL4Ac=",
+          "compressedLength": 74,
+          "decompressedLength": 96,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "id": "oojcfpqfkvvk",
+        "isImplicitlyDeclared": true,
+        "kind": "File",
+        "projectId": "codextest(Repo)",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "eedycmm7jesz",
+        "isImplicitlyDeclared": true,
+        "kind": "Checksum.Sha1",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "fj6tjzorh59i",
+        "isImplicitlyDeclared": true,
+        "kind": "File",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Reference"
+      },
+      {
+        "id": "tiitsqdl784z",
+        "isImplicitlyDeclared": true,
+        "kind": "File",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Reference"
+      },
+      {
+        "id": "tyldgiuze05e",
+        "isImplicitlyDeclared": true,
+        "kind": "File",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "m6ub6jgkq1kb",
+        "kind": "MSBuildItem",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "xvbu3irfrodn",
+        "kind": "MSBuildItem",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "amwppcqis2sk",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "ch9iiiqcjkoq",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Read"
+      },
+      {
+        "id": "do1gcpzyzomc",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Read"
+      },
+      {
+        "id": "do1gcpzyzomc",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "fqw5f7kfn1l3",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "fskmmtsvs6pk",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "glxaswv65k4l",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Read"
+      },
+      {
+        "id": "glxaswv65k4l",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "gnnjamvzeeor",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "hmnwy6c6fcyv",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "izcb8pajtrxe",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "juqubwuog07z",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "mrqklgqxbyss",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "qgboobmwe2su",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Read"
+      },
+      {
+        "id": "sdoij93z8j0r",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Read"
+      },
+      {
+        "id": "v25azsxpeqzf",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "vdcvqg5o51oo",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "vkzxbthahvfq",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "z23zm1iotmrt",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "zgwmeyv6dkdk",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "zpnn6rpn1ial",
+        "kind": "MSBuildProperty",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      }
+    ]
+  }
+}
