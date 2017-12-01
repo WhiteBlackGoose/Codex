@@ -168,9 +168,14 @@ namespace Codex.ElasticSearch.Store
             return Placeholder.NotImplementedAsync();
         }
 
-        public Task AddProjectsAsync(IReadOnlyList<AnalyzedProject> projects)
+        public async Task AddProjectsAsync(IReadOnlyList<AnalyzedProject> projects)
         {
-            return AddAsync(projects, StoredEntityKind.Projects, e => Path.GetFileName(e.ProjectId));
+            foreach (var project in projects)
+            {
+                await AddBoundFilesAsync(project.AdditionalSourceFiles);
+            }
+
+            await AddAsync(projects, StoredEntityKind.Projects, e => Path.GetFileName(e.ProjectId));
         }
 
         public Task AddTextFilesAsync(IReadOnlyList<SourceFile> files)
