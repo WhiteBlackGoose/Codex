@@ -18,6 +18,7 @@ using Mono.Options;
 using Codex.ElasticSearch;
 using System.Threading.Tasks;
 using Codex.Sdk.Search;
+using Codex.ElasticSearch.Store;
 
 namespace Codex.Application
 {
@@ -28,9 +29,10 @@ namespace Codex.Application
         static bool analysisOnly = false; // Set this to disable uploading to ElasticSearch
         static string repoName;
         static string rootDirectory;
+        static string saveDirectory;
         static string solutionPath;
         static bool interactive = false;
-        static ElasticSearchStore store = Placeholder.Value<ElasticSearchStore>("Create store (FileSystem | Elasticsearch)");
+        static ICodexStore store = Placeholder.Value<ICodexStore>("Create store (FileSystem | Elasticsearch)");
         static ElasticSearchService service;
         static bool listIndices = false;
         static List<string> deleteIndices = new List<string>();
@@ -44,6 +46,7 @@ namespace Codex.Application
                     new OptionSet
                     {
                         { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
+                        { "save=", "Saves the analysis information to the given directory.", n => saveDirectory = n },
                         { "n|name=", "Name of the repository.", n => repoName = AnalysisServices.GetSafeIndexName(n ?? string.Empty) },
                         { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
                         { "s|solution", "Optionally, path to the solution to analyze.", n => solutionPath = n },
@@ -75,6 +78,17 @@ namespace Codex.Application
                 )
             },
             {
+                "load",
+                (
+                    new Action(() => Load()),
+                    new OptionSet
+                    {
+                        { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
+                        { "d=", "The directory containing analysis data to load.", n => saveDirectory = n },
+                    }
+                )
+            },
+            {
                 "search",
                 (
                     new Action(() => Search()),
@@ -99,7 +113,6 @@ namespace Codex.Application
 
         static void Main(string[] args)
         {
-            Debugger.Launch();
             if (args.Length == 0)
             {
                 WriteHelpText();
@@ -153,7 +166,23 @@ namespace Codex.Application
         {
             if (String.IsNullOrEmpty(rootDirectory)) throw new ArgumentException("Root path is missing. Use -p to provide it.");
             if (String.IsNullOrEmpty(repoName)) throw new ArgumentException("Project name is missing. Use -n to provide it.");
-            InitService();
+            if (saveDirectory == null)
+            {
+                InitService();
+
+                store = service.CreateStoreAsync(new ElasticSearchStoreConfiguration()
+                {
+                    CreateIndices = true,
+                    ShardCount = 2,
+                    Prefix = string.Empty
+                }).GetAwaiter().GetResult();
+
+                service.ClearAsync().GetAwaiter().GetResult();
+            }
+            else
+            {
+                store = new DirectoryCodexStore(saveDirectory);
+            }
 
             try
             {
@@ -191,6 +220,20 @@ namespace Codex.Application
             }
         }
 
+        private static void Load()
+        {
+            Task.Run(async () =>
+            {
+                InitService();
+                if (String.IsNullOrEmpty(saveDirectory)) throw new ArgumentException("Load directory must be specified. Use -d to provide it.");
+
+                store = await service.CreateStoreAsync(new ElasticSearchStoreConfiguration());
+
+                var loadDirectoryStore = new DirectoryCodexStore(saveDirectory);
+                await loadDirectoryStore.Read(store);
+            }).GetAwaiter().GetResult();
+        }
+
         private static void ListIndices()
         {
             InitService();
@@ -213,16 +256,6 @@ namespace Codex.Application
         static async Task RunRepoImporter()
         {
             var targetIndexName = AnalysisServices.GetTargetIndexName(repoName);
-
-            await service.ClearAsync();
-
-            store = await service.CreateStoreAsync(new ElasticSearchStoreConfiguration()
-            {
-                CreateIndices = true,
-                ShardCount = 2,
-                Prefix = string.Empty
-            });
-
             string[] file = new string[0];
 
             bool requireProjectsExist = true;
@@ -262,11 +295,11 @@ namespace Codex.Application
 
                 List<RepoProjectAnalyzer> projectAnalyzers = new List<RepoProjectAnalyzer>()
                 {
-                    //new MSBuildSolutionProjectAnalyzer()
-                    new BinLogSolutionProjectAnalyzer()
-                            {
-                                RequireProjectFilesExist = requireProjectsExist
-                            }
+                    new MSBuildSolutionProjectAnalyzer()
+                    //new BinLogSolutionProjectAnalyzer()
+                    //        {
+                    //            RequireProjectFilesExist = requireProjectsExist
+                    //        }
                 };
 
 

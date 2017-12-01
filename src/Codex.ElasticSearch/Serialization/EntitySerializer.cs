@@ -103,19 +103,26 @@ namespace Codex.Serialization
             JsonContract contract;
             if (!ContractsByType.TryGetValue(objectType, out contract))
             {
-                contract = ContractsByType.GetOrAdd(objectType, m_inner.ResolveContract(objectType));
-
-                var objectContract = contract as JsonObjectContract;
-                if (objectContract != null)
+                contract = ContractsByType.GetOrAdd(objectType, k =>
                 {
-                    var sortedProperties = objectContract.Properties.ToList();
-                    sortedProperties.Sort((p1, p2) => StringComparer.OrdinalIgnoreCase.Compare(p1.PropertyName, p2.PropertyName));
-                    objectContract.Properties.Clear();
-                    foreach (var property in sortedProperties)
+                    var innerContract = m_inner.ResolveContract(objectType);
+                    lock (innerContract)
                     {
-                        objectContract.Properties.Add(property);
+                        var objectContract = innerContract as JsonObjectContract;
+                        if (objectContract != null)
+                        {
+                            var sortedProperties = objectContract.Properties.ToList();
+                            sortedProperties.Sort((p1, p2) => StringComparer.OrdinalIgnoreCase.Compare(p1.PropertyName, p2.PropertyName));
+                            objectContract.Properties.Clear();
+                            foreach (var property in sortedProperties)
+                            {
+                                objectContract.Properties.Add(property);
+                            }
+                        }
+
+                        return innerContract;
                     }
-                }
+                });
             }
 
             return contract;
@@ -422,12 +429,22 @@ namespace Codex.Serialization
             }
         }
 
+        public static T DeserializeEntity<T>(this TextReader reader, ObjectStage stage = ObjectStage.All)
+        {
+            return StageSerializers[(int)stage].Deserialize<T>(new JsonTextReader(reader));
+        }
+
         public static string SerializeEntity(this object entity, ObjectStage stage = ObjectStage.All)
         {
             return StageSerializers[(int)stage].Serialize(entity);
         }
 
         public static void SerializeEntityTo(this object entity, TextWriter writer, ObjectStage stage = ObjectStage.All)
+        {
+            StageSerializers[(int)stage].Serialize(writer, entity);
+        }
+
+        public static void SerializeEntityTo(this object entity, JsonWriter writer, ObjectStage stage = ObjectStage.All)
         {
             StageSerializers[(int)stage].Serialize(writer, entity);
         }

@@ -35,4 +35,19 @@ namespace Codex
         /// </summary>
         IReadOnlyList<ICommitFileLink> Files { get; }
     }
+
+    public interface IStoredBoundSourceFile
+    {
+        IBoundSourceFile BoundSourceFile { get; }
+
+        /// <summary>
+        /// Compressed list of classification spans
+        /// </summary>
+        IClassificationList CompressedClassifications { get; }
+
+        /// <summary>
+        /// Compressed list of reference spans
+        /// </summary>
+        IReferenceList CompressedReferences { get; }
+    }
 }
