@@ -67,10 +67,6 @@ namespace Codex.Storage.DataModel
             foreach (var symbolLine in SharedValues)
             {
                 symbolLine.LineSpanText = RemoveDuplicate(symbolLine.LineSpanText, ref lineSpanText);
-                if (!IncludeSpanRanges)
-                {
-                    symbolLine.Start = 0;
-                }
             }
         }
 

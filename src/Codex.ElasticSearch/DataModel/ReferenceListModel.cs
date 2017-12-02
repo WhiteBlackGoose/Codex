@@ -91,12 +91,14 @@ namespace Codex.Storage.DataModel
             }
 
             var index = segment.SegmentStartIndex + segmentOffset;
+            var lineSpan = LineSpanModel?.GetShared(index) ?? EmptySymbolSpan;
 
-            return new ReferenceSpan(LineSpanModel?.GetShared(index) ?? EmptySymbolSpan)
+            return new ReferenceSpan(lineSpan)
             {
                 Start = start,
                 Length = length,
                 Reference = shared,
+                LineSpanStart = start - lineSpan.Start
             };
         }
 
