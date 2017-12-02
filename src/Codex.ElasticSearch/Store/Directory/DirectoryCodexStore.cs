@@ -42,7 +42,7 @@ namespace Codex.ElasticSearch.Store
             m_directory = directory;
         }
 
-        public async Task Read(ICodexStore store)
+        public async Task ReadAsync(ICodexStore store)
         {
             m_storeInfo = Read<RepositoryStoreInfo>(RepositoryInitializationFileName);
             var repositoryStore = await store.CreateRepositoryStore(m_storeInfo.Repository, m_storeInfo.Commit, m_storeInfo.Branch);

@@ -233,7 +233,7 @@ namespace Codex.Application
                 store = await service.CreateStoreAsync(new ElasticSearchStoreConfiguration());
 
                 var loadDirectoryStore = new DirectoryCodexStore(saveDirectory);
-                await loadDirectoryStore.Read(store);
+                await loadDirectoryStore.ReadAsync(store);
             }).GetAwaiter().GetResult();
         }
 

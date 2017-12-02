@@ -13,7 +13,11 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\TestProjects\CodexTestRepo.cdx\TestInputsDirectoryPath.cs">
+      <Link>TestInputsDirectoryPath.cs</Link>
+    </Compile>
     <Compile Include="EsIntegrationTests.cs" />
+    <Compile Include="DirectoryCodexStoreTests.cs" />
     <Compile Include="MappingTests.cs" />
     <Compile Include="SerializationTests.cs" />
   </ItemGroup>
