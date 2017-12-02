@@ -172,7 +172,7 @@ namespace Codex.ObjectModel
 
         private int CoerceLineNumber(int? value)
         {
-            if (value == null || (value == 0 && m_LineIndex != null))
+            if (value == null || (value == 1 && m_LineIndex != null))
             {
                 if (m_LineIndex != null)
                 {
@@ -181,7 +181,7 @@ namespace Codex.ObjectModel
                 }
                 else
                 {
-                    return 0;
+                    return 1;
                 }
             }
 

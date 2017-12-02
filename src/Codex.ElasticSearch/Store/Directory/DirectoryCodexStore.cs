@@ -42,7 +42,17 @@ namespace Codex.ElasticSearch.Store
             DirectoryPath = directory;
         }
 
-        public async Task ReadAsync(ICodexStore store)
+        public static IEnumerable<string> GetEntityFiles(string directory)
+        {
+            if (Directory.Exists(directory))
+            {
+                return Directory.EnumerateFiles(directory, "*" + EntityFileExtension, SearchOption.AllDirectories);
+            }
+
+            return CollectionUtilities.Empty<string>.Array;
+        }
+
+        public async Task ReadAsync(ICodexStore store, bool finalize = true)
         {
             m_storeInfo = Read<RepositoryStoreInfo>(RepositoryInitializationFileName);
             var repositoryStore = await store.CreateRepositoryStore(m_storeInfo.Repository, m_storeInfo.Commit, m_storeInfo.Branch);
@@ -53,32 +63,29 @@ namespace Codex.ElasticSearch.Store
                 tasks.Add(Task.Run(async () =>
                 {
                     var kindDirectoryPath = Path.Combine(DirectoryPath, kind.Name);
-                    if (Directory.Exists(kindDirectoryPath))
+                    foreach (var file in GetEntityFiles(kindDirectoryPath))
                     {
-                        foreach (var file in Directory.EnumerateFiles(kindDirectoryPath, "*" + EntityFileExtension, SearchOption.AllDirectories))
-                        {
-                            await kind.Add(this, file, repositoryStore);
-                        }
+                        await kind.Add(this, file, repositoryStore);
                     }
                 }));
             }
 
             await Task.WhenAll(tasks);
+
+            if (finalize)
+            {
+                await repositoryStore.FinalizeAsync();
+            }
         }
 
         public Task<ICodexRepositoryStore> CreateRepositoryStore(Repository repository, Commit commit, Branch branch)
         {
-            if (Directory.Exists(DirectoryPath))
+            var allFiles = GetEntityFiles(DirectoryPath).ToList();
+            foreach (var file in allFiles)
             {
-                var allFiles = Directory.GetFiles(DirectoryPath, "*.*", SearchOption.AllDirectories);
-                foreach (var file in allFiles)
-                {
-                    if (file.EndsWith(EntityFileExtension, StringComparison.OrdinalIgnoreCase))
-                    {
-                        File.Delete(file);
-                    }
-                }
+                File.Delete(file);
             }
+
             lock (this)
             {
                 Contract.Assert(m_storeInfo == null);

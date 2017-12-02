@@ -385,7 +385,7 @@
       },
       {
         "length": 13,
-        "lineNumber": 1,
+        "lineNumber": 8,
         "lineSpanStart": 11,
         "lineSpanText": "[assembly: AssemblyTitle(\"CodexTestCSharpLibrary\")]",
         "reference": {
@@ -411,7 +411,7 @@
       },
       {
         "length": 19,
-        "lineNumber": 1,
+        "lineNumber": 9,
         "lineSpanStart": 11,
         "lineSpanText": "[assembly: AssemblyDescription(\"\")]",
         "reference": {
@@ -437,7 +437,7 @@
       },
       {
         "length": 21,
-        "lineNumber": 1,
+        "lineNumber": 10,
         "lineSpanStart": 11,
         "lineSpanText": "[assembly: AssemblyConfiguration(\"\")]",
         "reference": {
@@ -463,7 +463,7 @@
       },
       {
         "length": 15,
-        "lineNumber": 1,
+        "lineNumber": 11,
         "lineSpanStart": 11,
         "lineSpanText": "[assembly: AssemblyCompany(\"\")]",
         "reference": {
@@ -489,7 +489,7 @@
       },
       {
         "length": 15,
-        "lineNumber": 1,
+        "lineNumber": 12,
         "lineSpanStart": 11,
         "lineSpanText": "[assembly: AssemblyProduct(\"CodexTestCSharpLibrary\")]",
         "reference": {
@@ -502,7 +502,7 @@
       },
       {
         "length": 17,
-        "lineNumber": 1,
+        "lineNumber": 13,
         "lineSpanStart": 11,
         "lineSpanText": "[assembly: AssemblyCopyright(\"Copyright ©  2017\")]",
         "reference": {
@@ -528,7 +528,7 @@
       },
       {
         "length": 17,
-        "lineNumber": 1,
+        "lineNumber": 14,
         "lineSpanStart": 11,
         "lineSpanText": "[assembly: AssemblyTrademark(\"\")]",
         "reference": {
@@ -567,7 +567,7 @@
       },
       {
         "length": 15,
-        "lineNumber": 1,
+        "lineNumber": 15,
         "lineSpanStart": 11,
         "lineSpanText": "[assembly: AssemblyCulture(\"\")]",
         "reference": {
@@ -593,7 +593,7 @@
       },
       {
         "length": 10,
-        "lineNumber": 1,
+        "lineNumber": 20,
         "lineSpanStart": 11,
         "lineSpanText": "[assembly: ComVisible(false)]",
         "reference": {
@@ -619,7 +619,7 @@
       },
       {
         "length": 4,
-        "lineNumber": 1,
+        "lineNumber": 23,
         "lineSpanStart": 11,
         "lineSpanText": "[assembly: Guid(\"f16a9de8-193f-4d07-9d86-1dd2fb087a96\")]",
         "reference": {
@@ -645,7 +645,7 @@
       },
       {
         "length": 15,
-        "lineNumber": 1,
+        "lineNumber": 35,
         "lineSpanStart": 11,
         "lineSpanText": "[assembly: AssemblyVersion(\"1.0.0.0\")]",
         "reference": {
@@ -671,7 +671,7 @@
       },
       {
         "length": 19,
-        "lineNumber": 1,
+        "lineNumber": 36,
         "lineSpanStart": 11,
         "lineSpanText": "[assembly: AssemblyFileVersion(\"1.0.0.0\")]",
         "reference": {
