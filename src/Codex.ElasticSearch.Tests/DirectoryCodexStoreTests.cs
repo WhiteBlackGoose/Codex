@@ -31,16 +31,26 @@ namespace Codex.ElasticSearch.Tests
         {
             var inputStore = CreateInputStore();
 
-            var outputStoreDirectory = Directory.CreateDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, "outstore"));
-            var outputStore = new DirectoryCodexStore(outputStoreDirectory.FullName);
+            var optimizedOutputStore = CreateOutputStore("opt");
+            await inputStore.ReadAsync(optimizedOutputStore);
 
-            await inputStore.ReadAsync(outputStore);
-            Assert.Pass(outputStoreDirectory.FullName);
+            // Now read in optimized output store and write to unoptimized output store
+            var optimizedInputStore = new DirectoryCodexStore(optimizedOutputStore.DirectoryPath);
+            var unoptimizedOutputStore = CreateOutputStore("unopt", disableOptimization: true);
+            await optimizedInputStore.ReadAsync(unoptimizedOutputStore);
         }
 
-        private DirectoryCodexStore CreateInputStore([CallerFilePath] string filePath = null)
+        private DirectoryCodexStore CreateOutputStore(string name, bool disableOptimization = false)
         {
-            return new DirectoryCodexStore(TestInputsDirectoryHelper.FullPath) { DisableOptimization = true };
+            return new DirectoryCodexStore(Path.Combine(TestContext.CurrentContext.TestDirectory, name))
+            {
+                DisableOptimization = disableOptimization
+            };
+        }
+
+        private DirectoryCodexStore CreateInputStore()
+        {
+            return new DirectoryCodexStore(TestInputsDirectoryHelper.FullPath);
         }
     }
 }

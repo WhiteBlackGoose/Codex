@@ -156,6 +156,7 @@
       },
       {
         "length": 24,
+        "lineNumber": 4,
         "lineSpanStart": 45,
         "lineSpanText": "[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute(\".NETFramework,Version=v4.5.2\", FrameworkDisplayName = \".NET Framework 4.5.2\")]",
         "reference": {
@@ -168,6 +169,7 @@
       },
       {
         "length": 24,
+        "lineNumber": 1,
         "lineSpanStart": 45,
         "lineSpanText": "[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute(\".NETFramework,Version=v4.5.2\", FrameworkDisplayName = \".NET Framework 4.5.2\")]",
         "reference": {
@@ -180,6 +182,7 @@
       },
       {
         "length": 20,
+        "lineNumber": 4,
         "lineSpanStart": 102,
         "lineSpanText": "[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute(\".NETFramework,Version=v4.5.2\", FrameworkDisplayName = \".NET Framework 4.5.2\")]",
         "reference": {

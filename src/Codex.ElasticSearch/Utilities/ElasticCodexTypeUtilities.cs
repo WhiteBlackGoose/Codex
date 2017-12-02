@@ -18,6 +18,8 @@ namespace Codex.ElasticSearch.Utilities
         {
             Dictionary<Type, Type> typeMappings = new Dictionary<Type, Type>();
             MapType<IReferenceList, ReferenceListModel>(typeMappings);
+            MapType<IClassificationList, ClassificationListModel>(typeMappings);
+            MapType<ISymbolLineSpanList, SymbolLineSpanListModel>(typeMappings);
             return typeMappings;
         }
 

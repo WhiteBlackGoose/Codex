@@ -320,6 +320,7 @@
       },
       {
         "length": 6,
+        "lineNumber": 9,
         "lineSpanStart": 17,
         "lineSpanText": "public interface IXedoc",
         "reference": {
@@ -332,6 +333,7 @@
       },
       {
         "length": 15,
+        "lineNumber": 14,
         "lineSpanStart": 17,
         "lineSpanText": "public interface ITypeWithParams<T0, T1>",
         "reference": {
@@ -344,6 +346,7 @@
       },
       {
         "length": 9,
+        "lineNumber": 19,
         "lineSpanStart": 17,
         "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
         "reference": {
@@ -356,6 +359,7 @@
       },
       {
         "length": 6,
+        "lineNumber": 19,
         "lineSpanStart": 29,
         "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
         "reference": {
@@ -368,6 +372,7 @@
       },
       {
         "length": 15,
+        "lineNumber": 19,
         "lineSpanStart": 37,
         "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
         "reference": {
@@ -380,6 +385,7 @@
       },
       {
         "length": 6,
+        "lineNumber": 19,
         "lineSpanStart": 53,
         "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
         "reference": {
@@ -392,6 +398,7 @@
       },
       {
         "length": 6,
+        "lineNumber": 19,
         "lineSpanStart": 61,
         "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
         "reference": {

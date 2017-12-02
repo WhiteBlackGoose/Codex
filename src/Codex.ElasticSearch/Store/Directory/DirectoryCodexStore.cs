@@ -22,7 +22,7 @@ namespace Codex.ElasticSearch.Store
         private readonly ConcurrentQueue<ValueTask<None>> backgroundTasks = new ConcurrentQueue<ValueTask<None>>();
         private readonly ConcurrentQueue<CommitFileLink> commitFiles = new ConcurrentQueue<CommitFileLink>();
 
-        private readonly string m_directory;
+        public readonly string DirectoryPath;
 
         private const string EntityFileExtension = ".cdx.json";
 
@@ -39,7 +39,7 @@ namespace Codex.ElasticSearch.Store
 
         public DirectoryCodexStore(string directory)
         {
-            m_directory = directory;
+            DirectoryPath = directory;
         }
 
         public async Task ReadAsync(ICodexStore store)
@@ -52,10 +52,10 @@ namespace Codex.ElasticSearch.Store
             {
                 tasks.Add(Task.Run(async () =>
                 {
-                    var kindDirectoryPath = Path.Combine(m_directory, kind.Name);
+                    var kindDirectoryPath = Path.Combine(DirectoryPath, kind.Name);
                     if (Directory.Exists(kindDirectoryPath))
                     {
-                        foreach (var file in Directory.EnumerateFiles(kindDirectoryPath))
+                        foreach (var file in Directory.EnumerateFiles(kindDirectoryPath, "*" + EntityFileExtension, SearchOption.AllDirectories))
                         {
                             await kind.Add(this, file, repositoryStore);
                         }
@@ -68,15 +68,17 @@ namespace Codex.ElasticSearch.Store
 
         public Task<ICodexRepositoryStore> CreateRepositoryStore(Repository repository, Commit commit, Branch branch)
         {
-            var allFiles = Directory.GetFiles(m_directory, "*.*", SearchOption.AllDirectories);
-            foreach (var file in allFiles)
+            if (Directory.Exists(DirectoryPath))
             {
-                if (file.EndsWith(EntityFileExtension, StringComparison.OrdinalIgnoreCase))
+                var allFiles = Directory.GetFiles(DirectoryPath, "*.*", SearchOption.AllDirectories);
+                foreach (var file in allFiles)
                 {
-                    File.Delete(file);
+                    if (file.EndsWith(EntityFileExtension, StringComparison.OrdinalIgnoreCase))
+                    {
+                        File.Delete(file);
+                    }
                 }
             }
-
             lock (this)
             {
                 Contract.Assert(m_storeInfo == null);
@@ -108,7 +110,7 @@ namespace Codex.ElasticSearch.Store
 
         private void Write<T>(string relativePath, T entity)
         {
-            var fullPath = Path.Combine(m_directory, relativePath);
+            var fullPath = Path.Combine(DirectoryPath, relativePath);
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
             using (var streamWriter = new StreamWriter(fullPath))
             {
@@ -118,7 +120,7 @@ namespace Codex.ElasticSearch.Store
 
         private T Read<T>(string relativePath)
         {
-            var fullPath = Path.Combine(m_directory, relativePath);
+            var fullPath = Path.Combine(DirectoryPath, relativePath);
             using (var streamReader = new StreamReader(fullPath))
             {
                 return streamReader.DeserializeEntity<T>();
@@ -152,7 +154,7 @@ namespace Codex.ElasticSearch.Store
             return result;
         }
 
-        private BoundSourceFile FromStoredBoundFile(StoredBoundSourceFile storedBoundFile)
+        private static BoundSourceFile FromStoredBoundFile(StoredBoundSourceFile storedBoundFile)
         {
             var boundSourceFile = storedBoundFile.BoundSourceFile;
 
@@ -234,7 +236,7 @@ namespace Codex.ElasticSearch.Store
         {
             public static readonly StoredEntityKind<StoredBoundSourceFile> BoundFiles = Create<StoredBoundSourceFile>(
                 (entity) => ToStableId(entity.BoundSourceFile.ProjectId, entity.BoundSourceFile.ProjectRelativePath),
-                (entity, repositoryStore) => repositoryStore.AddBoundFilesAsync(new[] { entity.BoundSourceFile }));
+                (entity, repositoryStore) => repositoryStore.AddBoundFilesAsync(new[] { FromStoredBoundFile(entity) }));
             public static readonly StoredEntityKind<AnalyzedProject> Projects = Create<AnalyzedProject>(
                 (entity) => ToStableId(entity.ProjectId),
                 (entity, repositoryStore) => repositoryStore.AddProjectsAsync(new[] { entity }));

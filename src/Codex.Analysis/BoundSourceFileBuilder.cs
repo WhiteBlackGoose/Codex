@@ -254,33 +254,39 @@ namespace Codex.Analysis
 
             foreach (var reference in references)
             {
-                if (lastReference?.Start == reference.Start)
+                try
                 {
-                    reference.LineIndex = lastReference.LineIndex;
-                    reference.LineSpanStart = lastReference.LineSpanStart;
-                    reference.LineSpanText = lastReference.LineSpanText;
-                    continue;
-                }
+                    if (lastReference?.Start == reference.Start)
+                    {
+                        reference.LineIndex = lastReference.LineIndex;
+                        reference.LineSpanStart = lastReference.LineSpanStart;
+                        reference.LineSpanText = lastReference.LineSpanText;
+                        continue;
+                    }
 
-                var line = text.Lines.GetLineFromPosition(reference.Start);
-                if (lastReference?.LineIndex == line.LineNumber)
-                {
+                    var line = text.Lines.GetLineFromPosition(reference.Start);
+                    if (lastReference?.LineIndex == line.LineNumber)
+                    {
+                        reference.LineIndex = line.LineNumber;
+                        reference.LineSpanStart = lastReference.LineSpanStart + (reference.Start - lastReference.Start);
+                        reference.LineSpanText = lastReference.LineSpanText;
+                        continue;
+                    }
+
                     reference.LineIndex = line.LineNumber;
-                    reference.LineSpanStart = lastReference.LineSpanStart + (reference.Start - lastReference.Start);
-                    reference.LineSpanText = lastReference.LineSpanText;
-                    continue;
+                    reference.LineSpanStart = reference.Start - line.Start;
+                    reference.LineSpanText = line.ToString();
+                    reference.Trim();
                 }
-
-                reference.LineIndex = line.LineNumber;
-                reference.LineSpanStart = reference.Start - line.Start;
-                reference.LineSpanText = line.ToString();
-                reference.Trim();
+                finally
+                {
+                    lastReference = reference;
+                }
             }
 
             foreach (var definitionSpan in BoundSourceFile.Definitions)
             {
                 definitionSpan.Definition.ProjectId = definitionSpan.Definition.ProjectId ?? ProjectId;
-                var line = text.Lines.GetLineFromPosition(definitionSpan.Start);
             }
 
             return BoundSourceFile;

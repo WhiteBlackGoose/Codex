@@ -154,7 +154,7 @@ namespace Codex.ObjectModel
     {
         private int CoerceLineIndex(int? value)
         {
-            if (value == null)
+            if (value == null || (value <= 0 && m_LineNumber != null))
             {
                 if (m_LineNumber != null)
                 {
@@ -172,7 +172,7 @@ namespace Codex.ObjectModel
 
         private int CoerceLineNumber(int? value)
         {
-            if (value == null)
+            if (value == null || (value == 0 && m_LineIndex != null))
             {
                 if (m_LineIndex != null)
                 {
