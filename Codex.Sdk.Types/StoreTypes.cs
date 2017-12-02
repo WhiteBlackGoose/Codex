@@ -50,10 +50,5 @@ namespace Codex
         /// Compressed list of reference spans
         /// </summary>
         IReferenceList CompressedReferences { get; }
-
-        /// <summary>
-        /// Line data for <see cref="CompressedReferences"/>
-        /// </summary>
-        ISymbolLineSpanList CompressedReferencesLines { get; }
     }
 }

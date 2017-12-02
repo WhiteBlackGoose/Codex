@@ -1,5 +1,212 @@
 {
   "boundSourceFile": {
+    "classifications": [
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 5
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 6
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 5,
+        "start": 15
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 21
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 11,
+        "start": 28
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 7,
+        "start": 40
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 5,
+        "start": 50
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 56
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 63
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 5,
+        "start": 70
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 76
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 83
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 5,
+        "start": 90
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 96
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 103
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 5,
+        "start": 113
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 123
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 22,
+        "start": 133
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 164
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 171
+      },
+      {
+        "classification": "interface name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 181
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 211
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 218
+      },
+      {
+        "classification": "interface name",
+        "defaultClassificationColor": -1,
+        "length": 15,
+        "start": 228
+      },
+      {
+        "classification": "type parameter name",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "localGroupId": 1,
+        "start": 244
+      },
+      {
+        "classification": "type parameter name",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "localGroupId": 2,
+        "start": 248
+      },
+      {
+        "classification": "comment",
+        "defaultClassificationColor": -1,
+        "length": 114,
+        "start": 273
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 393
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 400
+      },
+      {
+        "classification": "interface name",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 410
+      },
+      {
+        "classification": "interface name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 422
+      },
+      {
+        "classification": "interface name",
+        "defaultClassificationColor": -1,
+        "length": 15,
+        "start": 430
+      },
+      {
+        "classification": "interface name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 446
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 454
+      }
+    ],
     "definitionCount": 5,
     "definitions": [
       {
@@ -76,6 +283,126 @@
     "language": "C#",
     "projectId": "CodexTestCSharpLibrary",
     "projectRelativePath": "Cases.cs",
+    "referenceCount": 10,
+    "references": [
+      {
+        "lineNumber": 1,
+        "lineSpanText": "using System;",
+        "reference": {
+          "id": "tiitsqdl784z",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition"
+        }
+      },
+      {
+        "lineNumber": 1,
+        "lineSpanText": "using System;",
+        "reference": {
+          "id": "jiphajk0kuy9",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "projectId": "codextest(Repo)",
+          "referenceKind": "Definition"
+        }
+      },
+      {
+        "lineNumber": 1,
+        "lineSpanText": "using System;",
+        "reference": {
+          "id": "x2imq0zfxrey",
+          "isImplicitlyDeclared": true,
+          "kind": "Checksum.Sha1",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition"
+        }
+      },
+      {
+        "length": 6,
+        "lineSpanStart": 17,
+        "lineSpanText": "public interface IXedoc",
+        "reference": {
+          "id": "qjxntd4ra1hl",
+          "kind": "Interface",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition"
+        },
+        "start": 181
+      },
+      {
+        "length": 15,
+        "lineSpanStart": 17,
+        "lineSpanText": "public interface ITypeWithParams<T0, T1>",
+        "reference": {
+          "id": "fdzoyyrcywtf",
+          "kind": "Interface",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition"
+        },
+        "start": 228
+      },
+      {
+        "length": 9,
+        "lineSpanStart": 17,
+        "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
+        "reference": {
+          "id": "qrlrsnmhwayc",
+          "kind": "Interface",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition"
+        },
+        "start": 410
+      },
+      {
+        "length": 6,
+        "lineSpanStart": 29,
+        "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
+        "reference": {
+          "id": "qjxntd4ra1hl",
+          "kind": "Interface",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "InterfaceInheritance"
+        },
+        "start": 422
+      },
+      {
+        "length": 15,
+        "lineSpanStart": 37,
+        "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
+        "reference": {
+          "id": "fdzoyyrcywtf",
+          "kind": "Interface",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "InterfaceInheritance"
+        },
+        "start": 430
+      },
+      {
+        "length": 6,
+        "lineSpanStart": 53,
+        "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
+        "reference": {
+          "id": "qjxntd4ra1hl",
+          "kind": "Interface",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Reference"
+        },
+        "start": 446
+      },
+      {
+        "length": 6,
+        "lineSpanStart": 61,
+        "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
+        "reference": {
+          "id": "cuycniiqolxa",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "Reference"
+        },
+        "start": 454
+      }
+    ],
     "repoRelativePath": "CodexTestCSharpLibrary\\Cases.cs",
     "repositoryName": "codextest",
     "sourceFile": {
@@ -92,179 +419,5 @@
         "size": 482
       }
     }
-  },
-  "compressedClassifications": {
-    "count": 34,
-    "segments": [
-      {
-        "fullLength": 460,
-        "lengths": {
-          "cdata": "Y2ZhZuFkZWZhAiN2ZnYRFnYWFnZeBoYCFnZ2Fl4WFgA=",
-          "compressedLength": 32,
-          "decompressedLength": 34,
-          "minValue": 2,
-          "valueByteWidth": 1
-        },
-        "localSymbolGroupIds": {
-          "cdata": "Y2DADhiZYCwA",
-          "compressedLength": 9,
-          "decompressedLength": 34,
-          "valueByteWidth": 1
-        },
-        "optimized": true,
-        "sharedIndices": {
-          "cdata": "Y2BkYGQEYQgCYgYGJiBiZmYBkkDAAAA=",
-          "compressedLength": 23,
-          "decompressedLength": 34,
-          "valueByteWidth": 1
-        },
-        "starts": {
-          "cdata": "Y2BgYmABYiY4jUwyMbABMReYJQkVYWaQYGCHqmEG8wE=",
-          "compressedLength": 32,
-          "decompressedLength": 68,
-          "valueByteWidth": 2
-        }
-      }
-    ],
-    "sharedValues": [
-      {
-        "color": -1,
-        "name": "keyword"
-      },
-      {
-        "color": -1,
-        "name": "identifier"
-      },
-      {
-        "color": -1,
-        "name": "interface name"
-      },
-      {
-        "color": -1,
-        "name": "type parameter name"
-      },
-      {
-        "color": -1,
-        "name": "comment"
-      }
-    ]
-  },
-  "compressedReferences": {
-    "count": 10,
-    "lineSpanModel": {
-      "count": 10,
-      "segments": [
-        {
-          "fullLength": 460,
-          "sharedIndices": {
-            "data": "AwMDAQACAgICAg==",
-            "valueByteWidth": 1
-          }
-        }
-      ],
-      "sharedValues": [
-        {
-          "lineNumber": 14,
-          "lineSpanText": "public interface ITypeWithParams<T0, T1>"
-        },
-        {
-          "lineNumber": 9,
-          "lineSpanText": "public interface IXedoc"
-        },
-        {
-          "lineNumber": 19,
-          "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>"
-        },
-        {
-          "lineNumber": 1,
-          "lineSpanText": "using System;"
-        }
-      ]
-    },
-    "segments": [
-      {
-        "fullLength": 460,
-        "lengths": {
-          "cdata": "AAAABg8JBg8GBg==",
-          "valueByteWidth": 1
-        },
-        "optimized": true,
-        "sharedIndices": {
-          "cdata": "AgABBQMIBgQHCQ==",
-          "valueByteWidth": 1
-        },
-        "starts": {
-          "cdata": "Y2AAgW0MWgwrGFgYmBmYgBgA",
-          "compressedLength": 18,
-          "decompressedLength": 20,
-          "valueByteWidth": 2
-        }
-      }
-    ],
-    "sharedValues": [
-      {
-        "id": "jiphajk0kuy9",
-        "isImplicitlyDeclared": true,
-        "kind": "File",
-        "projectId": "codextest(Repo)",
-        "referenceKind": "Definition"
-      },
-      {
-        "id": "x2imq0zfxrey",
-        "isImplicitlyDeclared": true,
-        "kind": "Checksum.Sha1",
-        "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
-      },
-      {
-        "id": "tiitsqdl784z",
-        "isImplicitlyDeclared": true,
-        "kind": "File",
-        "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
-      },
-      {
-        "id": "fdzoyyrcywtf",
-        "kind": "Interface",
-        "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
-      },
-      {
-        "id": "fdzoyyrcywtf",
-        "kind": "Interface",
-        "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "InterfaceInheritance"
-      },
-      {
-        "id": "qjxntd4ra1hl",
-        "kind": "Interface",
-        "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
-      },
-      {
-        "id": "qjxntd4ra1hl",
-        "kind": "Interface",
-        "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "InterfaceInheritance"
-      },
-      {
-        "id": "qjxntd4ra1hl",
-        "kind": "Interface",
-        "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Reference"
-      },
-      {
-        "id": "qrlrsnmhwayc",
-        "kind": "Interface",
-        "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
-      },
-      {
-        "id": "cuycniiqolxa",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "Reference"
-      }
-    ]
   }
 }

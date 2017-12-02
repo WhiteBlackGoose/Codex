@@ -34,7 +34,7 @@ namespace Codex.Application
         static bool interactive = false;
         static ICodexStore store = Placeholder.Value<ICodexStore>("Create store (FileSystem | Elasticsearch)");
         static ElasticSearchService service;
-        static bool listIndices = false;
+        static bool test = false;
         static List<string> deleteIndices = new List<string>();
 
         static Dictionary<string, (Action act, OptionSet options)> actions = new Dictionary<string, (Action, OptionSet)>(StringComparer.OrdinalIgnoreCase)
@@ -47,6 +47,7 @@ namespace Codex.Application
                     {
                         { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
                         { "save=", "Saves the analysis information to the given directory.", n => saveDirectory = n },
+                        { "test", "Indicates that save should use test mode which disables optimization.", n => test = n != null },
                         { "n|name=", "Name of the repository.", n => repoName = AnalysisServices.GetSafeIndexName(n ?? string.Empty) },
                         { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
                         { "s|solution", "Optionally, path to the solution to analyze.", n => solutionPath = n },
@@ -183,7 +184,7 @@ namespace Codex.Application
             }
             else
             {
-                store = new DirectoryCodexStore(saveDirectory);
+                store = new DirectoryCodexStore(saveDirectory) { DisableOptimization = test };
             }
 
             try

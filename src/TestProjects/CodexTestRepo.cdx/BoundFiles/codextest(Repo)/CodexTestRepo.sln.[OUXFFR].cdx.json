@@ -1,5 +1,19 @@
 {
   "boundSourceFile": {
+    "classifications": [
+      {
+        "classification": "xml literal - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 22,
+        "start": 215
+      },
+      {
+        "classification": "xml literal - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 52,
+        "start": 241
+      }
+    ],
     "definitionCount": 2,
     "definitions": [
       {
@@ -28,6 +42,59 @@
     "language": "sln",
     "projectId": "codextest(Repo)",
     "projectRelativePath": "CodexTestRepo.sln",
+    "referenceCount": 4,
+    "references": [
+      {
+        "lineNumber": 1,
+        "lineSpanText": "",
+        "reference": {
+          "id": "zbury1mkviqo",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "projectId": "codextest(Repo)",
+          "referenceKind": "Definition"
+        }
+      },
+      {
+        "lineNumber": 1,
+        "lineSpanText": "",
+        "reference": {
+          "id": "xfnkzuywvmuy",
+          "isImplicitlyDeclared": true,
+          "kind": "Checksum.Sha1",
+          "projectId": "codextest(Repo)",
+          "referenceKind": "Definition"
+        }
+      },
+      {
+        "length": 22,
+        "lineNumber": 6,
+        "lineSpanStart": 53,
+        "lineSpanText": "Project(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"CodexTestCSharpLibrary\", \"CodexTestCSharpLibrary\\CodexTestCSharpLibrary.csproj\", \"{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}\"",
+        "reference": {
+          "id": "oojcfpqfkvvk",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "projectId": "codextest(Repo)",
+          "referenceKind": "Reference"
+        },
+        "start": 215
+      },
+      {
+        "length": 52,
+        "lineNumber": 6,
+        "lineSpanStart": 79,
+        "lineSpanText": "Project(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"CodexTestCSharpLibrary\", \"CodexTestCSharpLibrary\\CodexTestCSharpLibrary.csproj\", \"{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}\"",
+        "reference": {
+          "id": "oojcfpqfkvvk",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "projectId": "codextest(Repo)",
+          "referenceKind": "Reference"
+        },
+        "start": 241
+      }
+    ],
     "repoRelativePath": "CodexTestRepo.sln",
     "repositoryName": "codextest",
     "sourceFile": {
@@ -43,104 +110,5 @@
         "repositoryName": "codextest"
       }
     }
-  },
-  "compressedClassifications": {
-    "count": 2,
-    "segments": [
-      {
-        "fullLength": 78,
-        "lengths": {
-          "cdata": "AB4=",
-          "minValue": 22,
-          "valueByteWidth": 1
-        },
-        "localSymbolGroupIds": {
-          "cdata": "AAA=",
-          "valueByteWidth": 1
-        },
-        "optimized": true,
-        "sharedIndices": {
-          "cdata": "AAA=",
-          "valueByteWidth": 1
-        },
-        "starts": {
-          "cdata": "AAU=",
-          "minValue": 215,
-          "valueByteWidth": 1
-        }
-      }
-    ],
-    "sharedValues": [
-      {
-        "color": -1,
-        "name": "xml literal - attribute value"
-      }
-    ]
-  },
-  "compressedReferences": {
-    "count": 4,
-    "lineSpanModel": {
-      "count": 4,
-      "segments": [
-        {
-          "fullLength": 293,
-          "sharedIndices": {
-            "data": "AAABAQ==",
-            "valueByteWidth": 1
-          }
-        }
-      ],
-      "sharedValues": [
-        {
-          "lineNumber": 1,
-          "lineSpanText": ""
-        },
-        {
-          "lineNumber": 6,
-          "lineSpanText": "Project(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"CodexTestCSharpLibrary\", \"CodexTestCSharpLibrary\\CodexTestCSharpLibrary.csproj\", \"{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}\""
-        }
-      ]
-    },
-    "segments": [
-      {
-        "fullLength": 293,
-        "lengths": {
-          "cdata": "AAAWNA==",
-          "valueByteWidth": 1
-        },
-        "optimized": true,
-        "sharedIndices": {
-          "cdata": "AgABAQ==",
-          "valueByteWidth": 1
-        },
-        "starts": {
-          "cdata": "AADYBQ==",
-          "valueByteWidth": 1
-        }
-      }
-    ],
-    "sharedValues": [
-      {
-        "id": "xfnkzuywvmuy",
-        "isImplicitlyDeclared": true,
-        "kind": "Checksum.Sha1",
-        "projectId": "codextest(Repo)",
-        "referenceKind": "Definition"
-      },
-      {
-        "id": "oojcfpqfkvvk",
-        "isImplicitlyDeclared": true,
-        "kind": "File",
-        "projectId": "codextest(Repo)",
-        "referenceKind": "Reference"
-      },
-      {
-        "id": "zbury1mkviqo",
-        "isImplicitlyDeclared": true,
-        "kind": "File",
-        "projectId": "codextest(Repo)",
-        "referenceKind": "Definition"
-      }
-    ]
   }
 }

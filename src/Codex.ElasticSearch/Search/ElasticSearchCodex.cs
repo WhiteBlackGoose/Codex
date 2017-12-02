@@ -44,9 +44,23 @@ namespace Codex.ElasticSearch.Search
             throw new NotImplementedException();
         }
 
-        public Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync(SearchArguments arguments)
+        public async Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync(SearchArguments arguments)
         {
-            return UseClient(async context =>
+            var searchPhrase = arguments.SearchString;
+
+            searchPhrase = searchPhrase?.Trim();
+            bool isPrefix = searchPhrase?.EndsWith("*") ?? false;
+            searchPhrase = searchPhrase?.TrimEnd('*');
+
+            if (string.IsNullOrEmpty(searchPhrase) || searchPhrase.Length < 3)
+            {
+                return new IndexQueryHitsResponse<ISearchResult>()
+                {
+                    Error = "Search phrase must be at least 3 characters"
+                };
+            }
+
+            return await UseClient(async context =>
             {
                 Placeholder.Todo("Do definitions search");
                 Placeholder.Todo("Allow filtering text matches by extension/path");
@@ -55,11 +69,6 @@ namespace Codex.ElasticSearch.Search
                 var indices = (Configuration.Prefix + SearchTypes.TextSource.IndexName).ToLowerInvariant();
 
                 var client = context.Client;
-                var searchPhrase = arguments.SearchString;
-
-                searchPhrase = searchPhrase.Trim();
-                bool isPrefix = searchPhrase.EndsWith("*");
-                searchPhrase = searchPhrase.TrimEnd('*');
 
                 var result = await client.SearchAsync<ITextSourceSearchModel>(
                     s => s

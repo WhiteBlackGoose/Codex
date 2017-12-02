@@ -281,8 +281,6 @@ namespace Codex.Analysis
             {
                 definitionSpan.Definition.ProjectId = definitionSpan.Definition.ProjectId ?? ProjectId;
                 var line = text.Lines.GetLineFromPosition(definitionSpan.Start);
-                definitionSpan.LineIndex = line.LineNumber;
-                definitionSpan.LineSpanStart = definitionSpan.Start - line.Start;
             }
 
             return BoundSourceFile;

@@ -1,5 +1,312 @@
 {
   "boundSourceFile": {
+    "classifications": [
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 5
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 6
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 10,
+        "start": 13
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 5,
+        "start": 26
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 32
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 7,
+        "start": 39
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 16,
+        "start": 47
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 5,
+        "start": 66
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 72
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 7,
+        "start": 79
+      },
+      {
+        "classification": "identifier",
+        "defaultClassificationColor": -1,
+        "length": 15,
+        "start": 87
+      },
+      {
+        "classification": "comment",
+        "defaultClassificationColor": -1,
+        "length": 189,
+        "start": 107
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 8,
+        "start": 299
+      },
+      {
+        "classification": "class name",
+        "defaultClassificationColor": -1,
+        "length": 13,
+        "start": 309
+      },
+      {
+        "classification": "string",
+        "defaultClassificationColor": -1,
+        "length": 24,
+        "start": 323
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 8,
+        "start": 352
+      },
+      {
+        "classification": "class name",
+        "defaultClassificationColor": -1,
+        "length": 19,
+        "start": 362
+      },
+      {
+        "classification": "string",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 382
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 8,
+        "start": 389
+      },
+      {
+        "classification": "class name",
+        "defaultClassificationColor": -1,
+        "length": 21,
+        "start": 399
+      },
+      {
+        "classification": "string",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 421
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 8,
+        "start": 428
+      },
+      {
+        "classification": "class name",
+        "defaultClassificationColor": -1,
+        "length": 15,
+        "start": 438
+      },
+      {
+        "classification": "string",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 454
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 8,
+        "start": 461
+      },
+      {
+        "classification": "class name",
+        "defaultClassificationColor": -1,
+        "length": 15,
+        "start": 471
+      },
+      {
+        "classification": "string",
+        "defaultClassificationColor": -1,
+        "length": 24,
+        "start": 487
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 8,
+        "start": 516
+      },
+      {
+        "classification": "class name",
+        "defaultClassificationColor": -1,
+        "length": 17,
+        "start": 526
+      },
+      {
+        "classification": "string",
+        "defaultClassificationColor": -1,
+        "length": 19,
+        "start": 544
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 8,
+        "start": 568
+      },
+      {
+        "classification": "class name",
+        "defaultClassificationColor": -1,
+        "length": 17,
+        "start": 578
+      },
+      {
+        "classification": "string",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 596
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 8,
+        "start": 603
+      },
+      {
+        "classification": "class name",
+        "defaultClassificationColor": -1,
+        "length": 15,
+        "start": 613
+      },
+      {
+        "classification": "string",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 629
+      },
+      {
+        "classification": "comment",
+        "defaultClassificationColor": -1,
+        "length": 212,
+        "start": 637
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 8,
+        "start": 852
+      },
+      {
+        "classification": "class name",
+        "defaultClassificationColor": -1,
+        "length": 10,
+        "start": 862
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 5,
+        "start": 873
+      },
+      {
+        "classification": "comment",
+        "defaultClassificationColor": -1,
+        "length": 84,
+        "start": 884
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 8,
+        "start": 971
+      },
+      {
+        "classification": "class name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 981
+      },
+      {
+        "classification": "string",
+        "defaultClassificationColor": -1,
+        "length": 38,
+        "start": 986
+      },
+      {
+        "classification": "comment",
+        "defaultClassificationColor": -1,
+        "length": 336,
+        "start": 1030
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 8,
+        "start": 1369
+      },
+      {
+        "classification": "class name",
+        "defaultClassificationColor": -1,
+        "length": 15,
+        "start": 1379
+      },
+      {
+        "classification": "string",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 1395
+      },
+      {
+        "classification": "keyword",
+        "defaultClassificationColor": -1,
+        "length": 8,
+        "start": 1409
+      },
+      {
+        "classification": "class name",
+        "defaultClassificationColor": -1,
+        "length": 19,
+        "start": 1419
+      },
+      {
+        "classification": "string",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 1439
+      }
+    ],
     "definitionCount": 2,
     "definitions": [
       {
@@ -28,6 +335,330 @@
     "language": "C#",
     "projectId": "CodexTestCSharpLibrary",
     "projectRelativePath": "Properties\\AssemblyInfo.cs",
+    "referenceCount": 27,
+    "references": [
+      {
+        "lineNumber": 1,
+        "lineSpanText": "using System.Reflection;",
+        "reference": {
+          "id": "fj6tjzorh59i",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition"
+        }
+      },
+      {
+        "lineNumber": 1,
+        "lineSpanText": "using System.Reflection;",
+        "reference": {
+          "id": "nevkzgkgawuz",
+          "isImplicitlyDeclared": true,
+          "kind": "Checksum.Sha1",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition"
+        }
+      },
+      {
+        "lineNumber": 1,
+        "lineSpanText": "using System.Reflection;",
+        "reference": {
+          "id": "jt014kvrjbyh",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "projectId": "codextest(Repo)",
+          "referenceKind": "Definition"
+        }
+      },
+      {
+        "length": 13,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyTitle(\"CodexTestCSharpLibrary\")]",
+        "reference": {
+          "id": "i65jqbopyhle",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "Reference"
+        },
+        "start": 309
+      },
+      {
+        "length": 13,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyTitle(\"CodexTestCSharpLibrary\")]",
+        "reference": {
+          "id": "iggnvlryy8pl",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "Instantiation"
+        },
+        "start": 309
+      },
+      {
+        "length": 19,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyDescription(\"\")]",
+        "reference": {
+          "id": "ifegugrv95ue",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "Reference"
+        },
+        "start": 362
+      },
+      {
+        "length": 19,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyDescription(\"\")]",
+        "reference": {
+          "id": "zpyv4zicoqy4",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "Instantiation"
+        },
+        "start": 362
+      },
+      {
+        "length": 21,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyConfiguration(\"\")]",
+        "reference": {
+          "id": "k95qbgte30kn",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "Reference"
+        },
+        "start": 399
+      },
+      {
+        "length": 21,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyConfiguration(\"\")]",
+        "reference": {
+          "id": "ugc4cfruh6uv",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "Instantiation"
+        },
+        "start": 399
+      },
+      {
+        "length": 15,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyCompany(\"\")]",
+        "reference": {
+          "id": "jyyyk9k2knea",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "Reference"
+        },
+        "start": 438
+      },
+      {
+        "length": 15,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyCompany(\"\")]",
+        "reference": {
+          "id": "ymmm1xbqot1r",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "Instantiation"
+        },
+        "start": 438
+      },
+      {
+        "length": 15,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyProduct(\"CodexTestCSharpLibrary\")]",
+        "reference": {
+          "id": "gvbjpbcxwy2k",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "Reference"
+        },
+        "start": 471
+      },
+      {
+        "length": 15,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyProduct(\"CodexTestCSharpLibrary\")]",
+        "reference": {
+          "id": "xxbdd8vgzz9q",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "Instantiation"
+        },
+        "start": 471
+      },
+      {
+        "length": 17,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyCopyright(\"Copyright ©  2017\")]",
+        "reference": {
+          "id": "cekgdiwfsy8q",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "Instantiation"
+        },
+        "start": 526
+      },
+      {
+        "length": 17,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyCopyright(\"Copyright ©  2017\")]",
+        "reference": {
+          "id": "yxt4gpkb4tiv",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "Reference"
+        },
+        "start": 526
+      },
+      {
+        "length": 17,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyTrademark(\"\")]",
+        "reference": {
+          "id": "gbbsioq1lr7p",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "Instantiation"
+        },
+        "start": 578
+      },
+      {
+        "length": 17,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyTrademark(\"\")]",
+        "reference": {
+          "id": "rhqleoomjaub",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "Reference"
+        },
+        "start": 578
+      },
+      {
+        "length": 15,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyCulture(\"\")]",
+        "reference": {
+          "id": "t2nno4ugsft3",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "Reference"
+        },
+        "start": 613
+      },
+      {
+        "length": 15,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyCulture(\"\")]",
+        "reference": {
+          "id": "ilzi8qywxj5d",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "Instantiation"
+        },
+        "start": 613
+      },
+      {
+        "length": 10,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: ComVisible(false)]",
+        "reference": {
+          "id": "y42a7756tggw",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "Reference"
+        },
+        "start": 862
+      },
+      {
+        "length": 10,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: ComVisible(false)]",
+        "reference": {
+          "id": "vhsblzyr6fft",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "Instantiation"
+        },
+        "start": 862
+      },
+      {
+        "length": 4,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: Guid(\"f16a9de8-193f-4d07-9d86-1dd2fb087a96\")]",
+        "reference": {
+          "id": "bv3kxqc9ozrz",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "Reference"
+        },
+        "start": 981
+      },
+      {
+        "length": 4,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: Guid(\"f16a9de8-193f-4d07-9d86-1dd2fb087a96\")]",
+        "reference": {
+          "id": "d7zlvzfupcol",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "Instantiation"
+        },
+        "start": 981
+      },
+      {
+        "length": 15,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyVersion(\"1.0.0.0\")]",
+        "reference": {
+          "id": "c38l4kmhtlby",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "Reference"
+        },
+        "start": 1379
+      },
+      {
+        "length": 15,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyVersion(\"1.0.0.0\")]",
+        "reference": {
+          "id": "oxstkbpff3nk",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "Instantiation"
+        },
+        "start": 1379
+      },
+      {
+        "length": 19,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyFileVersion(\"1.0.0.0\")]",
+        "reference": {
+          "id": "exjoiusmafos",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "Reference"
+        },
+        "start": 1419
+      },
+      {
+        "length": 19,
+        "lineSpanStart": 11,
+        "lineSpanText": "[assembly: AssemblyFileVersion(\"1.0.0.0\")]",
+        "reference": {
+          "id": "g1uxbc9evuqp",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "Instantiation"
+        },
+        "start": 1419
+      }
+    ],
     "repoRelativePath": "CodexTestCSharpLibrary\\Properties\\AssemblyInfo.cs",
     "repositoryName": "codextest",
     "sourceFile": {
@@ -44,319 +675,5 @@
         "size": 1452
       }
     }
-  },
-  "compressedClassifications": {
-    "count": 51,
-    "segments": [
-      {
-        "fullLength": 1448,
-        "lengths": {
-          "cdata": "Y2ZgYeBgYAaSrAx8UJqXYTcDGwM3gxiQFGRgAJLCYJIXSoLE+YEyIBImfglIg8wJAtJMDCoMfowgcXawCewMAA==",
-          "compressedLength": 64,
-          "decompressedLength": 102,
-          "minValue": 2,
-          "valueByteWidth": 2
-        },
-        "localSymbolGroupIds": {
-          "cdata": "Y2AgGQAA",
-          "compressedLength": 6,
-          "decompressedLength": 51,
-          "valueByteWidth": 1
-        },
-        "optimized": true,
-        "sharedIndices": {
-          "cdata": "Y2BkZGCEYCYGZhasCCjBwAShQVwA",
-          "compressedLength": 21,
-          "decompressedLength": 51,
-          "valueByteWidth": 1
-        },
-        "starts": {
-          "cdata": "Y2BgAkIWMImg2YAsZjBNLMkO1YFOQ2QB",
-          "compressedLength": 24,
-          "decompressedLength": 102,
-          "valueByteWidth": 2
-        }
-      }
-    ],
-    "sharedValues": [
-      {
-        "color": -1,
-        "name": "keyword"
-      },
-      {
-        "color": -1,
-        "name": "identifier"
-      },
-      {
-        "color": -1,
-        "name": "comment"
-      },
-      {
-        "color": -1,
-        "name": "class name"
-      },
-      {
-        "color": -1,
-        "name": "string"
-      }
-    ]
-  },
-  "compressedReferences": {
-    "count": 27,
-    "lineSpanModel": {
-      "count": 27,
-      "segments": [
-        {
-          "fullLength": 1438,
-          "sharedIndices": {
-            "data": "DAwMBwcEBAEBAAAGBgICCAgDAwoKCwsJCQUF",
-            "valueByteWidth": 1
-          }
-        }
-      ],
-      "sharedValues": [
-        {
-          "lineNumber": 11,
-          "lineSpanText": "[assembly: AssemblyCompany(\"\")]"
-        },
-        {
-          "lineNumber": 10,
-          "lineSpanText": "[assembly: AssemblyConfiguration(\"\")]"
-        },
-        {
-          "lineNumber": 13,
-          "lineSpanText": "[assembly: AssemblyCopyright(\"Copyright ©  2017\")]"
-        },
-        {
-          "lineNumber": 15,
-          "lineSpanText": "[assembly: AssemblyCulture(\"\")]"
-        },
-        {
-          "lineNumber": 9,
-          "lineSpanText": "[assembly: AssemblyDescription(\"\")]"
-        },
-        {
-          "lineNumber": 36,
-          "lineSpanText": "[assembly: AssemblyFileVersion(\"1.0.0.0\")]"
-        },
-        {
-          "lineNumber": 12,
-          "lineSpanText": "[assembly: AssemblyProduct(\"CodexTestCSharpLibrary\")]"
-        },
-        {
-          "lineNumber": 8,
-          "lineSpanText": "[assembly: AssemblyTitle(\"CodexTestCSharpLibrary\")]"
-        },
-        {
-          "lineNumber": 14,
-          "lineSpanText": "[assembly: AssemblyTrademark(\"\")]"
-        },
-        {
-          "lineNumber": 35,
-          "lineSpanText": "[assembly: AssemblyVersion(\"1.0.0.0\")]"
-        },
-        {
-          "lineNumber": 20,
-          "lineSpanText": "[assembly: ComVisible(false)]"
-        },
-        {
-          "lineNumber": 23,
-          "lineSpanText": "[assembly: Guid(\"f16a9de8-193f-4d07-9d86-1dd2fb087a96\")]"
-        },
-        {
-          "lineNumber": 1,
-          "lineSpanText": "using System.Reflection;"
-        }
-      ]
-    },
-    "segments": [
-      {
-        "fullLength": 1438,
-        "lengths": {
-          "cdata": "Y2Bg4OUVFhYV5QcCQSDg5+fiYmHh5xcWBgA=",
-          "compressedLength": 26,
-          "decompressedLength": 27,
-          "valueByteWidth": 1
-        },
-        "optimized": true,
-        "sharedIndices": {
-          "cdata": "AgEAEwcUDhYKFQ0SDAMaBhcYCBkLDwQQCREF",
-          "valueByteWidth": 1
-        },
-        "starts": {
-          "cdata": "Y2AAATNGBgZNIC2MhEF8FSj7NRDnAXE3UJ0UkAYA",
-          "compressedLength": 30,
-          "decompressedLength": 54,
-          "valueByteWidth": 2
-        }
-      }
-    ],
-    "sharedValues": [
-      {
-        "id": "jt014kvrjbyh",
-        "isImplicitlyDeclared": true,
-        "kind": "File",
-        "projectId": "codextest(Repo)",
-        "referenceKind": "Definition"
-      },
-      {
-        "id": "nevkzgkgawuz",
-        "isImplicitlyDeclared": true,
-        "kind": "Checksum.Sha1",
-        "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
-      },
-      {
-        "id": "fj6tjzorh59i",
-        "isImplicitlyDeclared": true,
-        "kind": "File",
-        "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
-      },
-      {
-        "id": "cekgdiwfsy8q",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "Instantiation"
-      },
-      {
-        "id": "d7zlvzfupcol",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "Instantiation"
-      },
-      {
-        "id": "g1uxbc9evuqp",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "Instantiation"
-      },
-      {
-        "id": "gbbsioq1lr7p",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "Instantiation"
-      },
-      {
-        "id": "iggnvlryy8pl",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "Instantiation"
-      },
-      {
-        "id": "ilzi8qywxj5d",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "Instantiation"
-      },
-      {
-        "id": "oxstkbpff3nk",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "Instantiation"
-      },
-      {
-        "id": "ugc4cfruh6uv",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "Instantiation"
-      },
-      {
-        "id": "vhsblzyr6fft",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "Instantiation"
-      },
-      {
-        "id": "xxbdd8vgzz9q",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "Instantiation"
-      },
-      {
-        "id": "ymmm1xbqot1r",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "Instantiation"
-      },
-      {
-        "id": "zpyv4zicoqy4",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "Instantiation"
-      },
-      {
-        "id": "bv3kxqc9ozrz",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "Reference"
-      },
-      {
-        "id": "c38l4kmhtlby",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "Reference"
-      },
-      {
-        "id": "exjoiusmafos",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "Reference"
-      },
-      {
-        "id": "gvbjpbcxwy2k",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "Reference"
-      },
-      {
-        "id": "i65jqbopyhle",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "Reference"
-      },
-      {
-        "id": "ifegugrv95ue",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "Reference"
-      },
-      {
-        "id": "jyyyk9k2knea",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "Reference"
-      },
-      {
-        "id": "k95qbgte30kn",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "Reference"
-      },
-      {
-        "id": "rhqleoomjaub",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "Reference"
-      },
-      {
-        "id": "t2nno4ugsft3",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "Reference"
-      },
-      {
-        "id": "y42a7756tggw",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "Reference"
-      },
-      {
-        "id": "yxt4gpkb4tiv",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "Reference"
-      }
-    ]
   }
 }

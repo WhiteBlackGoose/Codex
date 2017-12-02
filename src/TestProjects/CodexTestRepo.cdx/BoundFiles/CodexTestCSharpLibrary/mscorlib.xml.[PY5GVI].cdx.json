@@ -1,5 +1,2520 @@
 {
   "boundSourceFile": {
+    "classifications": [
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 16,
+        "start": 1
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 5,
+        "start": 18
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 23
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 24
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 25
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 27
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 28
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 33
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 34
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 44
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 48
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 49
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 17,
+        "start": 50
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 67
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 68
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 75
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 76
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 83
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 87
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 88
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 24,
+        "start": 89
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 113
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 115
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 129
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 130
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 131
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 132
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 134
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 142
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 143
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 150
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 154
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 155
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 64,
+        "start": 156
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 220
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 222
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 236
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 237
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 238
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 239
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 241
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 249
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 250
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 257
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 261
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 262
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 30,
+        "start": 263
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 293
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 295
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 309
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 310
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 311
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 312
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 314
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 322
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 323
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 330
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 334
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 335
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 76,
+        "start": 336
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 412
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 414
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 428
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 429
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 430
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 431
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 433
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 441
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 442
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 449
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 453
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 454
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 26,
+        "start": 455
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 481
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 483
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 497
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 498
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 499
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 500
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 502
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 510
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 511
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 518
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 522
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 523
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 68,
+        "start": 524
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 592
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 594
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 608
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 609
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 610
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 611
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 613
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 621
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 622
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 629
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 633
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 634
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 24,
+        "start": 635
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 659
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 661
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 675
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 676
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 677
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 678
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 680
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 688
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 689
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 696
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 700
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 701
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 64,
+        "start": 702
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 766
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 768
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 782
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 783
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 784
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 785
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 787
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 795
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 796
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 803
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 807
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 808
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 28,
+        "start": 809
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 837
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 839
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 853
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 854
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 855
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 856
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 858
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 866
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 867
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 874
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 878
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 879
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 72,
+        "start": 880
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 952
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 954
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 968
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 969
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 970
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 971
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 973
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 981
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 982
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 989
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 993
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 994
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 28,
+        "start": 995
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1023
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 1025
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1039
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1040
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1041
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1042
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 1044
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1052
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 1053
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 1060
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1064
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1065
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 72,
+        "start": 1066
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1138
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 1140
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1154
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1155
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1156
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1157
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 1159
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1167
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 1168
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 1175
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1179
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1180
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 24,
+        "start": 1181
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1205
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 1207
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1221
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1222
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1223
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1224
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 1226
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1234
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 1235
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 1242
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1246
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1247
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 64,
+        "start": 1248
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1312
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 1314
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1328
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1329
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1330
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1331
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 1333
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1341
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 1342
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 1349
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1353
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1354
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 22,
+        "start": 1355
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1377
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 1379
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1393
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1394
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1395
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1396
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 1398
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1406
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 1407
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 1414
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1418
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1419
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 60,
+        "start": 1420
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1480
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 1482
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1496
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1497
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1498
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1499
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 1501
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1509
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 1510
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 1517
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1521
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1522
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 26,
+        "start": 1523
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1549
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 1551
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1565
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1566
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1567
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1568
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 1570
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1578
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 1579
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 1586
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1590
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1591
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 68,
+        "start": 1592
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1660
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 1662
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1676
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1677
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1678
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1679
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 1681
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1689
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 1690
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 1697
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1701
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1702
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 24,
+        "start": 1703
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1727
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 1729
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1743
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1744
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1745
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1746
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 1748
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1756
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 1757
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 1764
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1768
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1769
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 64,
+        "start": 1770
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1834
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 1836
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1850
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1851
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1852
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1853
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 1855
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 1861
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 1863
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1872
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1877
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 1878
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 1888
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1892
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1893
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 30,
+        "start": 1894
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1924
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1925
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1932
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 1933
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 1940
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1944
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1945
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 19,
+        "start": 1946
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1965
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 1967
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1981
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1982
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1983
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1984
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 1986
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 1994
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 1995
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 2002
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2006
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2007
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 55,
+        "start": 2008
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2063
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 2065
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2079
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2080
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2081
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2082
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 2084
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2092
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 2093
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 2100
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2104
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2105
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 13,
+        "start": 2106
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2119
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 2121
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2135
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2136
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2137
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2138
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 2140
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2148
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 2149
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 2156
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2160
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2161
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 42,
+        "start": 2162
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2204
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 2206
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2220
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2221
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2222
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2223
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 2225
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 2231
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 2233
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2242
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2247
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 2248
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 2258
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2262
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2263
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 25,
+        "start": 2264
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2289
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2290
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2297
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 2298
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 2305
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2309
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2310
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 24,
+        "start": 2311
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2335
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 2337
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2351
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2352
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2353
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2354
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 2356
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2364
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 2365
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 2372
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2376
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2377
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 45,
+        "start": 2378
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2423
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 2425
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2439
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2440
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2441
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2442
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 2444
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2452
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 2453
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 2460
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2464
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2465
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 64,
+        "start": 2466
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2530
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 2532
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2546
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2547
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2548
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2549
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 2551
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 2557
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 2559
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2568
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2573
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 2574
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 2584
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2588
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2589
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 2590
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2596
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2597
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2604
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 2605
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 2612
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2616
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2617
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 2618
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2624
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 2626
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2640
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2641
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2642
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2643
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 2645
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 2651
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 2653
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2662
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 2665
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 16,
+        "start": 2667
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 2683
+      }
+    ],
     "definitionCount": 2,
     "definitions": [
       {
@@ -29,6 +2544,423 @@
     "language": "xml",
     "projectId": "CodexTestCSharpLibrary",
     "projectRelativePath": "[Metadata]\\ReferenceSymbols\\mscorlib.xml",
+    "referenceCount": 30,
+    "references": [
+      {
+        "lineNumber": 1,
+        "lineSpanText": "<ReferenceSymbols Count=\"28\">",
+        "reference": {
+          "id": "zmsmzhdzwdzx",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition"
+        }
+      },
+      {
+        "lineNumber": 1,
+        "lineSpanText": "<ReferenceSymbols Count=\"28\">",
+        "reference": {
+          "id": "hobzikb3ubag",
+          "isImplicitlyDeclared": true,
+          "kind": "Checksum.Sha1",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition"
+        }
+      },
+      {
+        "length": 24,
+        "lineNumber": 3,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyCompanyAttribute\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "ymmm1xbqot1r",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 89
+      },
+      {
+        "length": 64,
+        "lineNumber": 4,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyCompanyAttribute.AssemblyCompanyAttribute(System.String)\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "jyyyk9k2knea",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 156
+      },
+      {
+        "length": 30,
+        "lineNumber": 5,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyConfigurationAttribute\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "ugc4cfruh6uv",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 263
+      },
+      {
+        "length": 76,
+        "lineNumber": 6,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyConfigurationAttribute.AssemblyConfigurationAttribute(System.String)\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "k95qbgte30kn",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 336
+      },
+      {
+        "length": 26,
+        "lineNumber": 7,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyCopyrightAttribute\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "cekgdiwfsy8q",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 455
+      },
+      {
+        "length": 68,
+        "lineNumber": 8,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyCopyrightAttribute.AssemblyCopyrightAttribute(System.String)\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "yxt4gpkb4tiv",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 524
+      },
+      {
+        "length": 24,
+        "lineNumber": 9,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyCultureAttribute\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "ilzi8qywxj5d",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 635
+      },
+      {
+        "length": 64,
+        "lineNumber": 10,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyCultureAttribute.AssemblyCultureAttribute(System.String)\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "t2nno4ugsft3",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 702
+      },
+      {
+        "length": 28,
+        "lineNumber": 11,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyDescriptionAttribute\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "zpyv4zicoqy4",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 809
+      },
+      {
+        "length": 72,
+        "lineNumber": 12,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyDescriptionAttribute.AssemblyDescriptionAttribute(System.String)\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "ifegugrv95ue",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 880
+      },
+      {
+        "length": 28,
+        "lineNumber": 13,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyFileVersionAttribute\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "g1uxbc9evuqp",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 995
+      },
+      {
+        "length": 72,
+        "lineNumber": 14,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyFileVersionAttribute.AssemblyFileVersionAttribute(System.String)\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "exjoiusmafos",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 1066
+      },
+      {
+        "length": 24,
+        "lineNumber": 15,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyProductAttribute\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "xxbdd8vgzz9q",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 1181
+      },
+      {
+        "length": 64,
+        "lineNumber": 16,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyProductAttribute.AssemblyProductAttribute(System.String)\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "gvbjpbcxwy2k",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 1248
+      },
+      {
+        "length": 22,
+        "lineNumber": 17,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyTitleAttribute\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "iggnvlryy8pl",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 1355
+      },
+      {
+        "length": 60,
+        "lineNumber": 18,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyTitleAttribute.AssemblyTitleAttribute(System.String)\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "i65jqbopyhle",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 1420
+      },
+      {
+        "length": 26,
+        "lineNumber": 19,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyTrademarkAttribute\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "gbbsioq1lr7p",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 1523
+      },
+      {
+        "length": 68,
+        "lineNumber": 20,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyTrademarkAttribute.AssemblyTrademarkAttribute(System.String)\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "rhqleoomjaub",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 1592
+      },
+      {
+        "length": 24,
+        "lineNumber": 21,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyVersionAttribute\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "oxstkbpff3nk",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 1703
+      },
+      {
+        "length": 64,
+        "lineNumber": 22,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"AssemblyVersionAttribute.AssemblyVersionAttribute(System.String)\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "c38l4kmhtlby",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 1770
+      },
+      {
+        "length": 19,
+        "lineNumber": 25,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"ComVisibleAttribute\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "vhsblzyr6fft",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 1946
+      },
+      {
+        "length": 55,
+        "lineNumber": 26,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"ComVisibleAttribute.ComVisibleAttribute(System.Boolean)\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "y42a7756tggw",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 2008
+      },
+      {
+        "length": 13,
+        "lineNumber": 27,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"GuidAttribute\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "d7zlvzfupcol",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 2106
+      },
+      {
+        "length": 42,
+        "lineNumber": 28,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"GuidAttribute.GuidAttribute(System.String)\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "bv3kxqc9ozrz",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 2162
+      },
+      {
+        "length": 24,
+        "lineNumber": 31,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"TargetFrameworkAttribute\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "zng0jvzsohnn",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 2311
+      },
+      {
+        "length": 45,
+        "lineNumber": 32,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"TargetFrameworkAttribute.FrameworkDisplayName\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "i7vzz3amryno",
+          "kind": "Property",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 2378
+      },
+      {
+        "length": 64,
+        "lineNumber": 33,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"TargetFrameworkAttribute.TargetFrameworkAttribute(System.String)\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "oxmmbdshugky",
+          "kind": "Constructor",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 2466
+      },
+      {
+        "length": 6,
+        "lineNumber": 36,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"String\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "cuycniiqolxa",
+          "kind": "Class",
+          "projectId": "mscorlib",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 2618
+      }
+    ],
     "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceSymbols\\mscorlib.xml",
     "repositoryName": "codextest",
     "sourceFile": {
@@ -44,428 +2976,5 @@
         "repositoryName": "codextest"
       }
     }
-  },
-  "compressedClassifications": {
-    "count": 419,
-    "segments": [
-      {
-        "fullLength": 2684,
-        "lengths": {
-          "cdata": "Y+BnYWBgZGBg4GBmYBAA0qxAWpyBF8gCCoM49sgcWWSONzJHEpnjjMzBbZo0MsedOBncpokic6wpcBsjByQ4ZKHBIYSsyAyZw4PM0UTTLoEtNHXwWcgK1cGKEGfkZwAA",
-          "compressedLength": 96,
-          "decompressedLength": 419,
-          "minValue": 1,
-          "valueByteWidth": 1
-        },
-        "localSymbolGroupIds": {
-          "cdata": "Y2AYBYMcAAA=",
-          "compressedLength": 8,
-          "decompressedLength": 419,
-          "valueByteWidth": 1
-        },
-        "optimized": true,
-        "sharedIndices": {
-          "cdata": "Y2BkYmBmYWZgQKVHOIfC4CBdOy4dIAQA",
-          "compressedLength": 24,
-          "decompressedLength": 419,
-          "valueByteWidth": 1
-        },
-        "starts": {
-          "cdata": "Y2BgZGACYhhkReOzo/CRWaMyI0mGlWEgUwc9bCfVDoh6ZjAJAA==",
-          "compressedLength": 37,
-          "decompressedLength": 838,
-          "valueByteWidth": 2
-        }
-      }
-    ],
-    "sharedValues": [
-      {
-        "color": -1,
-        "name": "xml - delimiter"
-      },
-      {
-        "color": -1,
-        "name": "xml - name"
-      },
-      {
-        "color": -1,
-        "name": "xml - attribute name"
-      },
-      {
-        "color": -1,
-        "name": "xml - attribute quotes"
-      },
-      {
-        "color": -1,
-        "name": "xml - attribute value"
-      }
-    ]
-  },
-  "compressedReferences": {
-    "count": 30,
-    "lineSpanModel": {
-      "count": 30,
-      "segments": [
-        {
-          "fullLength": 2624,
-          "sharedIndices": {
-            "data": "AAABAgMEBQYHCAkKCwwNDg8QERITFBUWFxgaGxwZ",
-            "valueByteWidth": 1
-          }
-        }
-      ],
-      "sharedValues": [
-        {
-          "lineNumber": 1,
-          "lineSpanText": "<ReferenceSymbols Count=\"28\">"
-        },
-        {
-          "lineNumber": 3,
-          "lineSpanText": "<Symbol Name=\"AssemblyCompanyAttribute\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 4,
-          "lineSpanText": "<Symbol Name=\"AssemblyCompanyAttribute.AssemblyCompanyAttribute(System.String)\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 5,
-          "lineSpanText": "<Symbol Name=\"AssemblyConfigurationAttribute\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 6,
-          "lineSpanText": "<Symbol Name=\"AssemblyConfigurationAttribute.AssemblyConfigurationAttribute(System.String)\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 7,
-          "lineSpanText": "<Symbol Name=\"AssemblyCopyrightAttribute\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 8,
-          "lineSpanText": "<Symbol Name=\"AssemblyCopyrightAttribute.AssemblyCopyrightAttribute(System.String)\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 9,
-          "lineSpanText": "<Symbol Name=\"AssemblyCultureAttribute\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 10,
-          "lineSpanText": "<Symbol Name=\"AssemblyCultureAttribute.AssemblyCultureAttribute(System.String)\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 11,
-          "lineSpanText": "<Symbol Name=\"AssemblyDescriptionAttribute\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 12,
-          "lineSpanText": "<Symbol Name=\"AssemblyDescriptionAttribute.AssemblyDescriptionAttribute(System.String)\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 13,
-          "lineSpanText": "<Symbol Name=\"AssemblyFileVersionAttribute\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 14,
-          "lineSpanText": "<Symbol Name=\"AssemblyFileVersionAttribute.AssemblyFileVersionAttribute(System.String)\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 15,
-          "lineSpanText": "<Symbol Name=\"AssemblyProductAttribute\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 16,
-          "lineSpanText": "<Symbol Name=\"AssemblyProductAttribute.AssemblyProductAttribute(System.String)\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 17,
-          "lineSpanText": "<Symbol Name=\"AssemblyTitleAttribute\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 18,
-          "lineSpanText": "<Symbol Name=\"AssemblyTitleAttribute.AssemblyTitleAttribute(System.String)\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 19,
-          "lineSpanText": "<Symbol Name=\"AssemblyTrademarkAttribute\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 20,
-          "lineSpanText": "<Symbol Name=\"AssemblyTrademarkAttribute.AssemblyTrademarkAttribute(System.String)\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 21,
-          "lineSpanText": "<Symbol Name=\"AssemblyVersionAttribute\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 22,
-          "lineSpanText": "<Symbol Name=\"AssemblyVersionAttribute.AssemblyVersionAttribute(System.String)\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 25,
-          "lineSpanText": "<Symbol Name=\"ComVisibleAttribute\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 26,
-          "lineSpanText": "<Symbol Name=\"ComVisibleAttribute.ComVisibleAttribute(System.Boolean)\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 27,
-          "lineSpanText": "<Symbol Name=\"GuidAttribute\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 28,
-          "lineSpanText": "<Symbol Name=\"GuidAttribute.GuidAttribute(System.String)\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 36,
-          "lineSpanText": "<Symbol Name=\"String\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 31,
-          "lineSpanText": "<Symbol Name=\"TargetFrameworkAttribute\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 32,
-          "lineSpanText": "<Symbol Name=\"TargetFrameworkAttribute.FrameworkDisplayName\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 33,
-          "lineSpanText": "<Symbol Name=\"TargetFrameworkAttribute.TargetFrameworkAttribute(System.String)\" ReferenceCount=\"1\" />"
-        }
-      ]
-    },
-    "segments": [
-      {
-        "fullLength": 2624,
-        "lengths": {
-          "cdata": "Y2CQcJDzkXKRcJDxkPGQcBCzAbGFzXm1JHQd2AA=",
-          "compressedLength": 29,
-          "decompressedLength": 30,
-          "valueByteWidth": 1
-        },
-        "optimized": true,
-        "sharedIndices": {
-          "cdata": "AQANFgoXAhwIGg8VBRIMEwcUBhkJEQsbBBAOHRgD",
-          "valueByteWidth": 1
-        },
-        "starts": {
-          "cdata": "Y2BgYIhi0CEKFkLpHDAZyQAA",
-          "compressedLength": 18,
-          "decompressedLength": 60,
-          "valueByteWidth": 2
-        }
-      }
-    ],
-    "sharedValues": [
-      {
-        "id": "hobzikb3ubag",
-        "isImplicitlyDeclared": true,
-        "kind": "Checksum.Sha1",
-        "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
-      },
-      {
-        "id": "zmsmzhdzwdzx",
-        "isImplicitlyDeclared": true,
-        "kind": "File",
-        "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "cekgdiwfsy8q",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "cuycniiqolxa",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "d7zlvzfupcol",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "g1uxbc9evuqp",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "gbbsioq1lr7p",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "iggnvlryy8pl",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "ilzi8qywxj5d",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "oxstkbpff3nk",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "ugc4cfruh6uv",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "vhsblzyr6fft",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "xxbdd8vgzz9q",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "ymmm1xbqot1r",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "zng0jvzsohnn",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "zpyv4zicoqy4",
-        "kind": "Class",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "bv3kxqc9ozrz",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "c38l4kmhtlby",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "exjoiusmafos",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "gvbjpbcxwy2k",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "i65jqbopyhle",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "ifegugrv95ue",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "jyyyk9k2knea",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "k95qbgte30kn",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "oxmmbdshugky",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "rhqleoomjaub",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "t2nno4ugsft3",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "y42a7756tggw",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "yxt4gpkb4tiv",
-        "kind": "Constructor",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "i7vzz3amryno",
-        "kind": "Property",
-        "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
-      }
-    ]
   }
 }

@@ -1,5 +1,372 @@
 {
   "boundSourceFile": {
+    "classifications": [
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 16,
+        "start": 1
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 5,
+        "start": 18
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 23
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 24
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 25
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 26
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 27
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 32
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 33
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 43
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 47
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 48
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 22,
+        "start": 49
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 71
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 72
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 79
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 80
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 87
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 91
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 92
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 23,
+        "start": 93
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 116
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 118
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 132
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 133
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 134
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 135
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 137
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 145
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 146
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 153
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 157
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 158
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 159
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 165
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 167
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 181
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 182
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 183
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 184
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 186
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 194
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 6,
+        "start": 195
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 4,
+        "start": 202
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 206
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 207
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 208
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 217
+      },
+      {
+        "classification": "xml - attribute name",
+        "defaultClassificationColor": -1,
+        "length": 14,
+        "start": 219
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 233
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 234
+      },
+      {
+        "classification": "xml - attribute value",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 235
+      },
+      {
+        "classification": "xml - attribute quotes",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 236
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 238
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 244
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 9,
+        "start": 246
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 255
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 2,
+        "start": 258
+      },
+      {
+        "classification": "xml - name",
+        "defaultClassificationColor": -1,
+        "length": 16,
+        "start": 260
+      },
+      {
+        "classification": "xml - delimiter",
+        "defaultClassificationColor": -1,
+        "length": 1,
+        "start": 276
+      }
+    ],
     "definitionCount": 2,
     "definitions": [
       {
@@ -29,6 +396,73 @@
     "language": "xml",
     "projectId": "CodexTestCSharpLibrary",
     "projectRelativePath": "[Metadata]\\ReferenceSymbols\\CodexTestCSharpLibrary.xml",
+    "referenceCount": 5,
+    "references": [
+      {
+        "lineNumber": 1,
+        "lineSpanText": "<ReferenceSymbols Count=\"3\">",
+        "reference": {
+          "id": "d2xcyy2aphpa",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition"
+        }
+      },
+      {
+        "lineNumber": 1,
+        "lineSpanText": "<ReferenceSymbols Count=\"3\">",
+        "reference": {
+          "id": "dfic9igrfvye",
+          "isImplicitlyDeclared": true,
+          "kind": "Checksum.Sha1",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition"
+        }
+      },
+      {
+        "length": 23,
+        "lineNumber": 3,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"ITypeWithParams˂T0, T1˃\" ReferenceCount=\"1\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "fdzoyyrcywtf",
+          "kind": "Interface",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 93
+      },
+      {
+        "length": 6,
+        "lineNumber": 4,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"IXedoc\" ReferenceCount=\"2\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "qjxntd4ra1hl",
+          "kind": "Interface",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 159
+      },
+      {
+        "length": 9,
+        "lineNumber": 5,
+        "lineSpanStart": 14,
+        "lineSpanText": "<Symbol Name=\"XedocImpl\" ReferenceCount=\"0\" />",
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "qrlrsnmhwayc",
+          "kind": "Interface",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "start": 208
+      }
+    ],
     "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceSymbols\\CodexTestCSharpLibrary.xml",
     "repositoryName": "codextest",
     "sourceFile": {
@@ -44,149 +478,5 @@
         "repositoryName": "codextest"
       }
     }
-  },
-  "compressedClassifications": {
-    "count": 61,
-    "segments": [
-      {
-        "fullLength": 277,
-        "lengths": {
-          "cdata": "Y+BnYQADDmYGBlEgzQqkxRh4QUKMYA4rMocDymHkYGDkZwAA",
-          "compressedLength": 36,
-          "decompressedLength": 61,
-          "minValue": 1,
-          "valueByteWidth": 1
-        },
-        "localSymbolGroupIds": {
-          "cdata": "Y2CgAAAA",
-          "compressedLength": 6,
-          "decompressedLength": 61,
-          "valueByteWidth": 1
-        },
-        "optimized": true,
-        "sharedIndices": {
-          "cdata": "Y2BkYmBmYWZgQKUJc0AIAA==",
-          "compressedLength": 16,
-          "decompressedLength": 61,
-          "valueByteWidth": 1
-        },
-        "starts": {
-          "cdata": "Y2BgZGACYhhkReOzo/CRWeTIsIJpZjAJAA==",
-          "compressedLength": 25,
-          "decompressedLength": 122,
-          "valueByteWidth": 2
-        }
-      }
-    ],
-    "sharedValues": [
-      {
-        "color": -1,
-        "name": "xml - delimiter"
-      },
-      {
-        "color": -1,
-        "name": "xml - name"
-      },
-      {
-        "color": -1,
-        "name": "xml - attribute name"
-      },
-      {
-        "color": -1,
-        "name": "xml - attribute quotes"
-      },
-      {
-        "color": -1,
-        "name": "xml - attribute value"
-      }
-    ]
-  },
-  "compressedReferences": {
-    "count": 5,
-    "lineSpanModel": {
-      "count": 5,
-      "segments": [
-        {
-          "fullLength": 217,
-          "sharedIndices": {
-            "data": "AAABAgM=",
-            "valueByteWidth": 1
-          }
-        }
-      ],
-      "sharedValues": [
-        {
-          "lineNumber": 1,
-          "lineSpanText": "<ReferenceSymbols Count=\"3\">"
-        },
-        {
-          "lineNumber": 3,
-          "lineSpanText": "<Symbol Name=\"ITypeWithParams˂T0, T1˃\" ReferenceCount=\"1\" />"
-        },
-        {
-          "lineNumber": 4,
-          "lineSpanText": "<Symbol Name=\"IXedoc\" ReferenceCount=\"2\" />"
-        },
-        {
-          "lineNumber": 5,
-          "lineSpanText": "<Symbol Name=\"XedocImpl\" ReferenceCount=\"0\" />"
-        }
-      ]
-    },
-    "segments": [
-      {
-        "fullLength": 217,
-        "lengths": {
-          "cdata": "AAAXBgk=",
-          "valueByteWidth": 1
-        },
-        "optimized": true,
-        "sharedIndices": {
-          "cdata": "AQACAwQ=",
-          "valueByteWidth": 1
-        },
-        "starts": {
-          "cdata": "AABeLCw=",
-          "valueByteWidth": 1
-        }
-      }
-    ],
-    "sharedValues": [
-      {
-        "id": "dfic9igrfvye",
-        "isImplicitlyDeclared": true,
-        "kind": "Checksum.Sha1",
-        "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
-      },
-      {
-        "id": "d2xcyy2aphpa",
-        "isImplicitlyDeclared": true,
-        "kind": "File",
-        "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "fdzoyyrcywtf",
-        "kind": "Interface",
-        "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "qjxntd4ra1hl",
-        "kind": "Interface",
-        "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "ProjectLevelReference"
-      },
-      {
-        "excludeFromSearch": true,
-        "id": "qrlrsnmhwayc",
-        "kind": "Interface",
-        "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "ProjectLevelReference"
-      }
-    ]
   }
 }

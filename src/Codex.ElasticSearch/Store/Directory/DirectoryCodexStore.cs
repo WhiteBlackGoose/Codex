@@ -32,6 +32,11 @@ namespace Codex.ElasticSearch.Store
 
         private RepositoryStoreInfo m_storeInfo;
 
+        /// <summary>
+        /// Disables optimized serialization for use when testing
+        /// </summary>
+        public bool DisableOptimization { get; set; }
+
         public DirectoryCodexStore(string directory)
         {
             m_directory = directory;
@@ -130,15 +135,19 @@ namespace Codex.ElasticSearch.Store
         private StoredBoundSourceFile CreateStoredBoundFile(BoundSourceFile boundSourceFile)
         {
             boundSourceFile.ApplySourceFileInfo();
+
             var result = new StoredBoundSourceFile()
             {
                 BoundSourceFile = boundSourceFile,
-                CompressedClassifications = new ClassificationListModel(boundSourceFile.Classifications),
-                CompressedReferences = new ReferenceListModel(boundSourceFile.References, includeLineInfo: true),
             };
 
-            boundSourceFile.References = CollectionUtilities.Empty<ReferenceSpan>.Array;
-            boundSourceFile.Classifications = CollectionUtilities.Empty<ClassificationSpan>.Array;
+            if (!DisableOptimization)
+            {
+                result.CompressedClassifications = new ClassificationListModel(boundSourceFile.Classifications);
+                result.CompressedReferences = new ReferenceListModel(boundSourceFile.References, includeLineInfo: true);
+                boundSourceFile.References = CollectionUtilities.Empty<ReferenceSpan>.Array;
+                boundSourceFile.Classifications = CollectionUtilities.Empty<ClassificationSpan>.Array;
+            }
 
             return result;
         }
@@ -147,8 +156,15 @@ namespace Codex.ElasticSearch.Store
         {
             var boundSourceFile = storedBoundFile.BoundSourceFile;
 
-            boundSourceFile.Classifications = storedBoundFile.CompressedClassifications.ToList();
-            boundSourceFile.References = storedBoundFile.CompressedReferences.ToList();
+            if (storedBoundFile.CompressedClassifications != null)
+            {
+                boundSourceFile.Classifications = storedBoundFile.CompressedClassifications.ToList();
+            }
+
+            if (storedBoundFile.CompressedReferences != null)
+            {
+                boundSourceFile.References = storedBoundFile.CompressedReferences.ToList();
+            }
 
             return boundSourceFile;
         }
