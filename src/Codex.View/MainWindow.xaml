@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Codex.View"
         mc:Ignorable="d"
-        Title="Index" Height="720" Width="1080" FontFamily="Segoe UI,Tahoma,Helvetica,sans-serif">
+        Title="Ref12" Height="720" Width="1080" FontFamily="Segoe UI,Tahoma,Helvetica,sans-serif">
     <Window.Resources>
         <LinearGradientBrush x:Key="LinearGradientBrush1" StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="#744482" Offset="0.0" />
@@ -21,7 +21,11 @@
                 <ColumnDefinition  x:Name="HeaderMenuColumn" Width="Auto"  />
             </Grid.ColumnDefinitions>
             <StackPanel VerticalAlignment="Stretch" Orientation="Horizontal">
-                <TextBox Name="SearchBox" MaxLength="260" Width="492" Margin="8, 10, 0, 10" />
+                <TextBox Name="SearchBox" FontFamily="Arial" FontSize="21.333" 
+                         VerticalContentAlignment="Center" MaxLength="260"
+                         Width="492" 
+                         Padding="32, 5, 5, 5"
+                         Margin="8, 10, 0, 10" />
                 <Border  VerticalAlignment="Center" Margin="10" Width="95.5">
                     <!--<Image Source="Images/microsoftlogo.png" />-->
                 </Border>

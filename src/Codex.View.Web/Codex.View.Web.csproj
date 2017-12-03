@@ -22,11 +22,17 @@
     <PackageReference Include="Bridge.Min" Version="16.3.2">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Granular" Version="0.3.0">
-      <PrivateAssets>all</PrivateAssets>
+    <PackageReference Include="Granular">
+      <Version>0.3.0-b92</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Codex.View\Codex.View.csproj">
+      <Project>{aef02bdc-1c84-4f8d-b1a3-99c760937023}</Project>
+      <Name>Codex.View</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="bridge.json" />
     <None Include="ProjectLink.targets" />
@@ -38,8 +44,6 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SrcRoot)\Common.targets" />
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <Import Project="$(NuGetPackageRoot)granular\0.3.0\build\ProjectLink.targets" 
-            Condition="Exists('$(NuGetPackageRoot)granular\0.3.0\build\ProjectLink.targets')" />
   </ImportGroup>
   <Import Project="ProjectLink.targets" Condition="Exists('ProjectLink.targets')" />
 </Project>

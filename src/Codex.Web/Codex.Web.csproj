@@ -401,6 +401,8 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </ContentWithTargetPath>
     </ItemGroup>
+
+    <Message Importance="high" Text="Web Assets Directory: %(_WebAssetDirectories.Identity)" />
   </Target>
   <ProjectExtensions>
     <VisualStudio>

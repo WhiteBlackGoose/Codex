@@ -54,13 +54,6 @@ namespace Codex.ObjectModel
         }
     }
 
-    /// <summary>
-    ///  Allows defining extension data during analysis
-    /// </summary>
-    public class ExtensionData
-    {
-    }
-
     public class TextReferenceEntry
     {
         public string ReferringProjectId { get; set; }

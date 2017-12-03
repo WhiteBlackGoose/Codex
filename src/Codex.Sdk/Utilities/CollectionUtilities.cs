@@ -7,15 +7,8 @@ using Codex.ObjectModel;
 
 namespace Codex.Utilities
 {
-    public static class CollectionUtilities
+    public static partial class CollectionUtilities
     {
-        public class Empty<T>
-        {
-            public static readonly List<T> List = new List<T>(0);
-
-            public static readonly T[] Array = new T[0];
-        }
-
         public static IReadOnlyList<TResult> SelectList<T, TResult>(this IReadOnlyCollection<T> items, Func<T, TResult> selector)
         {
             TResult[] results = new TResult[items.Count];

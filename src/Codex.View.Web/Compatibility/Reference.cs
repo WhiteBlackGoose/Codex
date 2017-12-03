@@ -10,7 +10,7 @@ namespace Codex.View.Web.Compatibility
 {
     class Reference
     {
-        // Reference host project in order to ensure it included
+        // Reference host project in order to ensure it included 
         private static BulletChrome GranularPresentationGenericReference;
     }
 }

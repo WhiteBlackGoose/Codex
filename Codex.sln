@@ -23,6 +23,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{64FF0049-1E2B-4929-B944-EFF99A45C910}"
 	ProjectSection(SolutionItems) = preProject
 		Ingestion.txt = Ingestion.txt
+		nuget.config = nuget.config
 		TODO.txt = TODO.txt
 	EndProjectSection
 EndProject
@@ -52,9 +53,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.ElasticSearch.Tests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Web", "src\Codex.Web\Codex.Web.csproj", "{887A8565-4A10-44C8-82EF-F2F2D1D2BFBF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.View.Wpf", "src\Codex.View.Wpf\Codex.View.Wpf.csproj", "{0C89F949-AE1D-4137-9629-438735A111C3}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Codex.Sdk.Shared", "src\Codex.Sdk.Shared\Codex.Sdk.Shared.shproj", "{D60352C9-9E89-46C0-884D-91640F484AAC}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Codex.Sdk.Types\Codex.Sdk.Types.projitems*{2322a932-05f4-4931-8547-71377c6ab49e}*SharedItemsImports = 4
+		src\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems*{2322a932-05f4-4931-8547-71377c6ab49e}*SharedItemsImports = 4
+		Codex.Sdk.Types\Codex.Sdk.Types.projitems*{aef02bdc-1c84-4f8d-b1a3-99c760937023}*SharedItemsImports = 4
+		src\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems*{aef02bdc-1c84-4f8d-b1a3-99c760937023}*SharedItemsImports = 4
+		src\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems*{d60352c9-9e89-46c0-884d-91640f484aac}*SharedItemsImports = 13
 		Codex.Sdk.Types\Codex.Sdk.Types.projitems*{e30939c5-042d-4ec2-817d-c5afc509b330}*SharedItemsImports = 4
 		Codex.Sdk.Types\Codex.Sdk.Types.projitems*{f88fb26c-fac3-4d8a-9779-e3475d18ecb1}*SharedItemsImports = 13
 	EndGlobalSection
@@ -193,6 +202,14 @@ Global
 		{887A8565-4A10-44C8-82EF-F2F2D1D2BFBF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{887A8565-4A10-44C8-82EF-F2F2D1D2BFBF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{887A8565-4A10-44C8-82EF-F2F2D1D2BFBF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0C89F949-AE1D-4137-9629-438735A111C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C89F949-AE1D-4137-9629-438735A111C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C89F949-AE1D-4137-9629-438735A111C3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0C89F949-AE1D-4137-9629-438735A111C3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0C89F949-AE1D-4137-9629-438735A111C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C89F949-AE1D-4137-9629-438735A111C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C89F949-AE1D-4137-9629-438735A111C3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0C89F949-AE1D-4137-9629-438735A111C3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -209,6 +226,7 @@ Global
 		{796AA891-1AF9-4949-A817-EBF065AE2312} = {55E4316A-8074-44D6-9DB1-91404CDF2432}
 		{8EDF4429-251A-416D-BB68-93F227191BCF} = {7F4060A4-602D-4A7C-8ACF-7956D9F8D757}
 		{887A8565-4A10-44C8-82EF-F2F2D1D2BFBF} = {55E4316A-8074-44D6-9DB1-91404CDF2432}
+		{0C89F949-AE1D-4137-9629-438735A111C3} = {55E4316A-8074-44D6-9DB1-91404CDF2432}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {65FBD1BF-7814-40A8-9ECB-A0EEC4804B35}

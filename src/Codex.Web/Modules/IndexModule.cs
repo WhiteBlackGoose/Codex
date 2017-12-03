@@ -6,7 +6,7 @@ namespace Codex.Web.Modules
     {
         public IndexModule()
         {
-            Get["/"] = _ => View["bin/view/index"];
+            Get["/"] = _ => View["bin/view/index.min.html"];
             //Get["/"] = _ => "Hello World";
         }
     }
