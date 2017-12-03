@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright, Microsoft Corporation, All rights reserved.-->
+<ProjectSchemaDefinitions
+    xmlns="http://schemas.microsoft.com/build/2009/properties">
+
+  <ContentType
+      Name="WpfFile"
+      DisplayName="WPF file"
+      ItemType="Page">
+  </ContentType>
+
+  <ItemType Name="Page" DisplayName="Page"/>
+  <ItemType Name="ApplicationDefinition" DisplayName="ApplicationDefinition"/>
+  <ItemType Name="Resource" DisplayName="Resource"/>
+
+  <FileExtension Name=".xaml" ContentType="WpfFile"/>
+</ProjectSchemaDefinitions>
+

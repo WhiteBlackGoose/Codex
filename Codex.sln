@@ -57,12 +57,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.View.Wpf", "src\Codex
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Codex.Sdk.Shared", "src\Codex.Sdk.Shared\Codex.Sdk.Shared.shproj", "{D60352C9-9E89-46C0-884D-91640F484AAC}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Codex.View.Shared", "src\Codex.View.Shared\Codex.View.Shared.shproj", "{5CF2582D-E804-4283-89B5-677B3A41F363}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Codex.Sdk.Types\Codex.Sdk.Types.projitems*{2322a932-05f4-4931-8547-71377c6ab49e}*SharedItemsImports = 4
 		src\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems*{2322a932-05f4-4931-8547-71377c6ab49e}*SharedItemsImports = 4
+		src\Codex.View.Shared\Codex.View.Shared.projitems*{5cf2582d-e804-4283-89b5-677b3a41f363}*SharedItemsImports = 13
+		Codex.Sdk.Types\Codex.Sdk.Types.projitems*{796aa891-1af9-4949-a817-ebf065ae2312}*SharedItemsImports = 4
+		src\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems*{796aa891-1af9-4949-a817-ebf065ae2312}*SharedItemsImports = 4
+		src\Codex.View.Shared\Codex.View.Shared.projitems*{796aa891-1af9-4949-a817-ebf065ae2312}*SharedItemsImports = 4
 		Codex.Sdk.Types\Codex.Sdk.Types.projitems*{aef02bdc-1c84-4f8d-b1a3-99c760937023}*SharedItemsImports = 4
 		src\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems*{aef02bdc-1c84-4f8d-b1a3-99c760937023}*SharedItemsImports = 4
+		src\Codex.View.Shared\Codex.View.Shared.projitems*{aef02bdc-1c84-4f8d-b1a3-99c760937023}*SharedItemsImports = 4
 		src\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems*{d60352c9-9e89-46c0-884d-91640f484aac}*SharedItemsImports = 13
 		Codex.Sdk.Types\Codex.Sdk.Types.projitems*{e30939c5-042d-4ec2-817d-c5afc509b330}*SharedItemsImports = 4
 		Codex.Sdk.Types\Codex.Sdk.Types.projitems*{f88fb26c-fac3-4d8a-9779-e3475d18ecb1}*SharedItemsImports = 13
@@ -227,6 +234,7 @@ Global
 		{8EDF4429-251A-416D-BB68-93F227191BCF} = {7F4060A4-602D-4A7C-8ACF-7956D9F8D757}
 		{887A8565-4A10-44C8-82EF-F2F2D1D2BFBF} = {55E4316A-8074-44D6-9DB1-91404CDF2432}
 		{0C89F949-AE1D-4137-9629-438735A111C3} = {55E4316A-8074-44D6-9DB1-91404CDF2432}
+		{5CF2582D-E804-4283-89B5-677B3A41F363} = {55E4316A-8074-44D6-9DB1-91404CDF2432}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {65FBD1BF-7814-40A8-9ECB-A0EEC4804B35}

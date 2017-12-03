@@ -9,6 +9,9 @@
     <Import_RootNamespace>Codex.Sdk.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\out\bin\Debug\Codex.Framework.Generation\EntityTypes.g.cs">
+      <Link>EntityTypes.g.cs</Link>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Glyph.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ObjectModel\BoundSourceInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ObjectModel\ReferenceKind.cs" />

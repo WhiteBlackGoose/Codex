@@ -15,9 +15,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\out\bin\Debug\Codex.Framework.Generation\EntityTypes.g.cs">
-      <Link>Types\EntityTypes.g.cs</Link>
-    </Compile>
     <Compile Include="Analysis\ICodexStore.cs" />
     <Compile Include="Analysis\IAnalysisTarget.cs" />
     <Compile Include="Placeholder.cs" />
@@ -36,6 +33,7 @@
     <Compile Include="ObjectModel\SymbolId.cs" />
     <Compile Include="ObjectModel\SymbolKind.cs" />
     <Compile Include="ObjectModel\Symbols.cs" />
+    <Compile Include="Types\Types.cs" />
     <Compile Include="Utilities\AtomicBool.cs" />
     <Compile Include="Utilities\Base64.cs" />
     <Compile Include="Utilities\Box.cs" />

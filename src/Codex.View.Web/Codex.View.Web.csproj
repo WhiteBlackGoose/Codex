@@ -7,11 +7,18 @@
     <RootNamespace>Codex.View.Web</RootNamespace>
     <_FindDependencies>true</_FindDependencies>
     <NoStdLib>true</NoStdLib>
-  </PropertyGroup>
-  <PropertyGroup>
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);BRIDGE</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Bridge.Core" Version="16.3.2">
       <PrivateAssets>all</PrivateAssets>
@@ -35,12 +42,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="bridge.json" />
-    <None Include="ProjectLink.targets" />
+    <None Include="ProjectLink.targets">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compatibility\Compatibility.cs" />
     <Compile Include="Compatibility\Reference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <Import Project="..\Codex.View.Shared\Codex.View.Shared.projitems" Label="Shared" />
+  <Import Project="..\..\Codex.Sdk.Types\Codex.Sdk.Types.projitems" Label="Shared" />
+  <Import Project="..\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SrcRoot)\Common.targets" />
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
