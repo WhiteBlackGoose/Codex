@@ -154,10 +154,6 @@ namespace Codex
         /// </summary>
         ICodeSymbol Reference { get; }
 
-        // TODO: Store efficient representation of list of reference spans (old implementation
-        // has two possible representations).
-        // There should probably be some placeholder interfaces in SDK for the efficient types which
-        // the JSON serializer will be customized to replace with real type
         // TODO: Need some sort of override for searching RelatedDefinition of the
         // ReferenceSpan
         [SearchBehavior(SearchBehavior.None)]

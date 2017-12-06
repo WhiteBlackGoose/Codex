@@ -23,6 +23,7 @@
       <SubType>Code</SubType>
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CodexService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainWindow.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Codex.Sdk.Search;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,8 @@ namespace Codex.View
     /// </summary>
     public partial class MainWindow : Window
     {
+        public ICodex CodexService { get; } = CodexProvider.Instance;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -32,6 +35,17 @@ namespace Codex.View
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("Hello world");
+        }
+
+        public async void SearchTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var result = await CodexService.SearchAsync(new SearchArguments()
+            {
+                SearchString = ((TextBox)sender).Text
+            });
+
+            Console.WriteLine("Search result");
+            Console.WriteLine(result.ToString());
         }
 
         //private void Border_SizeChanged(object sender, SizeChangedEventArgs e)

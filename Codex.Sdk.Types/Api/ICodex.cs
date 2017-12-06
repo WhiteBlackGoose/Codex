@@ -29,7 +29,16 @@ namespace Codex.Sdk.Search
         /// </summary>
         Task<IndexQueryHitsResponse<IReferenceSearchModel>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments);
 
-        Task<IndexQueryHitsResponse<IBoundSourceSearchModel>> GetSourceAsync(GetSourceArguments arguments);
+        Task<IndexQueryResponse<IBoundSourceSearchModel>> GetSourceAsync(GetSourceArguments arguments);
+    }
+
+    public enum CodexServiceMethod
+    {
+        Search,
+        FindAllRefs,
+        FindDef,
+        FindDefLocation,
+        GetSource
     }
 
     public class CodexArgumentsBase
@@ -108,7 +117,37 @@ namespace Codex.Sdk.Search
         ITextLineSpan TextSpan { get; }
     }
 
-    public class IndexQueryResponse<T>
+    public struct SerializableTimeSpan
+    {
+        public long Ticks { get; set; }
+
+        public SerializableTimeSpan(TimeSpan timespan)
+        {
+            Ticks = timespan.Ticks;
+        }
+
+        public TimeSpan AsTimeSpan()
+        {
+            return TimeSpan.FromTicks(Ticks);
+        }
+
+        public static implicit operator TimeSpan(SerializableTimeSpan value)
+        {
+            return value.AsTimeSpan();
+        }
+
+        public static implicit operator SerializableTimeSpan(TimeSpan value)
+        {
+            return new SerializableTimeSpan(value);
+        }
+
+        public override string ToString()
+        {
+            return AsTimeSpan().ToString();
+        }
+    }
+
+    public class IndexQueryResponse
     {
         /// <summary>
         /// If the query failed, this will contain the error message
@@ -123,17 +162,30 @@ namespace Codex.Sdk.Search
         /// <summary>
         /// The spent executing the query
         /// </summary>
-        public TimeSpan Duration { get; set; }
+        public SerializableTimeSpan Duration { get; set; }
 
         /// <summary>
         /// The spent executing the query
         /// </summary>
-        public TimeSpan ServerTime { get; set; }
+        public SerializableTimeSpan ServerTime { get; set; }
 
+        public override string ToString()
+        {
+            return $"Error: {Error}, Duration: {Duration}";
+        }
+    }
+
+    public class IndexQueryResponse<T> : IndexQueryResponse
+    {
         /// <summary>
         /// The results of the query
         /// </summary>
         public T Result { get; set; }
+
+        public override string ToString()
+        {
+            return $"Result: {Result}, {base.ToString()}";
+        }
     }
 
     public class IndexQueryHits<T>
@@ -148,6 +200,11 @@ namespace Codex.Sdk.Search
         /// The results of the query
         /// </summary>
         public IReadOnlyList<T> Hits { get; set; }
+
+        public override string ToString()
+        {
+            return $"Total: {Total}, {base.ToString()}";
+        }
     }
 
     public class IndexQueryHitsResponse<T> : IndexQueryResponse<IndexQueryHits<T>>

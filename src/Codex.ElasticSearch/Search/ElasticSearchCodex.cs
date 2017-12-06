@@ -39,7 +39,7 @@ namespace Codex.ElasticSearch.Search
             throw new NotImplementedException();
         }
 
-        public Task<IndexQueryHitsResponse<IBoundSourceSearchModel>> GetSourceAsync(GetSourceArguments arguments)
+        public Task<IndexQueryResponse<IBoundSourceSearchModel>> GetSourceAsync(GetSourceArguments arguments)
         {
             throw new NotImplementedException();
         }

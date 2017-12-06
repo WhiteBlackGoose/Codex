@@ -12,5 +12,7 @@ namespace Codex.View.Web.Compatibility
     {
         // Reference host project in order to ensure it included 
         private static BulletChrome GranularPresentationGenericReference;
+
+        private static Bridge.jQuery2.jQueryEvent JQueryReference;
     }
 }
