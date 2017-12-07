@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Codex.Sdk.Search;
+using Codex.ElasticSearch.Search;
 
 namespace Codex.Web
 {
@@ -26,7 +27,10 @@ namespace Codex.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            //services.AddSingleton<ICodex>(new ElasticSearchCodex)
+            services.AddSingleton<ICodex>(new ElasticSearchCodex(new ElasticSearch.ElasticSearchStoreConfiguration()
+            {
+                Prefix = "apptest"
+            }, new ElasticSearch.ElasticSearchService(new ElasticSearch.ElasticSearchServiceConfiguration("http://localhost:9200"))));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

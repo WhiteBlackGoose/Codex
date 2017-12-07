@@ -16,25 +16,6 @@
         <GradientStop Color="#7db9e8" Offset="0.80" />
         <GradientStop Color="#b7fff9" Offset="1.0" />
       </LinearGradientBrush>
-
-
-      <!--Define a control template for a HeaderedItemsControl-->
-      <!--<Style TargetType="HeaderedItemsControl">
-        <Setter Property="Template">
-          <Setter.Value>
-            <ControlTemplate TargetType="{x:Type HeaderedItemsControl}">
-              <Expander Background="{TemplateBinding Background}">
-                <Expander.Header>
-                  <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}">
-                    <ContentPresenter ContentSource="Header"/>
-                  </Border>
-                </Expander.Header>
-                <ItemsPresenter/>
-              </Expander>
-            </ControlTemplate>
-          </Setter.Value>
-        </Setter>
-      </Style>-->
     </ResourceDictionary>
   </Window.Resources>
   <DockPanel>
@@ -66,41 +47,16 @@
       </Grid.ColumnDefinitions>
 
       <Border Background="#EEEEEE" Grid.Column="1" />
-      <Border Background="#FFFFE0" BorderBrush="#F0E68C" BorderThickness="1" Margin="8" VerticalAlignment="Top" Height="38" Padding="8, 0" Visibility="Collapsed" >
+      <Border Background="#FFFFE0" BorderBrush="#F0E68C" BorderThickness="1" Margin="8" VerticalAlignment="Top" Height="38" Padding="8, 0">
         <TextBlock 
                   x:Name="SearchInfo"
                   Text="Enter a search string. Start with ` for full text search results only."
                            VerticalAlignment="Center"
                            FontSize="16" />
       </Border>
-      <!--<HeaderedItemsControl Height="200">
-        <HeaderedItemsControl.Header>
-          <Border Background="#7988BD">
-            <TextBlock Text="12 text search hits for '`localworker'" />
-          </Border>
-        </HeaderedItemsControl.Header>
-        <TextBlock />
-      </HeaderedItemsControl>-->
-      <Expander Background="#7988BD" Style="{StaticResource TreeExpanderStyle}" IsExpanded="True">
-        <Expander.Header>
-          <TextBlock Text="12 text search hits for '`ireferencelist'" Margin="4,6" Foreground="White" FontSize="16" />
-        </Expander.Header>
-        <Expander Style="{StaticResource TreeExpanderStyle}" Background="#e7f5ff" IsExpanded="True">
-          <Expander.Header>
-            <TextBlock Text="Codex.Sdk" Margin="5" Foreground="Black" FontSize="18" FontWeight="Bold" />
-          </Expander.Header>
-          <HeaderedContentControl Style="{StaticResource HeaderedContentControlStyle}">
-            <HeaderedContentControl.Header>
-              <Border Background="#f6f6f6" Padding="4">
-                <TextBlock Text="src\Codex.Sdk\Utilities\SpanUtilities.cs" Foreground="Gray" FontSize="14" />
-              </Border>
-            </HeaderedContentControl.Header>
-            <ItemsControl>
-              <TextBlock Text="Hello" />
-            </ItemsControl>
-          </HeaderedContentControl>
-        </Expander>
-      </Expander>
+      <Border x:Name="SearchResultsContainer">
+        <local:SearchResults />
+      </Border>
     </Grid>
   </DockPanel>
 </Window>

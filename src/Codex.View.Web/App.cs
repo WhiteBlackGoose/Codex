@@ -11,6 +11,7 @@ namespace Codex.View
     {
         public App()
         {
+            // TODO: This should be configurable through build properties somehow
             CodexProvider.Instance = new WebApiCodex("http://localhost:9491/api/codex/");
         }
     }

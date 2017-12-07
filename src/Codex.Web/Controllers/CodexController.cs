@@ -11,6 +11,12 @@ namespace Codex.Web.Controllers
     [Route("api/codex")]
     public class CodexController : Controller, ICodex
     {
+        private ICodex Codex { get; set; }
+        public CodexController(ICodex codex)
+        {
+            Codex = codex;
+        }
+
         // GET api/values
         [HttpGet]
         public async Task<IEnumerable<string>> Get()
@@ -25,30 +31,32 @@ namespace Codex.Web.Controllers
         }
 
         [HttpPost(nameof(CodexServiceMethod.Search))]
-        public async Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync([FromBody]SearchArguments arguments)
+        public Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync([FromBody]SearchArguments arguments)
         {
-            return new IndexQueryHitsResponse<ISearchResult>()
-            {
-                Result = new IndexQueryHits<ISearchResult>()
-                {
-                    Hits = new List<SearchResult>()
-                    {
-                        new SearchResult()
-                        {
-                            ProjectId = "Codex.Web",
-                            RepositoryName = "Codex",
-                            ProjectRelativePath = @"Controllers\CodexController.cs",
-                            RepoRelativePath = @"src\Codex.Web\Controllers\CodexController.cs",
-                            TextSpan = new TextLineSpan()
-                            {
-                                LineNumber = 15,
-                                LineSpanText = "public Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync([FromBody]SearchArguments arguments)"
-                            }
-                        }
-                    },
-                    Total = 20
-                }
-            };
+            return Codex.SearchAsync(arguments);
+
+            //return new IndexQueryHitsResponse<ISearchResult>()
+            //{
+            //    Result = new IndexQueryHits<ISearchResult>()
+            //    {
+            //        Hits = new List<SearchResult>()
+            //        {
+            //            new SearchResult()
+            //            {
+            //                ProjectId = "Codex.Web",
+            //                RepositoryName = "Codex",
+            //                ProjectRelativePath = @"Controllers\CodexController.cs",
+            //                RepoRelativePath = @"src\Codex.Web\Controllers\CodexController.cs",
+            //                TextSpan = new TextLineSpan()
+            //                {
+            //                    LineNumber = 15,
+            //                    LineSpanText = "public Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync([FromBody]SearchArguments arguments)"
+            //                }
+            //            }
+            //        },
+            //        Total = 20
+            //    }
+            //};
         }
 
         public Task<IndexQueryHitsResponse<IReferenceSearchModel>> FindAllReferencesAsync(FindAllReferencesArguments arguments)

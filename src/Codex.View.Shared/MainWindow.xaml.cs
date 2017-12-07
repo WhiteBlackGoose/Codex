@@ -50,33 +50,40 @@ namespace Codex.View
                     return;
                 }
 
-                var result = await CodexService.SearchAsync(new SearchArguments()
+                var response = await CodexService.SearchAsync(new SearchArguments()
                 {
                     SearchString = searchString
                 });
 
-                if (result.Error != null)
+                if (response.Error != null)
                 {
-                    SearchInfo.Text = result.Error;
+                    SearchInfo.Text = response.Error;
                     return;
                 }
-                else if (result.Result?.Hits == null || result.Result.Hits.Count == 0)
+                else if (response.Result?.Hits == null || response.Result.Hits.Count == 0)
                 {
                     SearchInfo.Text = "No results found.";
                     return;
                 }
 
                 SearchInfo.Text = string.Empty;
+                SearchResultsContainer.DataContext = new TextSearchResultsViewModel(searchString, response);
 
                 //Console.WriteLine("Search result");
                 //Console.WriteLine(result.ToString());
             }
             finally
             {
-                // TODO: Set visibility of search results
-                SearchInfo.Visibility = string.IsNullOrEmpty(SearchInfo.Text) ?
-                    Visibility.Collapsed :
-                    Visibility.Visible;
+                if (string.IsNullOrEmpty(SearchInfo.Text))
+                {
+                    SearchResultsContainer.Visibility = Visibility.Visible;
+                    SearchInfo.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    SearchResultsContainer.Visibility = Visibility.Collapsed;
+                    SearchInfo.Visibility = Visibility.Visible;
+                }
             }
         }
 

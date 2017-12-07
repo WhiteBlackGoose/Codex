@@ -177,10 +177,8 @@ namespace Codex.Application
                     CreateIndices = true,
                     ClearIndicesBeforeUse = true,
                     ShardCount = 2,
-                    Prefix = string.Empty
+                    Prefix = "apptest"
                 }).GetAwaiter().GetResult();
-
-                service.ClearAsync().GetAwaiter().GetResult();
             }
             else
             {

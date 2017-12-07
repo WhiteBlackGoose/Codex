@@ -92,6 +92,8 @@ namespace Codex.ElasticSearch
                 });
             }
 
+            await base.InitializeAsync();
+
             Placeholder.Todo("Configure each store with its specific index sort. Consider defining that on search type");
 
             foreach (var store in EntityStores)
@@ -99,8 +101,6 @@ namespace Codex.ElasticSearch
                 // Creates the index
                 await store.InitializeAsync();
             }
-
-            await base.InitializeAsync();
         }
 
         public override async Task<ElasticSearchEntityStore<TSearchType>> CreateStoreAsync<TSearchType>(SearchType searchType)
