@@ -21,22 +21,22 @@ namespace Codex.View.Web
 
         public Task<IndexQueryHitsResponse<IReferenceSearchModel>> FindAllReferencesAsync(FindAllReferencesArguments arguments)
         {
-            throw new NotImplementedException();
+            return PostAsync(CodexServiceMethod.FindAllRefs, arguments, c => c.FindAllReferencesAsync(arguments));
         }
 
         public Task<IndexQueryHitsResponse<IDefinitionSearchModel>> FindDefinitionAsync(FindDefinitionArguments arguments)
         {
-            throw new NotImplementedException();
+            return PostAsync(CodexServiceMethod.FindDef, arguments, c => c.FindDefinitionAsync(arguments));
         }
 
         public Task<IndexQueryHitsResponse<IReferenceSearchModel>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments)
         {
-            throw new NotImplementedException();
+            return PostAsync(CodexServiceMethod.FindDefLocation, arguments, c => c.FindDefinitionLocationAsync(arguments));
         }
 
         public Task<IndexQueryResponse<IBoundSourceSearchModel>> GetSourceAsync(GetSourceArguments arguments)
         {
-            throw new NotImplementedException();
+            return PostAsync(CodexServiceMethod.GetSource, arguments, c => c.GetSourceAsync(arguments));
         }
 
         public Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync(SearchArguments arguments)

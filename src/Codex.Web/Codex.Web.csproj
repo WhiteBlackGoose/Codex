@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Codex.ElasticSearch\Codex.ElasticSearch.csproj" />
     <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />
   </ItemGroup>
 

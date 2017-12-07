@@ -6,47 +6,101 @@
         xmlns:local="clr-namespace:Codex.View"
         mc:Ignorable="d"
         Title="Ref12" Height="720" Width="1080" FontFamily="Segoe UI,Tahoma,Helvetica,sans-serif">
-    <Window.Resources>
-        <LinearGradientBrush x:Key="LinearGradientBrush1" StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#744482" Offset="0.0" />
-            <GradientStop Color="#7db9e8" Offset="0.80" />
-            <GradientStop Color="#b7fff9" Offset="1.0" />
-        </LinearGradientBrush>
-    </Window.Resources>
-    <DockPanel>
-        <Grid DockPanel.Dock="Top" Name="PageHeader" Height="58" Background="{StaticResource LinearGradientBrush1}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition x:Name="SearchBoxAndImagesColumn" Width="Auto" />
-                <ColumnDefinition />
-                <ColumnDefinition  x:Name="HeaderMenuColumn" Width="Auto"  />
-            </Grid.ColumnDefinitions>
-            <StackPanel VerticalAlignment="Stretch" Orientation="Horizontal">
-                <TextBox Name="SearchBox" FontFamily="Arial" FontSize="21.333" 
+  <Window.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Styling.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      <LinearGradientBrush x:Key="LinearGradientBrush1" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#744482" Offset="0.0" />
+        <GradientStop Color="#7db9e8" Offset="0.80" />
+        <GradientStop Color="#b7fff9" Offset="1.0" />
+      </LinearGradientBrush>
+
+
+      <!--Define a control template for a HeaderedItemsControl-->
+      <!--<Style TargetType="HeaderedItemsControl">
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type HeaderedItemsControl}">
+              <Expander Background="{TemplateBinding Background}">
+                <Expander.Header>
+                  <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}">
+                    <ContentPresenter ContentSource="Header"/>
+                  </Border>
+                </Expander.Header>
+                <ItemsPresenter/>
+              </Expander>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>-->
+    </ResourceDictionary>
+  </Window.Resources>
+  <DockPanel>
+    <Grid DockPanel.Dock="Top" Name="PageHeader" Height="58" Background="{StaticResource LinearGradientBrush1}">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition x:Name="SearchBoxAndImagesColumn" Width="Auto" />
+        <ColumnDefinition />
+        <ColumnDefinition  x:Name="HeaderMenuColumn" Width="Auto"  />
+      </Grid.ColumnDefinitions>
+      <StackPanel VerticalAlignment="Stretch" Orientation="Horizontal">
+        <TextBox x:Name="SearchBox" FontFamily="Arial" FontSize="21.333" 
                          VerticalContentAlignment="Center" MaxLength="260"
                          Width="492" 
                          Padding="32, 5, 5, 5"
                          Margin="8, 10, 0, 10"
                          TextChanged="SearchTextChanged"/>
-                <Border  VerticalAlignment="Center" Margin="10" Width="95.5">
-                    <!--<Image Source="Images/microsoftlogo.png" />-->
-                </Border>
-                <TextBlock Text="Codex" Foreground="White" 
+        <Border  VerticalAlignment="Center" Margin="10" Width="95.5">
+          <!--<Image Source="Images/microsoftlogo.png" />-->
+        </Border>
+        <TextBlock Text="Codex" Foreground="White" 
                            VerticalAlignment="Center" FontSize="20" Width="56" Margin="0, 0, 0, 4" />
-            </StackPanel>
-        </Grid>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="500" />
-                <ColumnDefinition Width="20" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
+      </StackPanel>
+    </Grid>
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="500" />
+        <ColumnDefinition Width="20" />
+        <ColumnDefinition />
+      </Grid.ColumnDefinitions>
 
-            <Border Background="#EEEEEE" Grid.Column="1" />
-            <Border Background="#FFFFE0" BorderBrush="#F0E68C" BorderThickness="1" Margin="8" VerticalAlignment="Top" Height="38" Padding="8, 0" >
-                <TextBlock Text="Enter a search string. Start with ` for full text search results only."
+      <Border Background="#EEEEEE" Grid.Column="1" />
+      <Border Background="#FFFFE0" BorderBrush="#F0E68C" BorderThickness="1" Margin="8" VerticalAlignment="Top" Height="38" Padding="8, 0" Visibility="Collapsed" >
+        <TextBlock 
+                  x:Name="SearchInfo"
+                  Text="Enter a search string. Start with ` for full text search results only."
                            VerticalAlignment="Center"
                            FontSize="16" />
-            </Border>
-        </Grid>
-    </DockPanel>
+      </Border>
+      <!--<HeaderedItemsControl Height="200">
+        <HeaderedItemsControl.Header>
+          <Border Background="#7988BD">
+            <TextBlock Text="12 text search hits for '`localworker'" />
+          </Border>
+        </HeaderedItemsControl.Header>
+        <TextBlock />
+      </HeaderedItemsControl>-->
+      <Expander Background="#7988BD" Style="{StaticResource TreeExpanderStyle}" IsExpanded="True">
+        <Expander.Header>
+          <TextBlock Text="12 text search hits for '`ireferencelist'" Margin="4,6" Foreground="White" FontSize="16" />
+        </Expander.Header>
+        <Expander Style="{StaticResource TreeExpanderStyle}" Background="#e7f5ff" IsExpanded="True">
+          <Expander.Header>
+            <TextBlock Text="Codex.Sdk" Margin="5" Foreground="Black" FontSize="18" FontWeight="Bold" />
+          </Expander.Header>
+          <HeaderedContentControl Style="{StaticResource HeaderedContentControlStyle}">
+            <HeaderedContentControl.Header>
+              <Border Background="#f6f6f6" Padding="4">
+                <TextBlock Text="src\Codex.Sdk\Utilities\SpanUtilities.cs" Foreground="Gray" FontSize="14" />
+              </Border>
+            </HeaderedContentControl.Header>
+            <ItemsControl>
+              <TextBlock Text="Hello" />
+            </ItemsControl>
+          </HeaderedContentControl>
+        </Expander>
+      </Expander>
+    </Grid>
+  </DockPanel>
 </Window>

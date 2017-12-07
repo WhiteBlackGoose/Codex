@@ -34,18 +34,50 @@ namespace Codex.View
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("Hello world");
+            Console.WriteLine("Grid_Loaded");
         }
 
         public async void SearchTextChanged(object sender, TextChangedEventArgs e)
         {
-            var result = await CodexService.SearchAsync(new SearchArguments()
+            try
             {
-                SearchString = ((TextBox)sender).Text
-            });
+                var searchString = SearchBox.Text;
+                searchString = searchString.Trim();
 
-            Console.WriteLine("Search result");
-            Console.WriteLine(result.ToString());
+                if (searchString.Length < 3)
+                {
+                    SearchInfo.Text = "Enter at least 3 characters.";
+                    return;
+                }
+
+                var result = await CodexService.SearchAsync(new SearchArguments()
+                {
+                    SearchString = searchString
+                });
+
+                if (result.Error != null)
+                {
+                    SearchInfo.Text = result.Error;
+                    return;
+                }
+                else if (result.Result?.Hits == null || result.Result.Hits.Count == 0)
+                {
+                    SearchInfo.Text = "No results found.";
+                    return;
+                }
+
+                SearchInfo.Text = string.Empty;
+
+                //Console.WriteLine("Search result");
+                //Console.WriteLine(result.ToString());
+            }
+            finally
+            {
+                // TODO: Set visibility of search results
+                SearchInfo.Visibility = string.IsNullOrEmpty(SearchInfo.Text) ?
+                    Visibility.Collapsed :
+                    Visibility.Visible;
+            }
         }
 
         //private void Border_SizeChanged(object sender, SizeChangedEventArgs e)

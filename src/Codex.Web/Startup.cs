@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Codex.Sdk.Search;
 
 namespace Codex.Web
 {
@@ -25,6 +26,7 @@ namespace Codex.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            //services.AddSingleton<ICodex>(new ElasticSearchCodex)
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,16 +41,6 @@ namespace Codex.Web
             }
 
             app.UseMvc();
-
-            var actionDescriptorCollectionProvider = app.ApplicationServices.GetService<IActionDescriptorCollectionProvider>();
-
-            var routes = actionDescriptorCollectionProvider.ActionDescriptors.Items.Select(x => new {
-                Action = x.RouteValues["Action"],
-                Controller = x.RouteValues["Controller"],
-                Name = x.AttributeRouteInfo?.Name,
-                Template = x.AttributeRouteInfo?.Template,
-                Contraint = x.ActionConstraints
-            }).ToList();
         }
     }
 }

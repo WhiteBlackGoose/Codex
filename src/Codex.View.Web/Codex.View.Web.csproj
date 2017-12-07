@@ -46,13 +46,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Codex.View\Codex.View.csproj">
-      <Project>{aef02bdc-1c84-4f8d-b1a3-99c760937023}</Project>
-      <Name>Codex.View</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="bridge.json" />
     <None Include="ProjectLink.targets">
       <SubType>Designer</SubType>
