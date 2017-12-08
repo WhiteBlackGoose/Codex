@@ -94,7 +94,7 @@ namespace Codex.ElasticSearch.Search
                      select new SearchResult(hit.Source.File.Info)
                      {
                          TextSpan = span
-                     }).ToList();
+                     }).ToList<ISearchResult>();
 
                 return new IndexQueryHits<ISearchResult>()
                 {
@@ -126,7 +126,7 @@ namespace Codex.ElasticSearch.Search
             });
 
             var response = elasticResponse.Result;
-            response.RawQueries = elasticResponse.Requests;
+            response.RawQueries = elasticResponse.Requests.ToList();
             response.Duration = elasticResponse.Duration;
             return response;
         }

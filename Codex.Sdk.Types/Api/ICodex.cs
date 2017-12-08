@@ -157,7 +157,7 @@ namespace Codex.Sdk.Search
         /// <summary>
         /// The raw query sent to the index server
         /// </summary>
-        public IReadOnlyList<string> RawQueries { get; set; }
+        public List<string> RawQueries { get; set; }
 
         /// <summary>
         /// The spent executing the query
@@ -199,7 +199,7 @@ namespace Codex.Sdk.Search
         /// <summary>
         /// The results of the query
         /// </summary>
-        public IReadOnlyList<T> Hits { get; set; }
+        public List<T> Hits { get; set; }
 
         public override string ToString()
         {

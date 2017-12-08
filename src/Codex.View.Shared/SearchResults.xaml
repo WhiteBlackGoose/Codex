@@ -11,40 +11,45 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Styling.xaml" />
       </ResourceDictionary.MergedDictionaries>
-      <DataTemplate x:Key="LineSpanTemplate">
-        <Grid>
-          <StackPanel Orientation="Vertical">
-            <WrapPanel Orientation="Horizontal" TextBlock.FontFamily="Consolas">
-              <TextBlock Text="{Binding LineNumber}" Margin="0,0,16,0" Foreground="#1791AF" />
-              <TextBlock Text="{Binding PrefixText}" />
-              <TextBlock Text="{Binding ContentText}" Background="Yellow" />
-              <TextBlock Text="{Binding SuffixText}" />
-            </WrapPanel>
-          </StackPanel>
-        </Grid>
+      <DataTemplate DataType="{x:Type local:TextSpanSearchResultViewModel}">
+        <StackPanel Orientation="Horizontal" TextBlock.FontFamily="Consolas">
+          <TextBlock Text="{Binding LineNumber}" Margin="0,0,16,0" Foreground="#1791AF" />
+          <TextBlock Text="{Binding PrefixText}" />
+          <Border Background="Yellow">
+            <TextBlock Text="{Binding ContentText}" />
+          </Border>
+          <TextBlock Text="{Binding SuffixText}" />
+        </StackPanel>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type local:FileResultsViewModel}">
+        <HeaderedContentControl Style="{StaticResource HeaderedContentControlStyle}">
+          <HeaderedContentControl.Header>
+            <Border Background="#f6f6f6" Padding="4">
+              <TextBlock Text="{Binding Path}" Foreground="Gray" FontSize="14" />
+            </Border>
+          </HeaderedContentControl.Header>
+          <ItemsControl ItemsSource="{Binding Items}" />
+        </HeaderedContentControl>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type local:ProjectResultsViewModel}">
+        <Expander Style="{StaticResource TreeExpanderStyle}" Background="#e7f5ff" IsExpanded="True">
+          <Expander.Header>
+            <TextBlock Text="{Binding ProjectName}" Margin="5" Foreground="Black" FontSize="18" FontWeight="Bold" />
+          </Expander.Header>
+          <ItemsControl ItemsSource="{Binding Items}" />
+        </Expander>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type local:TextSearchResultsViewModel}">
+        <Expander Background="#7988BD" Style="{StaticResource TreeExpanderStyle}" IsExpanded="True">
+          <Expander.Header>
+            <TextBlock Text="{Binding Header}" Margin="4,6" Foreground="White" FontSize="16" />
+          </Expander.Header>
+          <ItemsControl ItemsSource="{Binding ProjectResults}" />
+        </Expander>
       </DataTemplate>
     </ResourceDictionary>
   </UserControl.Resources>
   <Grid>
-    <Expander Background="#7988BD" Style="{StaticResource TreeExpanderStyle}" IsExpanded="True">
-      <Expander.Header>
-        <TextBlock Text="12 text search hits for '`ireferencelist'" Margin="4,6" Foreground="White" FontSize="16" />
-      </Expander.Header>
-      <Expander Style="{StaticResource TreeExpanderStyle}" Background="#e7f5ff" IsExpanded="True">
-        <Expander.Header>
-          <TextBlock Text="Codex.Sdk" Margin="5" Foreground="Black" FontSize="18" FontWeight="Bold" />
-        </Expander.Header>
-        <HeaderedContentControl Style="{StaticResource HeaderedContentControlStyle}">
-          <HeaderedContentControl.Header>
-            <Border Background="#f6f6f6" Padding="4">
-              <TextBlock Text="src\Codex.Sdk\Utilities\SpanUtilities.cs" Foreground="Gray" FontSize="14" />
-            </Border>
-          </HeaderedContentControl.Header>
-          <ItemsControl>
-            <TextBlock Text="Hello" />
-          </ItemsControl>
-        </HeaderedContentControl>
-      </Expander>
-    </Expander>
+    <ContentControl Content="{Binding}" />
   </Grid>
 </UserControl>

@@ -62,7 +62,11 @@ namespace Codex.View
                 }
                 else if (response.Result?.Hits == null || response.Result.Hits.Count == 0)
                 {
-                    SearchInfo.Text = "No results found.";
+                    SearchInfo.Text = $"No results found\n"
+                        + $"(response.Result == null):{response.Result == null}\n"
+                        + $"(response.Result?.Hits == null):{response.Result?.Hits == null}\n"
+                        + $"(response.Result.Hits?.Count):{response.Result.Hits?.Count}\n"
+                        + $"(response.Result == null):{response.Result == null}";
                     return;
                 }
 

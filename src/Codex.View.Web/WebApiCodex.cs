@@ -1,4 +1,5 @@
 ﻿using Bridge.Html5;
+using Codex.ObjectModel;
 using Codex.Sdk.Search;
 using Newtonsoft.Json;
 using System;
@@ -21,33 +22,32 @@ namespace Codex.View.Web
 
         public Task<IndexQueryHitsResponse<IReferenceSearchModel>> FindAllReferencesAsync(FindAllReferencesArguments arguments)
         {
-            return PostAsync(CodexServiceMethod.FindAllRefs, arguments, c => c.FindAllReferencesAsync(arguments));
+            return PostAsync<IndexQueryHitsResponse<ReferenceSearchModel>, IndexQueryHitsResponse<IReferenceSearchModel>>(CodexServiceMethod.FindAllRefs, arguments);
         }
 
         public Task<IndexQueryHitsResponse<IDefinitionSearchModel>> FindDefinitionAsync(FindDefinitionArguments arguments)
         {
-            return PostAsync(CodexServiceMethod.FindDef, arguments, c => c.FindDefinitionAsync(arguments));
+            return PostAsync<IndexQueryHitsResponse<DefinitionSearchModel>, IndexQueryHitsResponse<IDefinitionSearchModel>>(CodexServiceMethod.FindDef, arguments);
         }
 
         public Task<IndexQueryHitsResponse<IReferenceSearchModel>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments)
         {
-            return PostAsync(CodexServiceMethod.FindDefLocation, arguments, c => c.FindDefinitionLocationAsync(arguments));
+            return PostAsync<IndexQueryHitsResponse<ReferenceSearchModel>, IndexQueryHitsResponse<IReferenceSearchModel>>(CodexServiceMethod.FindDefLocation, arguments);
         }
 
         public Task<IndexQueryResponse<IBoundSourceSearchModel>> GetSourceAsync(GetSourceArguments arguments)
         {
-            return PostAsync(CodexServiceMethod.GetSource, arguments, c => c.GetSourceAsync(arguments));
+            return PostAsync<IndexQueryResponse<BoundSourceSearchModel>, IndexQueryResponse<IBoundSourceSearchModel>>(CodexServiceMethod.GetSource, arguments);
         }
 
         public Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync(SearchArguments arguments)
         {
-            return PostAsync(CodexServiceMethod.Search, arguments, c => c.SearchAsync(arguments));
+            return PostAsync<IndexQueryHitsResponse<SearchResult>, IndexQueryHitsResponse<ISearchResult>>(CodexServiceMethod.Search, arguments);
         }
 
-        private Task<TResult> PostAsync<TArguments, TResult>(
-            CodexServiceMethod searchMethod, 
-            TArguments arguments, 
-            Func<ICodex, Task<TResult>> func)
+        private Task<TResult> PostAsync<TSerializedResult, TResult>(
+            CodexServiceMethod searchMethod,
+            object arguments)
             where TResult : IndexQueryResponse, new()
         {
             TaskCompletionSource<TResult> tcs = new TaskCompletionSource<TResult>();
@@ -68,7 +68,7 @@ namespace Codex.View.Web
 
                 success = (data, textStatus, successRequest) =>
                 {
-                    tcs.SetResult(JsonConvert.DeserializeObject<TResult>(successRequest.responseText));
+                    tcs.SetResult(JsonConvert.DeserializeObject<TSerializedResult>(successRequest.responseText).As<TResult>());
                     return null;
                 },
 

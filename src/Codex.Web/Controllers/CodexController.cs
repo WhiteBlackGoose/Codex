@@ -31,9 +31,10 @@ namespace Codex.Web.Controllers
         }
 
         [HttpPost(nameof(CodexServiceMethod.Search))]
-        public Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync([FromBody]SearchArguments arguments)
+        public async Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync([FromBody]SearchArguments arguments)
         {
-            return Codex.SearchAsync(arguments);
+            var result = await Codex.SearchAsync(arguments);
+            return result;
 
             //return new IndexQueryHitsResponse<ISearchResult>()
             //{
