@@ -12,27 +12,46 @@
         <ResourceDictionary Source="Styling.xaml" />
       </ResourceDictionary.MergedDictionaries>
       <DataTemplate DataType="{x:Type local:TextSpanSearchResultViewModel}">
-        <StackPanel Orientation="Horizontal" TextBlock.FontFamily="Consolas">
-          <TextBlock Text="{Binding LineNumber}" Margin="0,0,16,0" Foreground="#1791AF" />
-          <TextBlock Text="{Binding PrefixText}" />
-          <Border Background="Yellow">
-            <TextBlock Text="{Binding ContentText}" />
-          </Border>
-          <TextBlock Text="{Binding SuffixText}" />
-        </StackPanel>
+        <Border x:Name="LinePanel" HorizontalAlignment="Stretch" Background="Transparent">
+          <StackPanel Orientation="Horizontal" TextBlock.FontFamily="Consolas" TextBlock.FontSize="13" Margin="8, 1, 0, 1">
+            <TextBlock Text="{Binding LineNumber}" Margin="0,0,16,0" Foreground="#1791AF" />
+            <TextBlock Text="{Binding PrefixText}" TextWrapping="NoWrap" />
+            <Border Background="Yellow" Padding="0" Margin="0">
+              <TextBlock Text="{Binding ContentText}" TextWrapping="NoWrap" />
+            </Border>
+            <TextBlock Text="{Binding SuffixText}" TextWrapping="NoWrap"/>
+          </StackPanel>
+        </Border>
+        <DataTemplate.Triggers>
+          <Trigger SourceName="LinePanel" Property="IsMouseOver" Value="True">
+            <Setter TargetName="LinePanel" Property="Background" Value="#eeeeee" />
+          </Trigger>
+        </DataTemplate.Triggers>
       </DataTemplate>
       <DataTemplate DataType="{x:Type local:FileResultsViewModel}">
-        <HeaderedContentControl Style="{StaticResource HeaderedContentControlStyle}">
+        <HeaderedContentControl Style="{StaticResource HeaderedContentControlStyle}" HorizontalContentAlignment="Stretch">
           <HeaderedContentControl.Header>
-            <Border Background="#f6f6f6" Padding="4">
-              <TextBlock Text="{Binding Path}" Foreground="Gray" FontSize="14" />
+            <Border Background="#f6f6f6" Padding="12, 4, 4, 4">
+              <TextBlock Text="{Binding Path}" Foreground="Gray" FontSize="16" />
             </Border>
           </HeaderedContentControl.Header>
           <ItemsControl ItemsSource="{Binding Items}" />
         </HeaderedContentControl>
       </DataTemplate>
+      <SolidColorBrush x:Key="ProjectHeaderBackground">##e7f5ff</SolidColorBrush>
+      <SolidColorBrush x:Key="ProjectHeaderOverBackground">Black</SolidColorBrush>
+      <Style x:Key="ProjectHeaderStyle" BasedOn="{StaticResource TreeExpanderStyle}" TargetType="Expander">
+        <Style.Triggers>
+          <Trigger Property="local:Styles.IsMouseOverHeader" Value="false">
+            <Setter Property="Background" Value="#e7f5ff" />
+          </Trigger>
+          <Trigger Property="local:Styles.IsMouseOverHeader" Value="true">
+            <Setter Property="Background" Value="#d4edff" />
+          </Trigger>
+        </Style.Triggers>
+      </Style>
       <DataTemplate DataType="{x:Type local:ProjectResultsViewModel}">
-        <Expander Style="{StaticResource TreeExpanderStyle}" Background="#e7f5ff" IsExpanded="True">
+        <Expander Style="{StaticResource ProjectHeaderStyle}" IsExpanded="True" Margin="0, 0, 0, 16">
           <Expander.Header>
             <TextBlock Text="{Binding ProjectName}" Margin="5" Foreground="Black" FontSize="18" FontWeight="Bold" />
           </Expander.Header>
@@ -50,6 +69,6 @@
     </ResourceDictionary>
   </UserControl.Resources>
   <Grid>
-    <ContentControl Content="{Binding}" />
+    <ContentControl Content="{Binding ViewModel}" />
   </Grid>
 </UserControl>

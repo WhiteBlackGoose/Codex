@@ -10,8 +10,6 @@
   <SolidColorBrush x:Key="TreeViewItem.TreeArrow.Static.Fill" Color="#FFFFFFFF"/>
   <SolidColorBrush x:Key="TreeViewItem.TreeArrow.Static.Stroke" Color="#FF818181"/>
 
-
-
   <Style x:Key="ExpandCollapseToggleStyle" TargetType="{x:Type ToggleButton}">
     <Setter Property="Focusable" Value="True"/>
     <Setter Property="Control.HorizontalContentAlignment" Value="Left"/>
@@ -19,7 +17,7 @@
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type ToggleButton}">
-          <Grid Background="{TemplateBinding Background}">
+          <Grid x:Name="ContentGrid" Background="{TemplateBinding Background}">
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="20" />
               <ColumnDefinition Width="*" />
@@ -79,7 +77,7 @@
       <Setter.Value>
         <ControlTemplate>
           <DockPanel>
-            <ToggleButton DockPanel.Dock="Top" Background="{TemplateBinding Background}"
+            <ToggleButton x:Name="HeaderButton" DockPanel.Dock="Top" Background="{TemplateBinding Background}"
                             Style="{StaticResource ExpandCollapseToggleStyle}"
                             ContentTemplate="{TemplateBinding Expander.HeaderTemplate}"
                             ContentTemplateSelector="{TemplateBinding Expander.HeaderTemplateSelector}"
@@ -99,6 +97,9 @@
           <ControlTemplate.Triggers>
             <Trigger Property="Expander.IsExpanded" Value="true">
               <Setter Property="Visibility" TargetName="ExpandSite" Value="Visible"/>
+            </Trigger>
+            <Trigger SourceName="HeaderButton" Property="IsMouseOver" Value="True">
+              <Setter Property="local:Styles.IsMouseOverHeader" Value="True" />
             </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>

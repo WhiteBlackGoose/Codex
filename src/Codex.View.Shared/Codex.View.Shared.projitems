@@ -25,11 +25,13 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CodexProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GranularExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainWindow.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -37,6 +39,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)SearchResults.xaml.cs">
       <DependentUpon>SearchResults.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Styles.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels.cs" />
   </ItemGroup>
   <ItemGroup>

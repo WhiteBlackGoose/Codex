@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Decompilation", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Decompilation.Perspective", "src\Codex.Decompilation.Perspective\Codex.Decompilation.Perspective.csproj", "{94BDF7DC-169D-41D7-9FC8-081A9D1D56D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.ElasticSearch", "src\Codex.ElasticSearch\Codex.ElasticSearch.csproj", "{4573F8BC-6B87-4526-A815-42F473452F8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.ElasticSearch", "src\Codex.ElasticSearch\Codex.ElasticSearch.csproj", "{4573F8BC-6B87-4526-A815-42F473452F8C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Perspectil", "src\Perspectil\Perspectil.csproj", "{F9A05818-6D67-484A-8397-149EA1DEDCDF}"
 EndProject
@@ -57,18 +57,19 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Codex.Sdk.Shared", "src\Cod
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Codex.View.Shared", "src\Codex.View.Shared\Codex.View.Shared.shproj", "{5CF2582D-E804-4283-89B5-677B3A41F363}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Web", "src\Codex.Web\Codex.Web.csproj", "{EA705293-ABA7-4B57-9BC4-FDC1F1FC6CA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Web", "src\Codex.Web\Codex.Web.csproj", "{EA705293-ABA7-4B57-9BC4-FDC1F1FC6CA8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{25E4BE1A-D5A5-45B4-B612-F524C796082E}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\Codex.View.Shared\Codex.View.Shared.projitems*{0c89f949-ae1d-4137-9629-438735a111c3}*SharedItemsImports = 4
 		Codex.Sdk.Types\Codex.Sdk.Types.projitems*{2322a932-05f4-4931-8547-71377c6ab49e}*SharedItemsImports = 4
 		src\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems*{2322a932-05f4-4931-8547-71377c6ab49e}*SharedItemsImports = 4
 		src\Codex.View.Shared\Codex.View.Shared.projitems*{5cf2582d-e804-4283-89b5-677b3a41f363}*SharedItemsImports = 13
 		Codex.Sdk.Types\Codex.Sdk.Types.projitems*{796aa891-1af9-4949-a817-ebf065ae2312}*SharedItemsImports = 4
 		src\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems*{796aa891-1af9-4949-a817-ebf065ae2312}*SharedItemsImports = 4
 		src\Codex.View.Shared\Codex.View.Shared.projitems*{796aa891-1af9-4949-a817-ebf065ae2312}*SharedItemsImports = 4
-		Codex.Sdk.Types\Codex.Sdk.Types.projitems*{aef02bdc-1c84-4f8d-b1a3-99c760937023}*SharedItemsImports = 4
-		src\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems*{aef02bdc-1c84-4f8d-b1a3-99c760937023}*SharedItemsImports = 4
 		src\Codex.View.Shared\Codex.View.Shared.projitems*{aef02bdc-1c84-4f8d-b1a3-99c760937023}*SharedItemsImports = 4
 		src\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems*{d60352c9-9e89-46c0-884d-91640f484aac}*SharedItemsImports = 13
 		Codex.Sdk.Types\Codex.Sdk.Types.projitems*{e30939c5-042d-4ec2-817d-c5afc509b330}*SharedItemsImports = 4
@@ -234,7 +235,7 @@ Global
 		{8EDF4429-251A-416D-BB68-93F227191BCF} = {7F4060A4-602D-4A7C-8ACF-7956D9F8D757}
 		{0C89F949-AE1D-4137-9629-438735A111C3} = {55E4316A-8074-44D6-9DB1-91404CDF2432}
 		{5CF2582D-E804-4283-89B5-677B3A41F363} = {55E4316A-8074-44D6-9DB1-91404CDF2432}
-		{EA705293-ABA7-4B57-9BC4-FDC1F1FC6CA8} = {55E4316A-8074-44D6-9DB1-91404CDF2432}
+		{EA705293-ABA7-4B57-9BC4-FDC1F1FC6CA8} = {25E4BE1A-D5A5-45B4-B612-F524C796082E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {65FBD1BF-7814-40A8-9ECB-A0EEC4804B35}

@@ -23,9 +23,12 @@ namespace Codex.View
     {
         public ICodex CodexService { get; } = CodexProvider.Instance;
 
+        private ViewModelDataContext SearchResultDataContext = new ViewModelDataContext();
+
         public MainWindow()
         {
             InitializeComponent();
+            SearchResultsContainer.DataContext = SearchResultDataContext;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -71,7 +74,7 @@ namespace Codex.View
                 }
 
                 SearchInfo.Text = string.Empty;
-                SearchResultsContainer.DataContext = new TextSearchResultsViewModel(searchString, response);
+                SearchResultDataContext.ViewModel = new TextSearchResultsViewModel(searchString, response);
 
                 //Console.WriteLine("Search result");
                 //Console.WriteLine(result.ToString());

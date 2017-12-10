@@ -45,6 +45,14 @@
     <DocumentationFile Condition="'$(GenerateDocumentation)' == 'true'">$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
     <Prefer32Bit Condition="'$(Prefer32Bit)'==''">false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <TargetFrameworkIdentifier>.NETStandard</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkMoniker>.NETStandard,Version=v2.0</TargetFrameworkMoniker>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
+    <TargetFrameworkMoniker>.NETFramework,Version=v4.6.1</TargetFrameworkMoniker>
+  </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)' == 'Any CPU' OR '$(Platform)' == 'AnyCPU' OR '$(Platform)' == 'Mixed Platforms'">
     <PlatformTarget>AnyCPU</PlatformTarget>

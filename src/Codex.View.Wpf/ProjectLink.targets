@@ -1,7 +1,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <!-- Add links to the source project files at compile time -->
-    <ProjectLinkSource>..\Codex.View\Codex.View.csproj</ProjectLinkSource>
+    <!--<ProjectLinkSource>..\Codex.View\Codex.View.csproj</ProjectLinkSource>-->
 
     <!-- Save the added links -->
     <ProjectLinkRewriteProject>False</ProjectLinkRewriteProject>

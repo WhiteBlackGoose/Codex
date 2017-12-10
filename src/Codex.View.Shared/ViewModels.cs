@@ -1,11 +1,34 @@
 ﻿using Codex.Sdk.Search;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
 namespace Codex.View
 {
+    public class ViewModelDataContext : INotifyPropertyChanged
+    {
+        private object viewModel;
+
+        public object ViewModel
+        {
+            get
+            {
+                return viewModel;
+            }
+
+            set
+            {
+                var oldValue = viewModel;
+                viewModel = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewModel)));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+    }
+
     public class TextSpanSearchResultViewModel : FileItemResultViewModel
     {
         public ISearchResult SearchResult { get; }

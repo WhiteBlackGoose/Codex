@@ -1,71 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
-    <ProjectGuid>{2322A932-05F4-4931-8547-71377C6AB49E}</ProjectGuid>
-    <AssemblyName>Codex.Sdk</AssemblyName>
-    <RootNamespace>Codex.Sdk</RootNamespace>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <!--<TargetFramework>netcoreapp2.0</TargetFramework>-->
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
-  <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Analysis\ICodexStore.cs" />
-    <Compile Include="Analysis\IAnalysisTarget.cs" />
-    <Compile Include="Placeholder.cs" />
-    <Compile Include="Types\EncodingDescription.cs" />
-    <Compile Include="Index\IndexCodex.cs" />
-    <Compile Include="Logging\ConsoleLogger.cs" />
-    <Compile Include="Logging\Logger.cs" />
-    <Compile Include="Logging\MultiLogger.cs" />
-    <Compile Include="Logging\TextLogger.cs" />
-    <Compile Include="ObjectModel\AnalyzedProject.cs" />
-    <Compile Include="ObjectModel\Classification.cs" />
-    <Compile Include="ObjectModel\EnumEx.cs" />
-    <Compile Include="ObjectModel\IStorage.cs" />
-    <Compile Include="ObjectModel\LanguageDescriptor.cs" />
-    <Compile Include="ObjectModel\Repository.cs" />
-    <Compile Include="ObjectModel\SymbolId.cs" />
-    <Compile Include="ObjectModel\SymbolKind.cs" />
-    <Compile Include="ObjectModel\Symbols.cs" />
-    <Compile Include="Types\Types.cs" />
-    <Compile Include="Utilities\AtomicBool.cs" />
-    <Compile Include="Utilities\Base64.cs" />
-    <Compile Include="Utilities\Box.cs" />
-    <Compile Include="Utilities\CollectionUtilities.cs" />
-    <Compile Include="Utilities\ComparerBuilder.cs" />
-    <Compile Include="Utilities\CompilerUtilities.cs" />
-    <Compile Include="Utilities\EncoderContext.cs" />
-    <Compile Include="Utilities\EqualityComparerBuilder.cs" />
-    <Compile Include="Utilities\IIndexable.cs" />
-    <Compile Include="Utilities\IndexableListAdapter.cs" />
-    <Compile Include="Utilities\IndexableSpanListAdapter.cs" />
-    <Compile Include="Utilities\IndexingUtilities.cs" />
-    <Compile Include="Utilities\IntHelpers.cs" />
-    <Compile Include="Utilities\ISpanList.cs" />
-    <Compile Include="Utilities\ListSegment.cs" />
-    <Compile Include="Utilities\MultiDictionary.cs" />
-    <Compile Include="Utilities\MurmurHash.cs" />
-    <Compile Include="Utilities\None.cs" />
-    <Compile Include="Utilities\ObjectPool.cs" />
-    <Compile Include="Utilities\Paths.cs" />
-    <Compile Include="Utilities\PathUtilities.cs" />
-    <Compile Include="Utilities\Pools.cs" />
-    <Compile Include="Utilities\Range.cs" />
-    <Compile Include="Utilities\RangeHelper.cs" />
-    <Compile Include="Utilities\ReflectionHelpers.cs" />
-    <Compile Include="Utilities\SpanUtilities.cs" />
-    <Compile Include="Utilities\TaskUtilities.cs" />
-    <Compile Include="Utilities\TextUtilities.cs" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="..\..\Codex.Sdk.Types\Codex.Sdk.Types.projitems" Label="Shared" />
   <Import Project="..\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems" Label="Shared" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>
