@@ -35,32 +35,9 @@ namespace Codex.Web.Controllers
         {
             var result = await Codex.SearchAsync(arguments);
             return result;
-
-            //return new IndexQueryHitsResponse<ISearchResult>()
-            //{
-            //    Result = new IndexQueryHits<ISearchResult>()
-            //    {
-            //        Hits = new List<SearchResult>()
-            //        {
-            //            new SearchResult()
-            //            {
-            //                ProjectId = "Codex.Web",
-            //                RepositoryName = "Codex",
-            //                ProjectRelativePath = @"Controllers\CodexController.cs",
-            //                RepoRelativePath = @"src\Codex.Web\Controllers\CodexController.cs",
-            //                TextSpan = new TextLineSpan()
-            //                {
-            //                    LineNumber = 15,
-            //                    LineSpanText = "public Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync([FromBody]SearchArguments arguments)"
-            //                }
-            //            }
-            //        },
-            //        Total = 20
-            //    }
-            //};
         }
 
-        public Task<IndexQueryHitsResponse<IReferenceSearchModel>> FindAllReferencesAsync(FindAllReferencesArguments arguments)
+        public Task<IndexQueryHitsResponse<IReferenceSearchModel>> FindAllReferencesAsync([FromBody]FindAllReferencesArguments arguments)
         {
             throw new NotImplementedException();
         }

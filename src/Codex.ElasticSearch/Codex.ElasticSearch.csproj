@@ -6,6 +6,9 @@
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
+    <Compile Remove="Model\ElasticSearchTypes.target.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Ref12.Codex.Elasticsearch.Net" Version="6.0.0-beta1-b61" />
     <PackageReference Include="Ref12.Codex.NEST" Version="6.0.0-beta1-b61" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
@@ -15,9 +18,7 @@
     <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$(OutDir)\..\Codex.Framework.Generation\ElasticSearchTypes.g.cs">
-      <Link>Model\ElasticSearchTypes.g.cs</Link>
-    </Compile>
+    <None Include="Model\ElasticSearchTypes.target.cs" />
   </ItemGroup>
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>

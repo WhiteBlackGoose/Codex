@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Codex.View
 {
     /// <summary>
-    /// Interaction logic for SearchResults.xaml
+    /// Interaction logic for LeftPane.xaml
     /// </summary>
-    public partial class SearchResults : UserControl
+    public partial class LeftPane : UserControl
     {
-        public SearchResults()
+        public LeftPane()
         {
             InitializeComponent();
         }

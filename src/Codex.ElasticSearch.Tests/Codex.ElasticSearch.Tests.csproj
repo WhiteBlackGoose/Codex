@@ -4,6 +4,7 @@
     <ProjectGuid>{8EDF4429-251A-416D-BB68-93F227191BCF}</ProjectGuid>
     <AssemblyName>Codex.ElasticSearch.Tests</AssemblyName>
     <RootNamespace>Codex.ElasticSearch.Tests</RootNamespace>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>

@@ -20,7 +20,8 @@
     <BinariesFolder>$(SrcRoot)\out\bin</BinariesFolder>
     <CommonOutputDirectory>$(BinariesFolder)\$(Configuration)</CommonOutputDirectory>
     <BuildToCommonOutputDirectory Condition="'$(BuildToCommonOutputDirectory)' == ''">false</BuildToCommonOutputDirectory>
-    <OutputPath Condition="'$(OutputPath)' == ''">$(CommonOutputDirectory)\$(MSBuildProjectName)</OutputPath>
+    <OutputPathSuffix Condition="'$(OutputPathSuffix)' == '' AND '$(TargetFrameworks)' != '' AND '$(TargetFramework)' != ''">\$(TargetFramework)</OutputPathSuffix>
+    <OutputPath Condition="'$(OutputPath)' == ''">$(CommonOutputDirectory)\$(MSBuildProjectName)$(OutputPathSuffix)</OutputPath>
     <OutputPath Condition="'$(BuildToCommonOutputDirectory)' == 'true'">$(CommonOutputDirectory)</OutputPath>
     <OutDir>$(OutputPath)\</OutDir>
     <_FindDependencies>true</_FindDependencies>

@@ -338,7 +338,7 @@ namespace Codex.Framework.Generation
 
             typeMappingCreatorMethod.Statements.Add(new CodeMethodReturnStatement(new CodeVariableReferenceExpression(typeMappingVariableName)));
 
-            using (var writer = new StreamWriter("ElasticSearchTypes.g.cs"))
+            using (var writer = new StreamWriter(ElasticSearchTypesTarget.Path))
             {
                 CodeProvider.GenerateCodeFromCompileUnit(elasticSearchTypesFile, writer, new System.CodeDom.Compiler.CodeGeneratorOptions()
                 {
@@ -347,7 +347,7 @@ namespace Codex.Framework.Generation
                 });
             }
 
-            using (var writer = new StreamWriter("EntityTypes.g.cs"))
+            using (var writer = new StreamWriter(EntityTypesTarget.Path))
             {
                 CodeProvider.GenerateCodeFromCompileUnit(searchDescriptors, writer, new System.CodeDom.Compiler.CodeGeneratorOptions()
                 {
@@ -538,10 +538,7 @@ namespace Codex.Framework.Generation
                 else
                 {
                     // new PropertyType().CopyFrom(value.Property);
-                    return new CodeMethodInvokeExpression(
-                        new CodeMethodReferenceExpression(new CodeObjectCreateExpression(property.MutablePropertyType), "CopyFrom")
-                            .Apply(mr => mr.TypeArguments.Add(property.MutablePropertyType)),
-                        valuePropertyReferenceExpression);
+                    return new CodeSnippetExpression($"EntityUtilities.NullOrCopy({valuePropertyReferenceExpression.FieldName}, v => new {property.PropertyTypeDefinition.ClassName}().CopyFrom<{property.PropertyTypeDefinition.ClassName}>(v));");
                 }
             }
             else
@@ -559,7 +556,7 @@ namespace Codex.Framework.Generation
                     return new CodeObjectCreateExpression(property.InitPropertyType,
                         new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeTypeReferenceExpression(typeof(Enumerable)), nameof(Enumerable.Select)),
                         valuePropertyReferenceExpression,
-                            new CodeSnippetExpression($"v => new {property.PropertyTypeDefinition.ClassName}().CopyFrom<{property.PropertyTypeDefinition.ClassName}>(v)")));
+                            new CodeSnippetExpression($"v => EntityUtilities.NullOrCopy(v, _v => new {property.PropertyTypeDefinition.ClassName}().CopyFrom<{property.PropertyTypeDefinition.ClassName}>(_v))")));
                 }
 
             }

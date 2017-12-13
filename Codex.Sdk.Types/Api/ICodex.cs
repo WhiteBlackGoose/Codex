@@ -109,12 +109,22 @@ namespace Codex.Sdk.Search
 
     }
 
-    public interface ISearchResult : IProjectFileScopeEntity
+    public interface ITextLineSpanResult : IProjectFileScopeEntity
+    {
+        ITextLineSpan TextSpan { get; }
+    }
+
+    public interface ISearchResult
     {
         /// <summary>
         /// The text span for a text result
         /// </summary>
-        ITextLineSpan TextSpan { get; }
+        ITextLineSpanResult TextLine { get; }
+
+        /// <summary>
+        /// The definition of the search result
+        /// </summary>
+        IDefinitionSymbol Definition { get; }
     }
 
     public struct SerializableTimeSpan
@@ -194,7 +204,7 @@ namespace Codex.Sdk.Search
         /// The total number of results matching the query. 
         /// NOTE: This may be greater than the number of hits returned.
         /// </summary>
-        public int Total { get; set; }
+        public long Total { get; set; }
 
         /// <summary>
         /// The results of the query

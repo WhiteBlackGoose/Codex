@@ -1,4 +1,3 @@
-using Codex.Storage.DataModel;
 using Nest;
 using System;
 using System.IO;
@@ -9,10 +8,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using Codex.Sdk.Utilities;
-using Codex.ElasticSearch;
-using Codex.ElasticSearch.Utilities;
 
-namespace Codex.Storage.ElasticProviders
+namespace Codex.ElasticSearch.Utilities
 {
     public class QualifiedNameTerms
     {

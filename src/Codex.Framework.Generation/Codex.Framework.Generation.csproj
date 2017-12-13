@@ -85,8 +85,15 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Codex.ElasticSearch\Model\ElasticSearchTypes.target.cs">
+      <Link>ElasticSearchTypes.target.cs</Link>
+    </Compile>
+    <Compile Include="..\Codex.Sdk.Shared\EntityTypes.target.cs">
+      <Link>EntityTypes.target.cs</Link>
+    </Compile>
     <Compile Include="Placeholders.cs" />
     <Compile Include="StoreGenerator.cs" />
+    <Compile Include="TargetBase.cs" />
     <Compile Include="TypeDefinition.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="Program.cs" />

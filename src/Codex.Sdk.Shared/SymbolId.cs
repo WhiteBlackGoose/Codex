@@ -7,14 +7,14 @@ namespace Codex.ObjectModel
     {
         public readonly string Value;
 
-        private SymbolId(string value)
+        private SymbolId(string value, bool ignored)
         {
             Value = value;
         }
 
         public static SymbolId UnsafeCreateWithValue(string value)
         {
-            return new SymbolId(value);
+            return new SymbolId(value, true);
         }
 
         public bool Equals(SymbolId other)

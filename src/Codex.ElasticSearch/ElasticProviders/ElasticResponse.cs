@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Text;
 using Nest;
+using Codex.ElasticSearch.Utilities;
 
 namespace Codex.Storage.ElasticProviders
 {

@@ -133,13 +133,13 @@ namespace Codex
         IDefinitionSymbol Definition { get; }
 
         // TODO: Not sure that this is actually needed
-        ///// <summary>
-        ///// Keywords are additional terms which can be used to find a given symbol.
-        ///// NOTE: Keywords can only be used to select from symbols which have
-        ///// a primary term match
-        ///// </summary>
-        //[SearchBehavior(SearchBehavior.NormalizedKeyword)]
-        //IReadOnlyList<string> Keywords { get; }
+        /// <summary>
+        /// Keywords are additional terms which can be used to find a given symbol.
+        /// NOTE: Keywords can only be used to select from symbols which have
+        /// a primary term match
+        /// </summary>
+        [SearchBehavior(SearchBehavior.NormalizedKeyword)]
+        IReadOnlyList<string> Keywords { get; }
     }
 
     public interface ILanguageSearchModel : ISearchEntity

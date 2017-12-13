@@ -1,4 +1,6 @@
-﻿using Codex.ObjectModel;
+﻿using Codex.ElasticSearch.Search;
+using Codex.ObjectModel;
+using Codex.Sdk.Search;
 using Codex.Utilities;
 using NUnit.Framework;
 using System;
@@ -14,6 +16,24 @@ namespace Codex.ElasticSearch.Tests
     [TestFixture]
     public class EsIntegrationTests
     {
+        [Test]
+        public async Task TestSearch()
+        {
+            var codex = new ElasticSearchCodex(new ElasticSearchStoreConfiguration()
+            {
+                CreateIndices = true,
+                ShardCount = 1,
+                Prefix = "apptest"
+            }, new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200")));
+
+            var response = await codex.SearchAsync(new SearchArguments()
+            {
+                SearchString = "assem"
+            });
+
+            Assert.IsNull(response.Error);
+        }
+
         [Test]
         public async Task StoredFilterTest()
         {

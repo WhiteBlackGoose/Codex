@@ -8,7 +8,7 @@ namespace Codex.ObjectModel
         public static SymbolId CreateFromId(string id)
         {
             // return new SymbolId(id);
-            return new SymbolId(IndexingUtilities.ComputeSymbolUid(id));
+            return new SymbolId(IndexingUtilities.ComputeSymbolUid(id), true);
         }
     }
 }

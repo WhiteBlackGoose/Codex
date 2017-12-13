@@ -46,17 +46,10 @@
         <ColumnDefinition />
       </Grid.ColumnDefinitions>
 
+      <local:LeftPane Grid.Column="0" DataContext="{Binding LeftPane}"/>
+
       <Border Background="#EEEEEE" Grid.Column="1" />
-      <Border Background="#FFFFE0" BorderBrush="#F0E68C" BorderThickness="1" Margin="8" VerticalAlignment="Top" Height="38" Padding="8, 0">
-        <TextBlock 
-                  x:Name="SearchInfo"
-                  Text="Enter a search string. Start with ` for full text search results only."
-                           VerticalAlignment="Center"
-                           FontSize="16" />
-      </Border>
-      <Border x:Name="SearchResultsContainer">
-        <local:SearchResults />
-      </Border>
+
     </Grid>
   </DockPanel>
 </Window>

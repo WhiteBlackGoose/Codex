@@ -23,12 +23,13 @@ namespace Codex.View
     {
         public ICodex CodexService { get; } = CodexProvider.Instance;
 
-        private ViewModelDataContext SearchResultDataContext = new ViewModelDataContext();
+        private ViewModelDataContext ViewModel = new ViewModelDataContext();
 
         public MainWindow()
         {
             InitializeComponent();
-            SearchResultsContainer.DataContext = SearchResultDataContext;
+            this.DataContext = ViewModel;
+            ViewModel.Initialize();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -42,74 +43,24 @@ namespace Codex.View
 
         public async void SearchTextChanged(object sender, TextChangedEventArgs e)
         {
-            try
+            var searchString = SearchBox.Text;
+            searchString = searchString.Trim();
+
+            if (searchString.Length < 3)
             {
-                var searchString = SearchBox.Text;
-                searchString = searchString.Trim();
-
-                if (searchString.Length < 3)
+                ViewModel.LeftPane = new LeftPaneViewModel()
                 {
-                    SearchInfo.Text = "Enter at least 3 characters.";
-                    return;
-                }
-
-                var response = await CodexService.SearchAsync(new SearchArguments()
-                {
-                    SearchString = searchString
-                });
-
-                if (response.Error != null)
-                {
-                    SearchInfo.Text = response.Error;
-                    return;
-                }
-                else if (response.Result?.Hits == null || response.Result.Hits.Count == 0)
-                {
-                    SearchInfo.Text = $"No results found\n"
-                        + $"(response.Result == null):{response.Result == null}\n"
-                        + $"(response.Result?.Hits == null):{response.Result?.Hits == null}\n"
-                        + $"(response.Result.Hits?.Count):{response.Result.Hits?.Count}\n"
-                        + $"(response.Result == null):{response.Result == null}";
-                    return;
-                }
-
-                SearchInfo.Text = string.Empty;
-                SearchResultDataContext.ViewModel = new TextSearchResultsViewModel(searchString, response);
-
-                //Console.WriteLine("Search result");
-                //Console.WriteLine(result.ToString());
+                    SearchInfo = "Enter at least 3 characters."
+                };
+                return;
             }
-            finally
+
+            var response = await CodexService.SearchAsync(new SearchArguments()
             {
-                if (string.IsNullOrEmpty(SearchInfo.Text))
-                {
-                    SearchResultsContainer.Visibility = Visibility.Visible;
-                    SearchInfo.Visibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    SearchResultsContainer.Visibility = Visibility.Collapsed;
-                    SearchInfo.Visibility = Visibility.Visible;
-                }
-            }
+                SearchString = searchString
+            });
+
+            ViewModel.LeftPane = LeftPaneViewModel.FromSearchResponse(searchString, response);
         }
-
-        //private void Border_SizeChanged(object sender, SizeChangedEventArgs e)
-        //{
-        //}
-
-        //private void Window_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //}
-
-        //private void Window_Initialized(object sender, EventArgs e)
-        //{
-        //}
-
-        //protected override Size ArrangeOverride(Size arrangeBounds)
-        //{
-        //    var result = base.ArrangeOverride(arrangeBounds);
-        //    return result;
-        //}
     }
 }
