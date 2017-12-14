@@ -12,13 +12,15 @@
         <ResourceDictionary Source="Styling.xaml" />
       </ResourceDictionary.MergedDictionaries>
       <DataTemplate DataType="{x:Type c:SymbolResultViewModel}">
-        <StackPanel x:Name="SymbolPanel" Orientation="Vertical" Margin="24,4,4,4">
-          <StackPanel Orientation="Horizontal" TextBlock.FontSize="16">
-            <TextBlock Text="{Binding SymbolKind}" Foreground="Blue" Margin="0,0,5,0"/>
-            <TextBlock Text="{Binding ShortName}" />
+        <Border x:Name="SymbolPanel" Background="Transparent">
+          <StackPanel Orientation="Vertical" Margin="24,4,4,4">
+            <StackPanel Orientation="Horizontal" TextBlock.FontSize="16">
+              <TextBlock Text="{Binding SymbolKind}" Foreground="Blue" Margin="0,0,5,0"/>
+              <TextBlock Text="{Binding ShortName}" />
+            </StackPanel>
+            <TextBlock Text="{Binding DisplayName}" Foreground="Silver" FontSize="14" />
           </StackPanel>
-          <TextBlock Text="{Binding DisplayName}" Foreground="Silver" FontSize="14" />
-        </StackPanel>
+        </Border>
         <DataTemplate.Triggers>
           <Trigger SourceName="SymbolPanel" Property="IsMouseOver" Value="True">
             <Setter TargetName="SymbolPanel" Property="Background" Value="#eeeeee" />
