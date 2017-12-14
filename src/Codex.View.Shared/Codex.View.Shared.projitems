@@ -13,7 +13,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="$(MSBuildThisFileDirectory)LeftPane.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)LeftPaneView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="$(MSBuildThisFileDirectory)MainWindow.xaml">
@@ -32,8 +32,8 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CodexProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GranularExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)LeftPane.xaml.cs">
-      <DependentUpon>LeftPane.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)LeftPaneView.xaml.cs">
+      <DependentUpon>LeftPaneView.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)MainWindow.xaml.cs">
       <SubType>Code</SubType>

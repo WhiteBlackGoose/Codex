@@ -68,44 +68,53 @@ namespace Codex.View
         }
     }
 
-    public class ProjectResultsViewModel
+    public class ProjectGroupResultsViewModel
     {
         public string ProjectName { get; set; }
         public IReadOnlyList<ProjectItemResultViewModel> Items { get; set; }
     }
 
+    public class ProjectResultsViewModel : LeftPaneContent
+    {
+        public List<ProjectGroupResultsViewModel> ProjectGroups { get; set; }
+
+        public ProjectResultsViewModel()
+        {
+        }
+
+        public ProjectResultsViewModel(string searchString, IndexQueryHitsResponse<ISearchResult> response)
+        {
+            ProjectGroups = response.Result.Hits.Select(sr => sr.Definition).GroupBy(sr => sr.ProjectId).Select(projectGroup => new ProjectGroupResultsViewModel()
+            {
+                ProjectName = projectGroup.Key,
+                Items = projectGroup.Select(symbol => new SymbolResultViewModel(symbol)).ToList()
+            }).ToList();
+        }
+    }
+
     public class CategoryGroupSearchResultsViewModel
     {
+        public Visibility HeaderVisibility => string.IsNullOrEmpty(Header) ? Visibility.Collapsed : Visibility.Visible;
+
         public string Header { get; }
 
-        public List<ProjectResultsViewModel> ProjectResults { get; }
+        public ProjectResultsViewModel ProjectResults { get; } = new ProjectResultsViewModel();
 
         public CategoryGroupSearchResultsViewModel(string searchString, IndexQueryHitsResponse<ISearchResult> response)
         {
             var result = response.Result;
 
-            if (result.Hits[0].Definition != null)
+            ProjectResults.ProjectGroups = result.Hits.Select(sr => sr.TextLine).GroupBy(sr => sr.ProjectId).Select(projectGroup => new ProjectGroupResultsViewModel()
             {
-                ProjectResults = result.Hits.Select(sr => sr.Definition).GroupBy(sr => sr.ProjectId).Select(projectGroup => new ProjectResultsViewModel()
+                ProjectName = projectGroup.Key,
+                Items = projectGroup.GroupBy(sr => sr.ProjectRelativePath).Select(fileGroup => new FileResultsViewModel()
                 {
-                    ProjectName = projectGroup.Key,
-                    Items = projectGroup.Select(symbol => new SymbolResultViewModel(symbol)).ToList()
-                }).ToList();
-            }
-            else
-            {
-                ProjectResults = result.Hits.Select(sr => sr.TextLine).GroupBy(sr => sr.ProjectId).Select(projectGroup => new ProjectResultsViewModel()
-                {
-                    ProjectName = projectGroup.Key,
-                    Items = projectGroup.GroupBy(sr => sr.ProjectRelativePath).Select(fileGroup => new FileResultsViewModel()
-                    {
-                        Path = fileGroup.Key,
-                        Items = fileGroup.Select(sr => new TextSpanSearchResultViewModel(sr)).ToList()
-                    }).ToList()
-                }).ToList();
+                    Path = fileGroup.Key,
+                    Items = fileGroup.Select(sr => new TextSpanSearchResultViewModel(sr)).ToList()
+                }).ToList()
+            }).ToList();
 
-                Header = $"{result.Hits.Count} text search hits for '{searchString}'";
-            }
+            Header = $"{result.Hits.Count} text search hits for '{searchString}'";
         }
     }
 
@@ -126,9 +135,9 @@ namespace Codex.View
     {
     }
 
-    public class LeftPaneViewModel : ViewModelBase
+    public class LeftPaneViewModel : NotifyPropertyChangedBase
     {
-        public Visibility SearchInfoVisibility => SearchInfo != null ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility SearchInfoVisibility => !string.IsNullOrEmpty(SearchInfo) ? Visibility.Visible : Visibility.Collapsed;
 
         public string SearchInfo { get; set; } = null;
 
@@ -158,26 +167,65 @@ namespace Codex.View
                 };
             }
 
+            var result = response.Result;
+            bool isDefinitionsResult = result.Hits[0].Definition != null;
             return new LeftPaneViewModel()
             {
-                Content = new CategorizedSearchResultsViewModel(searchString, response)
+                Content = isDefinitionsResult ?
+                    (LeftPaneContent)new ProjectResultsViewModel(searchString, response) :
+                    new CategorizedSearchResultsViewModel(searchString, response),
+                SearchInfo = isDefinitionsResult ?
+                    (result.Hits.Count < result.Total ?
+                        $"Displaying top {result.Hits.Count} results out of {result.Total}:" :
+                        $"{result.Hits.Count} results found:")
+                    : string.Empty
             };
         }
     }
 
-    public class ViewModelBase : INotifyPropertyChanged
+    public class BindableValue<T> : NotifyPropertyChangedBase
     {
-        public ViewModelBase Self => this;
+        private T value;
 
-        protected void OnPropertyChanged([CallerMemberName] string memberName = null)
+        public T Value
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
-        }
+            get
+            {
+                return value;
+            }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+            set
+            {
+                this.value = value;
+                OnPropertyChanged();
+            }
+        }
     }
 
-    public class ViewModelDataContext : ViewModelBase
+
+    public abstract class NotifyPropertyChangedBase : INotifyPropertyChanged
+    {
+        protected void OnPropertyChanged([CallerMemberName] string memberName = null)
+        {
+            propertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
+        }
+
+        private event PropertyChangedEventHandler propertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged
+        {
+            add
+            {
+                propertyChanged += value;
+            }
+
+            remove
+            {
+                propertyChanged -= value;
+            }
+        }
+    }
+
+    public class ViewModelDataContext : NotifyPropertyChangedBase
     {
         private LeftPaneViewModel leftPane;
 
@@ -190,6 +238,13 @@ namespace Codex.View
 
             set
             {
+                // HACK to force full refresh of left pane
+                //if (value != null)
+                //{
+                //    leftPane = null;
+                //    OnPropertyChanged();
+                //}
+
                 leftPane = value;
                 OnPropertyChanged();
             }

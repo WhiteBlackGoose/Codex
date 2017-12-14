@@ -18,9 +18,9 @@ namespace Codex.View
     /// <summary>
     /// Interaction logic for LeftPane.xaml
     /// </summary>
-    public partial class LeftPane : UserControl
+    public partial class LeftPaneView : UserControl
     {
-        public LeftPane()
+        public LeftPaneView()
         {
             InitializeComponent();
         }

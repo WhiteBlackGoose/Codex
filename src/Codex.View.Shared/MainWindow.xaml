@@ -46,7 +46,7 @@
         <ColumnDefinition />
       </Grid.ColumnDefinitions>
 
-      <local:LeftPane Grid.Column="0" DataContext="{Binding LeftPane}"/>
+      <local:LeftPaneView x:Name="LeftPane" Grid.Column="0" DataContext="{Binding LeftPane}" />
 
       <Border Background="#EEEEEE" Grid.Column="1" />
 
