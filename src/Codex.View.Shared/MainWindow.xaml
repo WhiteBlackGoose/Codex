@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="Ref12" Height="720" Width="1080" FontFamily="Segoe UI,Tahoma,Helvetica,sans-serif">
   <Window.Resources>
+    
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Styling.xaml" />
@@ -42,13 +43,13 @@
     <Grid>
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="500" />
-        <ColumnDefinition Width="20" />
+        <ColumnDefinition Width="Auto" />
         <ColumnDefinition />
       </Grid.ColumnDefinitions>
 
       <local:LeftPaneView x:Name="LeftPane" Grid.Column="0" DataContext="{Binding LeftPane}" />
 
-      <Border Background="#EEEEEE" Grid.Column="1" />
+      <GridSplitter Background="#EEEEEE" Grid.Column="1" VerticalAlignment="Stretch" ShowsPreview="True" HorizontalAlignment="Left" Width="20" />
 
     </Grid>
   </DockPanel>

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,6 +31,7 @@ namespace Codex.View
             InitializeComponent();
             this.DataContext = ViewModel;
             ViewModel.Initialize();
+            SearchBox.Text = "ixedoc";
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

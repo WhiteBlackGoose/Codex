@@ -98,7 +98,7 @@ namespace Codex.View
 
         public string Header { get; }
 
-        public ProjectResultsViewModel ProjectResults { get; } = new ProjectResultsViewModel();
+        public ProjectResultsViewModel ProjectResults { get; set; } = new ProjectResultsViewModel();
 
         public CategoryGroupSearchResultsViewModel(string searchString, IndexQueryHitsResponse<ISearchResult> response)
         {

@@ -19,4 +19,48 @@
     <ProjectLinkExcludeItem Include="Compatibility\"/>
     <ProjectLinkExcludeItem Include="Properties\"/>
   </ItemGroup>
+
+  <ItemGroup Condition="'$(GranularSourceRoot)' != ''">
+    <PackageReference Update="Granular.Host.Wpf">
+      <Superceded>true</Superceded>
+    </PackageReference>
+    <ProjectReference Include="$(GranularSourceRoot)\Granular.Common\Granular.Common.csproj">
+      <Project>{87f1fd58-e233-4183-830a-e9e54ba17d68}</Project>
+      <Name>Granular.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(GranularSourceRoot)\Granular.Host.Wpf\Granular.Host.Wpf.csproj">
+      <Project>{ed2ae8a5-dec3-4829-93a8-834a8833ec26}</Project>
+      <Name>Granular.Host.Wpf</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(GranularSourceRoot)\Granular.Presentation.Generic\Granular.Presentation.Generic.csproj">
+      <Project>{fb4fbb48-cacb-49fa-898f-154a8a9233d1}</Project>
+      <Name>Granular.Presentation.Generic</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(GranularSourceRoot)\Granular.Presentation\Granular.Presentation.csproj">
+      <Project>{14ec400c-e6b9-499b-9970-57b34af24a4b}</Project>
+      <Name>Granular.Presentation</Name>
+    </ProjectReference>
+  </ItemGroup>
+
+  <Target Name="BeforeSupercedePackageReferences" BeforeTargets="ResolveNuGetPackageAssets">
+    <ItemGroup>
+      <!--<_SupercedePackageReferences_ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths)" />-->
+      <!--<_SupercedePackageReferences_Reference Include="@(Reference)" />-->
+      <PackageReference Remove="@(PackageReference)" Condition="'%(PackageReference.Superceded)' == 'true'" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="SupercedePackageReferences" AfterTargets="ResolveNuGetPackageAssets">
+    <ItemGroup>
+      <Reference Remove="@(Reference)" Condition="'%(Reference.NuGetPackageId)' == 'Granular.Host.Wpf'" />
+      <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' == 'Granular.Host.Wpf'" />
+    </ItemGroup>
+
+    <Message Importance="high" Text="Reference: %(ReferencePath.NuGetPackageId)" />
+  </Target>
+
+  <Target Name="PrintRefs" BeforeTargets="CoreCompile">
+    <Message Importance="high" Text="Package Reference: %(PackageReference.Identity)" />
+    <Message Importance="high" Text="Reference: %(ReferencePath.Identity)" />
+  </Target>
 </Project>

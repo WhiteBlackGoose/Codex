@@ -22,35 +22,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="bridge.json" />
-    <None Include="ProjectLink.targets" />
+    <None Include="ProjectLink.targets">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compatibility\Reference.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Granular.Host.Wpf">
-      <Version>0.3.110-beta</Version>
+      <Version>0.3.112-beta</Version>
     </PackageReference>
   </ItemGroup>
-  <!--Uncomment this portion to support debugging Granular-->
-  <!--<ItemGroup Condition="'$(GranularSourceRoot)' != ''">
-    <ProjectReference Include="$(GranularSourceRoot)\Granular\Granular.Common\Granular.Common.csproj">
-      <Project>{87f1fd58-e233-4183-830a-e9e54ba17d68}</Project>
-      <Name>Granular.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="$(GranularSourceRoot)\Granular\Granular.Host.Wpf\Granular.Host.Wpf.csproj">
-      <Project>{ed2ae8a5-dec3-4829-93a8-834a8833ec26}</Project>
-      <Name>Granular.Host.Wpf</Name>
-    </ProjectReference>
-    <ProjectReference Include="$(GranularSourceRoot)\Granular\Granular.Presentation.Generic\Granular.Presentation.Generic.csproj">
-      <Project>{fb4fbb48-cacb-49fa-898f-154a8a9233d1}</Project>
-      <Name>Granular.Presentation.Generic</Name>
-    </ProjectReference>
-    <ProjectReference Include="$(GranularSourceRoot)\Granular\Granular.Presentation\Granular.Presentation.csproj">
-      <Project>{14ec400c-e6b9-499b-9970-57b34af24a4b}</Project>
-      <Name>Granular.Presentation</Name>
-    </ProjectReference>
-  </ItemGroup>-->
   <ItemGroup>
     <ProjectReference Include="..\Codex.ElasticSearch\Codex.ElasticSearch.csproj">
       <Project>{4573f8bc-6b87-4526-a815-42f473452f8c}</Project>
@@ -67,5 +50,4 @@
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
   </ImportGroup>
   <Import Project="ProjectLink.targets" Condition="Exists('ProjectLink.targets')" />
-  <Import Project="$(GranularSourceRoot)\..\BuildTasks\Granular.targets" Condition="'$(GranularSourceRoot)' != ''" />
 </Project>
