@@ -51,6 +51,7 @@
 
       <GridSplitter Background="#EEEEEE" Grid.Column="1" VerticalAlignment="Stretch" ShowsPreview="True" HorizontalAlignment="Left" Width="20" />
 
+      <local:EditorHostControl Grid.Column="2" />
     </Grid>
   </DockPanel>
 </Window>

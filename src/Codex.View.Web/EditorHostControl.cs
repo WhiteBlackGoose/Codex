@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Bridge;
 using Bridge.Html5;
 using Granular.Presentation.Web;
 
@@ -12,6 +13,7 @@ namespace Codex.View
         public void SetRenderElement(HTMLElement htmlElement)
         {
             m_htmlElement = htmlElement;
+            m_htmlElement.TextContent = "Hello World";
         }
     }
 }
