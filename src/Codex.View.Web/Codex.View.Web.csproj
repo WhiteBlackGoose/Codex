@@ -53,6 +53,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebApiCodex.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="bridge\index.debug.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="bridge\index.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="..\Codex.View.Shared\Codex.View.Shared.projitems" Label="Shared" />
   <Import Project="..\..\Codex.Sdk.Types\Codex.Sdk.Types.projitems" Label="Shared" />
   <Import Project="..\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems" Label="Shared" />
