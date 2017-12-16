@@ -30,11 +30,6 @@
     <Compile Include="Compatibility\Reference.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Granular.Host.Wpf">
-      <Version>0.3.112-beta</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Codex.ElasticSearch\Codex.ElasticSearch.csproj">
       <Project>{4573f8bc-6b87-4526-a815-42f473452f8c}</Project>
       <Name>Codex.ElasticSearch</Name>
@@ -43,6 +38,11 @@
       <Project>{2322a932-05f4-4931-8547-71377c6ab49e}</Project>
       <Name>Codex.Sdk</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Granular.Host.Wpf">
+      <Version>0.3.114-beta</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="..\Codex.View.Shared\Codex.View.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

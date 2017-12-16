@@ -20,7 +20,7 @@
     <ProjectLinkExcludeItem Include="Properties\"/>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(GranularSourceRoot)' != ''">
+  <!--<ItemGroup Condition="'$(GranularSourceRoot)' != ''">
     <PackageReference Update="Granular.Host.Wpf">
       <Superceded>true</Superceded>
     </PackageReference>
@@ -40,7 +40,7 @@
       <Project>{14ec400c-e6b9-499b-9970-57b34af24a4b}</Project>
       <Name>Granular.Presentation</Name>
     </ProjectReference>
-  </ItemGroup>
+  </ItemGroup>-->
 
   <Target Name="BeforeSupercedePackageReferences" BeforeTargets="ResolveNuGetPackageAssets">
     <ItemGroup>
@@ -50,7 +50,7 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="SupercedePackageReferences" AfterTargets="ResolveNuGetPackageAssets">
+  <Target Name="SupercedePackageReferences" AfterTargets="ResolveNuGetPackageAssets" Condition="false">
     <ItemGroup>
       <Reference Remove="@(Reference)" Condition="'%(Reference.NuGetPackageId)' == 'Granular.Host.Wpf'" />
       <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' == 'Granular.Host.Wpf'" />

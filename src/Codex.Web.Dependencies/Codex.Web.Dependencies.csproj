@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>Packages web files dependencies of Codex.View.Web project</Description>
+    <GeneratePackageOnBuild Condition="'$(WebDepsNugetVersion)' != ''">true</GeneratePackageOnBuild>
+    <Authors>Ref12</Authors>
+    <Company>Ref12</Company>
+    <Product>Ref12</Product>
+    <PackageId>Ref12.Codex.Web.View.Dependencies</PackageId>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
+    <Version>$(WebDepsNugetVersion)</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="node_modules\**\*.*" />
+  </ItemGroup>
+  <Import Project="$(SrcRoot)\Common.props" />
+  <Import Project="..\..\Codex.Sdk.Types\Codex.Sdk.Types.projitems" Label="Shared" />
+  <Import Project="..\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems" Label="Shared" />
+  <Import Project="$(SrcRoot)\Common.targets" />
+</Project>

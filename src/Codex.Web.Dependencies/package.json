@@ -1,0 +1,7 @@
+{
+  "name": "ref12.codex.web.dependencies",
+  "version": "1.0.0",
+  "devDependencies": {
+    "monaco-editor": "^0.10.1"
+  }
+}
