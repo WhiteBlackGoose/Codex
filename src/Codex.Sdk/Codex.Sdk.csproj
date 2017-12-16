@@ -2,6 +2,7 @@
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <SignAssembly Condition="'$(TargetFramework)' == 'net461'">true</SignAssembly>
     <!--<TargetFramework>netcoreapp2.0</TargetFramework>-->
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />

@@ -90,7 +90,7 @@ namespace Codex.ElasticSearch
 
         private bool IsAdded(BulkResponseItemBase item)
         {
-            return (item as BulkCreateResponseItem).Created;
+            return (item as BulkCreateResponseItem).Result == "created";
         }
 
         private int GetShard(BulkResponseItemBase item)

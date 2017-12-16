@@ -33,6 +33,9 @@
     <PackageReference Condition="'$(GranularSourceRoot)' == ''" Include="Granular">
       <Version>0.3.114-beta</Version>
     </PackageReference>
+    <PackageReference Include="Ref12.Codex.Web.View.Dependencies">
+      <Version>1.0.122-beta</Version>
+    </PackageReference>
     <PackageReference Include="Retyped">
       <Version>1.3.6532</Version>
     </PackageReference>

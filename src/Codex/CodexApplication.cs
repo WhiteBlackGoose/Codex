@@ -381,8 +381,9 @@ namespace Codex.Application
                 var response = await codex.SearchAsync(new SearchArguments() { SearchString = line });
                 var results = response.Result;
                 Console.WriteLine($"Found {results.Total} matches");
-                foreach (var result in results.Hits)
+                foreach (var searchResult in results.Hits)
                 {
+                    var result = searchResult.TextLine;
                     Console.WriteLine($@"\\{result.RepositoryName}\{result.RepoRelativePath}");
                     Console.WriteLine($"{result.ProjectId}:{result.ProjectRelativePath} ({result.TextSpan.LineIndex}, {result.TextSpan.LineSpanStart})");
 
