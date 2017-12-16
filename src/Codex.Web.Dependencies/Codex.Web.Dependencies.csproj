@@ -4,6 +4,7 @@
     <TargetFramework>net461</TargetFramework>
     <Description>Packages web files dependencies of Codex.View.Web project</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
     <Authors>Ref12</Authors>
     <Company>Ref12</Company>
     <Product>Ref12</Product>
@@ -14,6 +15,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="node_modules\**\*.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Ref12.Codex.Web.View.Dependencies.targets" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Ref12.Codex.Web.View.Dependencies.targets">
+      <PackagePath>build\Ref12.Codex.Web.View.Dependencies.targets</PackagePath>
+    </Content>
   </ItemGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <Import Project="$(SrcRoot)\Common.targets" />
