@@ -5,6 +5,8 @@ using Granular.Presentation.Web;
 using Monaco;
 using System.Windows.Media;
 using static monaco.editor;
+using System.Windows.Threading;
+using Granular.Host;
 
 namespace Codex.View
 {
@@ -12,16 +14,16 @@ namespace Codex.View
     {
         private HTMLElement m_htmlElement;
         private IStandaloneCodeEditor m_editor;
+        private RenderQueue renderQueue = new RenderQueue();
         //private List<HTMLElement> m_arrangedElements = new List<HTMLElement>();
 
         public async void SetRenderElement(HTMLElement htmlElement)
         {
             m_htmlElement = htmlElement;
-            //m_htmlElement.TextContent = "Hello World";
             m_editor = await Editor.Create(htmlElement, "Hello World");
 
             this.VisualIsHitTestVisible = true;
-            VisualBackground = Brushes.DeepPink;
+            VisualBackground = Brushes.Transparent;
         }
 
         protected override Size ArrangeOverride(Size finalSize)
@@ -31,7 +33,13 @@ namespace Codex.View
 
             if (!currentSize.IsClose(finalSize))
             {
-                m_editor?.layout();
+                if (m_editor != null)
+                {
+                    renderQueue.InvokeAsync(() =>
+                    {
+                        m_editor.layout();
+                    });
+                }
             }
 
             return finalSize;
