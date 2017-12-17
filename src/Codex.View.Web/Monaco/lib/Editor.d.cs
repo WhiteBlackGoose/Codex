@@ -21,9 +21,10 @@ public static partial class monaco
             public string language { get; set; }
         }
 
+        [Virtual]
         public interface IStandaloneCodeEditor
         {
-
+            void layout();
         }
     }
 }

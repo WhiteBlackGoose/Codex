@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static monaco.editor;
 
-namespace Codex.Monaco
+namespace Monaco
 {
     public static class Editor
     {

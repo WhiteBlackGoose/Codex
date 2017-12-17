@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 [Module(true, LoadName = "vs/editor/editor.main", Name = "monaco_editor_ignored")]
 public static partial class monaco { }
 
-namespace Codex.Monaco
+namespace Monaco
 {
     /// <summary>
     /// Responsible for loading the monaco editor javascript library using the loader.js

@@ -45,6 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="bridge.json" />
+    <Content Include="bridge\.nojekyll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="ProjectLink.targets">
       <SubType>Designer</SubType>
     </None>
@@ -53,6 +56,9 @@
     <Compile Include="Compatibility\Compatibility.cs" />
     <Compile Include="Compatibility\Reference.cs" />
     <Compile Include="EditorHostControl.cs" />
+    <Compile Include="Monaco\Editor.cs" />
+    <Compile Include="Monaco\lib\Editor.d.cs" />
+    <Compile Include="Monaco\lib\Monaco.d.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebApiCodex.cs" />
   </ItemGroup>
@@ -65,10 +71,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Codex.Monaco\Codex.Monaco.csproj">
-      <Project>{380dddf8-edaa-4808-a736-493ae928636d}</Project>
-      <Name>Codex.Monaco</Name>
-    </ProjectReference>
+    <None Include="Monaco\lib\monaco.d.ts" />
   </ItemGroup>
   <Import Project="..\Codex.View.Shared\Codex.View.Shared.projitems" Label="Shared" />
   <Import Project="..\..\Codex.Sdk.Types\Codex.Sdk.Types.projitems" Label="Shared" />
