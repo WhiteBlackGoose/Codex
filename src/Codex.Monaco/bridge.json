@@ -1,0 +1,17 @@
+{
+  "fileName": "Codex.Monaco",
+  "fileNameCasing": "None",
+  "outputBy": "Project",
+  "logging": {
+    "level": "None"
+  },
+  "sourceMap": {
+    "enabled": true
+  },
+  "html": {
+    "disabled": true
+  },
+  "loader": {
+    "manualLoading": true
+  }
+}
