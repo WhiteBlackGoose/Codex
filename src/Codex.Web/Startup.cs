@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Codex.Sdk.Search;
 using Codex.ElasticSearch.Search;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace Codex.Web
 {
@@ -26,7 +27,7 @@ namespace Codex.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc(o => o.Conventions.Add(new CodexServiceApplicationModelConvention()));
             services.AddSingleton<ICodex>(new ElasticSearchCodex(new ElasticSearch.ElasticSearchStoreConfiguration()
             {
                 Prefix = "apptest"

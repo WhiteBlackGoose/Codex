@@ -35,9 +35,9 @@ namespace Codex.View.Web
             return PostAsync<IndexQueryHitsResponse<ReferenceSearchModel>, IndexQueryHitsResponse<IReferenceSearchModel>>(CodexServiceMethod.FindDefLocation, arguments);
         }
 
-        public Task<IndexQueryResponse<IBoundSourceSearchModel>> GetSourceAsync(GetSourceArguments arguments)
+        public Task<IndexQueryResponse<IBoundSourceFile>> GetSourceAsync(GetSourceArguments arguments)
         {
-            return PostAsync<IndexQueryResponse<BoundSourceSearchModel>, IndexQueryResponse<IBoundSourceSearchModel>>(CodexServiceMethod.GetSource, arguments);
+            return PostAsync<IndexQueryResponse<BoundSourceFile>, IndexQueryResponse<IBoundSourceFile>>(CodexServiceMethod.GetSource, arguments);
         }
 
         public Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync(SearchArguments arguments)

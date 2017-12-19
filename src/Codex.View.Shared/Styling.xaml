@@ -130,4 +130,30 @@
       </Setter.Value>
     </Setter>
   </Style>
+
+  <Style x:Key="ResultButtonStyle" TargetType="{x:Type Button}">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate>
+          <Border x:Name="BackgroundPanel" Background="{TemplateBinding Background}">
+            <ContentPresenter
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                Margin="{TemplateBinding Padding}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding ContentControl.Content}"
+                                ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
+                                ContentTemplateSelector="{TemplateBinding ContentControl.ContentTemplateSelector}"/>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger SourceName="BackgroundPanel" Property="IsMouseOver" Value="True">
+              <Setter TargetName="BackgroundPanel" Property="Background" Value="#eeeeee" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
 </ResourceDictionary>

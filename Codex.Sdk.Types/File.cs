@@ -43,6 +43,7 @@ namespace Codex
         /// </summary>
         [ReadOnlyList]
         [SearchBehavior(SearchBehavior.None)]
+        [Include(ObjectStage.Analysis)]
         IReadOnlyList<IReferenceSpan> References { get; }
 
         // TODO: Should this be just the symbol
@@ -57,6 +58,7 @@ namespace Codex
         /// </summary>
         [ReadOnlyList]
         [SearchBehavior(SearchBehavior.None)]
+        [Include(ObjectStage.Analysis)]
         IReadOnlyList<IClassificationSpan> Classifications { get; }
 
         /// <summary>

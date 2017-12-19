@@ -11,8 +11,11 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Styling.xaml" />
       </ResourceDictionary.MergedDictionaries>
+      
       <DataTemplate DataType="{x:Type c:SymbolResultViewModel}">
-        <Border x:Name="SymbolPanel" Background="Transparent">
+        <Button Style="{StaticResource ResultButtonStyle}" 
+                Command="{x:Static c:Commands.GoToDefinition}"
+                CommandParameter="{Binding Symbol}">
           <StackPanel Orientation="Vertical" Margin="24,4,4,4">
             <StackPanel Orientation="Horizontal" TextBlock.FontSize="16">
               <TextBlock Text="{Binding SymbolKind}" Foreground="Blue" Margin="0,0,5,0"/>
@@ -20,16 +23,13 @@
             </StackPanel>
             <TextBlock Text="{Binding DisplayName}" Foreground="Silver" FontSize="14" />
           </StackPanel>
-        </Border>
-        <DataTemplate.Triggers>
-          <Trigger SourceName="SymbolPanel" Property="IsMouseOver" Value="True">
-            <Setter TargetName="SymbolPanel" Property="Background" Value="#eeeeee" />
-          </Trigger>
-        </DataTemplate.Triggers>
+        </Button>
       </DataTemplate>
 
       <DataTemplate DataType="{x:Type c:TextSpanSearchResultViewModel}">
-        <Border x:Name="LinePanel" HorizontalAlignment="Stretch" Background="Transparent">
+        <Button Style="{StaticResource ResultButtonStyle}"
+                Command="{x:Static c:Commands.GoToSpan}"
+                CommandParameter="{Binding SearchResult}">
           <StackPanel Orientation="Horizontal" TextBlock.FontFamily="Consolas" TextBlock.FontSize="13" Margin="8, 1, 0, 1">
             <TextBlock Text="{Binding LineNumber}" Margin="0,0,16,0" Foreground="#1791AF" />
             <TextBlock Text="{Binding PrefixText}" TextWrapping="NoWrap" />
@@ -38,12 +38,7 @@
             </Border>
             <TextBlock Text="{Binding SuffixText}" TextWrapping="NoWrap"/>
           </StackPanel>
-        </Border>
-        <DataTemplate.Triggers>
-          <Trigger SourceName="LinePanel" Property="IsMouseOver" Value="True">
-            <Setter TargetName="LinePanel" Property="Background" Value="#eeeeee" />
-          </Trigger>
-        </DataTemplate.Triggers>
+        </Button>
       </DataTemplate>
 
       <DataTemplate DataType="{x:Type c:FileResultsViewModel}">

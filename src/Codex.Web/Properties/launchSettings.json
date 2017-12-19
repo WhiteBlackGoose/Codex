@@ -10,7 +10,7 @@
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchUrl": "api/codex",
+      "launchUrl": "api/codex/search?searchString=ixedoc",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

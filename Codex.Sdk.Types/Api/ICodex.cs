@@ -15,7 +15,7 @@ namespace Codex.Sdk.Search
     {
         Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync(SearchArguments arguments);
 
-        Task<IndexQueryHitsResponse<IReferenceSearchModel>> FindAllReferencesAsync(FindAllReferencesArguments arguments);
+        Task<IndexQueryHitsResponse<IReferenceSearchResult>> FindAllReferencesAsync(FindAllReferencesArguments arguments);
 
         /// <summary>
         /// Find definition for a symbol
@@ -27,9 +27,9 @@ namespace Codex.Sdk.Search
         /// Find definition location for a symbol
         /// Usage: Go To Definition
         /// </summary>
-        Task<IndexQueryHitsResponse<IReferenceSearchModel>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments);
+        Task<IndexQueryHitsResponse<IReferenceSearchResult>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments);
 
-        Task<IndexQueryResponse<IBoundSourceSearchModel>> GetSourceAsync(GetSourceArguments arguments);
+        Task<IndexQueryResponse<IBoundSourceFile>> GetSourceAsync(GetSourceArguments arguments);
     }
 
     public enum CodexServiceMethod
@@ -46,7 +46,7 @@ namespace Codex.Sdk.Search
         /// <summary>
         /// The maximum number of results to return
         /// </summary>
-        public int MaxResults = 100;
+        public int MaxResults { get; set; } = 100;
     }
 
     public class ContextCodexArgumentsBase : CodexArgumentsBase
@@ -56,21 +56,21 @@ namespace Codex.Sdk.Search
         /// NOTE: This is used to priority inter-repository matches over
         /// matches from outside the repository
         /// </summary>
-        public string ReferencingRepositoryId;
+        public string ReferencingRepositoryId { get; set; }
 
         /// <summary>
         /// The id of the project referencing the symbol.
         /// NOTE: This is used to priority inter-repository matches over
         /// matches from outside the repository
         /// </summary>
-        public string ReferencingProjectId;
+        public string ReferencingProjectId { get; set; }
 
         /// <summary>
         /// The id of the file referencing the symbol.
         /// NOTE: This is used to priority inter-repository matches over
         /// matches from outside the repository
         /// </summary>
-        public string ReferencingFileId;
+        public string ReferencingFileId { get; set; }
     }
 
     public class FindSymbolArgumentsBase : ContextCodexArgumentsBase
@@ -78,12 +78,12 @@ namespace Codex.Sdk.Search
         /// <summary>
         /// The symbol id of the symbol
         /// </summary>
-        public string SymbolId;
+        public string SymbolId { get; set; }
 
         /// <summary>
         /// The project id of the symbol
         /// </summary>
-        public string ProjectId;
+        public string ProjectId { get; set; }
     }
 
     public class FindDefinitionArguments : FindSymbolArgumentsBase
@@ -101,12 +101,19 @@ namespace Codex.Sdk.Search
 
     public class SearchArguments : ContextCodexArgumentsBase
     {
-        public string SearchString;
+        public string SearchString { get; set; }
     }
 
     public class GetSourceArguments : ContextCodexArgumentsBase
     {
+        public string ProjectId { get; set; }
 
+        public string ProjectRelativePath { get; set; }
+    }
+
+    public interface IReferenceSearchResult : IProjectFileScopeEntity
+    {
+        IReferenceSymbol Reference { get; }
     }
 
     public interface ITextLineSpanResult : IProjectFileScopeEntity

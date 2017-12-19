@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Codex.Sdk.Search;
-using Codex.ObjectModel;
 
 namespace Codex.Web.Controllers
 {
@@ -30,8 +29,15 @@ namespace Codex.Web.Controllers
         {
         }
 
-        [HttpPost(nameof(CodexServiceMethod.Search))]
-        public async Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync([FromBody]SearchArguments arguments)
+        //public async Task<IndexQueryHitsResponse<ISearchResult>> QuerySearchAsync(SearchArguments arguments)
+        //{
+        //    var result = await Codex.SearchAsync(arguments);
+        //    return result;
+        //}
+
+        //[HttpPost(nameof(CodexServiceMethod.Search))]
+        [ServiceMethod(CodexServiceMethod.Search)]
+        public async Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync(SearchArguments arguments)
         {
             var result = await Codex.SearchAsync(arguments);
             return result;
@@ -47,14 +53,17 @@ namespace Codex.Web.Controllers
             throw new NotImplementedException();
         }
 
-        public Task<IndexQueryHitsResponse<IReferenceSearchModel>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments)
+        [ServiceMethod(CodexServiceMethod.FindDefLocation)]
+        public async Task<IndexQueryHitsResponse<IReferenceSearchModel>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments)
         {
-            throw new NotImplementedException();
+            var result = await Codex.FindDefinitionLocationAsync(arguments);
+            return result;
         }
 
-        public Task<IndexQueryResponse<IBoundSourceSearchModel>> GetSourceAsync(GetSourceArguments arguments)
+        public async Task<IndexQueryResponse<IBoundSourceSearchModel>> GetSourceAsync(GetSourceArguments arguments)
         {
-            throw new NotImplementedException();
+            var result = await Codex.GetSourceAsync(arguments);
+            return result;
         }
     }
 }

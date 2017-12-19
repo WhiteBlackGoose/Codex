@@ -3,11 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Codex.View"
+        xmlns:c="clr-namespace:Codex.View"
         mc:Ignorable="d"
         Title="Ref12" Height="720" Width="1080" FontFamily="Segoe UI,Tahoma,Helvetica,sans-serif">
+  <Window.CommandBindings>
+    <c:GoToDefinitionCommandBinding Executed="GoToDefinitionExecuted" />
+  </Window.CommandBindings>
   <Window.Resources>
-    
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Styling.xaml" />
@@ -47,11 +49,11 @@
         <ColumnDefinition />
       </Grid.ColumnDefinitions>
 
-      <local:LeftPaneView x:Name="LeftPane" Grid.Column="0" DataContext="{Binding LeftPane}" />
+      <c:LeftPaneView x:Name="LeftPane" Grid.Column="0" DataContext="{Binding LeftPane}" />
 
       <GridSplitter Background="#EEEEEE" Grid.Column="1" VerticalAlignment="Stretch" ShowsPreview="True" HorizontalAlignment="Left" Width="20" />
 
-      <local:EditorHostControl Grid.Column="2" />
+      <c:EditorHostControl Grid.Column="2" />
     </Grid>
   </DockPanel>
 </Window>

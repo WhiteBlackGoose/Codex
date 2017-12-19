@@ -64,5 +64,41 @@ namespace Codex.View
 
             ViewModel.LeftPane = LeftPaneViewModel.FromSearchResponse(searchString, response);
         }
+
+        public async void GoToDefinitionExecuted(IReferenceSymbol symbol)
+        {
+            var response = await CodexService.FindDefinitionLocationAsync(new FindDefinitionLocationArguments()
+            {
+                ProjectId = symbol.ProjectId,
+                SymbolId = symbol.Id.Value,
+            });
+
+            if (response.Error != null || response.Result.Hits.Count == 0)
+            {
+                ViewModel.RightPane = new RightPaneViewModel(response);
+            }
+            else if (response.Result.Hits.Count > 1)
+            {
+                // Show definitions in left pane
+                ViewModel.RightPane = new RightPaneViewModel(response);
+            }
+            else
+            {
+                IReferenceSearchResult reference = response.Result.Hits[0];
+                var sourceFileResponse = await CodexService.GetSourceAsync(new GetSourceArguments()
+                {
+                    ProjectId = reference.ProjectId,
+                    ProjectRelativePath = reference.ProjectRelativePath,
+                });
+
+                ViewModel.RightPane = new RightPaneViewModel(sourceFileResponse);
+            }
+        }
+
+        public async void UpdateRightPane(Func<Task<RightPaneViewModel>> getViewModel)
+        {
+            var rightViewModel = await getViewModel();
+            ViewModel.RightPane = rightViewModel;
+        }
     }
 }

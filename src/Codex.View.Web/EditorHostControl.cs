@@ -15,12 +15,16 @@ namespace Codex.View
         private HTMLElement m_htmlElement;
         private IStandaloneCodeEditor m_editor;
         private RenderQueue renderQueue = new RenderQueue();
-        //private List<HTMLElement> m_arrangedElements = new List<HTMLElement>();
 
         public async void SetRenderElement(HTMLElement htmlElement)
         {
             m_htmlElement = htmlElement;
-            m_editor = await Editor.Create(htmlElement, "Hello World");
+            m_editor = await Editor.Create(htmlElement, new EditorConstructionOptions()
+            {
+                value = "Hello World",
+                language = "text",
+                readOnly = true
+            });
 
             this.VisualIsHitTestVisible = true;
             VisualBackground = Brushes.Transparent;

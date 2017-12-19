@@ -149,6 +149,8 @@ namespace Codex.ObjectModel {
             typeMapping.Add(typeof(ReferenceSymbol), typeof(Codex.IReferenceSymbol));
             typeMapping.Add(typeof(Codex.ICodeSymbol), typeof(Symbol));
             typeMapping.Add(typeof(Symbol), typeof(Codex.ICodeSymbol));
+            typeMapping.Add(typeof(Codex.Sdk.Search.IReferenceSearchResult), typeof(ReferenceSearchResult));
+            typeMapping.Add(typeof(ReferenceSearchResult), typeof(Codex.Sdk.Search.IReferenceSearchResult));
             typeMapping.Add(typeof(Codex.Sdk.Search.ITextLineSpanResult), typeof(TextLineSpanResult));
             typeMapping.Add(typeof(TextLineSpanResult), typeof(Codex.Sdk.Search.ITextLineSpanResult));
             typeMapping.Add(typeof(Codex.Sdk.Search.ISearchResult), typeof(SearchResult));
@@ -3849,7 +3851,7 @@ namespace Codex.ObjectModel {
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IReferenceSearchModel))]
     public partial class ReferenceSearchModel : SearchEntity, Codex.IReferenceSearchModel {
         
-        private Symbol m_Reference;
+        private ReferenceSymbol m_Reference;
         
         private System.Collections.Generic.IReadOnlyList<SymbolSpan> m_Spans = Codex.Utilities.CollectionUtilities.Empty<SymbolSpan>.Array;
         
@@ -3893,7 +3895,7 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// The reference symbol
         /// </summary>
-        Codex.ICodeSymbol Codex.IReferenceSearchModel.Reference {
+        Codex.IReferenceSymbol Codex.IReferenceSearchModel.Reference {
             get {
                 return this.Reference;
             }
@@ -3902,7 +3904,7 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// The reference symbol
         /// </summary>
-        public virtual Symbol Reference {
+        public virtual ReferenceSymbol Reference {
             get {
                 return this.m_Reference;
             }
@@ -4015,7 +4017,7 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IReferenceSearchModel value)
             where TTarget : ReferenceSearchModel {
-            this.m_Reference = EntityUtilities.NullOrCopy(Reference, v => new Symbol().CopyFrom<Symbol>(v));;
+            this.m_Reference = EntityUtilities.NullOrCopy(Reference, v => new ReferenceSymbol().CopyFrom<ReferenceSymbol>(v));;
             this.m_Spans = new System.Collections.Generic.List<SymbolSpan>(System.Linq.Enumerable.Select(((Codex.IReferenceSearchModel)(value)).Spans, v => EntityUtilities.NullOrCopy(v, _v => new SymbolSpan().CopyFrom<SymbolSpan>(_v))));
             this.m_CompressedSpans = ((Codex.IReferenceSearchModel)(value)).CompressedSpans;
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
@@ -5172,6 +5174,45 @@ namespace Codex.ObjectModel {
         }
     }
     
+    [Codex.SerializationInterfaceAttribute(typeof(Codex.Sdk.Search.IReferenceSearchResult))]
+    public partial class ReferenceSearchResult : ProjectFileScopeEntity, Codex.Sdk.Search.IReferenceSearchResult {
+        
+        private ReferenceSymbol m_Reference;
+        
+        public ReferenceSearchResult() {
+        }
+        
+        public ReferenceSearchResult(Codex.Sdk.Search.IReferenceSearchResult value) {
+            this.CopyFrom<ReferenceSearchResult>(value);
+        }
+        
+        public ReferenceSearchResult(Codex.IProjectFileScopeEntity value) : 
+                base(value) {
+        }
+        
+        Codex.IReferenceSymbol Codex.Sdk.Search.IReferenceSearchResult.Reference {
+            get {
+                return this.Reference;
+            }
+        }
+        
+        public virtual ReferenceSymbol Reference {
+            get {
+                return this.m_Reference;
+            }
+            set {
+                this.m_Reference = value;
+            }
+        }
+        
+        public virtual TTarget CopyFrom<TTarget>(Codex.Sdk.Search.IReferenceSearchResult value)
+            where TTarget : ReferenceSearchResult {
+            this.m_Reference = EntityUtilities.NullOrCopy(Reference, v => new ReferenceSymbol().CopyFrom<ReferenceSymbol>(v));;
+            base.CopyFrom<ProjectFileScopeEntity>(((Codex.IProjectFileScopeEntity)(value)));
+            return ((TTarget)(this));
+        }
+    }
+    
     [Codex.SerializationInterfaceAttribute(typeof(Codex.Sdk.Search.ITextLineSpanResult))]
     public partial class TextLineSpanResult : ProjectFileScopeEntity, Codex.Sdk.Search.ITextLineSpanResult {
         
@@ -5362,6 +5403,7 @@ namespace Codex.Framework.Types {
     using DefinitionSymbol = Codex.ObjectModel.DefinitionSymbol;
     using ReferenceSymbol = Codex.ObjectModel.ReferenceSymbol;
     using Symbol = Codex.ObjectModel.Symbol;
+    using ReferenceSearchResult = Codex.ObjectModel.ReferenceSearchResult;
     using TextLineSpanResult = Codex.ObjectModel.TextLineSpanResult;
     using SearchResult = Codex.ObjectModel.SearchResult;
     using Index = Codex.ObjectModel.Index;

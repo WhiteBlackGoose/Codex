@@ -34,16 +34,6 @@ namespace Codex.ObjectModel
 
         protected override void OnSerializingCore()
         {
-            if (CompressedClassifications != null)
-            {
-                BindingInfo.Classifications = CollectionUtilities.Empty<ClassificationSpan>.Array;
-            }
-
-            if (CompressedReferences != null)
-            {
-                BindingInfo.References = CollectionUtilities.Empty<ReferenceSpan>.Array;
-            }
-
             base.OnSerializingCore();
         }
     }

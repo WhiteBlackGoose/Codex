@@ -50,6 +50,7 @@ namespace Codex.View
 
     public class SymbolResultViewModel : ProjectItemResultViewModel
     {
+        public IReferenceSymbol Symbol { get; }
         public string ShortName { get; set; }
         public string DisplayName { get; set; }
         public string SymbolKind { get; set; }
@@ -59,12 +60,13 @@ namespace Codex.View
         public int SortOrder { get; set; }
         public int IdentifierLength => ShortName.Length;
 
-        public SymbolResultViewModel(IDefinitionSymbol entry)
+        public SymbolResultViewModel(IDefinitionSymbol symbol)
         {
-            ShortName = entry.ShortName;
-            DisplayName = entry.DisplayName;
-            ProjectId = entry.ProjectId;
-            SymbolKind = entry.Kind?.ToLowerInvariant();
+            Symbol = symbol;
+            ShortName = symbol.ShortName;
+            DisplayName = symbol.DisplayName;
+            ProjectId = symbol.ProjectId;
+            SymbolKind = symbol.Kind?.ToLowerInvariant();
         }
     }
 
@@ -183,6 +185,37 @@ namespace Codex.View
         }
     }
 
+    public class RightPaneViewModel : NotifyPropertyChangedBase
+    {
+        public Visibility ErrorVisibility => !string.IsNullOrEmpty(Error) ? Visibility.Visible : Visibility.Collapsed;
+
+        public string Error { get; }
+
+        public Visibility EditorVisibility => SourceFile != null ? Visibility.Visible : Visibility.Hidden;
+
+        public IBoundSourceFile SourceFile { get; }
+
+        public RightPaneViewModel()
+        {
+        }
+
+        public RightPaneViewModel(IndexQueryResponse<IBoundSourceFile> sourceFileResponse)
+        {
+            Error = sourceFileResponse.Error;
+            SourceFile = sourceFileResponse.Result;
+        }
+
+        public RightPaneViewModel(IndexQueryResponse response)
+        {
+            Error = response.Error;
+        }
+
+        public RightPaneViewModel(IBoundSourceFile sourceFile)
+        {
+            SourceFile = sourceFile;
+        }
+    }
+
     public class BindableValue<T> : NotifyPropertyChangedBase
     {
         private T value;
@@ -238,14 +271,23 @@ namespace Codex.View
 
             set
             {
-                // HACK to force full refresh of left pane
-                //if (value != null)
-                //{
-                //    leftPane = null;
-                //    OnPropertyChanged();
-                //}
-
                 leftPane = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private RightPaneViewModel rightPane = new RightPaneViewModel();
+
+        public RightPaneViewModel RightPane
+        {
+            get
+            {
+                return rightPane;
+            }
+
+            set
+            {
+                rightPane = value;
                 OnPropertyChanged();
             }
         }

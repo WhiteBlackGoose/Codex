@@ -152,7 +152,7 @@ namespace Codex
         /// <summary>
         /// The reference symbol
         /// </summary>
-        ICodeSymbol Reference { get; }
+        IReferenceSymbol Reference { get; }
 
         // TODO: Need some sort of override for searching RelatedDefinition of the
         // ReferenceSpan

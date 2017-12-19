@@ -28,7 +28,7 @@ namespace Codex.ElasticSearch.Search
             Service = service;
         }
 
-        public Task<IndexQueryHitsResponse<IReferenceSearchModel>> FindAllReferencesAsync(FindAllReferencesArguments arguments)
+        public Task<IndexQueryHitsResponse<IReferenceSearchResult>> FindAllReferencesAsync(FindAllReferencesArguments arguments)
         {
             throw new NotImplementedException();
         }
@@ -38,14 +38,70 @@ namespace Codex.ElasticSearch.Search
             throw new NotImplementedException();
         }
 
-        public Task<IndexQueryHitsResponse<IReferenceSearchModel>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments)
+        public async Task<IndexQueryHitsResponse<IReferenceSearchResult>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments)
         {
-            throw new NotImplementedException();
+            return await UseClient(async context =>
+            {
+                var client = context.Client;
+
+                var referencesResult = await client.SearchAsync<IReferenceSearchModel>(s => s
+                    .Query(qcd => qcd.Bool(bq => bq.Filter(
+                        fq => fq.Term(r => r.Reference.ProjectId, arguments.ProjectId),
+                        fq => fq.Term(r => r.Reference.Id, arguments.SymbolId),
+                        fq => fq.Term(r => r.Reference.ReferenceKind, nameof(ReferenceKind.Definition)))))
+                    .Index(Configuration.Prefix + SearchTypes.Reference.IndexName)
+                    .Take(arguments.MaxResults)
+                    .CaptureRequest(context))
+                .ThrowOnFailure();
+
+                var searchResults =
+                    (from hit in referencesResult.Hits
+                     let referenceSearchModel = hit.Source
+                     from span in referenceSearchModel.Spans
+                     select new ReferenceSearchResult(referenceSearchModel)
+                     {
+                         Reference = new ReferenceSymbol(referenceSearchModel.Reference)
+                     }).ToList<IReferenceSearchResult>();
+
+
+                return new IndexQueryHits<IReferenceSearchResult>()
+                {
+                    Hits = searchResults,
+                    Total = referencesResult.Total
+                };
+            });
         }
 
-        public Task<IndexQueryResponse<IBoundSourceSearchModel>> GetSourceAsync(GetSourceArguments arguments)
+        public async Task<IndexQueryResponse<IBoundSourceFile>> GetSourceAsync(GetSourceArguments arguments)
         {
-            throw new NotImplementedException();
+            return await UseClientSingle<IBoundSourceFile>(async context =>
+            {
+                var client = context.Client;
+
+                var boundResults = await client.SearchAsync<BoundSourceSearchModel>(sd => sd
+                    .Query(qcd => qcd.Bool(bq => bq.Filter(
+                            fq => fq.Term(s => s.BindingInfo.ProjectId, arguments.ProjectId),
+                            fq => fq.Term(s => s.BindingInfo.ProjectRelativePath, arguments.ProjectRelativePath))))
+                    .Index(Configuration.Prefix + SearchTypes.BoundSource.IndexName)
+                    .Take(1)
+                    .CaptureRequest(context))
+                .ThrowOnFailure();
+
+                if (boundResults.Hits.Count != 0)
+                {
+                    var boundSearchModel = boundResults.Hits.First().Source;
+                    var textResults = await client.GetAsync<TextSourceSearchModel>(boundSearchModel.TextUid, 
+                        gd => gd.Index(Configuration.Prefix + SearchTypes.TextSource.IndexName))
+                    .ThrowOnFailure();
+
+                    return new BoundSourceFile(boundSearchModel.BindingInfo)
+                    {
+                        SourceFile = textResults.Source.File
+                    };
+                }
+
+                throw new Exception("Unable to find source file");
+            });
         }
 
         public async Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync(SearchArguments arguments)
@@ -66,7 +122,6 @@ namespace Codex.ElasticSearch.Search
 
             return await UseClient(async context =>
             {
-                Placeholder.Todo("Do definitions search");
                 Placeholder.Todo("Allow filtering text matches by extension/path");
                 Placeholder.Todo("Extract method for getting index name from search type");
 
@@ -264,6 +319,33 @@ namespace Codex.ElasticSearch.Search
                 catch (Exception ex)
                 {
                     return new IndexQueryHitsResponse<T>()
+                    {
+                        Error = ex.ToString(),
+                    };
+                }
+            });
+
+            var response = elasticResponse.Result;
+            response.RawQueries = elasticResponse.Requests.ToList();
+            response.Duration = elasticResponse.Duration;
+            return response;
+        }
+
+        private async Task<IndexQueryResponse<T>> UseClientSingle<T>(Func<ClientContext, Task<T>> useClient)
+        {
+            var elasticResponse = await Service.UseClient(async context =>
+            {
+                try
+                {
+                    var result = await useClient(context);
+                    return new IndexQueryResponse<T>()
+                    {
+                        Result = result
+                    };
+                }
+                catch (Exception ex)
+                {
+                    return new IndexQueryResponse<T>()
                     {
                         Error = ex.ToString(),
                     };

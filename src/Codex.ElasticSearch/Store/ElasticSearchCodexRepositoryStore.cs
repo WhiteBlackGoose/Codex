@@ -196,7 +196,7 @@ namespace Codex.ElasticSearch
             {
                 var referenceModel = new ReferenceSearchModel((IProjectFileScopeEntity)boundSourceFile)
                 {
-                    Reference = new Symbol(referenceGroup.Key),
+                    Reference = referenceGroup.Key,
                 };
 
                 var spanList = referenceGroup.AsReadOnlyList();

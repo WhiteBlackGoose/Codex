@@ -11,15 +11,11 @@ namespace Monaco
 {
     public static class Editor
     {
-        public static async Task<IStandaloneCodeEditor> Create(HTMLElement htmlElement, string text)
+        public static async Task<IStandaloneCodeEditor> Create(HTMLElement htmlElement, EditorConstructionOptions options)
         {
             await MonacoLibrary.InitializeAsync();
 
-            return create(htmlElement, new IEditorConstructionOptions
-            {
-                value = text,
-                language = "javascript"
-            });
+            return create(htmlElement, options);
         }
     }
 }

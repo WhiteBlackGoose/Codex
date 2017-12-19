@@ -128,18 +128,8 @@ namespace Codex.ElasticSearch
     public class OverrideConnectionSettings : ConnectionSettings
     {
         private static Serializer SharedSerializer;
-        public OverrideConnectionSettings(Uri uri) : base(new SingleNodeConnectionPool(uri), DefaultSerializer)
+        public OverrideConnectionSettings(Uri uri) : base(new SingleNodeConnectionPool(uri), SerializerFactory.CreateCore)
         {
-        }
-
-        private static IElasticsearchSerializer DefaultSerializer(ConnectionSettings settings)
-        {
-            if (SharedSerializer == null)
-            {
-                SharedSerializer = new Serializer(settings);
-            }
-
-            return SharedSerializer;
         }
 
         public JsonNetSerializer GetSerializer()
@@ -147,10 +137,38 @@ namespace Codex.ElasticSearch
             return new Serializer(this);
         }
 
+        private class SerializerFactory : ISerializerFactory
+        {
+            public IElasticsearchSerializer Create(IConnectionSettingsValues settings)
+            {
+                return SerializerFactory.CreateCore(settings);
+            }
+
+            public IElasticsearchSerializer CreateStateful(IConnectionSettingsValues settings, JsonConverter converter)
+            {
+                return new Serializer(settings, converter);
+            }
+
+            public static IElasticsearchSerializer CreateCore(IConnectionSettingsValues settings)
+            {
+                if (SharedSerializer == null)
+                {
+                    SharedSerializer = new Serializer(settings);
+                }
+
+                return SharedSerializer;
+            }
+        }
+
         private class Serializer : JsonNetSerializer
         {
             public Serializer(IConnectionSettingsValues settings)
                 : base(settings, ModifyJsonSerializerSettings)
+            {
+            }
+
+            public Serializer(IConnectionSettingsValues settings, JsonConverter statefulConverter)
+                : base(settings, statefulConverter, ModifyJsonSerializerSettings)
             {
             }
 
