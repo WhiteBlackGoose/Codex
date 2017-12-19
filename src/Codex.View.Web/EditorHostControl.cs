@@ -15,13 +15,14 @@ namespace Codex.View
         private HTMLElement m_htmlElement;
         private IStandaloneCodeEditor m_editor;
         private RenderQueue renderQueue = new RenderQueue();
+        private string m_text = "Hello World";
 
         public async void SetRenderElement(HTMLElement htmlElement)
         {
             m_htmlElement = htmlElement;
             m_editor = await Editor.Create(htmlElement, new EditorConstructionOptions()
             {
-                value = "Hello World",
+                value = m_text,
                 language = "text",
                 readOnly = true
             });
@@ -47,6 +48,12 @@ namespace Codex.View
             }
 
             return finalSize;
+        }
+
+        partial void OnSourceFileChanged()
+        {
+            m_text = SourceFile?.SourceFile.Content ?? string.Empty;
+            m_editor.setValue(m_text);
         }
     }
 }

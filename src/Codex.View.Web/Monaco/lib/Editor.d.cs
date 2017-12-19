@@ -18,6 +18,12 @@ public static partial class monaco
         public interface IStandaloneCodeEditor
         {
             void layout();
+
+            /// <summary>
+            /// Set the new text content for the control
+            /// </summary>
+            /// <param name="newValue"></param>
+            void setValue(string newValue);
         }
     }
 }

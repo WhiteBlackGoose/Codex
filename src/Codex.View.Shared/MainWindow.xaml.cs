@@ -65,6 +65,17 @@ namespace Codex.View
             ViewModel.LeftPane = LeftPaneViewModel.FromSearchResponse(searchString, response);
         }
 
+        public async void GoToSpanExecuted(ITextLineSpanResult lineSpan)
+        {
+            var sourceFileResponse = await CodexService.GetSourceAsync(new GetSourceArguments()
+            {
+                ProjectId = lineSpan.ProjectId,
+                ProjectRelativePath = lineSpan.ProjectRelativePath,
+            });
+
+            ViewModel.RightPane = new RightPaneViewModel(sourceFileResponse);
+        }
+
         public async void GoToDefinitionExecuted(IReferenceSymbol symbol)
         {
             var response = await CodexService.FindDefinitionLocationAsync(new FindDefinitionLocationArguments()

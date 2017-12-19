@@ -20,9 +20,9 @@ namespace Codex.View.Web
             this.baseUrl = baseUrl.EndsWith("/") ? baseUrl : baseUrl + '/';
         }
 
-        public Task<IndexQueryHitsResponse<IReferenceSearchModel>> FindAllReferencesAsync(FindAllReferencesArguments arguments)
+        public Task<IndexQueryHitsResponse<IReferenceSearchResult>> FindAllReferencesAsync(FindAllReferencesArguments arguments)
         {
-            return PostAsync<IndexQueryHitsResponse<ReferenceSearchModel>, IndexQueryHitsResponse<IReferenceSearchModel>>(CodexServiceMethod.FindAllRefs, arguments);
+            return PostAsync<IndexQueryHitsResponse<ReferenceSearchResult>, IndexQueryHitsResponse<IReferenceSearchResult>>(CodexServiceMethod.FindAllRefs, arguments);
         }
 
         public Task<IndexQueryHitsResponse<IDefinitionSearchModel>> FindDefinitionAsync(FindDefinitionArguments arguments)
@@ -30,9 +30,9 @@ namespace Codex.View.Web
             return PostAsync<IndexQueryHitsResponse<DefinitionSearchModel>, IndexQueryHitsResponse<IDefinitionSearchModel>>(CodexServiceMethod.FindDef, arguments);
         }
 
-        public Task<IndexQueryHitsResponse<IReferenceSearchModel>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments)
+        public Task<IndexQueryHitsResponse<IReferenceSearchResult>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments)
         {
-            return PostAsync<IndexQueryHitsResponse<ReferenceSearchModel>, IndexQueryHitsResponse<IReferenceSearchModel>>(CodexServiceMethod.FindDefLocation, arguments);
+            return PostAsync<IndexQueryHitsResponse<ReferenceSearchResult>, IndexQueryHitsResponse<IReferenceSearchResult>>(CodexServiceMethod.FindDefLocation, arguments);
         }
 
         public Task<IndexQueryResponse<IBoundSourceFile>> GetSourceAsync(GetSourceArguments arguments)

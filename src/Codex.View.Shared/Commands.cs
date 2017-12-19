@@ -29,12 +29,11 @@ namespace Codex.View
     public class GoToSpanCommandBinding : TypedCommandBinding<ITextLineSpanResult>
     {
         public GoToSpanCommandBinding() : base(Commands.GoToSpan) { }
-
     }
 
     public abstract class TypedCommandBinding<T> : CommandBinding
     {
-        public new event TypedExecutedRoutedEventHandler<T> Executed;
+        public event TypedExecutedRoutedEventHandler<T> CommandExecuted;
 
         public TypedCommandBinding(RoutedCommand command)
         {
@@ -44,7 +43,9 @@ namespace Codex.View
 
         private void TypedCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            Executed?.Invoke((T)e.Parameter);
+            var parameter = e.Parameter;
+            var typedParameter = (T)parameter;
+            CommandExecuted?.Invoke(typedParameter);
         }
     }
 
