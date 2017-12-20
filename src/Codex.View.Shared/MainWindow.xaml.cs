@@ -35,10 +35,6 @@ namespace Codex.View
             SearchBox.Text = "ixedoc";
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("Grid_Loaded");

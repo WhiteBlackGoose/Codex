@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
@@ -6,7 +6,7 @@
     <!--<TargetFramework>netcoreapp2.0</TargetFramework>-->
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
-  <Import Project="..\..\Codex.Sdk.Types\Codex.Sdk.Types.projitems" Label="Shared" />
+  <Import Project="..\Codex.Sdk.Types\Codex.Sdk.Types.projitems" Label="Shared" />
   <Import Project="..\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems" Label="Shared" />
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>
