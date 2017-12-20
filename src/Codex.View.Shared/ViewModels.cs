@@ -1,4 +1,5 @@
-﻿using Codex.Sdk.Search;
+﻿using Codex.ObjectModel;
+using Codex.Sdk.Search;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,12 +8,14 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Codex.View
 {
     public class TextSpanSearchResultViewModel : FileItemResultViewModel
     {
-        public ITextLineSpanResult SearchResult { get; }
+        public ICommand Command { get; }
+        public object SearchResult { get; }
 
         public int LineNumber { get; }
         public string PrefixText { get; }
@@ -21,8 +24,24 @@ namespace Codex.View
 
         public TextSpanSearchResultViewModel(ITextLineSpanResult result)
         {
+            Command = Commands.GoToSpan;
             SearchResult = result;
             var referringSpan = result.TextSpan;
+            LineNumber = referringSpan.LineNumber;
+            string lineSpanText = referringSpan.LineSpanText;
+            if (lineSpanText != null)
+            {
+                PrefixText = lineSpanText.Substring(0, referringSpan.LineSpanStart);
+                ContentText = lineSpanText.Substring(referringSpan.LineSpanStart, referringSpan.Length);
+                SuffixText = lineSpanText.Substring(referringSpan.LineSpanStart + referringSpan.Length);
+            }
+        }
+
+        public TextSpanSearchResultViewModel(IReferenceSearchResult result)
+        {
+            Command = Commands.GoToReference;
+            SearchResult = result;
+            var referringSpan = result.ReferenceSpan;
             LineNumber = referringSpan.LineNumber;
             string lineSpanText = referringSpan.LineSpanText;
             if (lineSpanText != null)
@@ -106,17 +125,27 @@ namespace Codex.View
         {
             var result = response.Result;
 
-            ProjectResults.ProjectGroups = result.Hits.Select(sr => sr.TextLine).GroupBy(sr => sr.ProjectId).Select(projectGroup => new ProjectGroupResultsViewModel()
+            PopulateProjectGroups(result.Hits.Select(sr => sr.TextLine), sr => new TextSpanSearchResultViewModel(sr));
+            Header = $"{result.Hits.Count} text search hits for '{searchString}'";
+        }
+
+        public CategoryGroupSearchResultsViewModel(ReferenceKind kind, string symbolName, IEnumerable<IReferenceSearchResult> references)
+        {
+            PopulateProjectGroups(references, sr => new TextSpanSearchResultViewModel(sr));
+            Header = ViewUtilities.GetReferencesHeader(kind, references.Count(), symbolName);
+        }
+
+        private void PopulateProjectGroups<T>(IEnumerable<T> items, Func<T, TextSpanSearchResultViewModel> viewModelFactory) where T : IProjectFileScopeEntity
+        {
+            ProjectResults.ProjectGroups = items.GroupBy(sr => sr.ProjectId).Select(projectGroup => new ProjectGroupResultsViewModel()
             {
                 ProjectName = projectGroup.Key,
                 Items = projectGroup.GroupBy(sr => sr.ProjectRelativePath).Select(fileGroup => new FileResultsViewModel()
                 {
                     Path = fileGroup.Key,
-                    Items = fileGroup.Select(sr => new TextSpanSearchResultViewModel(sr)).ToList()
+                    Items = fileGroup.Select(sr => viewModelFactory(sr)).ToList()
                 }).ToList()
             }).ToList();
-
-            Header = $"{result.Hits.Count} text search hits for '{searchString}'";
         }
     }
 
@@ -130,6 +159,16 @@ namespace Codex.View
             {
                 new CategoryGroupSearchResultsViewModel(searchString, response)
             };
+        }
+
+        public CategorizedSearchResultsViewModel(string symbolName, IEnumerable<IReferenceSearchResult> references)
+        {
+            Categories = references.GroupBy(r => r.ReferenceSpan.Reference.ReferenceKind.ToLower()).Select(referenceGroup =>
+            {
+                ReferenceKind referenceKind;
+                Enum.TryParse(referenceGroup.Key, true, out referenceKind);
+                return new CategoryGroupSearchResultsViewModel(referenceKind, symbolName, referenceGroup);
+            }).ToList();
         }
     }
 
@@ -151,6 +190,31 @@ namespace Codex.View
         {
             SearchInfo = "Enter a search string. Start with ` for full text search results only."
         };
+
+        public static LeftPaneViewModel FromReferencesResponse(IndexQueryResponse<ReferencesResult> response)
+        {
+            if (response.Error != null)
+            {
+                return new LeftPaneViewModel()
+                {
+                    SearchInfo = response.Error
+                };
+            }
+            else if (response.Result?.Hits == null || response.Result.Hits.Count == 0)
+            {
+                return new LeftPaneViewModel()
+                {
+                    SearchInfo = $"No references found."
+                };
+            }
+
+            var result = response.Result;
+            return new LeftPaneViewModel()
+            {
+                Content = new CategorizedSearchResultsViewModel(response.Result.SymbolDisplayName ?? response.Result.Hits[0].ReferenceSpan.Reference.Id.Value, response.Result.Hits),
+                SearchInfo = null
+            };
+        }
 
         public static LeftPaneViewModel FromSearchResponse(string searchString, IndexQueryHitsResponse<ISearchResult> response)
         {

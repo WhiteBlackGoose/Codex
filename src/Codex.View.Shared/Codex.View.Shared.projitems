@@ -43,6 +43,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Commands.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Styles.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)ViewModel\" />

@@ -20,9 +20,9 @@ namespace Codex.View.Web
             this.baseUrl = baseUrl.EndsWith("/") ? baseUrl : baseUrl + '/';
         }
 
-        public Task<IndexQueryHitsResponse<IReferenceSearchResult>> FindAllReferencesAsync(FindAllReferencesArguments arguments)
+        public Task<IndexQueryResponse<ReferencesResult>> FindAllReferencesAsync(FindAllReferencesArguments arguments)
         {
-            return PostAsync<IndexQueryHitsResponse<ReferenceSearchResult>, IndexQueryHitsResponse<IReferenceSearchResult>>(CodexServiceMethod.FindAllRefs, arguments);
+            return PostAsync<IndexQueryResponse<SerializedReferencesResult>, IndexQueryResponse<ReferencesResult>>(CodexServiceMethod.FindAllRefs, arguments);
         }
 
         public Task<IndexQueryHitsResponse<IDefinitionSearchModel>> FindDefinitionAsync(FindDefinitionArguments arguments)
@@ -30,9 +30,9 @@ namespace Codex.View.Web
             return PostAsync<IndexQueryHitsResponse<DefinitionSearchModel>, IndexQueryHitsResponse<IDefinitionSearchModel>>(CodexServiceMethod.FindDef, arguments);
         }
 
-        public Task<IndexQueryHitsResponse<IReferenceSearchResult>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments)
+        public Task<IndexQueryResponse<ReferencesResult>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments)
         {
-            return PostAsync<IndexQueryHitsResponse<ReferenceSearchResult>, IndexQueryHitsResponse<IReferenceSearchResult>>(CodexServiceMethod.FindDefLocation, arguments);
+            return PostAsync<IndexQueryResponse<SerializedReferencesResult>, IndexQueryResponse<ReferencesResult>>(CodexServiceMethod.FindDefLocation, arguments);
         }
 
         public Task<IndexQueryResponse<IBoundSourceFile>> GetSourceAsync(GetSourceArguments arguments)
@@ -87,5 +87,10 @@ namespace Codex.View.Web
 
             return tcs.Task;
         }
+    }
+
+    internal class SerializedReferencesResult : IndexQueryHits<ReferenceSearchResult>
+    {
+        public string SymbolDisplayName { get; set; }
     }
 }

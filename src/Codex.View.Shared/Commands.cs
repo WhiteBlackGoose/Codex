@@ -14,6 +14,7 @@ namespace Codex.View
     {
         public static readonly RoutedCommand GoToDefinition = CreateCommand();
         public static readonly RoutedCommand GoToSpan = CreateCommand();
+        public static readonly RoutedCommand GoToReference = CreateCommand();
 
         private static RoutedCommand CreateCommand([CallerMemberName] string name = null)
         {
@@ -29,6 +30,11 @@ namespace Codex.View
     public class GoToSpanCommandBinding : TypedCommandBinding<ITextLineSpanResult>
     {
         public GoToSpanCommandBinding() : base(Commands.GoToSpan) { }
+    }
+
+    public class GoToReferenceCommandBinding : TypedCommandBinding<IReferenceSearchResult>
+    {
+        public GoToReferenceCommandBinding() : base(Commands.GoToReference) { }
     }
 
     public abstract class TypedCommandBinding<T> : CommandBinding

@@ -28,9 +28,23 @@ namespace Codex.ElasticSearch.Search
             Service = service;
         }
 
-        public Task<IndexQueryHitsResponse<IReferenceSearchResult>> FindAllReferencesAsync(FindAllReferencesArguments arguments)
+        public Task<IndexQueryResponse<ReferencesResult>> FindAllReferencesAsync(FindAllReferencesArguments arguments)
         {
-            throw new NotImplementedException();
+            return FindReferencesCore(arguments, async context =>
+            {
+                var client = context.Client;
+                var referencesResult = await client.SearchAsync<IReferenceSearchModel>(s => s
+                    .Query(qcd => qcd.Bool(bq => bq.Filter(
+                        fq => fq.Term(r => r.Reference.ProjectId, arguments.ProjectId),
+                        fq => fq.Term(r => r.Reference.Id, arguments.SymbolId))))
+                    .Sort(sd => sd.Ascending(r => r.ProjectId))
+                    .Index(Configuration.Prefix + SearchTypes.Reference.IndexName)
+                    .Take(arguments.MaxResults)
+                    .CaptureRequest(context))
+                .ThrowOnFailure();
+
+                return referencesResult;
+            });
         }
 
         public Task<IndexQueryHitsResponse<IDefinitionSearchModel>> FindDefinitionAsync(FindDefinitionArguments arguments)
@@ -38,21 +52,48 @@ namespace Codex.ElasticSearch.Search
             throw new NotImplementedException();
         }
 
-        public async Task<IndexQueryHitsResponse<IReferenceSearchResult>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments)
+        public Task<IndexQueryResponse<ReferencesResult>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments)
         {
-            return await UseClient(async context =>
+            return FindReferencesCore(arguments, async context =>
+            {
+                var client = context.Client;
+                var referencesResult = await client.SearchAsync<IReferenceSearchModel>(s => s
+                                .Query(qcd => qcd.Bool(bq => bq.Filter(
+                                    fq => fq.Term(r => r.Reference.ProjectId, arguments.ProjectId),
+                                    fq => fq.Term(r => r.Reference.Id, arguments.SymbolId),
+                                    fq => fq.Term(r => r.Reference.ReferenceKind, nameof(ReferenceKind.Definition)))))
+                                .Index(Configuration.Prefix + SearchTypes.Reference.IndexName)
+                                .Take(arguments.MaxResults)
+                                .CaptureRequest(context))
+                            .ThrowOnFailure();
+
+                if (referencesResult.Total == 0)
+                {
+                    // No definitions, return the the result of find all references 
+                    referencesResult = await client.SearchAsync<IReferenceSearchModel>(s => s
+                        .Query(qcd => qcd.Bool(bq => bq.Filter(
+                            fq => fq.Term(r => r.Reference.ProjectId, arguments.ProjectId),
+                            fq => fq.Term(r => r.Reference.Id, arguments.SymbolId))))
+                        .Sort(sd => sd.Ascending(r => r.ProjectId))
+                        .Index(Configuration.Prefix + SearchTypes.Reference.IndexName)
+                        .Take(arguments.MaxResults)
+                        .CaptureRequest(context))
+                    .ThrowOnFailure();
+                }
+
+                return referencesResult;
+            });
+        }
+
+        private async Task<IndexQueryResponse<ReferencesResult>> FindReferencesCore(FindSymbolArgumentsBase arguments, Func<ClientContext, Task<ISearchResponse<IReferenceSearchModel>>> getReferencesAsync)
+        {
+            return await UseClientSingle(async context =>
             {
                 var client = context.Client;
 
-                var referencesResult = await client.SearchAsync<IReferenceSearchModel>(s => s
-                    .Query(qcd => qcd.Bool(bq => bq.Filter(
-                        fq => fq.Term(r => r.Reference.ProjectId, arguments.ProjectId),
-                        fq => fq.Term(r => r.Reference.Id, arguments.SymbolId),
-                        fq => fq.Term(r => r.Reference.ReferenceKind, nameof(ReferenceKind.Definition)))))
-                    .Index(Configuration.Prefix + SearchTypes.Reference.IndexName)
-                    .Take(arguments.MaxResults)
-                    .CaptureRequest(context))
-                .ThrowOnFailure();
+                ISearchResponse<IReferenceSearchModel> referencesResult = await getReferencesAsync(context);
+
+                var displayName = GetSymbolDisplayName(context, arguments);
 
                 var searchResults =
                     (from hit in referencesResult.Hits
@@ -60,16 +101,34 @@ namespace Codex.ElasticSearch.Search
                      from span in referenceSearchModel.Spans
                      select new ReferenceSearchResult(referenceSearchModel)
                      {
-                         Reference = new ReferenceSymbol(referenceSearchModel.Reference)
+                         ReferenceSpan = new ReferenceSpan(span)
+                         {
+                             Reference = new ReferenceSymbol(referenceSearchModel.Reference)
+                         }
                      }).ToList<IReferenceSearchResult>();
 
 
-                return new IndexQueryHits<IReferenceSearchResult>()
+                return new ReferencesResult()
                 {
                     Hits = searchResults,
                     Total = referencesResult.Total
                 };
             });
+        }
+
+        private async Task<string> GetSymbolDisplayName(ClientContext context, FindSymbolArgumentsBase arguments)
+        {
+            var client = context.Client;
+            var definitionsResult = await client.SearchAsync<IDefinitionSearchModel>(s => s
+                    .Query(qcd => qcd.Bool(bq => bq.Filter(
+                        fq => fq.Term(r => r.Definition.ProjectId, arguments.ProjectId),
+                        fq => fq.Term(r => r.Definition.Id, arguments.SymbolId))))
+                    .Index(Configuration.Prefix + SearchTypes.Definition.IndexName)
+                    .Take(1)
+                    .CaptureRequest(context))
+                .ThrowOnFailure();
+
+            return definitionsResult.Hits.FirstOrDefault()?.Source.Definition.DisplayName;
         }
 
         public async Task<IndexQueryResponse<IBoundSourceFile>> GetSourceAsync(GetSourceArguments arguments)

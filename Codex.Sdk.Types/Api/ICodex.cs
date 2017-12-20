@@ -15,7 +15,7 @@ namespace Codex.Sdk.Search
     {
         Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync(SearchArguments arguments);
 
-        Task<IndexQueryHitsResponse<IReferenceSearchResult>> FindAllReferencesAsync(FindAllReferencesArguments arguments);
+        Task<IndexQueryResponse<ReferencesResult>> FindAllReferencesAsync(FindAllReferencesArguments arguments);
 
         /// <summary>
         /// Find definition for a symbol
@@ -27,7 +27,7 @@ namespace Codex.Sdk.Search
         /// Find definition location for a symbol
         /// Usage: Go To Definition
         /// </summary>
-        Task<IndexQueryHitsResponse<IReferenceSearchResult>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments);
+        Task<IndexQueryResponse<ReferencesResult>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments);
 
         Task<IndexQueryResponse<IBoundSourceFile>> GetSourceAsync(GetSourceArguments arguments);
     }
@@ -113,7 +113,7 @@ namespace Codex.Sdk.Search
 
     public interface IReferenceSearchResult : IProjectFileScopeEntity
     {
-        IReferenceSymbol Reference { get; }
+        IReferenceSpan ReferenceSpan { get; }
     }
 
     public interface ITextLineSpanResult : IProjectFileScopeEntity
@@ -222,6 +222,11 @@ namespace Codex.Sdk.Search
         {
             return $"Total: {Total}, {base.ToString()}";
         }
+    }
+
+    public class ReferencesResult : IndexQueryHits<IReferenceSearchResult>
+    {
+        public string SymbolDisplayName { get; set; }
     }
 
     public class IndexQueryHitsResponse<T> : IndexQueryResponse<IndexQueryHits<T>>

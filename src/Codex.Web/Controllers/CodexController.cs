@@ -29,13 +29,6 @@ namespace Codex.Web.Controllers
         {
         }
 
-        //public async Task<IndexQueryHitsResponse<ISearchResult>> QuerySearchAsync(SearchArguments arguments)
-        //{
-        //    var result = await Codex.SearchAsync(arguments);
-        //    return result;
-        //}
-
-        //[HttpPost(nameof(CodexServiceMethod.Search))]
         [ServiceMethod(CodexServiceMethod.Search)]
         public async Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync(SearchArguments arguments)
         {
@@ -43,7 +36,8 @@ namespace Codex.Web.Controllers
             return result;
         }
 
-        public Task<IndexQueryHitsResponse<IReferenceSearchResult>> FindAllReferencesAsync([FromBody]FindAllReferencesArguments arguments)
+        [ServiceMethod(CodexServiceMethod.FindAllRefs)]
+        public Task<IndexQueryResponse<ReferencesResult>> FindAllReferencesAsync([FromBody]FindAllReferencesArguments arguments)
         {
             throw new NotImplementedException();
         }
@@ -54,7 +48,7 @@ namespace Codex.Web.Controllers
         }
 
         [ServiceMethod(CodexServiceMethod.FindDefLocation)]
-        public async Task<IndexQueryHitsResponse<IReferenceSearchResult>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments)
+        public async Task<IndexQueryResponse<ReferencesResult>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments)
         {
             var result = await Codex.FindDefinitionLocationAsync(arguments);
             return result;

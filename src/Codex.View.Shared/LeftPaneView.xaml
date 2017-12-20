@@ -28,7 +28,7 @@
 
       <DataTemplate DataType="{x:Type c:TextSpanSearchResultViewModel}">
         <Button Style="{StaticResource ResultButtonStyle}"
-                Command="{x:Static c:Commands.GoToSpan}"
+                Command="{Binding Command}"
                 CommandParameter="{Binding SearchResult}">
           <StackPanel Orientation="Horizontal" TextBlock.FontFamily="Consolas" TextBlock.FontSize="13" Margin="8, 1, 0, 1">
             <TextBlock Text="{Binding LineNumber}" Margin="0,0,16,0" Foreground="#1791AF" />

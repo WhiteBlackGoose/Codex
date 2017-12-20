@@ -9,6 +9,7 @@
   <Window.CommandBindings>
     <c:GoToSpanCommandBinding CommandExecuted="GoToSpanExecuted" />
     <c:GoToDefinitionCommandBinding CommandExecuted="GoToDefinitionExecuted" />
+    <c:GoToReferenceCommandBinding CommandExecuted="GoToReferenceExecuted" />
   </Window.CommandBindings>
   <Window.Resources>
     <ResourceDictionary>

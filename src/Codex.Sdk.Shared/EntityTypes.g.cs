@@ -5177,7 +5177,7 @@ namespace Codex.ObjectModel {
     [Codex.SerializationInterfaceAttribute(typeof(Codex.Sdk.Search.IReferenceSearchResult))]
     public partial class ReferenceSearchResult : ProjectFileScopeEntity, Codex.Sdk.Search.IReferenceSearchResult {
         
-        private ReferenceSymbol m_Reference;
+        private ReferenceSpan m_ReferenceSpan;
         
         public ReferenceSearchResult() {
         }
@@ -5190,24 +5190,24 @@ namespace Codex.ObjectModel {
                 base(value) {
         }
         
-        Codex.IReferenceSymbol Codex.Sdk.Search.IReferenceSearchResult.Reference {
+        Codex.IReferenceSpan Codex.Sdk.Search.IReferenceSearchResult.ReferenceSpan {
             get {
-                return this.Reference;
+                return this.ReferenceSpan;
             }
         }
         
-        public virtual ReferenceSymbol Reference {
+        public virtual ReferenceSpan ReferenceSpan {
             get {
-                return this.m_Reference;
+                return this.m_ReferenceSpan;
             }
             set {
-                this.m_Reference = value;
+                this.m_ReferenceSpan = value;
             }
         }
         
         public virtual TTarget CopyFrom<TTarget>(Codex.Sdk.Search.IReferenceSearchResult value)
             where TTarget : ReferenceSearchResult {
-            this.m_Reference = EntityUtilities.NullOrCopy(Reference, v => new ReferenceSymbol().CopyFrom<ReferenceSymbol>(v));;
+            this.m_ReferenceSpan = EntityUtilities.NullOrCopy(ReferenceSpan, v => new ReferenceSpan().CopyFrom<ReferenceSpan>(v));;
             base.CopyFrom<ProjectFileScopeEntity>(((Codex.IProjectFileScopeEntity)(value)));
             return ((TTarget)(this));
         }
