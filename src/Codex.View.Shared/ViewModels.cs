@@ -259,6 +259,8 @@ namespace Codex.View
 
         public IBoundSourceFile SourceFile { get; }
 
+        public BindableValue<ILineSpan> TargetSpan { get; } = new BindableValue<ILineSpan>();
+
         public RightPaneViewModel()
         {
         }

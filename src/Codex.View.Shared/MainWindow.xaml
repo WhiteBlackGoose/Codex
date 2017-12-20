@@ -51,11 +51,15 @@
         <ColumnDefinition />
       </Grid.ColumnDefinitions>
 
-      <c:LeftPaneView x:Name="LeftPane" Grid.Column="0" DataContext="{Binding LeftPane}" />
+      <ScrollViewer x:Name="LeftPaneScrollViewer" Grid.Column="0" 
+                    HorizontalScrollBarVisibility="Auto" 
+                    VerticalScrollBarVisibility="Auto">
+        <c:LeftPaneView x:Name="LeftPane" DataContext="{Binding LeftPane}" />
+      </ScrollViewer>
 
       <GridSplitter Background="#EEEEEE" Grid.Column="1" VerticalAlignment="Stretch" ShowsPreview="True" HorizontalAlignment="Left" Width="20" />
 
-      <c:EditorHostControl Grid.Column="2" SourceFile="{Binding RightPane.SourceFile}" />
+      <c:RightPaneView Grid.Column="2" DataContext="{Binding RightPane}" />
     </Grid>
   </DockPanel>
 </Window>

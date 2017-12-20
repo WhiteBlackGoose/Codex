@@ -9,22 +9,6 @@ namespace Codex.View
 {
     public static class Styles
     {
-        public static Brush GetMouseOverBackground(DependencyObject obj)
-        {
-            return (Brush)obj.GetValue(MouseOverBackgroundProperty);
-        }
-
-        public static void SetMouseOverBackground(DependencyObject obj, Brush value)
-        {
-            obj.SetValue(MouseOverBackgroundProperty, value);
-        }
-
-        // Using a DependencyProperty as the backing store for MouseOverBackground.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty MouseOverBackgroundProperty =
-            DependencyProperty.RegisterAttached("MouseOverBackground", typeof(Brush), typeof(Styles), new PropertyMetadata(Brushes.Transparent));
-
-
-
         public static bool GetIsMouseOverHeader(DependencyObject obj)
         {
             return (bool)obj.GetValue(IsMouseOverHeaderProperty);
@@ -39,7 +23,19 @@ namespace Codex.View
         public static readonly DependencyProperty IsMouseOverHeaderProperty =
             DependencyProperty.RegisterAttached("IsMouseOverHeader", typeof(bool), typeof(Styles), new PropertyMetadata(false));
 
+        public static Orientation GetHeaderOrientation(DependencyObject obj)
+        {
+            return (Orientation)obj.GetValue(HeaderOrientationProperty);
+        }
 
+        public static void SetHeaderOrientation(DependencyObject obj, Orientation value)
+        {
+            obj.SetValue(HeaderOrientationProperty, value);
+        }
+
+        // Using a DependencyProperty as the backing store for HeaderOrientation.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty HeaderOrientationProperty =
+            DependencyProperty.RegisterAttached("HeaderOrientation", typeof(Orientation), typeof(Styles), new PropertyMetadata(Orientation.Horizontal));
 
         public static void Initialize()
         {

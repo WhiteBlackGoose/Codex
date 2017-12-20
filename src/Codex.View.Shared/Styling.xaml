@@ -113,11 +113,10 @@
       <Setter.Value>
         <ControlTemplate>
           <DockPanel Background="{TemplateBinding Background}">
-            <ContentPresenter DockPanel.Dock="Top"
-                            ContentTemplate="{TemplateBinding Expander.HeaderTemplate}"
-                            ContentTemplateSelector="{TemplateBinding Expander.HeaderTemplateSelector}"
-                            Content="{TemplateBinding Expander.Header}" />
-
+            <ContentPresenter x:Name="HeaderPresenter"
+                            ContentTemplate="{TemplateBinding HeaderedContentControl.HeaderTemplate}"
+                            ContentTemplateSelector="{TemplateBinding HeaderedContentControl.HeaderTemplateSelector}"
+                            Content="{TemplateBinding HeaderedContentControl.Header}" />
             <ContentPresenter
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 Margin="{TemplateBinding Padding}"
@@ -126,6 +125,14 @@
                                 ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
                                 ContentTemplateSelector="{TemplateBinding ContentControl.ContentTemplateSelector}"/>
           </DockPanel>
+          <ControlTemplate.Triggers>
+            <Trigger Property="local:Styles.HeaderOrientation" Value="Horizontal">
+              <Setter TargetName="HeaderPresenter" Property="DockPanel.Dock" Value="Left" />
+            </Trigger>
+            <Trigger Property="local:Styles.HeaderOrientation" Value="Vertical">
+              <Setter TargetName="HeaderPresenter" Property="DockPanel.Dock" Value="Top" />
+            </Trigger>
+          </ControlTemplate.Triggers>
         </ControlTemplate>
       </Setter.Value>
     </Setter>

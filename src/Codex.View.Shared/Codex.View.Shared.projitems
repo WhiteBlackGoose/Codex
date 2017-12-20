@@ -20,6 +20,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="$(MSBuildThisFileDirectory)RightPaneView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Styling.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -41,6 +44,9 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Commands.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RightPaneView.xaml.cs">
+      <DependentUpon>RightPaneView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Styles.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewUtilities.cs" />
