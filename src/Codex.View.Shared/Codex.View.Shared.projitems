@@ -36,6 +36,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CodexProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EditorHostControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GranularExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LeftPaneContentView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LeftPaneView.xaml.cs">
       <DependentUpon>LeftPaneView.xaml</DependentUpon>
     </Compile>

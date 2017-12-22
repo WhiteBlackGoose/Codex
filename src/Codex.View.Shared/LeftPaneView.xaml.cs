@@ -24,5 +24,21 @@ namespace Codex.View
         {
             InitializeComponent();
         }
+
+        public LeftPaneViewModel ViewModel
+        {
+            get { return (LeftPaneViewModel)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ViewModelProperty = 
+            ViewUtilities.RegisterDependencyProperty<LeftPaneView, LeftPaneViewModel>(onPropertyChanged: OnViewModelChanged);
+
+        private static void OnViewModelChanged(LeftPaneView view, LeftPaneViewModel viewModel)
+        {
+            view.ContextGrid.DataContext = viewModel;
+            view.PaneContent?.RenderContent(view, viewModel?.Content);
+        }
     }
 }

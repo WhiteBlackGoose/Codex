@@ -1,0 +1,129 @@
+#main{
+    top: 58px;
+    width: 100%;
+    height: calc(100% - 58px);
+    display: flex;
+    position: fixed;
+}
+
+.gutter {
+    background-color: #eee;
+    cursor: col-resize;
+}
+
+#leftPane{
+    white-space: nowrap;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+#rightPane{
+    width: calc(100% - 524);
+    display: flex;
+    align-content:stretch;
+    flex-direction:column;
+}
+
+#editorPaneWrapper{
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+}
+
+#editorPane {
+    width: 100%;
+    height: 100%;
+}
+
+#bottomPane{
+    height: 55px;
+}
+
+.resultGroup {
+    margin-right: 0px;
+    margin-left: 8px;
+    margin-bottom: 16px;
+}
+
+.resultGroupHeader {
+    cursor: pointer;
+    padding: 6px 6px 6px 28px;
+    margin-top: 16px;
+    background-color: #e7f5ff;
+    background-image: url('images/minus.png');
+    background-attachment: local;
+    background-repeat: no-repeat;
+    background-position: 10px 13px;
+    background-origin: border-box;
+}
+
+.resultGroupHeader:hover {
+    background-color: #d4edff;
+}
+
+.resultGroupHeader.selectedResult {
+    background-color: #d4edff;
+    border-color: #744482;
+    border-width: 1px 3px 1px 1px;
+    border-style: solid;
+    padding: 5px 3px 5px 27px; /* acommodate .resultGroupHeader's padding for extra border */
+}
+
+.resultGroupAssemblyName {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.resultItem {
+    padding: 8px 0px 8px 24px;
+    text-decoration: none;
+    white-space: nowrap;
+    border-left-color: transparent;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-left-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-style: solid;
+    border-top-style: solid;
+    border-bottom-style: solid;
+    cursor: pointer;
+}
+
+.resultItem:hover {
+    background-color: #f6f6f6;
+}
+
+.resultItem.selectedResult {
+    background-color: #f6f6f6;
+    border-color: #744482;
+    border-right-width: 3px;
+    border-right-style: solid;
+}
+
+.resultKind {
+    display: inline;
+    color: blue;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.resultName {
+    display: inline;
+    margin-left: 0px;
+}
+
+.resultDescription {
+    font-size: smaller;
+    color: silver;
+    text-decoration: none;
+}
+    
+.resultGroupProjectPath {
+    font-size: smaller;
+    color: silver;
+}
+
+.resultGroupFileGroup {
+    margin-top: 8px;
+}

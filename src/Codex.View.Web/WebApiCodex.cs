@@ -42,7 +42,52 @@ namespace Codex.View.Web
 
         public Task<IndexQueryHitsResponse<ISearchResult>> SearchAsync(SearchArguments arguments)
         {
+            if (arguments.SearchString == "tdt")
+            {
+                return GetTestAsync<IndexQueryHitsResponse<SearchResult>, IndexQueryHitsResponse<ISearchResult>>(CodexServiceMethod.Search, arguments);
+            }
+
             return PostAsync<IndexQueryHitsResponse<SearchResult>, IndexQueryHitsResponse<ISearchResult>>(CodexServiceMethod.Search, arguments);
+        }
+
+        private Task<TResult> GetTestAsync<TSerializedResult, TResult>(
+            CodexServiceMethod searchMethod,
+            object arguments)
+            where TResult : IndexQueryResponse, new()
+        {
+            TaskCompletionSource<TResult> tcs = new TaskCompletionSource<TResult>();
+
+            var url = baseUrl + searchMethod.ToString();
+            Console.WriteLine(url);
+
+            var config = new JQueryAjaxSettings
+            {
+                url = "testsearchdata.json",
+                type = "GET",
+
+                // Set the contentType of the request
+                contentType = "application/json; charset=utf-8",
+
+                success = (data, textStatus, successRequest) =>
+                {
+                    tcs.SetResult(JsonConvert.DeserializeObject<TSerializedResult>(successRequest.responseText).As<TResult>());
+                    return null;
+                },
+
+                error = (errorRequest, textStatus, errorThrown) =>
+                {
+                    tcs.SetResult(new TResult()
+                    {
+                        Error = $"Error: {errorThrown}"
+                    });
+
+                    return null;
+                }
+            };
+
+            jQuery.ajax(config);
+
+            return tcs.Task;
         }
 
         private Task<TResult> PostAsync<TSerializedResult, TResult>(

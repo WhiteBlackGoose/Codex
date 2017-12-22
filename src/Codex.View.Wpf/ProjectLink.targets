@@ -19,11 +19,15 @@
     <ProjectLinkExcludeItem Include="Compatibility\"/>
     <ProjectLinkExcludeItem Include="Properties\"/>
   </ItemGroup>
+  
+  <PropertyGroup>
+    <GranularSourceRoot>E:\Code\Ref12\GranularTestApplication\Granular</GranularSourceRoot>
+  </PropertyGroup>
 
-  <!--<ItemGroup Condition="'$(GranularSourceRoot)' != ''">
-    <PackageReference Update="Granular.Host.Wpf">
+  <ItemGroup Condition="'$(GranularSourceRoot)' != ''">
+    <!--<PackageReference Update="Granular.Host.Wpf">
       <Superceded>true</Superceded>
-    </PackageReference>
+    </PackageReference>-->
     <ProjectReference Include="$(GranularSourceRoot)\Granular.Common\Granular.Common.csproj">
       <Project>{87f1fd58-e233-4183-830a-e9e54ba17d68}</Project>
       <Name>Granular.Common</Name>
@@ -40,7 +44,7 @@
       <Project>{14ec400c-e6b9-499b-9970-57b34af24a4b}</Project>
       <Name>Granular.Presentation</Name>
     </ProjectReference>
-  </ItemGroup>-->
+  </ItemGroup>
 
   <Target Name="BeforeSupercedePackageReferences" BeforeTargets="ResolveNuGetPackageAssets">
     <ItemGroup>
@@ -50,7 +54,7 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="SupercedePackageReferences" AfterTargets="ResolveNuGetPackageAssets" Condition="false">
+  <Target Name="SupercedePackageReferences" AfterTargets="ResolveNuGetPackageAssets">
     <ItemGroup>
       <Reference Remove="@(Reference)" Condition="'%(Reference.NuGetPackageId)' == 'Granular.Host.Wpf'" />
       <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' == 'Granular.Host.Wpf'" />
@@ -63,4 +67,5 @@
     <Message Importance="high" Text="Package Reference: %(PackageReference.Identity)" />
     <Message Importance="high" Text="Reference: %(ReferencePath.Identity)" />
   </Target>
+  <Import Project="$(NuGetPackageRoot)granular.host.wpf\0.3.131-beta\build\Granular.host.wpf.targets" Condition="Exists('$(NuGetPackageRoot)granular.host.wpf\0.3.131-beta\build\Granular.host.wpf.targets')" />
 </Project>

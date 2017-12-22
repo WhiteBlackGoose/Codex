@@ -32,7 +32,7 @@ namespace Codex.View
             InitializeComponent();
             this.DataContext = ViewModel;
             ViewModel.Initialize();
-            //SearchBox.Text = "ixedoc";
+            SearchBox.Text = "as";
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
@@ -44,6 +44,19 @@ namespace Codex.View
         {
             var searchString = SearchBox.Text;
             searchString = searchString.Trim();
+
+            if (searchString == "ass")
+            {
+#if !BRIDGE
+                //UITrace.Start();
+#endif
+            }
+            else
+            {
+#if !BRIDGE
+                //UITrace.Stop();
+#endif
+            }
 
             if (searchString.Length < 3)
             {

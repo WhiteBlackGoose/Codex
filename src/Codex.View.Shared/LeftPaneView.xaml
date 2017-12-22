@@ -93,7 +93,7 @@
       </DataTemplate>
     </ResourceDictionary>
   </UserControl.Resources>
-  <Grid>
+  <Grid x:Name="ContextGrid">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition />
@@ -107,6 +107,7 @@
                            VerticalAlignment="Center"
                            FontSize="16" />
     </Border>
-    <ContentControl x:Name="PaneContent" Grid.Row="1" Content="{Binding Content}" Visibility="{Binding ContentVisibility}" />
+    
+    <c:LeftPaneContentView x:Name="PaneContent" Grid.Row="1" Content="{Binding Content}" Visibility="{Binding ContentVisibility}" />
   </Grid>
 </UserControl>

@@ -12,14 +12,29 @@ namespace Codex.View
 {
     public static class Commands
     {
-        public static readonly RoutedCommand GoToDefinition = CreateCommand();
-        public static readonly RoutedCommand GoToSpan = CreateCommand();
-        public static readonly RoutedCommand GoToReference = CreateCommand();
+        public static readonly TypedRoutedComamnd<IReferenceSymbol> GoToDefinition = CreateCommand<IReferenceSymbol>();
+        public static readonly TypedRoutedComamnd<ITextLineSpanResult> GoToSpan = CreateCommand<ITextLineSpanResult>();
+        public static readonly TypedRoutedComamnd<IReferenceSearchResult> GoToReference = CreateCommand<IReferenceSearchResult>();
 
-        private static RoutedCommand CreateCommand([CallerMemberName] string name = null)
+        private static TypedRoutedComamnd<T> CreateCommand<T>([CallerMemberName] string name = null)
         {
-            return new RoutedCommand(name, typeof(Commands));
+            return new TypedRoutedComamnd<T>(name, typeof(Commands));
         }
+
+    }
+
+    public class TypedRoutedComamnd<T> : RoutedCommand
+    {
+        public TypedRoutedComamnd(string name, Type ownerType) 
+            : base(name, ownerType)
+        {
+        }
+#if BRIDGE
+        public void RaiseExecuted(UIElement element, T parameter)
+        {
+            element.RaiseEvent(new ExecutedRoutedEventArgs(this, parameter, element));
+        }
+#endif
     }
 
     public class GoToDefinitionCommandBinding : TypedCommandBinding<IReferenceSymbol>
@@ -41,7 +56,7 @@ namespace Codex.View
     {
         public event TypedExecutedRoutedEventHandler<T> CommandExecuted;
 
-        public TypedCommandBinding(RoutedCommand command)
+        public TypedCommandBinding(TypedRoutedComamnd<T> command)
         {
             Command = command;
             base.Executed += TypedCommandBinding_Executed;

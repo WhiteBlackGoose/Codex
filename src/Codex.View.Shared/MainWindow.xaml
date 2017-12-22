@@ -51,11 +51,7 @@
         <ColumnDefinition />
       </Grid.ColumnDefinitions>
 
-      <ScrollViewer x:Name="LeftPaneScrollViewer" Grid.Column="0" 
-                    HorizontalScrollBarVisibility="Auto" 
-                    VerticalScrollBarVisibility="Auto">
-        <c:LeftPaneView x:Name="LeftPane" DataContext="{Binding LeftPane}" />
-      </ScrollViewer>
+      <c:LeftPaneView x:Name="LeftPane" ViewModel="{Binding LeftPane}" />
 
       <GridSplitter Background="#EEEEEE" Grid.Column="1" VerticalAlignment="Stretch" ShowsPreview="True" HorizontalAlignment="Left" Width="20" />
 

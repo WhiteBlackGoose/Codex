@@ -12,9 +12,11 @@ using System.Windows.Input;
 
 namespace Codex.View
 {
-    public class TextSpanSearchResultViewModel : FileItemResultViewModel
+    public partial class TextSpanSearchResultViewModel : FileItemResultViewModel
     {
         public ICommand Command { get; }
+        public ITextLineSpanResult TextResult;
+        public IReferenceSearchResult ReferenceResult;
         public object SearchResult { get; }
 
         public int LineNumber { get; }
@@ -25,6 +27,7 @@ namespace Codex.View
         public TextSpanSearchResultViewModel(ITextLineSpanResult result)
         {
             Command = Commands.GoToSpan;
+            TextResult = result;
             SearchResult = result;
             var referringSpan = result.TextSpan;
             LineNumber = referringSpan.LineNumber;
@@ -40,6 +43,7 @@ namespace Codex.View
         public TextSpanSearchResultViewModel(IReferenceSearchResult result)
         {
             Command = Commands.GoToReference;
+            ReferenceResult = result;
             SearchResult = result;
             var referringSpan = result.ReferenceSpan;
             LineNumber = referringSpan.LineNumber;
@@ -53,23 +57,24 @@ namespace Codex.View
         }
     }
 
-    public class ProjectItemResultViewModel
+    public partial class ProjectItemResultViewModel
     {
     }
 
-    public class FileItemResultViewModel
+    public partial class FileItemResultViewModel
     {
     }
 
-    public class FileResultsViewModel : ProjectItemResultViewModel
+    public partial class FileResultsViewModel : ProjectItemResultViewModel, IResultsStats
     {
+        public Counter Counter { get; } = new Counter();
         public string Path { get; set; }
         public IReadOnlyList<FileItemResultViewModel> Items { get; set; }
     }
 
-    public class SymbolResultViewModel : ProjectItemResultViewModel
+    public partial class SymbolResultViewModel : ProjectItemResultViewModel
     {
-        public IReferenceSymbol Symbol { get; }
+        public IDefinitionSymbol Symbol { get; }
         public string ShortName { get; set; }
         public string DisplayName { get; set; }
         public string SymbolKind { get; set; }
@@ -89,32 +94,45 @@ namespace Codex.View
         }
     }
 
-    public class ProjectGroupResultsViewModel
+    public partial class ProjectGroupResultsViewModel : IResultsStats
     {
+        public Counter Counter { get; } = new Counter();
+
         public string ProjectName { get; set; }
         public IReadOnlyList<ProjectItemResultViewModel> Items { get; set; }
     }
 
-    public class ProjectResultsViewModel : LeftPaneContent
+    public partial class ProjectResultsViewModel : LeftPaneContent, IResultsStats
     {
+        public Counter Counter { get; } = new Counter();
+
         public List<ProjectGroupResultsViewModel> ProjectGroups { get; set; }
 
         public ProjectResultsViewModel()
         {
+            ProjectGroups = new List<ProjectGroupResultsViewModel>();
         }
 
         public ProjectResultsViewModel(string searchString, IndexQueryHitsResponse<ISearchResult> response)
         {
-            ProjectGroups = response.Result.Hits.Select(sr => sr.Definition).GroupBy(sr => sr.ProjectId).Select(projectGroup => new ProjectGroupResultsViewModel()
+            ProjectGroups = response.Result.Hits.Select(sr => sr.Definition).GroupBy(sr => sr.ProjectId).Select(projectGroup =>
             {
-                ProjectName = projectGroup.Key,
-                Items = projectGroup.Select(symbol => new SymbolResultViewModel(symbol)).ToList()
+                var projectCounter = new Counter();
+                return new ProjectGroupResultsViewModel()
+                {
+                    ProjectName = projectGroup.Key,
+                    Items = projectGroup.Select(symbol => new SymbolResultViewModel(symbol).Increment(projectCounter)).ToList()
+                }
+                .AddFrom(projectCounter)
+                .AddTo(Counter);
             }).ToList();
         }
     }
 
-    public class CategoryGroupSearchResultsViewModel
+    public partial class CategoryGroupSearchResultsViewModel : IResultsStats
     {
+        public Counter Counter { get; } = new Counter();
+
         public Visibility HeaderVisibility => string.IsNullOrEmpty(Header) ? Visibility.Collapsed : Visibility.Visible;
 
         public string Header { get; }
@@ -137,27 +155,29 @@ namespace Codex.View
 
         private void PopulateProjectGroups<T>(IEnumerable<T> items, Func<T, TextSpanSearchResultViewModel> viewModelFactory) where T : IProjectFileScopeEntity
         {
-            ProjectResults.ProjectGroups = items.GroupBy(sr => sr.ProjectId).Select(projectGroup => new ProjectGroupResultsViewModel()
+            ProjectResults.ProjectGroups.AddRange(items.GroupBy(sr => sr.ProjectId).Select(projectGroup => new ProjectGroupResultsViewModel()
             {
                 ProjectName = projectGroup.Key,
                 Items = projectGroup.GroupBy(sr => sr.ProjectRelativePath).Select(fileGroup => new FileResultsViewModel()
                 {
                     Path = fileGroup.Key,
                     Items = fileGroup.Select(sr => viewModelFactory(sr)).ToList()
-                }).ToList()
-            }).ToList();
+                }.Add(f => f.Items.Count).AddTo(Counter)).ToList()
+            }));
         }
     }
 
-    public class CategorizedSearchResultsViewModel : LeftPaneContent
+    public partial class CategorizedSearchResultsViewModel : LeftPaneContent, IResultsStats
     {
         public List<CategoryGroupSearchResultsViewModel> Categories { get; }
+
+        public Counter Counter { get; } = new Counter();
 
         public CategorizedSearchResultsViewModel(string searchString, IndexQueryHitsResponse<ISearchResult> response)
         {
             Categories = new List<CategoryGroupSearchResultsViewModel>()
             {
-                new CategoryGroupSearchResultsViewModel(searchString, response)
+                new CategoryGroupSearchResultsViewModel(searchString, response).AddTo(Counter)
             };
         }
 
@@ -167,16 +187,16 @@ namespace Codex.View
             {
                 ReferenceKind referenceKind;
                 Enum.TryParse(referenceGroup.Key, true, out referenceKind);
-                return new CategoryGroupSearchResultsViewModel(referenceKind, symbolName, referenceGroup);
+                return new CategoryGroupSearchResultsViewModel(referenceKind, symbolName, referenceGroup).AddTo(Counter);
             }).ToList();
         }
     }
 
-    public interface LeftPaneContent
+    public abstract partial class LeftPaneContent
     {
     }
 
-    public class LeftPaneViewModel : NotifyPropertyChangedBase
+    public partial class LeftPaneViewModel : PaneViewModelBase
     {
         public Visibility SearchInfoVisibility => !string.IsNullOrEmpty(SearchInfo) ? Visibility.Visible : Visibility.Collapsed;
 
@@ -249,7 +269,7 @@ namespace Codex.View
         }
     }
 
-    public class RightPaneViewModel : NotifyPropertyChangedBase
+    public partial class RightPaneViewModel : PaneViewModelBase
     {
         public Visibility ErrorVisibility => !string.IsNullOrEmpty(Error) ? Visibility.Visible : Visibility.Collapsed;
 
@@ -321,6 +341,37 @@ namespace Codex.View
             {
                 propertyChanged -= value;
             }
+        }
+    }
+
+    public class PaneViewModelBase : NotifyPropertyChangedBase
+    {
+        public ViewModelDataContext DataContext { get; set; }
+    }
+
+    public interface IResultsStats
+    {
+        Counter Counter { get; }
+    }
+
+    public class Counter
+    {
+        public Counter Parent;
+        public int Count;
+
+        public Counter CreateChild()
+        {
+            return new Counter() { Parent = this };
+        }
+
+        public void Increment()
+        {
+            Count++;
+        }
+
+        public void Add(int value)
+        {
+            Count = value;
         }
     }
 

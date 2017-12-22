@@ -14,7 +14,6 @@ namespace Codex.View
     {
         private HTMLElement m_htmlElement;
         private IStandaloneCodeEditor m_editor;
-        private RenderQueue renderQueue = new RenderQueue();
         private string m_text = "Hello World";
 
         public async void SetRenderElement(HTMLElement htmlElement)
@@ -40,7 +39,7 @@ namespace Codex.View
             {
                 if (m_editor != null)
                 {
-                    renderQueue.InvokeAsync(() =>
+                    ViewUtilities.RenderQueue.InvokeAsync(() =>
                     {
                         m_editor.layout();
                     });

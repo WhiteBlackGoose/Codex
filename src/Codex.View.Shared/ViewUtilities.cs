@@ -1,12 +1,58 @@
 ﻿using Codex.ObjectModel;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Windows;
 
 namespace Codex.View
 {
-    public static class ViewUtilities
+    public static partial class ViewUtilities
     {
+        public static T Increment<T>(this T value, Counter counter)
+        {
+            counter.Increment();
+            return value;
+        }
+
+        public static T Add<T>(this T value, Func<T, int> computeCount)
+            where T : IResultsStats
+        {
+            computeCount(value);
+            return value;
+        }
+
+        public static T AddTo<T>(this T value, Counter counter)
+            where T : IResultsStats
+        {
+            counter.Add(value.Counter.Count);
+            return value;
+        }
+
+        public static T AddFrom<T>(this T value, Counter counter)
+            where T : IResultsStats
+        {
+            value.Counter.Add(counter.Count);
+            return value;
+        }
+
+        public static DependencyProperty RegisterDependencyProperty<TOwner, TPropertyType>(
+            [CallerMemberName] string dependencyPropertyName = null,
+            Action<TOwner, TPropertyType> onPropertyChanged = null,
+            TPropertyType defaultValue = default(TPropertyType))
+            where TOwner : class
+        {
+            return DependencyProperty.Register(dependencyPropertyName.Substring(0, dependencyPropertyName.Length - "Property".Length),
+                typeof(TPropertyType),
+                typeof(TOwner),
+                onPropertyChanged != null ?
+                    new PropertyMetadata(defaultValue, (DependencyObject owner, DependencyPropertyChangedEventArgs args) =>
+                    {
+                        onPropertyChanged(owner as TOwner, (TPropertyType)args.NewValue);
+                    }) : 
+                    new PropertyMetadata(defaultValue));
+        }
+
         public static string GetReferencesHeader(ReferenceKind referenceKind, int referenceCount, string symbolName)
         {
             string formatString = "";

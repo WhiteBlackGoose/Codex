@@ -1,0 +1,32 @@
+﻿<Views>
+  <!-- INCOMPLETE: This is intended to be declarative specification for rendering html for view models -->
+  <ViewModel Name="FileResultsViewModel">
+    <div class="rF">
+      <div class="rN" Style.BackgroundImage="{GetFileNameGlyph(Path)}">{Path} ({Counter.Count})</div>
+    </div>
+  </ViewModel>
+
+  <ViewModel Name="FileResultsViewModel">
+    <div class="rF">
+      <div class="rN" Style.BackgroundImage="{GetFileNameGlyph(Path)}">{Path} ({Counter.Count})</div>
+      <ItemsPresenter Items="{}">
+        <ContentPresenter />
+      </ItemsPresenter>
+    </div>
+  </ViewModel>
+
+  <div>
+    <div class="rH">1 reference to yxt4gpkb4tiv</div>
+    <div class="rK">
+      <div class="rA">CodexTestCSharpLibrary (0)</div>
+      <div class="rG">
+        <div class="rF">
+          <div class="rN">Properties\AssemblyInfo.cs (0)</div>
+          <a class="rL">
+            <b>13</b>[assembly: <i>AssemblyCopyright</i>("Copyright ©  2017")]
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Views>
