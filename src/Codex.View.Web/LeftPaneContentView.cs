@@ -1,13 +1,13 @@
-﻿using Granular.Presentation.Web;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using Bridge.Html5;
 using System.Windows.Media;
+using Granular.Host.Render;
 
 namespace Codex.View
 {
-    public partial class LeftPaneContentView : FrameworkElement, IHtmlElementHost
+    public partial class LeftPaneContentView : FrameworkElement, IHtmlRenderElementHost
     {
         private HTMLElement m_htmlElement;
         private HTMLDivElement m_childrenHost;
@@ -18,7 +18,7 @@ namespace Codex.View
             set { SetValue(ContentProperty, value); }
         }
 
-        public static readonly DependencyProperty ContentProperty = ViewUtilities.RegisterDependencyProperty<LeftPaneContentView, LeftPaneContent>();
+        public static readonly DependencyProperty ContentProperty = ViewUtilities.RegisterDependencyProperty<LeftPaneContentView, LeftPaneContent>("ContentProperty");
 
         public LeftPaneContentView()
         {
@@ -44,15 +44,15 @@ namespace Codex.View
                 var newChildrenHost = new HTMLDivElement();
                 m_childrenHost = newChildrenHost;
                 viewModel?.Render(view, m_childrenHost);
-                m_htmlElement?.AppendChild(m_childrenHost);
+                //m_htmlElement?.AppendChild(m_childrenHost);
 
                 if (oldChildrenHost != null)
                 {
-                    m_htmlElement.ReplaceChild(newChildrenHost, oldChildrenHost);
+                    m_htmlElement?.ReplaceChild(newChildrenHost, oldChildrenHost);
                 }
                 else
                 {
-                    m_htmlElement.AppendChild(newChildrenHost);
+                    m_htmlElement?.AppendChild(newChildrenHost);
                 }
             });
         }

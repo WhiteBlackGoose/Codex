@@ -1,16 +1,16 @@
 ﻿using System.Windows;
 using Bridge;
 using Bridge.Html5;
-using Granular.Presentation.Web;
 using Monaco;
 using System.Windows.Media;
 using static monaco.editor;
 using System.Windows.Threading;
 using Granular.Host;
+using Granular.Host.Render;
 
 namespace Codex.View
 {
-    public partial class EditorHostControl : FrameworkElement, IHtmlElementHost
+    public partial class EditorHostControl : FrameworkElement, IHtmlRenderElementHost
     {
         private HTMLElement m_htmlElement;
         private IStandaloneCodeEditor m_editor;

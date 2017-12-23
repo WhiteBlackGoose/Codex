@@ -22,6 +22,8 @@ namespace Codex.View
     {
         public LeftPaneView()
         {
+            VisualBackground = Brushes.Transparent;
+            VisualIsHitTestVisible = true;
             InitializeComponent();
         }
 
@@ -33,7 +35,7 @@ namespace Codex.View
 
         // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ViewModelProperty = 
-            ViewUtilities.RegisterDependencyProperty<LeftPaneView, LeftPaneViewModel>(onPropertyChanged: OnViewModelChanged);
+            ViewUtilities.RegisterDependencyProperty<LeftPaneView, LeftPaneViewModel>("ViewModelProperty", onPropertyChanged: OnViewModelChanged);
 
         private static void OnViewModelChanged(LeftPaneView view, LeftPaneViewModel viewModel)
         {

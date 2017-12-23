@@ -32,7 +32,7 @@ namespace Codex.View
             InitializeComponent();
             this.DataContext = ViewModel;
             ViewModel.Initialize();
-            SearchBox.Text = "as";
+            SearchBox.Text = "asse";
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
