@@ -9,6 +9,11 @@ namespace Codex.View
 {
     public static partial class ViewUtilities
     {
+        public static Visibility BoolVisibility(bool isVisible)
+        {
+            return isVisible ? Visibility.Visible : Visibility.Collapsed;
+        }
+
         public static T Increment<T>(this T value, Counter counter)
         {
             counter.Increment();

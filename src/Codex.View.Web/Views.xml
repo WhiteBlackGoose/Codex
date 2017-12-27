@@ -1,32 +1,52 @@
 ﻿<Views>
   <!-- INCOMPLETE: This is intended to be declarative specification for rendering html for view models -->
-  <ViewModel Name="FileResultsViewModel">
-    <div class="rF">
-      <div class="rN" Style.BackgroundImage="{GetFileNameGlyph(Path)}">{Path} ({Counter.Count})</div>
-    </div>
-  </ViewModel>
-
-  <ViewModel Name="FileResultsViewModel">
-    <div class="rF">
-      <div class="rN" Style.BackgroundImage="{GetFileNameGlyph(Path)}">{Path} ({Counter.Count})</div>
-      <ItemsPresenter Items="{}">
-        <ContentPresenter />
-      </ItemsPresenter>
-    </div>
-  </ViewModel>
-
-  <div>
-    <div class="rH">1 reference to yxt4gpkb4tiv</div>
-    <div class="rK">
-      <div class="rA">CodexTestCSharpLibrary (0)</div>
-      <div class="rG">
-        <div class="rF">
-          <div class="rN">Properties\AssemblyInfo.cs (0)</div>
-          <a class="rL">
-            <b>13</b>[assembly: <i>AssemblyCopyright</i>("Copyright ©  2017")]
-          </a>
-        </div>
+  <ViewModel Name="SymbolResultViewModel">
+    <a onClick="{MouseEvent(() => { Commands.GoToDefinition.RaiseExecuted(view, this.Symbol); })}" href="/?query=">
+      <div class="resultItem">
+        <img src="{GetIconPath(Symbol.GetGlyph())}" height="16" width="16" />
+        <div class="resultKind">{Symbol.Kind.ToLowerCase()}</div>
+        <div class="resultName">{Symbol.ShortName}</div>
+        <div class="resultDescription">{Symbol.DisplayName}</div>
       </div>
+    </a>
+  </ViewModel>
+
+  <ViewModel Name="FileResultsViewModel">
+    <div class="rF">
+      <div class="rN" Style.BackgroundImage="{GetFileNameGlyph(Path)}">{Path} ({Counter.Count})</div>
+      <ForEach Items="Items" />
     </div>
-  </div>
+  </ViewModel>
+
+  <ViewModel Name="TextSpanSearchResultViewModel">
+    <div class="rL" onClick="{MouseEvent(() => { RaiseExecuted(view); })}">
+      <b>{LineNumber.ToString()}</b>{PrefixText}<i>{ContentText}</i>{SuffixText}
+    </div>
+  </ViewModel>
+
+  <ViewModel Name="CategorizedSearchResultsViewModel">
+    <ForEach Items="Categories" />
+  </ViewModel>
+
+  <ViewModel Name="CategoryGroupSearchResultsViewModel">
+    <div class="rH" onClick="{ViewUtilities.ToggleExpandCollapse}">{Header}</div>
+    <div class="rK">
+      <Render Value="ProjectResults" />
+    </div>
+  </ViewModel>
+
+  <ViewModel Name="ProjectResultsViewModel">
+    <ForEach Items="ProjectGroups" />
+  </ViewModel>
+
+  <ViewModel Name="ProjectResultsViewModel">
+    <ForEach Items="ProjectGroups" />
+  </ViewModel>
+
+  <ViewModel Name="ProjectGroupResultsViewModel">
+    <div class="rA" onClick="{ViewUtilities.ToggleExpandCollapse}">{ProjectName} ({Counter.Count})</div>
+    <div class="rG">
+      <ForEach Items="Items" />
+    </div>
+  </ViewModel>
 </Views>

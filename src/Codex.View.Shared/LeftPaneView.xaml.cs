@@ -22,8 +22,6 @@ namespace Codex.View
     {
         public LeftPaneView()
         {
-            VisualBackground = Brushes.Transparent;
-            VisualIsHitTestVisible = true;
             InitializeComponent();
         }
 

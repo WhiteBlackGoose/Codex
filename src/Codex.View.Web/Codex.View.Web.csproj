@@ -44,6 +44,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bridge\overview.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Views.xml" />
     <None Include="bridge.json" />
     <Content Include="bridge\.nojekyll">
@@ -842,15 +845,22 @@
   <ItemGroup>
     <Compile Include="Compatibility\Compatibility.cs" />
     <Compile Include="Compatibility\Reference.cs" />
+    <Compile Include="HtmlBuilder.cs" />
+    <Compile Include="HtmlContentView.cs" />
+    <Compile Include="IHtmlContent.cs" />
     <Compile Include="LeftPaneView.cs" />
     <Compile Include="LeftPaneContentView.cs" />
+    <Compile Include="RightPaneViewModel.cs" />
     <Compile Include="LeftPaneViewModel.cs" />
     <Compile Include="EditorHostControl.cs" />
     <Compile Include="Monaco\Editor.cs" />
     <Compile Include="Monaco\lib\Editor.d.cs" />
     <Compile Include="Monaco\lib\Monaco.d.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RenderContext.cs" />
+    <None Include="ViewsPath.cs" />
     <Compile Include="ViewUtilities.cs" />
+    <Compile Include="Request.cs" />
     <Compile Include="WebApiCodex.cs" />
   </ItemGroup>
   <ItemGroup>

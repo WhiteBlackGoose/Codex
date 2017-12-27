@@ -15,8 +15,8 @@ namespace Codex.View
         public void SetRenderElement(HTMLElement htmlElement)
         {
             m_htmlElement = htmlElement;
-            //VisualBackground = Brushes.Transparent;
-            //VisualIsHitTestVisible = true;
+            VisualBackground = Brushes.Transparent;
+            VisualIsHitTestVisible = true;
             htmlElement.Style.OverflowX = Overflow.Auto;
             htmlElement.Style.OverflowY = Overflow.Auto;
         }

@@ -111,19 +111,24 @@ namespace Codex.View
                     }
                     .WithOnClick(() =>
                     {
-                        if (TextResult != null)
-                        {
-                            Commands.GoToSpan.RaiseExecuted(view, TextResult);
-                        }
-                        else
-                        {
-                            Commands.GoToReference.RaiseExecuted(view, ReferenceResult);
-                        }
+                        RaiseExecuted(view);
                     })
                     .WithChild(Document.CreateElement("b").WithText(LineNumber.ToString()))
                     .WithChild(new Text(PrefixText))
                     .WithChild(Document.CreateElement("i").WithText(ContentText))
                     .WithChild(new Text(SuffixText)));
+        }
+
+        private void RaiseExecuted(LeftPaneView view)
+        {
+            if (TextResult != null)
+            {
+                Commands.GoToSpan.RaiseExecuted(view, TextResult);
+            }
+            else
+            {
+                Commands.GoToReference.RaiseExecuted(view, ReferenceResult);
+            }
         }
     }
 

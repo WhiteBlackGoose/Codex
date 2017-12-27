@@ -8,49 +8,48 @@ using Codex.View.Web;
 
 namespace Codex.View
 {
-    public partial class LeftPaneContentView : FrameworkElement, IHtmlRenderElementHost
+    public partial class HtmlContentView : FrameworkElement, IHtmlRenderElementHost
     {
         private HTMLElement m_htmlElement;
         private HTMLDivElement m_childrenHost;
 
-        public LeftPaneContent Content
+        public IHtmlContent Content
         {
-            get { return (LeftPaneContent)GetValue(ContentProperty); }
+            get { return (IHtmlContent)GetValue(ContentProperty); }
             set { SetValue(ContentProperty, value); }
         }
 
-        public static readonly DependencyProperty ContentProperty = ViewUtilities.RegisterDependencyProperty<LeftPaneContentView, LeftPaneContent>("ContentProperty");
+        public static readonly DependencyProperty ContentProperty = ViewUtilities.RegisterDependencyProperty<HtmlContentView, IHtmlContent>(
+            "ContentProperty",
+            (view, content) => view.OnContentChanged(content));
 
-        public LeftPaneContentView()
+        public HtmlContentView()
         {
             VerticalAlignment = VerticalAlignment.Stretch;
             this.VisualIsHitTestVisible = true;
             VisualBackground = Brushes.Transparent;
         }
 
-        internal void OnContentChanged(IHtmlContent content)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SetRenderElement(HTMLElement htmlElement)
         {
             m_htmlElement = htmlElement;
+            htmlElement.Style.OverflowX = Overflow.Auto;
+            htmlElement.Style.OverflowY = Overflow.Auto;
+
             if (m_childrenHost != null)
             {
                 m_htmlElement.AppendChild(m_childrenHost);
             }
         }
 
-        public void RenderContent(LeftPaneView view, LeftPaneContent viewModel)
+        private void OnContentChanged(IHtmlContent content)
         {
             ViewUtilities.RenderQueue.InvokeAsync(() =>
             {
                 var oldChildrenHost = m_childrenHost;
                 var newChildrenHost = new HTMLDivElement();
                 m_childrenHost = newChildrenHost;
-                viewModel?.Render(view, m_childrenHost);
-                //m_htmlElement?.AppendChild(m_childrenHost);
+                content?.Render(newChildrenHost, new RenderContext(this));
 
                 if (oldChildrenHost != null)
                 {

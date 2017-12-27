@@ -347,6 +347,13 @@ namespace Codex.View
     public class PaneViewModelBase : NotifyPropertyChangedBase
     {
         public ViewModelDataContext DataContext { get; set; }
+
+        public PaneViewModelBase()
+        {
+            Initialize();
+        }
+
+        protected virtual void Initialize() { }
     }
 
     public interface IResultsStats

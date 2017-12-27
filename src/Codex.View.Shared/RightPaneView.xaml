@@ -19,33 +19,15 @@
     </ResourceDictionary>
   </UserControl.Resources>
   <!--  Visibility="{Binding EditorVisibility}" -->
-  <DockPanel>
-    <Border DockPanel.Dock="Bottom" Background="#DDF0FF" Height="68" Padding="8">
-      <Grid TextBlock.FontSize="14">
-        <Grid.RowDefinitions>
-          <RowDefinition />
-          <RowDefinition />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition />
-          <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <HeaderedContentControl Style="{StaticResource LabeledLink}"
-                                Content="{Binding SourceFile.ProjectRelativePath, FallbackValue=ProjectRelativePath}">
-          <HeaderedContentControl.Header>
-            <TextBlock Text="File:" Foreground="Gray" />
-          </HeaderedContentControl.Header>
-        </HeaderedContentControl>
-        <HeaderedContentControl  Style="{StaticResource LabeledLink}"
-                                Grid.Row="1"
-                                Content="{Binding SourceFile.ProjectId, FallbackValue=ProjectId}">
-          <HeaderedContentControl.Header>
-            <TextBlock Text="Project:" Foreground="Gray" />
-          </HeaderedContentControl.Header>
-        </HeaderedContentControl>
-      </Grid>
-    </Border>
+  <Grid>
+    <DockPanel  Visibility="{Binding EditorVisibility}" >
+      <Border DockPanel.Dock="Bottom" Background="#DDF0FF" Height="68" >
+        <c:HtmlContentView Content="{Binding SourceFileDetails.Value}" />
+      </Border>
 
-    <c:EditorHostControl Grid.Column="2" SourceFile="{Binding SourceFile}" />
-  </DockPanel>
+      <c:EditorHostControl Grid.Column="2" SourceFile="{Binding SourceFile}"/>
+    </DockPanel>
+
+    <c:HtmlContentView Content="{Binding Overview.Value}" Visibility="{Binding OverviewVisibility}" />
+  </Grid>
 </UserControl>
