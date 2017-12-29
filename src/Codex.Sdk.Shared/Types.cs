@@ -84,26 +84,6 @@ namespace Codex.ObjectModel
         /// The absolute character offset of the end (exclusive) of the span within the document
         /// </summary>
         public int End => Start + Length;
-
-        public bool Contains(Span span)
-        {
-            if (span == null)
-            {
-                return false;
-            }
-
-            return span.Start >= Start && span.End <= End;
-        }
-
-        public bool SpanEquals(Span span)
-        {
-            if (span == null)
-            {
-                return false;
-            }
-
-            return span.Start == Start && span.End == End;
-        }
     }
 
     partial class ClassificationSpan

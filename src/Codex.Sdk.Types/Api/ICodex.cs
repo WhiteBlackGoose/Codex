@@ -52,6 +52,16 @@ namespace Codex.Sdk.Search
     public class ContextCodexArgumentsBase : CodexArgumentsBase
     {
         /// <summary>
+        /// The id of the repository to which to scope search results
+        /// </summary>
+        public string RepositoryScopeId { get; set; }
+
+        /// <summary>
+        /// The id of the project to which to scope search results
+        /// </summary>
+        public string ProjectScopeId { get; set; }
+
+        /// <summary>
         /// The id of the repository referencing the symbol.
         /// NOTE: This is used to priority inter-repository matches over
         /// matches from outside the repository
@@ -227,6 +237,12 @@ namespace Codex.Sdk.Search
     public class ReferencesResult : IndexQueryHits<IReferenceSearchResult>
     {
         public string SymbolDisplayName { get; set; }
+
+        public string SymbolId { get; set; }
+
+        public string ProjectId { get; set; }
+
+        public List<IDefinitionSymbol> RelatedDefinitions { get; } = new List<IDefinitionSymbol>();
     }
 
     public class IndexQueryHitsResponse<T> : IndexQueryResponse<IndexQueryHits<T>>

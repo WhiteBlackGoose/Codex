@@ -306,6 +306,39 @@ namespace Codex
         int LineOffset { get; }
     }
 
+    public static class SpanExtensions
+    {
+        public static int LineSpanEnd(this ILineSpan lineSpan)
+        {
+            return lineSpan.LineSpanStart + lineSpan.Length;
+        }
+
+        public static int End(this ISpan lineSpan)
+        {
+            return lineSpan.Start + lineSpan.Length;
+        }
+
+        public static bool SpanEquals(this ISpan span, ISpan otherSpan)
+        {
+            if (span == null)
+            {
+                return false;
+            }
+
+            return span.Start == otherSpan.Start && span.Length == otherSpan.Length;
+        }
+
+        public static bool Contains(this Span span, ISpan otherSpan)
+        {
+            if (span == null)
+            {
+                return false;
+            }
+
+            return otherSpan.Start >= span.Start && otherSpan.End() <= span.End();
+        }
+    }
+
     public interface ISpan
     {
         /// <summary>
