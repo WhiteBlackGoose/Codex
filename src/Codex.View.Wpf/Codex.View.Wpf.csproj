@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Granular.Host.Wpf">
-      <Version>0.3.138-beta</Version>
+      <Version>0.3.149-beta</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="..\Codex.View.Shared\Codex.View.Shared.projitems" Label="Shared" />

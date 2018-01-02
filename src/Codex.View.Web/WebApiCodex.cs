@@ -65,8 +65,7 @@ namespace Codex.View.Web
                 url = "testsearchdata.json",
                 type = "GET",
 
-                // Set the contentType of the request
-                contentType = "application/json; charset=utf-8",
+                dataType = "json",
 
                 success = (data, textStatus, successRequest) =>
                 {

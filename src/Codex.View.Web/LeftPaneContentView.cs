@@ -8,6 +8,14 @@ using Codex.View.Web;
 
 namespace Codex.View
 {
+#if !NATIVE_RENDER_HTML
+    public partial class LeftPaneContentView : ContentControl
+    {
+        public void RenderContent(LeftPaneView view, LeftPaneContent viewModel)
+        {
+        }
+    }
+#else
     public partial class LeftPaneContentView : FrameworkElement, IHtmlRenderElementHost
     {
         private HTMLElement m_htmlElement;
@@ -63,4 +71,5 @@ namespace Codex.View
             });
         }
     }
+#endif
 }
