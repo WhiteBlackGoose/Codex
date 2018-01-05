@@ -538,7 +538,7 @@ namespace Codex.Framework.Generation
                 else
                 {
                     // new PropertyType().CopyFrom(value.Property);
-                    return new CodeSnippetExpression($"EntityUtilities.NullOrCopy({valuePropertyReferenceExpression.FieldName}, v => new {property.PropertyTypeDefinition.ClassName}().CopyFrom<{property.PropertyTypeDefinition.ClassName}>(v));");
+                    return new CodeSnippetExpression($"EntityUtilities.NullOrCopy(value.{valuePropertyReferenceExpression.FieldName}, v => new {property.PropertyTypeDefinition.ClassName}().CopyFrom<{property.PropertyTypeDefinition.ClassName}>(v));");
                 }
             }
             else

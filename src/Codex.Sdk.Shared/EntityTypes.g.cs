@@ -515,7 +515,7 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IBoundSourceFile value)
             where TTarget : BoundSourceFile {
-            this.m_SourceFile = EntityUtilities.NullOrCopy(SourceFile, v => new SourceFile().CopyFrom<SourceFile>(v));;
+            this.m_SourceFile = EntityUtilities.NullOrCopy(value.SourceFile, v => new SourceFile().CopyFrom<SourceFile>(v));;
             base.CopyFrom<BoundSourceInfo>(((Codex.IBoundSourceInfo)(value)));
             return ((TTarget)(this));
         }
@@ -984,8 +984,8 @@ namespace Codex.ObjectModel {
             this.m_Size = ((Codex.ISourceFileInfo)(value)).Size;
             this.m_Language = ((Codex.ISourceFileInfo)(value)).Language;
             this.m_WebAddress = ((Codex.ISourceFileInfo)(value)).WebAddress;
-            this.m_Encoding = EntityUtilities.NullOrCopy(Encoding, v => new EncodingDescription().CopyFrom<EncodingDescription>(v));;
-            this.m_Properties = EntityUtilities.NullOrCopy(Properties, v => new PropertyMap().CopyFrom<PropertyMap>(v));;
+            this.m_Encoding = EntityUtilities.NullOrCopy(value.Encoding, v => new EncodingDescription().CopyFrom<EncodingDescription>(v));;
+            this.m_Properties = EntityUtilities.NullOrCopy(value.Properties, v => new PropertyMap().CopyFrom<PropertyMap>(v));;
             this.m_RepoRelativePath = ((Codex.IRepoFileScopeEntity)(value)).RepoRelativePath;
             this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
             this.m_SourceControlContentId = ((Codex.ISourceControlFileInfo)(value)).SourceControlContentId;
@@ -1114,7 +1114,7 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.ISourceFile value)
             where TTarget : SourceFile {
-            this.m_Info = EntityUtilities.NullOrCopy(Info, v => new SourceFileInfo().CopyFrom<SourceFileInfo>(v));;
+            this.m_Info = EntityUtilities.NullOrCopy(value.Info, v => new SourceFileInfo().CopyFrom<SourceFileInfo>(v));;
             this.m_Content = ((Codex.ISourceFile)(value)).Content;
             this.m_ExcludeFromSearch = ((Codex.ISourceFile)(value)).ExcludeFromSearch;
             return ((TTarget)(this));
@@ -1193,8 +1193,8 @@ namespace Codex.ObjectModel {
         public virtual TTarget CopyFrom<TTarget>(Codex.IOutliningRegion value)
             where TTarget : OutliningRegion {
             this.m_Kind = ((Codex.IOutliningRegion)(value)).Kind;
-            this.m_Header = EntityUtilities.NullOrCopy(Header, v => new LineSpan().CopyFrom<LineSpan>(v));;
-            this.m_Content = EntityUtilities.NullOrCopy(Content, v => new LineSpan().CopyFrom<LineSpan>(v));;
+            this.m_Header = EntityUtilities.NullOrCopy(value.Header, v => new LineSpan().CopyFrom<LineSpan>(v));;
+            this.m_Content = EntityUtilities.NullOrCopy(value.Content, v => new LineSpan().CopyFrom<LineSpan>(v));;
             return ((TTarget)(this));
         }
     }
@@ -1261,7 +1261,7 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IDefinitionSpan value)
             where TTarget : DefinitionSpan {
-            this.m_Definition = EntityUtilities.NullOrCopy(Definition, v => new DefinitionSymbol().CopyFrom<DefinitionSymbol>(v));;
+            this.m_Definition = EntityUtilities.NullOrCopy(value.Definition, v => new DefinitionSymbol().CopyFrom<DefinitionSymbol>(v));;
             this.m_Parameters = new System.Collections.Generic.List<ParameterDefinitionSpan>(System.Linq.Enumerable.Select(((Codex.IDefinitionSpan)(value)).Parameters, v => EntityUtilities.NullOrCopy(v, _v => new ParameterDefinitionSpan().CopyFrom<ParameterDefinitionSpan>(_v))));
             base.CopyFrom<Span>(((Codex.ISpan)(value)));
             return ((TTarget)(this));
@@ -1416,7 +1416,7 @@ namespace Codex.ObjectModel {
         public virtual TTarget CopyFrom<TTarget>(Codex.IReferenceSpan value)
             where TTarget : ReferenceSpan {
             this.m_RelatedDefinition = ((Codex.IReferenceSpan)(value)).RelatedDefinition;
-            this.m_Reference = EntityUtilities.NullOrCopy(Reference, v => new ReferenceSymbol().CopyFrom<ReferenceSymbol>(v));;
+            this.m_Reference = EntityUtilities.NullOrCopy(value.Reference, v => new ReferenceSymbol().CopyFrom<ReferenceSymbol>(v));;
             this.m_Parameters = new System.Collections.Generic.List<ParameterReferenceSpan>(System.Linq.Enumerable.Select(((Codex.IReferenceSpan)(value)).Parameters, v => EntityUtilities.NullOrCopy(v, _v => new ParameterReferenceSpan().CopyFrom<ParameterReferenceSpan>(_v))));
             base.CopyFrom<SymbolSpan>(((Codex.ISymbolSpan)(value)));
             return ((TTarget)(this));
@@ -2102,7 +2102,7 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.ICodeReviewCommentThread value)
             where TTarget : CodeReviewCommentThread {
-            this.m_OriginalSpan = EntityUtilities.NullOrCopy(OriginalSpan, v => new LineSpan().CopyFrom<LineSpan>(v));;
+            this.m_OriginalSpan = EntityUtilities.NullOrCopy(value.OriginalSpan, v => new LineSpan().CopyFrom<LineSpan>(v));;
             this.m_StartIteration = ((Codex.ICodeReviewCommentThread)(value)).StartIteration;
             this.m_LastUpdated = ((Codex.ICodeReviewCommentThread)(value)).LastUpdated;
             this.m_FileRepoRelativePath = ((Codex.ICodeReviewCommentThread)(value)).FileRepoRelativePath;
@@ -2490,7 +2490,7 @@ namespace Codex.ObjectModel {
             this.m_ProjectId = ((Codex.IReferencedProject)(value)).ProjectId;
             this.m_Definitions = new System.Collections.Generic.List<DefinitionSymbol>(System.Linq.Enumerable.Select(((Codex.IReferencedProject)(value)).Definitions, v => EntityUtilities.NullOrCopy(v, _v => new DefinitionSymbol().CopyFrom<DefinitionSymbol>(_v))));
             this.m_DisplayName = ((Codex.IReferencedProject)(value)).DisplayName;
-            this.m_Properties = EntityUtilities.NullOrCopy(Properties, v => new PropertyMap().CopyFrom<PropertyMap>(v));;
+            this.m_Properties = EntityUtilities.NullOrCopy(value.Properties, v => new PropertyMap().CopyFrom<PropertyMap>(v));;
             return ((TTarget)(this));
         }
     }
@@ -2728,7 +2728,7 @@ namespace Codex.ObjectModel {
             where TTarget : DocumentationInfo {
             this.m_DeclarationName = ((Codex.IDocumentationInfo)(value)).DeclarationName;
             this.m_Comment = ((Codex.IDocumentationInfo)(value)).Comment;
-            this.m_AssociatedSymbol = EntityUtilities.NullOrCopy(AssociatedSymbol, v => new Symbol().CopyFrom<Symbol>(v));;
+            this.m_AssociatedSymbol = EntityUtilities.NullOrCopy(value.AssociatedSymbol, v => new Symbol().CopyFrom<Symbol>(v));;
             this.m_References = new System.Collections.Generic.List<DocumentationReferenceSymbol>(System.Linq.Enumerable.Select(((Codex.IDocumentationInfo)(value)).References, v => EntityUtilities.NullOrCopy(v, _v => new DocumentationReferenceSymbol().CopyFrom<DocumentationReferenceSymbol>(_v))));
             this.m_Summary = ((Codex.IDocumentationInfo)(value)).Summary;
             this.m_Remarks = ((Codex.IDocumentationInfo)(value)).Remarks;
@@ -2832,7 +2832,7 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.ITypedParameterDocumentation value)
             where TTarget : TypedParameterDocumentation {
-            this.m_Type = EntityUtilities.NullOrCopy(Type, v => new DocumentationReferenceSymbol().CopyFrom<DocumentationReferenceSymbol>(v));;
+            this.m_Type = EntityUtilities.NullOrCopy(value.Type, v => new DocumentationReferenceSymbol().CopyFrom<DocumentationReferenceSymbol>(v));;
             base.CopyFrom<ParameterDocumentation>(((Codex.IParameterDocumentation)(value)));
             return ((TTarget)(this));
         }
@@ -3802,7 +3802,7 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IDefinitionSearchModel value)
             where TTarget : DefinitionSearchModel {
-            this.m_Definition = EntityUtilities.NullOrCopy(Definition, v => new DefinitionSymbol().CopyFrom<DefinitionSymbol>(v));;
+            this.m_Definition = EntityUtilities.NullOrCopy(value.Definition, v => new DefinitionSymbol().CopyFrom<DefinitionSymbol>(v));;
             this.m_Keywords = new System.Collections.Generic.List<string>(((Codex.IDefinitionSearchModel)(value)).Keywords);
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
             return ((TTarget)(this));
@@ -3842,7 +3842,7 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.ILanguageSearchModel value)
             where TTarget : LanguageSearchModel {
-            this.m_Language = EntityUtilities.NullOrCopy(Language, v => new LanguageInfo().CopyFrom<LanguageInfo>(v));;
+            this.m_Language = EntityUtilities.NullOrCopy(value.Language, v => new LanguageInfo().CopyFrom<LanguageInfo>(v));;
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
             return ((TTarget)(this));
         }
@@ -4017,7 +4017,7 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IReferenceSearchModel value)
             where TTarget : ReferenceSearchModel {
-            this.m_Reference = EntityUtilities.NullOrCopy(Reference, v => new ReferenceSymbol().CopyFrom<ReferenceSymbol>(v));;
+            this.m_Reference = EntityUtilities.NullOrCopy(value.Reference, v => new ReferenceSymbol().CopyFrom<ReferenceSymbol>(v));;
             this.m_Spans = new System.Collections.Generic.List<SymbolSpan>(System.Linq.Enumerable.Select(((Codex.IReferenceSearchModel)(value)).Spans, v => EntityUtilities.NullOrCopy(v, _v => new SymbolSpan().CopyFrom<SymbolSpan>(_v))));
             this.m_CompressedSpans = ((Codex.IReferenceSearchModel)(value)).CompressedSpans;
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
@@ -4068,7 +4068,7 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.ISourceSearchModelBase value)
             where TTarget : SourceSearchModelBase {
-            this.m_SourceControlInfo = EntityUtilities.NullOrCopy(SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
+            this.m_SourceControlInfo = EntityUtilities.NullOrCopy(value.SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
             return ((TTarget)(this));
         }
@@ -4205,19 +4205,19 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.ISourceSearchModelBase value)
             where TTarget : BoundSourceSearchModel {
-            this.m_SourceControlInfo = EntityUtilities.NullOrCopy(SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
+            this.m_SourceControlInfo = EntityUtilities.NullOrCopy(value.SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
             return ((TTarget)(this));
         }
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IBoundSourceSearchModel value)
             where TTarget : BoundSourceSearchModel {
             this.m_TextUid = ((Codex.IBoundSourceSearchModel)(value)).TextUid;
-            this.m_SourceInfo = EntityUtilities.NullOrCopy(SourceInfo, v => new SourceFileInfo().CopyFrom<SourceFileInfo>(v));;
-            this.m_BindingInfo = EntityUtilities.NullOrCopy(BindingInfo, v => new BoundSourceInfo().CopyFrom<BoundSourceInfo>(v));;
+            this.m_SourceInfo = EntityUtilities.NullOrCopy(value.SourceInfo, v => new SourceFileInfo().CopyFrom<SourceFileInfo>(v));;
+            this.m_BindingInfo = EntityUtilities.NullOrCopy(value.BindingInfo, v => new BoundSourceInfo().CopyFrom<BoundSourceInfo>(v));;
             this.m_CompressedClassifications = ((Codex.IBoundSourceSearchModel)(value)).CompressedClassifications;
             this.m_CompressedReferences = ((Codex.IBoundSourceSearchModel)(value)).CompressedReferences;
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
-            this.m_SourceControlInfo = EntityUtilities.NullOrCopy(SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
+            this.m_SourceControlInfo = EntityUtilities.NullOrCopy(value.SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
             return ((TTarget)(this));
         }
     }
@@ -4282,15 +4282,15 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.ISourceSearchModelBase value)
             where TTarget : TextSourceSearchModel {
-            this.m_SourceControlInfo = EntityUtilities.NullOrCopy(SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
+            this.m_SourceControlInfo = EntityUtilities.NullOrCopy(value.SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
             return ((TTarget)(this));
         }
         
         public virtual TTarget CopyFrom<TTarget>(Codex.ITextSourceSearchModel value)
             where TTarget : TextSourceSearchModel {
-            this.m_File = EntityUtilities.NullOrCopy(File, v => new SourceFile().CopyFrom<SourceFile>(v));;
+            this.m_File = EntityUtilities.NullOrCopy(value.File, v => new SourceFile().CopyFrom<SourceFile>(v));;
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
-            this.m_SourceControlInfo = EntityUtilities.NullOrCopy(SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
+            this.m_SourceControlInfo = EntityUtilities.NullOrCopy(value.SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
             return ((TTarget)(this));
         }
     }
@@ -4328,7 +4328,7 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IRepositorySearchModel value)
             where TTarget : RepositorySearchModel {
-            this.m_Repository = EntityUtilities.NullOrCopy(Repository, v => new Repository().CopyFrom<Repository>(v));;
+            this.m_Repository = EntityUtilities.NullOrCopy(value.Repository, v => new Repository().CopyFrom<Repository>(v));;
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
             return ((TTarget)(this));
         }
@@ -4367,7 +4367,7 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IProjectSearchModel value)
             where TTarget : ProjectSearchModel {
-            this.m_Project = EntityUtilities.NullOrCopy(Project, v => new AnalyzedProject().CopyFrom<AnalyzedProject>(v));;
+            this.m_Project = EntityUtilities.NullOrCopy(value.Project, v => new AnalyzedProject().CopyFrom<AnalyzedProject>(v));;
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
             return ((TTarget)(this));
         }
@@ -4454,7 +4454,7 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IProjectReferenceSearchModel value)
             where TTarget : ProjectReferenceSearchModel {
-            this.m_ProjectReference = EntityUtilities.NullOrCopy(ProjectReference, v => new ReferencedProject().CopyFrom<ReferencedProject>(v));;
+            this.m_ProjectReference = EntityUtilities.NullOrCopy(value.ProjectReference, v => new ReferencedProject().CopyFrom<ReferencedProject>(v));;
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
             this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
             this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
@@ -4495,7 +4495,7 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.ICommitSearchModel value)
             where TTarget : CommitSearchModel {
-            this.m_Commit = EntityUtilities.NullOrCopy(Commit, v => new Commit().CopyFrom<Commit>(v));;
+            this.m_Commit = EntityUtilities.NullOrCopy(value.Commit, v => new Commit().CopyFrom<Commit>(v));;
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
             return ((TTarget)(this));
         }
@@ -4698,9 +4698,9 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IRepositoryStoreInfo value)
             where TTarget : RepositoryStoreInfo {
-            this.m_Repository = EntityUtilities.NullOrCopy(Repository, v => new Repository().CopyFrom<Repository>(v));;
-            this.m_Branch = EntityUtilities.NullOrCopy(Branch, v => new Branch().CopyFrom<Branch>(v));;
-            this.m_Commit = EntityUtilities.NullOrCopy(Commit, v => new Commit().CopyFrom<Commit>(v));;
+            this.m_Repository = EntityUtilities.NullOrCopy(value.Repository, v => new Repository().CopyFrom<Repository>(v));;
+            this.m_Branch = EntityUtilities.NullOrCopy(value.Branch, v => new Branch().CopyFrom<Branch>(v));;
+            this.m_Commit = EntityUtilities.NullOrCopy(value.Commit, v => new Commit().CopyFrom<Commit>(v));;
             return ((TTarget)(this));
         }
     }
@@ -4816,7 +4816,7 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IStoredBoundSourceFile value)
             where TTarget : StoredBoundSourceFile {
-            this.m_BoundSourceFile = EntityUtilities.NullOrCopy(BoundSourceFile, v => new BoundSourceFile().CopyFrom<BoundSourceFile>(v));;
+            this.m_BoundSourceFile = EntityUtilities.NullOrCopy(value.BoundSourceFile, v => new BoundSourceFile().CopyFrom<BoundSourceFile>(v));;
             this.m_CompressedClassifications = ((Codex.IStoredBoundSourceFile)(value)).CompressedClassifications;
             this.m_CompressedReferences = ((Codex.IStoredBoundSourceFile)(value)).CompressedReferences;
             return ((TTarget)(this));
@@ -5018,7 +5018,7 @@ namespace Codex.ObjectModel {
             this.m_Modifiers = ((Codex.IDefinitionSymbol)(value)).Modifiers;
             this.m_Glyph = ((Codex.IDefinitionSymbol)(value)).Glyph;
             this.m_SymbolDepth = ((Codex.IDefinitionSymbol)(value)).SymbolDepth;
-            this.m_DocumentationInfo = EntityUtilities.NullOrCopy(DocumentationInfo, v => new DocumentationInfo().CopyFrom<DocumentationInfo>(v));;
+            this.m_DocumentationInfo = EntityUtilities.NullOrCopy(value.DocumentationInfo, v => new DocumentationInfo().CopyFrom<DocumentationInfo>(v));;
             this.m_TypeName = ((Codex.IDefinitionSymbol)(value)).TypeName;
             this.m_DeclarationName = ((Codex.IDefinitionSymbol)(value)).DeclarationName;
             this.m_Comment = ((Codex.IDefinitionSymbol)(value)).Comment;
@@ -5207,7 +5207,7 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.Sdk.Search.IReferenceSearchResult value)
             where TTarget : ReferenceSearchResult {
-            this.m_ReferenceSpan = EntityUtilities.NullOrCopy(ReferenceSpan, v => new ReferenceSpan().CopyFrom<ReferenceSpan>(v));;
+            this.m_ReferenceSpan = EntityUtilities.NullOrCopy(value.ReferenceSpan, v => new ReferenceSpan().CopyFrom<ReferenceSpan>(v));;
             base.CopyFrom<ProjectFileScopeEntity>(((Codex.IProjectFileScopeEntity)(value)));
             return ((TTarget)(this));
         }
@@ -5246,7 +5246,7 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.Sdk.Search.ITextLineSpanResult value)
             where TTarget : TextLineSpanResult {
-            this.m_TextSpan = EntityUtilities.NullOrCopy(TextSpan, v => new TextLineSpan().CopyFrom<TextLineSpan>(v));;
+            this.m_TextSpan = EntityUtilities.NullOrCopy(value.TextSpan, v => new TextLineSpan().CopyFrom<TextLineSpan>(v));;
             base.CopyFrom<ProjectFileScopeEntity>(((Codex.IProjectFileScopeEntity)(value)));
             return ((TTarget)(this));
         }
@@ -5312,8 +5312,8 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.Sdk.Search.ISearchResult value)
             where TTarget : SearchResult {
-            this.m_TextLine = EntityUtilities.NullOrCopy(TextLine, v => new TextLineSpanResult().CopyFrom<TextLineSpanResult>(v));;
-            this.m_Definition = EntityUtilities.NullOrCopy(Definition, v => new DefinitionSymbol().CopyFrom<DefinitionSymbol>(v));;
+            this.m_TextLine = EntityUtilities.NullOrCopy(value.TextLine, v => new TextLineSpanResult().CopyFrom<TextLineSpanResult>(v));;
+            this.m_Definition = EntityUtilities.NullOrCopy(value.Definition, v => new DefinitionSymbol().CopyFrom<DefinitionSymbol>(v));;
             return ((TTarget)(this));
         }
     }

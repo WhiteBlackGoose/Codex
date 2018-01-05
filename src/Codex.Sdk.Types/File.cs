@@ -330,7 +330,7 @@ namespace Codex
 
         public static bool Contains(this ISpan span, ISpan otherSpan)
         {
-            if (span == null)
+            if (span == null || otherSpan == null)
             {
                 return false;
             }

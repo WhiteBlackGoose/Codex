@@ -80,7 +80,7 @@ namespace WebUI.Controllers
                         return new SymbolSearchResultEntry()
                         {
                             Symbol = symbol,
-                            Glyph = symbol.GetGlyph()
+                            Glyph = symbol.GetGlyph() + ".png"
                         };
                     }))
             };

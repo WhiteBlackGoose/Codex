@@ -132,7 +132,8 @@ namespace WebUI.Controllers
 
                 definitions.Hits = definitions.Hits.Distinct(m_referenceEquator).ToList();
 
-                if (definitions.Hits.Count == 1)
+                if (definitions.Hits.Count == 1 && 
+                    definitions.Hits[0].ReferenceSpan.Reference.ReferenceKind == nameof(ReferenceKind.Definition))
                 {
                     var definitionReference = definitions.Hits[0];
                     return await Index(definitionReference.ProjectId, definitionReference.ProjectRelativePath, partial: true);

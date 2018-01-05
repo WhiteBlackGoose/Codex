@@ -39,7 +39,10 @@ namespace WebUI
             //    .SingleInstance();
 
             builder.Register(_ => new ElasticSearchCodex(
-                new ElasticSearchStoreConfiguration(),
+                new ElasticSearchStoreConfiguration()
+                {
+                    Prefix = "apptest"
+                },
                 new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200"))))
                 .As<ICodex>()
                 .SingleInstance();

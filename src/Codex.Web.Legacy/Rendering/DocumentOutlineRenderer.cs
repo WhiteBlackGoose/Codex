@@ -62,7 +62,7 @@ namespace WebUI.Rendering
                 bool hasChildren = nextIndex != boundSourceFile.Definitions.Count &&
                     boundSourceFile.Definitions[nextIndex].Definition.SymbolDepth > depth;
 
-                WriteFolderName(text, sb, definition.Definition.Id.Value, definition.Definition.Kind.ToLowerInvariant(), definition.Definition.GetGlyph(boundSourceFile?.ProjectRelativePath), hasChildren);
+                WriteFolderName(text, sb, definition.Definition.Id.Value, definition.Definition.Kind.ToLowerInvariant(), definition.Definition.GetGlyph(boundSourceFile?.ProjectRelativePath) + ".png", hasChildren);
                 if (hasChildren)
                 {
                     WriteFolderChildrenContainer(sb);
@@ -78,10 +78,10 @@ namespace WebUI.Rendering
             folderName = HttpUtility.HtmlEncode(folderName);
             var url = $"/?left=outline&rightProject={projectId}&file={HttpUtility.UrlEncode(boundSourceFile.ProjectRelativePath)}&rightSymbol={symbolId}";
             var folderNameText = $"<a href=\"{url}\" onclick=\"event.stopPropagation();S('{symbolId}');return false;\"><span class=\"k\">{kind}</span>&nbsp;{folderName}</a>";
-            var icon = $"<img src=\"../../content/icons/{folderIcon}\" class=\"imageFolder\" />";
+            var icon = $"<img src=\"/content/icons/{folderIcon}\" class=\"imageFolder\" />";
             if (hasChildren)
             {
-                sb.Append($"<div class=\"folderTitle\" onclick=\"ToggleExpandCollapse(this);ToggleFolderIcon(this);\" style=\"background-image:url('../../content/images/minus.png');\">{icon}{folderNameText}</div>");
+                sb.Append($"<div class=\"folderTitle\" onclick=\"ToggleExpandCollapse(this);ToggleFolderIcon(this);\" style=\"background-image:url('/content/images/minus.png');\">{icon}{folderNameText}</div>");
             }
             else
             {

@@ -17,9 +17,9 @@ namespace WebUI.Controllers
 {
     public class ReferencesController : Controller
     {
-        private readonly ElasticSearchCodex Storage;
+        private readonly ICodex Storage;
 
-        public ReferencesController(ElasticSearchCodex storage)
+        public ReferencesController(ICodex storage)
         {
             Storage = storage;
         }
@@ -30,14 +30,6 @@ namespace WebUI.Controllers
             try
             {
                 Requests.LogRequest(this);
-
-                var definitionResult = await Storage.FindDefinitionAsync(new FindDefinitionArguments()
-                {
-                    SymbolId = symbolId,
-                    ProjectId = projectId,
-                });
-
-                var definitionSpan = definitionResult.Result?.Hits.FirstOrDefault()?.Definition.ShortName ?? symbolId;
 
                 Responses.PrepareResponse(Response);
 
@@ -236,7 +228,7 @@ namespace WebUI.Controllers
                             foreach (var sameLineReferencesGroup in sameFileReferencesGroup.Item2)
                             {
                                 var first = sameLineReferencesGroup.First();
-                                var lineNumber = first.ReferenceSpan.LineNumber + 1;
+                                var lineNumber = first.ReferenceSpan.LineNumber;
                                 string onClick = $@"LoadSourceCode('{first.ProjectId}', '{first.ProjectRelativePath.AsJavaScriptStringEncoded()}', null, '{lineNumber}');return false;";
                                 var url = $"/?leftProject={definitionProjectId}&leftSymbol={symbolId}&rightProject={first.ProjectId}&file={HttpUtility.UrlEncode(first.ProjectRelativePath)}&line={lineNumber}";
                                 Write(writer, "<a class=\"rL\" onclick=\"{0}\" href=\"{1}\">", onClick, url);
