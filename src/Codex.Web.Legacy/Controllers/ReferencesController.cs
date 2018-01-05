@@ -10,7 +10,6 @@ using Codex.ElasticSearch.Search;
 using Codex.ObjectModel;
 using Codex.Sdk.Search;
 using Codex.Search;
-using Codex.Web;
 using WebUI.Util;
 using Reference = Codex.Sdk.Search.IReferenceSearchResult;
 
@@ -262,7 +261,7 @@ namespace WebUI.Controllers
 
         private static string GetGlyph(string fileName)
         {
-            return ViewUtilities.GetFileNameGlyph(fileName);
+            return GlyphUtilities.GetFileNameGlyph(fileName);
         }
 
         private static int CountItems(Tuple<string, IEnumerable<IGrouping<int, Reference>>> sameFileReferencesGroup)

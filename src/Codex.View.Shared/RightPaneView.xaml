@@ -22,12 +22,12 @@
   <Grid>
     <DockPanel  Visibility="{Binding EditorVisibility}" >
       <Border DockPanel.Dock="Bottom" Background="#DDF0FF" Height="68" >
-        <c:HtmlContentView Content="{Binding SourceFileDetails.Value}" />
+        <!--<c:HtmlContentView Content="{Binding SourceFileDetails.Value}" />-->
       </Border>
 
       <c:EditorHostControl Grid.Column="2" SourceFile="{Binding SourceFile}"/>
     </DockPanel>
 
-    <c:HtmlContentView Content="{Binding Overview.Value}" Visibility="{Binding OverviewVisibility}" />
+    <!--<c:HtmlContentView Content="{Binding Overview.Value}" Visibility="{Binding OverviewVisibility}" />-->
   </Grid>
 </UserControl>

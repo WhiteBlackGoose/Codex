@@ -35,6 +35,11 @@ namespace Codex.View.Web
             return PostAsync<IndexQueryResponse<SerializedReferencesResult>, IndexQueryResponse<ReferencesResult>>(CodexServiceMethod.FindDefLocation, arguments);
         }
 
+        public Task<IndexQueryResponse<GetProjectResult>> GetProjectAsync(GetProjectArguments arguments)
+        {
+            return PostAsync<IndexQueryResponse<GetProjectResult>, IndexQueryResponse<GetProjectResult>>(CodexServiceMethod.GetProject, arguments);
+        }
+
         public Task<IndexQueryResponse<IBoundSourceFile>> GetSourceAsync(GetSourceArguments arguments)
         {
             return PostAsync<IndexQueryResponse<BoundSourceFile>, IndexQueryResponse<IBoundSourceFile>>(CodexServiceMethod.GetSource, arguments);

@@ -328,7 +328,7 @@ namespace Codex
             return span.Start == otherSpan.Start && span.Length == otherSpan.Length;
         }
 
-        public static bool Contains(this Span span, ISpan otherSpan)
+        public static bool Contains(this ISpan span, ISpan otherSpan)
         {
             if (span == null)
             {

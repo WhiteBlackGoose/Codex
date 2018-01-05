@@ -1,5 +1,8 @@
 ﻿using Autofac;
+using Codex.ElasticSearch;
+using Codex.ElasticSearch.Search;
 using Codex.ObjectModel;
+using Codex.Sdk.Search;
 using Codex.Storage;
 
 namespace WebUI
@@ -10,8 +13,10 @@ namespace WebUI
 
         protected override void Load(ContainerBuilder builder)
         {
-            builder.Register(_ => new ElasticsearchStorage(Endpoint))
-                .As<IStorage>()
+            builder.Register(_ => new ElasticSearchCodex(
+                new ElasticSearchStoreConfiguration(), 
+                new ElasticSearchService(new ElasticSearchServiceConfiguration(Endpoint))))
+                .As<ICodex>()
                 .SingleInstance();
         }
     }

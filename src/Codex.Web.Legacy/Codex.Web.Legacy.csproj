@@ -108,7 +108,6 @@
     <Compile Include="Util\Requests.cs" />
     <Compile Include="Util\ScopeHelpers.cs" />
     <Compile Include="Util\StringExtensions.cs" />
-    <Compile Include="Util\ViewUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -425,6 +424,12 @@
     <Content Include="Views\Namespaces\Namespaces.cshtml" />
     <Content Include="Views\Overview\Overview.cshtml" />
     <Content Include="Views\Admin\Admin.cshtml" />
+    <None Include="Views\Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Views\Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

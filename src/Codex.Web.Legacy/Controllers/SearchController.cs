@@ -15,11 +15,11 @@ namespace WebUI.Controllers
 {
     public class SearchController : Controller
     {
-        private readonly ElasticsearchStorage storage;
+        private readonly ICodex codex;
 
-        public SearchController(IStorage storage)
+        public SearchController(ICodex codex)
         {
-            this.storage = (ElasticsearchStorage)storage;
+            this.codex = codex;
         }
 
         // GET: Results
@@ -39,26 +39,28 @@ namespace WebUI.Controllers
                     return PartialView();
                 }
 
-                if (searchTerm.StartsWith("`"))
-                {
-                    return await TextSearchResults(searchTerm);
-                }
-
-                SymbolSearchResult searchResult = null;
-                string term;
-                Classification? classification;
-                ParseSearchTerm(searchTerm, out term, out classification);
+                //string term;
+                //Classification? classification;
+                //ParseSearchTerm(searchTerm, out term, out classification);
 
                 Responses.PrepareResponse(Response);
 
-                searchResult = await storage.SearchAsync(this.GetSearchRepos(), searchTerm);
-
-                if (searchResult.Total == 0)
+                var searchResult = await codex.SearchAsync(new SearchArguments()
                 {
-                    return await TextSearchResults(searchTerm);
-                }
+                    RepositoryScopeId = this.GetSearchRepo(),
+                    SearchString = searchTerm,
+                });
 
-                return PartialView(searchResult);
+                searchResult.ThrowOnError();
+
+                if (searchResult.Result.Total == 0 || searchResult.Result.Hits[0].Definition != null)
+                {
+                    return PartialSymbolSearchResultView(searchTerm, searchResult);
+                }
+                else
+                {
+                    return PartialTextSearchResultView(searchTerm, searchResult);
+                }
             }
             catch (Exception ex)
             {
@@ -66,42 +68,54 @@ namespace WebUI.Controllers
             }
         }
 
-        private async Task<ActionResult> TextSearchResults(string searchTerm)
+        private SymbolSearchResult ToSymbolSearchResult(string searchTerm, IndexQueryHitsResponse<ISearchResult> searchResponse)
         {
-            var result = await storage.TextSearchAsync(this.GetSearchRepos(), searchTerm.TrimStart('`'), 500);
-            if (result.Count == 0)
+            return new SymbolSearchResult()
             {
-                return PartialView(null);
-            }
-
-            ReferencesResult referencesResult = FromTextEntries(result);
-            referencesResult.SymbolName = searchTerm;
-
-            return PartialView("~/Views/References/References.cshtml", (object)ReferencesController.GenerateReferencesHtml(referencesResult));
+                Total = (int)searchResponse.Result.Total,
+                QueryText = searchTerm,
+                Entries = new List<SymbolSearchResultEntry>(searchResponse.Result.Hits.Select(result => result.Definition)
+                    .Select(symbol =>
+                    {
+                        return new SymbolSearchResultEntry()
+                        {
+                            Symbol = symbol,
+                            Glyph = symbol.GetGlyph()
+                        };
+                    }))
+            };
         }
 
-        private ReferencesResult FromTextEntries(List<TextReferenceEntry> entries)
+        private PartialViewResult PartialSymbolSearchResultView(string searchTerm, IndexQueryHitsResponse<ISearchResult> searchResponse)
+        {
+            return PartialView(ToSymbolSearchResult(searchTerm, searchResponse));
+        }
+
+        private ReferencesResult ToReferencesResult(string searchTerm, IndexQueryHitsResponse<ISearchResult> searchResponse)
         {
             return new ReferencesResult()
             {
-
-            };
-
-
-            return new SymbolReferenceResult()
-            {
-                Total = entries.Count,
-                Entries = entries.Select(textEntry => new SymbolReferenceEntry()
-                {
-                    ReferringSpan = textEntry.ReferringSpan.CreateReference(new ReferenceSymbol()
+                SymbolDisplayName = searchTerm,
+                Total = searchResponse.Result.Total,
+                Hits = new List<IReferenceSearchResult>(searchResponse.Result.Hits.Select(result => result.TextLine)
+                    .Select(textResult => new ReferenceSearchResult(textResult)
                     {
-                        ReferenceKind = "Text",
-                        Id = SymbolId.UnsafeCreateWithValue(textEntry.Span.LineNumber.ToString())
-                    }),
-                    ReferringFilePath = textEntry.ReferringFilePath,
-                    ReferringProjectId = textEntry.ReferringProjectId,
-                }).ToList()
+                        ReferenceSpan = new ReferenceSpan(textResult.TextSpan)
+                        {
+                            Reference = new ReferenceSymbol()
+                            {
+                                ReferenceKind = nameof(ReferenceKind.Text),
+                            }
+                        }
+                    }))
             };
+        }
+
+        private PartialViewResult PartialTextSearchResultView(string searchTerm, IndexQueryHitsResponse<ISearchResult> searchResponse)
+        {
+            return PartialView(
+                "~/Views/References/References.cshtml", 
+                (object)ReferencesController.GenerateReferencesHtml(ToReferencesResult(searchTerm, searchResponse)));
         }
 
         private static void ParseSearchTerm(string searchTerm, out string term, out Classification? classification)

@@ -2,15 +2,16 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Codex.ObjectModel;
+using Codex.Sdk.Search;
 using WebUI.Rendering;
 
 namespace WebUI.Controllers
 {
     public class NamespacesController : Controller
     {
-        private readonly IStorage Storage;
+        private readonly ICodex Storage;
 
-        public NamespacesController(IStorage storage)
+        public NamespacesController(ICodex storage)
         {
             Storage = storage;
         }

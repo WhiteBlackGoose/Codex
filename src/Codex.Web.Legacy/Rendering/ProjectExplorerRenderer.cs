@@ -6,6 +6,7 @@ using System.Text;
 using System.Web;
 using Codex;
 using Codex.ObjectModel;
+using Codex.Sdk.Search;
 using Codex.Utilities;
 using Folder = WebUI.Rendering.Folder<string>;
 
@@ -13,13 +14,15 @@ namespace WebUI.Rendering
 {
     public class ProjectExplorerRenderer
     {
-        private ProjectContents projectContents;
+        public GetProjectResult getProjectResult;
+        private IProject projectContents;
         private readonly IEnumerable<string> referencingProjects;
 
-        public ProjectExplorerRenderer(ProjectContents projectContents, IEnumerable<string> referencingProjects)
+        public ProjectExplorerRenderer(GetProjectResult getProjectResult)
         {
-            this.projectContents = projectContents;
-            this.referencingProjects = referencingProjects.OrderBy(s => s, StringComparer.OrdinalIgnoreCase);
+            this.getProjectResult = getProjectResult;
+            this.projectContents = getProjectResult.Project;
+            this.referencingProjects = getProjectResult.ReferencingProjects.OrderBy(s => s, StringComparer.OrdinalIgnoreCase);
         }
 
         public string GenerateProjectExplorer()
@@ -44,9 +47,9 @@ namespace WebUI.Rendering
             //sb.AppendLine("Declared&nbsp;symbols:&nbsp;" + projectContents.SymbolCount.WithThousandSeparators() + "<br>");
             //sb.AppendLine("Declared&nbsp;types:&nbsp;" + namedTypes.Count().WithThousandSeparators() + "<br>");
             //sb.AppendLine("Public&nbsp;types:&nbsp;" + namedTypes.Where(t => t.DeclaredAccessibility == Accessibility.Public).Count().WithThousandSeparators() + "<br>");
-            if (projectContents.DateUploaded != default(DateTime))
+            if (getProjectResult.DateUploaded != default(DateTime))
             {
-                sb.AppendLine("Indexed&nbsp;on:&nbsp;" + projectContents.DateUploaded.ToLocalTime().ToString("MMMM dd"));
+                sb.AppendLine("Indexed&nbsp;on:&nbsp;" + getProjectResult.DateUploaded.ToLocalTime().ToString("MMMM dd"));
             }
 
             sb.AppendLine("</p>");
@@ -55,9 +58,9 @@ namespace WebUI.Rendering
         private void WriteBody(StringBuilder sb)
         {
             Folder root = new Folder();
-            root.Name = projectContents.Id;
+            root.Name = projectContents.ProjectId;
 
-            foreach (var file in projectContents.Files.Select(f => f.Path))
+            foreach (var file in projectContents.Files.Select(f => f.ProjectRelativePath))
             {
                 var parts = file.Split('\\');
                 AddDocumentToFolder(root, file, parts.Take(parts.Length - 1).ToArray());
@@ -88,7 +91,7 @@ namespace WebUI.Rendering
 
         private void WriteReferences(StringBuilder sb)
         {
-            var references = projectContents.References;
+            var references = projectContents.ProjectReferences;
             WriteReferencesCore(sb, references.Select(r => r.DisplayName ?? r.ProjectId), "References");
         }
 
@@ -183,9 +186,9 @@ namespace WebUI.Rendering
 
             var classname = extension;
             var fileName = PathUtilities.GetFileName(document);
-            var url = $"/?leftProject={projectContents.Id}&file={HttpUtility.UrlEncode(document)}";
+            var url = $"/?leftProject={projectContents.ProjectId}&file={HttpUtility.UrlEncode(document)}";
             sb.Append(
-                $"<a href=\"{url}\" class=\"{extension}\" onclick=\"LoadSourceCode('{projectContents.Id}', '{HttpUtility.JavaScriptStringEncode(document)}'); return false;\">{fileName}</a>");
+                $"<a href=\"{url}\" class=\"{extension}\" onclick=\"LoadSourceCode('{projectContents.ProjectId}', '{HttpUtility.JavaScriptStringEncode(document)}'); return false;\">{fileName}</a>");
             sb.AppendLine();
         }
 

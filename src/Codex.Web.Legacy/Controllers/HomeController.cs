@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Codex.ObjectModel;
+using Codex.Sdk.Search;
 using WebUI.Models;
 using WebUI.Util;
 
@@ -9,9 +10,9 @@ namespace WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IStorage storage;
+        private readonly ICodex storage;
 
-        public HomeController(IStorage storage)
+        public HomeController(ICodex storage)
         {
             this.storage = storage;
         }

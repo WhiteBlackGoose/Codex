@@ -1,11 +1,23 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
+using Codex.Sdk.Search;
 
 namespace WebUI
 {
-    public class Responses
+    public static class Responses
     {
+        public static T ThrowOnError<T>(this T response)
+            where T : IndexQueryResponse
+        {
+            if (!string.IsNullOrEmpty(response.Error))
+            {
+                throw new Exception(response.Error);
+            }
+
+            return response;
+        }
+
         public static ContentResult Exception(Exception ex)
         {
             return Message($"<pre>{ex.ToString()}</pre>");

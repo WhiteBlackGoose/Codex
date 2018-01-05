@@ -2,15 +2,16 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Codex.ObjectModel;
+using Codex.Sdk.Search;
 using WebUI.Rendering;
 
 namespace WebUI.Controllers
 {
     public class DocumentOutlineController : Controller
     {
-        private readonly IStorage Storage;
+        private readonly ICodex Storage;
 
-        public DocumentOutlineController(IStorage storage)
+        public DocumentOutlineController(ICodex storage)
         {
             Storage = storage;
         }
@@ -21,11 +22,14 @@ namespace WebUI.Controllers
             try
             {
                 Requests.LogRequest(this);
-                var boundSourceFile = await Storage.GetBoundSourceFileAsync(
-                    new string[0], 
-                    projectId, 
-                    filePath, 
-                    includeDefinitions: true);
+                var getSourceResponse = await Storage.GetSourceAsync(new GetSourceArguments()
+                {
+                    ProjectId = projectId,
+                    ProjectRelativePath = filePath
+                });
+
+                var boundSourceFile = getSourceResponse.ThrowOnError().Result;
+
                 if (boundSourceFile == null)
                 {
                     return PartialView("~/Views/DocumentOutline/DocumentOutline.cshtml", new EditorModel { Error = $"Bound source file for {filePath} in {projectId} not found." });

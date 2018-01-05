@@ -5,7 +5,6 @@ using System.Web;
 using Codex;
 using Codex.ObjectModel;
 using Codex.Storage;
-using Codex.Web;
 
 namespace WebUI.Rendering
 {

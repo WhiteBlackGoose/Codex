@@ -67,7 +67,7 @@ namespace Codex.ElasticSearch.Search
                                 .CaptureRequest(context))
                             .ThrowOnFailure();
 
-                if (referencesResult.Total == 0)
+                if (arguments.FallbackFindAllReferences && referencesResult.Total == 0)
                 {
                     // No definitions, return the the result of find all references 
                     referencesResult = await client.SearchAsync<IReferenceSearchModel>(s => s
@@ -160,6 +160,52 @@ namespace Codex.ElasticSearch.Search
                 }
 
                 throw new Exception("Unable to find source file");
+            });
+        }
+
+        public async Task<IndexQueryResponse<GetProjectResult>> GetProjectAsync(GetProjectArguments arguments)
+        {
+            return await UseClientSingle<GetProjectResult>(async context =>
+            {
+                var client = context.Client;
+
+                var response = await client.SearchAsync<ProjectSearchModel>(sd => sd
+                    .Query(qcd => qcd.Bool(bq => bq.Filter(
+                            fq => fq.Term(s => s.Project.ProjectId, arguments.ProjectId))))
+                    .Index(Configuration.Prefix + SearchTypes.Project.IndexName)
+                    .Take(1)
+                    .CaptureRequest(context))
+                .ThrowOnFailure();
+
+                if (response.Hits.Count != 0)
+                {
+                    IProjectSearchModel projectSearchModel = response.Hits.First().Source;
+
+                    var registeredResponse = await client.SearchAsync<IRegisteredEntity>(sd => sd
+                        .Query(qcd => qcd.Bool(bq => bq.Filter(
+                                fq => fq.Term(s => s.Uid, projectSearchModel.Uid))))
+                        .Index(Configuration.Prefix + SearchTypes.RegisteredEntity.IndexName)
+                        .Take(1)
+                        .CaptureRequest(context));
+
+                    var referencesResult = await client.SearchAsync<IProjectReferenceSearchModel>(s => s
+                        .Query(qcd => qcd.Bool(bq => bq.Filter(
+                            fq => fq.Term(r => r.ProjectReference.ProjectId, arguments.ProjectId))))
+                        .Sort(sd => sd.Ascending(r => r.ProjectId))
+                        .Index(Configuration.Prefix + SearchTypes.ProjectReference.IndexName)
+                        .Take(arguments.MaxResults)
+                        .CaptureRequest(context))
+                    .ThrowOnFailure();
+
+                    return new GetProjectResult()
+                    {
+                        Project = projectSearchModel.Project,
+                        DateUploaded = registeredResponse?.Hits.FirstOrDefault()?.Source.DateAdded ?? default(DateTime),
+                        ReferencingProjects = referencesResult?.Hits.Select(h => h.Source.ProjectId).ToList()
+                    };
+                }
+
+                throw new Exception("Unable to find project information");
             });
         }
 

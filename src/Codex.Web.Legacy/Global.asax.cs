@@ -4,7 +4,10 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
+using Codex.ElasticSearch;
+using Codex.ElasticSearch.Search;
 using Codex.ObjectModel;
+using Codex.Sdk.Search;
 using Codex.Storage;
 
 namespace WebUI
@@ -31,8 +34,14 @@ namespace WebUI
             //    .AsSelf()
             //    .SingleInstance();
 
-            builder.Register(_ => new ElasticsearchStorage("http://localhost:9200", requiresProjectGraph: true))
-                .As<IStorage>()
+            //builder.Register(_ => new ElasticsearchStorage("http://localhost:9200", requiresProjectGraph: true))
+            //    .As<IStorage>()
+            //    .SingleInstance();
+
+            builder.Register(_ => new ElasticSearchCodex(
+                new ElasticSearchStoreConfiguration(),
+                new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200"))))
+                .As<ICodex>()
                 .SingleInstance();
 
             DependencyResolver.SetResolver(new AutofacDependencyResolver(builder.Build()));

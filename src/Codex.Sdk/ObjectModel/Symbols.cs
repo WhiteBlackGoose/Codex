@@ -76,8 +76,7 @@ namespace Codex.ObjectModel
 
     public class SymbolSearchResultEntry
     {
-        public DefinitionSymbol Symbol => Span.Definition;
-        public DefinitionSpan Span { get; set; }
+        public IDefinitionSymbol Symbol { get; set; }
         public string File { get; set; }
         public string Glyph { get; set; }
         public int Rank { get; set; }

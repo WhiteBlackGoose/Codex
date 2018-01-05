@@ -30,6 +30,24 @@ namespace Codex.Sdk.Search
         Task<IndexQueryResponse<ReferencesResult>> FindDefinitionLocationAsync(FindDefinitionLocationArguments arguments);
 
         Task<IndexQueryResponse<IBoundSourceFile>> GetSourceAsync(GetSourceArguments arguments);
+
+        Task<IndexQueryResponse<GetProjectResult>> GetProjectAsync(GetProjectArguments arguments);
+    }
+
+    public static class CodexSearchExtensions
+    {
+        public static async Task<string> GetFirstDefinitionFilePath(this ICodex codex, string projectId, string symbolId)
+        {
+            var response = await codex.FindDefinitionLocationAsync(new FindDefinitionLocationArguments()
+            {
+                ProjectId = projectId,
+                SymbolId = symbolId,
+                FallbackFindAllReferences = false,
+                MaxResults = 1
+            });
+
+            return (response.Error != null || response.Result.Total == 0) ? null : response.Result.Hits[0].ProjectRelativePath;
+        }
     }
 
     public enum CodexServiceMethod
@@ -38,7 +56,8 @@ namespace Codex.Sdk.Search
         FindAllRefs,
         FindDef,
         FindDefLocation,
-        GetSource
+        GetSource,
+        GetProject,
     }
 
     public class CodexArgumentsBase
@@ -107,11 +126,26 @@ namespace Codex.Sdk.Search
 
     public class FindDefinitionLocationArguments : FindSymbolArgumentsBase
     {
+        public bool FallbackFindAllReferences { get; set; } = true;
     }
 
     public class SearchArguments : ContextCodexArgumentsBase
     {
         public string SearchString { get; set; }
+    }
+
+    public class GetProjectArguments : ContextCodexArgumentsBase
+    {
+        public string ProjectId { get; set; }
+    }
+
+    public class GetProjectResult
+    {
+        public DateTime DateUploaded { get; set; }
+
+        public IProject Project { get; set; }
+
+        public List<string> ReferencingProjects { get; set; } = new List<string>();
     }
 
     public class GetSourceArguments : ContextCodexArgumentsBase

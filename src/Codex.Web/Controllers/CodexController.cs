@@ -60,5 +60,10 @@ namespace Codex.Web.Controllers
             var result = await Codex.GetSourceAsync(arguments);
             return result;
         }
+
+        public Task<IndexQueryResponse<GetProjectResult>> GetProjectAsync(GetProjectArguments arguments)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

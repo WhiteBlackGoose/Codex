@@ -15,12 +15,12 @@ namespace WebUI.Controllers
     {
         private readonly ICodex Storage;
 
-        private readonly static IEqualityComparer<SymbolReferenceEntry> m_referenceEquator = new EqualityComparerBuilder<SymbolReferenceEntry>()
-            .CompareByAfter(rs => rs.Span.Reference.Id)
-            .CompareByAfter(rs => rs.Span.Reference.ProjectId)
-            .CompareByAfter(rs => rs.Span.Reference.ReferenceKind)
-            .CompareByAfter(rs => rs.ReferringProjectId)
-            .CompareByAfter(rs => rs.ReferringFilePath);
+        private readonly static IEqualityComparer<IReferenceSearchResult> m_referenceEquator = new EqualityComparerBuilder<IReferenceSearchResult>()
+            .CompareByAfter(rs => rs.ReferenceSpan.Reference.Id)
+            .CompareByAfter(rs => rs.ReferenceSpan.Reference.ProjectId)
+            .CompareByAfter(rs => rs.ReferenceSpan.Reference.ReferenceKind)
+            .CompareByAfter(rs => rs.ProjectId)
+            .CompareByAfter(rs => rs.ProjectRelativePath);
 
         public struct LinkEdit
         {
@@ -118,39 +118,27 @@ namespace WebUI.Controllers
             {
                 Requests.LogRequest(this);
 
-                var definitions = await Storage.GetReferencesToSymbolAsync(
-                    this.GetSearchRepos(),
-                    new Symbol()
+                var definitionResponse = await Storage.FindDefinitionLocationAsync(
+                    new FindDefinitionLocationArguments()
                     {
+                        RepositoryScopeId = this.GetSearchRepo(),
+                        SymbolId = symbolId,
                         ProjectId = projectId,
-                        Id = SymbolId.UnsafeCreateWithValue(symbolId),
-                        Kind = nameof(ReferenceKind.Definition)
                     });
 
-                definitions.Entries = definitions.Entries.Distinct(m_referenceEquator).ToList();
+                definitionResponse.ThrowOnError();
 
-                if (definitions.Entries.Count == 1)
+                var definitions = definitionResponse.Result;
+
+                definitions.Hits = definitions.Hits.Distinct(m_referenceEquator).ToList();
+
+                if (definitions.Hits.Count == 1)
                 {
-                    var definitionReference = definitions.Entries[0];
-                    return await Index(definitionReference.ReferringProjectId, definitionReference.File, partial: true);
+                    var definitionReference = definitions.Hits[0];
+                    return await Index(definitionReference.ProjectId, definitionReference.ProjectRelativePath, partial: true);
                 }
                 else
                 {
-                    var definitionResult = await Storage.GetDefinitionsAsync(this.GetSearchRepos(), projectId, symbolId);
-                    var symbolName = definitionResult?.FirstOrDefault()?.Span.Definition.DisplayName ?? symbolId;
-                    definitions.SymbolName = symbolName ?? definitions.SymbolName;
-
-                    if (definitions.Entries.Count == 0)
-                    {
-                        definitions = await Storage.GetReferencesToSymbolAsync(
-                            this.GetSearchRepos(),
-                            new Symbol()
-                            {
-                                ProjectId = projectId,
-                                Id = SymbolId.UnsafeCreateWithValue(symbolId)
-                            });
-                    }
-
                     var referencesText = ReferencesController.GenerateReferencesHtml(definitions);
                     if (string.IsNullOrEmpty(referencesText))
                     {

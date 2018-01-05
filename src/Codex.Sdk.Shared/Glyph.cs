@@ -113,6 +113,48 @@ namespace Codex.ObjectModel
 
     public static class GlyphUtilities
     {
+#if !BRIDGE
+        public static string GetGlyph(this IDefinitionSymbol s, string filePath = null)
+        {
+            var glyph = s.Glyph;
+            if (glyph != Glyph.Unknown)
+            {
+                return glyph.GetGlyphNumber().ToString();
+            }
+
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                if (string.Equals(s.Kind, nameof(SymbolKinds.File), StringComparison.OrdinalIgnoreCase))
+                {
+                    return GetFileNameGlyph(filePath);
+                }
+            }
+
+            return "0";
+        }
+
+        public static string GetFileNameGlyph(string fileName)
+        {
+            if (fileName.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
+            {
+                return "csharp";
+            }
+            else if (fileName.EndsWith(".vb", StringComparison.OrdinalIgnoreCase))
+            {
+                return "vb";
+            }
+            else if (fileName.EndsWith(".ts", StringComparison.OrdinalIgnoreCase))
+            {
+                return "TypeScript";
+            }
+            else if (fileName.EndsWith(".xaml", StringComparison.OrdinalIgnoreCase))
+            {
+                return "xaml";
+            }
+
+            return "212";
+        }
+#endif
         public static ushort GetGlyphNumber(this Glyph glyph)
         {
             ushort result = (ushort)((ushort)GetStandardGlyphGroup(glyph) + (ushort)GetStandardGlyphItem(glyph));

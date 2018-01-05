@@ -2,14 +2,15 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Codex.ObjectModel;
+using Codex.Sdk.Search;
 
 namespace WebUI.Controllers
 {
     public class AboutController : Controller
     {
-        private readonly IStorage Storage;
+        private readonly ICodex Storage;
 
-        public AboutController(IStorage storage)
+        public AboutController(ICodex storage)
         {
             Storage = storage;
         }
