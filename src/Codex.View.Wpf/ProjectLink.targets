@@ -21,13 +21,10 @@
   </ItemGroup>
   
   <PropertyGroup>
-    <GranularSourceRoot>E:\Code\Ref12\GranularTestApplication\Granular</GranularSourceRoot>
+    <!--<GranularSourceRoot>$(SourceRoot)\..\Ref12\GranularTestApplication\Granular</GranularSourceRoot>-->
   </PropertyGroup>
 
   <ItemGroup Condition="'$(GranularSourceRoot)' != ''">
-    <!--<PackageReference Update="Granular.Host.Wpf">
-      <Superceded>true</Superceded>
-    </PackageReference>-->
     <ProjectReference Include="$(GranularSourceRoot)\Granular.Common\Granular.Common.csproj">
       <Project>{87f1fd58-e233-4183-830a-e9e54ba17d68}</Project>
       <Name>Granular.Common</Name>
