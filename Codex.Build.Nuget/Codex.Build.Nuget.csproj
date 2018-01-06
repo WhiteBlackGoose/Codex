@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
+    <TargetFramework>net461</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="NugetContent.targets" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\Codex\Codex.csproj">
+      <IncludeAssets>all</IncludeAssets>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="NugetContent.targets" />
+  <Import Project="$(SrcRoot)\Common.props" />
+  <Import Project="$(SrcRoot)\Common.targets" />
+</Project>
