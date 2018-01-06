@@ -45,7 +45,8 @@ namespace Codex.ElasticSearch
                 TryReserveExecute();
             }
 
-            var registerResponse = await context.Client.BulkAsync(RegistryBulkDescriptor.CaptureRequest(context)).ThrowOnFailure();
+            var registerResponse = await context.Client.BulkAsync(RegistryBulkDescriptor.CaptureRequest(context))
+                .ThrowOnFailure(allowInvalid: true);
             Contract.Assert(EntityItems.Count == registerResponse.Items.Count);
 
             int batchIndex = 0;
@@ -58,7 +59,7 @@ namespace Codex.ElasticSearch
                 item.Entity.ShardStableId = registerResponseItem.SequenceNumber;
             }
 
-            var response = await context.Client.BulkAsync(BulkDescriptor.CaptureRequest(context)).ThrowOnFailure();
+            var response = await context.Client.BulkAsync(BulkDescriptor.CaptureRequest(context)).ThrowOnFailure(allowInvalid: true);
             Contract.Assert(EntityItems.Count == response.Items.Count);
 
             batchIndex = 0;

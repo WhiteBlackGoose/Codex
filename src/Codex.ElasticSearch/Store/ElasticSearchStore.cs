@@ -16,6 +16,8 @@ namespace Codex.ElasticSearch
 {
     public abstract partial class ElasticSearchStoreBase
     {
+        public bool Initialized { get; protected set; }
+
         internal readonly ElasticSearchService Service;
         internal readonly ElasticSearchStoreConfiguration Configuration;
 
@@ -40,7 +42,6 @@ namespace Codex.ElasticSearch
         public ElasticSearchStore(ElasticSearchStoreConfiguration configuration, ElasticSearchService service)
             : base(configuration, service)
         {
-
             StoredFilterPipelineId = configuration.Prefix + "StoredFilterPipeline";
         }
 
@@ -101,6 +102,8 @@ namespace Codex.ElasticSearch
                 // Creates the index
                 await store.InitializeAsync();
             }
+
+            Initialized = true;
         }
 
         public override async Task<ElasticSearchEntityStore<TSearchType>> CreateStoreAsync<TSearchType>(SearchType searchType)

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Codex.ElasticSearch
 {
@@ -37,6 +38,8 @@ namespace Codex.ElasticSearch
 
         public ElasticSearchBatcher(ElasticSearchStore store, string commitFilterName, string repositoryFilterName, string cumulativeCommitFilterName)
         {
+            Debug.Assert(store.Initialized, "Store must be initialized");
+
             this.store = store;
             service = store.Service;
             currentBatch = new ElasticSearchBatch(this);

@@ -230,8 +230,16 @@ namespace Codex.Application
 
                 store = await service.CreateStoreAsync(new ElasticSearchStoreConfiguration());
 
-                var loadDirectoryStore = new DirectoryCodexStore(saveDirectory);
-                await loadDirectoryStore.ReadAsync(store);
+                Directory.CreateDirectory("output");
+                using (StreamWriter writer = new StreamWriter(@"output\log.txt"))
+                {
+                    Logger logger = new MultiLogger(
+                        new ConsoleLogger(),
+                        new TextLogger(TextWriter.Synchronized(writer)));
+                    var loadDirectoryStore = new DirectoryCodexStore(saveDirectory, logger);
+                    await loadDirectoryStore.ReadAsync(store);
+                }
+
             }).GetAwaiter().GetResult();
         }
 

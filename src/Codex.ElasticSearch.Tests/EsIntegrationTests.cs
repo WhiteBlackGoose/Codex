@@ -17,6 +17,25 @@ namespace Codex.ElasticSearch.Tests
     public class EsIntegrationTests
     {
         [Test]
+        public async Task TestDuplicate()
+        {
+            var originalStore = DirectoryCodexStoreTests.CreateInputStore();
+
+            var store = new ElasticSearchStore(new ElasticSearchStoreConfiguration()
+            {
+                CreateIndices = true,
+                ShardCount = 1,
+                Prefix = "estest."
+            }, new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200")));
+
+            await store.InitializeAsync();
+
+            await originalStore.ReadAsync(store);
+
+            await originalStore.ReadAsync(store);
+        }
+
+        [Test]
         public async Task TestSearch()
         {
             var codex = new ElasticSearchCodex(new ElasticSearchStoreConfiguration()

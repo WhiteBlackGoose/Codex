@@ -15,6 +15,7 @@ namespace Codex.ElasticSearch.Utilities
 
             boundSourceFile.RepositoryName = boundSourceFile.RepositoryName ?? sourceFileInfo.RepositoryName;
             boundSourceFile.RepoRelativePath = boundSourceFile.RepoRelativePath ?? sourceFileInfo.RepoRelativePath;
+            sourceFileInfo.RepoRelativePath = boundSourceFile.RepoRelativePath;
 
             // TODO: These properties should not be defined on ISourceFileInfo as they require binding information
             boundSourceFile.Language = boundSourceFile.Language ?? sourceFileInfo.Language;

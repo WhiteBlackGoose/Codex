@@ -10,8 +10,8 @@
     <Compile Remove="Model\ElasticSearchTypes.target.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Ref12.Codex.Elasticsearch.Net" Version="6.0.0-beta1-b61" />
-    <PackageReference Include="Ref12.Codex.NEST" Version="6.0.0-beta1-b61" />
+    <PackageReference Include="Ref12.Codex.Elasticsearch.Net" Version="6.0.0-beta1-b89" />
+    <PackageReference Include="Ref12.Codex.NEST" Version="6.0.0-beta1-b89" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.4.0" />
   </ItemGroup>

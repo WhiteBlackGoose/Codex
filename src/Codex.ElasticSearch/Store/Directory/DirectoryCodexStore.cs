@@ -14,6 +14,7 @@ using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 using Codex.Storage.DataModel;
 using Codex.ElasticSearch.Utilities;
+using Codex.Logging;
 
 namespace Codex.ElasticSearch.Store
 {
@@ -32,14 +33,17 @@ namespace Codex.ElasticSearch.Store
 
         private RepositoryStoreInfo m_storeInfo;
 
+        private Logger logger;
+
         /// <summary>
         /// Disables optimized serialization for use when testing
         /// </summary>
         public bool DisableOptimization { get; set; }
 
-        public DirectoryCodexStore(string directory)
+        public DirectoryCodexStore(string directory, Logger logger = null)
         {
             DirectoryPath = directory;
+            this.logger = logger ?? Logger.Null;
         }
 
         public static IEnumerable<string> GetEntityFiles(string directory)
@@ -55,7 +59,11 @@ namespace Codex.ElasticSearch.Store
         public async Task ReadAsync(ICodexStore store, bool finalize = true)
         {
             m_storeInfo = Read<RepositoryStoreInfo>(RepositoryInitializationFileName);
+
+            logger.LogMessage("Reading repository information");
             var repositoryStore = await store.CreateRepositoryStore(m_storeInfo.Repository, m_storeInfo.Commit, m_storeInfo.Branch);
+
+            logger.LogMessage($"Read repository information (repo name: {m_storeInfo.Repository.Name})");
 
             List<Task> tasks = new List<Task>();
             foreach (var kind in StoredEntityKind.Kinds)
@@ -63,9 +71,12 @@ namespace Codex.ElasticSearch.Store
                 tasks.Add(Task.Run(async () =>
                 {
                     var kindDirectoryPath = Path.Combine(DirectoryPath, kind.Name);
+                    logger.LogMessage($"Reading {kind} infos from {kindDirectoryPath}");
                     foreach (var file in GetEntityFiles(kindDirectoryPath))
                     {
+                        logger.LogMessage($"Reading {kind} info at {file}");
                         await kind.Add(this, file, repositoryStore);
+                        logger.LogMessage($"Added {file} to store.");
                     }
                 }));
             }
