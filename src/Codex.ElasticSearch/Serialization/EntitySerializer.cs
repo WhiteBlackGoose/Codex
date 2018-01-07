@@ -221,6 +221,11 @@ namespace Codex.Serialization
 
         protected override JsonContract CreateContract(Type objectType)
         {
+            if (objectType == typeof(ReferenceListModel))
+            {
+
+            }
+
             objectType = ElasticCodexTypeUtilities.Instance.GetImplementationType(objectType);
 
             if (primitives.TryGetValue(objectType, out var converter))

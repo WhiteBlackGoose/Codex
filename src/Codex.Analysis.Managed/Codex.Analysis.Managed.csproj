@@ -8,20 +8,20 @@
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
     <PackageReference Include="ManagedEsent" Version="1.9.4" />
-    <PackageReference Include="Microsoft.Build" Version="15.3.409" />
-    <PackageReference Include="Microsoft.Build.Framework" Version="15.3.409" />
-    <PackageReference Include="Microsoft.Build.Logging.StructuredLogger" Version="1.1.168" />
-    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.3.409" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.3.409" />
-    <PackageReference Include="Microsoft.CodeAnalysis" Version="2.4.0" />
+    <PackageReference Include="Microsoft.Build" Version="15.5.180" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="15.5.180" />
+    <PackageReference Include="Microsoft.Build.Logging.StructuredLogger" Version="1.1.224" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.5.180" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.5.180" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="2.6.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.3.0-beta1" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.4.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.4.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.4.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Features" Version="2.4.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="2.4.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" Version="2.4.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="2.4.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.6.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.6.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.6.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Features" Version="2.6.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="2.6.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" Version="2.6.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="2.6.1" />
     <PackageReference Include="Microsoft.Composition" Version="1.0.31" />
     <PackageReference Include="Microsoft.Language.Xml" Version="1.1.20" />
     <PackageReference Include="System.AppContext" Version="4.3.0" />
@@ -47,10 +47,10 @@
     <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
     <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
-    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.0" />
+    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
     <PackageReference Include="System.Security.Cryptography.Encoding" Version="4.3.0" />
     <PackageReference Include="System.Security.Cryptography.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.1" />
+    <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
     <PackageReference Include="System.Text.Encoding" Version="4.3.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.4.0" />
     <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
@@ -119,7 +119,7 @@
   <Target Name="ApplyAliasesToPackageReferences" BeforeTargets="ResolveAssemblyReferences">
     <ItemGroup>
       <Reference>
-        <Aliases Condition="'%(Reference.NuGetPackageId)' == 'Microsoft.Build.Logging.StructuredLogger'" >global,binlog</Aliases>
+        <Aliases Condition="'%(Reference.NuGetPackageId)' == 'Microsoft.Build.Logging.StructuredLogger'">global,binlog</Aliases>
       </Reference>
     </ItemGroup>
   </Target>

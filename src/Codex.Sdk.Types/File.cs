@@ -16,6 +16,12 @@ namespace Codex
         /// The source file
         /// </summary>
         ISourceFile SourceFile { get; }
+
+        /// <summary>
+        /// The lines in the source file
+        /// </summary>
+        //[Include(ObjectStage.Analysis)]
+        //IReadOnlyList<string> SourceFileContentLines { get; }
     }
 
     public interface IBoundSourceInfo : IProjectFileScopeEntity

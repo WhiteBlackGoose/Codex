@@ -23,7 +23,7 @@ namespace Codex.Utilities
 
         public static T RemoveDuplicate<T>(T value, ref T lastValue)
         {
-            if (EqualityComparer<T>.Default.Equals(value, default(T)))
+            if (EqualityComparer<T>.Default.Equals(value, lastValue))
             {
                 return default(T);
             }

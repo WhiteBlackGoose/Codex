@@ -35,6 +35,7 @@ namespace Codex.Application
         static ICodexStore store = Placeholder.Value<ICodexStore>("Create store (FileSystem | Elasticsearch)");
         static ElasticSearchService service;
         static bool test = false;
+        static bool update = false;
         static List<string> deleteIndices = new List<string>();
 
         static Dictionary<string, (Action act, OptionSet options)> actions = new Dictionary<string, (Action, OptionSet)>(StringComparer.OrdinalIgnoreCase)
@@ -85,6 +86,7 @@ namespace Codex.Application
                     new OptionSet
                     {
                         { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
+                        { "u", "Updates the analysis data (in place).", n => update = n != null },
                         { "d=", "The directory containing analysis data to load.", n => saveDirectory = n },
                     }
                 )
@@ -225,10 +227,17 @@ namespace Codex.Application
         {
             Task.Run(async () =>
             {
-                InitService();
                 if (String.IsNullOrEmpty(saveDirectory)) throw new ArgumentException("Load directory must be specified. Use -d to provide it.");
 
-                store = await service.CreateStoreAsync(new ElasticSearchStoreConfiguration());
+                if (!update)
+                {
+                    InitService();
+                    store = await service.CreateStoreAsync(new ElasticSearchStoreConfiguration());
+                }
+                else
+                {
+                    store = new DirectoryCodexStore(saveDirectory) { Clean = false };
+                }
 
                 Directory.CreateDirectory("output");
                 using (StreamWriter writer = new StreamWriter(@"output\log.txt"))

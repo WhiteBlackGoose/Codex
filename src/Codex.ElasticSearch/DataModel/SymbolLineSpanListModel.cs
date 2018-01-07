@@ -12,13 +12,16 @@ namespace Codex.Storage.DataModel
         public static readonly IComparer<SymbolSpan> SharedSymbolLineModelComparer = new ComparerBuilder<SymbolSpan>()
             .CompareByAfter(s => s.LineSpanText);
 
+        public static readonly IComparer<SymbolSpan> OrdinalSymbolLineModelComparer = new ComparerBuilder<SymbolSpan>()
+            .CompareByAfter(s => s.LineNumber);
+
         public SymbolLineSpanListModel()
         {
             Optimize = false;
         }
 
-        public SymbolLineSpanListModel(IReadOnlyList<SymbolSpan> spans)
-            : base(spans, sharedValueSorter: SharedSymbolLineModelComparer)
+        public SymbolLineSpanListModel(IReadOnlyList<SymbolSpan> spans, bool useOrdinalSort = false)
+            : base(spans, sharedValueSorter: useOrdinalSort ? OrdinalSymbolLineModelComparer : SharedSymbolLineModelComparer)
         {
             Optimize = false;
         }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -75,6 +77,18 @@ namespace Codex.ObjectModel
         public override string ToString()
         {
             return DisplayName;
+        }
+
+        protected override void OnSerializingCore()
+        {
+            //ReferenceKind = nameof(ObjectModel.ReferenceKind.Definition);
+            base.OnSerializingCore();
+        }
+
+        protected override void OnDeserializedCore()
+        {
+            ReferenceKind = nameof(ObjectModel.ReferenceKind.Definition);
+            base.OnDeserializedCore();
         }
     }
 

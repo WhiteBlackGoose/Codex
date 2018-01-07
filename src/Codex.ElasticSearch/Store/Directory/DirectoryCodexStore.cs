@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using Codex.Storage.DataModel;
 using Codex.ElasticSearch.Utilities;
 using Codex.Logging;
+using System.Threading;
 
 namespace Codex.ElasticSearch.Store
 {
@@ -39,6 +40,7 @@ namespace Codex.ElasticSearch.Store
         /// Disables optimized serialization for use when testing
         /// </summary>
         public bool DisableOptimization { get; set; }
+        public bool Clean { get; set; }
 
         public DirectoryCodexStore(string directory, Logger logger = null)
         {
@@ -50,7 +52,7 @@ namespace Codex.ElasticSearch.Store
         {
             if (Directory.Exists(directory))
             {
-                return Directory.EnumerateFiles(directory, "*" + EntityFileExtension, SearchOption.AllDirectories);
+                return Directory.GetFiles(directory, "*" + EntityFileExtension, SearchOption.AllDirectories);
             }
 
             return CollectionUtilities.Empty<string>.Array;
@@ -60,23 +62,46 @@ namespace Codex.ElasticSearch.Store
         {
             m_storeInfo = Read<RepositoryStoreInfo>(RepositoryInitializationFileName);
 
+            ConcurrentQueue<Func<Task>> actionQueue = new ConcurrentQueue<Func<Task>>();
+
             logger.LogMessage("Reading repository information");
             var repositoryStore = await store.CreateRepositoryStore(m_storeInfo.Repository, m_storeInfo.Commit, m_storeInfo.Branch);
 
             logger.LogMessage($"Read repository information (repo name: {m_storeInfo.Repository.Name})");
 
+            int nextIndex = 0;
+            int count = 0;
             List<Task> tasks = new List<Task>();
             foreach (var kind in StoredEntityKind.Kinds)
             {
-                tasks.Add(Task.Run(async () =>
+                tasks.Add(Task.Run(() =>
                 {
                     var kindDirectoryPath = Path.Combine(DirectoryPath, kind.Name);
                     logger.LogMessage($"Reading {kind} infos from {kindDirectoryPath}");
                     foreach (var file in GetEntityFiles(kindDirectoryPath))
                     {
-                        logger.LogMessage($"Reading {kind} info at {file}");
-                        await kind.Add(this, file, repositoryStore);
-                        logger.LogMessage($"Added {file} to store.");
+                        actionQueue.Enqueue(async () =>
+                        {
+                            var i = Interlocked.Increment(ref nextIndex);
+                            logger.LogMessage($"{i}/{count}: Reading {kind} info at {file}");
+                            await kind.Add(this, file, repositoryStore);
+                            logger.LogMessage($"{i}/{count}: Added {file} to store.");
+                        });
+                    }
+                }));
+            }
+
+            await Task.WhenAll(tasks);
+
+            count = actionQueue.Count;
+            tasks.Clear();
+            for (int i = 0; i < Math.Min(Environment.ProcessorCount, 32); i++)
+            {
+                tasks.Add(Task.Run(async () =>
+                {
+                    while (actionQueue.TryDequeue(out var taskFactory))
+                    {
+                        await taskFactory();
                     }
                 }));
             }
@@ -91,10 +116,13 @@ namespace Codex.ElasticSearch.Store
 
         public Task<ICodexRepositoryStore> CreateRepositoryStore(Repository repository, Commit commit, Branch branch)
         {
-            var allFiles = GetEntityFiles(DirectoryPath).ToList();
-            foreach (var file in allFiles)
+            if (Clean)
             {
-                File.Delete(file);
+                var allFiles = GetEntityFiles(DirectoryPath).ToList();
+                foreach (var file in allFiles)
+                {
+                    File.Delete(file);
+                }
             }
 
             lock (this)
@@ -161,31 +189,15 @@ namespace Codex.ElasticSearch.Store
                 BoundSourceFile = boundSourceFile,
             };
 
-            if (!DisableOptimization)
-            {
-                result.CompressedClassifications = new ClassificationListModel(boundSourceFile.Classifications);
-                result.CompressedReferences = new ReferenceListModel(boundSourceFile.References, includeLineInfo: true);
-                boundSourceFile.References = CollectionUtilities.Empty<ReferenceSpan>.Array;
-                boundSourceFile.Classifications = CollectionUtilities.Empty<ClassificationSpan>.Array;
-            }
+            result.BeforeSerialize(optimize: !DisableOptimization, optimizeLineInfo: true);
 
             return result;
         }
 
         private static BoundSourceFile FromStoredBoundFile(StoredBoundSourceFile storedBoundFile)
         {
+            storedBoundFile.AfterDeserialization();
             var boundSourceFile = storedBoundFile.BoundSourceFile;
-
-            if (storedBoundFile.CompressedClassifications != null)
-            {
-                boundSourceFile.Classifications = storedBoundFile.CompressedClassifications.ToList();
-            }
-
-            if (storedBoundFile.CompressedReferences != null)
-            {
-                boundSourceFile.References = storedBoundFile.CompressedReferences.ToList();
-            }
-
             return boundSourceFile;
         }
 

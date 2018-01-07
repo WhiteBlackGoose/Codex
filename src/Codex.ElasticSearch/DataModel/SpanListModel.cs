@@ -117,6 +117,11 @@ namespace Codex.Storage.DataModel
             }
         }
 
+        internal virtual void OptimizeCore(OptimizationContext context)
+        {
+
+        }
+
         public SpanListModel()
         {
             SharedValues = new List<TShared>();

@@ -123,7 +123,7 @@ namespace Codex.Analysis
 
                         if (definition.DisplayName.StartsWith(nsdata?.Qualifier ?? string.Empty))
                         {
-                            ReferenceSymbol reference = definition;
+                            ReferenceSymbol reference = new ReferenceSymbol(definition);
                             reference.ReferenceKind = nameof(ReferenceKind.ProjectLevelReference);
                             reference.ExcludeFromSearch = true;
                             container.AddElement("Symbol", symbolElement =>

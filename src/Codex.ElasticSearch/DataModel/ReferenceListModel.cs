@@ -28,20 +28,27 @@ namespace Codex.Storage.DataModel
 
         public SymbolLineSpanListModel LineSpanModel { get; set; }
 
+        public IntegerListModel LineIndices;
+
         public ReferenceListModel()
         {
         }
 
-        public ReferenceListModel(IReadOnlyList<ReferenceSpan> spans, bool includeLineInfo = false)
+        public ReferenceListModel(IReadOnlyList<ReferenceSpan> spans, bool includeLineInfo = false, bool externalLineTextPersistence = false)
             : base(spans, ReferenceSymbolEqualityComparer, ReferenceSymbolComparer)
         {
             if (includeLineInfo)
             {
-                LineSpanModel = new SymbolLineSpanListModel(spans)
+                LineSpanModel = new SymbolLineSpanListModel(spans, useOrdinalSort: externalLineTextPersistence)
                 {
                     // Start/length already captured. No need for it in the line data
                     IncludeSpanRanges = false
                 };
+
+                if (externalLineTextPersistence)
+                {
+                    LineIndices = IntegerListModel.Create(LineSpanModel.SharedValues, span => span.LineIndex);
+                }
             }
             //PostProcessReferences();
         }
@@ -60,6 +67,16 @@ namespace Codex.Storage.DataModel
                 reference.Id = RemoveDuplicate(reference.Id, ref id);
                 reference.ReferenceKind = RemoveDuplicate(reference.ReferenceKind, ref referenceKind);
             }
+
+            if (LineSpanModel != null && LineIndices != null)
+            {
+                LineSpanModel.SharedValues.Clear();
+
+                if (Optimize)
+                {
+                    LineIndices.Optimize(new OptimizationContext());
+                }
+            }
         }
 
         [OnDeserialized]
@@ -75,6 +92,22 @@ namespace Codex.Storage.DataModel
                 reference.Kind = AssignDuplicate(reference.Kind, ref kind);
                 reference.Id = AssignDuplicate(reference.Id, ref id);
                 reference.ReferenceKind = AssignDuplicate(reference.ReferenceKind, ref referenceKind);
+            }
+
+            if (LineSpanModel != null && LineIndices != null)
+            {
+                if (LineIndices.CompressedData != null)
+                {
+                    LineIndices.ExpandData(new OptimizationContext());
+                }
+
+                for (int i = 0; i < LineIndices.Count; i++)
+                {
+                    LineSpanModel.SharedValues.Add(new SymbolSpan()
+                    {
+                        LineIndex = LineIndices[i]
+                    });
+                }
             }
         }
 

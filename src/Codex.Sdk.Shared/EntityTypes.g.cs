@@ -141,8 +141,6 @@ namespace Codex.ObjectModel {
             typeMapping.Add(typeof(RepositoryStoreInfo), typeof(Codex.IRepositoryStoreInfo));
             typeMapping.Add(typeof(Codex.ICommitFilesDirectory), typeof(CommitFilesDirectory));
             typeMapping.Add(typeof(CommitFilesDirectory), typeof(Codex.ICommitFilesDirectory));
-            typeMapping.Add(typeof(Codex.IStoredBoundSourceFile), typeof(StoredBoundSourceFile));
-            typeMapping.Add(typeof(StoredBoundSourceFile), typeof(Codex.IStoredBoundSourceFile));
             typeMapping.Add(typeof(Codex.IDefinitionSymbol), typeof(DefinitionSymbol));
             typeMapping.Add(typeof(DefinitionSymbol), typeof(Codex.IDefinitionSymbol));
             typeMapping.Add(typeof(Codex.IReferenceSymbol), typeof(ReferenceSymbol));
@@ -4757,72 +4755,6 @@ namespace Codex.ObjectModel {
         }
     }
     
-    [Codex.SerializationInterfaceAttribute(typeof(Codex.IStoredBoundSourceFile))]
-    public partial class StoredBoundSourceFile : Codex.EntityBase, Codex.IStoredBoundSourceFile {
-        
-        private BoundSourceFile m_BoundSourceFile;
-        
-        private Codex.IClassificationList m_CompressedClassifications;
-        
-        private Codex.IReferenceList m_CompressedReferences;
-        
-        public StoredBoundSourceFile() {
-            Initialize();
-        }
-        
-        public StoredBoundSourceFile(Codex.IStoredBoundSourceFile value) {
-            Initialize();
-            this.CopyFrom<StoredBoundSourceFile>(value);
-        }
-        
-        Codex.IBoundSourceFile Codex.IStoredBoundSourceFile.BoundSourceFile {
-            get {
-                return this.BoundSourceFile;
-            }
-        }
-        
-        public virtual BoundSourceFile BoundSourceFile {
-            get {
-                return this.m_BoundSourceFile;
-            }
-            set {
-                this.m_BoundSourceFile = value;
-            }
-        }
-        
-        /// <summary>
-        /// Compressed list of classification spans
-        /// </summary>
-        public virtual Codex.IClassificationList CompressedClassifications {
-            get {
-                return this.m_CompressedClassifications;
-            }
-            set {
-                this.m_CompressedClassifications = value;
-            }
-        }
-        
-        /// <summary>
-        /// Compressed list of reference spans
-        /// </summary>
-        public virtual Codex.IReferenceList CompressedReferences {
-            get {
-                return this.m_CompressedReferences;
-            }
-            set {
-                this.m_CompressedReferences = value;
-            }
-        }
-        
-        public virtual TTarget CopyFrom<TTarget>(Codex.IStoredBoundSourceFile value)
-            where TTarget : StoredBoundSourceFile {
-            this.m_BoundSourceFile = EntityUtilities.NullOrCopy(value.BoundSourceFile, v => new BoundSourceFile().CopyFrom<BoundSourceFile>(v));;
-            this.m_CompressedClassifications = ((Codex.IStoredBoundSourceFile)(value)).CompressedClassifications;
-            this.m_CompressedReferences = ((Codex.IStoredBoundSourceFile)(value)).CompressedReferences;
-            return ((TTarget)(this));
-        }
-    }
-    
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IDefinitionSymbol))]
     public partial class DefinitionSymbol : ReferenceSymbol, Codex.IDefinitionSymbol {
         
@@ -5399,7 +5331,6 @@ namespace Codex.Framework.Types {
     using FileStatistics = Codex.ObjectModel.FileStatistics;
     using RepositoryStoreInfo = Codex.ObjectModel.RepositoryStoreInfo;
     using CommitFilesDirectory = Codex.ObjectModel.CommitFilesDirectory;
-    using StoredBoundSourceFile = Codex.ObjectModel.StoredBoundSourceFile;
     using DefinitionSymbol = Codex.ObjectModel.DefinitionSymbol;
     using ReferenceSymbol = Codex.ObjectModel.ReferenceSymbol;
     using Symbol = Codex.ObjectModel.Symbol;
