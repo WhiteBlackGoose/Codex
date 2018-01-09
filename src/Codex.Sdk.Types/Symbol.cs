@@ -110,7 +110,7 @@ namespace Codex
         /// <summary>
         /// Indicates if the symbol should NEVER be included in the definition/find all references search.
         /// </summary>
-        [SearchBehavior(SearchBehavior.Term)]
+        [Include(ObjectStage.Analysis)]
         bool ExcludeFromSearch { get; }
     }
 

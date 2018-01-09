@@ -115,6 +115,14 @@ namespace Codex.ElasticSearch
         {
             foreach (var definition in definitions)
             {
+                if (definition.ExcludeFromSearch)
+                {
+                    // Definitions must be stored even if not contributing to search to allow
+                    // other operations like tooltips/showing symbol name for find all references
+                    // so we just set ExcludeFromDefaultSearch to true
+                    definition.ExcludeFromDefaultSearch = true;
+                }
+
                 batcher.Add(store.DefinitionStore, new DefinitionSearchModel()
                 {
                     Definition = definition,
@@ -186,7 +194,7 @@ namespace Codex.ElasticSearch
         {
             AddProperties(boundSourceModel, boundSourceFile.SourceFile.Info.Properties);
 
-            AddDefinitions(boundSourceFile.Definitions.Select(ds => ds.Definition).Where(d => !d.ExcludeFromSearch), declared: true);
+            AddDefinitions(boundSourceFile.Definitions.Select(ds => ds.Definition), declared: true);
 
             var referenceLookup = boundSourceFile.References
                 .Where(r => !(r.Reference.ExcludeFromSearch))
