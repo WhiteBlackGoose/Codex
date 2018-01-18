@@ -92,7 +92,7 @@ namespace WebUI.Rendering
         private void WriteReferences(StringBuilder sb)
         {
             var references = projectContents.ProjectReferences;
-            WriteReferencesCore(sb, references.Select(r => r.DisplayName ?? r.ProjectId), "References");
+            WriteReferencesCore(sb, references.Select(r => r.ProjectId), "References");
         }
 
         private void WriteUsedBy(StringBuilder sb)

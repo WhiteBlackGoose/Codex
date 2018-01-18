@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -79,6 +80,8 @@ namespace WebUI.Controllers
                     {
                         return new SymbolSearchResultEntry()
                         {
+                            File = symbol.Kind == nameof(SymbolKinds.File) && symbol.ShortName != null ?
+                                Path.Combine(symbol.ContainerQualifiedName, symbol.ShortName) : null,
                             Symbol = symbol,
                             Glyph = symbol.GetGlyph() + ".png"
                         };

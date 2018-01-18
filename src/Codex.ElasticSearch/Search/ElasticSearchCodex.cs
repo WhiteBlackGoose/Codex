@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using static Codex.ElasticSearch.Utilities.ElasticUtility;
+using Codex.Utilities;
 
 namespace Codex.ElasticSearch.Search
 {
@@ -93,7 +94,7 @@ namespace Codex.ElasticSearch.Search
 
                 ISearchResponse<IReferenceSearchModel> referencesResult = await getReferencesAsync(context);
 
-                var displayName = GetSymbolDisplayName(context, arguments);
+                var displayName = await GetSymbolShortName(context, arguments);
 
                 var searchResults =
                     (from hit in referencesResult.Hits
@@ -110,13 +111,14 @@ namespace Codex.ElasticSearch.Search
 
                 return new ReferencesResult()
                 {
+                    SymbolDisplayName = displayName,
                     Hits = searchResults,
                     Total = referencesResult.Total
                 };
             });
         }
 
-        private async Task<string> GetSymbolDisplayName(ClientContext context, FindSymbolArgumentsBase arguments)
+        private async Task<string> GetSymbolShortName(ClientContext context, FindSymbolArgumentsBase arguments)
         {
             var client = context.Client;
             var definitionsResult = await client.SearchAsync<IDefinitionSearchModel>(s => s
@@ -128,7 +130,7 @@ namespace Codex.ElasticSearch.Search
                     .CaptureRequest(context))
                 .ThrowOnFailure();
 
-            return definitionsResult.Hits.FirstOrDefault()?.Source.Definition.DisplayName;
+            return definitionsResult.Hits.FirstOrDefault()?.Source.Definition.ShortName;
         }
 
         public async Task<IndexQueryResponse<IBoundSourceFile>> GetSourceAsync(GetSourceArguments arguments)
@@ -152,6 +154,26 @@ namespace Codex.ElasticSearch.Search
                     var textResults = await client.GetAsync<TextSourceSearchModel>(boundSearchModel.TextUid, 
                         gd => gd.Index(Configuration.Prefix + SearchTypes.TextSource.IndexName))
                     .ThrowOnFailure();
+
+                    var repoResults = await client.SearchAsync<RepositorySearchModel>(sd => sd
+                        .Query(qcd => qcd.Bool(bq => bq.Filter(
+                                fq => fq.Term(s => s.Repository.Name, boundSearchModel.BindingInfo.RepositoryName))))
+                        .Index(Configuration.Prefix + SearchTypes.Repository.IndexName)
+                        .Take(1)
+                        .CaptureRequest(context))
+                    .ThrowOnFailure();
+
+                    var repo = repoResults.Hits.FirstOrDefault()?.Source.Repository;
+
+                    var sourceFile = textResults.Source.File;
+                    if (sourceFile.Info.WebAddress == null 
+                        && repo?.SourceControlWebAddress != null
+                        && sourceFile.Info.RepoRelativePath != null
+                        // Don't add web access link for files not under source tree (i.e. [Metadata])
+                        && !sourceFile.Info.RepoRelativePath.StartsWith("["))
+                    {
+                        sourceFile.Info.WebAddress = (repo.SourceControlWebAddress.EnsureTrailingSlash() + sourceFile.Info.RepoRelativePath).Replace("\\", "/");
+                    }
 
                     return new BoundSourceFile(boundSearchModel.BindingInfo)
                     {
@@ -236,8 +258,8 @@ namespace Codex.ElasticSearch.Search
 
                 var definitionsResult = await client.SearchAsync<IDefinitionSearchModel>(s => s
                         .Query(qcd => qcd.Bool(bq => bq
-                            .Filter(GetTermsFilters(terms))
-                            .Should(GetTermsFilters(terms, boostOnly: true))))
+                            .Filter(GetTermsFilter(terms))
+                            .Should(GetTermsFilter(terms, boostOnly: true))))
                         .Index(Configuration.Prefix + SearchTypes.Definition.IndexName)
                         .Take(arguments.MaxResults)
                         .CaptureRequest(context))

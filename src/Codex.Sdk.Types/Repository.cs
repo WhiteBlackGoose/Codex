@@ -11,6 +11,7 @@ namespace Codex
         /// <summary>
         /// The name fo the repository
         /// </summary>
+        [SearchBehavior(SearchBehavior.NormalizedKeyword)]
         string Name { get; }
 
         /// <summary>
