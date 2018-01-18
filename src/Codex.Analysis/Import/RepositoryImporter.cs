@@ -193,14 +193,23 @@ namespace Codex.Import
 
             foreach (var project in repo.Projects)
             {
+                if (project == repo.DefaultRepoProject)
+                {
+                    // Bypass default repo project so projects with semantic information
+                    // get indexed first
+                    continue;
+                }
+
                 if (AnalysisServices.IncludeRepoProject(project))
                 {
                     project.Analyzer.Analyze(project);
                 }
             }
-            // TODO(LANCEC): Explicitly analyze default repo project. Not why I don't
-            // add this to the projects list but I remember there being a reason.
-            //repo.DefaultRepoProject.Analyzer.Analyze(repo.DefaultRepoProject);
+
+            await AnalysisServices.TaskDispatcher.OnCompletion();
+
+            // Explicitly analyze default repo project last so that projects with semantic information get analyzed first
+            repo.DefaultRepoProject.Analyzer.Analyze(repo.DefaultRepoProject);
 
             await AnalysisServices.TaskDispatcher.OnCompletion();
 

@@ -202,7 +202,14 @@ namespace Codex.Analysis.Projects
 
         private static RepoFile AddDocumentToProject(RepoProject project, DocumentInfo document)
         {
-            if (document.FilePath == null)
+            try
+            {
+                if (document.FilePath == null || !File.Exists(document.FilePath))
+                {
+                    return null;
+                }
+            }
+            catch
             {
                 return null;
             }
