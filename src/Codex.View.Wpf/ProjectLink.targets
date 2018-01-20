@@ -43,10 +43,10 @@
     </ProjectReference>
   </ItemGroup>
 
-  <Target Name="BeforeSupercedePackageReferences" BeforeTargets="ResolveNuGetPackageAssets">
+  <!--<Target Name="BeforeSupercedePackageReferences" BeforeTargets="ResolveNuGetPackageAssets">
     <ItemGroup>
-      <!--<_SupercedePackageReferences_ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths)" />-->
-      <!--<_SupercedePackageReferences_Reference Include="@(Reference)" />-->
+      --><!--<_SupercedePackageReferences_ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths)" />--><!--
+      --><!--<_SupercedePackageReferences_Reference Include="@(Reference)" />--><!--
       <PackageReference Remove="@(PackageReference)" Condition="'%(PackageReference.Superceded)' == 'true'" />
     </ItemGroup>
   </Target>
@@ -58,11 +58,11 @@
     </ItemGroup>
 
     <Message Importance="high" Text="Reference: %(ReferencePath.NuGetPackageId)" />
-  </Target>
+  </Target>-->
 
   <Target Name="PrintRefs" BeforeTargets="CoreCompile">
     <Message Importance="high" Text="Package Reference: %(PackageReference.Identity)" />
     <Message Importance="high" Text="Reference: %(ReferencePath.Identity)" />
   </Target>
-  <Import Project="$(NuGetPackageRoot)granular.host.wpf\0.3.131-beta\build\Granular.host.wpf.targets" Condition="Exists('$(NuGetPackageRoot)granular.host.wpf\0.3.131-beta\build\Granular.host.wpf.targets')" />
+  <!--<Import Project="$(NuGetPackageRoot)granular.host.wpf\0.3.131-beta\build\Granular.host.wpf.targets" Condition="Exists('$(NuGetPackageRoot)granular.host.wpf\0.3.131-beta\build\Granular.host.wpf.targets')" />-->
 </Project>
