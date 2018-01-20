@@ -1,14 +1,15 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <ContentTargetFolders>content</ContentTargetFolders>
+    <ContentTargetFolders>build</ContentTargetFolders>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IncludeContentInPack>true</IncludeContentInPack>
+    <Version Condition="'$(Build_BuildNumber)' != ''">1.0.$(Build_BuildNumber)-beta</Version>
   </PropertyGroup>
 
-  <Target Name="_IncludeDependenciesInPackage" AfterTargets="GetCopyToOutputDirectoryItems">
+  <Target Name="_IncludeDependenciesInPackage" AfterTargets="ResolveProjectReferences">
     <ItemGroup>
-      <Content Include="@(AllItemsFullPathWithTargetPath)" />
+      <Content Include="$(CommonOutputDirectory)\Codex\*.*" />
     </ItemGroup>
     
     <Message Importance="high" Text="_IncludeDependenciesInPackage Ran" />

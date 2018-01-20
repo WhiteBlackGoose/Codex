@@ -11,9 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Codex\Codex.csproj">
-      <IncludeAssets>all</IncludeAssets>
-    </ProjectReference>
+    <ProjectReference Include="..\Codex\Codex.csproj" />
   </ItemGroup>
   <Import Project="NugetContent.targets" />
   <Import Project="$(SrcRoot)\Common.props" />

@@ -2,7 +2,7 @@
 
 
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)\..\content\**\*.*">
+    <Content Include="$(MSBuildThisFileDirectory)\content\**\*.*">
       <Link>bridge\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
