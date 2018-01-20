@@ -4,7 +4,7 @@
     <ContentTargetFolders>build</ContentTargetFolders>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IncludeContentInPack>true</IncludeContentInPack>
-    <Version Condition="'$(Build_BuildNumber)' != ''">1.0.$(Build_BuildNumber)-beta</Version>
+    <Version Condition="'$(BUILD_BUILDID)' != ''">1.0.$(BUILD_BUILDID)</Version>
   </PropertyGroup>
 
   <Target Name="_IncludeDependenciesInPackage" AfterTargets="ResolveProjectReferences">
