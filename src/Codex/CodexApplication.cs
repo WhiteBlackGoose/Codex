@@ -29,6 +29,7 @@ namespace Codex.Application
         static bool analysisOnly = false; // Set this to disable uploading to ElasticSearch
         static string repoName;
         static string rootDirectory;
+        static string repoUrl;
         static string saveDirectory;
         static string solutionPath;
         static bool interactive = false;
@@ -51,6 +52,7 @@ namespace Codex.Application
                         { "test", "Indicates that save should use test mode which disables optimization.", n => test = n != null },
                         { "n|name=", "Name of the repository.", n => repoName = AnalysisServices.GetSafeIndexName(n ?? string.Empty) },
                         { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
+                        { "repoUrl", "The URL of the repository being indexed", n => repoUrl = n },
                         { "s|solution", "Optionally, path to the solution to analyze.", n => solutionPath = n },
                         { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
                     }
@@ -311,13 +313,15 @@ namespace Codex.Application
                             DisableEnumeration = file.Length != 0
                         }));
 
+                Func<string, string> binLogFinder = null;
+
                 List<RepoProjectAnalyzer> projectAnalyzers = new List<RepoProjectAnalyzer>()
                 {
-                    new MSBuildSolutionProjectAnalyzer()
-                    //new BinLogSolutionProjectAnalyzer()
-                    //        {
-                    //            RequireProjectFilesExist = requireProjectsExist
-                    //        }
+                    //new MSBuildSolutionProjectAnalyzer()
+                    new BinLogSolutionProjectAnalyzer()
+                            {
+                                RequireProjectFilesExist = requireProjectsExist
+                            }
                 };
 
 
@@ -338,7 +342,10 @@ namespace Codex.Application
                 {
                     Placeholder.Todo("Populate commit/repo/branch with full set of real values");
                     analysisTarget = await store.CreateRepositoryStore(
-                        new Repository(repoName),
+                        new Repository(repoName)
+                        {
+                            SourceControlWebAddress = repoUrl,
+                        },
                         new Commit()
                         {
                             RepositoryName = repoName,
