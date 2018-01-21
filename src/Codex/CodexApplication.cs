@@ -31,6 +31,7 @@ namespace Codex.Application
         static string rootDirectory;
         static string repoUrl;
         static string saveDirectory;
+        static string binLogSearchDirectory;
         static string solutionPath;
         static bool interactive = false;
         static ICodexStore store = Placeholder.Value<ICodexStore>("Create store (FileSystem | Elasticsearch)");
@@ -53,6 +54,7 @@ namespace Codex.Application
                         { "n|name=", "Name of the repository.", n => repoName = AnalysisServices.GetSafeIndexName(n ?? string.Empty) },
                         { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
                         { "repoUrl", "The URL of the repository being indexed", n => repoUrl = n },
+                        { "bld|binLogSearchDirectory", "The directory to search for binlog files", n => binLogSearchDirectory = n },
                         { "s|solution", "Optionally, path to the solution to analyze.", n => solutionPath = n },
                         { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
                     }
@@ -318,7 +320,7 @@ namespace Codex.Application
                 List<RepoProjectAnalyzer> projectAnalyzers = new List<RepoProjectAnalyzer>()
                 {
                     //new MSBuildSolutionProjectAnalyzer()
-                    new BinLogSolutionProjectAnalyzer()
+                    new BinLogSolutionProjectAnalyzer(binLogSearchDirectory: binLogSearchDirectory)
                             {
                                 RequireProjectFilesExist = requireProjectsExist
                             }

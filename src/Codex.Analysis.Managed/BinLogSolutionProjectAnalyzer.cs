@@ -17,8 +17,9 @@ namespace Codex.Analysis.Projects
     public class BinLogSolutionProjectAnalyzer : MSBuildSolutionProjectAnalyzer
     {
         private readonly Func<string, string> binLogFinder;
+        private string binLogSearchDirectory;
 
-        public BinLogSolutionProjectAnalyzer(string[] includedSolutions = null, Func<string, string> binLogFinder = null)
+        public BinLogSolutionProjectAnalyzer(string[] includedSolutions = null, Func<string, string> binLogFinder = null, string binLogSearchDirectory = null)
             : base(includedSolutions)
         {
             if (binLogFinder == null)
@@ -26,15 +27,25 @@ namespace Codex.Analysis.Projects
                 binLogFinder = FindBinLogDefault;
             }
 
+            this.binLogSearchDirectory = binLogSearchDirectory;
             this.binLogFinder = binLogFinder;
         }
 
-        public static string FindBinLogDefault(string solutionFilePath)
+        public string FindBinLogDefault(string solutionFilePath)
         {
             var candidate = Path.ChangeExtension(solutionFilePath, ".binlog");
             if (File.Exists(candidate))
             {
                 return candidate;
+            }
+
+            if (!string.IsNullOrWhiteSpace(binLogSearchDirectory) && Directory.Exists(binLogSearchDirectory))
+            {
+                candidate = Directory.GetFiles(binLogSearchDirectory, "*.binlog").SingleOrDefault();
+                if (File.Exists(candidate))
+                {
+                    return candidate;
+                }
             }
 
             candidate = Directory.GetFiles(Path.GetDirectoryName(solutionFilePath), "*.binlog").SingleOrDefault();
