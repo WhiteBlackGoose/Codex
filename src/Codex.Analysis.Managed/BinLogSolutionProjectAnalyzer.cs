@@ -62,7 +62,7 @@ namespace Codex.Analysis.Projects
             }
 
             candidate = Directory.GetFiles(Path.GetDirectoryName(solutionFilePath), "*.binlog").SingleOrDefault();
-            if (TryCandidateBinLogPath(candidate, Path.GetDirectoryName(solutionFilePath))
+            if (TryCandidateBinLogPath(candidate, Path.GetDirectoryName(solutionFilePath)))
             {
                 return candidate;
             }
