@@ -53,9 +53,9 @@ namespace Codex.Application
                         { "test", "Indicates that save should use test mode which disables optimization.", n => test = n != null },
                         { "n|name=", "Name of the repository.", n => repoName = AnalysisServices.GetSafeIndexName(n ?? string.Empty) },
                         { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
-                        { "repoUrl", "The URL of the repository being indexed", n => repoUrl = n },
-                        { "bld|binLogSearchDirectory", "The directory to search for binlog files", n => binLogSearchDirectory = n },
-                        { "s|solution", "Optionally, path to the solution to analyze.", n => solutionPath = n },
+                        { "repoUrl=", "The URL of the repository being indexed", n => repoUrl = n },
+                        { "bld|binLogSearchDirectory=", "The directory to search for binlog files", n => binLogSearchDirectory = n },
+                        { "s|solution=", "Optionally, path to the solution to analyze.", n => solutionPath = n },
                         { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
                     }
                 )
@@ -309,10 +309,12 @@ namespace Codex.Application
                             new MultiFileSystemFilter(
                                 new DirectoryFileSystemFilter(@"\.", ".sln"),
 
+                                new GitIgnoreFilter(),
+
                                 // Filter out files from being indexed specified by the .cdxignore file
                                 // This is used to ignore files which are not specified in the .gitignore files
                                 new GitIgnoreFilter("cdx.ignore"),
-                                new GitIgnoreFilter(),
+
                                 new BinaryFileSystemFilter(new string[] { ".exe", ".dll", "*.blob", ".db" })
                                 ))
                         {

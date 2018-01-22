@@ -214,15 +214,5 @@ namespace Codex.Analysis.Projects
             }
         }
 
-        private class SolutionAnalyzer : RepoFileAnalyzer
-        {
-            protected override void AnnotateFile(BoundSourceFileBuilder binder)
-            {
-
-
-                base.AnnotateFile(binder);
-            }
-        }
-
     }
 }
