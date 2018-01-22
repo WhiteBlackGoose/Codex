@@ -324,7 +324,7 @@ namespace Codex.Application
                 List<RepoProjectAnalyzer> projectAnalyzers = new List<RepoProjectAnalyzer>()
                 {
                     //new MSBuildSolutionProjectAnalyzer()
-                    new BinLogSolutionProjectAnalyzer(binLogSearchDirectory: binLogSearchDirectory)
+                    new BinLogSolutionProjectAnalyzer(logger, binLogSearchDirectory: binLogSearchDirectory)
                             {
                                 RequireProjectFilesExist = requireProjectsExist
                             }

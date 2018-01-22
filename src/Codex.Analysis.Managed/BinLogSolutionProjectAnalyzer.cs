@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Codex.Analysis.Managed;
 using Codex.Import;
+using Codex.Logging;
 using Codex.MSBuild;
 using Codex.Utilities;
 using Microsoft.CodeAnalysis;
@@ -17,9 +18,14 @@ namespace Codex.Analysis.Projects
     public class BinLogSolutionProjectAnalyzer : MSBuildSolutionProjectAnalyzer
     {
         private readonly Func<string, string> binLogFinder;
-        private string binLogSearchDirectory;
+        private readonly Logger logger;
+        private readonly string binLogSearchDirectory;
 
-        public BinLogSolutionProjectAnalyzer(string[] includedSolutions = null, Func<string, string> binLogFinder = null, string binLogSearchDirectory = null)
+        public BinLogSolutionProjectAnalyzer(
+            Logger logger,
+            string[] includedSolutions = null, 
+            Func<string, string> binLogFinder = null, 
+            string binLogSearchDirectory = null)
             : base(includedSolutions)
         {
             if (binLogFinder == null)
@@ -27,6 +33,7 @@ namespace Codex.Analysis.Projects
                 binLogFinder = FindBinLogDefault;
             }
 
+            this.logger = logger;
             this.binLogSearchDirectory = binLogSearchDirectory;
             this.binLogFinder = binLogFinder;
         }
@@ -34,27 +41,41 @@ namespace Codex.Analysis.Projects
         public string FindBinLogDefault(string solutionFilePath)
         {
             var candidate = Path.ChangeExtension(solutionFilePath, ".binlog");
-            if (File.Exists(candidate))
+            if (TryCandidateBinLogPath(candidate))
             {
                 return candidate;
             }
 
             if (!string.IsNullOrWhiteSpace(binLogSearchDirectory) && Directory.Exists(binLogSearchDirectory))
             {
+                candidate = Path.Combine(binLogSearchDirectory, Path.GetFileNameWithoutExtension(solutionFilePath) + ".binlog");
+                if (TryCandidateBinLogPath(candidate))
+                {
+                    return candidate;
+                }
+
                 candidate = Directory.GetFiles(binLogSearchDirectory, "*.binlog").SingleOrDefault();
-                if (File.Exists(candidate))
+                if (TryCandidateBinLogPath(candidate, binLogSearchDirectory))
                 {
                     return candidate;
                 }
             }
 
             candidate = Directory.GetFiles(Path.GetDirectoryName(solutionFilePath), "*.binlog").SingleOrDefault();
-            if (File.Exists(candidate))
+            if (TryCandidateBinLogPath(candidate, Path.GetDirectoryName(solutionFilePath))
             {
                 return candidate;
             }
 
             return null;
+        }
+
+        private bool TryCandidateBinLogPath(string candidate, string searchDirectory = null)
+        {
+            var exists = candidate != null ? File.Exists(candidate) : false;
+            candidate = candidate ?? (searchDirectory.EnsureTrailingSlash() + "*.binlog");
+            logger.LogMessage($"Looking for binlog at '{candidate}'. Found = {exists}");
+            return exists;
         }
 
         protected override Task<SolutionInfo> GetSolutionInfoAsync(RepoFile repoFile)
