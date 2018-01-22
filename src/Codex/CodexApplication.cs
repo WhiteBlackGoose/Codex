@@ -308,6 +308,10 @@ namespace Codex.Application
                         new RootFileSystem(rootDirectory,
                             new MultiFileSystemFilter(
                                 new DirectoryFileSystemFilter(@"\.", ".sln"),
+
+                                // Filter out files from being indexed specified by the .cdxignore file
+                                // This is used to ignore files which are not specified in the .gitignore files
+                                new GitIgnoreFilter("cdx.ignore"),
                                 new GitIgnoreFilter(),
                                 new BinaryFileSystemFilter(new string[] { ".exe", ".dll", "*.blob", ".db" })
                                 ))

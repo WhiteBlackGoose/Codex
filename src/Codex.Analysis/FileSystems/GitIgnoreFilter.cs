@@ -15,6 +15,22 @@ namespace Codex.Analysis.FileSystems
 
         private static readonly char[] PathSeparators = new char[] { '\\', '/' };
 
+        private static readonly string[] DefaultGitIgnoreFileNames = new string[] { ".gitignore", ".tfignore" };
+
+        private readonly string[] gitIgnoreFileNames;
+
+        public GitIgnoreFilter(params string[] gitIgnoreFileNames)
+        {
+            if (gitIgnoreFileNames == null || gitIgnoreFileNames.Length == 0)
+            {
+                this.gitIgnoreFileNames = DefaultGitIgnoreFileNames;
+            }
+            else
+            {
+                this.gitIgnoreFileNames = gitIgnoreFileNames;
+            }
+        }
+
         public override bool IncludeDirectory(FileSystem fileSystem, string directoryPath)
         {
             string gitIgnoreDirectoryPath = directoryPath;
@@ -55,11 +71,9 @@ namespace Codex.Analysis.FileSystems
                 return true;
             }
 
-            var gitIgnoreFilePath = Path.Combine(directoryPath, ".gitignore");
-            bool tfIgnore = false;
-
-            while (true)
+            foreach (var gitIgnoreFileName in gitIgnoreFileNames)
             {
+                var gitIgnoreFilePath = Path.Combine(directoryPath, gitIgnoreFileName);
                 if (File.Exists(gitIgnoreFilePath))
                 {
                     try
@@ -68,7 +82,7 @@ namespace Codex.Analysis.FileSystems
                         using (var gitIgnoreStream = fileSystem.OpenFile(gitIgnoreFilePath))
                         using (var reader = new StreamReader(gitIgnoreStream))
                         {
-                            gitIgnore = GitIgnore.Parse(reader, tfIgnore);
+                            gitIgnore = GitIgnore.Parse(reader, tfIgnore: string.Equals(gitIgnoreFileName, ".tfignore", StringComparison.OrdinalIgnoreCase));
                             gitIgnoreMap[directoryPath] = new KeyValuePair<string, GitIgnore>(directoryPath, gitIgnore);
                         }
                     }
@@ -78,16 +92,6 @@ namespace Codex.Analysis.FileSystems
                     }
 
                     return true;
-                }
-
-                if (!tfIgnore)
-                {
-                    gitIgnoreFilePath = Path.Combine(directoryPath, ".tfignore");
-                    tfIgnore = true;
-                }
-                else
-                {
-                    break;
                 }
             }
 
