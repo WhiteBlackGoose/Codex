@@ -35,6 +35,7 @@ namespace Codex.Analysis.Projects
 
             this.logger = logger;
             this.binLogSearchDirectory = binLogSearchDirectory;
+            logger.LogMessage($"binlog search directory: '{binLogSearchDirectory}'. Exists: {Directory.Exists(binLogSearchDirectory)}");
             this.binLogFinder = binLogFinder;
         }
 

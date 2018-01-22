@@ -319,8 +319,6 @@ namespace Codex.Application
                             DisableEnumeration = file.Length != 0
                         }));
 
-                Func<string, string> binLogFinder = null;
-
                 List<RepoProjectAnalyzer> projectAnalyzers = new List<RepoProjectAnalyzer>()
                 {
                     //new MSBuildSolutionProjectAnalyzer()
