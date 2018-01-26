@@ -53,7 +53,11 @@ namespace Codex.Storage
             }
 
             var elapsed = DateTime.UtcNow - LastUpdateTime;
-            if (elapsed.TotalMinutes > 5 || force)
+            LastUpdateTime = DateTime.UtcNow;
+
+            TimeSpan elapsedThreshold = TimeSpan.FromHours(8);
+
+            if (elapsed > elapsedThreshold || force)
             {
                 try
                 {
@@ -86,7 +90,6 @@ namespace Codex.Storage
                                 .SelectMany(pm => pm.ReferencedProjects.Select(rp => rp.ProjectId))
                                 .GroupBy(s => s, StringComparer.OrdinalIgnoreCase)
                                 .ToDictionary(g => g.Key, g => g.Count(), StringComparer.OrdinalIgnoreCase);
-                            LastUpdateTime = DateTime.UtcNow;
                         }
                     }
                 }
@@ -96,6 +99,7 @@ namespace Codex.Storage
                 }
                 finally
                 {
+                    LastUpdateTime = DateTime.UtcNow;
                     Interlocked.CompareExchange(ref m_updating, 0, 1);
                 }
             }

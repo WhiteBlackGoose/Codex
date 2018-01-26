@@ -30,8 +30,9 @@ namespace WebUI.Controllers
             {
                 Requests.LogRequest(this, searchTerm);
                 searchTerm = HttpUtility.UrlDecode(searchTerm);
+                searchTerm = searchTerm?.Trim();
 
-                if (string.IsNullOrWhiteSpace(searchTerm))
+                if (string.IsNullOrWhiteSpace(searchTerm) || searchTerm.Length < 3)
                 {
                     //Still render view even if we have an invalid search term - it'll display a "results not found" message
                     Debug.WriteLine("GetSearchResult - searchTerm is null or whitespace");
@@ -51,11 +52,6 @@ namespace WebUI.Controllers
                 Responses.PrepareResponse(Response);
 
                 searchResult = await storage.SearchAsync(this.GetSearchRepos(), searchTerm);
-
-                if (searchResult.Total == 0)
-                {
-                    return await TextSearchResults(searchTerm);
-                }
 
                 return PartialView(searchResult);
             }
