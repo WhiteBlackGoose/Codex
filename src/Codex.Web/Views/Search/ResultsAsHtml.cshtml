@@ -8,7 +8,7 @@
     if (Model == null || Model.Entries.Count == 0)
     {
         <div class="note">No results found.</div>
-        if (!string.IsNullOrWhiteSpace(Model.QueryText) && !Model.QueryText.StartsWith("`"))
+        if (Model != null && !string.IsNullOrWhiteSpace(Model.QueryText) && !Model.QueryText.StartsWith("`"))
         {
             <div class="note"><a class="blueLink" href="/?query=@HttpUtility.UrlEncode("`" + Model.QueryText)">Search text results for: @Model.QueryText</a></div>
         }
