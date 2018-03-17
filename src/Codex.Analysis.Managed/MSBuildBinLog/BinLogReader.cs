@@ -87,14 +87,18 @@ namespace Codex.Analysis.Managed
                 return null;
             }
 
-            var taskId = args.BuildEventContext?.TaskId ?? 0;
+            int targetId = args.BuildEventContext?.TargetId ?? -1;
+            if (targetId < 0)
+            {
+                return null;
+            }
 
-            TaskStartedEventArgs taskStarted = args as TaskStartedEventArgs;
-            if (taskStarted != null && (taskStarted.TaskName == "Csc" || taskStarted.TaskName == "Vbc"))
+            var targetStarted = args as TargetStartedEventArgs;
+            if (targetStarted != null && targetStarted.TargetName == "CoreCompile")
             {
                 var invocation = new CompilerInvocation();
-                taskIdToInvocationMap[taskId] = invocation;
-                invocation.ProjectFile = taskStarted.ProjectFile;
+                taskIdToInvocationMap[targetId] = invocation;
+                invocation.ProjectFile = targetStarted.ProjectFile;
                 return null;
             }
 
@@ -115,11 +119,11 @@ namespace Codex.Analysis.Managed
             commandLine = TrimCompilerExeFromCommandLine(commandLine, language);
 
             CompilerInvocation compilerInvocation;
-            if (taskIdToInvocationMap.TryGetValue(taskId, out compilerInvocation))
+            if (taskIdToInvocationMap.TryGetValue(targetId, out compilerInvocation))
             {
                 compilerInvocation.Language = language;
                 compilerInvocation.CommandLine = commandLine;
-                taskIdToInvocationMap.Remove(taskId);
+                taskIdToInvocationMap.Remove(targetId);
             }
 
             return compilerInvocation;
@@ -148,7 +152,7 @@ namespace Codex.Analysis.Managed
         private static CompilerInvocation TryGetInvocationFromTask(Task task)
         {
             var name = task.Name;
-            if (name != "Csc" && name != "Vbc")
+            if (name != "Csc" && name != "Vbc" || ((task.Parent as Target)?.Name != "CoreCompile"))
             {
                 return null;
             }

@@ -1,3 +1,6 @@
+* Log / record *canonicalized* command line for semantic information derived from compiler command line
+
+* Allow running analyzer on individual project file for use during build
 
 * For the FileSystemCodexStore, it will need to also serialize any data that is currently transformed and removed prior to indexing (i.e. SourceFileInfo.Properties)
 so that it can replay those without lose of data. Check types for instances of this and handle somehow.

@@ -120,6 +120,7 @@ namespace Codex.Analysis.Projects
             public ConcurrentDictionary<string, ProjectInfoBuilder> ProjectInfoByAssemblyNameMap = new ConcurrentDictionary<string, ProjectInfoBuilder>(StringComparer.OrdinalIgnoreCase);
             private Repo repo;
             private string binLogPath;
+            private Logger logger;
 
             public bool HasProjects => ProjectInfoByAssemblyNameMap.Count != 0;
 
@@ -129,6 +130,7 @@ namespace Codex.Analysis.Projects
                 this.solutionDirectory = Path.GetDirectoryName(solutionPath);
                 this.repo = repo;
                 this.binLogPath = binLogFilePath;
+                this.logger = repo.AnalysisServices.Logger;
 
                 workspace = new AdhocWorkspace(DesktopMefHostServices.DefaultServices);
 
