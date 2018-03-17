@@ -1,6 +1,7 @@
 ﻿extern alias binlog;
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Build.Framework;
@@ -14,36 +15,55 @@ namespace Codex.Analysis.Managed
 
     public class BinLogReader
     {
+        /// <summary>
+        /// Binlog reader does not handle concurrent accesses appropriately so handle it here
+        /// </summary>
+        private static readonly ConcurrentDictionary<string, Lazy<List<CompilerInvocation>>> m_binlogInvocationMap
+            = new ConcurrentDictionary<string, Lazy<List<CompilerInvocation>>>(StringComparer.OrdinalIgnoreCase);
+
         public static IEnumerable<CompilerInvocation> ExtractInvocations(string binLogFilePath)
         {
+            // Normalize the path
+            binLogFilePath = Path.GetFullPath(binLogFilePath);
+
             if (!File.Exists(binLogFilePath))
             {
                 throw new FileNotFoundException(binLogFilePath);
             }
 
-            if (binLogFilePath.EndsWith(".buildlog", StringComparison.OrdinalIgnoreCase))
+            var lazyResult = m_binlogInvocationMap.GetOrAdd(binLogFilePath, new Lazy<List<CompilerInvocation>>(() =>
             {
-                return ExtractInvocationsFromBuild(binLogFilePath);
-            }
-
-            var invocations = new List<CompilerInvocation>();
-            var reader = new BinaryLogReplayEventSource();
-            var records = reader.ReadRecords(binLogFilePath);
-            var taskIdToInvocationMap = new Dictionary<int, CompilerInvocation>();
-
-            foreach (var record in records)
-            {
-                var invocation = TryGetInvocationFromRecord(record, taskIdToInvocationMap);
-                if (invocation != null)
+                if (binLogFilePath.EndsWith(".buildlog", StringComparison.OrdinalIgnoreCase))
                 {
-                    invocations.Add(invocation);
+                    return ExtractInvocationsFromBuild(binLogFilePath);
                 }
-            }
 
-            return invocations;
+                var invocations = new List<CompilerInvocation>();
+                var reader = new BinaryLogReplayEventSource();
+                var records = reader.ReadRecords(binLogFilePath);
+                var taskIdToInvocationMap = new Dictionary<int, CompilerInvocation>();
+
+                foreach (var record in records)
+                {
+                    var invocation = TryGetInvocationFromRecord(record, taskIdToInvocationMap);
+                    if (invocation != null)
+                    {
+                        invocations.Add(invocation);
+                    }
+                }
+
+                return invocations;
+            }));
+
+            var result = lazyResult.Value;
+
+            // Remove the lazy now that the operation has completed
+            m_binlogInvocationMap.TryRemove(binLogFilePath, out var ignored);
+
+            return result;
         }
 
-        private static IEnumerable<CompilerInvocation> ExtractInvocationsFromBuild(string logFilePath)
+        private static List<CompilerInvocation> ExtractInvocationsFromBuild(string logFilePath)
         {
             var build = Serialization.Read(logFilePath);
             var invocations = new List<CompilerInvocation>();

@@ -33,6 +33,7 @@ namespace Codex.Application
         static string saveDirectory;
         static string binLogSearchDirectory;
         static string solutionPath;
+        static string logDirectory = "logs";
         static bool interactive = false;
         static ICodexStore store = Placeholder.Value<ICodexStore>("Create store (FileSystem | Elasticsearch)");
         static ElasticSearchService service;
@@ -55,6 +56,7 @@ namespace Codex.Application
                         { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
                         { "repoUrl=", "The URL of the repository being indexed", n => repoUrl = n },
                         { "bld|binLogSearchDirectory=", "The directory to search for binlog files", n => binLogSearchDirectory = n },
+                        { "l|logDirectory", "Optional. Path to log directory", n => logDirectory = n },
                         { "s|solution=", "Optionally, path to the solution to analyze.", n => solutionPath = n },
                         { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
                     }
@@ -68,6 +70,7 @@ namespace Codex.Application
                     {
                         { "n|name=", "Name of the project.", n => repoName = n },
                         { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
+                        { "l|logDirectory", "Optional. Path to log directory", n => logDirectory = n },
                         { "s|solution", "Optionally, path to the solution to analyze.", n => solutionPath = n },
                     }
                 )
@@ -90,6 +93,7 @@ namespace Codex.Application
                     new OptionSet
                     {
                         { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
+                        { "l|logDirectory", "Optional. Path to log directory", n => logDirectory = n },
                         { "u", "Updates the analysis data (in place).", n => update = n != null },
                         { "d=", "The directory containing analysis data to load.", n => saveDirectory = n },
                     }
@@ -227,6 +231,13 @@ namespace Codex.Application
             }
         }
 
+        private static StreamWriter OpenLogWriter()
+        {
+            logDirectory = Path.Combine(logDirectory);
+            Directory.CreateDirectory(logDirectory);
+            return new StreamWriter(Path.Combine(logDirectory, "cdx.log"));
+        }
+
         private static void Load()
         {
             Task.Run(async () =>
@@ -243,8 +254,7 @@ namespace Codex.Application
                     store = new DirectoryCodexStore(saveDirectory) { Clean = false };
                 }
 
-                Directory.CreateDirectory("output");
-                using (StreamWriter writer = new StreamWriter(@"output\log.txt"))
+                using (StreamWriter writer = OpenLogWriter())
                 {
                     Logger logger = new MultiLogger(
                         new ConsoleLogger(),
@@ -296,8 +306,8 @@ namespace Codex.Application
                 rootDirectory = Path.GetDirectoryName(rootDirectory);
                 requireProjectsExist = false;
             }
-            Directory.CreateDirectory("output");
-            using (StreamWriter writer = new StreamWriter(@"output\log.txt"))
+
+            using (StreamWriter writer = OpenLogWriter())
             {
                 Logger logger = new MultiLogger(
                     new ConsoleLogger(),
@@ -321,13 +331,18 @@ namespace Codex.Application
                             DisableEnumeration = file.Length != 0
                         }));
 
+                var includedSolutions = !string.IsNullOrEmpty(solutionPath) ? new string[] { Path.GetFullPath(solutionPath) } : null;
+
                 List<RepoProjectAnalyzer> projectAnalyzers = new List<RepoProjectAnalyzer>()
                 {
                     //new MSBuildSolutionProjectAnalyzer()
-                    new BinLogSolutionProjectAnalyzer(logger, binLogSearchDirectory: binLogSearchDirectory)
-                            {
-                                RequireProjectFilesExist = requireProjectsExist
-                            }
+                    new BinLogSolutionProjectAnalyzer(
+                        logger, 
+                        includedSolutions: includedSolutions,
+                        binLogSearchDirectory: binLogSearchDirectory)
+                        {
+                            RequireProjectFilesExist = requireProjectsExist
+                        }
                 };
 
 
