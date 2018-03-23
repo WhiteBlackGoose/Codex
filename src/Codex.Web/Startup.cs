@@ -30,7 +30,7 @@ namespace Codex.Web
             services.AddMvc(o => o.Conventions.Add(new CodexServiceApplicationModelConvention()));
             services.AddSingleton<ICodex>(new ElasticSearchCodex(new ElasticSearch.ElasticSearchStoreConfiguration()
             {
-                Prefix = "apptest"
+                //Prefix = "apptest"
             }, new ElasticSearch.ElasticSearchService(new ElasticSearch.ElasticSearchServiceConfiguration("http://localhost:9200"))));
         }
 

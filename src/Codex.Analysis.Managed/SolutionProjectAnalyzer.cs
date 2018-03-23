@@ -128,7 +128,7 @@ namespace Codex.Analysis.Projects
                             projectFile = repo.DefaultRepoProject.AddFile(projectInfo.FilePath);
                         }
 
-                        if (requireProjectExists && ((projectFile == null || projectFile.HasExplicitAnalyzer)))
+                        if (requireProjectExists && (projectFile == null || repo.ProjectsByPath.ContainsKey(projectInfo.FilePath)))
                         {
                             continue;
                         }

@@ -32,10 +32,9 @@ public class AnalysisServices
 
         public ConcurrentDictionary<string, Repo> ReposByName = new ConcurrentDictionary<string, Repo>(StringComparer.OrdinalIgnoreCase);
 
-        public static string GetSafeIndexName(string repoName)
+        public static string GetSafeRepoName(string repoName)
         {
             var safeName = repoName
-                .ToLowerInvariant()
                 .Replace('#', '_')
                 .Replace('.', '_')
                 .Replace(',', '_')
@@ -52,6 +51,12 @@ public class AnalysisServices
                 .Replace(':', '_')
                 .TrimStart('_');
 
+            return safeName;
+        }
+
+        public static string GetSafeIndexName(string repoName)
+        {
+            var safeName = GetSafeRepoName(repoName.ToLowerInvariant());
             return safeName;
         }
 

@@ -33,10 +33,10 @@ namespace Codex.Analysis.Projects
             }
         }
 
-        private Task<SolutionInfo> LoadSolutionInfo(ProjectInfo projectInfo)
+        private Task<SolutionInfo> LoadSolutionInfo(params ProjectInfo[] projectInfos)
         {
             return Task.FromResult(SolutionInfo.Create(SolutionId.CreateNewId(), VersionStamp.Create(),
-                projects: new[] { projectInfo }));
+                projects: projectInfos));
         }
     }
 }

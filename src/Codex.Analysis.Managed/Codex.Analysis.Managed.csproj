@@ -88,7 +88,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="MSBuild\Codex.Managed.Extractor.targets" />
+    <Content Include="MSBuild\Codex.Managed.Extractor.targets">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompilationServices.cs" />
@@ -111,6 +113,8 @@
     <Compile Include="MSBuild\SolutionFile\WorkspacesResources.cs" />
     <Compile Include="ProjectCollectionAnalyzer.cs" />
     <Compile Include="DummyReferences.cs" />
+    <Compile Include="Projects\InvocationSolutionInfoBuilderBase.cs" />
+    <Compile Include="Projects\BinLogProjectAnalyzer.cs" />
     <Compile Include="SemanticServices.cs" />
     <Compile Include="SolutionFileAnalyzer.cs" />
     <Compile Include="SolutionProjectAnalyzer.cs" />

@@ -31,7 +31,7 @@ namespace Codex.Application
         static string rootDirectory;
         static string repoUrl;
         static string saveDirectory;
-        static string binLogSearchDirectory;
+        static List<string> binlogSearchPaths;
         static string solutionPath;
         static string logDirectory = "logs";
         static bool interactive = false;
@@ -52,10 +52,10 @@ namespace Codex.Application
                         { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
                         { "save=", "Saves the analysis information to the given directory.", n => saveDirectory = n },
                         { "test", "Indicates that save should use test mode which disables optimization.", n => test = n != null },
-                        { "n|name=", "Name of the repository.", n => repoName = AnalysisServices.GetSafeIndexName(n ?? string.Empty) },
+                        { "n|name=", "Name of the repository.", n => repoName = AnalysisServices.GetSafeRepoName(n ?? string.Empty) },
                         { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
                         { "repoUrl=", "The URL of the repository being indexed", n => repoUrl = n },
-                        { "bld|binLogSearchDirectory=", "The directory to search for binlog files", n => binLogSearchDirectory = n },
+                        { "bld|binLogSearchDirectory=", "Adds a bin log file or directory to search for binlog files", n => binlogSearchPaths.Add(n) },
                         { "l|logDirectory", "Optional. Path to log directory", n => logDirectory = n },
                         { "s|solution=", "Optionally, path to the solution to analyze.", n => solutionPath = n },
                         { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
@@ -290,6 +290,11 @@ namespace Codex.Application
             var targetIndexName = AnalysisServices.GetTargetIndexName(repoName);
             string[] file = new string[0];
 
+            if (!string.IsNullOrEmpty(solutionPath))
+            {
+                solutionPath = Path.GetFullPath(solutionPath);
+            }
+
             bool requireProjectsExist = true;
 
             string assembly = null;
@@ -335,16 +340,12 @@ namespace Codex.Application
 
                 List<RepoProjectAnalyzer> projectAnalyzers = new List<RepoProjectAnalyzer>()
                 {
-                    //new MSBuildSolutionProjectAnalyzer()
-                    new BinLogSolutionProjectAnalyzer(
-                        logger, 
-                        includedSolutions: includedSolutions,
-                        binLogSearchDirectory: binLogSearchDirectory)
-                        {
-                            RequireProjectFilesExist = requireProjectsExist
-                        }
+                    new BinLogProjectAnalyzer(logger, binlogSearchPaths.ToArray())
+                    {
+                        RequireProjectFilesExist = requireProjectsExist
+                    },
+                    new MSBuildSolutionProjectAnalyzer(includedSolutions: includedSolutions)
                 };
-
 
                 if (assembly != null)
                 {

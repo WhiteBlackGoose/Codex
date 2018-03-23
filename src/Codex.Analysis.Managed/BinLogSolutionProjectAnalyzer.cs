@@ -55,14 +55,14 @@ namespace Codex.Analysis.Projects
                     return candidate;
                 }
 
-                candidate = Directory.GetFiles(binLogSearchDirectory, "*.binlog").SingleOrDefault();
+                candidate = Directory.GetFiles(binLogSearchDirectory, "*.binlog").SingleOrDefaultNoThrow();
                 if (TryCandidateBinLogPath(candidate, binLogSearchDirectory))
                 {
                     return candidate;
                 }
             }
 
-            candidate = Directory.GetFiles(Path.GetDirectoryName(solutionFilePath), "*.binlog").SingleOrDefault();
+            candidate = Directory.GetFiles(Path.GetDirectoryName(solutionFilePath), "*.binlog").SingleOrDefaultNoThrow();
             if (TryCandidateBinLogPath(candidate, Path.GetDirectoryName(solutionFilePath)))
             {
                 return candidate;

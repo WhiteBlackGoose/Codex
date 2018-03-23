@@ -22,6 +22,27 @@ namespace Codex.Utilities
             return results;
         }
 
+        public static T SingleOrDefaultNoThrow<T>(this IEnumerable<T> items)
+        {
+            int count = 0;
+            T result = default(T);
+            foreach (var item in items)
+            {
+                if (count == 0)
+                {
+                    result = item;
+                }
+                else
+                {
+                    return default(T);
+                }
+
+                count++;
+            }
+
+            return result;
+        }
+
         public static IReadOnlyList<T> AsReadOnlyList<T>(this IEnumerable<T> items)
         {
             if (items is IReadOnlyList<T>)

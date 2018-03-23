@@ -21,6 +21,9 @@ namespace Codex.Import
         public readonly RepoProject DefaultRepoProject;
         public BlockingCollection<RepoProject> Projects { get; private set; } = new BlockingCollection<RepoProject>();
 
+        public ConcurrentDictionary<string, RepoProject> ProjectsByPath { get; private set; } = new ConcurrentDictionary<string, RepoProject>(StringComparer.OrdinalIgnoreCase);
+        public ConcurrentDictionary<string, RepoProject> ProjectsById { get; private set; } = new ConcurrentDictionary<string, RepoProject>(StringComparer.OrdinalIgnoreCase);
+
         public int AnalyzeCount;
         public int UploadCount;
         public IEnumerable<RepoFile> Files => FilesByPath.Values;
@@ -103,10 +106,13 @@ namespace Codex.Import
                 ProjectFile = projectFile
             };
 
+            ProjectsById[projectFile.FilePath] = project;
+
             if (projectFile != null)
             {
                 projectFile.PrimaryProject = project;
                 project.AddFile(projectFile);
+                ProjectsByPath[projectFile.FilePath] = project;
             }
 
             Projects.Add(project);
