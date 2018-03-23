@@ -92,6 +92,7 @@ namespace Codex.Serialization
         private IContractResolver m_inner;
         private ConcurrentDictionary<Type, JsonContract> ContractsByType
             = new ConcurrentDictionary<System.Type, JsonContract>();
+        private object m_contractsLock = new object();
 
         public CachingContractResolver(IContractResolver inner)
         {
@@ -103,26 +104,29 @@ namespace Codex.Serialization
             JsonContract contract;
             if (!ContractsByType.TryGetValue(objectType, out contract))
             {
-                contract = ContractsByType.GetOrAdd(objectType, k =>
+                lock (m_contractsLock)
                 {
-                    var innerContract = m_inner.ResolveContract(objectType);
-                    lock (innerContract)
+                    contract = ContractsByType.GetOrAdd(objectType, k =>
                     {
-                        var objectContract = innerContract as JsonObjectContract;
-                        if (objectContract != null)
+                        var innerContract = m_inner.ResolveContract(objectType);
+                        lock (innerContract)
                         {
-                            var sortedProperties = objectContract.Properties.ToList();
-                            sortedProperties.Sort((p1, p2) => StringComparer.OrdinalIgnoreCase.Compare(p1.PropertyName, p2.PropertyName));
-                            objectContract.Properties.Clear();
-                            foreach (var property in sortedProperties)
+                            var objectContract = innerContract as JsonObjectContract;
+                            if (objectContract != null)
                             {
-                                objectContract.Properties.Add(property);
+                                var sortedProperties = objectContract.Properties.ToList();
+                                sortedProperties.Sort((p1, p2) => StringComparer.OrdinalIgnoreCase.Compare(p1.PropertyName, p2.PropertyName));
+                                objectContract.Properties.Clear();
+                                foreach (var property in sortedProperties)
+                                {
+                                    objectContract.Properties.Add(property);
+                                }
                             }
-                        }
 
-                        return innerContract;
-                    }
-                });
+                            return innerContract;
+                        }
+                    });
+                }
             }
 
             return contract;
