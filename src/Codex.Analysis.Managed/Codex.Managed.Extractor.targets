@@ -79,7 +79,7 @@
                       Overwrite="true" />
   </Target>
 
-  <Target Name="RunCodex" AfterTargets="ExtractCommandLineArgs" Condition="'$(CodexCompilerArgumentsFile)' != '' AND '$(RunCodex)' == 'true'">
+  <Target Name="RunCodex" AfterTargets="ExtractCommandLineArgs" Condition="'$(CodexCompilerArgumentsFile)' != '' AND Exists('$(CodexCompilerArgumentsFile)') AND '$(RunCodex)' == 'true'">
 
     <PropertyGroup>
       <CodexExePath Condition="'$(CodexExePath)' == ''">$(MSBuildThisFileDirectory)Codex.exe</CodexExePath>
