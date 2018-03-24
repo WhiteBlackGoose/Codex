@@ -11,12 +11,13 @@ namespace Codex.Analysis.Managed
     {
         public string Language { get; internal set; }
         public string CommandLine { get; internal set; }
+        public string[] CommandLineArguments { get; internal set; }
         public string ProjectFile { get; internal set; }
         public string ProjectDirectory => Path.GetDirectoryName(ProjectFile);
 
         public string[] GetCommandLineArguments()
         {
-            return CommandLineParser.SplitCommandLineIntoArguments(CommandLine, removeHashComments: false).ToArray();
+            return CommandLineArguments ?? CommandLineParser.SplitCommandLineIntoArguments(CommandLine, removeHashComments: false).ToArray();
         }
 
         public CommandLineArguments GetParsedCommandLineArguments()
@@ -38,7 +39,8 @@ namespace Codex.Analysis.Managed
 
         public override string ToString()
         {
-            return $"{ProjectFile} {((CommandLine != null && CommandLine.Length > 60) ? CommandLine.Substring(0, 60) + "..." : CommandLine)}";
+            var commandLine = CommandLine ?? string.Join(" ", CommandLineArguments ?? new string[0]);
+            return $"{ProjectFile} {((commandLine != null && commandLine.Length > 60) ? commandLine.Substring(0, 60) + "..." : commandLine)}";
         }
     }
 }

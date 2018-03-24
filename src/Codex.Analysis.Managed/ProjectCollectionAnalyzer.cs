@@ -27,6 +27,7 @@ namespace Codex.Analysis.Projects
                 SolutionProjectAnalyzer.AddSolutionProjects(
                     repo,
                     () => LoadSolutionInfo(projectInfo),
+                    solutionName: projectInfo.FilePath ?? projectInfo.OutputFilePath ?? projectInfo.AssemblyName,
                     requireProjectExists: false);
 
                 Console.WriteLine($"Created project {i} of {projects.Count}");

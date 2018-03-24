@@ -51,7 +51,12 @@ namespace Codex.Analysis.Projects
                     SolutionInfoBuilder builder = new SolutionInfoBuilder(binlog, repo);
                     if (builder.HasProjects)
                     {
-                        SolutionProjectAnalyzer.AddSolutionProjects(repo, () => Task.FromResult(builder.Build()), requireProjectExists: RequireProjectFilesExist, solutionName: Path.GetFileName(binlog));
+                        SolutionProjectAnalyzer.AddSolutionProjects
+                            (repo, 
+                            () => Task.FromResult(builder.Build()),
+                            workspace: builder.Workspace,
+                            requireProjectExists: RequireProjectFilesExist, 
+                            solutionName: builder.SolutionName);
                     }
                 }
             }

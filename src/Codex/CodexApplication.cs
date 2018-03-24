@@ -31,13 +31,16 @@ namespace Codex.Application
         static string rootDirectory;
         static string repoUrl;
         static string saveDirectory;
-        static List<string> binlogSearchPaths;
+        static List<string> binlogSearchPaths = new List<string>();
+        static List<string> compilerArgumentsFiles = new List<string>();
         static string solutionPath;
         static string logDirectory = "logs";
         static bool interactive = false;
+        static bool disableMsbuild = false;
         static ICodexStore store = Placeholder.Value<ICodexStore>("Create store (FileSystem | Elasticsearch)");
         static ElasticSearchService service;
         static bool test = false;
+        static bool projectMode = false;
         static bool update = false;
         static List<string> deleteIndices = new List<string>();
 
@@ -56,8 +59,11 @@ namespace Codex.Application
                         { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
                         { "repoUrl=", "The URL of the repository being indexed", n => repoUrl = n },
                         { "bld|binLogSearchDirectory=", "Adds a bin log file or directory to search for binlog files", n => binlogSearchPaths.Add(n) },
-                        { "l|logDirectory", "Optional. Path to log directory", n => logDirectory = n },
+                        { "ca|compilerArgumentFile=", "Adds a file specifying compiler arguments", n => compilerArgumentsFiles.Add(n) },
+                        { "l|logDirectory=", "Optional. Path to log directory", n => logDirectory = n },
                         { "s|solution=", "Optionally, path to the solution to analyze.", n => solutionPath = n },
+                        { "noMsBuild", "Disable loading solutions using msbuild.", n => disableMsbuild = n != null },
+                        { "projectMode", "Uses project indexing mode.", n => projectMode = n != null },
                         { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
                     }
                 )
@@ -192,6 +198,11 @@ namespace Codex.Application
             }
             else
             {
+                if (logDirectory == null)
+                {
+                    logDirectory = Path.Combine(saveDirectory, "logs");
+                }
+
                 store = new DirectoryCodexStore(saveDirectory) { DisableOptimization = test };
             }
 
@@ -233,7 +244,7 @@ namespace Codex.Application
 
         private static StreamWriter OpenLogWriter()
         {
-            logDirectory = Path.Combine(logDirectory);
+            logDirectory = Path.GetFullPath(logDirectory);
             Directory.CreateDirectory(logDirectory);
             return new StreamWriter(Path.Combine(logDirectory, "cdx.log"));
         }
@@ -337,9 +348,14 @@ namespace Codex.Application
                         }));
 
                 var includedSolutions = !string.IsNullOrEmpty(solutionPath) ? new string[] { Path.GetFullPath(solutionPath) } : null;
+                if (disableMsbuild)
+                {
+                    includedSolutions = new string[0];
+                }
 
                 List<RepoProjectAnalyzer> projectAnalyzers = new List<RepoProjectAnalyzer>()
                 {
+                    new CompilerArgumentsProjectAnalyzer(compilerArgumentsFiles.ToArray()),
                     new BinLogProjectAnalyzer(logger, binlogSearchPaths.ToArray())
                     {
                         RequireProjectFilesExist = requireProjectsExist

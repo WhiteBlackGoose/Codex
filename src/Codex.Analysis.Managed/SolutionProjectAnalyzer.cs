@@ -79,9 +79,9 @@ namespace Codex.Analysis.Projects
         }
 
         internal static void AddSolutionProjects(Repo repo, Func<Task<SolutionInfo>> solutionInfoLoader,
-            bool requireProjectExists = true, string solutionName = "Anonymous solution")
+            bool requireProjectExists = true, string solutionName = "Anonymous solution", AdhocWorkspace workspace = null)
         {
-            var workspace = new AdhocWorkspace(DesktopMefHostServices.DefaultServices);
+            workspace = workspace ?? new AdhocWorkspace(DesktopMefHostServices.DefaultServices);
 
             AddSolutionProjects(
                 repo, 
@@ -128,7 +128,13 @@ namespace Codex.Analysis.Projects
                             projectFile = repo.DefaultRepoProject.AddFile(projectInfo.FilePath);
                         }
 
-                        if (requireProjectExists && (projectFile == null || repo.ProjectsByPath.ContainsKey(projectInfo.FilePath)))
+                        if (requireProjectExists && projectFile == null)
+                        {
+                            continue;
+                        }
+
+                        if (repo.ProjectsById.ContainsKey(projectInfo.AssemblyName) || 
+                            (projectFile != null && repo.ProjectsByPath.ContainsKey(projectFile.FilePath)))
                         {
                             continue;
                         }

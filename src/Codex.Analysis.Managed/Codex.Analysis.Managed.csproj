@@ -88,8 +88,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Content Include="MSBuild\Codex.Managed.Extractor.targets">
+    <Content Include="Codex.Managed.Extractor.targets">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -100,7 +101,6 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="ManagedAnalysisHost.cs" />
     <Compile Include="ManagedProjectAnalyzer.cs" />
-    <Compile Include="BinLogSolutionProjectAnalyzer.cs" />
     <Compile Include="ManagedSolutionProjectAnalyzer.cs" />
     <Compile Include="MSBuildBinLog\BinLogReader.cs" />
     <Compile Include="MSBuildFileAnalyzer.cs" />
@@ -113,6 +113,7 @@
     <Compile Include="MSBuild\SolutionFile\WorkspacesResources.cs" />
     <Compile Include="ProjectCollectionAnalyzer.cs" />
     <Compile Include="DummyReferences.cs" />
+    <Compile Include="Projects\CompilerArgumentsProjectAnalyzer.cs" />
     <Compile Include="Projects\InvocationSolutionInfoBuilderBase.cs" />
     <Compile Include="Projects\BinLogProjectAnalyzer.cs" />
     <Compile Include="SemanticServices.cs" />

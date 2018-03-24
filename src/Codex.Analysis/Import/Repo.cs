@@ -106,7 +106,7 @@ namespace Codex.Import
                 ProjectFile = projectFile
             };
 
-            ProjectsById[projectFile.FilePath] = project;
+            ProjectsById[projectId] = project;
 
             if (projectFile != null)
             {

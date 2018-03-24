@@ -102,7 +102,6 @@
     <DisableForceExtractionCoreCompile>true</DisableForceExtractionCoreCompile>
     <CodexProjectExtractionDirectory>$(OutputPath)</CodexProjectExtractionDirectory>
   </PropertyGroup>
-  <Import Project="..\Codex.Analysis.Managed\MSBuild\Codex.Managed.Extractor.targets" />
   <Import Project="..\Codex.Sdk.Types\Codex.Sdk.Types.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SrcRoot)\Common.targets" />

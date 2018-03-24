@@ -17,7 +17,7 @@ namespace Codex.Analysis.Projects
 {
     public abstract class InvocationSolutionInfoBuilderBase
     {
-        private string solutionPath;
+        public readonly string SolutionName;
         public AdhocWorkspace Workspace;
         public Dictionary<string, CompilerInvocation> InvocationsByProjectPath = new Dictionary<string, CompilerInvocation>(StringComparer.OrdinalIgnoreCase);
         private readonly ConcurrentDictionary<string, ProjectInfoBuilder> ProjectInfoByAssemblyNameMap = new ConcurrentDictionary<string, ProjectInfoBuilder>(StringComparer.OrdinalIgnoreCase);
@@ -26,9 +26,9 @@ namespace Codex.Analysis.Projects
 
         public bool HasProjects => ProjectInfoByAssemblyNameMap.Count != 0;
 
-        protected InvocationSolutionInfoBuilderBase(string filePath, Repo repo)
+        protected InvocationSolutionInfoBuilderBase(string solutionName, Repo repo)
         {
-            this.solutionPath = filePath;
+            this.SolutionName = solutionName;
             this.repo = repo;
             this.logger = repo.AnalysisServices.Logger;
 
@@ -88,7 +88,7 @@ namespace Codex.Analysis.Projects
                 }
             }
 
-            return SolutionInfo.Create(SolutionId.CreateNewId(), VersionStamp.Default, solutionPath, projects);
+            return SolutionInfo.Create(SolutionId.CreateNewId(), VersionStamp.Default, SolutionName, projects);
         }
 
         private class ProjectInfoBuilder
