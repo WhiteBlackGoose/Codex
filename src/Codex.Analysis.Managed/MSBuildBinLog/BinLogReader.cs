@@ -40,17 +40,21 @@ namespace Codex.Analysis.Managed
 
                 var invocations = new List<CompilerInvocation>();
                 var reader = new BinaryLogReplayEventSource();
-                var records = reader.ReadRecords(binLogFilePath);
                 var taskIdToInvocationMap = new Dictionary<int, CompilerInvocation>();
 
-                foreach (var record in records)
+                void TryGetInvocationFromEvent(object sender, BuildEventArgs args)
                 {
-                    var invocation = TryGetInvocationFromRecord(record, taskIdToInvocationMap);
+                    var invocation = TryGetInvocationFromRecord(args, taskIdToInvocationMap);
                     if (invocation != null)
                     {
                         invocations.Add(invocation);
                     }
                 }
+
+                reader.TargetStarted += TryGetInvocationFromEvent;
+                reader.MessageRaised += TryGetInvocationFromEvent;
+
+                reader.Replay(binLogFilePath);
 
                 return invocations;
             }));
@@ -79,14 +83,8 @@ namespace Codex.Analysis.Managed
             return invocations;
         }
 
-        private static CompilerInvocation TryGetInvocationFromRecord(Record record, Dictionary<int, CompilerInvocation> taskIdToInvocationMap)
+        private static CompilerInvocation TryGetInvocationFromRecord(BuildEventArgs args, Dictionary<int, CompilerInvocation> taskIdToInvocationMap)
         {
-            var args = record.Args;
-            if (args == null)
-            {
-                return null;
-            }
-
             int targetId = args.BuildEventContext?.TargetId ?? -1;
             if (targetId < 0)
             {
