@@ -145,7 +145,7 @@ namespace Codex.Application
                 var verb = args[0].ToLowerInvariant();
                 if (actions.TryGetValue(verb, out var action))
                 {
-                    action.options.Parse(remaining);
+                    var remainingArguments = action.options.Parse(remaining);
                     Console.WriteLine("Parsed Arguments");
                     action.act();
                 }
@@ -204,7 +204,7 @@ namespace Codex.Application
                     }
                 }
 
-                if (ex is AggregateException)
+                if (ex is AggregateException || ex is OperationCanceledException)
                 {
                     return;
                 }
@@ -258,7 +258,7 @@ namespace Codex.Application
                     return;
                 }
 
-                var message = DateTime.Now.ToString() + ": First chance exception";
+                var message = DateTime.Now.ToString() + ": First chance exception: " + ex.ToString();
 
                 Log(message);
             }
