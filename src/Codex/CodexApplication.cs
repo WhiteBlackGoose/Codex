@@ -51,6 +51,7 @@ namespace Codex.Application
                     new Action(() => Index()),
                     new OptionSet
                     {
+                        { "noMsBuild", "Disable loading solutions using msbuild.", n => disableMsbuild = n != null },
                         { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
                         { "save=", "Saves the analysis information to the given directory.", n => saveDirectory = n },
                         { "test", "Indicates that save should use test mode which disables optimization.", n => test = n != null },
@@ -61,7 +62,6 @@ namespace Codex.Application
                         { "ca|compilerArgumentFile=", "Adds a file specifying compiler arguments", n => compilerArgumentsFiles.Add(n) },
                         { "l|logDirectory=", "Optional. Path to log directory", n => logDirectory = n },
                         { "s|solution=", "Optionally, path to the solution to analyze.", n => solutionPath = n },
-                        { "noMsBuild", "Disable loading solutions using msbuild.", n => disableMsbuild = n != null },
                         { "projectMode", "Uses project indexing mode.", n => projectMode = n != null },
                         { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
                     }
@@ -146,6 +146,13 @@ namespace Codex.Application
                 if (actions.TryGetValue(verb, out var action))
                 {
                     var remainingArguments = action.options.Parse(remaining);
+                    if (remainingArguments.Count != 0)
+                    {
+                        Console.Error.WriteLine($"Invalid argument(s): '{string.Join(", ", remainingArguments)}'");
+                        WriteHelpText();
+                        return;
+                    }
+
                     Console.WriteLine("Parsed Arguments");
                     action.act();
                 }
