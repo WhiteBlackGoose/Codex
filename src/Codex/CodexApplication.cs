@@ -1,24 +1,23 @@
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using Codex.Analysis;
 using Codex.Analysis.Files;
 using Codex.Analysis.FileSystems;
 using Codex.Analysis.Managed;
 using Codex.Analysis.Projects;
 using Codex.Analysis.Xml;
+using Codex.ElasticSearch;
+using Codex.ElasticSearch.Store;
 using Codex.Import;
 using Codex.Logging;
 using Codex.ObjectModel;
-using Codex.Storage;
-using Mono.Options;
-using Codex.ElasticSearch;
-using System.Threading.Tasks;
 using Codex.Sdk.Search;
-using Codex.ElasticSearch.Store;
+using Mono.Options;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
 
 namespace Codex.Application
 {
@@ -52,6 +51,7 @@ namespace Codex.Application
                     new Action(() => Index()),
                     new OptionSet
                     {
+                        { "noMsBuild", "Disable loading solutions using msbuild.", n => disableMsbuild = n != null },
                         { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
                         { "save=", "Saves the analysis information to the given directory.", n => saveDirectory = n },
                         { "test", "Indicates that save should use test mode which disables optimization.", n => test = n != null },
@@ -62,7 +62,6 @@ namespace Codex.Application
                         { "ca|compilerArgumentFile=", "Adds a file specifying compiler arguments", n => compilerArgumentsFiles.Add(n) },
                         { "l|logDirectory=", "Optional. Path to log directory", n => logDirectory = n },
                         { "s|solution=", "Optionally, path to the solution to analyze.", n => solutionPath = n },
-                        { "noMsBuild", "Disable loading solutions using msbuild.", n => disableMsbuild = n != null },
                         { "projectMode", "Uses project indexing mode.", n => projectMode = n != null },
                         { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
                     }
@@ -130,24 +129,166 @@ namespace Codex.Application
 
         static void Main(string[] args)
         {
-            if (args.Length == 0)
+            try
             {
-                WriteHelpText();
+                AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
+                AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+                Console.WriteLine("Started");
+
+                if (args.Length == 0)
+                {
+                    WriteHelpText();
+                    return;
+                }
+
+                var remaining = args.Skip(1).ToArray();
+                var verb = args[0].ToLowerInvariant();
+                if (actions.TryGetValue(verb, out var action))
+                {
+                    var remainingArguments = action.options.Parse(remaining);
+                    if (remainingArguments.Count != 0)
+                    {
+                        Console.Error.WriteLine($"Invalid argument(s): '{string.Join(", ", remainingArguments)}'");
+                        WriteHelpText();
+                        return;
+                    }
+
+                    Console.WriteLine("Parsed Arguments");
+                    action.act();
+                }
+                else
+                {
+                    Console.Error.WriteLine($"Invalid verb '{verb}'");
+                    WriteHelpText();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log(ex.ToString());
+            }
+        }
+
+        private static bool isReentrant = false;
+
+        private static HashSet<string> knownMessages = new HashSet<string>()
+        {
+            "Unable to load DLL 'api-ms-win-core-file-l1-2-0.dll': The specified module could not be found. (Exception from HRESULT: 0x8007007E)",
+            "Invalid cast from 'System.String' to 'System.Int32[]'.",
+            "The given assembly name or codebase was invalid. (Exception from HRESULT: 0x80131047)",
+            "Value was either too large or too small for a Decimal.",
+        };
+
+        private static void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
+        {
+            if (isReentrant)
+            {
                 return;
             }
 
-            var remaining = args.Skip(1).ToArray();
-            var verb = args[0].ToLowerInvariant();
-            if (actions.TryGetValue(verb, out var action))
+            isReentrant = true;
+            try
             {
-                action.options.Parse(remaining);
-                action.act();
+                var ex = e.Exception;
+
+                if (ex is InvalidCastException)
+                {
+                    if (ex.Message.Contains("Invalid cast from 'System.String' to"))
+                    {
+                        return;
+                    }
+
+                    if (ex.Message.Contains("Unable to cast object of type 'Microsoft.Build.Tasks.Windows.MarkupCompilePass1' to type 'Microsoft.Build.Framework.ITask'."))
+                    {
+                        return;
+                    }
+                }
+
+                if (ex is InvalidOperationException)
+                {
+                    if (ex.Message.Contains("An attempt was made to transition a task to a final state when it had already completed."))
+                    {
+                        return;
+                    }
+                }
+
+                if (ex is AggregateException || ex is OperationCanceledException)
+                {
+                    return;
+                }
+
+                if (ex is DecoderFallbackException)
+                {
+                    return;
+                }
+
+                if (ex is DirectoryNotFoundException)
+                {
+                    return;
+                }
+
+                if (ex is Microsoft.Build.Exceptions.InvalidProjectFileException)
+                {
+                    return;
+                }
+
+                if (ex is FileNotFoundException)
+                {
+                    return;
+                }
+
+                if (ex is MissingMethodException)
+                {
+                    // MSBuild evaluation has a known one
+                    return;
+                }
+
+                if (ex is XmlException && ex.Message.Contains("There are multiple root elements"))
+                {
+                    return;
+                }
+
+                if (knownMessages.Contains(ex.Message))
+                {
+                    return;
+                }
+
+                string exceptionType = ex.GetType().FullName;
+
+                if (exceptionType.Contains("UnsupportedSignatureContent"))
+                {
+                    return;
+                }
+
+                string stackTrace = ex.StackTrace;
+                if (stackTrace.Contains("at System.Guid.StringToInt"))
+                {
+                    return;
+                }
+
+                var message = DateTime.Now.ToString() + ": First chance exception: " + ex.ToString();
+
+                Log(message);
             }
-            else
+            finally
             {
-                Console.Error.WriteLine($"Invalid verb '{verb}'");
-                WriteHelpText();
+                isReentrant = false;
             }
+        }
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Log(e.ExceptionObject?.ToString());
+            try
+            {
+                Log(string.Join(Environment.NewLine, AppDomain.CurrentDomain.GetAssemblies().Select(a => $"{a.FullName ?? "Unknown Name"}: {a.Location ?? "Unknown Location"}")));
+            }
+            catch
+            {
+            }
+        }
+
+        private static void Log(string text)
+        {
+            Console.Error.WriteLine(text);
         }
 
         private static void WriteHelpText()
