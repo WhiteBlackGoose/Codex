@@ -74,20 +74,23 @@ namespace Codex.ElasticSearch
                 {
                     var client = context.Client;
 
-                    var getPipelineResult = await client.GetPipelineAsync(gp => gp.Id(StoredFilterPipelineId));
-                    if (getPipelineResult.IsValid)
+                    if (Configuration.UseStoredFilters)
                     {
-                        return false;
-                    }
+                        var getPipelineResult = await client.GetPipelineAsync(gp => gp.Id(StoredFilterPipelineId));
+                        if (getPipelineResult.IsValid)
+                        {
+                            return false;
+                        }
 
-                    await client.PutPipelineAsync(StoredFilterPipelineId, ppd =>
-                        ppd.Processors(pd => pd.BinarySequence<IStoredFilter>(bsp => bsp
-                            .IncludeField(sf => sf.StableIds)
-                            .UnionField(sf => sf.UnionFilters)
-                            .TargetHashField(sf => sf.FilterHash)
-                            .TargetCountField(sf => sf.FilterCount)
-                            .TargetField(sf => sf.Filter))))
-                        .ThrowOnFailure();
+                        await client.PutPipelineAsync(StoredFilterPipelineId, ppd =>
+                            ppd.Processors(pd => pd.BinarySequence<IStoredFilter>(bsp => bsp
+                                .IncludeField(sf => sf.StableIds)
+                                .UnionField(sf => sf.UnionFilters)
+                                .TargetHashField(sf => sf.FilterHash)
+                                .TargetCountField(sf => sf.FilterCount)
+                                .TargetField(sf => sf.Filter))))
+                            .ThrowOnFailure();
+                    }
 
                     return true;
                 });
@@ -131,6 +134,8 @@ namespace Codex.ElasticSearch
         /// Indicates where indices should be created when <see cref="ElasticSearchStore.InitializeAsync"/> is called.
         /// </summary>
         public bool CreateIndices = true;
+
+        public bool UseStoredFilters = false;
 
         public bool ClearIndicesBeforeUse = true;
 

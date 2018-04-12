@@ -11,6 +11,7 @@
 *.userprefs
 
 # JS files produced from the TS files
+**/Codex.Web.Monaco/Scripts/*.js
 **/Scripts/*.js.map
 
 # Build results

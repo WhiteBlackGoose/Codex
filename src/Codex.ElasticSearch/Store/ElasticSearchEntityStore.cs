@@ -42,7 +42,7 @@ namespace Codex.ElasticSearch
         public ElasticSearchEntityStore(ElasticSearchStore store, SearchType searchType)
             : base(store, searchType)
         {
-            m_pipeline = searchType == SearchTypes.StoredFilter ?
+            m_pipeline = searchType == SearchTypes.StoredFilter && store.Configuration.UseStoredFilters ?
                 store.StoredFilterPipelineId : null;
         }
 
