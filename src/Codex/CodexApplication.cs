@@ -38,6 +38,8 @@ namespace Codex.Application
         static bool disableMsbuild = false;
         static ICodexStore store = Placeholder.Value<ICodexStore>("Create store (FileSystem | Elasticsearch)");
         static ElasticSearchService service;
+        static bool reset = false;
+        static bool scan = false;
         static bool test = false;
         static bool projectMode = false;
         static bool update = false;
@@ -97,8 +99,10 @@ namespace Codex.Application
                     new Action(() => Load()),
                     new OptionSet
                     {
+                        { "scan", "Treats every directory under data directory as a separate store to upload.", n => scan = n != null },
                         { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
                         { "l|logDirectory", "Optional. Path to log directory", n => logDirectory = n },
+                        { "reset", "Reset elasticsearch for indexing new set of data.", n => reset = n != null },
                         { "u", "Updates the analysis data (in place).", n => update = n != null },
                         { "d=", "The directory containing analysis data to load.", n => saveDirectory = n },
                         { "test", "Indicates that save should use test mode which disables optimization.", n => test = n != null },
@@ -393,28 +397,57 @@ namespace Codex.Application
 
         private static void Load()
         {
+            using (StreamWriter writer = OpenLogWriter())
+            {
+                Logger logger = new MultiLogger(
+                    new ConsoleLogger(),
+                    new TextLogger(TextWriter.Synchronized(writer)));
+                if (scan)
+                {
+                    var clearIndicesBeforeUse = reset;
+                    var directories = Directory.GetDirectories(saveDirectory);
+                    int i = 1;
+                    foreach (var directory in directories)
+                    {
+                        logger.LogMessage($"[{i} of {directories.Length}] Loading {directory}");
+                        LoadCore(logger, directory, clearIndicesBeforeUse);
+                        clearIndicesBeforeUse = false;
+                        i++;
+                    }
+                }
+                else
+                {
+                    LoadCore(logger, saveDirectory, reset);
+                }
+            }
+        }
+
+        private static void LoadCore(Logger logger, string loadDirectory, bool clearIndicesBeforeUse)
+        {
+            if (File.Exists(Path.Combine(loadDirectory, @"store\repo.cdx.json")))
+            {
+                loadDirectory = Path.Combine(loadDirectory, "store");
+            }
+
             Task.Run(async () =>
             {
-                if (String.IsNullOrEmpty(saveDirectory)) throw new ArgumentException("Load directory must be specified. Use -d to provide it.");
+                if (String.IsNullOrEmpty(loadDirectory)) throw new ArgumentException("Load directory must be specified. Use -d to provide it.");
 
                 if (!update)
                 {
                     InitService();
-                    store = await service.CreateStoreAsync(new ElasticSearchStoreConfiguration());
+                    store = await service.CreateStoreAsync(new ElasticSearchStoreConfiguration()
+                    {
+                        ClearIndicesBeforeUse = clearIndicesBeforeUse
+                    });
                 }
                 else
                 {
-                    store = new DirectoryCodexStore(saveDirectory) { Clean = false, DisableOptimization = test };
+                    store = new DirectoryCodexStore(loadDirectory) { Clean = false, DisableOptimization = test };
                 }
 
-                using (StreamWriter writer = OpenLogWriter())
-                {
-                    Logger logger = new MultiLogger(
-                        new ConsoleLogger(),
-                        new TextLogger(TextWriter.Synchronized(writer)));
-                    var loadDirectoryStore = new DirectoryCodexStore(saveDirectory, logger);
-                    await loadDirectoryStore.ReadAsync(store);
-                }
+                var loadDirectoryStore = new DirectoryCodexStore(loadDirectory, logger);
+                await loadDirectoryStore.ReadAsync(store);
 
             }).GetAwaiter().GetResult();
         }

@@ -182,6 +182,7 @@ namespace Codex.ElasticSearch.Store
 
         private StoredBoundSourceFile CreateStoredBoundFile(BoundSourceFile boundSourceFile)
         {
+            boundSourceFile.RepositoryName = m_storeInfo.Repository.Name;
             boundSourceFile.ApplySourceFileInfo();
 
             var result = new StoredBoundSourceFile()
@@ -194,9 +195,12 @@ namespace Codex.ElasticSearch.Store
             return result;
         }
 
-        private static BoundSourceFile FromStoredBoundFile(StoredBoundSourceFile storedBoundFile)
+        private BoundSourceFile FromStoredBoundFile(StoredBoundSourceFile storedBoundFile)
         {
+            storedBoundFile.BoundSourceFile.RepositoryName = m_storeInfo.Repository.Name;
+            storedBoundFile.BoundSourceFile.ApplySourceFileInfo();
             storedBoundFile.AfterDeserialization();
+
             var boundSourceFile = storedBoundFile.BoundSourceFile;
             return boundSourceFile;
         }
@@ -266,20 +270,20 @@ namespace Codex.ElasticSearch.Store
         {
             public static readonly StoredEntityKind<StoredBoundSourceFile> BoundFiles = Create<StoredBoundSourceFile>(
                 (entity) => ToStableId(entity.BoundSourceFile.ProjectId, entity.BoundSourceFile.ProjectRelativePath),
-                (entity, repositoryStore) => repositoryStore.AddBoundFilesAsync(new[] { FromStoredBoundFile(entity) }));
+                (entity, repositoryStore, directoryStore) => repositoryStore.AddBoundFilesAsync(new[] { directoryStore.FromStoredBoundFile(entity) }));
             public static readonly StoredEntityKind<AnalyzedProject> Projects = Create<AnalyzedProject>(
                 (entity) => ToStableId(entity.ProjectId),
-                (entity, repositoryStore) => repositoryStore.AddProjectsAsync(new[] { entity }));
+                (entity, repositoryStore, directoryStore) => repositoryStore.AddProjectsAsync(new[] { entity }));
             public static readonly StoredEntityKind<SourceFile> TextFiles = Create<SourceFile>(
                 (entity) => ToStableId(entity.Info.RepoRelativePath, entity.Info.ProjectRelativePath),
-                (entity, repositoryStore) => repositoryStore.AddTextFilesAsync(new[] { entity }));
+                (entity, repositoryStore, directoryStore) => repositoryStore.AddTextFilesAsync(new[] { entity }));
             public static readonly StoredEntityKind<CommitFilesDirectory> CommitDirectories = Create<CommitFilesDirectory>(
                 (entity) => ToStableId(entity.RepoRelativePath),
-                (entity, repositoryStore) => repositoryStore.AddCommitFilesAsync(entity.Files));
+                (entity, repositoryStore, directoryStore) => repositoryStore.AddCommitFilesAsync(entity.Files));
 
             public static IReadOnlyList<StoredEntityKind> Kinds => Inner.Kinds;
 
-            public static StoredEntityKind<T> Create<T>(Func<T, string> getEntityStableId, Func<T, ICodexRepositoryStore, Task> add, [CallerMemberName] string name = null)
+            public static StoredEntityKind<T> Create<T>(Func<T, string> getEntityStableId, Func<T, ICodexRepositoryStore, DirectoryCodexStore, Task> add, [CallerMemberName] string name = null)
             {
                 var kind = new StoredEntityKind<T>(getEntityStableId, add, name);
                 Inner.Kinds.Add(kind);
@@ -300,11 +304,11 @@ namespace Codex.ElasticSearch.Store
         {
             public override string Name { get; }
 
-            private Func<T, ICodexRepositoryStore, Task> add;
+            private Func<T, ICodexRepositoryStore, DirectoryCodexStore, Task> add;
 
             public readonly Func<T, string> GetEntityStableId;
 
-            public StoredEntityKind(Func<T, string> getEntityStableId, Func<T, ICodexRepositoryStore, Task> add, string name)
+            public StoredEntityKind(Func<T, string> getEntityStableId, Func<T, ICodexRepositoryStore, DirectoryCodexStore, Task> add, string name)
             {
                 Name = name;
                 this.add = add;
@@ -314,7 +318,7 @@ namespace Codex.ElasticSearch.Store
             public override Task Add(DirectoryCodexStore store, string fullPath, ICodexRepositoryStore repositoryStore)
             {
                 var entity = store.Read<T>(fullPath);
-                return add(entity, repositoryStore);
+                return add(entity, repositoryStore, store);
             }
         }
     }

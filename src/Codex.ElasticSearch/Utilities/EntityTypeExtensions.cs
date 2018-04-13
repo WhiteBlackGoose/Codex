@@ -14,6 +14,8 @@ namespace Codex.ElasticSearch.Utilities
             var sourceFileInfo = boundSourceFile.SourceFile.Info;
 
             boundSourceFile.RepositoryName = boundSourceFile.RepositoryName ?? sourceFileInfo.RepositoryName;
+            sourceFileInfo.RepositoryName = boundSourceFile.RepositoryName;
+
             boundSourceFile.RepoRelativePath = boundSourceFile.RepoRelativePath ?? sourceFileInfo.RepoRelativePath;
             sourceFileInfo.RepoRelativePath = boundSourceFile.RepoRelativePath;
 

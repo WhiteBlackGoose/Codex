@@ -153,6 +153,8 @@ namespace Codex.Sdk.Search
         public string ProjectId { get; set; }
 
         public string ProjectRelativePath { get; set; }
+
+        public bool IncludeWebAddress { get; set; }
     }
 
     public interface IReferenceSearchResult : IProjectFileScopeEntity
