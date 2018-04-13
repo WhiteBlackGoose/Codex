@@ -23,6 +23,16 @@ namespace Codex.Storage.DataModel
         {
         }
 
+        public static ClassificationListModel CreateFrom(IReadOnlyList<ClassificationSpan> spans)
+        {
+            //if (spans is IndexableListAdapter<ClassificationSpan> list && list.Indexable is ClassificationListModel model)
+            //{
+            //    return model;
+            //}
+
+            return new ClassificationListModel(spans);
+        }
+
         public override ClassificationSpanListSegmentModel CreateSegment(ListSegment<ClassificationSpan> segmentSpans)
         {
             return new ClassificationSpanListSegmentModel()

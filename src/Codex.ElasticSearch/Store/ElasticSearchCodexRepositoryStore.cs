@@ -171,8 +171,8 @@ namespace Codex.ElasticSearch
             {
                 BindingInfo = boundSourceFile,
                 TextUid = textModel.Uid,
-                CompressedClassifications = new ClassificationListModel(boundSourceFile.Classifications),
-                CompressedReferences = new ReferenceListModel(boundSourceFile.References)
+                CompressedClassifications = ClassificationListModel.CreateFrom(boundSourceFile.Classifications),
+                CompressedReferences = ReferenceListModel.CreateFrom(boundSourceFile.References)
             };
 
             await batcher.AddAsync(store.BoundSourceStore, boundSourceModel, onAdded: () =>

@@ -45,6 +45,9 @@ namespace Codex.ElasticSearch
                 TryReserveExecute();
             }
 
+            //Task.Delay(1);
+            //return null;
+
             var registerResponse = await context.Client.BulkAsync(RegistryBulkDescriptor.CaptureRequest(context))
                 .ThrowOnFailure(allowInvalid: true);
             Contract.Assert(EntityItems.Count == registerResponse.Items.Count);

@@ -74,7 +74,8 @@ namespace Codex.ElasticSearch.Store
             List<Task> tasks = new List<Task>();
             foreach (var kind in StoredEntityKind.Kinds)
             {
-                tasks.Add(Task.Run(() =>
+                // TODO: Do we even need concurrency here?
+                //tasks.Add(Task.Run(() =>
                 {
                     var kindDirectoryPath = Path.Combine(DirectoryPath, kind.Name);
                     logger.LogMessage($"Reading {kind} infos from {kindDirectoryPath}");
@@ -88,7 +89,8 @@ namespace Codex.ElasticSearch.Store
                             logger.LogMessage($"{i}/{count}: Added {file} to store.");
                         });
                     }
-                }));
+                }
+                //));
             }
 
             await Task.WhenAll(tasks);
@@ -97,13 +99,14 @@ namespace Codex.ElasticSearch.Store
             tasks.Clear();
             for (int i = 0; i < Math.Min(Environment.ProcessorCount, 32); i++)
             {
-                tasks.Add(Task.Run(async () =>
+                //tasks.Add(Task.Run(async () =>
                 {
                     while (actionQueue.TryDequeue(out var taskFactory))
                     {
                         await taskFactory();
                     }
-                }));
+                }
+                //));
             }
 
             await Task.WhenAll(tasks);

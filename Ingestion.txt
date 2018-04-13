@@ -6,3 +6,5 @@ Ingestion kinds:
 
 Source Control Ingestion - adding commits/changesets from various branches in a source control repository
 	This approach is modeled after git commits. Commits point to a description
+
+Don't 'decompress' when uploading during ingestion. Attach compressed collections to bound source file.

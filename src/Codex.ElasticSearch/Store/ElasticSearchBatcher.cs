@@ -101,6 +101,10 @@ namespace Codex.ElasticSearch
                         {
                             backgroundTasks.TryDequeue(out dequeuedTask);
                         }
+                        else
+                        {
+                            break;
+                        }
                     }
 
                     backgroundDequeueReservation.TrySet(false);

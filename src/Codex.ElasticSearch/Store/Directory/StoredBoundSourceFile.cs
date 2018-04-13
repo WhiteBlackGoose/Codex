@@ -41,8 +41,8 @@ namespace Codex.ElasticSearch.Store
                     definition.ReferenceKind = null;
                 }
 
-                CompressedClassifications = new ClassificationListModel(BoundSourceFile.Classifications);
-                CompressedReferences = new ReferenceListModel(BoundSourceFile.References, includeLineInfo: true, externalLineTextPersistence: optimizeLineInfo);
+                CompressedClassifications = ClassificationListModel.CreateFrom(BoundSourceFile.Classifications);
+                CompressedReferences = ReferenceListModel.CreateFrom(BoundSourceFile.References, includeLineInfo: true, externalLineTextPersistence: optimizeLineInfo);
                 BoundSourceFile.References = CollectionUtilities.Empty<ReferenceSpan>.Array;
                 BoundSourceFile.Classifications = CollectionUtilities.Empty<ClassificationSpan>.Array;
             }
@@ -130,6 +130,26 @@ namespace Codex.ElasticSearch.Store
 
         private void ResplitLines()
         {
+            bool needsResplit = false;
+            foreach (var line in SourceFileContentLines)
+            {
+                if (line.Length == 0) continue;
+
+                int index = line.IndexOf('\r');
+                if (index == -1) continue;
+
+                // Line with just carriage return
+                if (line.Length == 1) continue;
+
+                if ((index < line.Length - 2) || 
+                    (index == line.Length - 2 && line[line.Length - 1] != '\n'))
+                {
+                    needsResplit = true;
+                }
+            }
+
+            if (!needsResplit) return;
+
             SourceFileContentLines = string.Join(string.Empty, SourceFileContentLines)
                                     .GetLines(includeLineBreak: true).ToList();
         }

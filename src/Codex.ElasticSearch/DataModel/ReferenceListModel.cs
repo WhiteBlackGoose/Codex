@@ -53,6 +53,17 @@ namespace Codex.Storage.DataModel
             //PostProcessReferences();
         }
 
+        public static ReferenceListModel CreateFrom(IReadOnlyList<ReferenceSpan> spans, bool includeLineInfo = false, bool externalLineTextPersistence = false)
+        {
+            //if (spans is IndexableListAdapter<ReferenceSpan> list && list.Indexable is ReferenceListModel model)
+            //{
+            //    var listModel = new ReferenceListModel(spans, includeLineInfo, externalLineTextPersistence);
+            //    return model;
+            //}
+
+            return new ReferenceListModel(spans, includeLineInfo, externalLineTextPersistence);
+        }
+
         [OnSerializing]
         public void PostProcessReferences(StreamingContext context)
         {

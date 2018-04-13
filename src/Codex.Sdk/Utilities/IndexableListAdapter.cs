@@ -29,18 +29,18 @@ namespace Codex.Utilities
 
     public class IndexableListAdapter<T> : IReadOnlyList<T>
     {
-        private readonly IIndexable<T> model;
+        public readonly IIndexable<T> Indexable;
 
         public IndexableListAdapter(IIndexable<T> model)
         {
-            this.model = model;
+            this.Indexable = model;
         }
 
         public T this[int index]
         {
             get
             {
-                return model[index];
+                return Indexable[index];
             }
         }
 
@@ -48,15 +48,15 @@ namespace Codex.Utilities
         {
             get
             {
-                return model.Count;
+                return Indexable.Count;
             }
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            for (int i = 0; i < model.Count; i++)
+            for (int i = 0; i < Indexable.Count; i++)
             {
-                yield return model[i];
+                yield return Indexable[i];
             }
         }
 
