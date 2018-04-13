@@ -15,7 +15,7 @@ namespace Codex.Logging
         private readonly TextWriter writer;
         private readonly ConcurrentQueue<string> messages = new ConcurrentQueue<string>();
         private int reservation;
-        private readonly Stopwatch stopwatch = new Stopwatch();
+        private readonly Stopwatch stopwatch = Stopwatch.StartNew();
 
         public TextLogger(TextWriter writer)
         {
@@ -34,11 +34,12 @@ namespace Codex.Logging
 
         public override void LogMessage(string message, MessageKind kind)
         {
-            WriteLineCore($"[{stopwatch.Elapsed.ToString("hh:mm:ss")}]: {message}");
+            WriteLineCore(message);
         }
 
         protected virtual void WriteLineCore(string text)
         {
+            text = $"[{stopwatch.Elapsed.ToString(@"hh\:mm\:ss")}]: {text}";
             messages.Enqueue(text);
 
             FlushMessages();

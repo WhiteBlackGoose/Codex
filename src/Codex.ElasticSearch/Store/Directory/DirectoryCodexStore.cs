@@ -298,6 +298,11 @@ namespace Codex.ElasticSearch.Store
             {
                 public static readonly List<StoredEntityKind> Kinds = new List<StoredEntityKind>();
             }
+
+            public override string ToString()
+            {
+                return Name;
+            }
         }
 
         private class StoredEntityKind<T> : StoredEntityKind

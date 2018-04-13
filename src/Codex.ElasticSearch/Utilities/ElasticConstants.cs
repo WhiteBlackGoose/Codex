@@ -11,6 +11,6 @@ namespace Codex.ElasticSearch.Utilities
         /// <summary>
         /// Max size of batches in bytes
         /// </summary>
-        public const int BatchSizeBytes = (10 << 20);
+        public const int BatchSizeBytes = (1 << 20);
     }
 }
