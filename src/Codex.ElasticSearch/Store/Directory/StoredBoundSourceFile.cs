@@ -58,25 +58,7 @@ namespace Codex.ElasticSearch.Store
 
             this.BoundSourceFile.SourceFile.Content = null;
 
-            SourceFileContentLines = new List<string>();
-
-            int startIndex = 0;
-            while (true)
-            {
-                var newLineIndex = content.IndexOf('\n', startIndex);
-                if (newLineIndex < 0)
-                {
-                    if (startIndex < content.Length)
-                    {
-                        SourceFileContentLines.Add(content.Substring(startIndex));
-                    }
-
-                    break;
-                }
-
-                SourceFileContentLines.Add(content.Substring(startIndex, newLineIndex - startIndex + 1));
-                startIndex = newLineIndex + 1;
-            }
+            SourceFileContentLines = new List<string>(content.GetLines(includeLineBreak: true));
 
             Debug.Assert(SourceFileContentLines.Sum(l => l.Length) == content.Length);
         }
@@ -92,6 +74,8 @@ namespace Codex.ElasticSearch.Store
             {
                 if (SourceFileContentLines != null && SourceFileContentLines.Count != 0)
                 {
+                    ResplitLines();
+
                     var lineSpans = new List<SymbolSpan>();
                     var lineSpanStart = 0;
                     for (int i = 0; i < SourceFileContentLines.Count; i++)
@@ -144,5 +128,10 @@ namespace Codex.ElasticSearch.Store
             }
         }
 
+        private void ResplitLines()
+        {
+            SourceFileContentLines = string.Join(string.Empty, SourceFileContentLines)
+                                    .GetLines(includeLineBreak: true).ToList();
+        }
     }
 }

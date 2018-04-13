@@ -101,6 +101,7 @@ namespace Codex.Application
                         { "l|logDirectory", "Optional. Path to log directory", n => logDirectory = n },
                         { "u", "Updates the analysis data (in place).", n => update = n != null },
                         { "d=", "The directory containing analysis data to load.", n => saveDirectory = n },
+                        { "test", "Indicates that save should use test mode which disables optimization.", n => test = n != null },
                     }
                 )
             },
@@ -403,7 +404,7 @@ namespace Codex.Application
                 }
                 else
                 {
-                    store = new DirectoryCodexStore(saveDirectory) { Clean = false };
+                    store = new DirectoryCodexStore(saveDirectory) { Clean = false, DisableOptimization = test };
                 }
 
                 using (StreamWriter writer = OpenLogWriter())
