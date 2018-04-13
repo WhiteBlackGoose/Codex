@@ -4,6 +4,7 @@ using Codex.Utilities;
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
 
@@ -33,14 +34,17 @@ namespace Codex.ElasticSearch
 
         private readonly ElasticSearchService service;
         private readonly ElasticSearchStore store;
+        private readonly SemaphoreSlim batchSemaphore;
 
         private ElasticSearchBatch currentBatch;
+        private AtomicBool backgroundDequeueReservation = new AtomicBool();
 
         public ElasticSearchBatcher(ElasticSearchStore store, string commitFilterName, string repositoryFilterName, string cumulativeCommitFilterName)
         {
             Debug.Assert(store.Initialized, "Store must be initialized");
 
             this.store = store;
+            batchSemaphore = new SemaphoreSlim(store.Configuration.MaxBatchConcurrency);
             service = store.Service;
             currentBatch = new ElasticSearchBatch(this);
 
@@ -83,8 +87,24 @@ namespace Codex.ElasticSearch
         {
             if (batch.TryReserveExecute())
             {
-                currentBatch = new ElasticSearchBatch(this);
-                await service.UseClient(batch.ExecuteAsync);
+                using (await batchSemaphore.AcquireAsync())
+                {
+                    currentBatch = new ElasticSearchBatch(this);
+                    await service.UseClient(batch.ExecuteAsync);
+                }
+
+                if (backgroundDequeueReservation.TrySet(true))
+                {
+                    while (backgroundTasks.TryPeek(out var dequeuedTask))
+                    {
+                        if (dequeuedTask.IsCompleted)
+                        {
+                            backgroundTasks.TryDequeue(out dequeuedTask);
+                        }
+                    }
+
+                    backgroundDequeueReservation.TrySet(false);
+                }
             }
 
             return None.Value;
