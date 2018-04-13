@@ -398,10 +398,10 @@ namespace Codex.Application
         private static void Load()
         {
             using (StreamWriter writer = OpenLogWriter())
+            using (Logger logger = new MultiLogger(
+                new ConsoleLogger(),
+                new TextLogger(TextWriter.Synchronized(writer))))
             {
-                Logger logger = new MultiLogger(
-                    new ConsoleLogger(),
-                    new TextLogger(TextWriter.Synchronized(writer)));
                 if (scan)
                 {
                     var clearIndicesBeforeUse = reset;
@@ -499,11 +499,10 @@ namespace Codex.Application
             }
 
             using (StreamWriter writer = OpenLogWriter())
+            using (Logger logger = new MultiLogger(
+                new ConsoleLogger(),
+                new TextLogger(TextWriter.Synchronized(writer))))
             {
-                Logger logger = new MultiLogger(
-                    new ConsoleLogger(),
-                    new TextLogger(TextWriter.Synchronized(writer)));
-
                 FileSystem fileSystem = new CachingFileSystem(
                     new UnionFileSystem(file.Union(Enumerable.Repeat(solutionPath, String.IsNullOrEmpty(solutionPath) ? 0 : 1)),
                         new RootFileSystem(rootDirectory,

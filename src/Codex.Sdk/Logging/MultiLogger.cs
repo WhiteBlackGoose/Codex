@@ -39,5 +39,13 @@ namespace Codex.Logging
                 logger.LogMessage(message, kind);
             }
         }
+
+        public override void Dispose()
+        {
+            foreach (var logger in loggers)
+            {
+                logger.Dispose();
+            }
+        }
     }
 }

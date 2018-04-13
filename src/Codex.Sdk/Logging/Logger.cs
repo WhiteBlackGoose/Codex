@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Codex.Logging
 {
-    public class Logger
+    public class Logger : IDisposable
     {
         public static readonly Logger Null = new Logger();
 
@@ -30,6 +30,10 @@ namespace Codex.Logging
         public void WriteLine(string message)
         {
             LogMessage(message);
+        }
+
+        public virtual void Dispose()
+        {
         }
     }
 
