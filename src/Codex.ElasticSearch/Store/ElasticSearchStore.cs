@@ -135,6 +135,8 @@ namespace Codex.ElasticSearch
         /// </summary>
         public bool CreateIndices = true;
 
+        public int MaxBatchConcurrency = 32;
+
         public bool UseStoredFilters = false;
 
         public bool ClearIndicesBeforeUse = true;
