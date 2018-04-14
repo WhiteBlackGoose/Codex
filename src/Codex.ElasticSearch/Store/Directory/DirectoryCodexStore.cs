@@ -75,7 +75,7 @@ namespace Codex.ElasticSearch.Store
             foreach (var kind in StoredEntityKind.Kinds)
             {
                 // TODO: Do we even need concurrency here?
-                //tasks.Add(Task.Run(() =>
+                tasks.Add(Task.Run(() =>
                 {
                     var kindDirectoryPath = Path.Combine(DirectoryPath, kind.Name);
                     logger.LogMessage($"Reading {kind} infos from {kindDirectoryPath}");
@@ -90,7 +90,7 @@ namespace Codex.ElasticSearch.Store
                         });
                     }
                 }
-                //));
+                ));
             }
 
             await Task.WhenAll(tasks);
@@ -99,14 +99,14 @@ namespace Codex.ElasticSearch.Store
             tasks.Clear();
             for (int i = 0; i < Math.Min(Environment.ProcessorCount, 32); i++)
             {
-                //tasks.Add(Task.Run(async () =>
+                tasks.Add(Task.Run(async () =>
                 {
                     while (actionQueue.TryDequeue(out var taskFactory))
                     {
                         await taskFactory();
                     }
                 }
-                //));
+                ));
             }
 
             await Task.WhenAll(tasks);

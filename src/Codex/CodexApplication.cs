@@ -5,11 +5,13 @@ using Codex.Analysis.Managed;
 using Codex.Analysis.Projects;
 using Codex.Analysis.Xml;
 using Codex.ElasticSearch;
+using Codex.ElasticSearch.Legacy.Bridge;
 using Codex.ElasticSearch.Store;
 using Codex.Import;
 using Codex.Logging;
 using Codex.ObjectModel;
 using Codex.Sdk.Search;
+using Codex.Utilities;
 using Mono.Options;
 using System;
 using System.Collections.Generic;
@@ -39,6 +41,7 @@ namespace Codex.Application
         static ICodexStore store = Placeholder.Value<ICodexStore>("Create store (FileSystem | Elasticsearch)");
         static ElasticSearchService service;
         static bool reset = false;
+        static bool newBackend = false;
         static bool scan = false;
         static bool test = false;
         static bool projectMode = false;
@@ -57,7 +60,7 @@ namespace Codex.Application
                         { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
                         { "save=", "Saves the analysis information to the given directory.", n => saveDirectory = n },
                         { "test", "Indicates that save should use test mode which disables optimization.", n => test = n != null },
-                        { "n|name=", "Name of the repository.", n => repoName = AnalysisServices.GetSafeRepoName(n ?? string.Empty) },
+                        { "n|name=", "Name of the repository.", n => repoName = StoreUtilities.GetSafeRepoName(n ?? string.Empty) },
                         { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
                         { "repoUrl=", "The URL of the repository being indexed", n => repoUrl = n },
                         { "bld|binLogSearchDirectory=", "Adds a bin log file or directory to search for binlog files", n => binlogSearchPaths.Add(n) },
@@ -99,6 +102,7 @@ namespace Codex.Application
                     new Action(() => Load()),
                     new OptionSet
                     {
+                        { "newBackend", "Use new backend with stored filters Not supported.", n => newBackend = n != null },
                         { "scan", "Treats every directory under data directory as a separate store to upload.", n => scan = n != null },
                         { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
                         { "l|logDirectory", "Optional. Path to log directory", n => logDirectory = n },
@@ -411,6 +415,8 @@ namespace Codex.Application
                     {
                         logger.LogMessage($"[{i} of {directories.Length}] Loading {directory}");
                         LoadCore(logger, directory, clearIndicesBeforeUse);
+
+                        // Only clear indices on first use
                         clearIndicesBeforeUse = false;
                         i++;
                     }
@@ -435,11 +441,22 @@ namespace Codex.Application
 
                 if (!update)
                 {
-                    InitService();
-                    store = await service.CreateStoreAsync(new ElasticSearchStoreConfiguration()
+                    if (newBackend)
                     {
-                        ClearIndicesBeforeUse = clearIndicesBeforeUse
-                    });
+                        InitService();
+                        store = await service.CreateStoreAsync(new ElasticSearchStoreConfiguration()
+                        {
+                            Prefix = "test.",
+                            ClearIndicesBeforeUse = reset
+                        });
+                    }
+                    else
+                    {
+                        store = new LegacyElasticSearchStore(new LegacyElasticSearchStoreConfiguration()
+                        {
+                            Endpoint = elasticSearchServer
+                        });
+                    }
                 }
                 else
                 {
@@ -473,7 +490,7 @@ namespace Codex.Application
 
         static async Task RunRepoImporter()
         {
-            var targetIndexName = AnalysisServices.GetTargetIndexName(repoName);
+            var targetIndexName = StoreUtilities.GetTargetIndexName(repoName);
             string[] file = new string[0];
 
             if (!string.IsNullOrEmpty(solutionPath))

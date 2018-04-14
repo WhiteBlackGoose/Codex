@@ -1,0 +1,1 @@
+﻿This project contains the old implementation of ElasticSearch storage. This is intended as a shim until new functionality is available.

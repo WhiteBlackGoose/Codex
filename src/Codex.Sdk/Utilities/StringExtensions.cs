@@ -16,6 +16,21 @@ namespace Codex.Utilities
                 && extensions.Any(e => actualExtension.Equals(e, StringComparison.OrdinalIgnoreCase));
         }
 
+        public static bool ContainsIgnoreCase(this string s, string value)
+        {
+            return s.IndexOf(value, StringComparison.OrdinalIgnoreCase) > -1;
+        }
+
+        public static string TrimEndIgnoreCase(this string s, string value)
+        {
+            if (s.EndsWith(value, StringComparison.OrdinalIgnoreCase))
+            {
+                return s.Substring(0, s.Length - value.Length);
+            }
+
+            return s;
+        }
+
         public static bool IsArgument(this string argument, string argumentName)
         {
             if (string.IsNullOrWhiteSpace(argument))

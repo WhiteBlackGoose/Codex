@@ -93,6 +93,10 @@
       <Project>{2016a682-4d9f-4a65-a03d-d65ff2948269}</Project>
       <Name>Codex.Analysis</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Codex.ElasticSearch.Legacy\Codex.ElasticSearch.Legacy.csproj">
+      <Project>{7001F919-92BB-46DB-9647-66D492EF0E86}</Project>
+      <Name>Codex.ElasticSearch.Legacy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Codex.ElasticSearch\Codex.ElasticSearch.csproj">
       <Project>{4573f8bc-6b87-4526-a815-42f473452f8c}</Project>
       <Name>Codex.ElasticSearch</Name>
