@@ -15,6 +15,7 @@ using Codex.Import;
 using Codex.Logging;
 using Codex.ObjectModel;
 using Codex.Storage;
+using Microsoft.Build.Locator;
 using Mono.Options;
 
 namespace Codex.Application
@@ -66,6 +67,8 @@ namespace Codex.Application
             if (string.IsNullOrEmpty(rootDirectory)) throw new ArgumentException("Solution path is missing. Use -p to provide it.");
             if (string.IsNullOrEmpty(repoName)) throw new ArgumentException("Repository name is missing. Use -n to provide it.");
             if (string.IsNullOrEmpty(elasticSearchServer)) throw new ArgumentException("Elastic Search server URL is missing. Use -es to provide it.");
+
+            MSBuildLocator.RegisterDefaults();
 
             try
             {
