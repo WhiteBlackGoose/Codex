@@ -254,7 +254,7 @@ namespace WebUI.Controllers
                     if (sourceFile != null)
                     {
                         var referringSpan = definitions.Entries[0].ReferringSpan;
-                        var position = new LineSpan()
+                        var position = new Codex.Web.Monaco.Models.LineSpan()
                         {
                             position = referringSpan.Start,
                             length = referringSpan.Length,
@@ -330,7 +330,7 @@ namespace WebUI.Controllers
                     {
                         projectId = definitionReference.ReferringProjectId,
                         filename = definitionReference.File,
-                        span = new LineSpan()
+                        span = new Codex.Web.Monaco.Models.LineSpan()
                         {
                             position = referringSpan.Start,
                             length = referringSpan.Length,

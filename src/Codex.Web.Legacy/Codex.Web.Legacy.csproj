@@ -79,8 +79,10 @@
     <Compile Include="Rendering\ProjectExplorerRenderer.cs" />
     <Compile Include="Rendering\Responses.cs" />
     <Compile Include="Rendering\SourceFileRenderer.cs" />
+    <Compile Include="Util\LegacyTypes.cs" />
     <Compile Include="Util\Requests.cs" />
     <Compile Include="Util\ScopeHelpers.cs" />
+    <Compile Include="Util\SearchResultSorter.cs" />
     <Compile Include="Util\StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
