@@ -376,7 +376,6 @@
           "isImplicitlyDeclared": true,
           "kind": "File",
           "projectId": "CodexTestCSharpLibrary",
-          "referenceKind": "Definition",
           "shortName": "CodexTestCSharpLibrary.xml"
         }
       },
@@ -387,7 +386,6 @@
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestCSharpLibrary",
-          "referenceKind": "Definition",
           "shortName": "C1F13CA56A53698E4D0977CDF4F34D324C9E2D8B"
         }
       }
@@ -466,10 +464,10 @@
     "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceSymbols\\CodexTestCSharpLibrary.xml",
     "repositoryName": "codextest",
     "sourceFile": {
-      "content": "<ReferenceSymbols Count=\"3\">\r\n  <Namespace Name=\"CodexTestCSharpLibrary\">\r\n    <Symbol Name=\"ITypeWithParams˂T0, T1˃\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"IXedoc\" ReferenceCount=\"2\" />\r\n    <Symbol Name=\"XedocImpl\" ReferenceCount=\"0\" />\r\n  </Namespace>\r\n</ReferenceSymbols>",
       "info": {
         "language": "xml",
         "lines": 7,
+        "projectId": "CodexTestCSharpLibrary",
         "projectRelativePath": "[Metadata]\\ReferenceSymbols\\CodexTestCSharpLibrary.xml",
         "properties": {
           "Checksum.Sha1": "C1F13CA56A53698E4D0977CDF4F34D324C9E2D8B"
@@ -478,5 +476,14 @@
         "repositoryName": "codextest"
       }
     }
-  }
+  },
+  "sourceFileContentLines": [
+    "<ReferenceSymbols Count=\"3\">\r\n",
+    "  <Namespace Name=\"CodexTestCSharpLibrary\">\r\n",
+    "    <Symbol Name=\"ITypeWithParams˂T0, T1˃\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"IXedoc\" ReferenceCount=\"2\" />\r\n",
+    "    <Symbol Name=\"XedocImpl\" ReferenceCount=\"0\" />\r\n",
+    "  </Namespace>\r\n",
+    "</ReferenceSymbols>"
+  ]
 }

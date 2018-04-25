@@ -2524,7 +2524,6 @@
           "isImplicitlyDeclared": true,
           "kind": "File",
           "projectId": "CodexTestCSharpLibrary",
-          "referenceKind": "Definition",
           "shortName": "mscorlib.xml"
         }
       },
@@ -2535,7 +2534,6 @@
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestCSharpLibrary",
-          "referenceKind": "Definition",
           "shortName": "3DEC235A815B4877F048F77C14997EC5479542A1"
         }
       }
@@ -2964,10 +2962,10 @@
     "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceSymbols\\mscorlib.xml",
     "repositoryName": "codextest",
     "sourceFile": {
-      "content": "<ReferenceSymbols Count=\"28\">\r\n  <Namespace Name=\"System.Reflection\">\r\n    <Symbol Name=\"AssemblyCompanyAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyCompanyAttribute.AssemblyCompanyAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyConfigurationAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyConfigurationAttribute.AssemblyConfigurationAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyCopyrightAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyCopyrightAttribute.AssemblyCopyrightAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyCultureAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyCultureAttribute.AssemblyCultureAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyDescriptionAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyDescriptionAttribute.AssemblyDescriptionAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyFileVersionAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyFileVersionAttribute.AssemblyFileVersionAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyProductAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyProductAttribute.AssemblyProductAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyTitleAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyTitleAttribute.AssemblyTitleAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyTrademarkAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyTrademarkAttribute.AssemblyTrademarkAttribute(System.String)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyVersionAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"AssemblyVersionAttribute.AssemblyVersionAttribute(System.String)\" ReferenceCount=\"1\" />\r\n  </Namespace>\r\n  <Namespace Name=\"System.Runtime.InteropServices\">\r\n    <Symbol Name=\"ComVisibleAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"ComVisibleAttribute.ComVisibleAttribute(System.Boolean)\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"GuidAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"GuidAttribute.GuidAttribute(System.String)\" ReferenceCount=\"1\" />\r\n  </Namespace>\r\n  <Namespace Name=\"System.Runtime.Versioning\">\r\n    <Symbol Name=\"TargetFrameworkAttribute\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"TargetFrameworkAttribute.FrameworkDisplayName\" ReferenceCount=\"1\" />\r\n    <Symbol Name=\"TargetFrameworkAttribute.TargetFrameworkAttribute(System.String)\" ReferenceCount=\"1\" />\r\n  </Namespace>\r\n  <Namespace Name=\"System\">\r\n    <Symbol Name=\"String\" ReferenceCount=\"1\" />\r\n  </Namespace>\r\n</ReferenceSymbols>",
       "info": {
         "language": "xml",
         "lines": 38,
+        "projectId": "CodexTestCSharpLibrary",
         "projectRelativePath": "[Metadata]\\ReferenceSymbols\\mscorlib.xml",
         "properties": {
           "Checksum.Sha1": "3DEC235A815B4877F048F77C14997EC5479542A1"
@@ -2976,5 +2974,45 @@
         "repositoryName": "codextest"
       }
     }
-  }
+  },
+  "sourceFileContentLines": [
+    "<ReferenceSymbols Count=\"28\">\r\n",
+    "  <Namespace Name=\"System.Reflection\">\r\n",
+    "    <Symbol Name=\"AssemblyCompanyAttribute\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyCompanyAttribute.AssemblyCompanyAttribute(System.String)\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyConfigurationAttribute\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyConfigurationAttribute.AssemblyConfigurationAttribute(System.String)\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyCopyrightAttribute\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyCopyrightAttribute.AssemblyCopyrightAttribute(System.String)\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyCultureAttribute\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyCultureAttribute.AssemblyCultureAttribute(System.String)\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyDescriptionAttribute\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyDescriptionAttribute.AssemblyDescriptionAttribute(System.String)\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyFileVersionAttribute\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyFileVersionAttribute.AssemblyFileVersionAttribute(System.String)\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyProductAttribute\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyProductAttribute.AssemblyProductAttribute(System.String)\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyTitleAttribute\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyTitleAttribute.AssemblyTitleAttribute(System.String)\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyTrademarkAttribute\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyTrademarkAttribute.AssemblyTrademarkAttribute(System.String)\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyVersionAttribute\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"AssemblyVersionAttribute.AssemblyVersionAttribute(System.String)\" ReferenceCount=\"1\" />\r\n",
+    "  </Namespace>\r\n",
+    "  <Namespace Name=\"System.Runtime.InteropServices\">\r\n",
+    "    <Symbol Name=\"ComVisibleAttribute\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"ComVisibleAttribute.ComVisibleAttribute(System.Boolean)\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"GuidAttribute\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"GuidAttribute.GuidAttribute(System.String)\" ReferenceCount=\"1\" />\r\n",
+    "  </Namespace>\r\n",
+    "  <Namespace Name=\"System.Runtime.Versioning\">\r\n",
+    "    <Symbol Name=\"TargetFrameworkAttribute\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"TargetFrameworkAttribute.FrameworkDisplayName\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"TargetFrameworkAttribute.TargetFrameworkAttribute(System.String)\" ReferenceCount=\"1\" />\r\n",
+    "  </Namespace>\r\n",
+    "  <Namespace Name=\"System\">\r\n",
+    "    <Symbol Name=\"String\" ReferenceCount=\"1\" />\r\n",
+    "  </Namespace>\r\n",
+    "</ReferenceSymbols>"
+  ]
 }

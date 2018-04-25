@@ -61,6 +61,7 @@ namespace Codex.ObjectModel
         }
     }
 
+    [ExcludedSerializationProperty(nameof(ReferenceKind))]
     partial class DefinitionSymbol
     {
         protected override void Initialize()
@@ -77,12 +78,6 @@ namespace Codex.ObjectModel
         public override string ToString()
         {
             return DisplayName;
-        }
-
-        protected override void OnSerializingCore()
-        {
-            //ReferenceKind = nameof(ObjectModel.ReferenceKind.Definition);
-            base.OnSerializingCore();
         }
 
         protected override void OnDeserializedCore()

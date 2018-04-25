@@ -1126,7 +1126,6 @@
           "isImplicitlyDeclared": true,
           "kind": "File",
           "projectId": "CodexTestCSharpLibrary",
-          "referenceKind": "Definition",
           "shortName": "ReferenceProjects.xml"
         }
       },
@@ -1137,7 +1136,6 @@
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestCSharpLibrary",
-          "referenceKind": "Definition",
           "shortName": "2786C7896C1257F8A4A841278FEA633C2B67208C"
         }
       }
@@ -1202,10 +1200,10 @@
     "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceProjects.xml",
     "repositoryName": "codextest",
     "sourceFile": {
-      "content": "<ReferenceProjects>\r\n  <Project ReferenceCount=\"3\" Name=\"CodexTestCSharpLibrary\" FullName=\"CodexTestCSharpLibrary\" />\r\n  <Project ReferenceCount=\"0\" Name=\"Microsoft.CSharp\" FullName=\"Microsoft.CSharp, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\" />\r\n  <Project ReferenceCount=\"28\" Name=\"mscorlib\" FullName=\"mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n  <Project ReferenceCount=\"0\" Name=\"System\" FullName=\"System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n  <Project ReferenceCount=\"0\" Name=\"System.Core\" FullName=\"System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n  <Project ReferenceCount=\"0\" Name=\"System.Data\" FullName=\"System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n  <Project ReferenceCount=\"0\" Name=\"System.Data.DataSetExtensions\" FullName=\"System.Data.DataSetExtensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n  <Project ReferenceCount=\"0\" Name=\"System.Net.Http\" FullName=\"System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\" />\r\n  <Project ReferenceCount=\"0\" Name=\"System.Xml\" FullName=\"System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n  <Project ReferenceCount=\"0\" Name=\"System.Xml.Linq\" FullName=\"System.Xml.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n</ReferenceProjects>",
       "info": {
         "language": "xml",
         "lines": 12,
+        "projectId": "CodexTestCSharpLibrary",
         "projectRelativePath": "[Metadata]\\ReferenceProjects.xml",
         "properties": {
           "Checksum.Sha1": "2786C7896C1257F8A4A841278FEA633C2B67208C"
@@ -1214,5 +1212,19 @@
         "repositoryName": "codextest"
       }
     }
-  }
+  },
+  "sourceFileContentLines": [
+    "<ReferenceProjects>\r\n",
+    "  <Project ReferenceCount=\"3\" Name=\"CodexTestCSharpLibrary\" FullName=\"CodexTestCSharpLibrary\" />\r\n",
+    "  <Project ReferenceCount=\"0\" Name=\"Microsoft.CSharp\" FullName=\"Microsoft.CSharp, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\" />\r\n",
+    "  <Project ReferenceCount=\"28\" Name=\"mscorlib\" FullName=\"mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n",
+    "  <Project ReferenceCount=\"0\" Name=\"System\" FullName=\"System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n",
+    "  <Project ReferenceCount=\"0\" Name=\"System.Core\" FullName=\"System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n",
+    "  <Project ReferenceCount=\"0\" Name=\"System.Data\" FullName=\"System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n",
+    "  <Project ReferenceCount=\"0\" Name=\"System.Data.DataSetExtensions\" FullName=\"System.Data.DataSetExtensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n",
+    "  <Project ReferenceCount=\"0\" Name=\"System.Net.Http\" FullName=\"System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\" />\r\n",
+    "  <Project ReferenceCount=\"0\" Name=\"System.Xml\" FullName=\"System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n",
+    "  <Project ReferenceCount=\"0\" Name=\"System.Xml.Linq\" FullName=\"System.Xml.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n",
+    "</ReferenceProjects>"
+  ]
 }

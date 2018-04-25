@@ -216,7 +216,6 @@
           "isImplicitlyDeclared": true,
           "kind": "File",
           "projectId": "CodexTestCSharpLibrary",
-          "referenceKind": "Definition",
           "shortName": "Cases.cs"
         }
       },
@@ -227,7 +226,6 @@
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestCSharpLibrary",
-          "referenceKind": "Definition",
           "shortName": "A11C83D26BF1B95E4426AFF5CBDD2E8BA90DA001"
         }
       },
@@ -241,7 +239,6 @@
           "id": "qjxntd4ra1hl",
           "kind": "Interface",
           "projectId": "CodexTestCSharpLibrary",
-          "referenceKind": "Definition",
           "shortName": "IXedoc"
         },
         "length": 6,
@@ -257,7 +254,6 @@
           "id": "fdzoyyrcywtf",
           "kind": "Interface",
           "projectId": "CodexTestCSharpLibrary",
-          "referenceKind": "Definition",
           "shortName": "ITypeWithParams<T0, T1>"
         },
         "length": 15,
@@ -273,7 +269,6 @@
           "id": "qrlrsnmhwayc",
           "kind": "Interface",
           "projectId": "CodexTestCSharpLibrary",
-          "referenceKind": "Definition",
           "shortName": "XedocImpl"
         },
         "length": 9,
@@ -413,10 +408,10 @@
     "repoRelativePath": "CodexTestCSharpLibrary\\Cases.cs",
     "repositoryName": "codextest",
     "sourceFile": {
-      "content": "using System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing System.Text;\r\nusing System.Threading.Tasks;\r\n\r\nnamespace CodexTestCSharpLibrary\r\n{\r\n    public interface IXedoc\r\n    {\r\n\r\n    }\r\n\r\n    public interface ITypeWithParams<T0, T1>\r\n    {\r\n    }\r\n\r\n    // Test interface implementations only applies to actual base types and not those which appear as type parameters \r\n    public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>\r\n    {\r\n\r\n    }\r\n}\r\n",
       "info": {
         "language": "C#",
         "lines": 24,
+        "projectId": "CodexTestCSharpLibrary",
         "projectRelativePath": "Cases.cs",
         "properties": {
           "Checksum.Sha1": "A11C83D26BF1B95E4426AFF5CBDD2E8BA90DA001"
@@ -426,5 +421,31 @@
         "size": 482
       }
     }
-  }
+  },
+  "sourceFileContentLines": [
+    "using System;\r\n",
+    "using System.Collections.Generic;\r\n",
+    "using System.Linq;\r\n",
+    "using System.Text;\r\n",
+    "using System.Threading.Tasks;\r\n",
+    "\r\n",
+    "namespace CodexTestCSharpLibrary\r\n",
+    "{\r\n",
+    "    public interface IXedoc\r\n",
+    "    {\r\n",
+    "\r\n",
+    "    }\r\n",
+    "\r\n",
+    "    public interface ITypeWithParams<T0, T1>\r\n",
+    "    {\r\n",
+    "    }\r\n",
+    "\r\n",
+    "    // Test interface implementations only applies to actual base types and not those which appear as type parameters \r\n",
+    "    public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>\r\n",
+    "    {\r\n",
+    "\r\n",
+    "    }\r\n",
+    "}\r\n",
+    ""
+  ]
 }

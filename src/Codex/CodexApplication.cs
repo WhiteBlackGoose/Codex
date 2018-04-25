@@ -41,6 +41,7 @@ namespace Codex.Application
         static ICodexStore store = Placeholder.Value<ICodexStore>("Create store (FileSystem | Elasticsearch)");
         static ElasticSearchService service;
         static bool reset = false;
+        static bool clean = false;
         static bool newBackend = false;
         static bool scan = false;
         static bool test = false;
@@ -60,6 +61,7 @@ namespace Codex.Application
                         { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
                         { "save=", "Saves the analysis information to the given directory.", n => saveDirectory = n },
                         { "test", "Indicates that save should use test mode which disables optimization.", n => test = n != null },
+                        { "clean", "Reset target index directory when using -save option.", n => clean = n != null },
                         { "n|name=", "Name of the repository.", n => repoName = StoreUtilities.GetSafeRepoName(n ?? string.Empty) },
                         { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
                         { "repoUrl=", "The URL of the repository being indexed", n => repoUrl = n },
@@ -353,7 +355,7 @@ namespace Codex.Application
                     logDirectory = Path.Combine(saveDirectory, "logs");
                 }
 
-                store = new DirectoryCodexStore(saveDirectory) { DisableOptimization = test };
+                store = new DirectoryCodexStore(saveDirectory) { DisableOptimization = test, Clean = clean };
             }
 
             try

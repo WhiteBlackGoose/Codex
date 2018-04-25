@@ -55,6 +55,21 @@ namespace Codex
     }
 
     /// <summary>
+    /// Excludes a property from serialization. Mainly used for excluding properties from serialization
+    /// which have an inferred value such as (ReferenceKind on DefinitionSymbol is inferred as Definition)
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = true)]
+    public sealed class ExcludedSerializationPropertyAttribute : Attribute
+    {
+        public readonly string PropertyName;
+
+        public ExcludedSerializationPropertyAttribute(string propertyName)
+        {
+            PropertyName = propertyName;
+        }
+    }
+
+    /// <summary>
     /// Indicates an attached property which is not intrinsic to the parent object and should be
     /// excluded when computing the <see cref="ISearchEntity.EntityContentId"/>
     /// </summary>

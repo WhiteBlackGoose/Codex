@@ -316,6 +316,8 @@ namespace Codex.Serialization
         protected override List<MemberInfo> GetSerializableMembers(Type objectType)
         {
             var members = base.GetSerializableMembers(objectType);
+            var excludedSerializationProperties = new HashSet<string>(objectType.GetCustomAttributes<ExcludedSerializationPropertyAttribute>()
+                .Select(attr => attr.PropertyName));
 
             var serializationInterfaceAttribute = objectType.GetAttribute<SerializationInterfaceAttribute>();
             if (serializationInterfaceAttribute != null)
@@ -334,6 +336,11 @@ namespace Codex.Serialization
 
                 members.RemoveAll(m =>
                 {
+                    if (excludedSerializationProperties.Contains(m.Name))
+                    {
+                        return true;
+                    }
+
                     if (interfaceMemberMap.TryGetValue(m.Name, out var interfaceProperty))
                     {
                         return (interfaceProperty.GetAllowedStages() & stage) == 0;

@@ -38,7 +38,6 @@ namespace Codex.ElasticSearch.Store
                     definition.Kind = RemoveDuplicate(definition.Kind, ref kind);
                     definition.ContainerQualifiedName = RemoveDuplicate(definition.ContainerQualifiedName, ref containerQualifiedName);
                     definition.Glyph = RemoveDuplicate(definition.Glyph, ref glyph);
-                    definition.ReferenceKind = null;
                 }
 
                 CompressedClassifications = ClassificationListModel.CreateFrom(BoundSourceFile.Classifications);

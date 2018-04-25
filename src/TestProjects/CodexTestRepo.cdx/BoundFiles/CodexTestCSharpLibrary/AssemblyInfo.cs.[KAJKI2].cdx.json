@@ -316,7 +316,6 @@
           "isImplicitlyDeclared": true,
           "kind": "File",
           "projectId": "CodexTestCSharpLibrary",
-          "referenceKind": "Definition",
           "shortName": "AssemblyInfo.cs"
         }
       },
@@ -327,7 +326,6 @@
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestCSharpLibrary",
-          "referenceKind": "Definition",
           "shortName": "BAA9D4B4B4C30D2D7DEECFE82B254A4CA08102A5"
         }
       }
@@ -686,10 +684,10 @@
     "repoRelativePath": "CodexTestCSharpLibrary\\Properties\\AssemblyInfo.cs",
     "repositoryName": "codextest",
     "sourceFile": {
-      "content": "using System.Reflection;\r\nusing System.Runtime.CompilerServices;\r\nusing System.Runtime.InteropServices;\r\n\r\n// General Information about an assembly is controlled through the following \r\n// set of attributes. Change these attribute values to modify the information\r\n// associated with an assembly.\r\n[assembly: AssemblyTitle(\"CodexTestCSharpLibrary\")]\r\n[assembly: AssemblyDescription(\"\")]\r\n[assembly: AssemblyConfiguration(\"\")]\r\n[assembly: AssemblyCompany(\"\")]\r\n[assembly: AssemblyProduct(\"CodexTestCSharpLibrary\")]\r\n[assembly: AssemblyCopyright(\"Copyright ©  2017\")]\r\n[assembly: AssemblyTrademark(\"\")]\r\n[assembly: AssemblyCulture(\"\")]\r\n\r\n// Setting ComVisible to false makes the types in this assembly not visible \r\n// to COM components.  If you need to access a type in this assembly from \r\n// COM, set the ComVisible attribute to true on that type.\r\n[assembly: ComVisible(false)]\r\n\r\n// The following GUID is for the ID of the typelib if this project is exposed to COM\r\n[assembly: Guid(\"f16a9de8-193f-4d07-9d86-1dd2fb087a96\")]\r\n\r\n// Version information for an assembly consists of the following four values:\r\n//\r\n//      Major Version\r\n//      Minor Version \r\n//      Build Number\r\n//      Revision\r\n//\r\n// You can specify all the values or you can default the Build and Revision Numbers \r\n// by using the '*' as shown below:\r\n// [assembly: AssemblyVersion(\"1.0.*\")]\r\n[assembly: AssemblyVersion(\"1.0.0.0\")]\r\n[assembly: AssemblyFileVersion(\"1.0.0.0\")]\r\n",
       "info": {
         "language": "C#",
         "lines": 37,
+        "projectId": "CodexTestCSharpLibrary",
         "projectRelativePath": "Properties\\AssemblyInfo.cs",
         "properties": {
           "Checksum.Sha1": "BAA9D4B4B4C30D2D7DEECFE82B254A4CA08102A5"
@@ -699,5 +697,44 @@
         "size": 1452
       }
     }
-  }
+  },
+  "sourceFileContentLines": [
+    "using System.Reflection;\r\n",
+    "using System.Runtime.CompilerServices;\r\n",
+    "using System.Runtime.InteropServices;\r\n",
+    "\r\n",
+    "// General Information about an assembly is controlled through the following \r\n",
+    "// set of attributes. Change these attribute values to modify the information\r\n",
+    "// associated with an assembly.\r\n",
+    "[assembly: AssemblyTitle(\"CodexTestCSharpLibrary\")]\r\n",
+    "[assembly: AssemblyDescription(\"\")]\r\n",
+    "[assembly: AssemblyConfiguration(\"\")]\r\n",
+    "[assembly: AssemblyCompany(\"\")]\r\n",
+    "[assembly: AssemblyProduct(\"CodexTestCSharpLibrary\")]\r\n",
+    "[assembly: AssemblyCopyright(\"Copyright ©  2017\")]\r\n",
+    "[assembly: AssemblyTrademark(\"\")]\r\n",
+    "[assembly: AssemblyCulture(\"\")]\r\n",
+    "\r\n",
+    "// Setting ComVisible to false makes the types in this assembly not visible \r\n",
+    "// to COM components.  If you need to access a type in this assembly from \r\n",
+    "// COM, set the ComVisible attribute to true on that type.\r\n",
+    "[assembly: ComVisible(false)]\r\n",
+    "\r\n",
+    "// The following GUID is for the ID of the typelib if this project is exposed to COM\r\n",
+    "[assembly: Guid(\"f16a9de8-193f-4d07-9d86-1dd2fb087a96\")]\r\n",
+    "\r\n",
+    "// Version information for an assembly consists of the following four values:\r\n",
+    "//\r\n",
+    "//      Major Version\r\n",
+    "//      Minor Version \r\n",
+    "//      Build Number\r\n",
+    "//      Revision\r\n",
+    "//\r\n",
+    "// You can specify all the values or you can default the Build and Revision Numbers \r\n",
+    "// by using the '*' as shown below:\r\n",
+    "// [assembly: AssemblyVersion(\"1.0.*\")]\r\n",
+    "[assembly: AssemblyVersion(\"1.0.0.0\")]\r\n",
+    "[assembly: AssemblyFileVersion(\"1.0.0.0\")]\r\n",
+    ""
+  ]
 }
