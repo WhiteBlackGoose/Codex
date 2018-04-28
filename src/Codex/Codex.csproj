@@ -19,6 +19,9 @@
   <ItemGroup>
     <PackageReference Include="ManagedEsent" Version="1.9.4" />
     <PackageReference Include="Microsoft.Build.Framework" Version="15.6.82" />
+    <PackageReference Include="Microsoft.Build.Locator">
+      <Version>1.0.13</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.6.82" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.6.82" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.6.0" />

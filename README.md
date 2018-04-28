@@ -5,7 +5,7 @@ An extensible platform for indexing and exploring inspired by Source Browser.
 
 # Getting started
 * Install [Java JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-* Download and unzip [ElasticSearch](https://www.elastic.co/downloads/elasticsearch)
+* Download and unzip [ElasticSearch 5.5.1](https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.5.1.zip)
 * Set JAVA_HOME environment variable. Run the following (change the path as needed): `set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_144`.
 * Run `.\elasticsearch.bat`
 * Open **Codex.sln**

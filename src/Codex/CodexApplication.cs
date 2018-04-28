@@ -12,6 +12,7 @@ using Codex.Logging;
 using Codex.ObjectModel;
 using Codex.Sdk.Search;
 using Codex.Utilities;
+using Microsoft.Build.Locator;
 using Mono.Options;
 using System;
 using System.Collections.Generic;
@@ -333,6 +334,18 @@ namespace Codex.Application
 
         static void Index()
         {
+            if (!disableMsbuild)
+            {
+                try
+                {
+                    MSBuildLocator.RegisterDefaults();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error registering MSBuild locator: {ex.Message}");
+                }
+            }
+
             if (String.IsNullOrEmpty(rootDirectory)) throw new ArgumentException("Root path is missing. Use -p to provide it.");
             if (String.IsNullOrEmpty(repoName)) throw new ArgumentException("Project name is missing. Use -n to provide it.");
             if (saveDirectory == null)
