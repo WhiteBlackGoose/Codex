@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Codex.Analysis.FileSystems
+namespace Codex
 {
-    public class FileSystem
+    public class FileSystem : IDisposable
     {
         public FileSystem()
         {
@@ -18,9 +18,18 @@ namespace Codex.Analysis.FileSystems
             return new string[0];
         }
 
+        public virtual IEnumerable<string> GetFiles(string relativeDirectoryPath)
+        {
+            return new string[0];
+        }
+
         public virtual Stream OpenFile(string filePath)
         {
             return Stream.Null;
+        }
+
+        public virtual void Dispose()
+        {
         }
     }
 

@@ -75,7 +75,6 @@
     <None Include="External\ExternalRepoFileAnalyzer.cs" />
     <Compile Include="FileSystems\BinaryFileSystemFilter.cs" />
     <Compile Include="FileSystems\DirectoryFilter.cs" />
-    <Compile Include="FileSystems\FileSystem.cs" />
     <Compile Include="FileSystems\FileSystemFilter.cs" />
     <Compile Include="FileSystems\FileSystemWrapper.cs" />
     <Compile Include="FileSystems\GitIgnore.cs" />

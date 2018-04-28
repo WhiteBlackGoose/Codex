@@ -25,7 +25,6 @@ namespace Codex.ElasticSearch.Store
         private readonly ConcurrentQueue<CommitFileLink> commitFiles = new ConcurrentQueue<CommitFileLink>();
 
         public readonly string DirectoryPath;
-
         private const string EntityFileExtension = ".cdx.json";
 
         // These two files should contain the same content after finalization
@@ -60,60 +59,73 @@ namespace Codex.ElasticSearch.Store
 
         public async Task ReadAsync(ICodexStore store, bool finalize = true)
         {
-            m_storeInfo = Read<RepositoryStoreInfo>(RepositoryInitializationFileName);
-
-            ConcurrentQueue<Func<Task>> actionQueue = new ConcurrentQueue<Func<Task>>();
-
-            logger.LogMessage("Reading repository information");
-            var repositoryStore = await store.CreateRepositoryStore(m_storeInfo.Repository, m_storeInfo.Commit, m_storeInfo.Branch);
-
-            logger.LogMessage($"Read repository information (repo name: {m_storeInfo.Repository.Name})");
-
-            int nextIndex = 0;
-            int count = 0;
-            List<Task> tasks = new List<Task>();
-            foreach (var kind in StoredEntityKind.Kinds)
+            FileSystem fileSystem;
+            if (Directory.Exists(DirectoryPath))
             {
-                // TODO: Do we even need concurrency here?
-                tasks.Add(Task.Run(() =>
+                fileSystem = new DirectoryFileSystem(DirectoryPath, "*" + EntityFileExtension);
+            }
+            else
+            {
+                fileSystem = new ZipFileSystem(DirectoryPath);
+            }
+
+            using (fileSystem)
+            {
+                m_storeInfo = Read<RepositoryStoreInfo>(fileSystem, RepositoryInitializationFileName);
+
+                ConcurrentQueue<Func<Task>> actionQueue = new ConcurrentQueue<Func<Task>>();
+
+                logger.LogMessage("Reading repository information");
+                var repositoryStore = await store.CreateRepositoryStore(m_storeInfo.Repository, m_storeInfo.Commit, m_storeInfo.Branch);
+
+                logger.LogMessage($"Read repository information (repo name: {m_storeInfo.Repository.Name})");
+
+                int nextIndex = 0;
+                int count = 0;
+                List<Task> tasks = new List<Task>();
+                foreach (var kind in StoredEntityKind.Kinds)
                 {
-                    var kindDirectoryPath = Path.Combine(DirectoryPath, kind.Name);
-                    logger.LogMessage($"Reading {kind} infos from {kindDirectoryPath}");
-                    foreach (var file in GetEntityFiles(kindDirectoryPath))
+                    // TODO: Do we even need concurrency here?
+                    tasks.Add(Task.Run(() =>
                     {
-                        actionQueue.Enqueue(async () =>
+                        var kindDirectoryPath = Path.Combine(DirectoryPath, kind.Name);
+                        logger.LogMessage($"Reading {kind} infos from {kindDirectoryPath}");
+                        foreach (var file in fileSystem.GetFiles(kind.Name))
                         {
-                            var i = Interlocked.Increment(ref nextIndex);
-                            logger.LogMessage($"{i}/{count}: Reading {kind} info at {file}");
-                            await kind.Add(this, file, repositoryStore);
-                            logger.LogMessage($"{i}/{count}: Added {file} to store.");
-                        });
+                            actionQueue.Enqueue(async () =>
+                            {
+                                var i = Interlocked.Increment(ref nextIndex);
+                                logger.LogMessage($"{i}/{count}: Reading {kind} info at {file}");
+                                await kind.Add(this, file, repositoryStore);
+                                logger.LogMessage($"{i}/{count}: Added {file} to store.");
+                            });
+                        }
                     }
+                    ));
                 }
-                ));
-            }
 
-            await Task.WhenAll(tasks);
+                await Task.WhenAll(tasks);
 
-            count = actionQueue.Count;
-            tasks.Clear();
-            for (int i = 0; i < Math.Min(Environment.ProcessorCount, 32); i++)
-            {
-                tasks.Add(Task.Run(async () =>
+                count = actionQueue.Count;
+                tasks.Clear();
+                for (int i = 0; i < Math.Min(Environment.ProcessorCount, 32); i++)
                 {
-                    while (actionQueue.TryDequeue(out var taskFactory))
+                    tasks.Add(Task.Run(async () =>
                     {
-                        await taskFactory();
+                        while (actionQueue.TryDequeue(out var taskFactory))
+                        {
+                            await taskFactory();
+                        }
                     }
+                    ));
                 }
-                ));
-            }
 
-            await Task.WhenAll(tasks);
+                await Task.WhenAll(tasks);
 
-            if (finalize)
-            {
-                await repositoryStore.FinalizeAsync();
+                if (finalize)
+                {
+                    await repositoryStore.FinalizeAsync();
+                }
             }
         }
 
@@ -167,10 +179,9 @@ namespace Codex.ElasticSearch.Store
             }
         }
 
-        private T Read<T>(string relativePath)
+        private T Read<T>(FileSystem fileSystem, string relativePath)
         {
-            var fullPath = Path.Combine(DirectoryPath, relativePath);
-            using (var streamReader = new StreamReader(fullPath))
+            using (var streamReader = new StreamReader(fileSystem.OpenFile(relativePath)))
             {
                 return streamReader.DeserializeEntity<T>();
             }
