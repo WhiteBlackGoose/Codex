@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFramework>net461</TargetFramework>
     <OutputType>Exe</OutputType>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.2.1" />
-    <PackageReference Include="Microsoft.TeamFoundationServer.ExtendedClient" Version="15.112.1" />
+    <PackageReference Include="Microsoft.TeamFoundationServer.ExtendedClient" Version="15.132.0-preview" />
+    <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="15.132.0-preview" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Reference Include="System.IO.Compression" />
+  </ItemGroup>
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>
