@@ -873,6 +873,16 @@ namespace Codex.Analysis
                 case ClassificationTypeNames.XmlDocCommentText:
                 case ClassificationTypeNames.XmlDocCommentProcessingInstruction:
                     return ClassificationTypeNames.XmlDocCommentComment;
+                case ClassificationTypeNames.FieldName:
+                case ClassificationTypeNames.EnumMemberName:
+                case ClassificationTypeNames.ConstantName:
+                case ClassificationTypeNames.LocalName:
+                case ClassificationTypeNames.ParameterName:
+                case ClassificationTypeNames.MethodName:
+                case ClassificationTypeNames.ExtensionMethodName:
+                case ClassificationTypeNames.PropertyName:
+                case ClassificationTypeNames.EventName:
+                    return ClassificationTypeNames.Identifier;
                 default:
                     return span.ClassificationType;
             }
@@ -880,7 +890,7 @@ namespace Codex.Analysis
 
         static bool IsSemanticSpan(ClassifiedSpan span)
         {
-            switch (span.ClassificationType)
+            switch (NormalizeClassification(span))
             {
                 case ClassificationTypeNames.Keyword:
                 case ClassificationTypeNames.Identifier:
