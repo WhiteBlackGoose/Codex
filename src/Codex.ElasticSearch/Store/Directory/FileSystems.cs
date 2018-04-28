@@ -27,7 +27,21 @@ namespace Codex
 
         public override IEnumerable<string> GetFiles(string relativeDirectoryPath)
         {
-            return Directory.GetFiles(Path.Combine(RootDirectory, relativeDirectoryPath), SearchPattern, SearchOption.AllDirectories);
+            var path = Path.Combine(RootDirectory, relativeDirectoryPath);
+            if (Directory.Exists(path))
+            {
+                return Directory.GetFiles(path, SearchPattern, SearchOption.AllDirectories);
+            }
+            else
+            {
+                return new string[0];
+            }
+        }
+
+        public override Stream OpenFile(string filePath)
+        {
+            filePath = Path.Combine(RootDirectory, filePath);
+            return base.OpenFile(filePath);
         }
     }
 

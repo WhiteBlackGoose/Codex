@@ -94,7 +94,7 @@ namespace Codex.Application
                     new Action(() => DeleteIndices()),
                     new OptionSet
                     {
-                        { "es|elasticsearch", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
+                        { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
                         { "d=", "List the indices to delete.", n => deleteIndices.Add(n) },
                     }
                 )
@@ -133,7 +133,7 @@ namespace Codex.Application
                     new Action(() => ListIndices()),
                     new OptionSet
                     {
-                        { "es|elasticsearch", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
+                        { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
                     }
                 )
             }
@@ -218,6 +218,14 @@ namespace Codex.Application
                 if (ex is InvalidOperationException)
                 {
                     if (ex.Message.Contains("An attempt was made to transition a task to a final state when it had already completed."))
+                    {
+                        return;
+                    }
+                }
+
+                if (ex is System.Net.WebException)
+                {
+                    if (ex.Message.Contains("(404) Not Found"))
                     {
                         return;
                     }
@@ -486,14 +494,25 @@ namespace Codex.Application
 
         private static void ListIndices()
         {
-            InitService();
+            Storage.ElasticsearchStorage storage = new Storage.ElasticsearchStorage(elasticSearchServer);
 
-            var indices = service.GetIndicesAsync().GetAwaiter().GetResult();
+            var indices = storage.Provider.GetIndicesAsync().GetAwaiter().GetResult();
 
             foreach (var index in indices)
             {
+                if (index.IsActive)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                }
+
                 Console.WriteLine(index.IndexName + (index.IsActive ? " (IsActive)" : ""));
             }
+
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         private static void InitService()
