@@ -8,7 +8,7 @@
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.6.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.7.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.9.0-beta4-62827-12" />
     <PackageReference Include="Microsoft.Language.Xml" Version="1.1.20" />
     <PackageReference Include="Microsoft.Tpl.Dataflow" Version="4.5.24" />
     <PackageReference Include="System.AppContext" Version="4.3.0" />

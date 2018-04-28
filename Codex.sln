@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 	ProjectSection(SolutionItems) = preProject
 		Ingestion.txt = Ingestion.txt
 		nuget.config = nuget.config
+		runcodex.bat = runcodex.bat
 		TODO.txt = TODO.txt
 	EndProjectSection
 EndProject
@@ -76,7 +77,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Web.Monaco", "src\Cod
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Web.EsLegacy", "src\Codex.Web.EsLegacy\Codex.Web.EsLegacy.csproj", "{EFF3F007-FE68-4680-9D4F-758CF46FA781}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Downloader", "src\Codex.Downloader\Codex.Downloader.csproj", "{4E426B71-BC07-498D-879F-F320E3208A32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Downloader", "src\Codex.Downloader\Codex.Downloader.csproj", "{4E426B71-BC07-498D-879F-F320E3208A32}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
