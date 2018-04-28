@@ -96,7 +96,7 @@ namespace Codex.ElasticSearch.Store
                             {
                                 var i = Interlocked.Increment(ref nextIndex);
                                 logger.LogMessage($"{i}/{count}: Reading {kind} info at {file}");
-                                await kind.Add(this, file, repositoryStore);
+                                await kind.Add(this, fileSystem, file, repositoryStore);
                                 logger.LogMessage($"{i}/{count}: Added {file} to store.");
                             });
                         }
@@ -306,7 +306,7 @@ namespace Codex.ElasticSearch.Store
 
             public abstract string Name { get; }
 
-            public abstract Task Add(DirectoryCodexStore store, string fullPath, ICodexRepositoryStore repositoryStore);
+            public abstract Task Add(DirectoryCodexStore store, FileSystem fileSystem, string fullPath, ICodexRepositoryStore repositoryStore);
 
             private static class Inner
             {
@@ -334,9 +334,9 @@ namespace Codex.ElasticSearch.Store
                 GetEntityStableId = getEntityStableId;
             }
 
-            public override Task Add(DirectoryCodexStore store, string fullPath, ICodexRepositoryStore repositoryStore)
+            public override Task Add(DirectoryCodexStore store, FileSystem fileSystem, string fullPath, ICodexRepositoryStore repositoryStore)
             {
-                var entity = store.Read<T>(fullPath);
+                var entity = store.Read<T>(fileSystem, fullPath);
                 return add(entity, repositoryStore, store);
             }
         }
