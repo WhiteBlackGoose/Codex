@@ -73,8 +73,6 @@ namespace Codex.ElasticSearch.Store
             {
                 if (SourceFileContentLines != null && SourceFileContentLines.Count != 0)
                 {
-                    ResplitLines();
-
                     var lineSpans = new List<SymbolSpan>();
                     var lineSpanStart = 0;
                     for (int i = 0; i < SourceFileContentLines.Count; i++)
@@ -125,32 +123,6 @@ namespace Codex.ElasticSearch.Store
             {
                 this.BoundSourceFile.SourceFile.Content = string.Join(string.Empty, SourceFileContentLines);
             }
-        }
-
-        private void ResplitLines()
-        {
-            bool needsResplit = false;
-            foreach (var line in SourceFileContentLines)
-            {
-                if (line.Length == 0) continue;
-
-                int index = line.IndexOf('\r');
-                if (index == -1) continue;
-
-                // Line with just carriage return
-                if (line.Length == 1) continue;
-
-                if ((index < line.Length - 2) || 
-                    (index == line.Length - 2 && line[line.Length - 1] != '\n'))
-                {
-                    needsResplit = true;
-                }
-            }
-
-            if (!needsResplit) return;
-
-            SourceFileContentLines = string.Join(string.Empty, SourceFileContentLines)
-                                    .GetLines(includeLineBreak: true).ToList();
         }
     }
 }
