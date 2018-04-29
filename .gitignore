@@ -256,3 +256,4 @@ paket-files/
 .idea/
 *.sln.iml
 *.binlog
+**/launchSettings.json

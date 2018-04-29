@@ -30,7 +30,7 @@ namespace Codex.Downloader
             [Option("id", HelpText = "The Id of the build definition.")]
             public int BuildDefinitionId { get; set; }
 
-            [Option("out", Required = true, HelpText = "The output location to store the index artifact zip file.")]
+            [Option('o', "out", Required = true, HelpText = "The output location to store the index artifact zip file.")]
             public string Destination { get; set; }
 
             [Option("pat", Required = true, HelpText = "The personal access token used to access the account.")]
@@ -39,7 +39,11 @@ namespace Codex.Downloader
 
         static void Main(string[] args)
         {
-            CommandLine.Parser.Default.ParseArguments<VSTSBuildOptions>(args)
+            new CommandLine.Parser(settings =>
+            {
+                settings.CaseInsensitiveEnumValues = true;
+                settings.CaseSensitive = false;
+            }).ParseArguments<VSTSBuildOptions>(args)
                 .WithParsed<VSTSBuildOptions>(opts => RunOptionsAndReturnExitCode(opts))
                 .WithNotParsed<VSTSBuildOptions>((errs) => HandleParseError(errs));
         }
@@ -55,6 +59,8 @@ namespace Codex.Downloader
             BuildHttpClient client = new BuildHttpClient(
                 new Uri(collectionUri),
                 new VssBasicCredential(string.Empty, options.PersonalAccessToken));
+
+            Console.WriteLine($"Getting build definition: {buildDefinitionName}");
 
             var definitions = await client.GetDefinitionsAsync(
                 project: project,
