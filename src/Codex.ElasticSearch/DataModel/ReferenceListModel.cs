@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using Codex.ObjectModel;
 using Codex.Utilities;
@@ -6,7 +8,7 @@ using static Codex.Utilities.SerializationUtilities;
 
 namespace Codex.Storage.DataModel
 {
-    public class ReferenceListModel : SpanListModel<ReferenceSpan, SpanListSegmentModel, ReferenceSymbol, ReferenceSymbol>, IReferenceList
+    public class ReferenceListModel : SpanListModel<ReferenceSpan, ReferenceSpanListSegmentModel, ReferenceSymbol, ReferenceSymbol>, IReferenceList
     {
         public static readonly IEqualityComparer<ReferenceSymbol> ReferenceSymbolEqualityComparer = new EqualityComparerBuilder<ReferenceSymbol>()
             .CompareByAfter(s => s.ProjectId)
@@ -19,16 +21,12 @@ namespace Codex.Storage.DataModel
             .CompareByAfter(s => s.Id.Value)
             .CompareByAfter(s => s.ReferenceKind);
 
-        public static readonly IEqualityComparer<ReferenceSymbol> ReferenceSymbolModelComparer = new EqualityComparerBuilder<ReferenceSymbol>()
-            .CompareByAfter(s => s.ProjectId)
-            .CompareByAfter(s => s.Id)
-            .CompareByAfter(s => s.ReferenceKind);
-
         private static readonly SymbolSpan EmptySymbolSpan = new SymbolSpan();
 
         public SymbolLineSpanListModel LineSpanModel { get; set; }
 
         public IntegerListModel LineIndices;
+        public IntegerListModel ExcludedFromSearchSpans;
 
         public ReferenceListModel()
         {
@@ -77,6 +75,7 @@ namespace Codex.Storage.DataModel
                 reference.Kind = RemoveDuplicate(reference.Kind, ref kind);
                 reference.Id = RemoveDuplicate(reference.Id, ref id);
                 reference.ReferenceKind = RemoveDuplicate(reference.ReferenceKind, ref referenceKind);
+                reference.ExcludeFromSearch = false;
             }
 
             if (LineSpanModel != null && LineIndices != null)
@@ -103,6 +102,7 @@ namespace Codex.Storage.DataModel
                 reference.Kind = AssignDuplicate(reference.Kind, ref kind);
                 reference.Id = AssignDuplicate(reference.Id, ref id);
                 reference.ReferenceKind = AssignDuplicate(reference.ReferenceKind, ref referenceKind);
+                reference.ExcludeFromSearch = false;
             }
 
             if (LineSpanModel != null && LineIndices != null)
@@ -122,12 +122,12 @@ namespace Codex.Storage.DataModel
             }
         }
 
-        public override SpanListSegmentModel CreateSegment(ListSegment<ReferenceSpan> segmentSpans)
+        public override ReferenceSpanListSegmentModel CreateSegment(ListSegment<ReferenceSpan> segmentSpans)
         {
-            return new SpanListSegmentModel();
+            return new ReferenceSpanListSegmentModel(segmentSpans);
         }
 
-        public override ReferenceSpan CreateSpan(int start, int length, ReferenceSymbol shared, SpanListSegmentModel segment, int segmentOffset)
+        public override ReferenceSpan CreateSpan(int start, int length, ReferenceSymbol shared, ReferenceSpanListSegmentModel segment, int segmentOffset)
         {
             if (shared.ProjectId == null || shared.Kind == null || shared.ReferenceKind == null)
             {
@@ -137,12 +137,19 @@ namespace Codex.Storage.DataModel
             var index = segment.SegmentStartIndex + segmentOffset;
             var lineSpan = LineSpanModel?.GetShared(index) ?? EmptySymbolSpan;
 
+            var relatedDefinition = segment.GetRelatedDefinition(segmentOffset);
+            var excludeFromSearch = segment.GetExcludedFromSearch(segmentOffset);
+
             return new ReferenceSpan(lineSpan)
             {
                 Start = start,
                 Length = length,
-                Reference = shared,
-                LineSpanStart = start - lineSpan.Start
+                Reference = !excludeFromSearch ? shared : new ReferenceSymbol(shared)
+                {
+                    ExcludeFromSearch = excludeFromSearch,
+                },
+                LineSpanStart = start - lineSpan.Start,
+                RelatedDefinition = SymbolId.UnsafeCreateWithValue(relatedDefinition)
             };
         }
 
@@ -154,6 +161,100 @@ namespace Codex.Storage.DataModel
         public override ReferenceSymbol GetSharedKey(ReferenceSpan span)
         {
             return span.Reference;
+        }
+    }
+
+    public class ReferenceSpanListSegmentModel : SpanListSegmentModel
+    {
+        public IntegerListModel ExcludedFromSearchSpans { get; set; }
+        public IntegerListModel RelatedDefinitionsIndices { get; set; }
+        public List<string> RelatedDefinitionIds { get; set; }
+
+        private BitArray excludedFromSearchBitArray;
+
+        public ReferenceSpanListSegmentModel()
+        {
+        }
+
+        public ReferenceSpanListSegmentModel(ListSegment<ReferenceSpan> spans)
+        {
+            ListSet<string> listSet = new ListSet<string>();
+
+            if (spans.Any(s => s.RelatedDefinition.Value != null))
+            {
+                RelatedDefinitionsIndices = IntegerListModel.Create(spans, span => listSet.Add(span.RelatedDefinition.Value ?? string.Empty));
+                RelatedDefinitionIds = listSet.List;
+            }
+
+            excludedFromSearchBitArray = GetExcludedFromSearchBitArray(spans);
+            if (excludedFromSearchBitArray != null)
+            {
+                ExcludedFromSearchSpans = new IntegerListModel(excludedFromSearchBitArray);
+            }
+        }
+
+        public bool GetExcludedFromSearch(int spanIndex)
+        {
+            if (ExcludedFromSearchSpans == null)
+            {
+                return false;
+            }
+
+            if (excludedFromSearchBitArray == null)
+            {
+                excludedFromSearchBitArray = new BitArray(ExcludedFromSearchSpans.Data);
+            }
+
+            return excludedFromSearchBitArray[spanIndex];
+        }
+
+        public string GetRelatedDefinition(int spanIndex)
+        {
+            if (RelatedDefinitionIds == null)
+            {
+                return null;
+            }
+
+            var relatedDefinition = RelatedDefinitionIds[RelatedDefinitionsIndices[spanIndex]];
+            if (string.IsNullOrEmpty(relatedDefinition))
+            {
+                return null;
+            }
+
+            return relatedDefinition;
+        }
+
+        private static BitArray GetExcludedFromSearchBitArray(ListSegment<ReferenceSpan> spans)
+        {
+            BitArray bitArray = null;
+
+            for (int i = 0; i < spans.Count; i++)
+            {
+                var span = spans[i];
+                if (span.Reference.ExcludeFromSearch)
+                {
+                    bitArray = bitArray ?? new BitArray(spans.Count);
+                    bitArray[i] = true;
+                }
+            }
+
+            return bitArray;
+        }
+
+        internal override void OptimizeLists(OptimizationContext context)
+        {
+            ExcludedFromSearchSpans?.Optimize(context);
+            RelatedDefinitionsIndices?.Optimize(context);
+
+            base.OptimizeLists(context);
+        }
+
+        internal override void ExpandLists(OptimizationContext context)
+        {
+            ExcludedFromSearchSpans?.ExpandData(context);
+            RelatedDefinitionsIndices?.ExpandData(context);
+
+            base.ExpandLists(context);
         }
     }
 }

@@ -118,6 +118,10 @@
     },
     "segments": [
       {
+        "excludedFromSearchSpans": {
+          "cdata": "AAA=",
+          "valueByteWidth": 1
+        },
         "fullLength": 995,
         "lengths": {
           "cdata": "AAAXBgkGDAkPCRQTCRQT",
@@ -145,17 +149,14 @@
         "referenceKind": "Definition"
       },
       {
-        "excludeFromSearch": true,
         "id": "focaqdch24tt",
         "kind": "Class",
         "referenceKind": "ProjectLevelReference"
       },
       {
-        "excludeFromSearch": true,
         "id": "gl7z45hdnojl"
       },
       {
-        "excludeFromSearch": true,
         "id": "ysgoespli6db"
       },
       {
@@ -165,46 +166,36 @@
         "referenceKind": "Definition"
       },
       {
-        "excludeFromSearch": true,
         "id": "d6gmw0nyzfwe",
         "kind": "Interface",
         "referenceKind": "ProjectLevelReference"
       },
       {
-        "excludeFromSearch": true,
         "id": "hubxj3ihkrbe"
       },
       {
-        "excludeFromSearch": true,
         "id": "il71lvemucbf"
       },
       {
-        "excludeFromSearch": true,
         "id": "mrmqhpalox2j"
       },
       {
-        "excludeFromSearch": true,
         "id": "i8xspsqvz4oz",
         "kind": "Method"
       },
       {
-        "excludeFromSearch": true,
         "id": "ov2v153rs2dy"
       },
       {
-        "excludeFromSearch": true,
         "id": "qzzztsebhqp3"
       },
       {
-        "excludeFromSearch": true,
         "id": "tlxmyrhpqmwu"
       },
       {
-        "excludeFromSearch": true,
         "id": "ud2cojqpu3ak"
       },
       {
-        "excludeFromSearch": true,
         "id": "wj6da2bm7ihh"
       }
     ]

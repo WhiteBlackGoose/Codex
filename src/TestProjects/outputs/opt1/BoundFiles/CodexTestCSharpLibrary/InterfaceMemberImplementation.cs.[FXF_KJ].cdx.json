@@ -184,6 +184,16 @@
           "valueByteWidth": 1
         },
         "optimized": true,
+        "relatedDefinitionIds": [
+          "",
+          "wj6da2bm7ihh"
+        ],
+        "relatedDefinitionsIndices": {
+          "cdata": "Y2CAAUYA",
+          "compressedLength": 6,
+          "decompressedLength": 11,
+          "valueByteWidth": 1
+        },
         "sharedIndices": {
           "cdata": "AggAAwkFAQQJBwY=",
           "valueByteWidth": 1

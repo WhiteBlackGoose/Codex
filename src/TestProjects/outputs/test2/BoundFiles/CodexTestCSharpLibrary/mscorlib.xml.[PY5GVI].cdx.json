@@ -2650,7 +2650,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyCompanyAttribute\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "ymmm1xbqot1r",
           "kind": "Class",
           "projectId": "mscorlib",
@@ -2664,7 +2663,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyCompanyAttribute.AssemblyCompanyAttribute(System.String)\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "jyyyk9k2knea",
           "kind": "Constructor",
           "projectId": "mscorlib",
@@ -2678,7 +2676,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyConfigurationAttribute\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "ugc4cfruh6uv",
           "kind": "Class",
           "projectId": "mscorlib",
@@ -2692,7 +2689,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyConfigurationAttribute.AssemblyConfigurationAttribute(System.String)\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "k95qbgte30kn",
           "kind": "Constructor",
           "projectId": "mscorlib",
@@ -2706,7 +2702,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyCopyrightAttribute\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "cekgdiwfsy8q",
           "kind": "Class",
           "projectId": "mscorlib",
@@ -2720,7 +2715,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyCopyrightAttribute.AssemblyCopyrightAttribute(System.String)\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "yxt4gpkb4tiv",
           "kind": "Constructor",
           "projectId": "mscorlib",
@@ -2734,7 +2728,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyCultureAttribute\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "ilzi8qywxj5d",
           "kind": "Class",
           "projectId": "mscorlib",
@@ -2748,7 +2741,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyCultureAttribute.AssemblyCultureAttribute(System.String)\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "t2nno4ugsft3",
           "kind": "Constructor",
           "projectId": "mscorlib",
@@ -2762,7 +2754,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyDescriptionAttribute\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "zpyv4zicoqy4",
           "kind": "Class",
           "projectId": "mscorlib",
@@ -2776,7 +2767,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyDescriptionAttribute.AssemblyDescriptionAttribute(System.String)\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "ifegugrv95ue",
           "kind": "Constructor",
           "projectId": "mscorlib",
@@ -2790,7 +2780,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyFileVersionAttribute\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "g1uxbc9evuqp",
           "kind": "Class",
           "projectId": "mscorlib",
@@ -2804,7 +2793,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyFileVersionAttribute.AssemblyFileVersionAttribute(System.String)\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "exjoiusmafos",
           "kind": "Constructor",
           "projectId": "mscorlib",
@@ -2818,7 +2806,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyProductAttribute\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "xxbdd8vgzz9q",
           "kind": "Class",
           "projectId": "mscorlib",
@@ -2832,7 +2819,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyProductAttribute.AssemblyProductAttribute(System.String)\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "gvbjpbcxwy2k",
           "kind": "Constructor",
           "projectId": "mscorlib",
@@ -2846,7 +2832,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyTitleAttribute\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "iggnvlryy8pl",
           "kind": "Class",
           "projectId": "mscorlib",
@@ -2860,7 +2845,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyTitleAttribute.AssemblyTitleAttribute(System.String)\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "i65jqbopyhle",
           "kind": "Constructor",
           "projectId": "mscorlib",
@@ -2874,7 +2858,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyTrademarkAttribute\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "gbbsioq1lr7p",
           "kind": "Class",
           "projectId": "mscorlib",
@@ -2888,7 +2871,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyTrademarkAttribute.AssemblyTrademarkAttribute(System.String)\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "rhqleoomjaub",
           "kind": "Constructor",
           "projectId": "mscorlib",
@@ -2902,7 +2884,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyVersionAttribute\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "oxstkbpff3nk",
           "kind": "Class",
           "projectId": "mscorlib",
@@ -2916,7 +2897,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"AssemblyVersionAttribute.AssemblyVersionAttribute(System.String)\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "c38l4kmhtlby",
           "kind": "Constructor",
           "projectId": "mscorlib",
@@ -2930,7 +2910,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"ComVisibleAttribute\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "vhsblzyr6fft",
           "kind": "Class",
           "projectId": "mscorlib",
@@ -2944,7 +2923,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"ComVisibleAttribute.ComVisibleAttribute(System.Boolean)\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "y42a7756tggw",
           "kind": "Constructor",
           "projectId": "mscorlib",
@@ -2958,7 +2936,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"GuidAttribute\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "d7zlvzfupcol",
           "kind": "Class",
           "projectId": "mscorlib",
@@ -2972,7 +2949,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"GuidAttribute.GuidAttribute(System.String)\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "bv3kxqc9ozrz",
           "kind": "Constructor",
           "projectId": "mscorlib",
@@ -2986,7 +2962,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"TargetFrameworkAttribute\" ReferenceCount=\"2\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "zng0jvzsohnn",
           "kind": "Class",
           "projectId": "mscorlib",
@@ -3000,7 +2975,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"TargetFrameworkAttribute.FrameworkDisplayName\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "i7vzz3amryno",
           "kind": "Property",
           "projectId": "mscorlib",
@@ -3014,7 +2988,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"TargetFrameworkAttribute.TargetFrameworkAttribute(System.String)\" ReferenceCount=\"2\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "oxmmbdshugky",
           "kind": "Constructor",
           "projectId": "mscorlib",
@@ -3028,7 +3001,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"String\" ReferenceCount=\"1\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "cuycniiqolxa",
           "kind": "Class",
           "projectId": "mscorlib",
@@ -3042,7 +3014,6 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"Void\" ReferenceCount=\"6\" />",
         "reference": {
-          "excludeFromSearch": true,
           "id": "bkkllbfoc0jy",
           "kind": "Struct",
           "projectId": "mscorlib",

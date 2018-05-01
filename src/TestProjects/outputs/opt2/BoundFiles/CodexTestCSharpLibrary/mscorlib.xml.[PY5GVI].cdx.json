@@ -152,124 +152,95 @@
         "kind": "File"
       },
       {
-        "excludeFromSearch": true,
         "id": "cekgdiwfsy8q",
         "kind": "Class",
         "projectId": "mscorlib",
         "referenceKind": "ProjectLevelReference"
       },
       {
-        "excludeFromSearch": true,
         "id": "cuycniiqolxa"
       },
       {
-        "excludeFromSearch": true,
         "id": "d7zlvzfupcol"
       },
       {
-        "excludeFromSearch": true,
         "id": "g1uxbc9evuqp"
       },
       {
-        "excludeFromSearch": true,
         "id": "gbbsioq1lr7p"
       },
       {
-        "excludeFromSearch": true,
         "id": "iggnvlryy8pl"
       },
       {
-        "excludeFromSearch": true,
         "id": "ilzi8qywxj5d"
       },
       {
-        "excludeFromSearch": true,
         "id": "oxstkbpff3nk"
       },
       {
-        "excludeFromSearch": true,
         "id": "ugc4cfruh6uv"
       },
       {
-        "excludeFromSearch": true,
         "id": "vhsblzyr6fft"
       },
       {
-        "excludeFromSearch": true,
         "id": "xxbdd8vgzz9q"
       },
       {
-        "excludeFromSearch": true,
         "id": "ymmm1xbqot1r"
       },
       {
-        "excludeFromSearch": true,
         "id": "zng0jvzsohnn"
       },
       {
-        "excludeFromSearch": true,
         "id": "zpyv4zicoqy4"
       },
       {
-        "excludeFromSearch": true,
         "id": "bv3kxqc9ozrz",
         "kind": "Constructor"
       },
       {
-        "excludeFromSearch": true,
         "id": "c38l4kmhtlby"
       },
       {
-        "excludeFromSearch": true,
         "id": "exjoiusmafos"
       },
       {
-        "excludeFromSearch": true,
         "id": "gvbjpbcxwy2k"
       },
       {
-        "excludeFromSearch": true,
         "id": "i65jqbopyhle"
       },
       {
-        "excludeFromSearch": true,
         "id": "ifegugrv95ue"
       },
       {
-        "excludeFromSearch": true,
         "id": "jyyyk9k2knea"
       },
       {
-        "excludeFromSearch": true,
         "id": "k95qbgte30kn"
       },
       {
-        "excludeFromSearch": true,
         "id": "oxmmbdshugky"
       },
       {
-        "excludeFromSearch": true,
         "id": "rhqleoomjaub"
       },
       {
-        "excludeFromSearch": true,
         "id": "t2nno4ugsft3"
       },
       {
-        "excludeFromSearch": true,
         "id": "y42a7756tggw"
       },
       {
-        "excludeFromSearch": true,
         "id": "yxt4gpkb4tiv"
       },
       {
-        "excludeFromSearch": true,
         "id": "i7vzz3amryno",
         "kind": "Property"
       },
       {
-        "excludeFromSearch": true,
         "id": "bkkllbfoc0jy",
         "kind": "Struct"
       }

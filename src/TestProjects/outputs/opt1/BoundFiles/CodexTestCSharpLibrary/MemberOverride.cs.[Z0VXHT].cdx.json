@@ -200,12 +200,27 @@
     },
     "segments": [
       {
+        "excludedFromSearchSpans": {
+          "cdata": "AAAA",
+          "valueByteWidth": 1
+        },
         "fullLength": 489,
         "lengths": {
           "cdata": "AAAACQQIBAcJCQgECAgIBAcH",
           "valueByteWidth": 1
         },
         "optimized": true,
+        "relatedDefinitionIds": [
+          "",
+          "qzzztsebhqp3",
+          "ud2cojqpu3ak"
+        ],
+        "relatedDefinitionsIndices": {
+          "cdata": "Y2BAAowMDEwMAA==",
+          "compressedLength": 10,
+          "decompressedLength": 18,
+          "valueByteWidth": 1
+        },
         "sharedIndices": {
           "cdata": "BAALAgwFDAgBAwYMBwYJDAkK",
           "valueByteWidth": 1
@@ -247,7 +262,6 @@
         "kind": "Method"
       },
       {
-        "excludeFromSearch": true,
         "referenceKind": "Override"
       },
       {
@@ -258,7 +272,6 @@
         "id": "tlxmyrhpqmwu"
       },
       {
-        "excludeFromSearch": true,
         "referenceKind": "Override"
       },
       {

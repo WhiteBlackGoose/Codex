@@ -521,7 +521,6 @@
         "lineSpanStart": 7,
         "lineSpanText": "public override void Abstract()",
         "reference": {
-          "excludeFromSearch": true,
           "id": "i8xspsqvz4oz",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
@@ -561,12 +560,12 @@
         "lineSpanStart": 21,
         "lineSpanText": "public override void Abstract()",
         "reference": {
-          "excludeFromSearch": true,
           "id": "i8xspsqvz4oz",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Override"
         },
+        "relatedDefinition": "qzzztsebhqp3",
         "start": 417
       },
       {
@@ -575,7 +574,6 @@
         "lineSpanStart": 7,
         "lineSpanText": "public override void Virtual()",
         "reference": {
-          "excludeFromSearch": true,
           "id": "tlxmyrhpqmwu",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
@@ -602,12 +600,12 @@
         "lineSpanStart": 21,
         "lineSpanText": "public override void Virtual()",
         "reference": {
-          "excludeFromSearch": true,
           "id": "tlxmyrhpqmwu",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Override"
         },
+        "relatedDefinition": "ud2cojqpu3ak",
         "start": 482
       },
       {

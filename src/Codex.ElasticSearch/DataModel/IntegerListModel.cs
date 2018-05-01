@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.IO.Compression;
 using System.IO;
 using Newtonsoft.Json;
+using System.Collections;
 
 namespace Codex.Storage.DataModel
 {
@@ -69,6 +70,13 @@ namespace Codex.Storage.DataModel
             }
 
             return list;
+        }
+
+        public IntegerListModel(BitArray bitArray)
+        {
+            var byteArrayLength = (bitArray.Count + 7) / 8;
+            Data = new byte[byteArrayLength];
+            ValueByteWidth = 1;
         }
 
         public IntegerListModel(int byteWidth, int numberOfValues, int minValue)
