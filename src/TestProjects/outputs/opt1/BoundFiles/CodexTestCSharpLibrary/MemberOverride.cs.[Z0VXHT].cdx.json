@@ -201,7 +201,7 @@
     "segments": [
       {
         "excludedFromSearchSpans": {
-          "cdata": "AAAA",
+          "cdata": "AEQA",
           "valueByteWidth": 1
         },
         "fullLength": 489,

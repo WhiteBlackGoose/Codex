@@ -200,6 +200,10 @@
     },
     "segments": [
       {
+        "excludedFromSearchSpans": {
+          "cdata": "AEQA",
+          "valueByteWidth": 1
+        },
         "fullLength": 489,
         "lengths": {
           "cdata": "AAAACQQIBAcJCQgECAgIBAcH",

@@ -118,6 +118,10 @@
     },
     "segments": [
       {
+        "excludedFromSearchSpans": {
+          "cdata": "/H8=",
+          "valueByteWidth": 1
+        },
         "fullLength": 995,
         "lengths": {
           "cdata": "AAAXBgkGDAkPCRQTCRQT",

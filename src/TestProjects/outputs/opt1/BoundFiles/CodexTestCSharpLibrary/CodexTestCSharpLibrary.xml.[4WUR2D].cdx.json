@@ -119,7 +119,7 @@
     "segments": [
       {
         "excludedFromSearchSpans": {
-          "cdata": "AAA=",
+          "cdata": "/H8=",
           "valueByteWidth": 1
         },
         "fullLength": 995,

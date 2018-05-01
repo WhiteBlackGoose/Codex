@@ -102,7 +102,6 @@ namespace Codex.Storage.DataModel
                 reference.Kind = AssignDuplicate(reference.Kind, ref kind);
                 reference.Id = AssignDuplicate(reference.Id, ref id);
                 reference.ReferenceKind = AssignDuplicate(reference.ReferenceKind, ref referenceKind);
-                reference.ExcludeFromSearch = false;
             }
 
             if (LineSpanModel != null && LineIndices != null)

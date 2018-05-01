@@ -76,6 +76,7 @@ namespace Codex.Storage.DataModel
         {
             var byteArrayLength = (bitArray.Count + 7) / 8;
             Data = new byte[byteArrayLength];
+            bitArray.CopyTo(Data, 0);
             ValueByteWidth = 1;
         }
 

@@ -1336,6 +1336,7 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"ITypeWithParams˂T0, T1˃\" ReferenceCount=\"1\" />",
         "reference": {
+          "excludeFromSearch": true,
           "id": "il71lvemucbf",
           "kind": "Interface",
           "projectId": "CodexTestCSharpLibrary",
@@ -1349,6 +1350,7 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"IXedoc\" ReferenceCount=\"2\" />",
         "reference": {
+          "excludeFromSearch": true,
           "id": "mrmqhpalox2j",
           "kind": "Interface",
           "projectId": "CodexTestCSharpLibrary",
@@ -1362,6 +1364,7 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"XedocImpl\" ReferenceCount=\"0\" />",
         "reference": {
+          "excludeFromSearch": true,
           "id": "d6gmw0nyzfwe",
           "kind": "Interface",
           "projectId": "CodexTestCSharpLibrary",
@@ -1375,6 +1378,7 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"IXedoc\" ReferenceCount=\"1\" />",
         "reference": {
+          "excludeFromSearch": true,
           "id": "hubxj3ihkrbe",
           "kind": "Interface",
           "projectId": "CodexTestCSharpLibrary",
@@ -1388,6 +1392,7 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"IXedoc.Run()\" ReferenceCount=\"1\" />",
         "reference": {
+          "excludeFromSearch": true,
           "id": "ov2v153rs2dy",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
@@ -1401,6 +1406,7 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"XedocImpl\" ReferenceCount=\"0\" />",
         "reference": {
+          "excludeFromSearch": true,
           "id": "ysgoespli6db",
           "kind": "Class",
           "projectId": "CodexTestCSharpLibrary",
@@ -1414,6 +1420,7 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"XedocImpl.Run()\" ReferenceCount=\"0\" />",
         "reference": {
+          "excludeFromSearch": true,
           "id": "wj6da2bm7ihh",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
@@ -1427,6 +1434,7 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"XedocBase\" ReferenceCount=\"1\" />",
         "reference": {
+          "excludeFromSearch": true,
           "id": "gl7z45hdnojl",
           "kind": "Class",
           "projectId": "CodexTestCSharpLibrary",
@@ -1440,6 +1448,7 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"XedocBase.Abstract()\" ReferenceCount=\"2\" />",
         "reference": {
+          "excludeFromSearch": true,
           "id": "i8xspsqvz4oz",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
@@ -1453,6 +1462,7 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"XedocBase.Virtual()\" ReferenceCount=\"2\" />",
         "reference": {
+          "excludeFromSearch": true,
           "id": "tlxmyrhpqmwu",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
@@ -1466,6 +1476,7 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"XedocImpl\" ReferenceCount=\"0\" />",
         "reference": {
+          "excludeFromSearch": true,
           "id": "focaqdch24tt",
           "kind": "Class",
           "projectId": "CodexTestCSharpLibrary",
@@ -1479,6 +1490,7 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"XedocImpl.Abstract()\" ReferenceCount=\"0\" />",
         "reference": {
+          "excludeFromSearch": true,
           "id": "qzzztsebhqp3",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
@@ -1492,6 +1504,7 @@
         "lineSpanStart": 14,
         "lineSpanText": "<Symbol Name=\"XedocImpl.Virtual()\" ReferenceCount=\"0\" />",
         "reference": {
+          "excludeFromSearch": true,
           "id": "ud2cojqpu3ak",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",

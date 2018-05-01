@@ -521,6 +521,7 @@
         "lineSpanStart": 7,
         "lineSpanText": "public override void Abstract()",
         "reference": {
+          "excludeFromSearch": true,
           "id": "i8xspsqvz4oz",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
@@ -574,6 +575,7 @@
         "lineSpanStart": 7,
         "lineSpanText": "public override void Virtual()",
         "reference": {
+          "excludeFromSearch": true,
           "id": "tlxmyrhpqmwu",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
