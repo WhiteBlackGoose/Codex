@@ -1,0 +1,235 @@
+{
+  "boundSourceFile": {
+    "definitionCount": 2,
+    "definitions": [
+      {
+        "definition": {
+          "containerQualifiedName": "[Metadata]\\ReferenceSymbols",
+          "id": "d2xcyy2aphpa",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "shortName": "CodexTestCSharpLibrary.xml"
+        }
+      },
+      {
+        "definition": {
+          "containerQualifiedName": "Checksum.Sha1",
+          "id": "hbh3ty0mlayl",
+          "isImplicitlyDeclared": true,
+          "kind": "Checksum.Sha1",
+          "shortName": "BFDFDEEF6056A7382C148C3CEBC12903935B4025"
+        }
+      }
+    ],
+    "excludeFromSearch": true,
+    "language": "xml",
+    "projectId": "CodexTestCSharpLibrary",
+    "projectRelativePath": "[Metadata]\\ReferenceSymbols\\CodexTestCSharpLibrary.xml",
+    "referenceCount": 15,
+    "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceSymbols\\CodexTestCSharpLibrary.xml",
+    "repositoryName": "CodexTestRepo",
+    "sourceFile": {
+      "info": {
+        "language": "xml",
+        "lines": 21,
+        "projectId": "CodexTestCSharpLibrary",
+        "projectRelativePath": "[Metadata]\\ReferenceSymbols\\CodexTestCSharpLibrary.xml",
+        "properties": {
+          "Checksum.Sha1": "BFDFDEEF6056A7382C148C3CEBC12903935B4025"
+        },
+        "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceSymbols\\CodexTestCSharpLibrary.xml",
+        "repositoryName": "CodexTestRepo"
+      }
+    }
+  },
+  "compressedClassifications": {
+    "count": 213,
+    "segments": [
+      {
+        "fullLength": 1055,
+        "lengths": {
+          "cdata": "Y+BnYWBgZGBg4GBmYDAG0qxAWoyBF8gCCoM4rMgcDiiHkQOiwxKqA0URNzYdYA4fmnYtqHYURcLIHCGcZmFVBjSYkZ8BAA==",
+          "compressedLength": 70,
+          "decompressedLength": 213,
+          "minValue": 1,
+          "valueByteWidth": 1
+        },
+        "localSymbolGroupIds": {
+          "cdata": "Y2AYhgAA",
+          "compressedLength": 6,
+          "decompressedLength": 213,
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "Y2BkYmBmYWZgQKUJc0jXQU3teA1mAAA=",
+          "compressedLength": 23,
+          "decompressedLength": 213,
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "Y2BgZGACYhhkReOzo/CRWeTIsNLBjsFqO/kuZgaTAA==",
+          "compressedLength": 31,
+          "decompressedLength": 426,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "color": -1,
+        "name": "xml - delimiter"
+      },
+      {
+        "color": -1,
+        "name": "xml - name"
+      },
+      {
+        "color": -1,
+        "name": "xml - attribute name"
+      },
+      {
+        "color": -1,
+        "name": "xml - attribute quotes"
+      },
+      {
+        "color": -1,
+        "name": "xml - attribute value"
+      }
+    ]
+  },
+  "compressedReferences": {
+    "count": 15,
+    "lineIndices": {
+      "cdata": "AAIDBAcICQoNDg8QERI=",
+      "valueByteWidth": 1
+    },
+    "lineSpanModel": {
+      "count": 15,
+      "segments": [
+        {
+          "fullLength": 995,
+          "sharedIndices": {
+            "data": "AAABAgMEBQYHCAkKCwwN",
+            "valueByteWidth": 1
+          }
+        }
+      ]
+    },
+    "segments": [
+      {
+        "fullLength": 995,
+        "lengths": {
+          "cdata": "AAAXBgkGDAkPCRQTCRQT",
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "BAAHCAUGCgMOAgkMAQsN",
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "Y2BgYKhl0AHCXjCpw1AHpUEQAA==",
+          "compressedLength": 19,
+          "decompressedLength": 30,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "id": "hbh3ty0mlayl",
+        "isImplicitlyDeclared": true,
+        "kind": "Checksum.Sha1",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Definition"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "focaqdch24tt",
+        "kind": "Class",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "gl7z45hdnojl"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "ysgoespli6db"
+      },
+      {
+        "id": "d2xcyy2aphpa",
+        "isImplicitlyDeclared": true,
+        "kind": "File",
+        "referenceKind": "Definition"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "d6gmw0nyzfwe",
+        "kind": "Interface",
+        "referenceKind": "ProjectLevelReference"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "hubxj3ihkrbe"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "il71lvemucbf"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "mrmqhpalox2j"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "i8xspsqvz4oz",
+        "kind": "Method"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "ov2v153rs2dy"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "qzzztsebhqp3"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "tlxmyrhpqmwu"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "ud2cojqpu3ak"
+      },
+      {
+        "excludeFromSearch": true,
+        "id": "wj6da2bm7ihh"
+      }
+    ]
+  },
+  "sourceFileContentLines": [
+    "<ReferenceSymbols Count=\"13\">\r\n",
+    "  <Namespace Name=\"CodexTestCSharpLibrary.Cases.InterfaceImplementation\">\r\n",
+    "    <Symbol Name=\"ITypeWithParams˂T0, T1˃\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"IXedoc\" ReferenceCount=\"2\" />\r\n",
+    "    <Symbol Name=\"XedocImpl\" ReferenceCount=\"0\" />\r\n",
+    "  </Namespace>\r\n",
+    "  <Namespace Name=\"CodexTestCSharpLibrary.Cases.InterfaceMemberImplementation\">\r\n",
+    "    <Symbol Name=\"IXedoc\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"IXedoc.Run()\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"XedocImpl\" ReferenceCount=\"0\" />\r\n",
+    "    <Symbol Name=\"XedocImpl.Run()\" ReferenceCount=\"0\" />\r\n",
+    "  </Namespace>\r\n",
+    "  <Namespace Name=\"CodexTestCSharpLibrary.Cases.MemberOverride\">\r\n",
+    "    <Symbol Name=\"XedocBase\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"XedocBase.Abstract()\" ReferenceCount=\"2\" />\r\n",
+    "    <Symbol Name=\"XedocBase.Virtual()\" ReferenceCount=\"2\" />\r\n",
+    "    <Symbol Name=\"XedocImpl\" ReferenceCount=\"0\" />\r\n",
+    "    <Symbol Name=\"XedocImpl.Abstract()\" ReferenceCount=\"0\" />\r\n",
+    "    <Symbol Name=\"XedocImpl.Virtual()\" ReferenceCount=\"0\" />\r\n",
+    "  </Namespace>\r\n",
+    "</ReferenceSymbols>"
+  ]
+}

@@ -33,6 +33,7 @@ namespace Codex.Application
         static string rootDirectory;
         static string repoUrl;
         static string saveDirectory;
+        static string loadDirectory;
         static List<string> binlogSearchPaths = new List<string>();
         static List<string> compilerArgumentsFiles = new List<string>();
         static string solutionPath;
@@ -64,7 +65,7 @@ namespace Codex.Application
                         { "test", "Indicates that save should use test mode which disables optimization.", n => test = n != null },
                         { "clean", "Reset target index directory when using -save option.", n => clean = n != null },
                         { "n|name=", "Name of the repository.", n => repoName = StoreUtilities.GetSafeRepoName(n ?? string.Empty) },
-                        { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
+                        { "p|path=", "Path to the repo to analyze.", n => rootDirectory = Path.GetFullPath(n) },
                         { "repoUrl=", "The URL of the repository being indexed", n => repoUrl = n },
                         { "bld|binLogSearchDirectory=", "Adds a bin log file or directory to search for binlog files", n => binlogSearchPaths.Add(n) },
                         { "ca|compilerArgumentFile=", "Adds a file specifying compiler arguments", n => compilerArgumentsFiles.Add(n) },
@@ -110,8 +111,10 @@ namespace Codex.Application
                         { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
                         { "l|logDirectory", "Optional. Path to log directory", n => logDirectory = n },
                         { "reset", "Reset elasticsearch for indexing new set of data.", n => reset = n != null },
+                        { "clean", "Reset target index directory when using -save option.", n => clean = n != null },
                         { "u", "Updates the analysis data (in place).", n => update = n != null },
-                        { "d=", "The directory containing analysis data to load.", n => saveDirectory = n },
+                        { "d=", "The directory containing analysis data to load.", n => loadDirectory = n },
+                        { "save=", "Saves the analysis information to the given directory.", n => saveDirectory = n },
                         { "test", "Indicates that save should use test mode which disables optimization.", n => test = n != null },
                     }
                 )
@@ -141,6 +144,11 @@ namespace Codex.Application
 
         static void Main(string[] args)
         {
+            if (Environment.GetEnvironmentVariable("CodexDebugOnStart") == "1")
+            {
+                System.Diagnostics.Debugger.Launch();
+            }
+
             try
             {
                 AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
@@ -432,7 +440,7 @@ namespace Codex.Application
                 if (scan)
                 {
                     var clearIndicesBeforeUse = reset;
-                    var directories = Directory.GetDirectories(saveDirectory);
+                    var directories = Directory.GetDirectories(loadDirectory);
                     int i = 1;
                     foreach (var directory in directories)
                     {
@@ -446,7 +454,7 @@ namespace Codex.Application
                 }
                 else
                 {
-                    LoadCore(logger, saveDirectory, reset);
+                    LoadCore(logger, loadDirectory, reset);
                 }
             }
         }
@@ -462,7 +470,7 @@ namespace Codex.Application
             {
                 if (String.IsNullOrEmpty(loadDirectory)) throw new ArgumentException("Load directory must be specified. Use -d to provide it.");
 
-                if (!update)
+                if (saveDirectory == null)
                 {
                     if (newBackend)
                     {
@@ -483,7 +491,7 @@ namespace Codex.Application
                 }
                 else
                 {
-                    store = new DirectoryCodexStore(loadDirectory) { Clean = false, DisableOptimization = test };
+                    store = new DirectoryCodexStore(saveDirectory) { Clean = clean, DisableOptimization = test };
                 }
 
                 var loadDirectoryStore = new DirectoryCodexStore(loadDirectory, logger);

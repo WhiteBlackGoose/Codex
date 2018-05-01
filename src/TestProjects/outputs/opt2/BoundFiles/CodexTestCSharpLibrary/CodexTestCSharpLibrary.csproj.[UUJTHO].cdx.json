@@ -1,0 +1,323 @@
+{
+  "boundSourceFile": {
+    "definitionCount": 2,
+    "definitions": [
+      {
+        "definition": {
+          "containerQualifiedName": "",
+          "id": "tyldgiuze05e",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "shortName": "CodexTestCSharpLibrary.csproj"
+        }
+      },
+      {
+        "definition": {
+          "containerQualifiedName": "Checksum.Sha1",
+          "id": "qehzpjkzigtt",
+          "isImplicitlyDeclared": true,
+          "kind": "Checksum.Sha1",
+          "shortName": "0819D6D690302B788D430E28166D561FEFBAB4A7"
+        }
+      }
+    ],
+    "language": "msbuild",
+    "projectId": "CodexTestCSharpLibrary",
+    "projectRelativePath": "CodexTestCSharpLibrary.csproj",
+    "referenceCount": 52,
+    "repoRelativePath": "CodexTestCSharpLibrary\\CodexTestCSharpLibrary.csproj",
+    "repositoryName": "CodexTestRepo",
+    "sourceFile": {
+      "info": {
+        "language": "msbuild",
+        "lines": 56,
+        "projectId": "CodexTestCSharpLibrary",
+        "projectRelativePath": "CodexTestCSharpLibrary.csproj",
+        "properties": {
+          "Checksum.Sha1": "0819D6D690302B788D430E28166D561FEFBAB4A7"
+        },
+        "repoRelativePath": "CodexTestCSharpLibrary\\CodexTestCSharpLibrary.csproj",
+        "repositoryName": "CodexTestRepo"
+      }
+    }
+  },
+  "compressedClassifications": {
+    "count": 358,
+    "segments": [
+      {
+        "fullLength": 2617,
+        "lengths": {
+          "cdata": "lVLLDoIwENzlWSiCBzEhMfHEyZP6DZ79/7+xzE5r6I0mSzvb7swsrUohjWyjCNFiVYXQEI144DLEKe1UWL3ERs3qTwiH1ZfVA9DA7MJ6Zb5l/kIWpXYfYg2oB+rgQjGLnJFRzMY/Jz5PZI5ncs7pZMGTmvl6sg+PPmO9I3L0as7b5KlLnkZ4Vszmvk7ujcs4c903dR07/CuVOyW/U6oOKDl+G/5hu5WI+wyPGb5leDpY3wFrciHo0/buEt+X4WuG1wwvO6744h7IllLrdrdb7gc=",
+          "compressedLength": 209,
+          "decompressedLength": 716,
+          "minValue": 1,
+          "valueByteWidth": 2
+        },
+        "localSymbolGroupIds": {
+          "cdata": "Y2AYBbQHAA==",
+          "compressedLength": 7,
+          "decompressedLength": 358,
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "Y2BkYmBmYQYTDAxIHEwRIAfGZ2DFYJNOwfTTTS+KPnJp4kxBMNlAPAA=",
+          "compressedLength": 41,
+          "decompressedLength": 358,
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "Y2BgZGACYghEsBgZmHHIIKthxamGFUyzo6mHQXzitOWxYnH38LKXFYlEDWcmuvOp6RZsIQgTZQaTAA==",
+          "compressedLength": 58,
+          "decompressedLength": 716,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "color": -1,
+        "name": "xml - delimiter"
+      },
+      {
+        "color": -1,
+        "name": "xml - name"
+      },
+      {
+        "color": -1,
+        "name": "xml - attribute name"
+      },
+      {
+        "color": -1,
+        "name": "xml - attribute quotes"
+      },
+      {
+        "color": -1,
+        "name": "xml - attribute value"
+      },
+      {
+        "color": -1,
+        "name": "xml - text"
+      },
+      {
+        "color": -1,
+        "name": "xml - comment"
+      }
+    ]
+  },
+  "compressedReferences": {
+    "count": 52,
+    "lineIndices": {
+      "cdata": "AAIEBQYHCAkKCwwODxAREhMUFRcYGRobHB0gISIjJCUmJyorLC0v",
+      "valueByteWidth": 1
+    },
+    "lineSpanModel": {
+      "count": 52,
+      "segments": [
+        {
+          "fullLength": 2302,
+          "sharedIndices": {
+            "data": "AAAAAQEBAQICAwMEBQYHCAkKCwsMDQ4PEBESExMUFRYXGBkaGxwdHh8gISIiIyMkJCUlJg==",
+            "valueByteWidth": 1
+          }
+        }
+      ]
+    },
+    "segments": [
+      {
+        "fullLength": 2302,
+        "lengths": {
+          "cdata": "Y2BgEBUWFebl5eDg5hLk5REDsng4Obj4uXl4OSA0JxSwQ4EAAA==",
+          "compressedLength": 37,
+          "decompressedLength": 52,
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "Y2Vg4xLjEhPg5+GWkhAWkeTl5OeW4ROSFRSV5ueG0BxQwM7CzsjOzM4kDgA=",
+          "compressedLength": 44,
+          "decompressedLength": 52,
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "FYs5CoBAEASLBR9gpuDigVekgiaCYir4WZ9oOUPTPV0M/POSsKidlFG1nEQGZibvR1JSkLsVveS2qW0yGpvIYa7pWKW/XwQ/gymwqZsP",
+          "compressedLength": 78,
+          "decompressedLength": 104,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "id": "qehzpjkzigtt",
+        "isImplicitlyDeclared": true,
+        "kind": "Checksum.Sha1",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "cf0zwkaulygj",
+        "isImplicitlyDeclared": true,
+        "kind": "File",
+        "referenceKind": "Reference"
+      },
+      {
+        "id": "fj6tjzorh59i",
+        "isImplicitlyDeclared": true
+      },
+      {
+        "id": "mw6l0prf2548",
+        "isImplicitlyDeclared": true
+      },
+      {
+        "id": "phmxgc9mt2wi",
+        "isImplicitlyDeclared": true
+      },
+      {
+        "id": "tyldgiuze05e",
+        "isImplicitlyDeclared": true,
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "oojcfpqfkvvk",
+        "isImplicitlyDeclared": true,
+        "projectId": "CodexTestRepo(Repo)"
+      },
+      {
+        "id": "m6ub6jgkq1kb",
+        "kind": "MSBuildItem",
+        "projectId": "MSBuild Files",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "xvbu3irfrodn"
+      },
+      {
+        "id": "amwppcqis2sk",
+        "kind": "MSBuildProperty"
+      },
+      {
+        "id": "ch9iiiqcjkoq",
+        "referenceKind": "Read"
+      },
+      {
+        "id": "do1gcpzyzomc"
+      },
+      {
+        "referenceKind": "Write"
+      },
+      {
+        "id": "fqw5f7kfn1l3"
+      },
+      {
+        "id": "fskmmtsvs6pk"
+      },
+      {
+        "id": "glxaswv65k4l",
+        "referenceKind": "Read"
+      },
+      {
+        "referenceKind": "Write"
+      },
+      {
+        "id": "gnnjamvzeeor"
+      },
+      {
+        "id": "hmnwy6c6fcyv"
+      },
+      {
+        "id": "izcb8pajtrxe"
+      },
+      {
+        "id": "juqubwuog07z"
+      },
+      {
+        "id": "mrqklgqxbyss"
+      },
+      {
+        "id": "qgboobmwe2su",
+        "referenceKind": "Read"
+      },
+      {
+        "id": "sdoij93z8j0r"
+      },
+      {
+        "id": "v25azsxpeqzf",
+        "referenceKind": "Write"
+      },
+      {
+        "id": "vdcvqg5o51oo"
+      },
+      {
+        "id": "vkzxbthahvfq"
+      },
+      {
+        "id": "z23zm1iotmrt"
+      },
+      {
+        "id": "zgwmeyv6dkdk"
+      },
+      {
+        "id": "zpnn6rpn1ial"
+      }
+    ]
+  },
+  "sourceFileContentLines": [
+    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n",
+    "<Project ToolsVersion=\"14.0\" DefaultTargets=\"Build\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">\r\n",
+    "  <Import Project=\"$(MSBuildExtensionsPath)\\$(MSBuildToolsVersion)\\Microsoft.Common.props\" Condition=\"Exists('$(MSBuildExtensionsPath)\\$(MSBuildToolsVersion)\\Microsoft.Common.props')\" />\r\n",
+    "  <PropertyGroup>\r\n",
+    "    <Configuration Condition=\" '$(Configuration)' == '' \">Debug</Configuration>\r\n",
+    "    <Platform Condition=\" '$(Platform)' == '' \">AnyCPU</Platform>\r\n",
+    "    <ProjectGuid>{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}</ProjectGuid>\r\n",
+    "    <OutputType>Library</OutputType>\r\n",
+    "    <AppDesignerFolder>Properties</AppDesignerFolder>\r\n",
+    "    <RootNamespace>CodexTestCSharpLibrary</RootNamespace>\r\n",
+    "    <AssemblyName>CodexTestCSharpLibrary</AssemblyName>\r\n",
+    "    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>\r\n",
+    "    <FileAlignment>512</FileAlignment>\r\n",
+    "  </PropertyGroup>\r\n",
+    "  <PropertyGroup Condition=\" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' \">\r\n",
+    "    <DebugSymbols>true</DebugSymbols>\r\n",
+    "    <DebugType>full</DebugType>\r\n",
+    "    <Optimize>false</Optimize>\r\n",
+    "    <OutputPath>bin\\Debug\\</OutputPath>\r\n",
+    "    <DefineConstants>DEBUG;TRACE</DefineConstants>\r\n",
+    "    <ErrorReport>prompt</ErrorReport>\r\n",
+    "    <WarningLevel>4</WarningLevel>\r\n",
+    "  </PropertyGroup>\r\n",
+    "  <PropertyGroup Condition=\" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' \">\r\n",
+    "    <DebugType>pdbonly</DebugType>\r\n",
+    "    <Optimize>true</Optimize>\r\n",
+    "    <OutputPath>bin\\Release\\</OutputPath>\r\n",
+    "    <DefineConstants>TRACE</DefineConstants>\r\n",
+    "    <ErrorReport>prompt</ErrorReport>\r\n",
+    "    <WarningLevel>4</WarningLevel>\r\n",
+    "  </PropertyGroup>\r\n",
+    "  <ItemGroup>\r\n",
+    "    <Reference Include=\"System\" />\r\n",
+    "    <Reference Include=\"System.Core\" />\r\n",
+    "    <Reference Include=\"System.Xml.Linq\" />\r\n",
+    "    <Reference Include=\"System.Data.DataSetExtensions\" />\r\n",
+    "    <Reference Include=\"Microsoft.CSharp\" />\r\n",
+    "    <Reference Include=\"System.Data\" />\r\n",
+    "    <Reference Include=\"System.Net.Http\" />\r\n",
+    "    <Reference Include=\"System.Xml\" />\r\n",
+    "  </ItemGroup>\r\n",
+    "  <ItemGroup>\r\n",
+    "    <Compile Include=\"Cases\\InterfaceImplementation.cs\" />\r\n",
+    "    <Compile Include=\"Cases\\MemberOverride.cs\" />\r\n",
+    "    <Compile Include=\"Cases\\InterfaceMemberImplementation.cs\" />\r\n",
+    "    <Compile Include=\"Properties\\AssemblyInfo.cs\" />\r\n",
+    "  </ItemGroup>\r\n",
+    "  <Import Project=\"$(MSBuildToolsPath)\\Microsoft.CSharp.targets\" />\r\n",
+    "  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. \r\n",
+    "       Other similar extension points exist, see Microsoft.Common.targets.\r\n",
+    "  <Target Name=\"BeforeBuild\">\r\n",
+    "  </Target>\r\n",
+    "  <Target Name=\"AfterBuild\">\r\n",
+    "  </Target>\r\n",
+    "  -->\r\n",
+    "</Project>"
+  ]
+}

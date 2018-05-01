@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CodexTestCSharpLibrary
+namespace CodexTestCSharpLibrary.Cases.InterfaceImplementation
 {
     public interface IXedoc
     {

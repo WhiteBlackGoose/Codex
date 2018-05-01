@@ -26,6 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 		Ingestion.txt = Ingestion.txt
 		nuget.config = nuget.config
 		runcodex.bat = runcodex.bat
+		src\TestProjects\testcodex.bat = src\TestProjects\testcodex.bat
 		TODO.txt = TODO.txt
 	EndProjectSection
 EndProject

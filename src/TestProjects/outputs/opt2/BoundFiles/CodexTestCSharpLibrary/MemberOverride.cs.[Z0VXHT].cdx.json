@@ -1,0 +1,314 @@
+{
+  "boundSourceFile": {
+    "definitionCount": 8,
+    "definitions": [
+      {
+        "definition": {
+          "containerQualifiedName": "Cases",
+          "id": "cf0zwkaulygj",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "shortName": "MemberOverride.cs"
+        }
+      },
+      {
+        "definition": {
+          "containerQualifiedName": "Checksum.Sha1",
+          "id": "lpocwezis0zn",
+          "isImplicitlyDeclared": true,
+          "kind": "Checksum.Sha1",
+          "shortName": "A2F19B1BB212C3C9DACADB90019A723A5A2CF287"
+        }
+      },
+      {
+        "definition": {
+          "comment": "",
+          "containerQualifiedName": "CodexTestCSharpLibrary.Cases.MemberOverride",
+          "declarationName": "public class CodexTestCSharpLibrary.Cases.MemberOverride.XedocBase",
+          "displayName": "CodexTestCSharpLibrary.Cases.MemberOverride.XedocBase",
+          "glyph": 3,
+          "id": "gl7z45hdnojl",
+          "kind": "Class",
+          "shortName": "XedocBase"
+        },
+        "length": 9,
+        "start": 207
+      },
+      {
+        "definition": {
+          "comment": "",
+          "containerQualifiedName": "CodexTestCSharpLibrary.Cases.MemberOverride.XedocBase",
+          "declarationName": "public abstract void XedocBase.Abstract()",
+          "displayName": "CodexTestCSharpLibrary.Cases.MemberOverride.XedocBase.Abstract()",
+          "glyph": 44,
+          "id": "i8xspsqvz4oz",
+          "kind": "Method",
+          "shortName": "Abstract",
+          "symbolDepth": 1,
+          "typeName": "Void"
+        },
+        "length": 8,
+        "start": 254
+      },
+      {
+        "definition": {
+          "comment": "",
+          "declarationName": "public virtual void XedocBase.Virtual()",
+          "displayName": "CodexTestCSharpLibrary.Cases.MemberOverride.XedocBase.Virtual()",
+          "id": "tlxmyrhpqmwu",
+          "shortName": "Virtual",
+          "symbolDepth": 1,
+          "typeName": "Void"
+        },
+        "length": 7,
+        "start": 297
+      },
+      {
+        "definition": {
+          "comment": "",
+          "containerQualifiedName": "CodexTestCSharpLibrary.Cases.MemberOverride",
+          "declarationName": "public class CodexTestCSharpLibrary.Cases.MemberOverride.XedocImpl",
+          "displayName": "CodexTestCSharpLibrary.Cases.MemberOverride.XedocImpl",
+          "glyph": 3,
+          "id": "focaqdch24tt",
+          "kind": "Class",
+          "shortName": "XedocImpl"
+        },
+        "length": 9,
+        "start": 358
+      },
+      {
+        "definition": {
+          "comment": "",
+          "containerQualifiedName": "CodexTestCSharpLibrary.Cases.MemberOverride.XedocImpl",
+          "declarationName": "public override void XedocImpl.Abstract()",
+          "displayName": "CodexTestCSharpLibrary.Cases.MemberOverride.XedocImpl.Abstract()",
+          "glyph": 44,
+          "id": "qzzztsebhqp3",
+          "kind": "Method",
+          "shortName": "Abstract",
+          "symbolDepth": 1,
+          "typeName": "Void"
+        },
+        "length": 8,
+        "start": 417
+      },
+      {
+        "definition": {
+          "comment": "",
+          "declarationName": "public override void XedocImpl.Virtual()",
+          "displayName": "CodexTestCSharpLibrary.Cases.MemberOverride.XedocImpl.Virtual()",
+          "id": "ud2cojqpu3ak",
+          "shortName": "Virtual",
+          "symbolDepth": 1,
+          "typeName": "Void"
+        },
+        "length": 7,
+        "start": 482
+      }
+    ],
+    "language": "C#",
+    "projectId": "CodexTestCSharpLibrary",
+    "projectRelativePath": "Cases\\MemberOverride.cs",
+    "referenceCount": 18,
+    "repoRelativePath": "CodexTestCSharpLibrary\\Cases\\MemberOverride.cs",
+    "repositoryName": "CodexTestRepo",
+    "sourceFile": {
+      "info": {
+        "language": "C#",
+        "lines": 30,
+        "projectId": "CodexTestCSharpLibrary",
+        "projectRelativePath": "Cases\\MemberOverride.cs",
+        "properties": {
+          "Checksum.Sha1": "A2F19B1BB212C3C9DACADB90019A723A5A2CF287"
+        },
+        "repoRelativePath": "CodexTestCSharpLibrary\\Cases\\MemberOverride.cs",
+        "repositoryName": "CodexTestRepo",
+        "size": 525
+      }
+    }
+  },
+  "compressedClassifications": {
+    "count": 44,
+    "segments": [
+      {
+        "fullLength": 489,
+        "lengths": {
+          "cdata": "JcbBCQAgEAPBZJND8Gn/xQoK8xhjVoye8Rxv6qEqUfD8V7k=",
+          "compressedLength": 35,
+          "decompressedLength": 44,
+          "minValue": 4,
+          "valueByteWidth": 1
+        },
+        "localSymbolGroupIds": {
+          "cdata": "Y2AgHgAA",
+          "compressedLength": 6,
+          "decompressedLength": 44,
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "Y2BkYGQEYQiCYAYGJiBmhmAmOBsA",
+          "compressedLength": 21,
+          "decompressedLength": 44,
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "Y2BgYmABYiY4jUwyMbBBaS4oLQSlBaC0FlQ1TFwVSgMA",
+          "compressedLength": 33,
+          "decompressedLength": 88,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "color": -1,
+        "name": "keyword"
+      },
+      {
+        "color": -1,
+        "name": "identifier"
+      },
+      {
+        "color": -1,
+        "name": "class name"
+      },
+      {
+        "color": -1,
+        "name": "method name"
+      }
+    ]
+  },
+  "compressedReferences": {
+    "count": 18,
+    "lineIndices": {
+      "cdata": "AAgKDBIUGA==",
+      "valueByteWidth": 1
+    },
+    "lineSpanModel": {
+      "count": 18,
+      "segments": [
+        {
+          "fullLength": 489,
+          "sharedIndices": {
+            "data": "AAAAAQICAwMEBAUFBQUGBgYG",
+            "valueByteWidth": 1
+          }
+        }
+      ]
+    },
+    "segments": [
+      {
+        "fullLength": 489,
+        "lengths": {
+          "cdata": "AAAACQQIBAcJCQgECAgIBAcH",
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "BAALAgwFDAgBAwYMBwYJDAkK",
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "Y2AAgQsMSgxMDPJAbM7AwiAJpJmAojpQGgA=",
+          "compressedLength": 26,
+          "decompressedLength": 36,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "id": "lpocwezis0zn",
+        "isImplicitlyDeclared": true,
+        "kind": "Checksum.Sha1",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "focaqdch24tt",
+        "kind": "Class"
+      },
+      {
+        "id": "gl7z45hdnojl"
+      },
+      {
+        "referenceKind": "DerivedType"
+      },
+      {
+        "id": "cf0zwkaulygj",
+        "isImplicitlyDeclared": true,
+        "kind": "File",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "i8xspsqvz4oz",
+        "kind": "Method"
+      },
+      {
+        "excludeFromSearch": true,
+        "referenceKind": "Override"
+      },
+      {
+        "id": "qzzztsebhqp3",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "tlxmyrhpqmwu"
+      },
+      {
+        "excludeFromSearch": true,
+        "referenceKind": "Override"
+      },
+      {
+        "id": "ud2cojqpu3ak",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "hufrp9hvvkvb",
+        "isImplicitlyDeclared": true,
+        "kind": "File",
+        "projectId": "CodexTestRepo(Repo)"
+      },
+      {
+        "id": "bkkllbfoc0jy",
+        "kind": "Struct",
+        "projectId": "mscorlib",
+        "referenceKind": "Reference"
+      }
+    ]
+  },
+  "sourceFileContentLines": [
+    "using System;\r\n",
+    "using System.Collections.Generic;\r\n",
+    "using System.Linq;\r\n",
+    "using System.Text;\r\n",
+    "using System.Threading.Tasks;\r\n",
+    "\r\n",
+    "namespace CodexTestCSharpLibrary.Cases.MemberOverride\r\n",
+    "{\r\n",
+    "    public abstract class XedocBase\r\n",
+    "    {\r\n",
+    "        public abstract void Abstract();\r\n",
+    "\r\n",
+    "        public virtual void Virtual()\r\n",
+    "        {\r\n",
+    "\r\n",
+    "        }\r\n",
+    "    }\r\n",
+    "\r\n",
+    "    public class XedocImpl : XedocBase\r\n",
+    "    {\r\n",
+    "        public override void Abstract()\r\n",
+    "        {\r\n",
+    "        }\r\n",
+    "\r\n",
+    "        public override void Virtual()\r\n",
+    "        {\r\n",
+    "        }\r\n",
+    "    }\r\n",
+    "}\r\n",
+    ""
+  ]
+}

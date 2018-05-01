@@ -1,0 +1,272 @@
+{
+  "boundSourceFile": {
+    "definitionCount": 6,
+    "definitions": [
+      {
+        "definition": {
+          "containerQualifiedName": "Cases",
+          "id": "mw6l0prf2548",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "shortName": "InterfaceMemberImplementation.cs"
+        }
+      },
+      {
+        "definition": {
+          "containerQualifiedName": "Checksum.Sha1",
+          "id": "d40xtbxyllit",
+          "isImplicitlyDeclared": true,
+          "kind": "Checksum.Sha1",
+          "shortName": "8EE23C759E86079F48B17D231D01A9338414CF42"
+        }
+      },
+      {
+        "definition": {
+          "comment": "",
+          "containerQualifiedName": "CodexTestCSharpLibrary.Cases.InterfaceMemberImplementation",
+          "declarationName": "public interface CodexTestCSharpLibrary.Cases.InterfaceMemberImplementation.IXedoc",
+          "displayName": "CodexTestCSharpLibrary.Cases.InterfaceMemberImplementation.IXedoc",
+          "glyph": 35,
+          "id": "hubxj3ihkrbe",
+          "kind": "Interface",
+          "shortName": "IXedoc"
+        },
+        "length": 6,
+        "start": 217
+      },
+      {
+        "definition": {
+          "comment": "",
+          "containerQualifiedName": "CodexTestCSharpLibrary.Cases.InterfaceMemberImplementation.IXedoc",
+          "declarationName": "void IXedoc.Run()",
+          "displayName": "CodexTestCSharpLibrary.Cases.InterfaceMemberImplementation.IXedoc.Run()",
+          "glyph": 44,
+          "id": "ov2v153rs2dy",
+          "kind": "Method",
+          "shortName": "Run",
+          "symbolDepth": 1,
+          "typeName": "Void"
+        },
+        "length": 3,
+        "start": 245
+      },
+      {
+        "definition": {
+          "comment": "",
+          "containerQualifiedName": "CodexTestCSharpLibrary.Cases.InterfaceMemberImplementation",
+          "declarationName": "public class CodexTestCSharpLibrary.Cases.InterfaceMemberImplementation.XedocImpl",
+          "displayName": "CodexTestCSharpLibrary.Cases.InterfaceMemberImplementation.XedocImpl",
+          "glyph": 3,
+          "id": "ysgoespli6db",
+          "kind": "Class",
+          "shortName": "XedocImpl"
+        },
+        "length": 9,
+        "start": 279
+      },
+      {
+        "definition": {
+          "comment": "",
+          "containerQualifiedName": "CodexTestCSharpLibrary.Cases.InterfaceMemberImplementation.XedocImpl",
+          "declarationName": "public void XedocImpl.Run()",
+          "displayName": "CodexTestCSharpLibrary.Cases.InterfaceMemberImplementation.XedocImpl.Run()",
+          "glyph": 44,
+          "id": "wj6da2bm7ihh",
+          "kind": "Method",
+          "shortName": "Run",
+          "symbolDepth": 1,
+          "typeName": "Void"
+        },
+        "length": 3,
+        "start": 326
+      }
+    ],
+    "language": "C#",
+    "projectId": "CodexTestCSharpLibrary",
+    "projectRelativePath": "Cases\\InterfaceMemberImplementation.cs",
+    "referenceCount": 11,
+    "repoRelativePath": "CodexTestCSharpLibrary\\Cases\\InterfaceMemberImplementation.cs",
+    "repositoryName": "CodexTestRepo",
+    "sourceFile": {
+      "info": {
+        "language": "C#",
+        "lines": 21,
+        "projectId": "CodexTestCSharpLibrary",
+        "projectRelativePath": "Cases\\InterfaceMemberImplementation.cs",
+        "properties": {
+          "Checksum.Sha1": "8EE23C759E86079F48B17D231D01A9338414CF42"
+        },
+        "repoRelativePath": "CodexTestCSharpLibrary\\Cases\\InterfaceMemberImplementation.cs",
+        "repositoryName": "CodexTestRepo",
+        "size": 365
+      }
+    }
+  },
+  "compressedClassifications": {
+    "count": 32,
+    "segments": [
+      {
+        "fullLength": 329,
+        "lengths": {
+          "cdata": "Y2JmYuZgYWJmBCM2JjZhJilmNmZGBmYmNmYgBQA=",
+          "compressedLength": 29,
+          "decompressedLength": 32,
+          "minValue": 3,
+          "valueByteWidth": 1
+        },
+        "localSymbolGroupIds": {
+          "cdata": "Y2DADwA=",
+          "compressedLength": 5,
+          "decompressedLength": 32,
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "Y2BkYGQEYQiCYAYmBmYGBhYmBgZmAA==",
+          "compressedLength": 22,
+          "decompressedLength": 32,
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "Y2BgYmABYiY4jUwyMbBBaS4wKQTEwlB5ITANAA==",
+          "compressedLength": 28,
+          "decompressedLength": 64,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "color": -1,
+        "name": "keyword"
+      },
+      {
+        "color": -1,
+        "name": "identifier"
+      },
+      {
+        "color": -1,
+        "name": "interface name"
+      },
+      {
+        "color": -1,
+        "name": "method name"
+      },
+      {
+        "color": -1,
+        "name": "class name"
+      }
+    ]
+  },
+  "compressedReferences": {
+    "count": 11,
+    "lineIndices": {
+      "cdata": "AAgKDQ8=",
+      "valueByteWidth": 1
+    },
+    "lineSpanModel": {
+      "count": 11,
+      "segments": [
+        {
+          "fullLength": 329,
+          "sharedIndices": {
+            "data": "AAAAAQICAwMEBAQ=",
+            "valueByteWidth": 1
+          }
+        }
+      ]
+    },
+    "segments": [
+      {
+        "fullLength": 329,
+        "lengths": {
+          "cdata": "AAAABgQDCQYEAwM=",
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "AggAAwkFAQQJBwY=",
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "Y2AAgVsMQgxMDAoMLAySQJqBAQA=",
+          "compressedLength": 20,
+          "decompressedLength": 22,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "id": "d40xtbxyllit",
+        "isImplicitlyDeclared": true,
+        "kind": "Checksum.Sha1",
+        "projectId": "CodexTestCSharpLibrary",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "ysgoespli6db",
+        "kind": "Class"
+      },
+      {
+        "id": "mw6l0prf2548",
+        "isImplicitlyDeclared": true,
+        "kind": "File"
+      },
+      {
+        "id": "hubxj3ihkrbe",
+        "kind": "Interface"
+      },
+      {
+        "referenceKind": "InterfaceImplementation"
+      },
+      {
+        "id": "ov2v153rs2dy",
+        "kind": "Method",
+        "referenceKind": "Definition"
+      },
+      {
+        "referenceKind": "InterfaceMemberImplementation"
+      },
+      {
+        "id": "wj6da2bm7ihh",
+        "referenceKind": "Definition"
+      },
+      {
+        "id": "cvoirbojyqcu",
+        "isImplicitlyDeclared": true,
+        "kind": "File",
+        "projectId": "CodexTestRepo(Repo)"
+      },
+      {
+        "id": "bkkllbfoc0jy",
+        "kind": "Struct",
+        "projectId": "mscorlib",
+        "referenceKind": "Reference"
+      }
+    ]
+  },
+  "sourceFileContentLines": [
+    "using System;\r\n",
+    "using System.Collections.Generic;\r\n",
+    "using System.Linq;\r\n",
+    "using System.Text;\r\n",
+    "using System.Threading.Tasks;\r\n",
+    "\r\n",
+    "namespace CodexTestCSharpLibrary.Cases.InterfaceMemberImplementation\r\n",
+    "{\r\n",
+    "    public interface IXedoc\r\n",
+    "    {\r\n",
+    "        void Run();\r\n",
+    "    }\r\n",
+    "\r\n",
+    "    public class XedocImpl : IXedoc\r\n",
+    "    {\r\n",
+    "        public void Run()\r\n",
+    "        {\r\n",
+    "        }\r\n",
+    "    }\r\n",
+    "}\r\n",
+    ""
+  ]
+}
