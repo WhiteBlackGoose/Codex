@@ -26,7 +26,6 @@ namespace Codex.Analysis.Projects
         protected override async Task<SolutionInfo> GetSolutionInfoAsync(RepoFile repoFile)
         {
             var repo = repoFile.PrimaryProject.Repo;
-            var dispatcher = repo.AnalysisServices.TaskDispatcher;
             var services = repo.AnalysisServices;
             var logger = repo.AnalysisServices.Logger;
 
@@ -76,7 +75,7 @@ namespace Codex.Analysis.Projects
                 return completionTracker.PendingCompletion;
             }
 
-            public async void StartLoadProjectAsync(string projectPath)
+            public void StartLoadProjectAsync(string projectPath)
             {
                 projectPath = Path.GetFullPath(Path.Combine(solutionDirectory, projectPath));
                 var projectName = Path.GetFileNameWithoutExtension(projectPath);
@@ -97,7 +96,7 @@ namespace Codex.Analysis.Projects
 
                     ProjectInfoBuilder info = null;
 
-                    await dispatcher.Invoke(() =>
+                    dispatcher.QueueInvoke(() =>
                     {
                         var args = File.ReadAllLines(argsPath);
 

@@ -13,7 +13,6 @@ namespace Codex.Analysis.Projects
     public class ManagedProjectAnalyzer : RepoProjectAnalyzerBase
     {
         public readonly SemanticServices semanticServices;
-        private List<Task<BoundSourceFile>> DocumentAnalysisTasks = new List<Task<BoundSourceFile>>();
         private readonly Lazy<Task<Solution>> lazySolution;
         private Project Project;
         private CompilationServices CompilationServices;
@@ -36,7 +35,7 @@ namespace Codex.Analysis.Projects
             ProjectContext = new AnalyzedProjectContext(analyzedProject);
         }
 
-        public override async void Analyze(RepoProject project)
+        public override async Task Analyze(RepoProject project)
         {
             var logger = project.Repo.AnalysisServices.Logger;
             try
@@ -44,47 +43,40 @@ namespace Codex.Analysis.Projects
                 var services = project.Repo.AnalysisServices;
                 logger.LogMessage("Loading project: " + project.ProjectId);
 
-                using (services.TaskDispatcher.TrackScope())
+                var solution = await lazySolution.Value;
+                Project = solution.GetProject(ProjectId);
+                if (Project == null)
                 {
-                    await services.TaskDispatcher.Invoke(async () =>
-                    {
-                        var solution = await lazySolution.Value;
-                        Project = solution.GetProject(ProjectId);
-                        if (Project == null)
-                        {
-                            logger.LogError($"Can't find project for {ProjectId} in {solution}");
-                        }
-                        else
-                        {
-                            Compilation = await Project.GetCompilationAsync();
-                            CompilationServices = new CompilationServices(Compilation);
-
-                            foreach (var reference in Compilation.ReferencedAssemblyNames)
-                            {
-                                var referencedProject = new ReferencedProject()
-                                {
-                                    ProjectId = reference.Name,
-                                    DisplayName = reference.GetDisplayName(),
-                                    Properties = new PropertyMap()
-                                    {
-                                        { "PublicKey", string.Concat(reference.PublicKey.Select(b => b.ToString("X2"))) }
-                                    }
-                                };
-
-                                ProjectContext.ReferencedProjects.TryAdd(referencedProject.ProjectId, referencedProject);
-                            }
-                        }
-
-                        base.Analyze(project);
-                    });
-
-                    var documents = await Task.WhenAll(DocumentAnalysisTasks);
-                    ProjectContext.Finish(project);
-
-                    UploadProject(project, ProjectContext.Project);
-
-                    project.Analyzer = RepoProjectAnalyzer.Null;
+                    logger.LogError($"Can't find project for {ProjectId} in {solution}");
                 }
+                else
+                {
+                    Compilation = await Project.GetCompilationAsync();
+                    CompilationServices = new CompilationServices(Compilation);
+
+                    foreach (var reference in Compilation.ReferencedAssemblyNames)
+                    {
+                        var referencedProject = new ReferencedProject()
+                        {
+                            ProjectId = reference.Name,
+                            DisplayName = reference.GetDisplayName(),
+                            Properties = new PropertyMap()
+                                {
+                                    { "PublicKey", string.Concat(reference.PublicKey.Select(b => b.ToString("X2"))) }
+                                }
+                        };
+
+                        ProjectContext.ReferencedProjects.TryAdd(referencedProject.ProjectId, referencedProject);
+                    }
+                }
+
+                await base.Analyze(project);
+
+                await ProjectContext.Finish(project);
+
+                await UploadProject(project, ProjectContext.Project);
+
+                project.Analyzer = RepoProjectAnalyzer.Null;
             }
             catch (Exception ex)
             {
@@ -118,59 +110,54 @@ namespace Codex.Analysis.Projects
                 DocumentInfo = documentInfo;
             }
 
-            protected override void Analyze(AnalysisServices services, RepoFile file)
+            protected override async Task Analyze(AnalysisServices services, RepoFile file)
             {
-                ProjectAnalyzer.DocumentAnalysisTasks.Add(services.TaskDispatcher.Invoke(async () =>
+                try
                 {
-                    try
+                    ReportStartAnalyze(file);
+
+                    var project = ProjectAnalyzer.Project;
+                    if (project == null)
                     {
-                        ReportStartAnalyze(file);
-
-                        var project = ProjectAnalyzer.Project;
-                        if (project == null)
-                        {
-                            file.PrimaryProject.Repo.AnalysisServices.Logger.LogError("Project is null");
-                            return null;
-                        }
-
-                        var document = project.GetDocument(DocumentInfo.Id);
-                        var text = await document.GetTextAsync();
-
-                        SourceFile sourceFile = new SourceFile()
-                        {
-                            Info = AugmentSourceFileInfo(new SourceFileInfo()
-                            {
-                                Language = project.Language,
-                                ProjectRelativePath = file.LogicalPath,
-                                RepoRelativePath = file.RepoRelativePath
-                            }),
-                        };
-
-                        BoundSourceFileBuilder binder = CreateBuilder(sourceFile, file, file.PrimaryProject.ProjectId);
-                        binder.SourceText = text;
-
-                        DocumentAnalyzer analyzer = new DocumentAnalyzer(
-                            ProjectAnalyzer.semanticServices,
-                            document,
-                            ProjectAnalyzer.CompilationServices,
-                            file.LogicalPath,
-                            ProjectAnalyzer.ProjectContext,
-                            binder);
-
-                        var boundSourceFile = await analyzer.CreateBoundSourceFile();
-
-                        ProjectAnalyzer.ProjectContext.ReportDocument(boundSourceFile, file);
-
-                        UploadSourceFile(services, file, boundSourceFile);
-
-                        return boundSourceFile;
+                        file.PrimaryProject.Repo.AnalysisServices.Logger.LogError("Project is null");
+                        return;
                     }
-                    finally
+
+                    var document = project.GetDocument(DocumentInfo.Id);
+                    var text = await document.GetTextAsync();
+
+                    SourceFile sourceFile = new SourceFile()
                     {
-                        file.Analyzer = RepoFileAnalyzer.Null;
-                        ProjectAnalyzer = null;
-                    }
-                }));
+                        Info = AugmentSourceFileInfo(new SourceFileInfo()
+                        {
+                            Language = project.Language,
+                            ProjectRelativePath = file.LogicalPath,
+                            RepoRelativePath = file.RepoRelativePath
+                        }),
+                    };
+
+                    BoundSourceFileBuilder binder = CreateBuilder(sourceFile, file, file.PrimaryProject.ProjectId);
+                    binder.SourceText = text;
+
+                    DocumentAnalyzer analyzer = new DocumentAnalyzer(
+                        ProjectAnalyzer.semanticServices,
+                        document,
+                        ProjectAnalyzer.CompilationServices,
+                        file.LogicalPath,
+                        ProjectAnalyzer.ProjectContext,
+                        binder);
+
+                    var boundSourceFile = await analyzer.CreateBoundSourceFile();
+
+                    ProjectAnalyzer.ProjectContext.ReportDocument(boundSourceFile, file);
+
+                    await UploadSourceFile(services, file, boundSourceFile);
+                }
+                finally
+                {
+                    file.Analyzer = RepoFileAnalyzer.Null;
+                    ProjectAnalyzer = null;
+                }
             }
         }
     }

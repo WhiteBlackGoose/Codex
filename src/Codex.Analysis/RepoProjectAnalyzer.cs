@@ -19,19 +19,22 @@ namespace Codex.Analysis
 
     public class RepoProjectAnalyzerBase : RepoProjectAnalyzer
     {
-        public override void UploadProject(RepoProject project)
+        public override Task UploadProject(RepoProject project)
         {
+            return Task.CompletedTask;
         }
     }
 
     public class NullRepoProjectAnalzyer : RepoProjectAnalyzer
     {
-        public override void UploadProject(RepoProject project)
+        public override Task UploadProject(RepoProject project)
         {
+            return Task.CompletedTask;
         }
 
-        public override void Analyze(RepoProject project)
+        public override Task Analyze(RepoProject project)
         {
+            return Task.CompletedTask;
         }
     }
 
@@ -43,35 +46,46 @@ namespace Codex.Analysis
 
         public virtual void CreateProjects(Repo repo) { }
 
-        public virtual void Analyze(RepoProject project)
+        public virtual async Task Analyze(RepoProject project)
         {
-            project.Repo.AnalysisServices.Logger.WriteLine($"Analyzing project {project.ProjectId}");
+            var analysisServices = project.Repo.AnalysisServices;
+            analysisServices.Logger.WriteLine($"Analyzing project {project.ProjectId}");
+            List<Task> fileTasks = new List<Task>();
 
             foreach (var file in project.Files)
             {
                 if (file.PrimaryProject == project)
                 {
-                    file.Analyze();
+                    if (analysisServices.ParallelProcessProjectFiles)
+                    {
+                        fileTasks.Add(analysisServices.TaskDispatcher.Invoke(() => file.Analyze(), TaskType.File));
+                    }
+                    else
+                    {
+                        await file.Analyze();
+                    }
                 }
             }
 
-            UploadProject(project);
+            await Task.WhenAll(fileTasks);
+
+            await UploadProject(project);
         }
 
         public virtual void CreateProjects(RepoFile repoFile) { }
 
         public virtual bool IsCandidateProjectFile(RepoFile repoFile) => false;
 
-        public virtual void UploadProject(RepoProject project)
+        public virtual async Task UploadProject(RepoProject project)
         {
             AnalyzedProject analyzedProject = new AnalyzedProject(
                 repositoryName: project.Repo.Name, 
                 projectId: project.ProjectId);
 
-            UploadProject(project, analyzedProject);
+            await UploadProject(project, analyzedProject);
         }
 
-        protected static void UploadProject(RepoProject project, AnalyzedProject analyzedProject)
+        protected static async Task UploadProject(RepoProject project, AnalyzedProject analyzedProject)
         {
             analyzedProject.ProjectKind = project.ProjectKind;
             foreach (var file in project.Files)
@@ -85,18 +99,15 @@ namespace Codex.Analysis
 
             if (analyzedProject.AdditionalSourceFiles.Count != 0)
             {
-                project.Repo.AnalysisServices.TaskDispatcher.QueueInvoke(() =>
-                    project.Repo.AnalysisServices.RepositoryStore.AddBoundFilesAsync(analyzedProject.AdditionalSourceFiles), TaskType.Upload);
+                await project.Repo.AnalysisServices.RepositoryStore.AddBoundFilesAsync(analyzedProject.AdditionalSourceFiles);
             }
 
             if (analyzedProject.ReferenceDefinitionMap.Count != 0)
             {
-                project.Repo.AnalysisServices.TaskDispatcher.QueueInvoke(() =>
-                    project.Repo.AnalysisServices.RepositoryStore.AddBoundFilesAsync(analyzedProject.AdditionalSourceFiles), TaskType.Upload);
+                await project.Repo.AnalysisServices.RepositoryStore.AddBoundFilesAsync(analyzedProject.AdditionalSourceFiles);
             }
 
-            project.Repo.AnalysisServices.TaskDispatcher.QueueInvoke(() =>
-                project.Repo.AnalysisServices.RepositoryStore.AddProjectsAsync(new[] { analyzedProject }), TaskType.Upload);
+            await project.Repo.AnalysisServices.RepositoryStore.AddProjectsAsync(new[] { analyzedProject });
         }
     }
 }

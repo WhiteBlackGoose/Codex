@@ -111,13 +111,15 @@ namespace Codex.Import
             return string.Join(";", list);
         }
 
-        public void Analyze()
+        public Task Analyze()
         {
             if (Interlocked.Increment(ref m_analyzed) == 1)
             {
                 var fileAnalyzer = Analyzer ?? PrimaryProject.Repo.AnalysisServices.GetDefaultAnalyzer(FilePath);
-                fileAnalyzer?.Analyze(this);
+                return fileAnalyzer?.Analyze(this) ?? Task.CompletedTask;
             }
+
+            return Task.CompletedTask;
         }
     }
 }

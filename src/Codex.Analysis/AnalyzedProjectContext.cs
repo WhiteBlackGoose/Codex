@@ -10,7 +10,7 @@ using Codex.ObjectModel;
 using Microsoft.CodeAnalysis;
 using static Codex.Analysis.Xml.Linq.XElementExtensions;
 using static Codex.Analysis.BoundSourceFileBuilder;
-
+using System.Threading.Tasks;
 
 namespace Codex.Analysis
 {
@@ -70,7 +70,7 @@ namespace Codex.Analysis
             return extData;
         }
 
-        public void Finish(RepoProject repoProject)
+        public async Task Finish(RepoProject repoProject)
         {
             foreach (var entry in ReferenceDefinitionMap)
             {
@@ -99,10 +99,10 @@ namespace Codex.Analysis
             }
 
             //CreateNamespaceFile();
-            CreateReferencedProjectFiles(repoProject);
+            await CreateReferencedProjectFiles(repoProject);
         }
 
-        private void CreateReferencedProjectFiles(RepoProject repoProject)
+        private async Task CreateReferencedProjectFiles(RepoProject repoProject)
         {
             foreach (var project in ReferencedProjects.Values)
             {
@@ -111,7 +111,7 @@ namespace Codex.Analysis
                     continue;
                 }
 
-                CreateMetadataFile(repoProject, GetProjectReferenceSymbolsPath(project.ProjectId), () =>
+                await CreateMetadataFile(repoProject, GetProjectReferenceSymbolsPath(project.ProjectId), () =>
                 {
                     XElement container = null;
                     return Element("ReferenceSymbols")
@@ -136,7 +136,7 @@ namespace Codex.Analysis
                 });
             }
 
-            CreateMetadataFile(repoProject, "ReferenceProjects.xml", () =>
+            await CreateMetadataFile(repoProject, "ReferenceProjects.xml", () =>
                 {
                     return Element("ReferenceProjects").ForEach(ReferencedProjects.Values
                         .OrderBy(rp => rp.ProjectId, StringComparer.OrdinalIgnoreCase)
@@ -164,7 +164,7 @@ namespace Codex.Analysis
             return $@"[Metadata]\{fileName}";
         }
 
-        private void CreateMetadataFile(RepoProject project, string fileName, Func<XElement> elementFactory)
+        private async Task CreateMetadataFile(RepoProject project, string fileName, Func<XElement> elementFactory)
         {
             var metadataFileBuilder = elementFactory().CreateAnnotatedSourceBuilder(
                 new SourceFileInfo()
@@ -182,7 +182,9 @@ namespace Codex.Analysis
 
             metadataFileBuilder.BoundSourceFile.ExcludeFromSearch = true;
 
-            repoFile.Analyze();
+            await repoFile.Analyze();
+
+            repoFile.InMemorySourceFileBuilder = null;
         }
     }
 }

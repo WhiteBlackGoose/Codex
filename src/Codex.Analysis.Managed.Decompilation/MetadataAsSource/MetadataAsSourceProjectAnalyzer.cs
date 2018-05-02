@@ -48,41 +48,38 @@ namespace Codex.Analysis.Managed
             }
         }
 
-        public override void Analyze(RepoProject project)
+        public override async Task Analyze(RepoProject project)
         {
-            project.Repo.AnalysisServices.TaskDispatcher.QueueInvoke(async () =>
+            var assembly = assemblyFileByMetadataAsSourceProjectPath[project.ProjectDirectory];
+
+            try
             {
-                var assembly = assemblyFileByMetadataAsSourceProjectPath[project.ProjectDirectory];
-
-                try
+                var solution = await MetadataAsSource.LoadMetadataAsSourceSolution(assembly, project.ProjectDirectory);
+                if (solution == null)
                 {
-                    var solution = await MetadataAsSource.LoadMetadataAsSourceSolution(assembly, project.ProjectDirectory);
-                    if (solution == null)
-                    {
-                        return;
-                    }
-
-                    var proj = solution.Projects.Single();
-
-                    var projectInfo = ProjectInfo.Create(proj.Id, VersionStamp.Create(), project.ProjectId, project.ProjectId, LanguageNames.CSharp,
-                        documents: proj.Documents.Select(d => DocumentInfo.Create(d.Id, d.Name, filePath: d.FilePath, folders: d.Folders)));
-
-                    SolutionProjectAnalyzer.AddSolutionProject(
-                        new Lazy<Task<Microsoft.CodeAnalysis.Solution>>(() => Task.FromResult(solution)),
-                        projectInfo,
-                        project.ProjectFile,
-                        project,
-                        csharpSemanticServices: new Lazy<SemanticServices>(() => new SemanticServices(solution.Workspace, LanguageNames.CSharp)));
-
-                    if (project.Analyzer != this)
-                    {
-                        project.Analyzer.Analyze(project);
-                    }
+                    return;
                 }
-                catch
+
+                var proj = solution.Projects.Single();
+
+                var projectInfo = ProjectInfo.Create(proj.Id, VersionStamp.Create(), project.ProjectId, project.ProjectId, LanguageNames.CSharp,
+                    documents: proj.Documents.Select(d => DocumentInfo.Create(d.Id, d.Name, filePath: d.FilePath, folders: d.Folders)));
+
+                SolutionProjectAnalyzer.AddSolutionProject(
+                    new Lazy<Task<Microsoft.CodeAnalysis.Solution>>(() => Task.FromResult(solution)),
+                    projectInfo,
+                    project.ProjectFile,
+                    project,
+                    csharpSemanticServices: new Lazy<SemanticServices>(() => new SemanticServices(solution.Workspace, LanguageNames.CSharp)));
+
+                if (project.Analyzer != this)
                 {
+                    await project.Analyzer.Analyze(project);
                 }
-            });
+            }
+            catch
+            {
+            }
         }
     }
 }

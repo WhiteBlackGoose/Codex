@@ -34,10 +34,10 @@ namespace Codex.Analysis.FileSystems
                 return new string[0];
             }
 
-            return GetFiles(RootDirectory);
+            return GetFilesHelper(RootDirectory);
         }
 
-        private IEnumerable<string> GetFiles(string rootDirectory)
+        private IEnumerable<string> GetFilesHelper(string rootDirectory)
         {
             CompletionTracker tracker = new CompletionTracker();
 

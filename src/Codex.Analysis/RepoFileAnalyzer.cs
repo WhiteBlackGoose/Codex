@@ -14,9 +14,9 @@ namespace Codex.Analysis.Files
 
         public virtual string[] SupportedExtensions => new string[0];
 
-        public void Analyze(RepoFile file)
+        public Task Analyze(RepoFile file)
         {
-            Analyze(file.PrimaryProject.Repo.AnalysisServices, file);
+            return Analyze(file.PrimaryProject.Repo.AnalysisServices, file);
         }
 
         public virtual void Initialize(Repo repo)
@@ -32,20 +32,17 @@ namespace Codex.Analysis.Files
             return info;
         }
 
-        protected virtual void Analyze(AnalysisServices services, RepoFile file)
+        protected virtual async Task Analyze(AnalysisServices services, RepoFile file)
         {
             try
             {
-                services.TaskDispatcher.QueueInvoke(() =>
-                {
-                    ReportStartAnalyze(file);
+                ReportStartAnalyze(file);
 
-                    SourceFile sourceFile = file.InMemorySourceFileBuilder?.SourceFile ?? CreateSourceFile(services, file);
+                SourceFile sourceFile = file.InMemorySourceFileBuilder?.SourceFile ?? CreateSourceFile(services, file);
 
-                    BoundSourceFileBuilder binder = file.InMemorySourceFileBuilder ?? CreateBuilder(sourceFile, file, file.PrimaryProject.ProjectId);
+                BoundSourceFileBuilder binder = file.InMemorySourceFileBuilder ?? CreateBuilder(sourceFile, file, file.PrimaryProject.ProjectId);
 
-                    AnnotateAndUpload(services, file, binder);
-                });
+                await AnnotateAndUpload(services, file, binder);
             }
             catch (Exception ex)
             {
@@ -67,7 +64,7 @@ namespace Codex.Analysis.Files
             };
         }
 
-        private async void AnnotateAndUpload(
+        private async Task AnnotateAndUpload(
             AnalysisServices services,
             RepoFile file,
             BoundSourceFileBuilder binder)
@@ -76,7 +73,7 @@ namespace Codex.Analysis.Files
 
             var boundSourceFile = binder.Build();
 
-            UploadSourceFile(services, file, boundSourceFile);
+            await UploadSourceFile(services, file, boundSourceFile);
         }
 
         protected static void ReportStartAnalyze(RepoFile file)
@@ -105,19 +102,15 @@ namespace Codex.Analysis.Files
             return new BoundSourceFileBuilder(sourceFile, projectId);
         }
 
-        protected static void UploadSourceFile(AnalysisServices services, RepoFile file, BoundSourceFile boundSourceFile)
+        protected static Task UploadSourceFile(AnalysisServices services, RepoFile file, BoundSourceFile boundSourceFile)
         {
             boundSourceFile.RepositoryName = file.PrimaryProject.Repo.Name;
             boundSourceFile.SourceFile.Info.RepositoryName = file.PrimaryProject.Repo.Name;
 
-            services.TaskDispatcher.QueueInvoke(() =>
-            {
-                int uploadCount = Interlocked.Increment(ref file.PrimaryProject.Repo.UploadCount);
-                file.PrimaryProject.Repo.AnalysisServices.Logger.WriteLine($"Uploading source: '{boundSourceFile.ProjectId}::{boundSourceFile.SourceFile.Info.ProjectRelativePath}' ({uploadCount} of {file.PrimaryProject.Repo.FileCount})");
+            int uploadCount = Interlocked.Increment(ref file.PrimaryProject.Repo.UploadCount);
+            file.PrimaryProject.Repo.AnalysisServices.Logger.WriteLine($"Uploading source: '{boundSourceFile.ProjectId}::{boundSourceFile.SourceFile.Info.ProjectRelativePath}' ({uploadCount} of {file.PrimaryProject.Repo.FileCount})");
 
-                return services.RepositoryStore.AddBoundFilesAsync(new[] { boundSourceFile });
-            },
-            TaskType.Upload);
+            return services.RepositoryStore.AddBoundFilesAsync(new[] { boundSourceFile });
         }
 
         protected virtual Task AnnotateFileAsync(AnalysisServices services, RepoFile file, BoundSourceFileBuilder binder)
@@ -142,8 +135,9 @@ namespace Codex.Analysis.Files
 
         public class NullRepoFileAnalyzer : RepoFileAnalyzer
         {
-            protected override void Analyze(AnalysisServices services, RepoFile file)
+            protected override Task Analyze(AnalysisServices services, RepoFile file)
             {
+                return Task.CompletedTask;
             }
         }
     }

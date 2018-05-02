@@ -28,11 +28,6 @@ namespace Codex.Analysis.Projects
         {
         }
 
-        public override void Analyze(RepoProject project)
-        {
-            base.Analyze(project);
-        }
-
         public override bool IsCandidateProjectFile(RepoFile repoFile)
         {
             if (repoFile.FilePath.EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
