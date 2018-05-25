@@ -320,11 +320,24 @@ namespace Codex.Storage.ElasticProviders
             });
         }
 
+        public Task ChangeIndices(IReadOnlyList<string> promoteIndices, IReadOnlyList<string> demoteIndices)
+        {
+            return UseElasticClient(async client =>
+            {
+                return await client.AliasAsync(
+                    ba => ba
+                    .ForEach(promoteIndices, (b, index) => b.Add(a => a.Index(index).Alias(CombinedSourcesIndexAlias)))
+                    .ForEach(demoteIndices, (b, index) => b.Remove(a => a.Index(index).Alias(CombinedSourcesIndexAlias)))
+                    );
+            });
+        }
+
         public async Task<IEnumerable<(string IndexName, bool IsActive)>> GetIndicesAsync()
         {
             var client = CreateClient();
 
             var result = await client.GetAliasAsync().ThrowOnFailure();
+            var indices = await client.GetIndexAsync(Nest.Indices.All);
 
             return result.Indices.Select(kvp =>
             (

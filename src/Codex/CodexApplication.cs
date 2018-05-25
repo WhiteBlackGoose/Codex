@@ -50,6 +50,8 @@ namespace Codex.Application
         static bool projectMode = false;
         static bool update = false;
         static List<string> deleteIndices = new List<string>();
+        static List<string> demoteIndices = new List<string>();
+        static List<string> promoteIndices = new List<string>();
 
         static Dictionary<string, (Action act, OptionSet options)> actions = new Dictionary<string, (Action, OptionSet)>(StringComparer.OrdinalIgnoreCase)
         {
@@ -97,6 +99,18 @@ namespace Codex.Application
                     {
                         { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
                         { "d=", "List the indices to delete.", n => deleteIndices.Add(n) },
+                    }
+                )
+            },
+            {
+                "change",
+                (
+                    new Action(() => ChangeIndices()),
+                    new OptionSet
+                    {
+                        { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
+                        { "promote=", "List the indices to delete.", n => promoteIndices.Add(n) },
+                        { "demote=", "List the indices to delete.", n => demoteIndices.Add(n) },
                     }
                 )
             },
@@ -401,6 +415,18 @@ namespace Codex.Application
             if (interactive)
             {
                 Search();
+            }
+        }
+
+        private static void ChangeIndices()
+        {
+            Storage.ElasticsearchStorage storage = new Storage.ElasticsearchStorage(elasticSearchServer);
+
+            if ((promoteIndices.Count > 0) || (demoteIndices.Count > 0))
+            {
+                storage.Provider.ChangeIndices(promoteIndices: promoteIndices, demoteIndices: demoteIndices).GetAwaiter().GetResult();
+
+                ListIndices();
             }
         }
 

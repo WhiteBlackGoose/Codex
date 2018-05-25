@@ -4595,6 +4595,20 @@ namespace Codex.ObjectModel {
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IFileStatistics))]
     public partial class FileStatistics : Codex.EntityBase, Codex.IFileStatistics {
         
+        private long m_FileCount;
+        
+        private long m_Classifications;
+        
+        private long m_Definitions;
+        
+        private long m_References;
+        
+        private long m_Lines;
+        
+        private long m_Size;
+        
+        private long m_AnalyzedSize;
+        
         public FileStatistics() {
             Initialize();
         }
@@ -4604,8 +4618,99 @@ namespace Codex.ObjectModel {
             this.CopyFrom<FileStatistics>(value);
         }
         
+        /// <summary>
+        /// The numbef of files
+        /// </summary>
+        public virtual long FileCount {
+            get {
+                return this.m_FileCount;
+            }
+            set {
+                this.m_FileCount = value;
+            }
+        }
+        
+        /// <summary>
+        /// The number of classifications
+        /// </summary>
+        public virtual long Classifications {
+            get {
+                return this.m_Classifications;
+            }
+            set {
+                this.m_Classifications = value;
+            }
+        }
+        
+        /// <summary>
+        /// The number of definitions
+        /// </summary>
+        public virtual long Definitions {
+            get {
+                return this.m_Definitions;
+            }
+            set {
+                this.m_Definitions = value;
+            }
+        }
+        
+        /// <summary>
+        /// The number of references
+        /// </summary>
+        public virtual long References {
+            get {
+                return this.m_References;
+            }
+            set {
+                this.m_References = value;
+            }
+        }
+        
+        /// <summary>
+        /// The number of lines of code in files
+        /// </summary>
+        public virtual long Lines {
+            get {
+                return this.m_Lines;
+            }
+            set {
+                this.m_Lines = value;
+            }
+        }
+        
+        /// <summary>
+        /// The total size of files
+        /// </summary>
+        public virtual long Size {
+            get {
+                return this.m_Size;
+            }
+            set {
+                this.m_Size = value;
+            }
+        }
+        
+        /// <summary>
+        /// The total size of analysis files
+        /// </summary>
+        public virtual long AnalyzedSize {
+            get {
+                return this.m_AnalyzedSize;
+            }
+            set {
+                this.m_AnalyzedSize = value;
+            }
+        }
+        
         public virtual TTarget CopyFrom<TTarget>(Codex.IFileStatistics value)
             where TTarget : FileStatistics {
+            this.m_FileCount = ((Codex.IFileStatistics)(value)).FileCount;
+            this.m_Classifications = ((Codex.IFileStatistics)(value)).Classifications;
+            this.m_Definitions = ((Codex.IFileStatistics)(value)).Definitions;
+            this.m_References = ((Codex.IFileStatistics)(value)).References;
+            this.m_Lines = ((Codex.IFileStatistics)(value)).Lines;
+            this.m_Size = ((Codex.IFileStatistics)(value)).Size;
+            this.m_AnalyzedSize = ((Codex.IFileStatistics)(value)).AnalyzedSize;
             return ((TTarget)(this));
         }
     }
