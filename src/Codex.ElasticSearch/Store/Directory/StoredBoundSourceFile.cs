@@ -31,9 +31,14 @@ namespace Codex.ElasticSearch.Store
                 string containerQualifiedName = null;
                 string kind = null;
                 Glyph glyph = default(Glyph);
+
                 foreach (var definitionSpan in this.BoundSourceFile.Definitions)
                 {
-                    var definition = definitionSpan.Definition;
+                    // Clone definition so references which are actually definitions do not get
+                    // modified
+                    var definition = new DefinitionSymbol(definitionSpan.Definition);
+                    definitionSpan.Definition = definition;
+
                     definition.ProjectId = RemoveDuplicate(definition.ProjectId, ref projectId);
                     definition.Kind = RemoveDuplicate(definition.Kind, ref kind);
                     definition.ContainerQualifiedName = RemoveDuplicate(definition.ContainerQualifiedName, ref containerQualifiedName);

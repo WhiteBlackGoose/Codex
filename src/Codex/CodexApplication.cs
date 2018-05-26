@@ -74,6 +74,7 @@ namespace Codex.Application
                         { "l|logDirectory=", "Optional. Path to log directory", n => logDirectory = n },
                         { "s|solution=", "Optionally, path to the solution to analyze.", n => solutionPath = n },
                         { "projectMode", "Uses project indexing mode.", n => projectMode = n != null },
+                        { "newBackend", "Use new backend with stored filters Not supported.", n => newBackend = n != null },
                         { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
                     }
                 )
@@ -380,16 +381,26 @@ namespace Codex.Application
             if (String.IsNullOrEmpty(repoName)) throw new ArgumentException("Project name is missing. Use -n to provide it.");
             if (saveDirectory == null)
             {
-                InitService();
-
-                store = service.CreateStoreAsync(new ElasticSearchStoreConfiguration()
+                if (newBackend)
                 {
-                    // TODO: Remove these for production. Indices should be created by a single setup process
-                    CreateIndices = true,
-                    ClearIndicesBeforeUse = true,
-                    ShardCount = 2,
-                    Prefix = "apptest"
-                }).GetAwaiter().GetResult();
+                    InitService();
+
+                    store = service.CreateStoreAsync(new ElasticSearchStoreConfiguration()
+                    {
+                        // TODO: Remove these for production. Indices should be created by a single setup process
+                        CreateIndices = true,
+                        ClearIndicesBeforeUse = true,
+                        ShardCount = 2,
+                        Prefix = "apptest"
+                    }).GetAwaiter().GetResult();
+                }
+                else
+                {
+                    store = new LegacyElasticSearchStore(new LegacyElasticSearchStoreConfiguration()
+                    {
+                        Endpoint = elasticSearchServer
+                    });
+                }
             }
             else
             {
