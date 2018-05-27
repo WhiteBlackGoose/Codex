@@ -69,7 +69,7 @@ namespace Codex.ElasticSearch.Utilities
 
         public static IndexName GetIndexName<T>(string baseIndexName)
         {
-            return new IndexName() { Name = GetIndexName(baseIndexName, TypeIndexName<T>()) };
+            return GetIndexName(baseIndexName, TypeIndexName<T>());
         }
 
         public static BulkIndexDescriptor<T> IndexEx<T>(this BulkIndexDescriptor<T> bulk, string index)
@@ -217,7 +217,7 @@ namespace Codex.ElasticSearch.Utilities
             {
                 using (var ms = new MemoryStream())
                 {
-                    client.Serializer.Serialize(requestDescriptor, ms);
+                    client.RequestResponseSerializer.Serialize(requestDescriptor, ms);
                     ms.Position = 0;
                     var textReader = new StreamReader(ms);
                     request.Value = textReader.ReadToEnd();

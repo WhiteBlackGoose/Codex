@@ -8,6 +8,7 @@ using Codex.Sdk.Utilities;
 using Codex.ElasticSearch.Utilities;
 using Codex.Storage.ElasticProviders;
 using Codex.ObjectModel;
+using System.Net;
 
 namespace Codex.ElasticSearch
 {
@@ -92,14 +93,14 @@ namespace Codex.ElasticSearch
             return response;
         }
 
-        private bool IsAdded(BulkResponseItemBase item)
+        private bool IsAdded(IBulkResponseItem item)
         {
-            return (item as BulkCreateResponseItem).Result == "created";
+            return (item as BulkCreateResponseItem).Status == (int)HttpStatusCode.Created;
         }
 
-        private int GetShard(BulkResponseItemBase item)
+        private int GetShard(IBulkResponseItem item)
         {
-            return item.Shard;
+            return Placeholder.Value<int>();
         }
 
         public bool TryAdd<T>(ElasticSearchEntityStore<T> store, T entity, Action onAdded, ElasticSearchStoredFilterBuilder[] additionalStoredFilters)

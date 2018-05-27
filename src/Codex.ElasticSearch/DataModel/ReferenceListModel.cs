@@ -139,6 +139,11 @@ namespace Codex.Storage.DataModel
             var relatedDefinition = segment.GetRelatedDefinition(segmentOffset);
             var excludeFromSearch = segment.GetExcludedFromSearch(segmentOffset);
 
+            //if ((start - lineSpan.Start) == 21 && lineSpan.LineSpanText == "public interface IXedoc")
+            //{
+            //    System.Diagnostics.Debugger.Launch();
+            //}
+
             return new ReferenceSpan(lineSpan)
             {
                 Start = start,

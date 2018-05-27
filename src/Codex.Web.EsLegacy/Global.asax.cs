@@ -31,7 +31,7 @@ namespace WebUI
             //    .AsSelf()
             //    .SingleInstance();
 
-            builder.Register(_ => new ElasticsearchStorage("http://localhost:9200", requiresProjectGraph: true))
+            builder.Register(_ => new ElasticsearchStorage("http://ddindex:9125", requiresProjectGraph: true))
                 .As<IStorage>()
                 .SingleInstance();
 

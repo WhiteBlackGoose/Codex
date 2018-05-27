@@ -50,7 +50,7 @@ namespace Codex.ElasticSearch.Tests
                             Reference = new DefinitionSymbol()
                             {
                                 ContainerQualifiedName = "cqn",
-                                ReferenceKind = "refKind"
+                                ReferenceKind = "rkind"
                             }
                         }
                     }
@@ -63,6 +63,7 @@ namespace Codex.ElasticSearch.Tests
             };
 
             var entityResult = entity.ElasticSerialize();
+            Assert.True(entityResult.ToLowerInvariant().Contains("rkind"), "Property of ReferenceSymbol should be serialized when the property type is ReferenceSymbol");
             Assert.False(entityResult.ToLowerInvariant().Contains("cqn"), "Property of DefinitionSymbol should not be serialized when the property type is ReferenceSymbol");
             Assert.Pass(entityResult);
         }

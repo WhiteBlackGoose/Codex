@@ -85,15 +85,23 @@ namespace Codex.ElasticSearch.Store
                         var lineSpanText = SourceFileContentLines[i];
                         var lineSpan = new SymbolSpan()
                         {
-                            // LineSpanStart is modified by Trim(), but floored at zero
-                            // This is only set to recompute the start value so we set it to max
-                            // value and then use the changed amount after trim to compute start
-                            LineSpanStart = int.MaxValue,
+                            Length = lineSpanText.Length,
                             LineSpanText = lineSpanText,
                         };
 
+                        int lineOffset = 0;
+                        // Set line span start to first non-whitespace character
+                        for (int j = 0; j < lineSpanText.Length; j++)
+                        {
+                            if (!char.IsWhiteSpace(lineSpanText[j]))
+                            {
+                                lineOffset = j;
+                                break;
+                            }
+                        }
+
                         lineSpan.Trim();
-                        lineSpan.Start = lineSpanStart + (int.MaxValue - lineSpan.LineSpanStart);
+                        lineSpan.Start = lineSpanStart + lineOffset;
                         lineSpans.Add(lineSpan);
 
                         lineSpanStart += lineSpanText.Length;

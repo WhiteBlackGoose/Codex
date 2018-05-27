@@ -16,33 +16,25 @@ using System.Collections;
 using System.Linq.Expressions;
 using Codex.Storage.DataModel;
 using Codex.ElasticSearch.Utilities;
+using Nest.JsonNetSerializer;
+using Elasticsearch.Net;
 
 namespace Codex.Serialization
 {
-    //class EntitySerializer : DefaultContractResolver
-    //{
-    //    protected override JsonContract CreateContract(Type objectType)
-    //    {
-    //        return base.CreateContract(objectType);
-    //    }
+    public class EntityJsonNetSerializer : JsonNetSerializer
+    {
+        public EntityJsonNetSerializer(
+            IElasticsearchSerializer builtinSerializer, 
+            IConnectionSettingsValues connectionSettings) 
+            : base(builtinSerializer, connectionSettings)
+        {
+        }
 
-    //    protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
-    //    {
-    //        var properties = base.CreateProperties(type, memberSerialization);
-
-    //        foreach (var property in properties)
-    //        {
-    //        }
-
-    //        return properties;
-    //    }
-
-    //    protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
-    //    {
-    //        return base.CreateProperty(member, memberSerialization);
-    //    }
-
-    //}
+        protected override IContractResolver CreateContractResolver()
+        {
+            return new CachingContractResolver(new EntityContractResolver(ObjectStage.Index, this.ConnectionSettings));
+        }
+    }
 
     public class JsonPrimitiveConverter<TType> : JsonConverter
     {
@@ -68,22 +60,6 @@ namespace Codex.Serialization
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             Write(writer, (TType)value);
-        }
-    }
-
-    public class CachingElasticContractResolver : ElasticContractResolver
-    {
-        private IContractResolver m_inner;
-
-        public CachingElasticContractResolver(IContractResolver inner, IConnectionSettingsValues connectionSettings = null, IList<Func<Type, JsonConverter>> contractConverters = null)
-            : base (connectionSettings ?? new ConnectionSettings(), contractConverters)
-        {
-            m_inner = new CachingContractResolver(inner);
-        }
-
-        public override JsonContract ResolveContract(Type objectType)
-        {
-            return m_inner.ResolveContract(objectType);
         }
     }
 
@@ -165,7 +141,7 @@ namespace Codex.Serialization
         }
     }
 
-    public class EntityContractResolver : ElasticContractResolver
+    public class EntityContractResolver : ConnectionSettingsAwareContractResolver
     {
         private readonly ObjectStage stage;
         private readonly Dictionary<Type, JsonConverter> primitives = new Dictionary<Type, JsonConverter>();
@@ -178,8 +154,8 @@ namespace Codex.Serialization
         private readonly IComparer<MemberInfo> MemberComparer = new ComparerBuilder<MemberInfo>()
             .CompareByAfter(m => m.Name, StringComparer.Ordinal);
 
-        public EntityContractResolver(ObjectStage stage)
-            : base (new ConnectionSettings(), null)
+        public EntityContractResolver(ObjectStage stage, IConnectionSettingsValues settings = null)
+            : base (settings ?? new ConnectionSettings())
         {
             this.stage = stage;
             AddPrimitive(r => SymbolId.UnsafeCreateWithValue((string)r.Value), (w, id) => w.WriteValue(id.Value));
@@ -199,6 +175,13 @@ namespace Codex.Serialization
         {
             var result = base.ResolveContractConverter(objectType);
             return result;
+        }
+
+        protected override JsonDictionaryContract CreateDictionaryContract(Type objectType)
+        {
+            var contract = base.CreateDictionaryContract(objectType);
+            contract.DictionaryKeyResolver = propertyName => propertyName;
+            return contract;
         }
 
         protected override JsonObjectContract CreateObjectContract(Type objectType)
@@ -225,11 +208,6 @@ namespace Codex.Serialization
 
         protected override JsonContract CreateContract(Type objectType)
         {
-            if (objectType == typeof(ReferenceListModel))
-            {
-
-            }
-
             objectType = ElasticCodexTypeUtilities.Instance.GetImplementationType(objectType);
 
             if (primitives.TryGetValue(objectType, out var converter))
@@ -367,12 +345,27 @@ namespace Codex.Serialization
             {
                 serializers[stage] = JsonSerializer.Create(new JsonSerializerSettings()
                 {
-                    ContractResolver = new CachingElasticContractResolver(new EntityContractResolver((ObjectStage)stage)),
+                    ContractResolver = new CachingContractResolver(new EntityContractResolver((ObjectStage)stage)),
                     DefaultValueHandling = DefaultValueHandling.Ignore
                 });
             }
 
             return serializers;
+        }
+
+        public static Func<TArg, TResult> CreateStaticMethodCall<TArg, TResult>(Type type, string methodName)
+        {
+            var arg0 = Expression.Parameter(typeof(TArg), "arg0");
+            return Expression.Lambda<Func<TArg, TResult>>(
+                Expression.Call(
+                    type,
+                    methodName,
+                    typeArguments: null,
+                    arguments: new Expression[]
+                    {
+                        arg0
+                    }),
+                arg0).Compile();
         }
 
         public static Action<TType, TFieldType> CreateFieldSetter<TType, TFieldType>(string fieldName)
@@ -480,27 +473,4 @@ namespace Codex.Serialization
             return type.GetCustomAttributes(typeof(T), inherit: false).OfType<T>().FirstOrDefault();
         }
     }
-
-    //internal class CachingResolver : IContractResolver
-    //{
-    //    private IContractResolver m_inner;
-    //    private ConcurrentDictionary<Type, JsonContract> ContractsByType
-    //        = new ConcurrentDictionary<System.Type, JsonContract>();
-
-    //    public CachingResolver(IContractResolver inner)
-    //    {
-    //        m_inner = inner;
-    //    }
-
-    //    public JsonContract ResolveContract(Type objectType)
-    //    {
-    //        JsonContract contract;
-    //        if (!ContractsByType.TryGetValue(objectType, out contract))
-    //        {
-    //            contract = ContractsByType.GetOrAdd(objectType, m_inner.ResolveContract(objectType));
-    //        }
-
-    //        return contract;
-    //    }
-    //}
 }

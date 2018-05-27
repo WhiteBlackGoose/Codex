@@ -159,13 +159,22 @@ namespace Codex.ObjectModel
 
         public void Trim()
         {
-            var initialLength = LineSpanText.Length;
-            LineSpanText = LineSpanText.TrimStart();
-            var newLength = LineSpanText.Length;
-            LineSpanStart -= (initialLength - newLength);
-            LineSpanText = LineSpanText.TrimEnd();
-            LineSpanStart = Math.Max(LineSpanStart, 0);
-            Length = Math.Min(LineSpanText.Length, Length);
+            if (string.IsNullOrWhiteSpace(LineSpanText))
+            {
+                LineSpanStart = 0;
+                LineSpanText = string.Empty;
+                Length = 0;
+            }
+            else
+            {
+                var initialLength = LineSpanText.Length;
+                LineSpanText = LineSpanText.TrimStart();
+                var newLength = LineSpanText.Length;
+                LineSpanStart -= (initialLength - newLength);
+                LineSpanText = LineSpanText.TrimEnd();
+                LineSpanStart = Math.Max(LineSpanStart, 0);
+                Length = Math.Min(LineSpanText.Length, Length);
+            }
         }
 
         public ReferenceSpan CreateReference(ReferenceSymbol referenceSymbol, SymbolId relatedDefinition = default(SymbolId))

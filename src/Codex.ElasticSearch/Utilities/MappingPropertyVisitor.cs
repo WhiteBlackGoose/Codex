@@ -17,6 +17,9 @@ namespace Codex.ElasticSearch.Utilities
     {
         private const DataInclusionOptions AlwaysInclude = DataInclusionOptions.None;
 
+        private static Func<PropertyInfo, IProperty> PropertyWalkerInferProperty = EntityReflectionHelpers.
+            CreateStaticMethodCall<PropertyInfo, IProperty>(typeof(PropertyWalker), "InferProperty");
+
         public static IProperties GetProperties(Type type, int recursionDepth = 0)
         {
             var properties = new Properties();
@@ -70,7 +73,7 @@ namespace Codex.ElasticSearch.Utilities
                     case SearchBehavior.None:
                         return null;
                     case SearchBehavior.Term:
-                        return PropertyWalker.InferProperty(propertyInfo.PropertyType);
+                        return PropertyWalkerInferProperty(propertyInfo);
                     case SearchBehavior.NormalizedKeyword:
                         return new NormalizedKeywordAttribute();
                     case SearchBehavior.Sortword:

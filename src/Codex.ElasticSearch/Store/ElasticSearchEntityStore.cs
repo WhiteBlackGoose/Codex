@@ -190,7 +190,7 @@ namespace Codex.ElasticSearch
                         .ThrowOnFailure();
 
                     int index = 0;
-                    foreach (var item in getResponse.Documents)
+                    foreach (var item in getResponse.Hits)
                     {
                         int currentIndex = index;
                         index++;

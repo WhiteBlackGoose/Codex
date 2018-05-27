@@ -31,7 +31,8 @@ namespace Codex.ElasticSearch
 
         public static string GetTokenizedFilterId(string baseFilterId, string indexName)
         {
-            return GetFilterId(baseFilterId, indexName, StoredFilterQuery.ShardIdToken);
+            return Placeholder.Value<string>("Update this for new stored filter strategy");
+            //return GetFilterId(baseFilterId, indexName, StoredFilterQuery.ShardIdToken);
         }
 
         public static string GetFilterId(string baseFilterId, string indexName, object shard)
@@ -42,28 +43,30 @@ namespace Codex.ElasticSearch
         public static Task<ElasticSearchResponse<IReadOnlyList<T>>> GetStoredFilterEntities<T>(this ElasticSearchEntityStore<T> entityStore, string baseFilterId, int maxCount = 10)
             where T : class, ISearchEntity
         {
-            return entityStore.Store.Service.UseClient<IReadOnlyList<T>>(async context =>
-            {
-                var client = context.Client;
+            throw Placeholder.NotImplementedException();
 
-                var result = await client.SearchAsync<T>(
-                    s => s.Query(f => f.Bool(bq => bq.Filter(qcd => qcd.StoredFilter(
-                        sfq => sfq.Field(e => e.ShardStableId).FilterLookup<IStoredFilter>(fl => fl
-                            .Id(GetTokenizedFilterId(baseFilterId, entityStore.IndexName))
-                            .Index(entityStore.Store.StoredFilterStore.IndexName)
-                            .Path(sf => sf.Filter))))))
-                    .Index(entityStore.IndexName)
-                    .Take(maxCount))
-                    .ThrowOnFailure();
+        //    return entityStore.Store.Service.UseClient<IReadOnlyList<T>>(async context =>
+        //    {
+        //        var client = context.Client;
 
-                return result.Hits.Select(h => h.Source).ToList();
+        //        var result = await client.SearchAsync<T>(
+        //            s => s.Query(f => f.Bool(bq => bq.Filter(qcd => qcd.StoredFilter(
+        //                sfq => sfq.Field(e => e.ShardStableId).FilterLookup<IStoredFilter>(fl => fl
+        //                    .Id(GetTokenizedFilterId(baseFilterId, entityStore.IndexName))
+        //                    .Index(entityStore.Store.StoredFilterStore.IndexName)
+        //                    .Path(sf => sf.Filter))))))
+        //            .Index(entityStore.IndexName)
+        //            .Take(maxCount))
+        //            .ThrowOnFailure();
 
-                //var response = await context.Client
-                //    .GetAsync<T>(uid, g => g.Index(IndexName))
-                //    .ThrowOnFailure();
+        //        return result.Hits.Select(h => h.Source).ToList();
 
-                //return response.Source;
-            });
+        //        //var response = await context.Client
+        //        //    .GetAsync<T>(uid, g => g.Index(IndexName))
+        //        //    .ThrowOnFailure();
+
+        //        //return response.Source;
+        //    });
         }
     }
 }

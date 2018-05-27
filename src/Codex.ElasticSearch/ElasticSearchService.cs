@@ -13,6 +13,7 @@ using Codex.Storage.ElasticProviders;
 using Codex.ElasticSearch.Utilities;
 using Codex.ObjectModel;
 using Codex.ElasticSearch.Search;
+using Nest.JsonNetSerializer;
 
 namespace Codex.ElasticSearch
 {
@@ -26,30 +27,20 @@ namespace Codex.ElasticSearch
         public ElasticSearchService(ElasticSearchServiceConfiguration configuration)
         {
             this.configuration = configuration;
-            this.settings = new OverrideConnectionSettings(new Uri(configuration.Endpoint))
+            this.settings = new ConnectionSettings(new SingleNodeConnectionPool(new Uri(configuration.Endpoint)))
                 .EnableHttpCompression();
 
             if (configuration.CaptureRequests)
             {
-                settings = settings.PrettyJson().DisableDirectStreaming().MapDefaultTypeNames(typeNames =>
+                settings = settings.PrettyJson().DisableDirectStreaming().DefaultTypeNameInferrer(type =>
                 {
-                    foreach (var searchType in SearchTypes.RegisteredSearchTypes)
-                    {
-                        typeNames[searchType.Type] = searchType.Name.ToLowerInvariant();
-                        typeNames[ElasticCodexTypeUtilities.Instance.GetImplementationType(searchType.Type)] = searchType.Name.ToLowerInvariant();
-                    }
+                    return ElasticCodexTypeUtilities.Instance.GetImplementationType(type).Name.ToLowerInvariant();
                 });
-            }
-
-            foreach (var searchType in SearchTypes.RegisteredSearchTypes)
-            {
-                var mapper = (IdMapper)Activator.CreateInstance(typeof(IdMapper<>).MakeGenericType(ElasticCodexTypeUtilities.Instance.GetImplementationType(searchType.Type)));
-                settings = mapper.MapId(settings);
             }
 
             client = new ElasticClient(settings);
         }
-
+        
         public async Task<ElasticSearchResponse<T>> UseClient<T>(Func<ClientContext, Task<T>> useClient)
         {
             var startTime = stopwatch.Elapsed;
@@ -103,9 +94,11 @@ namespace Codex.ElasticSearch
 
                 return result.Indices.Select(kvp =>
                 (
-                    IndexName: kvp.Key,
+                    IndexName: kvp.Key.ToString(),
                     IsActive: Placeholder.Value<bool>("Is this still applicable?")
-                )).OrderBy(v => v.IndexName, StringComparer.OrdinalIgnoreCase).ToList();
+                ))
+                .OrderBy(v => v.IndexName, StringComparer.OrdinalIgnoreCase)
+                .ToList();
             });
 
             return response.Result;
@@ -127,57 +120,19 @@ namespace Codex.ElasticSearch
 
     public class OverrideConnectionSettings : ConnectionSettings
     {
-        private static Serializer SharedSerializer;
-        public OverrideConnectionSettings(Uri uri) : base(new SingleNodeConnectionPool(uri), SerializerFactory.CreateCore)
+        public OverrideConnectionSettings(Uri uri) 
+            : base(new SingleNodeConnectionPool(uri), sourceSerializer: CreateSerializer)
         {
         }
 
-        public JsonNetSerializer GetSerializer()
+        private static IElasticsearchSerializer CreateSerializer(IElasticsearchSerializer builtIn, IConnectionSettingsValues values)
         {
-            return new Serializer(this);
+            return new EntityJsonNetSerializer(builtIn, values);
         }
 
-        private class SerializerFactory : ISerializerFactory
+        public IElasticsearchSerializer GetSerializer()
         {
-            public IElasticsearchSerializer Create(IConnectionSettingsValues settings)
-            {
-                return SerializerFactory.CreateCore(settings);
-            }
-
-            public IElasticsearchSerializer CreateStateful(IConnectionSettingsValues settings, JsonConverter converter)
-            {
-                return new Serializer(settings, converter);
-            }
-
-            public static IElasticsearchSerializer CreateCore(IConnectionSettingsValues settings)
-            {
-                if (SharedSerializer == null)
-                {
-                    SharedSerializer = new Serializer(settings);
-                }
-
-                return SharedSerializer;
-            }
-        }
-
-        private class Serializer : JsonNetSerializer
-        {
-            public Serializer(IConnectionSettingsValues settings)
-                : base(settings, ModifyJsonSerializerSettings)
-            {
-            }
-
-            public Serializer(IConnectionSettingsValues settings, JsonConverter statefulConverter)
-                : base(settings, statefulConverter, ModifyJsonSerializerSettings)
-            {
-            }
-
-            private static void ModifyJsonSerializerSettings(JsonSerializerSettings arg1, IConnectionSettingsValues arg2)
-            {
-                arg1.ContractResolver = new CachingElasticContractResolver(new CompositeEntityResolver(
-                    new EntityContractResolver(ObjectStage.Index),
-                    arg1.ContractResolver), arg2, null);
-            }
+            return new EntityJsonNetSerializer(null, new ConnectionSettings());
         }
     }
 
