@@ -110,8 +110,8 @@ namespace Codex.Application
                     new OptionSet
                     {
                         { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
-                        { "promote=", "List the indices to delete.", n => promoteIndices.Add(n) },
-                        { "demote=", "List the indices to delete.", n => demoteIndices.Add(n) },
+                        { "promote=", "List the indices to promote.", n => promoteIndices.Add(n) },
+                        { "demote=", "List the indices to demote.", n => demoteIndices.Add(n) },
                     }
                 )
             },
