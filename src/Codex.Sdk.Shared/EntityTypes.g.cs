@@ -3179,6 +3179,8 @@ namespace Codex.ObjectModel {
         
         private long m_ShardStableId;
         
+        private string m_SortKey;
+        
         public SearchEntity() {
             Initialize();
         }
@@ -3247,6 +3249,19 @@ namespace Codex.ObjectModel {
             }
         }
         
+        /// <summary>
+        /// Value used for sorting (this should be computed based other values in the entity i.e. {FileName}/{RepoRelativePath} for files)
+        /// The goal is so that similar entities should be clustered together to allow maximum compression
+        /// </summary>
+        public virtual string SortKey {
+            get {
+                return this.m_SortKey;
+            }
+            set {
+                this.m_SortKey = value;
+            }
+        }
+        
         public virtual TTarget CopyFrom<TTarget>(Codex.ISearchEntity value)
             where TTarget : SearchEntity {
             this.m_Uid = ((Codex.ISearchEntity)(value)).Uid;
@@ -3254,6 +3269,7 @@ namespace Codex.ObjectModel {
             this.m_EntityContentSize = ((Codex.ISearchEntity)(value)).EntityContentSize;
             this.m_EntityVersion = ((Codex.ISearchEntity)(value)).EntityVersion;
             this.m_ShardStableId = ((Codex.ISearchEntity)(value)).ShardStableId;
+            this.m_SortKey = ((Codex.ISearchEntity)(value)).SortKey;
             return ((TTarget)(this));
         }
     }

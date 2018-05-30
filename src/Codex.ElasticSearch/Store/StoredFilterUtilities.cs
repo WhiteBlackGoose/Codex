@@ -1,5 +1,6 @@
 ﻿using Codex.ObjectModel;
 using Codex.Storage.ElasticProviders;
+using Codex.Utilities;
 using Nest;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,17 @@ namespace Codex.ElasticSearch
         public static string GetFilterId(string baseFilterId, string indexName, object shard)
         {
             return $"{indexName}#{shard}|{baseFilterId}";
+        }
+
+        public static byte GetRouting(string uid)
+        {
+            Placeholder.Todo("Routing should be based something other than uid OR uid needs to incorporate other aspects.");
+            // TODO: For instance, files should be routed based on file name to increase likelihood of deduplication. This
+            // seems to have a lot of overlap with index sorting. Also, it would nice of uid was fairly short, so the components should
+            // probably be hashed
+            // TODO: Consider having routing value embedded in uid (i.e. {contentid}#{routing})
+
+            return IndexingUtilities.ComputeFullHash(uid).GetByte(0);
         }
 
         public static Task<ElasticSearchResponse<IReadOnlyList<T>>> GetStoredFilterEntities<T>(this ElasticSearchEntityStore<T> entityStore, string baseFilterId, int maxCount = 10)

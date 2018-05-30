@@ -7,9 +7,11 @@ using Nest;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Codex.ElasticSearch.StoredFilterUtilities;
 
 namespace Codex.ElasticSearch
 {
@@ -126,7 +128,7 @@ namespace Codex.ElasticSearch
             return Store.Service.UseClient(async context =>
             {
                 var response = await context.Client
-                    .GetAsync<T>(uid, g => g.Index(IndexName))
+                    .GetAsync<T>(uid, g => g.Routing(GetRouting(uid)).Index(IndexName))
                     .ThrowOnFailure();
 
                 return response.Source;
@@ -138,7 +140,10 @@ namespace Codex.ElasticSearch
             await Store.Service.UseClient(async context =>
             {
                 var response = await context.Client
-                    .BulkAsync(b => b.DeleteMany<T>(uids, (bd, uid) => bd.Id(uid).Index(IndexName)).CaptureRequest(context))
+                    .BulkAsync(b => b.DeleteMany<T>(uids, (bd, uid) => bd
+                        .Id(uid)
+                        .Routing(GetRouting(uid))
+                        .Index(IndexName)).CaptureRequest(context))
                     .ThrowOnFailure();
 
                 return response.IsValid;
@@ -152,6 +157,7 @@ namespace Codex.ElasticSearch
                 return bd.Index<T>(bco => bco
                     .Document(value)
                     .Id(value.Uid)
+                    .Routing(GetRouting(value.Uid))
                     .Index(IndexName)
                     .Version(value.EntityVersion)
                     .Pipeline(m_pipeline));
@@ -161,6 +167,7 @@ namespace Codex.ElasticSearch
                 return bd.Create<T>(bco => bco
                     .Document(value)
                     .Id(value.Uid)
+                    .Routing(GetRouting(value.Uid))
                     .Index(IndexName)
                     .Version(value.EntityVersion)
                     .Pipeline(m_pipeline));
@@ -169,7 +176,10 @@ namespace Codex.ElasticSearch
 
         public BulkDescriptor AddRegisterOperation(BulkDescriptor bd, IRegisteredEntity value)
         {
-            return bd.Create<IRegisteredEntity>(bco => bco.Document(value).Index(RegistryIndexName).Id(value.Uid));
+            return bd.Create<IRegisteredEntity>(bco => bco.Document(value)
+                .Index(RegistryIndexName)
+                .Routing(GetRouting(value.Uid))
+                .Id(value.Uid));
         }
 
         public async Task StoreAsync<TOut>(IReadOnlyList<T> values, UpdateMergeFunction<T> updateMergeFunction)
@@ -186,8 +196,10 @@ namespace Codex.ElasticSearch
                     T[] updatedValues = new T[values.Count];
 
                     var getResponse = client
-                        .MultiGet(mg => mg.GetMany<TOut>(values.Select(value => value.Uid)).Index(IndexName))
-                        .ThrowOnFailure();
+                        .MultiGet(mg => mg.GetMany<TOut>(values.Select(value => value.Uid), 
+                            (g, uid) => g.Routing(GetRouting(uid).ToString(CultureInfo.InvariantCulture)))
+                            .Index(IndexName))
+                            .ThrowOnFailure();
 
                     int index = 0;
                     foreach (var item in getResponse.Hits)

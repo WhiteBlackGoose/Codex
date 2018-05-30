@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+ 
+  <Target Name="MergeAssemblies" AfterTargets="CoreCompile">
+    <Warning Text="ILRepack" />
+    
+    <ItemGroup>
+      <InputAssemblies Include="@(IntermediateAssembly)"/>
+      <InputAssemblies Include="@(ReferencePath)" Condition="'%(ReferencePath.NuGetPackageId)' == 'Elasticsearch.Net'"/>
+      <InputAssemblies Include="@(ReferencePath)" Condition="'%(ReferencePath.NuGetPackageId)' == 'Nest'"/>
+
+      <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" Condition="'%(ReferencePath.NuGetPackageId)' == 'Elasticsearch.Net'"/>
+      <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" Condition="'%(ReferencePath.NuGetPackageId)' == 'Nest'"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <!-- Must be a fully qualified name -->
+      <DoNotInternalizeAssemblies Include="Newtonsoft.Json" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <SkipCopyBuildProduct>true</SkipCopyBuildProduct>
+    </PropertyGroup>
+
+    <ILRepack
+      Parallel="true"
+      DebugInfo="true"
+      LibraryPath="@(ReferencePath -> '%(RootDir)%(Directory)')"
+      AllowDuplicateResources="false"
+      InputAssemblies="@(InputAssemblies)"
+      TargetKind="SameAsPrimaryAssembly"
+      KeyFile="$(KeyOriginatorFile)"
+      OutputFile="$(TargetPath)"
+    />
+  </Target>
+</Project>

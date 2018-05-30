@@ -19,11 +19,13 @@ namespace Codex
         /// to determine if an entity with the same <see cref="Uid"/> should be updated
         /// </summary>
         [SearchBehavior(SearchBehavior.Term)]
+        [Include(ObjectStage.Search)]
         string EntityContentId { get; set; }
 
         /// <summary>
         /// Defines the size of the raw serialized entity.
         /// </summary>
+        [Include(ObjectStage.Search)]
         int EntityContentSize { get; set; }
 
         /// <summary>
@@ -31,13 +33,32 @@ namespace Codex
         /// to prevent races when storing values)
         /// </summary>
         [SearchBehavior(SearchBehavior.None)]
+        [Include(ObjectStage.Search)]
         long? EntityVersion { get; set; }
 
         /// <summary>
         /// The per-shard stable identity (derived from ElasticSearch sequence number)
         /// </summary>
         [SearchBehavior(SearchBehavior.Term)]
+        [Include(ObjectStage.Search)]
         long ShardStableId { get; set; }
+
+        /// <summary>
+        /// Value used for sorting (this should be computed based other values in the entity i.e. {FileName}/{RepoRelativePath} for files)
+        /// The goal is so that similar entities should be clustered together to allow maximum compression
+        /// </summary>
+        [SearchBehavior(SearchBehavior.Term)]
+        [Include(ObjectStage.Search)]
+        string SortKey { get; set; }
+
+        ///// <summary>
+        ///// Value used for routing (this should be computed based other values in the entity i.e. {FileName} for files)
+        ///// The goal is so that similar entities should be routed to same shard to allow maximum compression
+        ///// This should be composed into uid
+        ///// </summary>
+        //[SearchBehavior(SearchBehavior.Term)]
+        //[Include(ObjectStage.None)]
+        //string RoutingKey { get; set; }
     }
 
     public interface IRepoScopeEntity

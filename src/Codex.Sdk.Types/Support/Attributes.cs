@@ -129,7 +129,7 @@ namespace Codex
         None = 0,
         Analysis = 1,
         Index = 1 << 1,
-        Search = 1 << 2,
+        Search = 1 << 2 | Index,
         All = Search | Index | Analysis
     }
 

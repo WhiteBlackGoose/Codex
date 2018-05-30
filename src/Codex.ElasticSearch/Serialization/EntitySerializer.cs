@@ -32,7 +32,7 @@ namespace Codex.Serialization
 
         protected override IContractResolver CreateContractResolver()
         {
-            return new CachingContractResolver(new EntityContractResolver(ObjectStage.Index, this.ConnectionSettings));
+            return new CachingContractResolver(new EntityContractResolver(ObjectStage.Search, this.ConnectionSettings));
         }
     }
 

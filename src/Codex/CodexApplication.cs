@@ -40,6 +40,7 @@ namespace Codex.Application
         static string logDirectory = "logs";
         static bool interactive = false;
         static bool disableMsbuild = false;
+        static bool disableMsbuildLocator = false;
         static ICodexStore store = Placeholder.Value<ICodexStore>("Create store (FileSystem | Elasticsearch)");
         static ElasticSearchService service;
         static bool reset = false;
@@ -62,6 +63,7 @@ namespace Codex.Application
                     new OptionSet
                     {
                         { "noMsBuild", "Disable loading solutions using msbuild.", n => disableMsbuild = n != null },
+                        { "noMsBuildLocator", "Disable loading solutions using msbuild.", n => disableMsbuildLocator = n != null },
                         { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
                         { "save=", "Saves the analysis information to the given directory.", n => saveDirectory = n },
                         { "test", "Indicates that save should use test mode which disables optimization.", n => test = n != null },
@@ -365,7 +367,7 @@ namespace Codex.Application
 
         static void Index()
         {
-            if (!disableMsbuild)
+            if (!disableMsbuild && !disableMsbuildLocator)
             {
                 try
                 {
