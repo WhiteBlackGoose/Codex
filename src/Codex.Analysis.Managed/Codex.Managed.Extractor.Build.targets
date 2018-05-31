@@ -1,0 +1,16 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <!-- Don't run the compiler, just get the command line arguments -->
+    <SkipCompilerExecution>true</SkipCompilerExecution>
+    
+    <!-- This will disable build for C++ projects -->
+    <_InvalidConfigurationWarning Condition="'$(Language)' != 'C#' AND '$(Language)' != 'VB'">true</_InvalidConfigurationWarning>
+  </PropertyGroup>
+
+  <!-- Targets used to replace Build with codex extraction. This assumes that all dependencies for the project have already been built -->
+  <Import Project="$(MSBuildThisFileDirectory)Codex.Managed.Extractor.targets"/>
+
+  <!-- Replace the build target with a call to Compile which will trigger the  -->
+  <Target Name="Build" DependsOnTargets="Compile;GetTargetPath" />
+</Project>

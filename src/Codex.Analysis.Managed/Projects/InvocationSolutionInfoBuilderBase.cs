@@ -21,7 +21,7 @@ namespace Codex.Analysis.Projects
         public AdhocWorkspace Workspace;
         public Dictionary<string, CompilerInvocation> InvocationsByProjectPath = new Dictionary<string, CompilerInvocation>(StringComparer.OrdinalIgnoreCase);
         private readonly ConcurrentDictionary<string, ProjectInfoBuilder> ProjectInfoByAssemblyNameMap = new ConcurrentDictionary<string, ProjectInfoBuilder>(StringComparer.OrdinalIgnoreCase);
-        private Repo repo;
+        protected Repo repo;
         private Logger logger;
 
         public bool HasProjects => ProjectInfoByAssemblyNameMap.Count != 0;

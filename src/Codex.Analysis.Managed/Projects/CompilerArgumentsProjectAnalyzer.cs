@@ -55,30 +55,47 @@ namespace Codex.Analysis.Projects
 
             public void Initialize()
             {
-                const string ProjectFilePrefix = "Project=";
                 foreach (var argsFile in argsFiles)
                 {
-                    var args = File.ReadAllLines(argsFile);
-                    var argsFileName = Path.GetFileName(argsFile).ToLower();
-                    var languageName = argsFileName == "csc.args.txt" ? LanguageNames.CSharp : LanguageNames.VisualBasic;
-                    var projectFile = argsFile;
-                    int startIndex = 0;
-                    if (args[0].StartsWith(ProjectFilePrefix, StringComparison.OrdinalIgnoreCase))
+                    if (Directory.Exists(argsFile))
                     {
-                        projectFile = args[0].Substring(ProjectFilePrefix.Length);
-                        startIndex++;
+                        foreach (var file in Directory.GetFiles(argsFile, "*.args.txt", SearchOption.AllDirectories))
+                        {
+                            ReadArgsFile(file);
+                        }
                     }
-
-                    var invocation = new CompilerInvocation()
+                    else
                     {
-                        Language = languageName,
-                        ProjectFile = projectFile,
-                        CommandLineArguments = args.Skip(startIndex).ToArray()
-                    };
-
-                    InvocationsByProjectPath[invocation.ProjectFile] = invocation;
-                    StartLoadProject(invocation);
+                        ReadArgsFile(argsFile);
+                    }
                 }
+            }
+
+            private void ReadArgsFile(string argsFile)
+            {
+                const string ProjectFilePrefix = "Project=";
+                var args = File.ReadAllLines(argsFile);
+                var argsFileName = Path.GetFileName(argsFile).ToLower();
+                var languageName = argsFileName == "csc.args.txt" ? LanguageNames.CSharp : LanguageNames.VisualBasic;
+                var projectFile = argsFile;
+                int startIndex = 0;
+                if (args[0].StartsWith(ProjectFilePrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    projectFile = args[0].Substring(ProjectFilePrefix.Length);
+                    startIndex++;
+                }
+
+                repo.AnalysisServices.Logger.LogMessage($"Reading args file '{argsFile}' for project '{projectFile ?? string.Empty}'");
+
+                var invocation = new CompilerInvocation()
+                {
+                    Language = languageName,
+                    ProjectFile = projectFile,
+                    CommandLineArguments = args.Skip(startIndex).ToArray()
+                };
+
+                InvocationsByProjectPath[invocation.ProjectFile] = invocation;
+                StartLoadProject(invocation);
             }
         }
     }
