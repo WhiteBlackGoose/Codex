@@ -72,13 +72,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Web.Legacy", "src\Cod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Build.Nuget", "src\Codex.Build.Nuget\Codex.Build.Nuget.csproj", "{38044DCA-2FF6-4579-B06E-46BF7401D0B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.ElasticSearch.Legacy", "src\Codex.ElasticSearch.Legacy\Codex.ElasticSearch.Legacy.csproj", "{7001F919-92BB-46DB-9647-66D492EF0E86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.ElasticSearch.Legacy", "src\Codex.ElasticSearch.Legacy\Codex.ElasticSearch.Legacy.csproj", "{7001F919-92BB-46DB-9647-66D492EF0E86}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Web.Monaco", "src\Codex.Web.Monaco\Codex.Web.Monaco.csproj", "{BC4A8ABD-8848-4544-9F7C-FC98E3A89DF2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Web.EsLegacy", "src\Codex.Web.EsLegacy\Codex.Web.EsLegacy.csproj", "{EFF3F007-FE68-4680-9D4F-758CF46FA781}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Downloader", "src\Codex.Downloader\Codex.Downloader.csproj", "{4E426B71-BC07-498D-879F-F320E3208A32}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Automation.Workflow", "src\Codex.Automation.Workflow\Codex.Automation.Workflow.csproj", "{9B0F9558-E181-4972-BE12-70C18B64061A}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -301,6 +303,14 @@ Global
 		{4E426B71-BC07-498D-879F-F320E3208A32}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4E426B71-BC07-498D-879F-F320E3208A32}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4E426B71-BC07-498D-879F-F320E3208A32}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9B0F9558-E181-4972-BE12-70C18B64061A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B0F9558-E181-4972-BE12-70C18B64061A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B0F9558-E181-4972-BE12-70C18B64061A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9B0F9558-E181-4972-BE12-70C18B64061A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9B0F9558-E181-4972-BE12-70C18B64061A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B0F9558-E181-4972-BE12-70C18B64061A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B0F9558-E181-4972-BE12-70C18B64061A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9B0F9558-E181-4972-BE12-70C18B64061A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -327,6 +337,7 @@ Global
 		{BC4A8ABD-8848-4544-9F7C-FC98E3A89DF2} = {25E4BE1A-D5A5-45B4-B612-F524C796082E}
 		{EFF3F007-FE68-4680-9D4F-758CF46FA781} = {25E4BE1A-D5A5-45B4-B612-F524C796082E}
 		{4E426B71-BC07-498D-879F-F320E3208A32} = {5B49B5ED-0C4F-47DD-8D72-6BD21518E7FD}
+		{9B0F9558-E181-4972-BE12-70C18B64061A} = {5B49B5ED-0C4F-47DD-8D72-6BD21518E7FD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BA03C0DC-5D0A-4126-9F26-77704FB5FD5B}
