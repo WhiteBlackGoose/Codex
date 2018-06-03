@@ -1,0 +1,14 @@
+﻿{
+  "nextValue": 1032,
+
+  "freeList": [ 121, 244, 349, 948 ],
+
+  // This is the list of reservations which have been committed. When a reservation is committed, unused ids are added to the free list and the reservation is deleted. 
+  "pendingReservations": [
+    {
+      "reservationId": "c35829c7-e1be-4850-9d55-065a11d73e3e",
+      "reservationDate": "2015-01-01T12:10:30Z",
+      "reservedIds": [ 1022, 1023, 1025, 1026, 1027 ]
+    }
+  ]
+}

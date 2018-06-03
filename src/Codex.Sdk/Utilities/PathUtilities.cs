@@ -8,7 +8,7 @@ namespace Codex.Utilities
     /// <summary>
     /// Utility methods for paths and Uris (including relativizing and derelativizing)
     /// </summary>
-    public static class PathUtilities
+    public static partial class PathUtilities
     {
         /// <summary>
         /// Indicates that a relative path is same as the base path
@@ -42,11 +42,6 @@ namespace Codex.Utilities
             }
 
             return string.Empty;
-        }
-
-        public static string GetFileName(string path)
-        {
-            return path.Substring(path.LastIndexOf('\\') + 1);
         }
 
         public static string GetDirectoryName(string path)

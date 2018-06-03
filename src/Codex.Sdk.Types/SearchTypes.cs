@@ -1,3 +1,4 @@
+using Codex.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +13,19 @@ namespace Codex
      * Types in this file define search behaviors. Changes should be made with caution as they can affect
      * the mapping schema for indices and will generally need to be backward compatible.
      * Additions should be generally safe.
+     * 
+     * WARNING: Changing routing key by changed input to Route() function is extremely destructive as it causes entities
+     * to be routed to different shards and thereby invalidates most stored documents. Generally, these should never be changed
+     * unless the entire index will be recreated.
+     * 
+     * TODO: Maybe there should be some sort of validation on this.
      */
     public class SearchTypes
     {
         public static readonly List<SearchType> RegisteredSearchTypes = new List<SearchType>();
 
-        public static SearchType Definition = SearchType.Create<IDefinitionSearchModel>(RegisteredSearchTypes);
+        public static SearchType Definition = SearchType.Create<IDefinitionSearchModel>(RegisteredSearchTypes)
+            .Route(ds => ds.Definition.Id.Value);
         //.CopyTo(ds => ds.Definition.Modifiers, ds => ds.Keywords)
         //.CopyTo(ds => ds.Definition.Kind, ds => ds.Kind)
         //.CopyTo(ds => ds.Definition.ExcludeFromDefaultSearch, ds => ds.ExcludeFromDefaultSearch)
@@ -27,30 +35,37 @@ namespace Codex
         //.CopyTo(ds => ds.Definition.ProjectId, ds => ds.ProjectId)
         //.CopyTo(ds => ds.Definition.ProjectId, ds => ds.Keywords);
 
-        public static SearchType Reference = SearchType.Create<IReferenceSearchModel>(RegisteredSearchTypes);
+        public static SearchType Reference = SearchType.Create<IReferenceSearchModel>(RegisteredSearchTypes)
+            .Route(rs => rs.Reference.Id.Value);
         //.CopyTo(rs => rs.Spans.First().Reference, rs => rs.Reference);
 
-        public static SearchType TextSource = SearchType.Create<ITextSourceSearchModel>(RegisteredSearchTypes);
+        public static SearchType TextSource = SearchType.Create<ITextSourceSearchModel>(RegisteredSearchTypes)
+            .Route(ss => PathUtilities.GetFileName(ss.File.Info.RepoRelativePath));
         //.CopyTo(ss => ss.File.SourceFile.Content, ss => ss.Content)
         //.CopyTo(ss => ss.File.SourceFile.Info.RepoRelativePath, ss => ss.RepoRelativePath)
         //.CopyTo(ss => ss.File.ProjectId, ss => ss.ProjectId)
         //.CopyTo(ss => ss.File.Info.Path, ss => ss.FilePath);
 
-        public static SearchType BoundSource = SearchType.Create<IBoundSourceSearchModel>(RegisteredSearchTypes);
-            //.CopyTo(ss => ss.File.SourceFile.Content, ss => ss.Content)
-            //.CopyTo(ss => ss.File.SourceFile.Info.RepoRelativePath, ss => ss.RepoRelativePath)
-            //.CopyTo(ss => ss.BindingInfo.ProjectId, ss => ss.ProjectId)
-            //.CopyTo(ss => ss.FilePath, ss => ss.FilePath);
+        public static SearchType BoundSource = SearchType.Create<IBoundSourceSearchModel>(RegisteredSearchTypes)
+            .Route(ss => PathUtilities.GetFileName(ss.BindingInfo.RepoRelativePath));
+        //.CopyTo(ss => ss.File.SourceFile.Content, ss => ss.Content)
+        //.CopyTo(ss => ss.File.SourceFile.Info.RepoRelativePath, ss => ss.RepoRelativePath)
+        //.CopyTo(ss => ss.BindingInfo.ProjectId, ss => ss.ProjectId)
+        //.CopyTo(ss => ss.FilePath, ss => ss.FilePath);
 
-        public static SearchType Language = SearchType.Create<ILanguageSearchModel>(RegisteredSearchTypes);
+        public static SearchType Language = SearchType.Create<ILanguageSearchModel>(RegisteredSearchTypes)
+            .Route(ls => ls.Language.Name);
 
-        public static SearchType Repository = SearchType.Create<IRepositorySearchModel>(RegisteredSearchTypes);
+        public static SearchType Repository = SearchType.Create<IRepositorySearchModel>(RegisteredSearchTypes)
+            .Route(rs => rs.Repository.Name);
 
         public static SearchType Project = SearchType.Create<IProjectSearchModel>(RegisteredSearchTypes)
+            .Route(sm => sm.Project.ProjectId)
             .Exclude(sm => sm.Project.ProjectReferences.First().Definitions);
 
         public static SearchType Commit = SearchType.Create<ICommitSearchModel>(RegisteredSearchTypes);
 
+        // TODO: Should these be one per file to allow mapping text files to their corresponding project for text search
         public static SearchType CommitFiles = SearchType.Create<ICommitFilesSearchModel>(RegisteredSearchTypes);
 
         public static SearchType ProjectReference = SearchType.Create<IProjectReferenceSearchModel>(RegisteredSearchTypes);

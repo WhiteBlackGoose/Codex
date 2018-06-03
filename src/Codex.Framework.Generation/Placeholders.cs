@@ -9,6 +9,7 @@ namespace Codex.ObjectModel
     [Placeholder]
     public class SymbolId
     {
+        public string Value { get; set; }
     }
 
     [Placeholder]

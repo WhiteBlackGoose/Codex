@@ -31,6 +31,8 @@ namespace Codex
     {
         public override Type Type => typeof(TSearchType);
 
+        public Func<TSearchType, string> GetRoutingKey { get; private set; }
+
         public List<Tuple<Expression<Func<TSearchType, object>>, Expression<Func<TSearchType, object>>>> CopyToFields = new List<Tuple<Expression<Func<TSearchType, object>>, Expression<Func<TSearchType, object>>>>();
 
         public List<Tuple<Expression<Func<TSearchType, object>>, Expression<Func<TSearchType, object>>>> InheritFields = new List<Tuple<Expression<Func<TSearchType, object>>, Expression<Func<TSearchType, object>>>>();
@@ -45,6 +47,12 @@ namespace Codex
             Expression<Func<TSearchType, T>> providerField,
             Expression<Func<TSearchType, T>> searchField)
         {
+            return this;
+        }
+
+        public SearchType<TSearchType> Route(Func<TSearchType, string> getRoutingKey)
+        {
+            GetRoutingKey = getRoutingKey;
             return this;
         }
 

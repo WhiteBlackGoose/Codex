@@ -39,11 +39,13 @@ namespace Codex.ElasticSearch
     public class ElasticSearchEntityStore<T> : ElasticSearchEntityStore, IStore<T>
         where T : class, ISearchEntity
     {
+        internal readonly SearchType<T> EntitySearchType;
         private readonly string m_pipeline;
 
         public ElasticSearchEntityStore(ElasticSearchStore store, SearchType searchType)
             : base(store, searchType)
         {
+            EntitySearchType = (SearchType<T>)searchType;
             m_pipeline = searchType == SearchTypes.StoredFilter && store.Configuration.UseStoredFilters ?
                 store.StoredFilterPipelineId : null;
         }

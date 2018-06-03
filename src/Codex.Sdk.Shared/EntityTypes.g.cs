@@ -3181,6 +3181,8 @@ namespace Codex.ObjectModel {
         
         private string m_SortKey;
         
+        private string m_RoutingKey;
+        
         public SearchEntity() {
             Initialize();
         }
@@ -3262,6 +3264,20 @@ namespace Codex.ObjectModel {
             }
         }
         
+        /// <summary>
+        /// Value used for routing (this should be computed based other values in the entity i.e. {FileName} for files)
+        /// The goal is so that similar entities should be routed to same shard to allow maximum compression
+        /// This should be composed into uid
+        /// </summary>
+        public virtual string RoutingKey {
+            get {
+                return this.m_RoutingKey;
+            }
+            set {
+                this.m_RoutingKey = value;
+            }
+        }
+        
         public virtual TTarget CopyFrom<TTarget>(Codex.ISearchEntity value)
             where TTarget : SearchEntity {
             this.m_Uid = ((Codex.ISearchEntity)(value)).Uid;
@@ -3270,6 +3286,7 @@ namespace Codex.ObjectModel {
             this.m_EntityVersion = ((Codex.ISearchEntity)(value)).EntityVersion;
             this.m_ShardStableId = ((Codex.ISearchEntity)(value)).ShardStableId;
             this.m_SortKey = ((Codex.ISearchEntity)(value)).SortKey;
+            this.m_RoutingKey = ((Codex.ISearchEntity)(value)).RoutingKey;
             return ((TTarget)(this));
         }
     }

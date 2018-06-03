@@ -127,6 +127,11 @@ namespace Codex.ElasticSearch
         public void PopulateContentIdAndSize<T>(T entity, ElasticSearchEntityStore<T> store)
             where T : class, ISearchEntity
         {
+            if (entity.RoutingKey == null && store.EntitySearchType.GetRoutingKey != null)
+            {
+                entity.RoutingKey = store.EntitySearchType.GetRoutingKey(entity);
+            }
+
             entity.PopulateContentIdAndSize();
         }
 
