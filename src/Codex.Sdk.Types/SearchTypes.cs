@@ -74,13 +74,15 @@ namespace Codex
 
         public static SearchType StoredFilter = SearchType.Create<IStoredFilter>(RegisteredSearchTypes);
 
+        public static SearchType StableIdMarker = SearchType.Create<IStableIdMarker>(RegisteredSearchTypes);
+
         public static SearchType RegisteredEntity = SearchType.Create<IRegisteredEntity>(RegisteredSearchTypes);
     }
 
     /// <summary>
     /// In order to compute a stable integral id for each entity. This type is used to store into a 'follow' index which
     /// stores entities of this type using the <see cref="ISearchEntity.Uid"/> of the corresponding search entity. Then the
-    /// sequence number assigned by ElasticSearch is used as the shard stable id (<see cref="ISearchEntity.ShardStableId"/>)
+    /// sequence number assigned by ElasticSearch is used as the shard stable id (<see cref="ISearchEntity.StableId"/>)
     /// for the entity. This approach is used in order to ensure that the stable id appears as an explicit field in the document rather
     /// which allows configuration of how the field is indexed (not true for sequence number field without code changes to ES).
     /// </summary>

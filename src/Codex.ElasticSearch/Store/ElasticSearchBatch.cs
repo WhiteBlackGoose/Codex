@@ -60,7 +60,7 @@ namespace Codex.ElasticSearch
                 batchIndex++;
 
                 // Use the sequence number of the registered item as the stable id
-                item.Entity.ShardStableId = registerResponseItem.SequenceNumber;
+                item.Entity.StableId = registerResponseItem.SequenceNumber;
             }
 
             var response = await context.Client.BulkAsync(BulkDescriptor.CaptureRequest(context)).ThrowOnFailure(allowInvalid: true);
@@ -76,7 +76,7 @@ namespace Codex.ElasticSearch
                 {
                     var entityRef = new ElasticEntityRef(
                             shard: GetShard(responseItem),
-                            stableId: item.Entity.ShardStableId);
+                            stableId: item.Entity.StableId);
                     batcher.CommitSearchTypeStoredFilters[item.SearchType.Id].Add(entityRef);
                     foreach (var additionalStoredFilter in item.AdditionalStoredFilters)
                     {

@@ -133,7 +133,7 @@ namespace Codex.ElasticSearch.Tests
                     {
                         Uid = GetUidFromStableId(stableId),
                         DateAdded = DateTime.UtcNow,
-                        ShardStableId = stableId,
+                        StableId = stableId,
                     };
                 }).ToArray());
 
@@ -168,7 +168,7 @@ namespace Codex.ElasticSearch.Tests
                 maxCount: values.Count + 1);
             var filteredEntities = filteredEntitiesResponse.Result;
 
-            var filteredEntityIds = new HashSet<long>(filteredEntities.Select(e => e.ShardStableId));
+            var filteredEntityIds = new HashSet<long>(filteredEntities.Select(e => e.StableId));
 
             var missingFilteredEntityIds = values.Except(filteredEntityIds).ToList();
             Assert.IsEmpty(missingFilteredEntityIds);

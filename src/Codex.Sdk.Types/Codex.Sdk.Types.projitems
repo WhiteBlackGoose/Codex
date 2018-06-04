@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)EntityBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)File.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ICodeReview.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StableIdMarker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mutable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Placeholders.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Language.cs" />

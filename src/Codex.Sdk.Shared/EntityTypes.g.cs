@@ -71,6 +71,10 @@ namespace Codex.ObjectModel {
             typeMapping.Add(typeof(CodeReviewCommentThread), typeof(Codex.ICodeReviewCommentThread));
             typeMapping.Add(typeof(Codex.ICodeReviewComment), typeof(CodeReviewComment));
             typeMapping.Add(typeof(CodeReviewComment), typeof(Codex.ICodeReviewComment));
+            typeMapping.Add(typeof(Codex.IStableIdMarker), typeof(StableIdMarker));
+            typeMapping.Add(typeof(StableIdMarker), typeof(Codex.IStableIdMarker));
+            typeMapping.Add(typeof(Codex.IStableIdReservation), typeof(StableIdReservation));
+            typeMapping.Add(typeof(StableIdReservation), typeof(Codex.IStableIdReservation));
             typeMapping.Add(typeof(Codex.ILanguageInfo), typeof(LanguageInfo));
             typeMapping.Add(typeof(LanguageInfo), typeof(Codex.ILanguageInfo));
             typeMapping.Add(typeof(Codex.IClassificationStyle), typeof(ClassificationStyle));
@@ -2184,6 +2188,168 @@ namespace Codex.ObjectModel {
         }
     }
     
+    /// <summary>
+    /// Marker document for tracking reservation of stable ids from a given stable id shard
+    /// </summary>
+    [Codex.SerializationInterfaceAttribute(typeof(Codex.IStableIdMarker))]
+    public partial class StableIdMarker : SearchEntity, Codex.IStableIdMarker {
+        
+        private int m_NextValue;
+        
+        private System.Collections.Generic.List<int> m_FreeList = new System.Collections.Generic.List<int>();
+        
+        private System.Collections.Generic.List<StableIdReservation> m_PendingReservations = new System.Collections.Generic.List<StableIdReservation>();
+        
+        public StableIdMarker() {
+        }
+        
+        public StableIdMarker(Codex.IStableIdMarker value) {
+            this.CopyFrom<StableIdMarker>(value);
+        }
+        
+        public StableIdMarker(Codex.ISearchEntity value) : 
+                base(value) {
+        }
+        
+        /// <summary>
+        /// The next tail available stable id
+        /// </summary>
+        public virtual int NextValue {
+            get {
+                return this.m_NextValue;
+            }
+            set {
+                this.m_NextValue = value;
+            }
+        }
+        
+        /// <summary>
+        /// The list of free indices
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<int> Codex.IStableIdMarker.FreeList {
+            get {
+                return this.FreeList;
+            }
+        }
+        
+        /// <summary>
+        /// The list of free indices
+        /// </summary>
+        public virtual System.Collections.Generic.List<int> FreeList {
+            get {
+                return this.m_FreeList;
+            }
+            set {
+                this.m_FreeList = value;
+            }
+        }
+        
+        /// <summary>
+        /// The uncommitted reservations
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<Codex.IStableIdReservation> Codex.IStableIdMarker.PendingReservations {
+            get {
+                return this.PendingReservations;
+            }
+        }
+        
+        /// <summary>
+        /// The uncommitted reservations
+        /// </summary>
+        public virtual System.Collections.Generic.List<StableIdReservation> PendingReservations {
+            get {
+                return this.m_PendingReservations;
+            }
+            set {
+                this.m_PendingReservations = value;
+            }
+        }
+        
+        public virtual TTarget CopyFrom<TTarget>(Codex.IStableIdMarker value)
+            where TTarget : StableIdMarker {
+            this.m_NextValue = ((Codex.IStableIdMarker)(value)).NextValue;
+            this.m_FreeList = new System.Collections.Generic.List<int>(((Codex.IStableIdMarker)(value)).FreeList);
+            this.m_PendingReservations = new System.Collections.Generic.List<StableIdReservation>(System.Linq.Enumerable.Select(((Codex.IStableIdMarker)(value)).PendingReservations, v => EntityUtilities.NullOrCopy(v, _v => new StableIdReservation().CopyFrom<StableIdReservation>(_v))));
+            base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
+            return ((TTarget)(this));
+        }
+    }
+    
+    /// <summary>
+    /// A reservation of a set of stable ids.
+    /// </summary>
+    [Codex.SerializationInterfaceAttribute(typeof(Codex.IStableIdReservation))]
+    public partial class StableIdReservation : Codex.EntityBase, Codex.IStableIdReservation {
+        
+        private string m_ReservationId;
+        
+        private System.DateTime m_ReservationDate;
+        
+        private System.Collections.Generic.List<int> m_ReservedIds = new System.Collections.Generic.List<int>();
+        
+        public StableIdReservation() {
+            Initialize();
+        }
+        
+        public StableIdReservation(Codex.IStableIdReservation value) {
+            Initialize();
+            this.CopyFrom<StableIdReservation>(value);
+        }
+        
+        /// <summary>
+        /// Unique id of the reservation. Used during commit to find and remove the reservation.
+        /// </summary>
+        public virtual string ReservationId {
+            get {
+                return this.m_ReservationId;
+            }
+            set {
+                this.m_ReservationId = value;
+            }
+        }
+        
+        /// <summary>
+        /// The date of the id reservation. Used for garbage collection of stale reservations.
+        /// </summary>
+        public virtual System.DateTime ReservationDate {
+            get {
+                return this.m_ReservationDate;
+            }
+            set {
+                this.m_ReservationDate = value;
+            }
+        }
+        
+        /// <summary>
+        /// The list of reserved ids for the reservation
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<int> Codex.IStableIdReservation.ReservedIds {
+            get {
+                return this.ReservedIds;
+            }
+        }
+        
+        /// <summary>
+        /// The list of reserved ids for the reservation
+        /// </summary>
+        public virtual System.Collections.Generic.List<int> ReservedIds {
+            get {
+                return this.m_ReservedIds;
+            }
+            set {
+                this.m_ReservedIds = value;
+            }
+        }
+        
+        public virtual TTarget CopyFrom<TTarget>(Codex.IStableIdReservation value)
+            where TTarget : StableIdReservation {
+            this.m_ReservationId = ((Codex.IStableIdReservation)(value)).ReservationId;
+            this.m_ReservationDate = ((Codex.IStableIdReservation)(value)).ReservationDate;
+            this.m_ReservedIds = new System.Collections.Generic.List<int>(((Codex.IStableIdReservation)(value)).ReservedIds);
+            return ((TTarget)(this));
+        }
+    }
+    
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ILanguageInfo))]
     public partial class LanguageInfo : Codex.EntityBase, Codex.ILanguageInfo {
         
@@ -3177,7 +3343,9 @@ namespace Codex.ObjectModel {
         
         private System.Nullable<long> m_EntityVersion;
         
-        private long m_ShardStableId;
+        private int m_StableIdGroup;
+        
+        private long m_StableId;
         
         private string m_SortKey;
         
@@ -3240,14 +3408,29 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// The per-shard stable identity (derived from ElasticSearch sequence number)
+        /// Entities are split into separate groups (specified by an integral value) which in turn
+        /// are sent to specific shards based on the ElasticSearch routing policy (i.e. the routing value is
+        /// determined by this value)
+        /// NOTE: This value is derived from <see cref="P:Codex.ISearchEntity.RoutingKey" />
         /// </summary>
-        public virtual long ShardStableId {
+        public virtual int StableIdGroup {
             get {
-                return this.m_ShardStableId;
+                return this.m_StableIdGroup;
             }
             set {
-                this.m_ShardStableId = value;
+                this.m_StableIdGroup = value;
+            }
+        }
+        
+        /// <summary>
+        /// The per-group stable identity
+        /// </summary>
+        public virtual long StableId {
+            get {
+                return this.m_StableId;
+            }
+            set {
+                this.m_StableId = value;
             }
         }
         
@@ -3284,7 +3467,8 @@ namespace Codex.ObjectModel {
             this.m_EntityContentId = ((Codex.ISearchEntity)(value)).EntityContentId;
             this.m_EntityContentSize = ((Codex.ISearchEntity)(value)).EntityContentSize;
             this.m_EntityVersion = ((Codex.ISearchEntity)(value)).EntityVersion;
-            this.m_ShardStableId = ((Codex.ISearchEntity)(value)).ShardStableId;
+            this.m_StableIdGroup = ((Codex.ISearchEntity)(value)).StableIdGroup;
+            this.m_StableId = ((Codex.ISearchEntity)(value)).StableId;
             this.m_SortKey = ((Codex.ISearchEntity)(value)).SortKey;
             this.m_RoutingKey = ((Codex.ISearchEntity)(value)).RoutingKey;
             return ((TTarget)(this));
@@ -3547,7 +3731,7 @@ namespace Codex.ObjectModel {
     /// <summary>
     /// In order to compute a stable integral id for each entity. This type is used to store into a 'follow' index which
     /// stores entities of this type using the <see cref="P:Codex.ISearchEntity.Uid" /> of the corresponding search entity. Then the
-    /// sequence number assigned by ElasticSearch is used as the shard stable id (<see cref="P:Codex.ISearchEntity.ShardStableId" />)
+    /// sequence number assigned by ElasticSearch is used as the shard stable id (<see cref="P:Codex.ISearchEntity.StableId" />)
     /// for the entity. This approach is used in order to ensure that the stable id appears as an explicit field in the document rather
     /// which allows configuration of how the field is indexed (not true for sequence number field without code changes to ES).
     /// </summary>
@@ -5434,6 +5618,8 @@ namespace Codex.Framework.Types {
     using CodeReviewFile = Codex.ObjectModel.CodeReviewFile;
     using CodeReviewCommentThread = Codex.ObjectModel.CodeReviewCommentThread;
     using CodeReviewComment = Codex.ObjectModel.CodeReviewComment;
+    using StableIdMarker = Codex.ObjectModel.StableIdMarker;
+    using StableIdReservation = Codex.ObjectModel.StableIdReservation;
     using LanguageInfo = Codex.ObjectModel.LanguageInfo;
     using ClassificationStyle = Codex.ObjectModel.ClassificationStyle;
     using AnalyzedProject = Codex.ObjectModel.AnalyzedProject;

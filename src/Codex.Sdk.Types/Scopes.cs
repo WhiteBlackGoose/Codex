@@ -37,11 +37,20 @@ namespace Codex
         long? EntityVersion { get; set; }
 
         /// <summary>
-        /// The per-shard stable identity (derived from ElasticSearch sequence number)
+        /// Entities are split into separate groups (specified by an integral value) which in turn
+        /// are sent to specific shards based on the ElasticSearch routing policy (i.e. the routing value is
+        /// determined by this value)
+        /// NOTE: This value is derived from <see cref="RoutingKey"/>
+        /// </summary>
+        [Include(ObjectStage.Search)]
+        int StableIdGroup { get; set; }
+
+        /// <summary>
+        /// The per-group stable identity
         /// </summary>
         [SearchBehavior(SearchBehavior.Term)]
         [Include(ObjectStage.Search)]
-        long ShardStableId { get; set; }
+        long StableId { get; set; }
 
         /// <summary>
         /// Value used for sorting (this should be computed based other values in the entity i.e. {FileName}/{RepoRelativePath} for files)

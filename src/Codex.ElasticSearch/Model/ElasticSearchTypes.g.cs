@@ -37,6 +37,8 @@ namespace Codex.ElasticSearch {
         
         private ElasticSearchEntityStore<Codex.IStoredFilter> m_StoredFilterStore;
         
+        private ElasticSearchEntityStore<Codex.IStableIdMarker> m_StableIdMarkerStore;
+        
         private ElasticSearchEntityStore<Codex.IRegisteredEntity> m_RegisteredEntityStore;
         
         public virtual ElasticSearchEntityStore<Codex.IDefinitionSearchModel> DefinitionStore {
@@ -111,6 +113,12 @@ namespace Codex.ElasticSearch {
             }
         }
         
+        public virtual ElasticSearchEntityStore<Codex.IStableIdMarker> StableIdMarkerStore {
+            get {
+                return this.m_StableIdMarkerStore;
+            }
+        }
+        
         public virtual ElasticSearchEntityStore<Codex.IRegisteredEntity> RegisteredEntityStore {
             get {
                 return this.m_RegisteredEntityStore;
@@ -130,6 +138,7 @@ namespace Codex.ElasticSearch {
             m_ProjectReferenceStore = await this.CreateStoreAsync<Codex.IProjectReferenceSearchModel>(Codex.SearchTypes.ProjectReference);
             m_PropertyStore = await this.CreateStoreAsync<Codex.IPropertySearchModel>(Codex.SearchTypes.Property);
             m_StoredFilterStore = await this.CreateStoreAsync<Codex.IStoredFilter>(Codex.SearchTypes.StoredFilter);
+            m_StableIdMarkerStore = await this.CreateStoreAsync<Codex.IStableIdMarker>(Codex.SearchTypes.StableIdMarker);
             m_RegisteredEntityStore = await this.CreateStoreAsync<Codex.IRegisteredEntity>(Codex.SearchTypes.RegisteredEntity);
         }
         
@@ -146,6 +155,7 @@ namespace Codex.ElasticSearch {
             await m_ProjectReferenceStore.FinalizeAsync();
             await m_PropertyStore.FinalizeAsync();
             await m_StoredFilterStore.FinalizeAsync();
+            await m_StableIdMarkerStore.FinalizeAsync();
             await m_RegisteredEntityStore.FinalizeAsync();
         }
     }
