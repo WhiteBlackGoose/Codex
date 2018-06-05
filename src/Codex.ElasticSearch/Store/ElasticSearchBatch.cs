@@ -158,14 +158,25 @@ namespace Codex.ElasticSearch
             return true;
         }
 
-        public class Item
+        public class Item : IStableIdItem
         {
+            public int? StableId { get; set; }
             public int BatchIndex { get; set; }
             public ISearchEntity Entity { get; set; }
             public SearchType SearchType => EntityStore.SearchType;
             public ElasticSearchEntityStore EntityStore { get; set; }
             public Action OnAdded { get; set; }
             public ElasticSearchStoredFilterBuilder[] AdditionalStoredFilters { get; set; }
+
+            public int StableIdGroup => Entity.StableIdGroup;
+            public string Uid => Entity.Uid;
+            public string IndexName => SearchType.IndexName;
+
+            public void SetStableId(int stableId)
+            {
+                StableId = stableId;
+                Entity.StableId = stableId;
+            }
         }
     }
 }
