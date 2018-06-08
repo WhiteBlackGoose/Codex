@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
-    <PackageReference Include="Ref12.Codex.Elasticsearch.Net" Version="6.0.0-beta1-b89" />
+    <PackageReference Include="Elasticsearch.Net" Version="6.1.0" />
   </ItemGroup>
 
   <ItemGroup>
