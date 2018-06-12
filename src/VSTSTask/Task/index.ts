@@ -4,12 +4,24 @@ import mod = require('./taskmod');
 import http = require('https');
 import fs = require('fs');
 import request = require('request');
+import shell = require('shelljs');
+import path = require('path');
+
+function mkdir(directoryPath: string) {
+    let cmdPath = tl.which('cmd');
+    let tool = tl.tool(cmdPath).arg('/c').arg('mkdir ' + directoryPath);
+    tool.execSync();
+}
 
 async function run() {
     try {
-        let toolPath = "C:/temp/Codex.Automation.Workflow.exe";
+        let outputDirectory = tl.getPathInput('CodexOutputRoot');        
+        let codexBootstrapDirectory = path.join(outputDirectory, "bootstrap");
+        let toolPath =path.join(codexBootstrapDirectory, "Codex.Automation.Workflow.exe");
         let tool: trm.ToolRunner;
         
+        shell.mkdir("-p", codexBootstrapDirectory);
+
         //download file
         var file = fs.createWriteStream(toolPath);
 
