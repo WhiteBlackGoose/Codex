@@ -1,8 +1,8 @@
 {
     "manifestVersion": 1,
-    "id": "ref12-analyze-extension",
+    "id": "ref12-analyze-task",
     "name": "Ref12 Analyze",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "publisher": "Ref12",
     "targets": [
         {

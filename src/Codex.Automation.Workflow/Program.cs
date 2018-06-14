@@ -22,7 +22,47 @@ namespace Codex.Automation.Workflow
     {
         private static Arguments ParseArguments(string[] args)
         {
-            throw new NotImplementedException();
+            Arguments newArgs = new Arguments();
+            foreach (string arg in args)
+            {
+                string argValue;
+                if (MatchArg(arg, "SourcesDirectory", out argValue))
+                {
+                    newArgs.SourcesDirectory = argValue;
+                }
+                else if (MatchArg(arg, "AdditionalCodexArguments", out argValue))
+                {
+                    newArgs.AdditionalCodexArguments = argValue;
+                }
+                else if (MatchArg(arg, "CodexOutputRoot", out argValue))
+                {
+                    newArgs.CodexOutputRoot = argValue;
+                }
+                else if (MatchArg(arg, "CodexRepoUrl", out argValue))
+                {
+                    newArgs.CodexRepoUrl = argValue;
+                }
+                else if (MatchArg(arg, "RepoName", out argValue))
+                {
+                    newArgs.RepoName = argValue;
+                }
+                else
+                {
+                    throw new ArgumentException("Invalid Arguments: " + arg);
+                }
+            }
+            return newArgs;
+        }
+
+        private static bool MatchArg(string arg, string argName, out string argValue)
+        {
+            if (arg.StartsWith($"/{argName}:", StringComparison.OrdinalIgnoreCase))
+            {
+                argValue = arg.Substring(argName.Length + 2);
+                return true;
+            }
+            argValue = null;
+            return false;
         }
 
         static void Main(string[] args)

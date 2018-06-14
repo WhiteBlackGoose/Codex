@@ -257,3 +257,5 @@ paket-files/
 *.sln.iml
 *.binlog
 **/launchSettings.json
+*.vsix
+*.zip
