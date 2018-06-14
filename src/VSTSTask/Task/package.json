@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/shelljs": "^0.8.0",
     "request": "^2.87.0",
     "vsts-task-lib": "^2.4.0"
   },

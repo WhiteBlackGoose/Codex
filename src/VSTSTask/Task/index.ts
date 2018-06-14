@@ -1,6 +1,5 @@
 import tl = require('vsts-task-lib/task');
 import trm = require('vsts-task-lib/toolrunner');
-import mod = require('./taskmod');
 import http = require('https');
 import fs = require('fs');
 import request = require('request');

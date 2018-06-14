@@ -11,11 +11,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tl = require("vsts-task-lib/task");
 const fs = require("fs");
 const request = require("request");
+const shell = require("shelljs");
+const path = require("path");
+function mkdir(directoryPath) {
+    let cmdPath = tl.which('cmd');
+    let tool = tl.tool(cmdPath).arg('/c').arg('mkdir ' + directoryPath);
+    tool.execSync();
+}
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            let toolPath = "C:/temp/Codex.Automation.Workflow.exe";
+            let outputDirectory = tl.getPathInput('CodexOutputRoot');
+            let codexBootstrapDirectory = path.join(outputDirectory, "bootstrap");
+            let toolPath = path.join(codexBootstrapDirectory, "Codex.Automation.Workflow.exe");
             let tool;
+            shell.mkdir("-p", codexBootstrapDirectory);
             //download file
             var file = fs.createWriteStream(toolPath);
             yield new Promise(resolve => request.get('https://github.com/Ref12/Codex/releases/download/latest-prerel/Codex.Automation.Workflow.exe').pipe(file).on('finish', resolve));

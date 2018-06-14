@@ -114,6 +114,7 @@ namespace Codex.Automation.Workflow
             // publish to a vsts build
             Console.WriteLine("Publishing to Build");
             Console.WriteLine($"##vso[artifact.upload artifactname=CodexOutputs;]{analysisOutputZip}");
+            Console.WriteLine("##vso[build.addbuildtag]CodexOutputs");
         }
     }
 }
