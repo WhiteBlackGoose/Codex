@@ -18,6 +18,7 @@ using Codex.Storage.DataModel;
 using Codex.ElasticSearch.Utilities;
 using Nest.JsonNetSerializer;
 using Elasticsearch.Net;
+using Codex.ElasticSearch;
 
 namespace Codex.Serialization
 {
@@ -422,7 +423,7 @@ namespace Codex.Serialization
 
                     if (entity.Uid == null)
                     {
-                        entity.Uid = entity.EntityContentId;
+                        entity.Uid = entity.EntityContentId + entity.GetRoutingSuffix();
                     }
                 }
             }

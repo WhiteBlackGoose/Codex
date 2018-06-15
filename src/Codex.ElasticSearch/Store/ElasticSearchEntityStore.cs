@@ -27,8 +27,13 @@ namespace Codex.ElasticSearch
         {
             this.Store = store;
             this.SearchType = searchType;
-            this.IndexName = (store.Configuration.Prefix + searchType.IndexName).ToLowerInvariant();
+            this.IndexName = GetIndexName(store, searchType);
             this.RegistryIndexName = IndexName + ".reg";
+        }
+
+        public static string GetIndexName(ElasticSearchStore store, SearchType searchType)
+        {
+            return (store.Configuration.Prefix + searchType.IndexName).ToLowerInvariant();
         }
 
         public abstract Task DeleteAsync(IEnumerable<string> uids);
@@ -180,6 +185,7 @@ namespace Codex.ElasticSearch
         {
             return bd.Create<IRegisteredEntity>(bco => bco.Document(value)
                 .Index(RegistryIndexName)
+                .Version(value.EntityVersion)
                 .Routing(GetRouting(value.Uid))
                 .Id(value.Uid));
         }

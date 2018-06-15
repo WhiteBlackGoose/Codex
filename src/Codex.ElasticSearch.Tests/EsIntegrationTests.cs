@@ -36,6 +36,24 @@ namespace Codex.ElasticSearch.Tests
         }
 
         [Test]
+        public async Task ReservingStableIds()
+        {
+            var store = new ElasticSearchStore(new ElasticSearchStoreConfiguration()
+            {
+                CreateIndices = true,
+                ClearIndicesBeforeUse = true,
+                ShardCount = 1,
+                Prefix = "estest."
+            }, new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200")));
+
+            await store.InitializeAsync();
+
+            var idRegistry = new ElasticSearchIdRegistry(store);
+
+            var reservation = await idRegistry.ReserveIds(SearchTypes.BoundSource, 23);
+        }
+
+        [Test]
         public async Task TestSearch()
         {
             var codex = new ElasticSearchCodex(new ElasticSearchStoreConfiguration()
