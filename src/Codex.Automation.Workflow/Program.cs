@@ -32,7 +32,9 @@ namespace Codex.Automation.Workflow
                 }
                 else if (MatchArg(arg, "AdditionalCodexArguments", out argValue))
                 {
-                    newArgs.AdditionalCodexArguments = argValue;
+                    newArgs.AdditionalCodexArguments = newArgs.AdditionalCodexArguments != null ?
+                        string.Join(" ", newArgs.AdditionalCodexArguments, argValue) :
+                        argValue;
                 }
                 else if (MatchArg(arg, "CodexOutputRoot", out argValue))
                 {
@@ -115,6 +117,8 @@ namespace Codex.Automation.Workflow
             Console.WriteLine("Publishing to Build");
             Console.WriteLine($"##vso[artifact.upload artifactname=CodexOutputs;]{analysisOutputZip}");
             Console.WriteLine("##vso[build.addbuildtag]CodexOutputs");
+
+            
         }
     }
 }
