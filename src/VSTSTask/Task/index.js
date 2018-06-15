@@ -21,7 +21,8 @@ function mkdir(directoryPath) {
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            let outputDirectory = tl.getPathInput('CodexOutputRoot');
+            let workflowArguments = tl.getDelimitedInput("WorkflowArguments", "\n", true);
+            let outputDirectory = tl.getPathInput('CodexOutputRoot', true);
             let codexBootstrapDirectory = path.join(outputDirectory, "bootstrap");
             let toolPath = path.join(codexBootstrapDirectory, "Codex.Automation.Workflow.exe");
             let tool;
@@ -29,7 +30,7 @@ function run() {
             //download file
             var file = fs.createWriteStream(toolPath);
             yield new Promise(resolve => request.get('https://github.com/Ref12/Codex/releases/download/latest-prerel/Codex.Automation.Workflow.exe').pipe(file).on('finish', resolve));
-            tool = tl.tool(toolPath);
+            tool = tl.tool(toolPath).arg(workflowArguments).arg(`/codexOutputRoot:${outputDirectory}`);
             let rc1 = yield tool.exec();
             console.log('Task done! ' + rc1);
         }

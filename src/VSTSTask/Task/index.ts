@@ -5,6 +5,7 @@ import fs = require('fs');
 import request = require('request');
 import shell = require('shelljs');
 import path = require('path');
+import os = require('os');
 
 function mkdir(directoryPath: string) {
     let cmdPath = tl.which('cmd');
@@ -14,7 +15,8 @@ function mkdir(directoryPath: string) {
 
 async function run() {
     try {
-        let outputDirectory = tl.getPathInput('CodexOutputRoot');        
+        let workflowArguments = tl.getDelimitedInput("WorkflowArguments", "\n", true);
+        let outputDirectory = tl.getPathInput('CodexOutputRoot', true);        
         let codexBootstrapDirectory = path.join(outputDirectory, "bootstrap");
         let toolPath =path.join(codexBootstrapDirectory, "Codex.Automation.Workflow.exe");
         let tool: trm.ToolRunner;
@@ -25,7 +27,7 @@ async function run() {
         var file = fs.createWriteStream(toolPath);
 
         await new Promise(resolve => request.get('https://github.com/Ref12/Codex/releases/download/latest-prerel/Codex.Automation.Workflow.exe').pipe(file).on('finish', resolve));
-        tool = tl.tool(toolPath);
+        tool = tl.tool(toolPath).arg(workflowArguments).arg(`/codexOutputRoot:${outputDirectory}`);
         let rc1: number = await tool.exec();
 
         console.log('Task done! ' + rc1);
