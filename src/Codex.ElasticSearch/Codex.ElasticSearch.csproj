@@ -21,5 +21,18 @@
   <ItemGroup>
     <None Include="Model\ElasticSearchTypes.target.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Store\Scripts\Scripts.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Scripts.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Store\Scripts\Scripts.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Scripts.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>

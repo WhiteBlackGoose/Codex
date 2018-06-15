@@ -62,7 +62,7 @@ namespace Codex.ElasticSearch
 
         public void Add(ElasticEntityRef entityRef)
         {
-            var shardState = ShardStates[entityRef.Shard];
+            var shardState = ShardStates[entityRef.StableIdGroup];
             IReadOnlyList<ElasticEntityRef> batch;
             if (shardState.Queue.AddAndTryGetBatch(entityRef, out batch))
             {
@@ -182,12 +182,12 @@ namespace Codex.ElasticSearch
 
     public struct ElasticEntityRef
     {
-        public int Shard;
+        public int StableIdGroup;
         public long StableId;
 
-        public ElasticEntityRef(int shard, long stableId)
+        public ElasticEntityRef(int stableIdGroup, long stableId)
         {
-            Shard = shard;
+            StableIdGroup = stableIdGroup;
             StableId = stableId;
         }
     }

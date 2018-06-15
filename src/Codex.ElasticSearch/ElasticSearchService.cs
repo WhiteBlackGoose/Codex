@@ -27,7 +27,7 @@ namespace Codex.ElasticSearch
         public ElasticSearchService(ElasticSearchServiceConfiguration configuration)
         {
             this.configuration = configuration;
-            this.settings = new ConnectionSettings(new SingleNodeConnectionPool(new Uri(configuration.Endpoint)))
+            this.settings = new OverrideConnectionSettings(new Uri(configuration.Endpoint))
                 .EnableHttpCompression();
 
             if (configuration.CaptureRequests)

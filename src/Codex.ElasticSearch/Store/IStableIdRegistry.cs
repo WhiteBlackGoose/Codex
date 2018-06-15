@@ -20,7 +20,16 @@ namespace Codex.ElasticSearch
         /// <summary>
         /// Reserves and sets the stable ids on the items
         /// </summary>
-        Task SetStableIdsAsync(IReadOnlyList<IStableIdItem> items);
+        Task<IStableIdRegistration> SetStableIdsAsync(IReadOnlyList<IStableIdItem> items);
+
+        Task FinalizeAsync();
+    }
+
+    public interface IStableIdRegistration
+    {
+        void Report(IStableIdItem item, bool used);
+
+        Task CompleteAsync();
     }
 
     public interface IStableIdItem
@@ -30,19 +39,8 @@ namespace Codex.ElasticSearch
         /// </summary>
         int StableIdGroup { get; }
 
-        /// <summary>
-        /// The unique identifier for item
-        /// </summary>
-        string Uid { get; }
+        int StableId { get; set; }
 
-        /// <summary>
-        /// The index name in which the item will be stored
-        /// </summary>
-        string IndexName { get; }
-
-        /// <summary>
-        /// Sets the stable id for the item
-        /// </summary>
-        void SetStableId(int stableId);
+        SearchType SearchType { get; }
     }
 }
