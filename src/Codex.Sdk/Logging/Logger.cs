@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Codex.Logging
 {
-    public class Logger : IDisposable
+    public abstract class Logger : IDisposable
     {
-        public static readonly Logger Null = new Logger();
+        public static readonly Logger Null = new NullLogger();
 
         public virtual void LogError(string error)
         {
@@ -21,11 +21,10 @@ namespace Codex.Logging
 
         public virtual void LogWarning(string warning)
         {
+            LogMessage(warning);
         }
 
-        public virtual void LogMessage(string message, MessageKind kind = MessageKind.Informational)
-        {
-        }
+        public abstract void LogMessage(string message, MessageKind kind = MessageKind.Informational);
 
         public void WriteLine(string message)
         {
@@ -34,6 +33,13 @@ namespace Codex.Logging
 
         public virtual void Dispose()
         {
+        }
+
+        private class NullLogger : Logger
+        {
+            public override void LogMessage(string message, MessageKind kind = MessageKind.Informational)
+            {
+            }
         }
     }
 

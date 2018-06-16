@@ -115,8 +115,12 @@ namespace Codex.Analysis.Projects
                         return Task.FromResult(solution);
                     }, isThreadSafe: true);
 
+                    logger.LogMessage($"Found {solutionInfo.Projects.Count} projects in solution '{solutionName}'");
+
                     foreach (var projectInfo in solutionInfo.Projects)
                     {
+                        logger.LogMessage($"Processing project '{projectInfo.FilePath}' for solution '{solutionName}'");
+
                         RepoFile projectFile = null;
                         if (!string.IsNullOrEmpty(projectInfo.FilePath))
                         {
@@ -125,12 +129,14 @@ namespace Codex.Analysis.Projects
 
                         if (requireProjectExists && projectFile == null)
                         {
+                            logger.LogMessage($"Project '{projectInfo.FilePath}' does not exist for solution '{solutionName}'");
                             continue;
                         }
 
                         if (repo.ProjectsById.ContainsKey(projectInfo.AssemblyName) || 
                             (projectFile != null && repo.ProjectsByPath.ContainsKey(projectFile.FilePath)))
                         {
+                            logger.LogMessage($"Project '{projectInfo.FilePath}' already has analyzer other than for solution '{solutionName}'");
                             continue;
                         }
 
@@ -139,6 +145,7 @@ namespace Codex.Analysis.Projects
                             projectFile != null ? Path.GetDirectoryName(projectFile.FilePath) : string.Empty,
                             projectFile);
 
+                        logger.LogMessage($"Adding project '{projectInfo.FilePath}' for solution '{solutionName}'");
                         AddSolutionProject(lazySolution, projectInfo, projectFile, repoProject, csharpSemanticServices, visualBasicSemanticServices);
                     }
                 }

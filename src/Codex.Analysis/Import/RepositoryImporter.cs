@@ -91,7 +91,7 @@ namespace Codex.Import
                     {
                         if (analyzerData.Analyzer.IsCandidateProjectFile(repoFile))
                         {
-                            logger.LogMessage($"Candidate project file: {file}\nAnalyzer: {analyzerData.Analyzer.GetType().FullName}", Logging.MessageKind.Diagnostic);
+                            logger.LogMessage($"Candidate project file: {file}\nAnalyzer: {analyzerData.Analyzer.GetType().FullName}", Logging.MessageKind.Informational);
 
                             analyzerData.CandidateProjectFiles.Add(repoFile);
                         }
