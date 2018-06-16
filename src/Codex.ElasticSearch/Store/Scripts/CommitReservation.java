@@ -3,13 +3,13 @@
 // CommitReservation(string[] reservationIds, int[] unusedIds)
 
 // Parameters
-int[] unusedIds = params.returnedIds;
-String[] reservationIds = params.reservationIds;
+List unusedIds = params.returnedIds;
+List reservationIds = params.reservationIds;
 
 // Add all unused ids to the free list
 ctx._source.freeList.addAll(unusedIds);
 
-for (reservationId : reservationIds)
+for (String reservationId : reservationIds)
 {
 	// Remove the reservation id
 	ctx._source.pendingReservations.removeIf(item -> item.reservationId == reservationId);

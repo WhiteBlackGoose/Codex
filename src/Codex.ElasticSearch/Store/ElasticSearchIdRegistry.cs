@@ -15,6 +15,8 @@ namespace Codex.ElasticSearch
 {
     public class ElasticSearchIdRegistry : IStableIdRegistry
     {
+        public const int ReserveCount = 20;
+
         private readonly ElasticSearchStore store;
         private readonly ElasticSearchService service;
         private readonly ElasticSearchEntityStore entityStore;
@@ -35,14 +37,38 @@ namespace Codex.ElasticSearch
             throw new NotImplementedException();
         }
 
-        public Task CommitReservations(IReadOnlyList<string> committedReservations, IReadOnlyList<int> unusedIds = null)
+        public async Task CompleteReservations(
+            SearchType searchType, 
+            int stableIdGroup,
+            IReadOnlyList<string> completedReservations, 
+            IReadOnlyList<int> unusedIds = null)
         {
-            throw new NotImplementedException();
+            var response = await this.service.UseClient(context =>
+            {
+                var client = context.Client;
+                string stableIdMarkerId = GetStableIdMarkerId(searchType, stableIdGroup);
+                return client.UpdateAsync<IStableIdMarker, IStableIdMarker>(stableIdMarkerId,
+                    ud => ud
+                    .Index(entityStore.IndexName)
+                    .Upsert(new StableIdMarker())
+                    .ScriptedUpsert()
+                    .Source()
+                    .RetryOnConflict(10)
+                    .Script(sd => sd
+                        .Source(Scripts.CommitReservation)
+                        .Lang(ScriptLang.Painless)
+                        .Params(pd => pd
+                            .Add("reservationIds", completedReservations)
+                            .Add("returnedIds", unusedIds))).CaptureRequest(context))
+                    .ThrowOnFailure();
+            });
+
+            var stableIdMarkerDocument = response.Result.Get.Source;
         }
 
         public async Task<IStableIdRegistration> SetStableIdsAsync(IReadOnlyList<IStableIdItem> items)
         {
-            var registration = new StableIdRegistration();
+            var registration = new StableIdRegistration(this);
             foreach (var item in items)
             {
                 var indexRegistry = indexRegistries[item.SearchType.Id];
@@ -61,7 +87,6 @@ namespace Codex.ElasticSearch
 
         public async Task<IStableIdReservation> ReserveIds(SearchType searchType, int stableIdGroup)
         {
-            const int reserveCount = 20;
             string reservationId = Guid.NewGuid().ToString();
             var response = await this.service.UseClient(context =>
             {
@@ -79,7 +104,7 @@ namespace Codex.ElasticSearch
                         .Lang(ScriptLang.Painless)
                         .Params(pd => pd
                             .Add("reservationId", reservationId)
-                            .Add("reserveCount", reserveCount))).CaptureRequest(context))
+                            .Add("reserveCount", ReserveCount))).CaptureRequest(context))
                     .ThrowOnFailure();
             });
 
@@ -96,6 +121,11 @@ namespace Codex.ElasticSearch
         {
             private readonly ElasticSearchIdRegistry registry;
             private readonly Dictionary<IStableIdItem, ReservationNode> reservations = new Dictionary<IStableIdItem, ReservationNode>();
+
+            public StableIdRegistration(ElasticSearchIdRegistry registry)
+            {
+                this.registry = registry;
+            }
 
             public void AddReservation(IStableIdItem item, ReservationNode node)
             {
@@ -260,7 +290,7 @@ namespace Codex.ElasticSearch
 
                 if (completedReservations != null)
                 {
-                    await idRegistry.CommitReservations(completedReservations);
+                    await idRegistry.CompleteReservations(SearchType, stableIdGroup, completedReservations);
                 }
 
                 groupReservationNodes[stableIdGroup] = node;

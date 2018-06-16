@@ -50,7 +50,20 @@ namespace Codex.ElasticSearch.Tests
 
             var idRegistry = new ElasticSearchIdRegistry(store);
 
-            var reservation = await idRegistry.ReserveIds(SearchTypes.BoundSource, 23);
+            int iterations = 3;
+            for (int i = 0; i < iterations; i++)
+            {
+                var reservation = await idRegistry.ReserveIds(SearchTypes.BoundSource, 23);
+                Assert.True(reservation.ReservedIds.SequenceEqual(Enumerable.Range(i * ElasticSearchIdRegistry.ReserveCount, ElasticSearchIdRegistry.ReserveCount)));
+            }
+
+            var returnedIds = new int[] { 3, 14, 22, 23, 51 };
+            await idRegistry.CompleteReservations(SearchTypes.BoundSource, 23, new string[0], unusedIds: returnedIds);
+
+            var reservation1 = await idRegistry.ReserveIds(SearchTypes.BoundSource, 23);
+            var expectedIds = returnedIds.Concat(
+                    Enumerable.Range(iterations * ElasticSearchIdRegistry.ReserveCount, ElasticSearchIdRegistry.ReserveCount - returnedIds.Length)).ToArray();
+            Assert.True(new HashSet<int>(reservation1.ReservedIds).SetEquals(expectedIds));
         }
 
         [Test]

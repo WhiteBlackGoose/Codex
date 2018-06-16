@@ -12,6 +12,7 @@ namespace Codex.Logging
 
         public virtual void LogError(string error)
         {
+            LogMessage(error);
         }
 
         public virtual void LogExceptionError(string operation, Exception ex)
