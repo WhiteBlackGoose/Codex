@@ -61,7 +61,7 @@ namespace Codex.ElasticSearch
                     filterName: commitFilterName) };
         }
 
-        public async ValueTask<None> AddAsync<T>(ElasticSearchEntityStore<T> store, T entity, Action onAdded = null, params ElasticSearchStoredFilterBuilder[] additionalStoredFilters)
+        public async ValueTask<None> AddAsync<T>(ElasticSearchEntityStore<T> store, T entity, params ElasticSearchStoredFilterBuilder[] additionalStoredFilters)
             where T : class, ISearchEntity
         {
             // This part must be synchronous since Add calls this method and
@@ -71,7 +71,7 @@ namespace Codex.ElasticSearch
             while (true)
             {
                 var batch = currentBatch;
-                if (!batch.TryAdd(store, entity, onAdded, additionalStoredFilters))
+                if (!batch.TryAdd(store, entity, additionalStoredFilters))
                 {
                     await ExecuteBatchAsync(batch);
                 }

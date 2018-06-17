@@ -7,6 +7,7 @@ using Nest;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,9 +33,12 @@ namespace Codex.ElasticSearch
             this.entityStore = store.StableIdMarkerStore;
         }
 
-        public Task FinalizeAsync()
+        public async Task FinalizeAsync()
         {
-            throw new NotImplementedException();
+            foreach (var indexRegistry in indexRegistries)
+            {
+                await indexRegistry.FinalizeAsync();
+            }
         }
 
         public async Task CompleteReservations(
@@ -132,9 +136,9 @@ namespace Codex.ElasticSearch
                 reservations.Add(item, node);
             }
 
-            public Task CompleteAsync()
+            public void Dispose()
             {
-                throw new NotImplementedException();
+                Contract.Assert(reservations.Count == 0);
             }
 
             public void Report(IStableIdItem item, bool used)
@@ -179,6 +183,7 @@ namespace Codex.ElasticSearch
                     {
                         id = remainingId;
                         node = this;
+                        remainingIds.Remove(remainingId);
                         return true;
                     }
                 }
@@ -209,9 +214,10 @@ namespace Codex.ElasticSearch
                 Interlocked.Increment(ref committedIdCount);
             }
 
-            public ReservationNode CollectCompletedReservationsAndGetNextUncompleted(ref List<string> committedNodes)
+            public ReservationNode CollectCompletedReservationsAndGetNextUncompleted(ref List<string> committedNodes, List<int> finalizationUnusedIds)
             {
-                if (committedIdCount == IdReservation.ReservedIds.Count)
+                bool isFinalizing = finalizationUnusedIds != null;
+                if (committedIdCount == IdReservation.ReservedIds.Count || isFinalizing)
                 {
                     // Node is committed since all reserved ids are committed
                     if (committedNodes == null)
@@ -219,14 +225,15 @@ namespace Codex.ElasticSearch
                         committedNodes = new List<string>();
                     }
 
+                    finalizationUnusedIds?.AddRange(remainingIds);
                     committedNodes.Add(this.IdReservation.ReservationId);
-                    return Next?.CollectCompletedReservationsAndGetNextUncompleted(ref committedNodes);
+                    return Next?.CollectCompletedReservationsAndGetNextUncompleted(ref committedNodes, finalizationUnusedIds);
                 }
                 else
                 {
                     if (Next != null)
                     {
-                        Next = Next.CollectCompletedReservationsAndGetNextUncompleted(ref committedNodes);
+                        Next = Next.CollectCompletedReservationsAndGetNextUncompleted(ref committedNodes, finalizationUnusedIds);
                     }
 
                     return this;
@@ -284,17 +291,35 @@ namespace Codex.ElasticSearch
             {
                 var reservation = await idRegistry.ReserveIds(SearchType, stableIdGroup);
 
-                List<string> completedReservations = null;
-                next = next.CollectCompletedReservationsAndGetNextUncompleted(ref completedReservations);
+                next = await CompletePendingReservations(stableIdGroup, next, finalizationUnusedIds: null);
+
                 var node = new ReservationNode(stableIdGroup, reservation, next);
-
-                if (completedReservations != null)
-                {
-                    await idRegistry.CompleteReservations(SearchType, stableIdGroup, completedReservations);
-                }
-
                 groupReservationNodes[stableIdGroup] = node;
                 return node;
+            }
+
+            private async Task<ReservationNode> CompletePendingReservations(int stableIdGroup, ReservationNode node, List<int> finalizationUnusedIds)
+            {
+                List<string> completedReservations = null;
+                node = node?.CollectCompletedReservationsAndGetNextUncompleted(ref completedReservations, finalizationUnusedIds: finalizationUnusedIds);
+                if (completedReservations != null)
+                {
+                    await idRegistry.CompleteReservations(SearchType, stableIdGroup, completedReservations, unusedIds: finalizationUnusedIds);
+                }
+
+                return node;
+            }
+
+            public async Task FinalizeAsync()
+            {
+                for (int stableIdGroup = 0; stableIdGroup < groupReservationNodes.Length; stableIdGroup++)
+                {
+                    var reservationNode = groupReservationNodes[stableIdGroup];
+                    if (reservationNode != null)
+                    {
+                        await CompletePendingReservations(stableIdGroup, reservationNode, finalizationUnusedIds: new List<int>());
+                    }
+                }
             }
         }
     }

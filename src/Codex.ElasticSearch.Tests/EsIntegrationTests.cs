@@ -51,19 +51,82 @@ namespace Codex.ElasticSearch.Tests
             var idRegistry = new ElasticSearchIdRegistry(store);
 
             int iterations = 3;
+            string reservationId = null;
             for (int i = 0; i < iterations; i++)
             {
                 var reservation = await idRegistry.ReserveIds(SearchTypes.BoundSource, 23);
+                reservationId = reservation.ReservationId;
                 Assert.True(reservation.ReservedIds.SequenceEqual(Enumerable.Range(i * ElasticSearchIdRegistry.ReserveCount, ElasticSearchIdRegistry.ReserveCount)));
             }
 
             var returnedIds = new int[] { 3, 14, 22, 23, 51 };
-            await idRegistry.CompleteReservations(SearchTypes.BoundSource, 23, new string[0], unusedIds: returnedIds);
+            await idRegistry.CompleteReservations(SearchTypes.BoundSource, 23, new string[] { reservationId }, unusedIds: returnedIds);
 
             var reservation1 = await idRegistry.ReserveIds(SearchTypes.BoundSource, 23);
             var expectedIds = returnedIds.Concat(
                     Enumerable.Range(iterations * ElasticSearchIdRegistry.ReserveCount, ElasticSearchIdRegistry.ReserveCount - returnedIds.Length)).ToArray();
             Assert.True(new HashSet<int>(reservation1.ReservedIds).SetEquals(expectedIds));
+        }
+
+        [Test]
+        public async Task ReservingStableIdsUsingRegistration()
+        {
+            var store = new ElasticSearchStore(new ElasticSearchStoreConfiguration()
+            {
+                CreateIndices = true,
+                ClearIndicesBeforeUse = true,
+                ShardCount = 1,
+                Prefix = "estest."
+            }, new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200")));
+
+            await store.InitializeAsync();
+
+            var idRegistry = new ElasticSearchIdRegistry(store);
+
+            List<TestStableIdItem> testStableIdItems = new List<TestStableIdItem>()
+            {
+                new TestStableIdItem(SearchTypes.BoundSource, 23, expectedStableId: 0),
+                new TestStableIdItem(SearchTypes.BoundSource, 23, expectedStableId: 1) { Unused = true },
+                new TestStableIdItem(SearchTypes.BoundSource, 23, expectedStableId: 2),
+                new TestStableIdItem(SearchTypes.TextSource, 1, expectedStableId: 0),
+                new TestStableIdItem(SearchTypes.TextSource, 1, expectedStableId: 1),
+                new TestStableIdItem(SearchTypes.Project, 0, expectedStableId: 0),
+                new TestStableIdItem(SearchTypes.Project, 1, expectedStableId: 0) { Unused = true },
+                new TestStableIdItem(SearchTypes.Project, 1, expectedStableId: 1),
+                new TestStableIdItem(SearchTypes.Project, 2, expectedStableId: 0),
+                new TestStableIdItem(SearchTypes.BoundSource, 23, expectedStableId: 3),
+            };
+
+            using (var registration = await idRegistry.SetStableIdsAsync(testStableIdItems))
+            {
+                foreach (var item in testStableIdItems)
+                {
+                    Assert.IsTrue(item.StableIdValue.HasValue);
+                    Assert.AreEqual(item.ExpectedStableId, item.StableId);
+                    registration.Report(item, used: !item.Unused);
+                }
+            }
+
+            await idRegistry.FinalizeAsync();
+
+            // TODO: Test that stable id marker documents contains correct free list and empty pending reservations
+        }
+
+        private class TestStableIdItem : IStableIdItem
+        {
+            public int StableIdGroup { get; }
+            public bool Unused { get; set; }
+            public int? StableIdValue { get; set; }
+            public int ExpectedStableId { get; }
+            public int StableId { get => StableIdValue.Value; set => StableIdValue = value; }
+            public SearchType SearchType { get; }
+
+            public TestStableIdItem(SearchType searchType, int stableIdGroup, int expectedStableId)
+            {
+                SearchType = searchType;
+                StableIdGroup = stableIdGroup;
+                ExpectedStableId = expectedStableId;
+            }
         }
 
         [Test]
@@ -147,7 +210,7 @@ namespace Codex.ElasticSearch.Tests
 
         private async Task<IStoredFilter> StoreAndVerifyFilter(
             ElasticSearchStore store,
-            Dictionary<int, HashSet<long>> valuesMap, 
+            Dictionary<int, HashSet<long>> valuesMap,
             IEnumerable<long> valuesToStore,
             int filterId = 1,
             [CallerLineNumber] int line = 0)
@@ -194,7 +257,7 @@ namespace Codex.ElasticSearch.Tests
 
             await store.RegisteredEntityStore.RefreshAsync();
 
-            var filteredEntitiesResponse = await store.RegisteredEntityStore.GetStoredFilterEntities(baseFilterId, 
+            var filteredEntitiesResponse = await store.RegisteredEntityStore.GetStoredFilterEntities(baseFilterId,
                 // Ensure that if there are more matches than expected that the API would return those results
                 maxCount: values.Count + 1);
             var filteredEntities = filteredEntitiesResponse.Result;

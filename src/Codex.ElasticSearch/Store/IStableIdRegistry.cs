@@ -25,11 +25,9 @@ namespace Codex.ElasticSearch
         Task FinalizeAsync();
     }
 
-    public interface IStableIdRegistration
+    public interface IStableIdRegistration : IDisposable
     {
         void Report(IStableIdItem item, bool used);
-
-        Task CompleteAsync();
     }
 
     public interface IStableIdItem

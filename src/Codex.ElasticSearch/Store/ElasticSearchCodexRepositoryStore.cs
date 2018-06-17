@@ -175,10 +175,9 @@ namespace Codex.ElasticSearch
                 CompressedReferences = ReferenceListModel.CreateFrom(boundSourceFile.References)
             };
 
-            await batcher.AddAsync(store.BoundSourceStore, boundSourceModel, onAdded: () =>
-            {
-                AddBoundSourceFileAssociatedData(boundSourceFile, boundSourceModel);
-            });
+            await batcher.AddAsync(store.BoundSourceStore, boundSourceModel);
+
+            AddBoundSourceFileAssociatedData(boundSourceFile, boundSourceModel);
         }
 
         private void UpdateCommitFile(TextSourceSearchModel sourceSearchModel)

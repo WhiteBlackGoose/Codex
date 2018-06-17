@@ -52,26 +52,24 @@ namespace Codex.ElasticSearch
             //Task.Delay(1);
             //return null;
 
-            var registerResponse = await context.Client.BulkAsync(RegistryBulkDescriptor.CaptureRequest(context))
-                .ThrowOnFailure(allowInvalid: true);
-            Contract.Assert(EntityItems.Count == registerResponse.Items.Count);
-
-            int batchIndex = 0;
-
             // Reserve stable ids
-
-            var registration = await stableIdRegistry.SetStableIdsAsync(EntityItems);
-            foreach (var registerResponseItem in registerResponse.Items)
+            int batchIndex = 0;
+            using (var registration = await stableIdRegistry.SetStableIdsAsync(EntityItems))
             {
-                var item = EntityItems[batchIndex];
-                batchIndex++;
+                var registerResponse = await context.Client.BulkAsync(RegistryBulkDescriptor.CaptureRequest(context))
+                    .ThrowOnFailure(allowInvalid: true);
+                Contract.Assert(EntityItems.Count == registerResponse.Items.Count);
 
-                item.SetVersionAndStableIdUsingRegisteredVersion(registerResponseItem.Version);
+                foreach (var registerResponseItem in registerResponse.Items)
+                {
+                    var item = EntityItems[batchIndex];
+                    batchIndex++;
 
-                registration.Report(item, used: IsAdded(registerResponseItem));
+                    item.SetVersionAndStableIdUsingRegisteredVersion(registerResponseItem.Version);
+
+                    registration.Report(item, used: IsAdded(registerResponseItem));
+                }
             }
-
-            await registration.CompleteAsync();
 
             var response = await context.Client.BulkAsync(BulkDescriptor.CaptureRequest(context)).ThrowOnFailure(allowInvalid: true);
             Contract.Assert(EntityItems.Count == response.Items.Count);
@@ -93,11 +91,6 @@ namespace Codex.ElasticSearch
                         additionalStoredFilter.Add(entityRef);
                     }
                 }
-
-                if (IsAdded(responseItem))
-                {
-                    item.OnAdded?.Invoke();
-                }
             }
 
             return response;
@@ -108,7 +101,7 @@ namespace Codex.ElasticSearch
             return item.Status == (int)HttpStatusCode.Created;
         }
 
-        public bool TryAdd<T>(ElasticSearchEntityStore<T> store, T entity, Action onAdded, ElasticSearchStoredFilterBuilder[] additionalStoredFilters)
+        public bool TryAdd<T>(ElasticSearchEntityStore<T> store, T entity, ElasticSearchStoredFilterBuilder[] additionalStoredFilters)
             where T : class, ISearchEntity
         {
             if (!CanFit(entity))
@@ -129,7 +122,6 @@ namespace Codex.ElasticSearch
                 {
                     BatchIndex = EntityItems.Count,
                     EntityStore = store,
-                    OnAdded = onAdded,
                     AdditionalStoredFilters = additionalStoredFilters
                 };
 
@@ -167,7 +159,6 @@ namespace Codex.ElasticSearch
             public RegisteredEntity RegisteredEntity { get; set; }
             public SearchType SearchType => EntityStore.SearchType;
             public ElasticSearchEntityStore EntityStore { get; set; }
-            public Action OnAdded { get; set; }
             public ElasticSearchStoredFilterBuilder[] AdditionalStoredFilters { get; set; }
 
             public int StableIdGroup => Entity.StableIdGroup;
