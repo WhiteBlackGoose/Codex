@@ -32,6 +32,7 @@ namespace Codex.ElasticSearch
         public ElasticSearchBatch(ElasticSearchBatcher batcher)
         {
             this.batcher = batcher;
+            this.stableIdRegistry = batcher.StableIdRegistry;
         }
 
         public bool TryReserveExecute()

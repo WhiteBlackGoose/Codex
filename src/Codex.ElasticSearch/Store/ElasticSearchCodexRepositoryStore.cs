@@ -16,6 +16,7 @@ namespace Codex.ElasticSearch
 {
     class ElasticSearchCodexRepositoryStore : ICodexRepositoryStore
     {
+        internal ElasticSearchIdRegistry IdRegistry { get; }
         private readonly ElasticSearchStore store;
         private readonly ElasticSearchBatcher batcher;
         private readonly Repository repository;
@@ -30,8 +31,10 @@ namespace Codex.ElasticSearch
             this.commit = commit;
             this.branch = branch;
 
+            IdRegistry = new ElasticSearchIdRegistry(store);
+
             Placeholder.Todo("Choose real values for the parameters");
-            this.batcher = new ElasticSearchBatcher(store, commit.CommitId, repository.Name, $"{commit.CommitId}#Cumulative");
+            this.batcher = new ElasticSearchBatcher(store, IdRegistry, commit.CommitId, repository.Name, $"{commit.CommitId}#Cumulative");
 
             batcher.Add(store.RepositoryStore, new RepositorySearchModel()
             {
@@ -230,6 +233,8 @@ namespace Codex.ElasticSearch
             });
 
             await batcher.FinalizeAsync();
+
+            await IdRegistry.FinalizeAsync();
         }
     }
 }

@@ -29,9 +29,10 @@ namespace Codex.ElasticSearch
         /// Empty set of stored filters for passing as additional stored filters
         /// </summary>
         internal readonly ElasticSearchStoredFilterBuilder[] EmptyStoredFilters = Array.Empty<ElasticSearchStoredFilterBuilder>();
-
+        
         private readonly ConcurrentQueue<ValueTask<None>> backgroundTasks = new ConcurrentQueue<ValueTask<None>>();
 
+        internal IStableIdRegistry StableIdRegistry { get; }
         private readonly ElasticSearchService service;
         private readonly ElasticSearchStore store;
         private readonly SemaphoreSlim batchSemaphore;
@@ -39,11 +40,12 @@ namespace Codex.ElasticSearch
         private ElasticSearchBatch currentBatch;
         private AtomicBool backgroundDequeueReservation = new AtomicBool();
 
-        public ElasticSearchBatcher(ElasticSearchStore store, string commitFilterName, string repositoryFilterName, string cumulativeCommitFilterName)
+        public ElasticSearchBatcher(ElasticSearchStore store, IStableIdRegistry stableIdRegistry, string commitFilterName, string repositoryFilterName, string cumulativeCommitFilterName)
         {
             Debug.Assert(store.Initialized, "Store must be initialized");
 
             this.store = store;
+            this.StableIdRegistry = stableIdRegistry;
             batchSemaphore = new SemaphoreSlim(store.Configuration.MaxBatchConcurrency);
             service = store.Service;
             currentBatch = new ElasticSearchBatch(this);

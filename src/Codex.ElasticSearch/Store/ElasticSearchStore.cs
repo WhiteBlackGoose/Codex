@@ -111,7 +111,8 @@ namespace Codex.ElasticSearch
 
         public async Task<ICodexRepositoryStore> CreateRepositoryStore(Repository repository, Commit commit, Branch branch)
         {
-            return new ElasticSearchCodexRepositoryStore(this, repository, commit, branch);
+            var repositoryStore = new ElasticSearchCodexRepositoryStore(this, repository, commit, branch);
+            return repositoryStore;
         }
     }
 
