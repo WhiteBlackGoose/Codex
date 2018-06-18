@@ -24,6 +24,7 @@ namespace Codex.ElasticSearch.Utilities
 
         public bool AddAndTryGetBatch(T item, out IReadOnlyList<T> batch)
         {
+            Placeholder.Todo("Get final batch");
             queue.Enqueue(item);
             var updatedTotalCount = Interlocked.Increment(ref totalCount);
             if (updatedTotalCount % batchSize == 0)

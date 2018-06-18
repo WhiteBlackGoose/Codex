@@ -28,7 +28,7 @@ namespace Codex.ElasticSearch
 
         private const int BatchSize = 10000;
 
-        private readonly ShardState[] ShardStates;
+        private readonly StableIdGroupBuild[] ShardStates;
         private ConcurrentQueue<Task> storedFilterUpdateTasks = new ConcurrentQueue<Task>();
         private readonly string[] unionFilterNames;
 
@@ -40,13 +40,13 @@ namespace Codex.ElasticSearch
 
             IntermediateFilterSuffix = Guid.NewGuid().ToString();
 
-            ShardStates = Enumerable.Range(0, entityStore.ShardCount).Select(shard => CreateShardState(shard)).ToArray();
+            ShardStates = Enumerable.Range(0, StableIdGroupMaxValue).Select(stableIdGroupNumber => CreateShardState(stableIdGroupNumber)).ToArray();
         }
 
-        private ShardState CreateShardState(int shard)
+        private StableIdGroupBuild CreateShardState(int shard)
         {
             var shardFilterId = GetFilterId(FilterName, IndexName, shard);
-            var shardState = new ShardState()
+            var shardState = new StableIdGroupBuild()
             {
                 IndexName = IndexName,
                 Shard = shard,
@@ -151,7 +151,7 @@ namespace Codex.ElasticSearch
             });
         }
 
-        private class ShardState
+        private class StableIdGroupBuild
         {
             public int Shard;
             public string IndexName;
