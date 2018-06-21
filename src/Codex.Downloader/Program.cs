@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO.Compression;
+using CommandLine.Text;
 
 namespace Codex.Downloader
 {
@@ -43,6 +44,7 @@ namespace Codex.Downloader
             {
                 settings.CaseInsensitiveEnumValues = true;
                 settings.CaseSensitive = false;
+                settings.HelpWriter = Console.Out;
             }).ParseArguments<VSTSBuildOptions>(args)
                 .WithParsed<VSTSBuildOptions>(opts => RunOptionsAndReturnExitCode(opts))
                 .WithNotParsed<VSTSBuildOptions>((errs) => HandleParseError(errs));
@@ -78,6 +80,7 @@ namespace Codex.Downloader
             var lastBuild = (await client.GetBuildsAsync(
                 project: projectId,
                 definitions: definition,
+                tagFilters: new [] { "CodexOutputs" },
                 resultFilter: BuildResult.Succeeded | BuildResult.PartiallySucceeded,
                 queryOrder: BuildQueryOrder.FinishTimeDescending,
                 top: 1)).FirstOrDefault();
@@ -89,6 +92,9 @@ namespace Codex.Downloader
             }
 
             Console.WriteLine($"Found build: {lastBuild.BuildNumber} (id: {lastBuild.Id})");
+
+            destination = Path.GetFullPath(destination);
+            Directory.CreateDirectory(Path.GetDirectoryName(destination));
 
             using (var tempStream = new FileStream(tempFilePath, 
                 FileMode.Create, 
@@ -114,9 +120,13 @@ namespace Codex.Downloader
 
         private static void HandleParseError(IEnumerable<Error> errors)
         {
+            var sb = SentenceBuilder.Create();
             foreach (var error in errors)
             {
-                Console.Error.WriteLine(error);
+                if (error.Tag != ErrorType.HelpRequestedError)
+                {
+                    Console.Error.WriteLine(sb.FormatError(error));
+                }
             }
         }
 
