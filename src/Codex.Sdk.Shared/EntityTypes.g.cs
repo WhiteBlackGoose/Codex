@@ -3345,7 +3345,7 @@ namespace Codex.ObjectModel {
         
         private int m_StableIdGroup;
         
-        private long m_StableId;
+        private int m_StableId;
         
         private string m_SortKey;
         
@@ -3425,7 +3425,7 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// The per-group stable identity
         /// </summary>
-        public virtual long StableId {
+        public virtual int StableId {
             get {
                 return this.m_StableId;
             }

@@ -183,9 +183,9 @@ namespace Codex.ElasticSearch
     public struct ElasticEntityRef
     {
         public int StableIdGroup;
-        public long StableId;
+        public int StableId;
 
-        public ElasticEntityRef(int stableIdGroup, long stableId)
+        public ElasticEntityRef(int stableIdGroup, int stableId)
         {
             StableIdGroup = stableIdGroup;
             StableId = stableId;
