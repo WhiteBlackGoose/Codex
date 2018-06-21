@@ -123,6 +123,7 @@ namespace Codex.Application
                     new Action(() => Load()),
                     new OptionSet
                     {
+                        { "n|name=", "Name of the repository.", n => repoName = StoreUtilities.GetSafeRepoName(n ?? string.Empty) },
                         { "newBackend", "Use new backend with stored filters Not supported.", n => newBackend = n != null },
                         { "scan", "Treats every directory under data directory as a separate store to upload.", n => scan = n != null },
                         { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
@@ -130,7 +131,7 @@ namespace Codex.Application
                         { "reset", "Reset elasticsearch for indexing new set of data.", n => reset = n != null },
                         { "clean", "Reset target index directory when using -save option.", n => clean = n != null },
                         { "u", "Updates the analysis data (in place).", n => update = n != null },
-                        { "d=", "The directory containing analysis data to load.", n => loadDirectory = n },
+                        { "d=", "The directory or a zip file containing analysis data to load.", n => loadDirectory = n },
                         { "save=", "Saves the analysis information to the given directory.", n => saveDirectory = n },
                         { "test", "Indicates that save should use test mode which disables optimization.", n => test = n != null },
                     }
@@ -534,7 +535,7 @@ namespace Codex.Application
                 }
 
                 var loadDirectoryStore = new DirectoryCodexStore(loadDirectory, logger);
-                await loadDirectoryStore.ReadAsync(store);
+                await loadDirectoryStore.ReadAsync(store, repositoryName: repoName);
 
             }).GetAwaiter().GetResult();
         }

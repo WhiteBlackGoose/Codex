@@ -57,7 +57,7 @@ namespace Codex.ElasticSearch.Store
             return CollectionUtilities.Empty<string>.Array;
         }
 
-        public async Task ReadAsync(ICodexStore store, bool finalize = true)
+        public async Task ReadAsync(ICodexStore store, bool finalize = true, string repositoryName = null)
         {
             FileSystem fileSystem;
             if (Directory.Exists(DirectoryPath))
@@ -72,6 +72,7 @@ namespace Codex.ElasticSearch.Store
             using (fileSystem)
             {
                 m_storeInfo = Read<RepositoryStoreInfo>(fileSystem, RepositoryInitializationFileName);
+                m_storeInfo.Repository.Name = repositoryName ?? m_storeInfo.Repository.Name;
 
                 ConcurrentQueue<Func<Task>> actionQueue = new ConcurrentQueue<Func<Task>>();
 
