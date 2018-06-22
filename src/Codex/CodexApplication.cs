@@ -612,7 +612,7 @@ namespace Codex.Application
 
                                 // Filter out files from being indexed specified by the .cdxignore file
                                 // This is used to ignore files which are not specified in the .gitignore files
-                                new GitIgnoreFilter("cdx.ignore"),
+                                new GitIgnoreFilter(".cdxignore"),
 
                                 new BinaryFileSystemFilter(new string[] { ".exe", ".dll", "*.blob", ".db" })
                                 ))
