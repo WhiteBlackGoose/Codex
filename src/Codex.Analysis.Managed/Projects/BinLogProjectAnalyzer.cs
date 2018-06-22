@@ -110,7 +110,13 @@ namespace Codex.Analysis.Projects
 
                 foreach (var invocation in BinLogReader.ExtractInvocations(binLogPath))
                 {
-                    InvocationsByProjectPath[invocation.ProjectFile] = invocation;
+                    if (repo.AnalysisServices.AnalysisIgnoreFilter.IncludeFile(
+                        repo.AnalysisServices.FileSystem, 
+                        invocation.ProjectFile))
+                    {
+                        InvocationsByProjectPath[invocation.ProjectFile] = invocation;
+                    }
+
                     StartLoadProject(invocation);
                 }
             }
