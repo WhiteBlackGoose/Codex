@@ -117,7 +117,7 @@ namespace Codex
         /// <summary>
         /// List of stable ids to include in the stored filter.
         /// </summary>
-        IReadOnlyList<long> StableIds { get; }
+        IReadOnlyList<int> StableIds { get; }
 
         /// <summary>
         /// List of uids to for stored filters which will be unioned with the given stored filter

@@ -165,9 +165,9 @@ namespace Codex.ElasticSearch.Tests
 
             Random random = new Random(12);
 
-            Dictionary<int, HashSet<long>> valuesMap = new Dictionary<int, HashSet<long>>();
+            Dictionary<int, HashSet<int>> valuesMap = new Dictionary<int, HashSet<int>>();
 
-            HashSet<long> valuesToStore = new HashSet<long>();
+            HashSet<int> valuesToStore = new HashSet<int>();
 
             for (int i = 0; i < valuesToAdd; i++)
             {
@@ -210,12 +210,12 @@ namespace Codex.ElasticSearch.Tests
 
         private async Task<IStoredFilter> StoreAndVerifyFilter(
             ElasticSearchStore store,
-            Dictionary<int, HashSet<long>> valuesMap,
-            IEnumerable<long> valuesToStore,
+            Dictionary<int, HashSet<int>> valuesMap,
+            IEnumerable<int> valuesToStore,
             int filterId = 1,
             [CallerLineNumber] int line = 0)
         {
-            var values = valuesMap.GetOrAdd(filterId, new HashSet<long>());
+            var values = valuesMap.GetOrAdd(filterId, new HashSet<int>());
             valuesToStore = valuesToStore.ToList();
 
             values.UnionWith(valuesToStore);
@@ -262,7 +262,7 @@ namespace Codex.ElasticSearch.Tests
                 maxCount: values.Count + 1);
             var filteredEntities = filteredEntitiesResponse.Result;
 
-            var filteredEntityIds = new HashSet<long>(filteredEntities.Select(e => e.StableId));
+            var filteredEntityIds = new HashSet<int>(filteredEntities.Select(e => e.StableId));
 
             var missingFilteredEntityIds = values.Except(filteredEntityIds).ToList();
             Assert.IsEmpty(missingFilteredEntityIds);
@@ -275,7 +275,7 @@ namespace Codex.ElasticSearch.Tests
             return retrievedFilter;
         }
 
-        private string GetUidFromStableId(long stableId)
+        private string GetUidFromStableId(int stableId)
         {
             return Convert.ToString(stableId, 16);
         }
