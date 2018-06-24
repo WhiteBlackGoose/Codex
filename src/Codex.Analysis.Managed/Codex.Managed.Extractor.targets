@@ -47,7 +47,7 @@
     <PropertyGroup>
       <CodexProjectName>$(MSBuildProjectName)</CodexProjectName>
       <_CodexTargetPath>$(OutDir)\$(TargetName).cdx</_CodexTargetPath>
-      <CodexProjectExtractionDirectory Condition="'$(CodexProjectExtractionDirectory)' == '' AND '$(CodexProjectExtractionRoot)' != ''">$(CodexProjectExtractionRoot)\$(TargetName).$(_CodexTargetPath.GetHashCode().ToString('X'))</CodexProjectExtractionDirectory>
+      <CodexProjectExtractionDirectory Condition="'$(CodexProjectExtractionDirectory)' == '' AND '$(CodexProjectExtractionRoot)' != ''">$(CodexProjectExtractionRoot)\$(CodexProjectName)\.$(_CodexTargetPath.GetHashCode().ToString('X'))</CodexProjectExtractionDirectory>
       <CodexProjectExtractionDirectory Condition="'$(CodexProjectExtractionDirectory)' == ''">$(OutDir)\$(TargetName).cdx</CodexProjectExtractionDirectory>
       <CodexCompilerArgumentsFile Condition="'$(Language)' == 'C#'">$(CodexProjectExtractionDirectory)\csc.args.txt</CodexCompilerArgumentsFile>
       <CodexCompilerArgumentsFile Condition="'$(Language)' == 'VB'">$(CodexProjectExtractionDirectory)\vbc.args.txt</CodexCompilerArgumentsFile>
