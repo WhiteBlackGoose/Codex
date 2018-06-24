@@ -3783,7 +3783,7 @@ namespace Codex.ObjectModel {
         
         private int m_Shard;
         
-        private System.Collections.Generic.List<long> m_StableIds = new System.Collections.Generic.List<long>();
+        private System.Collections.Generic.List<int> m_StableIds = new System.Collections.Generic.List<int>();
         
         private System.Collections.Generic.List<string> m_BaseUids = new System.Collections.Generic.List<string>();
         
@@ -3845,7 +3845,7 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// List of stable ids to include in the stored filter.
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<long> Codex.IStoredFilter.StableIds {
+        System.Collections.Generic.IReadOnlyList<int> Codex.IStoredFilter.StableIds {
             get {
                 return this.StableIds;
             }
@@ -3854,7 +3854,7 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// List of stable ids to include in the stored filter.
         /// </summary>
-        public virtual System.Collections.Generic.List<long> StableIds {
+        public virtual System.Collections.Generic.List<int> StableIds {
             get {
                 return this.m_StableIds;
             }
@@ -3946,7 +3946,7 @@ namespace Codex.ObjectModel {
             this.m_DateUpdated = ((Codex.IStoredFilter)(value)).DateUpdated;
             this.m_IndexName = ((Codex.IStoredFilter)(value)).IndexName;
             this.m_Shard = ((Codex.IStoredFilter)(value)).Shard;
-            this.m_StableIds = new System.Collections.Generic.List<long>(((Codex.IStoredFilter)(value)).StableIds);
+            this.m_StableIds = new System.Collections.Generic.List<int>(((Codex.IStoredFilter)(value)).StableIds);
             this.m_BaseUids = new System.Collections.Generic.List<string>(((Codex.IStoredFilter)(value)).BaseUids);
             this.m_UnionFilters = new System.Collections.Generic.List<byte[]>(((Codex.IStoredFilter)(value)).UnionFilters);
             this.m_Filter = ((Codex.IStoredFilter)(value)).Filter;
