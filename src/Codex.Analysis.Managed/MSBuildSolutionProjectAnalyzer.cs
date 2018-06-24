@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
@@ -18,10 +19,26 @@ namespace Codex.Analysis.Projects
         public MSBuildSolutionProjectAnalyzer(string[] includedSolutions = null)
             : base(includedSolutions)
         {
-            loader = new MSBuildProjectLoader(new AdhocWorkspace(DesktopMefHostServices.DefaultServices))
+            var workspace = MSBuildWorkspace.Create();
+            
+            workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+            var propertiesOpt = ImmutableDictionary<string, string>.Empty;
+
+            // Explicitly add "CheckForSystemRuntimeDependency = true" property to correctly resolve facade references.
+            // See https://github.com/dotnet/roslyn/issues/560
+            propertiesOpt = propertiesOpt.Add("CheckForSystemRuntimeDependency", "true");
+            propertiesOpt = propertiesOpt.Add("VisualStudioVersion", "15.0");
+            propertiesOpt = propertiesOpt.Add("AlwaysCompileMarkupFilesInSeparateDomain", "false");
+
+            loader = new MSBuildProjectLoader(workspace, propertiesOpt)
             {
                 SkipUnrecognizedProjects = true,
             };
+        }
+
+        private void Workspace_WorkspaceFailed(object sender, WorkspaceDiagnosticEventArgs e)
+        {
+            throw new Exception(e.Diagnostic.Message);
         }
 
         protected override Task<SolutionInfo> GetSolutionInfoAsync(RepoFile repoFile)

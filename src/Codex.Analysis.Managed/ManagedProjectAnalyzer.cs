@@ -51,6 +51,8 @@ namespace Codex.Analysis.Projects
                 }
                 else
                 {
+                    Project = Project.WithMetadataReferences(Project.MetadataReferences.Where(m => !(m is UnresolvedMetadataReference)));
+
                     Compilation = await Project.GetCompilationAsync();
                     CompilationServices = new CompilationServices(Compilation);
 
