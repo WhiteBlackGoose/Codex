@@ -94,8 +94,37 @@ namespace Codex.Analysis.Projects
         private class ProjectInfoBuilder
         {
             public bool HasProjectInfo => ProjectInfo != null;
-            public ProjectInfo ProjectInfo;
             public string AssemblyName;
+            private ProjectInfo projectInfo;
+            public ProjectInfo ProjectInfo
+            {
+                get
+                {
+                    return projectInfo;
+                }
+                set
+                {
+                    if (projectInfo == null)
+                    {
+                        projectInfo = value;
+                    }
+                    else
+                    {
+                        projectInfo = GetBestProjectInfo(projectInfo, value);
+                    }
+                }
+            }
+
+            private ProjectInfo GetBestProjectInfo(ProjectInfo projectInfo1, ProjectInfo projectInfo2)
+            {
+                // Heuristic: Project with most documents is the best project info
+                if (projectInfo1.Documents.Count > projectInfo2.Documents.Count)
+                {
+                    return projectInfo1;
+                }
+
+                return projectInfo2;
+            }
 
             public ProjectInfoBuilder(string assemblyName)
             {
