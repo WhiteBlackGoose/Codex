@@ -38,7 +38,7 @@ namespace Codex.Analysis.Projects
 
         private void Workspace_WorkspaceFailed(object sender, WorkspaceDiagnosticEventArgs e)
         {
-            throw new Exception(e.Diagnostic.Message);
+            //throw new Exception(e.Diagnostic.Message);
         }
 
         protected override Task<SolutionInfo> GetSolutionInfoAsync(RepoFile repoFile)
