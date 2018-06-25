@@ -269,7 +269,10 @@ namespace Codex.Storage
                     tokenizedDisplayName = tokenizedDisplayName.Replace(symbol.ContainerQualifiedName, ContainerQualifiedNameToken);
                 }
 
-                tokenizedDisplayName = tokenizedDisplayName.Replace(symbol.ShortName, ShortNameToken);
+                if (!string.IsNullOrEmpty(symbol.ShortName))
+                {
+                    tokenizedDisplayName = tokenizedDisplayName.Replace(symbol.ShortName, ShortNameToken);
+                }
             }
 
             var result = new DefinitionSymbolModel
