@@ -42,7 +42,7 @@ namespace Codex.ElasticSearch.Legacy.Bridge
             {
                 this.store = store;
                 this.repository = repository;
-                this.targetIndex = StoreUtilities.GetTargetIndexName(repository.Name);
+                this.targetIndex = store.Configuration.TargetIndexName ?? StoreUtilities.GetTargetIndexName(repository.Name);
             }
 
             public async Task<ICodexRepositoryStore> InitializeAsync()

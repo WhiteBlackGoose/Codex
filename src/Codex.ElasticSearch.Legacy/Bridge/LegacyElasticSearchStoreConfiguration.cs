@@ -20,5 +20,10 @@ namespace Codex.ElasticSearch
         /// The ElasticSearch endpoint (i.e. http://localhost:9200)
         /// </summary>
         public string Endpoint { get; set; }
+
+        /// <summary>
+        /// The name of the target index
+        /// </summary>
+        public string TargetIndexName { get; set; }
     }
 }

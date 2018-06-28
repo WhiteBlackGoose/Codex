@@ -24,7 +24,7 @@ using System.Xml;
 
 namespace Codex.Application
 {
-    class CodexApplication
+    public class CodexApplication
     {
         static string elasticSearchServer = "http://localhost:9200";
         static bool finalize = true;
@@ -470,7 +470,20 @@ namespace Codex.Application
             return new StreamWriter(Path.Combine(logDirectory, "cdx.log"));
         }
 
-        private static void Load()
+        public static void Ingest(
+            string name,
+            string elasticsearchUrl,
+            string ingestionDirectory,
+            bool finalize)
+        {
+            repoName = name;
+            loadDirectory = ingestionDirectory;
+            elasticSearchServer = elasticsearchUrl;
+            scan = true;
+            Load(targetIndexName: StoreUtilities.GetTargetIndexName(name), finalize: finalize);
+        }
+
+        private static void Load(string targetIndexName = null, bool finalize = true)
         {
             using (StreamWriter writer = OpenLogWriter())
             using (Logger logger = new MultiLogger(
@@ -480,12 +493,19 @@ namespace Codex.Application
                 if (scan)
                 {
                     var clearIndicesBeforeUse = reset;
-                    var directories = Directory.GetDirectories(loadDirectory);
+                    var directories = Directory.GetFileSystemEntries(loadDirectory);
                     int i = 1;
                     foreach (var directory in directories)
                     {
+                        var finalizeRepository =
+                            (targetIndexName != null ? i == directories.Length : true) && finalize;
                         logger.LogMessage($"[{i} of {directories.Length}] Loading {directory}");
-                        LoadCore(logger, directory, clearIndicesBeforeUse);
+                        LoadCore(
+                            logger, 
+                            directory, 
+                            clearIndicesBeforeUse,
+                            finalizeRepository,
+                            targetIndexName);
 
                         // Only clear indices on first use
                         clearIndicesBeforeUse = false;
@@ -494,12 +514,17 @@ namespace Codex.Application
                 }
                 else
                 {
-                    LoadCore(logger, loadDirectory, reset);
+                    LoadCore(logger, loadDirectory, reset, finalizeRepository: finalize, targetIndexName: targetIndexName);
                 }
             }
         }
 
-        private static void LoadCore(Logger logger, string loadDirectory, bool clearIndicesBeforeUse)
+        private static void LoadCore(
+            Logger logger, 
+            string loadDirectory, 
+            bool clearIndicesBeforeUse, 
+            bool finalizeRepository, 
+            string targetIndexName = null)
         {
             if (File.Exists(Path.Combine(loadDirectory, @"store\repo.cdx.json")))
             {
@@ -525,7 +550,8 @@ namespace Codex.Application
                     {
                         store = new LegacyElasticSearchStore(new LegacyElasticSearchStoreConfiguration()
                         {
-                            Endpoint = elasticSearchServer
+                            Endpoint = elasticSearchServer,
+                            TargetIndexName = targetIndexName
                         });
                     }
                 }
@@ -535,7 +561,7 @@ namespace Codex.Application
                 }
 
                 var loadDirectoryStore = new DirectoryCodexStore(loadDirectory, logger);
-                await loadDirectoryStore.ReadAsync(store, repositoryName: repoName);
+                await loadDirectoryStore.ReadAsync(store, repositoryName: repoName, finalize: finalizeRepository);
 
             }).GetAwaiter().GetResult();
         }

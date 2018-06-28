@@ -14,6 +14,7 @@ using System.IO.Compression;
 using CommandLine.Text;
 using Newtonsoft.Json;
 using Codex.Downloader;
+using Codex.Application;
 
 namespace Codex.Ingester
 {
@@ -29,6 +30,12 @@ namespace Codex.Ingester
 
             [Option("incremental", HelpText = "Specifies if files should not be downloaded if already present at output location.")]
             public bool Incremental { get; set; }
+
+            [Option("name", Required = true, HelpText = "The name of the repository to create.")]
+            public string RepoName { get; set; }
+
+            [Option("es", Required = true, HelpText = "The URL of the elasticsearch instance.")]
+            public string ElasticSearchUrl { get; set; }
         }
 
         static void Main(string[] args)
@@ -73,6 +80,12 @@ namespace Codex.Ingester
             // Run codex.exe (maybe just launch in-proc)
             // specifying the root folder and a mode indicating that
             // they all go into the same partition
+
+            CodexApplication.Ingest(
+                options.RepoName,
+                options.ElasticSearchUrl,
+                options.OutputFolder,
+                false);
 
             // TODO: Maybe have handling to ensure that same code is not uploaded more
             // than once
