@@ -40,7 +40,7 @@ namespace Codex.Analysis.Managed
 
                 var invocations = new List<CompilerInvocation>();
                 var reader = new BinaryLogReplayEventSource();
-                var taskIdToInvocationMap = new Dictionary<int, CompilerInvocation>();
+                var taskIdToInvocationMap = new Dictionary<(int, int), CompilerInvocation>();
 
                 void TryGetInvocationFromEvent(object sender, BuildEventArgs args)
                 {
@@ -83,9 +83,10 @@ namespace Codex.Analysis.Managed
             return invocations;
         }
 
-        private static CompilerInvocation TryGetInvocationFromRecord(BuildEventArgs args, Dictionary<int, CompilerInvocation> taskIdToInvocationMap)
+        private static CompilerInvocation TryGetInvocationFromRecord(BuildEventArgs args, Dictionary<(int, int), CompilerInvocation> taskIdToInvocationMap)
         {
             int targetId = args.BuildEventContext?.TargetId ?? -1;
+            int projectId = args.BuildEventContext?.ProjectInstanceId ?? -1;
             if (targetId < 0)
             {
                 return null;
@@ -95,7 +96,7 @@ namespace Codex.Analysis.Managed
             if (targetStarted != null && targetStarted.TargetName == "CoreCompile")
             {
                 var invocation = new CompilerInvocation();
-                taskIdToInvocationMap[targetId] = invocation;
+                taskIdToInvocationMap[(targetId, projectId)] = invocation;
                 invocation.ProjectFile = targetStarted.ProjectFile;
                 return null;
             }
@@ -117,11 +118,11 @@ namespace Codex.Analysis.Managed
             commandLine = TrimCompilerExeFromCommandLine(commandLine, language);
 
             CompilerInvocation compilerInvocation;
-            if (taskIdToInvocationMap.TryGetValue(targetId, out compilerInvocation))
+            if (taskIdToInvocationMap.TryGetValue((targetId, projectId), out compilerInvocation))
             {
                 compilerInvocation.Language = language;
                 compilerInvocation.CommandLine = commandLine;
-                taskIdToInvocationMap.Remove(targetId);
+                taskIdToInvocationMap.Remove((targetId, projectId));
             }
 
             return compilerInvocation;
