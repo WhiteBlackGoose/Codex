@@ -22,7 +22,7 @@ namespace Codex.Ingester
     {
         class Options
         {
-            [Option("file", Required = true, HelpText = "The location of a json file containing definition of repo analysis output locations.")]
+            [Option("file", HelpText = "The location of a json file containing definition of repo analysis output locations.")]
             public string DefinitionsFile { get; set; }
 
             [Option("out", Required = true, HelpText = "The temporary location to store analysis outputs before uploading.")]
@@ -52,29 +52,32 @@ namespace Codex.Ingester
 
         private static async Task RunAsync(Options options)
         {
-            // Read the json file
-            RepoList repoList = JsonConvert.DeserializeObject<RepoList>(File.ReadAllText(options.DefinitionsFile));
-
-            // Download each of the repos to a subfolder with the repo name
-            // (maybe also in-proc)
-
-            Directory.CreateDirectory(options.OutputFolder);
-            foreach (var repo in repoList.repos)
+            if (!string.IsNullOrEmpty(options.DefinitionsFile))
             {
-                var destination = Path.Combine(options.OutputFolder, repo.name + ".zip");
-                if (options.Incremental && File.Exists(destination))
-                {
-                    continue;
-                }
+                // Read the json file
+                RepoList repoList = JsonConvert.DeserializeObject<RepoList>(File.ReadAllText(options.DefinitionsFile));
 
-                await DownloaderProgram.RunAsync(new DownloaderProgram.VSTSBuildOptions()
+                // Download each of the repos to a subfolder with the repo name
+                // (maybe also in-proc)
+
+                Directory.CreateDirectory(options.OutputFolder);
+                foreach (var repo in repoList.repos)
                 {
-                    BuildDefinitionId = repo.id,
-                    CollectionUri = repo.url,
-                    Destination = destination,
-                    ProjectName = repo.project,
-                    PersonalAccessToken = GetPersonalAccessToken(options, repo.pat)
-                });
+                    var destination = Path.Combine(options.OutputFolder, repo.name + ".zip");
+                    if (options.Incremental && File.Exists(destination))
+                    {
+                        continue;
+                    }
+
+                    await DownloaderProgram.RunAsync(new DownloaderProgram.VSTSBuildOptions()
+                    {
+                        BuildDefinitionId = repo.id,
+                        CollectionUri = repo.url,
+                        Destination = destination,
+                        ProjectName = repo.project,
+                        PersonalAccessToken = GetPersonalAccessToken(options, repo.pat)
+                    });
+                }
             }
 
             // Run codex.exe (maybe just launch in-proc)
