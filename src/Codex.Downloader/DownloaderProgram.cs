@@ -15,9 +15,9 @@ using CommandLine.Text;
 
 namespace Codex.Downloader
 {
-    class Program
+    public class DownloaderProgram
     {
-        class VSTSBuildOptions
+        public class VSTSBuildOptions
         {
             [Option("uri", Required = true, HelpText = "The URI of the project collection.")]
             public string CollectionUri { get; set; }
@@ -35,7 +35,7 @@ namespace Codex.Downloader
             public string PersonalAccessToken { get; set; }
         }
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             new CommandLine.Parser(settings =>
             {
@@ -47,7 +47,7 @@ namespace Codex.Downloader
                 .WithNotParsed<VSTSBuildOptions>((errs) => HandleParseError(errs));
         }
 
-        private static async Task RunAsync(VSTSBuildOptions options)
+        public static async Task RunAsync(VSTSBuildOptions options)
         {
             string project = options.ProjectName;
             var tempFilePath = Path.GetTempFileName();
