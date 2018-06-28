@@ -22,13 +22,10 @@ namespace Codex.Downloader
             [Option("uri", Required = true, HelpText = "The URI of the project collection.")]
             public string CollectionUri { get; set; }
 
-            [Option('n', "name", Required = true, HelpText = "The name of the build definition.")]
-            public string BuildDefinitionName { get; set; }
-
             [Option('p', "project", Required = true, HelpText = "The name of the VSTS project.")]
             public string ProjectName { get; set; }
 
-            [Option("id", HelpText = "The Id of the build definition.")]
+            [Option("id", Required = true, HelpText = "The Id of the build definition.")]
             public int BuildDefinitionId { get; set; }
 
             [Option('o', "out", Required = true, HelpText = "The output location to store the index artifact zip file.")]
@@ -55,32 +52,32 @@ namespace Codex.Downloader
             string project = options.ProjectName;
             var tempFilePath = Path.GetTempFileName();
             var destination = options.Destination;
-            string buildDefinitionName = options.BuildDefinitionName;
             string collectionUri = options.CollectionUri;
 
-            BuildHttpClient client = new BuildHttpClient(
+             BuildHttpClient client = new BuildHttpClient(
                 new Uri(collectionUri),
                 new VssBasicCredential(string.Empty, options.PersonalAccessToken));
 
-            Console.WriteLine($"Getting build definition: {buildDefinitionName}");
+            Console.WriteLine($"Getting build definition: {options.BuildDefinitionId}");
 
-            var definitions = await client.GetDefinitionsAsync(
+            var definition = await client.GetDefinitionAsync(
                 project: project,
-                name: buildDefinitionName);
+                definitionId: options.BuildDefinitionId);
 
-            if (definitions.Count == 0)
+            if (definition == null)
             {
                 Console.Error.WriteLine("Unable to find build definition");
                 return;
             }
 
-            var definition = definitions.Select(bd => bd.Id).Take(1).ToArray();
-            var projectId = definitions.First().Project.Id;
+            var projectId = definition.Project.Id;
+
+            Console.WriteLine($"Found build {definition.Name} in project {definition.Project.Name}");
 
             var lastBuild = (await client.GetBuildsAsync(
                 project: projectId,
-                definitions: definition,
-                tagFilters: new [] { "CodexOutputs" },
+                definitions: new[] { definition.Id },
+                tagFilters: new[] { "CodexOutputs" },
                 resultFilter: BuildResult.Succeeded | BuildResult.PartiallySucceeded,
                 queryOrder: BuildQueryOrder.FinishTimeDescending,
                 top: 1)).FirstOrDefault();
@@ -96,10 +93,10 @@ namespace Codex.Downloader
             destination = Path.GetFullPath(destination);
             Directory.CreateDirectory(Path.GetDirectoryName(destination));
 
-            using (var tempStream = new FileStream(tempFilePath, 
-                FileMode.Create, 
-                FileAccess.ReadWrite, 
-                FileShare.Delete, 64 << 10, 
+            using (var tempStream = new FileStream(tempFilePath,
+                FileMode.Create,
+                FileAccess.ReadWrite,
+                FileShare.Delete, 64 << 10,
                 FileOptions.DeleteOnClose))
             using (var stream = await client.GetArtifactContentZipAsync(projectId, lastBuild.Id, artifactName: "CodexOutputs"))
             {
