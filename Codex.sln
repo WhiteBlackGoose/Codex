@@ -28,6 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 		runcodex.bat = runcodex.bat
 		src\TestProjects\testcodex.bat = src\TestProjects\testcodex.bat
 		TODO.txt = TODO.txt
+		vsts-ci.yml = vsts-ci.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodexTestCSharpLibrary", "src\TestProjects\CodexTestRepo\CodexTestCSharpLibrary\CodexTestCSharpLibrary.csproj", "{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}"
