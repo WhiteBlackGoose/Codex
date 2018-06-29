@@ -2,21 +2,21 @@ steps:
 - task: NuGetToolInstaller@0
   displayName: Use NuGet 4.3.0
 
-# - task: NuGetCommand@2
-#   displayName: NuGet restore
-#   inputs:
-#     restoreSolution: Codex.sln
-#     feedsToUse: config
-#     nugetConfigPath: nuget.config
-# 
-# - task: VSBuild@1
-#   displayName: Build solution Codex.sln
-#   inputs:
-#     solution: Codex.sln
-#     vsVersion: 15.0
-#     msbuildArgs: '/bl:$(Build.StagingDirectory)\Codex.binlog'
-#     configuration: Debug
-#     maximumCpuCount: true
+ - task: NuGetCommand@2
+   displayName: NuGet restore
+   inputs:
+     restoreSolution: Codex.sln
+     feedsToUse: config
+     nugetConfigPath: nuget.config
+ 
+ - task: VSBuild@1
+   displayName: Build solution Codex.sln
+   inputs:
+     solution: Codex.sln
+     vsVersion: 15.0
+     msbuildArgs: '/bl:$(Build.StagingDirectory)\Codex.binlog'
+     configuration: Debug
+     maximumCpuCount: true
 # 
 # - task: CmdLine@1
 #   displayName: Index using newly built Codex
