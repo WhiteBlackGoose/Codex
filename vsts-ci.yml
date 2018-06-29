@@ -27,14 +27,14 @@ steps:
 - task: CopyFiles@2
   displayName: Copy Files to: out\bin\debug\Codex\Downloader
   inputs:
-    SourceFolder: 'out\bin\debug\Codex.Downloader'
-    TargetFolder: 'out\bin\debug\Codex\Downloader'
+    sourceFolder: 'out\bin\debug\Codex.Downloader'
+    targetFolder: 'out\bin\debug\Codex\Downloader'
 
 #- task: CopyFiles@2
 #  displayName: Copy Codex.Automation.Workflow Files to: $(Build.ArtifactStagingDirectory)\rel
 #  inputs:
-#    SourceFolder: 'out\bin\debug\Codex.Automation.Workflow'
-#    TargetFolder: '$(Build.ArtifactStagingDirectory)\rel'
+#    sourceFolder: 'out\bin\debug\Codex.Automation.Workflow'
+#    targetFolder: '$(Build.ArtifactStagingDirectory)\rel'
 #
 #- task: ArchiveFiles@2
 #  displayName: Archive Codex binaries
