@@ -18,30 +18,30 @@ steps:
     configuration: Debug
     maximumCpuCount: true
 
-# - task: CmdLine@1
-#   displayName: Index using newly built Codex
-#   inputs:
-#     filename: 'out\bin\debug\Codex\Codex.exe'
-#     arguments: 'index -save $(Build.StagingDirectory)\indexnew\store -p $(Build.SourcesDirectory) -repoUrl https://github.com/Ref12/Codex/tree/feature/commitModelView/ -n Codex -bld $(Build.StagingDirectory)'
-# 
-# - task: CopyFiles@2
-#   displayName: Copy Files to: out\bin\debug\Codex\Downloader
-#   inputs:
-#     SourceFolder: 'out\bin\debug\Codex.Downloader'
-#     TargetFolder: 'out\bin\debug\Codex\Downloader'
-# 
-# - task: CopyFiles@2
-#   displayName: Copy Codex.Automation.Workflow Files to: $(Build.ArtifactStagingDirectory)\rel
-#   inputs:
-#     SourceFolder: 'out\bin\debug\Codex.Automation.Workflow'
-#     TargetFolder: '$(Build.ArtifactStagingDirectory)\rel'
-# 
-# - task: ArchiveFiles@2
-#   displayName: Archive Codex binaries
-#   inputs:
-#     rootFolderOrFile: 'out\bin\debug\Codex'
-#     includeRootFolder: false
-#     archiveFile: '$(Build.ArtifactStagingDirectory)/rel/Codex.zip'
+- task: CmdLine@1
+  displayName: Index using newly built Codex
+  inputs:
+    filename: 'out\bin\debug\Codex\Codex.exe'
+    arguments: 'index -save $(Build.StagingDirectory)\indexnew\store -p $(Build.SourcesDirectory) -repoUrl https://github.com/Ref12/Codex/tree/feature/commitModelView/ -n Codex -bld $(Build.StagingDirectory)'
+
+- task: CopyFiles@2
+  displayName: Copy Files to: out\bin\debug\Codex\Downloader
+  inputs:
+    SourceFolder: 'out\bin\debug\Codex.Downloader'
+    TargetFolder: 'out\bin\debug\Codex\Downloader'
+
+- task: CopyFiles@2
+  displayName: Copy Codex.Automation.Workflow Files to: $(Build.ArtifactStagingDirectory)\rel
+  inputs:
+    SourceFolder: 'out\bin\debug\Codex.Automation.Workflow'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\rel'
+
+- task: ArchiveFiles@2
+  displayName: Archive Codex binaries
+  inputs:
+    rootFolderOrFile: 'out\bin\debug\Codex'
+    includeRootFolder: false
+    archiveFile: '$(Build.ArtifactStagingDirectory)/rel/Codex.zip'
 
 #- task: marcelo-formentao.github-tools.github-release-publish-task.GitHubReleasePublish@0
 #  displayName: Create or Modify GitHub Release
