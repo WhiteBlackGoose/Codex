@@ -25,7 +25,6 @@ steps:
     arguments: 'index -save $(Build.StagingDirectory)\indexnew\store -p $(Build.SourcesDirectory) -repoUrl https://github.com/Ref12/Codex/tree/feature/commitModelView/ -n Codex -bld $(Build.StagingDirectory)'
 
 - task: CopyFiles@2
-  displayName: Copy Files to: out\bin\debug\Codex\Downloader
   inputs:
     sourceFolder: 'out\bin\debug\Codex.Downloader'
     targetFolder: 'out\bin\debug\Codex\Downloader'
