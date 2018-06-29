@@ -34,7 +34,7 @@ namespace Codex.Ingester
             [Option("name", Required = true, HelpText = "The name of the repository to create.")]
             public string RepoName { get; set; }
 
-            [Option("es", Required = true, HelpText = "The URL of the elasticsearch instance.")]
+            [Option("es", HelpText = "The URL of the elasticsearch instance.")]
             public string ElasticSearchUrl { get; set; }
         }
 
@@ -84,12 +84,16 @@ namespace Codex.Ingester
             // specifying the root folder and a mode indicating that
             // they all go into the same partition
 
-            CodexApplication.Ingest(
-                options.RepoName,
-                options.ElasticSearchUrl,
-                options.OutputFolder,
-                false);
+            if (!string.IsNullOrEmpty(options.ElasticSearchUrl))
+            {
+                CodexApplication.Ingest(
+                    options.RepoName,
+                    options.ElasticSearchUrl,
+                    options.OutputFolder,
+                    true);
+            }
 
+            // TODO: Make disable finalize command line option
             // TODO: Maybe have handling to ensure that same code is not uploaded more
             // than once
         }
