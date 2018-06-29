@@ -51,16 +51,16 @@ steps:
     includeRootFolder: false
     archiveFile: '$(Build.ArtifactStagingDirectory)/rel/Codex.zip'
 
-- task: marcelo-formentao.github-tools.github-release-publish-task.GitHubReleasePublish@0
-  displayName: Create or Modify GitHub Release
-  inputs:
-    githubEndpoint: 'GitHub lancecs2'
-    githubRepository: 'Ref12/Codex'
-    githubTag: 'latest-prerel'
-    githubReleaseTitle: 'latest-prerel'
-    githubReleaseNotes: 'The latest release of the Codex binaries for analyzing semantic information in a repository.'
-    githubReleaseDraft: false
-    githubReleasePrerelease: true
-    githubReleaseAsset: '$(Build.ArtifactStagingDirectory)/rel/*.*'
-    githubReuseDraftOnly: false
-    githubEditRelease: true
+#- task: marcelo-formentao.github-tools.github-release-publish-task.GitHubReleasePublish@0
+#  displayName: Create or Modify GitHub Release
+#  inputs:
+#    githubEndpoint: 'GitHub lancecs2'
+#    githubRepository: 'Ref12/Codex'
+#    githubTag: 'latest-prerel'
+#    githubReleaseTitle: 'latest-prerel'
+#    githubReleaseNotes: 'The latest release of the Codex binaries for analyzing semantic information in a repository.'
+#    githubReleaseDraft: false
+#    githubReleasePrerelease: true
+#    githubReleaseAsset: '$(Build.ArtifactStagingDirectory)/rel/*.*'
+#    githubReuseDraftOnly: false
+#    githubEditRelease: true
