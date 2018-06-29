@@ -25,23 +25,23 @@ steps:
     arguments: 'index -save $(Build.StagingDirectory)\indexnew\store -p $(Build.SourcesDirectory) -repoUrl https://github.com/Ref12/Codex/tree/feature/commitModelView/ -n Codex -bld $(Build.StagingDirectory)'
 
 - task: CopyFiles@2
-  displayName: Copy Files to: out\bin\debug\Codex\Downloader
+  displayName: 'Copy Files to: out\bin\debug\Codex\Downloader'
   inputs:
     sourceFolder: 'out\bin\debug\Codex.Downloader'
     targetFolder: 'out\bin\debug\Codex\Downloader'
 
-#- task: CopyFiles@2
-#  displayName: Copy Codex.Automation.Workflow Files to: $(Build.ArtifactStagingDirectory)\rel
-#  inputs:
-#    sourceFolder: 'out\bin\debug\Codex.Automation.Workflow'
-#    targetFolder: '$(Build.ArtifactStagingDirectory)\rel'
-#
-#- task: ArchiveFiles@2
-#  displayName: Archive Codex binaries
-#  inputs:
-#    rootFolderOrFile: 'out\bin\debug\Codex'
-#    includeRootFolder: false
-#    archiveFile: '$(Build.ArtifactStagingDirectory)/rel/Codex.zip'
+- task: CopyFiles@2
+  displayName: 'Copy Codex.Automation.Workflow Files to: $(Build.ArtifactStagingDirectory)\rel'
+  inputs:
+    sourceFolder: 'out\bin\debug\Codex.Automation.Workflow'
+    targetFolder: '$(Build.ArtifactStagingDirectory)\rel'
+
+- task: ArchiveFiles@2
+  displayName: Archive Codex binaries
+  inputs:
+    rootFolderOrFile: 'out\bin\debug\Codex'
+    includeRootFolder: false
+    archiveFile: '$(Build.ArtifactStagingDirectory)/rel/Codex.zip'
 
 #- task: marcelo-formentao.github-tools.github-release-publish-task.GitHubReleasePublish@0
 #  displayName: Create or Modify GitHub Release
