@@ -117,6 +117,8 @@ namespace Codex.ObjectModel {
             typeMapping.Add(typeof(RegisteredEntity), typeof(Codex.IRegisteredEntity));
             typeMapping.Add(typeof(Codex.IStoredFilter), typeof(StoredFilter));
             typeMapping.Add(typeof(StoredFilter), typeof(Codex.IStoredFilter));
+            typeMapping.Add(typeof(Codex.IGroupedStoredFilterIds), typeof(GroupedStoredFilterIds));
+            typeMapping.Add(typeof(GroupedStoredFilterIds), typeof(Codex.IGroupedStoredFilterIds));
             typeMapping.Add(typeof(Codex.IDefinitionSearchModel), typeof(DefinitionSearchModel));
             typeMapping.Add(typeof(DefinitionSearchModel), typeof(Codex.IDefinitionSearchModel));
             typeMapping.Add(typeof(Codex.ILanguageSearchModel), typeof(LanguageSearchModel));
@@ -3781,19 +3783,11 @@ namespace Codex.ObjectModel {
         
         private string m_IndexName;
         
-        private int m_Shard;
-        
-        private System.Collections.Generic.List<int> m_StableIds = new System.Collections.Generic.List<int>();
-        
-        private System.Collections.Generic.List<string> m_BaseUids = new System.Collections.Generic.List<string>();
-        
-        private System.Collections.Generic.List<byte[]> m_UnionFilters = new System.Collections.Generic.List<byte[]>();
-        
-        private byte[] m_Filter;
+        private GroupedStoredFilterIds m_StableIds;
         
         private string m_FilterHash;
         
-        private int m_FilterCount;
+        private int m_Cardinality;
         
         public StoredFilter() {
         }
@@ -3831,30 +3825,18 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// The shard to which the stored filter applies
+        /// Map from stored filter groups to corresponding stored filter bit set
         /// </summary>
-        public virtual int Shard {
-            get {
-                return this.m_Shard;
-            }
-            set {
-                this.m_Shard = value;
-            }
-        }
-        
-        /// <summary>
-        /// List of stable ids to include in the stored filter.
-        /// </summary>
-        System.Collections.Generic.IReadOnlyList<int> Codex.IStoredFilter.StableIds {
+        Codex.IGroupedStoredFilterIds Codex.IStoredFilter.StableIds {
             get {
                 return this.StableIds;
             }
         }
         
         /// <summary>
-        /// List of stable ids to include in the stored filter.
+        /// Map from stored filter groups to corresponding stored filter bit set
         /// </summary>
-        public virtual System.Collections.Generic.List<int> StableIds {
+        public virtual GroupedStoredFilterIds StableIds {
             get {
                 return this.m_StableIds;
             }
@@ -3864,61 +3846,7 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// List of uids to for stored filters which will be unioned with the given stored filter
-        /// </summary>
-        System.Collections.Generic.IReadOnlyList<string> Codex.IStoredFilter.BaseUids {
-            get {
-                return this.BaseUids;
-            }
-        }
-        
-        /// <summary>
-        /// List of uids to for stored filters which will be unioned with the given stored filter
-        /// </summary>
-        public virtual System.Collections.Generic.List<string> BaseUids {
-            get {
-                return this.m_BaseUids;
-            }
-            set {
-                this.m_BaseUids = value;
-            }
-        }
-        
-        /// <summary>
-        /// List of stored filters which will be unioned with the given stored filter
-        /// </summary>
-        System.Collections.Generic.IReadOnlyList<byte[]> Codex.IStoredFilter.UnionFilters {
-            get {
-                return this.UnionFilters;
-            }
-        }
-        
-        /// <summary>
-        /// List of stored filters which will be unioned with the given stored filter
-        /// </summary>
-        public virtual System.Collections.Generic.List<byte[]> UnionFilters {
-            get {
-                return this.m_UnionFilters;
-            }
-            set {
-                this.m_UnionFilters = value;
-            }
-        }
-        
-        /// <summary>
-        /// The stored filter bit set which matches the stored filter documents
-        /// </summary>
-        public virtual byte[] Filter {
-            get {
-                return this.m_Filter;
-            }
-            set {
-                this.m_Filter = value;
-            }
-        }
-        
-        /// <summary>
-        /// The hash of <see cref="P:Codex.IStoredFilter.Filter" />
+        /// The hash of <see cref="!:Filter" />
         /// </summary>
         public virtual string FilterHash {
             get {
@@ -3930,14 +3858,14 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// The count of elements matched by <see cref="P:Codex.IStoredFilter.Filter" />
+        /// The count of elements matched by <see cref="!:Filter" />
         /// </summary>
-        public virtual int FilterCount {
+        public virtual int Cardinality {
             get {
-                return this.m_FilterCount;
+                return this.m_Cardinality;
             }
             set {
-                this.m_FilterCount = value;
+                this.m_Cardinality = value;
             }
         }
         
@@ -3945,14 +3873,28 @@ namespace Codex.ObjectModel {
             where TTarget : StoredFilter {
             this.m_DateUpdated = ((Codex.IStoredFilter)(value)).DateUpdated;
             this.m_IndexName = ((Codex.IStoredFilter)(value)).IndexName;
-            this.m_Shard = ((Codex.IStoredFilter)(value)).Shard;
-            this.m_StableIds = new System.Collections.Generic.List<int>(((Codex.IStoredFilter)(value)).StableIds);
-            this.m_BaseUids = new System.Collections.Generic.List<string>(((Codex.IStoredFilter)(value)).BaseUids);
-            this.m_UnionFilters = new System.Collections.Generic.List<byte[]>(((Codex.IStoredFilter)(value)).UnionFilters);
-            this.m_Filter = ((Codex.IStoredFilter)(value)).Filter;
+            this.m_StableIds = EntityUtilities.NullOrCopy(value.StableIds, v => new GroupedStoredFilterIds().CopyFrom<GroupedStoredFilterIds>(v));;
             this.m_FilterHash = ((Codex.IStoredFilter)(value)).FilterHash;
-            this.m_FilterCount = ((Codex.IStoredFilter)(value)).FilterCount;
+            this.m_Cardinality = ((Codex.IStoredFilter)(value)).Cardinality;
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
+            return ((TTarget)(this));
+        }
+    }
+    
+    [Codex.SerializationInterfaceAttribute(typeof(Codex.IGroupedStoredFilterIds))]
+    public partial class GroupedStoredFilterIds : Codex.IGroupedStoredFilterIds {
+        
+        public GroupedStoredFilterIds() {
+            Initialize();
+        }
+        
+        public GroupedStoredFilterIds(Codex.IGroupedStoredFilterIds value) {
+            Initialize();
+            this.CopyFrom<GroupedStoredFilterIds>(value);
+        }
+        
+        public virtual TTarget CopyFrom<TTarget>(Codex.IGroupedStoredFilterIds value)
+            where TTarget : GroupedStoredFilterIds {
             return ((TTarget)(this));
         }
     }
@@ -5641,6 +5583,7 @@ namespace Codex.Framework.Types {
     using ProjectFileScopeEntity = Codex.ObjectModel.ProjectFileScopeEntity;
     using RegisteredEntity = Codex.ObjectModel.RegisteredEntity;
     using StoredFilter = Codex.ObjectModel.StoredFilter;
+    using GroupedStoredFilterIds = Codex.ObjectModel.GroupedStoredFilterIds;
     using DefinitionSearchModel = Codex.ObjectModel.DefinitionSearchModel;
     using LanguageSearchModel = Codex.ObjectModel.LanguageSearchModel;
     using ReferenceSearchModel = Codex.ObjectModel.ReferenceSearchModel;

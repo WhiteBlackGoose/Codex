@@ -44,8 +44,7 @@ namespace Codex.ElasticSearch.Formats
          */
         public class Builder
         {
-            private readonly int maxDoc;
-            private readonly DocIdSet[] sets;
+            private readonly List<DocIdSet> sets = new List<DocIdSet>();
 
             private int cardinality;
             private int lastDocId;
@@ -60,17 +59,26 @@ namespace Codex.ElasticSearch.Formats
             /**
              * Sole constructor.
              */
-            public Builder(int maxDoc)
+            public Builder()
             {
-                sets = new DocIdSet[(maxDoc + (1 << 16) - 1) >> 16];
                 lastDocId = -1;
                 currentBlock = -1;
                 buffer = new short[MAX_ARRAY_LENGTH];
             }
 
+            private void EnsureCapacity()
+            {
+                for (int i = sets.Count; i <= currentBlock; i++)
+                {
+                    sets.Add(null);
+                }
+            }
+
             private void Flush()
             {
                 Contract.Assert(currentBlockCardinality <= BLOCK_SIZE);
+
+                EnsureCapacity();
                 if (currentBlockCardinality <= MAX_ARRAY_LENGTH)
                 {
                     // Use sparse encoding
@@ -157,7 +165,7 @@ namespace Codex.ElasticSearch.Formats
             /**
              * Add the content of the provided {@link DocIdSetIterator}.
              */
-            public Builder add(DocIdSetIterator disi)
+            public Builder Add(DocIdSetIterator disi)
             {
                 for (int doc = disi.NextDoc(); doc != DocIdSetIterator.NO_MORE_DOCS; doc = disi.NextDoc())
                 {
@@ -169,12 +177,22 @@ namespace Codex.ElasticSearch.Formats
             /**
              * Build an instance.
              */
-            public RoaringDocIdSet build()
+            public RoaringDocIdSet Build()
             {
                 Flush();
-                return new RoaringDocIdSet(sets, cardinality);
+                return new RoaringDocIdSet(sets.ToArray(), cardinality);
             }
 
+        }
+
+        internal byte[] GetBytes()
+        {
+            GrowableByteArrayDataOutput output = new GrowableByteArrayDataOutput(1024);
+            Write(output);
+
+            byte[] result = new byte[output.Length];
+            Array.Copy(output.Bytes, result, output.Length);
+            return result;
         }
 
         /**
@@ -355,14 +373,13 @@ namespace Codex.ElasticSearch.Formats
             }
         }
 
-
         private RoaringDocIdSet(DocIdSet[] docIdSets, int cardinality)
         {
             this.docIdSets = docIdSets;
             this.cardinality = cardinality;
         }
 
-        public void write(DataOutput output)
+        public void Write(DataOutput output)
         {
             output.WriteVInt32(cardinality);
             output.WriteVInt32(docIdSets.Length);
@@ -442,6 +459,21 @@ namespace Codex.ElasticSearch.Formats
             }
 
             return new Iterator(this);
+        }
+
+        public IEnumerable<int> Enumerate()
+        {
+            var iterator = GetIterator();
+            while (true)
+            {
+                var doc = iterator.NextDoc();
+                if (doc == DocIdSetIterator.NO_MORE_DOCS)
+                {
+                    yield break;
+                }
+
+                yield return doc;
+            }
         }
 
         private class Iterator : DocIdSetIterator

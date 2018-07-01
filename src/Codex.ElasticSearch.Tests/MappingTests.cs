@@ -30,5 +30,12 @@ namespace Codex.ElasticSearch.Tests
             var mapping = new TypeMappingDescriptor<IDefinitionSearchModel>().AutoMapEx();
             Assert.Pass(mapping.ElasticSerialize());
         }
+
+        [Test]
+        public void TestStoredFilterMappings()
+        {
+            var mapping = new TypeMappingDescriptor<IStoredFilter>().AutoMapEx();
+            Assert.Pass(mapping.ElasticSerialize());
+        }
     }
 }

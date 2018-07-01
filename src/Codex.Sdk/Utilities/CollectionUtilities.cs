@@ -102,14 +102,13 @@ namespace Codex.Utilities
             }
         }
 
-        public static IEnumerable<T> ExclusiveInterleave<T>(IEnumerable<T> spans1, IEnumerable<T> spans2, IComparer<T> comparer)
-            where T : Span
+        public static IEnumerable<T> ExclusiveInterleave<T>(this IEnumerable<T> items1, IEnumerable<T> items2, IComparer<T> comparer)
         {
             bool end1 = false;
             bool end2 = false;
 
-            var enumerator1 = spans1.GetEnumerator();
-            var enumerator2 = spans2.GetEnumerator();
+            var enumerator1 = items1.GetEnumerator();
+            var enumerator2 = items2.GetEnumerator();
 
             T current1 = default(T);
             T current2 = default(T);
@@ -155,7 +154,7 @@ namespace Codex.Utilities
             }
         }
 
-        private static bool MoveNext<T>(IEnumerator<T> enumerator1, ref T current) where T : Span
+        private static bool MoveNext<T>(IEnumerator<T> enumerator1, ref T current)
         {
             if (enumerator1.MoveNext())
             {

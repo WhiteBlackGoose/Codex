@@ -12,6 +12,8 @@ namespace Codex
     /// </summary>
     public static class Placeholder
     {
+        public const bool IsCommitModelEnabled = true;
+
         public static T Value<T>(string message = null)
         {
             return default(T);

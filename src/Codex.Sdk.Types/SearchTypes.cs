@@ -107,42 +107,30 @@ namespace Codex
         /// <summary>
         /// The name of the index to which the stored filter applies
         /// </summary>
+        [SearchBehavior(SearchBehavior.Term)]
         string IndexName { get; }
 
         /// <summary>
-        /// The shard to which the stored filter applies
+        /// Map from stored filter groups to corresponding stored filter bit set
         /// </summary>
-        int Shard { get; }
-
-        /// <summary>
-        /// List of stable ids to include in the stored filter.
-        /// </summary>
-        IReadOnlyList<int> StableIds { get; }
-
-        /// <summary>
-        /// List of uids to for stored filters which will be unioned with the given stored filter
-        /// </summary>
-        IReadOnlyList<string> BaseUids { get; }
-
-        /// <summary>
-        /// List of stored filters which will be unioned with the given stored filter
-        /// </summary>
-        IReadOnlyList<byte[]> UnionFilters { get; }
-
-        /// <summary>
-        /// The stored filter bit set which matches the stored filter documents
-        /// </summary>
-        byte[] Filter { get; }
+        [SearchBehavior(SearchBehavior.None)]
+        IGroupedStoredFilterIds StableIds { get; }
 
         /// <summary>
         /// The hash of <see cref="Filter"/>
         /// </summary>
+        [SearchBehavior(SearchBehavior.Term)]
         string FilterHash { get; }
 
         /// <summary>
         /// The count of elements matched by <see cref="Filter"/>
         /// </summary>
-        int FilterCount { get; }
+        int Cardinality { get; }
+    }
+
+    [AdapterType]
+    public interface IGroupedStoredFilterIds
+    {
     }
 
     public interface IDefinitionSearchModel : ISearchEntity

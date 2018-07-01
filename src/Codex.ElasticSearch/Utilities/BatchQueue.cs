@@ -22,32 +22,39 @@ namespace Codex.ElasticSearch.Utilities
 
         public int TotalCount => totalCount;
 
-        public bool AddAndTryGetBatch(T item, out IReadOnlyList<T> batch)
+        public bool TryGetBatch(out List<T> batch)
         {
-            Placeholder.Todo("Get final batch");
+            List<T> batchList = new List<T>(batchSize);
+            for (int i = 0; i < batchSize; i++)
+            {
+                T dequeuedItem;
+                if (queue.TryDequeue(out dequeuedItem))
+                {
+                    batchList.Add(dequeuedItem);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            if (batchList.Count != 0)
+            {
+                batch = batchList;
+                return true;
+            }
+
+            batch = null;
+            return false;
+        }
+
+        public bool AddAndTryGetBatch(T item, out List<T> batch)
+        {
             queue.Enqueue(item);
             var updatedTotalCount = Interlocked.Increment(ref totalCount);
             if (updatedTotalCount % batchSize == 0)
             {
-                List<T> batchList = new List<T>(batchSize);
-                for (int i = 0; i < batchSize; i++)
-                {
-                    T dequeuedItem;
-                    if (queue.TryDequeue(out dequeuedItem))
-                    {
-                        batchList.Add(dequeuedItem);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-
-                if (batchList.Count != 0)
-                {
-                    batch = batchList;
-                    return true;
-                }
+                return TryGetBatch(out batch);
             }
 
             batch = null;

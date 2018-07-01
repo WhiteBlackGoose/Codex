@@ -42,6 +42,13 @@ namespace Codex.ObjectModel
         }
     }
 
+    public partial class GroupedStoredFilterIds : Dictionary<int, byte[]>
+    {
+        public void Initialize()
+        {
+        }
+    }
+
     public partial class PropertyMapBase
     {
         public PropertyMapBase() : base(StringComparer.OrdinalIgnoreCase)

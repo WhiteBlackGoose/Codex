@@ -18,34 +18,17 @@ namespace Codex.ElasticSearch
 
         public static Task UpdateStoredFiltersAsync(this ElasticSearchEntityStore<IStoredFilter> storedFilterStore, IReadOnlyList<IStoredFilter> storedFilters)
         {
-            return storedFilterStore.StoreAsync<StoredFilter>(storedFilters, UpdateMergeStoredFilter);
+            return storedFilterStore.StoreAsync<StoredFilter>(storedFilters, updateMergeFunction: null);
         }
 
-        public static IStoredFilter UpdateMergeStoredFilter(IStoredFilter oldValue, IStoredFilter newValue)
+        public static string GetFilterId(string baseFilterId, string indexName)
         {
-            var updatedStoredFilter = new StoredFilter(newValue);
-            updatedStoredFilter.Uid = oldValue.Uid;
-
-            // The filter will be unioned with values for StableIds and UnionFilters fields
-            Contract.Assert(updatedStoredFilter.Filter == null);
-            updatedStoredFilter.Filter = oldValue.Filter;
-
-            return updatedStoredFilter;
-        }
-
-        public static string GetTokenizedFilterId(string baseFilterId, string indexName)
-        {
-            return Placeholder.Value<string>("Update this for new stored filter strategy");
-            //return GetFilterId(baseFilterId, indexName, StoredFilterQuery.ShardIdToken);
-        }
-
-        public static string GetFilterId(string baseFilterId, string indexName, object shard)
-        {
-            return $"{indexName}#{shard}|{baseFilterId}";
+            return $"{indexName}|{baseFilterId}";
         }
 
         public static int ExtractStableId(long version)
         {
+            version--;
             return (int)(version >> ByteBitCount);
         }
 
@@ -53,12 +36,12 @@ namespace Codex.ElasticSearch
         {
             Contract.Assert(stableIdGroup >= 0 && stableIdGroup < StableIdGroupMaxValue);
             long version =  (byte)stableIdGroup | (((long)stableId) << ByteBitCount);
-            return version;
+            return version + 1;
         }
 
         public static int GetStableIdGroup(this ISearchEntity entity)
         {
-            return IndexingUtilities.ComputeFullHash(entity.RoutingKey ?? entity.Uid).GetByte(0) % StableIdGroupMaxValue;
+            return IndexingUtilities.ComputeFullHash(entity.RoutingKey ?? entity.Uid ?? entity.EntityContentId).GetByte(0) % StableIdGroupMaxValue;
         }
 
         public static string GetRoutingSuffix(this ISearchEntity entity)

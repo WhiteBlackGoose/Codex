@@ -36,6 +36,8 @@ namespace Codex.ElasticSearch
             return (store.Configuration.Prefix + searchType.IndexName).ToLowerInvariant();
         }
 
+        public abstract BulkDescriptor AddRegisterOperation(BulkDescriptor bd, IRegisteredEntity value);
+
         public abstract Task DeleteAsync(IEnumerable<string> uids);
 
         public abstract Task InitializeAsync();
@@ -51,8 +53,6 @@ namespace Codex.ElasticSearch
             : base(store, searchType)
         {
             EntitySearchType = (SearchType<T>)searchType;
-            m_pipeline = searchType == SearchTypes.StoredFilter && store.Configuration.UseStoredFilters ?
-                store.StoredFilterPipelineId : null;
         }
 
         public override async Task InitializeAsync()
@@ -101,21 +101,10 @@ namespace Codex.ElasticSearch
                             .Settings(s => s
                                 .AddAnalyzerSettings()
                                 .Setting("index.mapper.dynamic", false)
-                                .NumberOfShards(Store.Configuration.ShardCount)
+                                .NumberOfShards(SearchType == SearchTypes.StoredFilter ? 1 : Store.Configuration.ShardCount)
                                 .RefreshInterval(TimeSpan.FromMinutes(1)))
                             .CaptureRequest(context))
                             .ThrowOnFailure();
-
-                response = await context.Client
-                .CreateIndexAsync(RegistryIndexName,
-                    c => c.Mappings(m => m.Map<IRegisteredEntity>(SearchTypes.RegisteredEntity.IndexName, tm => tm.AutoMapEx()))
-                        .Settings(s => s
-                            .AddAnalyzerSettings()
-                            .Setting("index.mapper.dynamic", false)
-                            .NumberOfShards(Store.Configuration.ShardCount)
-                            .RefreshInterval(TimeSpan.FromMinutes(1)))
-                        .CaptureRequest(context))
-                        .ThrowOnFailure();
 
                 return response.IsValid;
             });
@@ -181,11 +170,13 @@ namespace Codex.ElasticSearch
             }
         }
 
-        public BulkDescriptor AddRegisterOperation(BulkDescriptor bd, IRegisteredEntity value)
+        public override BulkDescriptor AddRegisterOperation(BulkDescriptor bd, IRegisteredEntity value)
         {
-            return bd.Create<IRegisteredEntity>(bco => bco.Document(value)
+            // TODO: Use same registry index for all entities rather than one per type
+            return bd.Index<IRegisteredEntity>(bco => bco.Document(value)
                 .Index(RegistryIndexName)
                 .Version(value.EntityVersion)
+                .VersionType(VersionType.External)
                 .Routing(GetRouting(value.Uid))
                 .Id(value.Uid));
         }
