@@ -4,6 +4,7 @@
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <!--<TargetFramework>netcoreapp2.0</TargetFramework>-->
     <SignAssembly Condition="'$(TargetFramework)' == 'net461'">true</SignAssembly>
+    <DisableStrongNamer Condition="'$(TargetFramework)' != 'net461'">true</DisableStrongNamer>
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
