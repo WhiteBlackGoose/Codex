@@ -32,7 +32,7 @@
             "name": "workflowArguments",
             "type": "multiLine",
             "label": "Workflow Arguments",
-            "defaultValue": "/sourcesDirectory:$(Build.SourcesDirectory) \n/codexRepoUrl:$(Build.Repository.Uri) \n/repoName:$(Build.Repository.Name) \n/additionalCodexArguments:-bld  \n/additionalCodexArguments:$(Build.StagingDirectory)\"",
+            "defaultValue": "/sourcesDirectory:$(Build.SourcesDirectory)\n/codexRepoUrl:$(Build.Repository.Uri)\n/repoName:$(Build.Repository.Name)\n/additionalCodexArguments:-bld\n/additionalCodexArguments:$(Build.StagingDirectory)",
             "required": true,
             "helpMarkDown": "Command line arguments for the exe"
         }
