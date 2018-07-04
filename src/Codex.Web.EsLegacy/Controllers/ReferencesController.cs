@@ -355,7 +355,7 @@ namespace WebUI.Controllers
                                     filePath,
                                     referencesInSameFile.GroupBy
                                     (
-                                        r3 => r3.ReferringSpan.LineNumber + 1
+                                        r3 => r3.ReferringSpan.LineNumber
                                     )
                                 )
                             )
