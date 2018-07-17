@@ -17,13 +17,17 @@ namespace Codex.Automation.Workflow
         public string CodexRepoUrl;
         public string SourcesDirectory;
         public string RepoName;
+        public string ElasticSearchUrl;
+        public string JsonFilePath;
     }
 
     enum Mode
     {
         Prepare = 1 << 0,
         AnalyzeOnly = 1 << 1,
-        FullAnalyze = Prepare | AnalyzeOnly
+        UploadOnly = 1 << 2,
+        FullAnalyze = Prepare | AnalyzeOnly,
+        Upload = Prepare | UploadOnly
     }
 
     class Program
@@ -55,6 +59,14 @@ namespace Codex.Automation.Workflow
                 else if (MatchArg(arg, "RepoName", out argValue))
                 {
                     newArgs.RepoName = argValue;
+                }
+                else if (MatchArg(arg, "ElasticSearchUrl", out argValue))
+                {
+                    newArgs.ElasticSearchUrl = argValue;
+                }
+                else if (MatchArg(arg, "JsonFilePath", out argValue))
+                {
+                    newArgs.JsonFilePath = argValue;
                 }
                 else
                 {
@@ -130,6 +142,7 @@ namespace Codex.Automation.Workflow
 
                 // zip/unzip files
                 Console.WriteLine("Creating Directories");
+                Directory.Delete(codexBinDirectory, true);
                 Directory.CreateDirectory(codexBinDirectory);
                 Console.WriteLine("Extracting Zip Files");
                 ZipFile.ExtractToDirectory(zipPath, codexBinDirectory); // TODO: doesnt work if the directory already contains files
@@ -169,6 +182,25 @@ namespace Codex.Automation.Workflow
                 Console.WriteLine("Publishing to Build");
                 Console.WriteLine($"##vso[artifact.upload artifactname=CodexOutputs;]{analysisOutputZip}");
                 Console.WriteLine("##vso[build.addbuildtag]CodexOutputs");
+            }
+
+            if (HasModeFlag(mode, Mode.UploadOnly))
+            {
+                string executablePath = Path.Combine(codexBinDirectory, "Codex.Ingester.exe");
+                string storeFolder = Path.Combine(arguments.CodexOutputRoot, "store");
+                Process runExe = Process.Start(new ProcessStartInfo(executablePath, string.Join(" ",
+                    "--file",
+                    arguments.JsonFilePath,
+                    "--out",
+                    storeFolder,
+                    "--es",
+                    arguments.ElasticSearchUrl,
+                    "--name",
+                    arguments.RepoName))
+                {
+                    UseShellExecute = false
+                });
+                
             }
         }
     }
