@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO.Compression;
 using CommandLine.Text;
+using Microsoft.VisualStudio.Services.Client.Controls;
 
 namespace Codex.Downloader
 {
@@ -54,8 +55,10 @@ namespace Codex.Downloader
             var destination = options.Destination;
             string collectionUri = options.CollectionUri;
 
-             BuildHttpClient client = new BuildHttpClient(
-                new Uri(collectionUri),
+            BuildHttpClient client = new BuildHttpClient(
+               new Uri(collectionUri),
+               string.IsNullOrWhiteSpace(options.PersonalAccessToken) ?
+                new VssClientCredentials(new VssFederatedCredentialPrompt()) :
                 new VssBasicCredential(string.Empty, options.PersonalAccessToken));
 
             Console.WriteLine($"Getting build definition: {options.BuildDefinitionId}");

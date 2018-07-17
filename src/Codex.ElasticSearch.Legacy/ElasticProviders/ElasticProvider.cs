@@ -170,6 +170,17 @@ namespace Codex.Storage.ElasticProviders
                     }
                 }
 
+                var pendingIndexAliasName = repoModel.Name + "_pending";
+
+                // Point repository alias at new target index
+                var indicesForAlias = await client.GetIndicesPointingToAliasAsync(pendingIndexAliasName);
+
+                await client.AliasAsync(
+                    ba => ba
+                    .ForEach(indicesForAlias, (b, index) => b.Remove(ar => ar.Index(index).Alias(pendingIndexAliasName)))
+                    .Add(a => a.Index(repoModel.SourcesIndexName).Alias(pendingIndexAliasName))
+                    ).ThrowOnFailure();
+
                 return await client.IndexAsync(repoModel,
                     p => p.Index(CoreIndexName).Type(RepositoryTypeName).Id(repoModel.SourcesIndexName));
             });
@@ -336,13 +347,12 @@ namespace Codex.Storage.ElasticProviders
         {
             var client = CreateClient();
 
-            var result = await client.GetAliasAsync().ThrowOnFailure();
             var indices = await client.GetIndexAsync(Nest.Indices.All);
 
-            return result.Indices.Select(kvp =>
+            return indices.Indices.Select(i =>
             (
-                IndexName: kvp.Key,
-                IsActive: kvp.Value.Any(alias => alias.Name == CombinedSourcesIndexAlias)
+                IndexName: i.Key,
+                IsActive: i.Value.Aliases.Any(alias => alias.Key.Name == CombinedSourcesIndexAlias)
             )).OrderBy(v => v.IndexName, StringComparer.OrdinalIgnoreCase).ToList();
         }
 
