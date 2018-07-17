@@ -1,40 +1,51 @@
 {
-    "manifestVersion": 1,
-    "id": "ref12-analyze-task",
-    "name": "Ref12 Analyze",
-    "version": "0.1.9",
-    "publisher": "Ref12",
-    "targets": [
-        {
-            "id": "Microsoft.VisualStudio.Services"
+  "manifestVersion": 1,
+  "id": "ref12-analyze-task",
+  "name": "Ref12 Analyze",
+  "version": "0.1.10",
+  "publisher": "Ref12",
+  "icons": {
+        "default": "ref12icon.png"
+  },
+  "targets": [
+    {
+      "id": "Microsoft.VisualStudio.Services"
+    }
+  ],
+  "description": "VSTS Task to index codebases",
+  "content": {
+        "details": {
+            "path": "overview.md"
         }
-    ],    
-    "description": "VSTS Task to index codebases",
-    "categories": [
-        "Build and release"
-    ],
-    "//uncomment 'icons' below to include a custom icon": "",
-    "//icons": {
-        "default": "images/extension-icon.png"
     },
-    "files": [
-        {
-            "//Relative path of the task directory": "",
-            "path": "Task"
-        }
-    ],
-    "contributions": [
-        {
-            "//Identifier of the contribution. Must be unique within the extension. Does not need to match the name of the build task, but typically the build task name is included in the ID of the contribution.": "",
-            "id": "ref12-analyze-task",
-            "type": "ms.vss-distributed-task.task",
-            "targets": [
-                "ms.vss-distributed-task.tasks"
-            ],
-            "properties": {
-                "//Name of the task. This must match the folder name of the corresponding self-contained build task definition.": "",
-                "name": "Task"
-            }
-        }
+  "categories": [
+    "Build and release"
+  ],
+  "//uncomment 'icons' below to include a custom icon": "",
+  "//icons": {
+    "default": "images/extension-icon.png"
+  },
+  "files": [
+    {
+      "//Relative path of the task directory": "",
+      "path": "Task"
+    }
+  ],
+  "contributions": [
+    {
+      "//Identifier of the contribution. Must be unique within the extension. Does not need to match the name of the build task, but typically the build task name is included in the ID of the contribution.": "",
+      "id": "ref12-analyze-task",
+      "type": "ms.vss-distributed-task.task",
+      "targets": [
+        "ms.vss-distributed-task.tasks"
+      ],
+      "properties": {
+        "//Name of the task. This must match the folder name of the corresponding self-contained build task definition.": "",
+        "name": "Task"
+      }
+    }
+  ],
+    "galleryFlags": [
+      "Public"
     ]
 }
