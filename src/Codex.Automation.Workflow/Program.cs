@@ -142,7 +142,11 @@ namespace Codex.Automation.Workflow
 
                 // zip/unzip files
                 Console.WriteLine("Creating Directories");
-                Directory.Delete(codexBinDirectory, true);
+                if (Directory.Exists(codexBinDirectory))
+                {
+                    Directory.Delete(codexBinDirectory, true);
+                }
+
                 Directory.CreateDirectory(codexBinDirectory);
                 Console.WriteLine("Extracting Zip Files");
                 ZipFile.ExtractToDirectory(zipPath, codexBinDirectory); // TODO: doesnt work if the directory already contains files
