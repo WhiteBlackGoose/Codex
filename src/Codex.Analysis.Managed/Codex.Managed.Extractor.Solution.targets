@@ -1,0 +1,15 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Target Name="FilterToRelevantProjects" BeforeTargets="Build">
+
+    <Message Text="Removing project references..." Importance="high" />
+
+    <ItemGroup>
+      <_RemovedProjectReference Include="@(ProjectReference)" Condition="('%(Extension)' != '.csproj') AND ('%(Extension)' != '.vbproj')" />
+      <ProjectReference Remove="@(_RemovedProjectReference)" />
+    </ItemGroup>
+
+    <Message Text="Removed project reference: %(_RemovedProjectReference.Identity)" Importance="high" />
+  </Target>
+  
+</Project>
