@@ -68,11 +68,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Codex.Analysis.External\CodexTypes..cs">
+      <Link>External\CodexTypes..cs</Link>
+    </Compile>
     <Compile Include="AnalysisServices.cs" />
     <Compile Include="AnalyzedProjectContext.cs" />
     <Compile Include="BoundSourceFileBuilder.cs" />
-    <None Include="External\CodexTypeAdapter.cs" />
-    <None Include="External\ExternalRepoFileAnalyzer.cs" />
+    <Compile Include="External\CodexTypeAdapter.cs" />
+    <Compile Include="External\ExternalRepoFileAnalyzer.cs" />
     <Compile Include="FileSystems\BinaryFileSystemFilter.cs" />
     <Compile Include="FileSystems\DirectoryFilter.cs" />
     <Compile Include="FileSystems\FileSystemFilter.cs" />

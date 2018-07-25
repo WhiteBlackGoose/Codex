@@ -9,10 +9,6 @@ namespace Codex.Analysis.External
     {
         private readonly HashSet<string> semanticDataDirectories;
 
-        private static readonly string[] supportedExtensions = new[] {".dsc"};
-
-        public override string[] SupportedExtensions => supportedExtensions;
-
         public Dictionary<string, CodexFile> m_fileToStoreMap =
             new Dictionary<string, CodexFile>(StringComparer.OrdinalIgnoreCase);
 
@@ -52,7 +48,7 @@ namespace Codex.Analysis.External
                         if (!repo.FilesByPath.TryGetValue(file.Path, out repoFile))
                         {
                             RepoProject project;
-                            if (!dd.TryGetValue(store.Projects[file.Project].Name, out project))
+                            if (!file.Project.IsValid || !dd.TryGetValue(store.Projects[file.Project].Name, out project))
                             {
                                 project = repo.DefaultRepoProject;
                             }
@@ -60,6 +56,8 @@ namespace Codex.Analysis.External
                             repoFile = project.AddFile(file.Path);
                         }
 
+                        repoFile.Analyzer = this;
+                        repoFile.HasExplicitAnalyzer = true;
                         m_fileToStoreMap[repoFile.RepoRelativePath] = file;
                     }
                 }

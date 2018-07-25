@@ -36,6 +36,9 @@ namespace Codex.Ingester
 
             [Option("es", HelpText = "The URL of the elasticsearch instance.")]
             public string ElasticSearchUrl { get; set; }
+
+            [Option("newBackend", HelpText = "Specifies if new elasticsearch backend should be used.")]
+            public bool NewBackend { get; set; }
         }
 
         static void Main(string[] args)
@@ -90,7 +93,8 @@ namespace Codex.Ingester
                     options.RepoName,
                     options.ElasticSearchUrl,
                     options.OutputFolder,
-                    true);
+                    true,
+                    useNewBackend: options.NewBackend);
             }
 
             // TODO: Make disable finalize command line option
