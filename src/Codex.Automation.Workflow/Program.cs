@@ -24,9 +24,12 @@ namespace Codex.Automation.Workflow
     enum Mode
     {
         Prepare = 1 << 0,
-        AnalyzeOnly = 1 << 1,
-        UploadOnly = 1 << 2,
+        UploadOnly = 1 << 1,
+        IngestOnly = 1 << 2,
+        // For historical reasons, analyze only also includes upload
+        AnalyzeOnly = 1 << 3 | UploadOnly,
         FullAnalyze = Prepare | AnalyzeOnly,
+        Ingest = Prepare | IngestOnly,
         Upload = Prepare | UploadOnly
     }
 
@@ -178,7 +181,10 @@ namespace Codex.Automation.Workflow
                     UseShellExecute = false
                 });
                 runExe.WaitForExit();
+            }
 
+            if (HasModeFlag(mode, Mode.UploadOnly))
+            {
                 // get json files and zip
                 Console.WriteLine("Zipping JSON files");
 
@@ -191,11 +197,11 @@ namespace Codex.Automation.Workflow
                 Console.WriteLine("##vso[build.addbuildtag]CodexOutputs");
             }
 
-            if (HasModeFlag(mode, Mode.UploadOnly))
+            if (HasModeFlag(mode, Mode.IngestOnly))
             {
-                string executablePath = Path.Combine(codexBinDirectory, "Codex.Ingester.exe");
+                string ingesterExecutablePath = Path.Combine(codexBinDirectory, "Codex.Ingester.exe");
                 string storeFolder = Path.Combine(arguments.CodexOutputRoot, "store");
-                Process runExe = Process.Start(new ProcessStartInfo(executablePath, string.Join(" ",
+                Process runExe = Process.Start(new ProcessStartInfo(ingesterExecutablePath, string.Join(" ",
                     "--file",
                     arguments.JsonFilePath,
                     "--out",
