@@ -128,6 +128,18 @@ namespace Codex.Automation.Workflow
 
             string codexBinDirectory = Path.Combine(arguments.CodexOutputRoot, "bin");
             string analysisOutputDirectory = Path.Combine(arguments.CodexOutputRoot, "store");
+            string analysisArguments = string.Join(" ",
+                    "index",
+                    "-save",
+                    analysisOutputDirectory,
+                    "-p",
+                    arguments.SourcesDirectory,
+                    "-repoUrl",
+                    arguments.CodexRepoUrl,
+                    "-n",
+                    arguments.RepoName,
+                    arguments.AdditionalCodexArguments);
+            string executablePath = Path.Combine(codexBinDirectory, "Codex.exe");
 
             if (HasModeFlag(mode, Mode.Prepare))
             {
@@ -153,24 +165,15 @@ namespace Codex.Automation.Workflow
 
                 Console.WriteLine($"##vso[task.setvariable variable=CodexBinDir;]{codexBinDirectory}");
                 Console.WriteLine($"##vso[task.setvariable variable=CodexAnalysisOutDir;]{analysisOutputDirectory}");
+                Console.WriteLine($"##vso[task.setvariable variable=CodexExePath;]{executablePath}");
+                Console.WriteLine($"##vso[task.setvariable variable=CodexAnalysisArguments;]{analysisArguments}");
             }
 
             if (HasModeFlag(mode, Mode.AnalyzeOnly))
             {
                 // run exe
                 Console.WriteLine("Running Process");
-                string executablePath = Path.Combine(codexBinDirectory, "Codex.exe");
-                Process runExe = Process.Start(new ProcessStartInfo(executablePath, string.Join(" ",
-                    "index",
-                    "-save",
-                    analysisOutputDirectory,
-                    "-p",
-                    arguments.SourcesDirectory,
-                    "-repoUrl",
-                    arguments.CodexRepoUrl,
-                    "-n",
-                    arguments.RepoName,
-                    arguments.AdditionalCodexArguments))
+                Process runExe = Process.Start(new ProcessStartInfo(executablePath, analysisArguments)
                 {
                     UseShellExecute = false
                 });
