@@ -130,8 +130,13 @@ namespace Codex.Automation.Workflow
             Mode mode = GetMode(ref args);
 
             Arguments arguments = ParseArguments(args);
+            if (string.IsNullOrEmpty(arguments.RepoName))
+            {
+                arguments.RepoName = GetRepoName(arguments);
+            }
 
             string codexBinDirectory = Path.Combine(arguments.CodexOutputRoot, "bin");
+            string binlogDirectory = Path.Combine(arguments.CodexOutputRoot, "binlogs");
             string analysisOutputDirectory = Path.Combine(arguments.CodexOutputRoot, "store");
             string analysisArguments = string.Join(" ",
                     "index",
@@ -143,7 +148,9 @@ namespace Codex.Automation.Workflow
                     arguments.CodexRepoUrl,
                     "-n",
                     arguments.RepoName,
-                    arguments.AdditionalCodexArguments);
+                    arguments.AdditionalCodexArguments,
+                    "-bld",
+                    binlogDirectory);
             string executablePath = Path.Combine(codexBinDirectory, "Codex.exe");
 
             if (HasModeFlag(mode, Mode.Prepare))
@@ -176,7 +183,7 @@ namespace Codex.Automation.Workflow
 
             if (HasModeFlag(mode, Mode.BuildOnly))
             {
-                var analysisPreparation = new AnalysisPreparation(arguments);
+                var analysisPreparation = new AnalysisPreparation(arguments, binlogDirectory);
                 analysisPreparation.Run();
             }
 
@@ -223,6 +230,19 @@ namespace Codex.Automation.Workflow
                 });
                 
             }
+        }
+
+        private static string GetRepoName(Arguments arguments)
+        {
+            var repoName = arguments.CodexRepoUrl;
+            repoName = repoName.TrimEnd('/');
+            var lastSlashIndex = repoName.LastIndexOf('/');
+            if (lastSlashIndex > 0)
+            {
+                repoName = repoName.Substring(0, lastSlashIndex);
+            }
+
+            return repoName;
         }
     }
 }

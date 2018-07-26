@@ -17,16 +17,16 @@ namespace Codex.Automation.Workflow
         private readonly string NugetPath = "nuget";
 
         private readonly List<string> binLogPaths = new List<string>();
+        private readonly string binlogDirectory;
 
-        public AnalysisPreparation(Arguments arguments)
+        public AnalysisPreparation(Arguments arguments, string binlogDirectory)
         {
             this.arguments = arguments;
+            this.binlogDirectory = binlogDirectory;
         }
 
         public void Run()
         {
-            arguments.RepoName = GetRepoName();
-
             bool successfullyCloned = Invoke("git.exe", "clone", arguments.CodexRepoUrl, arguments.SourcesDirectory);
             if (!successfullyCloned)
             {
@@ -40,24 +40,6 @@ namespace Codex.Automation.Workflow
             TryRestore(solutions);
 
             TryBuild(solutions);
-
-            foreach (var binLogPath in binLogPaths)
-            {
-                arguments.AdditionalCodexArguments += $" -bld {QuoteIfNecessary(binLogPath)} "; 
-            }
-        }
-
-        private string GetRepoName()
-        {
-            var repoName = arguments.CodexRepoUrl;
-            repoName = repoName.TrimEnd('/');
-            var lastSlashIndex = repoName.LastIndexOf('/');
-            if (lastSlashIndex > 0)
-            {
-                repoName = repoName.Substring(0, lastSlashIndex);
-            }
-
-            return repoName;
         }
 
         private void TryBuild(string[] solutions)
@@ -73,7 +55,7 @@ namespace Codex.Automation.Workflow
             Log(solution);
 
             var binlogName = ComputeBinLogName(solution);
-            var binLogPath = $@"{arguments.CodexOutputRoot}\binlogs\{binlogName}.binlog";
+            var binLogPath = $@"{binlogDirectory}\{binlogName}.binlog";
             binLogPaths.Add(binLogPath);
 
             Invoke(MsBuildPath, $"/bl:{binLogPath}", solution);
