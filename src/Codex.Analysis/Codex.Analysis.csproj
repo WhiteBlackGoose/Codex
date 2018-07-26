@@ -68,8 +68,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Codex.Analysis.External\CodexTypes..cs">
-      <Link>External\CodexTypes..cs</Link>
+    <Compile Include="..\Codex.Analysis.External\CodexTypes.cs">
+      <Link>External\CodexTypes.cs</Link>
     </Compile>
     <Compile Include="AnalysisServices.cs" />
     <Compile Include="AnalyzedProjectContext.cs" />

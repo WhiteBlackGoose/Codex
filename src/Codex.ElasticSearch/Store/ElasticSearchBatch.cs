@@ -65,6 +65,11 @@ namespace Codex.ElasticSearch
                     var item = EntityItems[batchIndex];
                     batchIndex++;
 
+                    if (registerResponseItem.Version == 0)
+                    {
+
+                    }
+
                     item.SetVersionAndStableIdUsingRegisteredVersion(registerResponseItem.Version);
 
                     registration.Report(item, used: IsAdded(registerResponseItem));
@@ -173,7 +178,6 @@ namespace Codex.ElasticSearch
 
             public int StableIdGroup => Entity.StableIdGroup;
             public string Uid => Entity.Uid;
-            public string IndexName => SearchType.IndexName;
 
             int IStableIdItem.StableId
             {

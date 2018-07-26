@@ -135,6 +135,11 @@ namespace Codex.ElasticSearch
 
             public bool AddAndTryGetBatch(int id, out List<int> batch)
             {
+                if (id == -1)
+                {
+
+                }
+
                 return Queue.AddAndTryGetBatch(id, out batch);
             }
 
