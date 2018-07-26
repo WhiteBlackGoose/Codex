@@ -494,6 +494,7 @@ namespace Codex.Storage.ElasticProviders
                                             .Map<ProjectModel>(ProjectTypeName, tm => tm.AutoMapEx())
                                             .Map<RepositoryModel>(RepositoryTypeName, tm => tm.AutoMapEx())
                                             )
+                            .Settings(s => s.NumberOfShards(1))
                             .CaptureRequest(client, requestHolder)
                             )
                     .ThrowOnFailure();

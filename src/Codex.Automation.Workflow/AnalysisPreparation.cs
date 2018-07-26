@@ -25,6 +25,8 @@ namespace Codex.Automation.Workflow
 
         public void Run()
         {
+            arguments.RepoName = GetRepoName();
+
             bool successfullyCloned = Invoke("git.exe", "clone", arguments.CodexRepoUrl, arguments.SourcesDirectory);
             if (!successfullyCloned)
             {
@@ -43,6 +45,19 @@ namespace Codex.Automation.Workflow
             {
                 arguments.AdditionalCodexArguments += $" -bld {QuoteIfNecessary(binLogPath)} "; 
             }
+        }
+
+        private string GetRepoName()
+        {
+            var repoName = arguments.CodexRepoUrl;
+            repoName = repoName.TrimEnd('/');
+            var lastSlashIndex = repoName.LastIndexOf('/');
+            if (lastSlashIndex > 0)
+            {
+                repoName = repoName.Substring(0, lastSlashIndex);
+            }
+
+            return repoName;
         }
 
         private void TryBuild(string[] solutions)
