@@ -28,9 +28,11 @@ namespace Codex.Automation.Workflow
         IngestOnly = 1 << 2,
         // For historical reasons, analyze only also includes upload
         AnalyzeOnly = 1 << 3 | UploadOnly,
+        BuildOnly = 1 << 4,
         FullAnalyze = Prepare | AnalyzeOnly,
         Ingest = Prepare | IngestOnly,
-        Upload = Prepare | UploadOnly
+        Upload = Prepare | UploadOnly,
+        Build = Prepare | BuildOnly | FullAnalyze | Upload,
     }
 
     class Program
@@ -170,6 +172,12 @@ namespace Codex.Automation.Workflow
                 Console.WriteLine($"##vso[task.setvariable variable=CodexAnalysisOutDir;]{analysisOutputDirectory}");
                 Console.WriteLine($"##vso[task.setvariable variable=CodexExePath;]{executablePath}");
                 Console.WriteLine($"##vso[task.setvariable variable=CodexAnalysisArguments;]{analysisArguments}");
+            }
+
+            if (HasModeFlag(mode, Mode.BuildOnly))
+            {
+                var analysisPreparation = new AnalysisPreparation(arguments);
+                analysisPreparation.Run();
             }
 
             if (HasModeFlag(mode, Mode.AnalyzeOnly))
