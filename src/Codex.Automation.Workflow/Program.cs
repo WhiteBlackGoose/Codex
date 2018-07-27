@@ -180,7 +180,7 @@ namespace Codex.Automation.Workflow
                 Console.WriteLine($"##vso[task.setvariable variable=CodexExePath;]{executablePath}");
                 Console.WriteLine($"##vso[task.setvariable variable=CodexAnalysisArguments;]{analysisArguments}");
 
-                if (string.IsNullOrEmpty(arguments.RepoName))
+                if (!string.IsNullOrEmpty(arguments.RepoName))
                 {
                     Console.WriteLine($"##vso[task.setvariable variable=CodexRepoName;]{arguments.RepoName}");
                 }
