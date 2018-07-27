@@ -235,11 +235,15 @@ namespace Codex.Automation.Workflow
         private static string GetRepoName(Arguments arguments)
         {
             var repoName = arguments.CodexRepoUrl;
-            repoName = repoName.TrimEnd('/');
-            var lastSlashIndex = repoName.LastIndexOf('/');
-            if (lastSlashIndex > 0)
+
+            if (!string.IsNullOrEmpty(arguments.CodexRepoUrl))
             {
-                repoName = repoName.Substring(0, lastSlashIndex);
+                repoName = repoName.TrimEnd('/');
+                var lastSlashIndex = repoName.LastIndexOf('/');
+                if (lastSlashIndex > 0)
+                {
+                    repoName = repoName.Substring(0, lastSlashIndex);
+                }
             }
 
             return repoName;
