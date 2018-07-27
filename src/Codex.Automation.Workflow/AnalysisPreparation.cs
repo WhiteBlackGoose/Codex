@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace Codex.Automation.Workflow
 {
+    using static Helpers;
+
     internal class AnalysisPreparation
     {
         private readonly Arguments arguments;
@@ -90,40 +92,6 @@ namespace Codex.Automation.Workflow
         private string[] EnumerateSolutions()
         {
             return Directory.GetFiles(arguments.SourcesDirectory, "*.sln", SearchOption.AllDirectories);
-        }
-
-        public void Log(string message, [CallerMemberName]string method = null)
-        {
-            Console.WriteLine($"{method}: {message}");
-        }
-
-        public bool Invoke(string processExe, params string[] arguments)
-        {
-            var processArgs = string.Join(" ", arguments.Select(QuoteIfNecessary));
-            Log($"Running: {processExe} {processArgs}");
-
-            try
-            {
-                var process = Process.Start(new ProcessStartInfo(processExe, processArgs)
-                {
-                    UseShellExecute = false
-                });
-
-                process.WaitForExit();
-                Log($"Run completed with exit code '{process.ExitTime}': {processExe} {processArgs}");
-
-                return process.ExitCode == 0;
-            }
-            catch (Exception ex)
-            {
-                Log(ex.ToString());
-                return false;
-            }
-        }
-
-        private string QuoteIfNecessary(string arg)
-        {
-            return arg.Contains(" ") ? $"\"{arg}\"" : arg;
         }
     }
 }

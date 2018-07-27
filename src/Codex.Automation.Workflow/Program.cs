@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace Codex.Automation.Workflow
 {
+    using static Helpers;
+
     class Arguments
     {
         public string AdditionalCodexArguments;
@@ -128,6 +130,7 @@ namespace Codex.Automation.Workflow
             }
 
             Mode mode = GetMode(ref args);
+            bool success = true;
 
             Arguments arguments = ParseArguments(args);
             if (string.IsNullOrEmpty(arguments.RepoName))
@@ -201,20 +204,32 @@ namespace Codex.Automation.Workflow
                     UseShellExecute = false
                 });
                 runExe.WaitForExit();
+
+                if (runExe.ExitCode != 0)
+                {
+                    success = false;
+                }
             }
 
             if (HasModeFlag(mode, Mode.UploadOnly))
             {
-                // get json files and zip
-                Console.WriteLine("Zipping JSON files");
+                if (!success)
+                {
+                    // get json files and zip
+                    Console.WriteLine("Zipping analysis files.");
 
-                string analysisOutputZip = analysisOutputDirectory + ".zip";
-                ZipFile.CreateFromDirectory(analysisOutputDirectory, analysisOutputZip);
+                    string analysisOutputZip = analysisOutputDirectory + ".zip";
+                    ZipFile.CreateFromDirectory(analysisOutputDirectory, analysisOutputZip);
 
-                // publish to a vsts build
-                Console.WriteLine("Publishing to Build");
-                Console.WriteLine($"##vso[artifact.upload artifactname=CodexOutputs;]{analysisOutputZip}");
-                Console.WriteLine("##vso[build.addbuildtag]CodexOutputs");
+                    // publish to a vsts build
+                    Console.WriteLine("Publishing to Build");
+                    Console.WriteLine($"##vso[artifact.upload artifactname=CodexOutputs;]{analysisOutputZip}");
+                    Console.WriteLine("##vso[build.addbuildtag]CodexOutputs");
+                }
+                else
+                {
+                    Console.WriteLine("Analysis failed. Skipping public of analysis files.");
+                }
             }
 
             if (HasModeFlag(mode, Mode.IngestOnly))

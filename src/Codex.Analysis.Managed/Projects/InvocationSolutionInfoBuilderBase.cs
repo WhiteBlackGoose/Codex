@@ -66,15 +66,25 @@ namespace Codex.Analysis.Projects
                 outputPath = Path.Combine(csArgs.OutputDirectory, csArgs.OutputFileName);
             }
 
+            var argsWithoutAnalyzers = args.Where(arg => !IsAnalyzerArg(arg)).ToArray();
+
             var projectInfo = CommandLineProject.CreateProjectInfo(
                 projectName: projectName,
                 language: languageName,
-                commandLineArgs: args,
+                commandLineArgs: argsWithoutAnalyzers,
                 projectDirectory: projectDirectory,
                 workspace: Workspace);
 
             projectInfo = projectInfo.WithOutputFilePath(outputPath).WithFilePath(projectPath);
             return projectInfo;
+        }
+
+        private bool IsAnalyzerArg(string arg)
+        {
+            return arg.StartsWith("/a:", StringComparison.OrdinalIgnoreCase) ||
+                arg.StartsWith("/analyzer:", StringComparison.OrdinalIgnoreCase) ||
+                arg.StartsWith("-a:", StringComparison.OrdinalIgnoreCase) ||
+                arg.StartsWith("-analyzer:", StringComparison.OrdinalIgnoreCase);
         }
 
         internal SolutionInfo Build()
