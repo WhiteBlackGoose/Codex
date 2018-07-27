@@ -1,4 +1,5 @@
 using Codex.Analysis;
+using Codex.Analysis.External;
 using Codex.Analysis.Files;
 using Codex.Analysis.FileSystems;
 using Codex.Analysis.Managed;
@@ -47,9 +48,11 @@ namespace Codex.Application
         static bool clean = false;
         static bool newBackend = false;
         static bool scan = false;
+        static bool disableEnumeration = false;
         static bool test = false;
         static bool projectMode = false;
         static bool update = false;
+        static List<string> externalDataDirectories = new List<string>();
         static List<string> deleteIndices = new List<string>();
         static List<string> demoteIndices = new List<string>();
         static List<string> promoteIndices = new List<string>();
@@ -62,6 +65,8 @@ namespace Codex.Application
                     new Action(() => Index()),
                     new OptionSet
                     {
+                        { "ed|extData=", "Specifies one or more external data directories.", n => externalDataDirectories.Add(n) },
+                        { "noScan", "Disable scanning enlistment directory.", n => disableEnumeration = n != null },
                         { "noMsBuild", "Disable loading solutions using msbuild.", n => disableMsbuild = n != null },
                         { "noMsBuildLocator", "Disable loading solutions using msbuild.", n => disableMsbuildLocator = n != null },
                         { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
@@ -474,9 +479,11 @@ namespace Codex.Application
             string name,
             string elasticsearchUrl,
             string ingestionDirectory,
-            bool finalize)
+            bool finalize,
+            bool useNewBackend)
         {
             repoName = name;
+            newBackend = useNewBackend;
             loadDirectory = ingestionDirectory;
             elasticSearchServer = elasticsearchUrl;
             scan = true;
@@ -643,7 +650,7 @@ namespace Codex.Application
                                 new BinaryFileSystemFilter(new string[] { ".exe", ".dll", "*.blob", ".db" })
                                 ))
                         {
-                            DisableEnumeration = file.Length != 0
+                            DisableEnumeration = disableEnumeration || file.Length != 0
                         }));
 
                 var includedSolutions = !string.IsNullOrEmpty(solutionPath) ? new string[] { Path.GetFullPath(solutionPath) } : null;
@@ -704,13 +711,14 @@ namespace Codex.Application
                         {
                         new SolutionFileAnalyzer(),
                         new MSBuildFileAnalyzer(),
+                        // This indexer allows an external tool to write out codex spans for importing.
+                        new ExternalRepoFileAnalyzer(externalDataDirectories.ToArray()),
                         new XmlFileAnalyzer(
                             ".ds",
                             ".xml",
                             ".config",
                             ".settings"),
                         })
-                    //new ExternalRepoFileAnalyzer(new[] { @"d:\temp\Codex" }), // This indexer allows an external tool to write out codex spans for importing. We sill need to add support for a 'marker' file so we don't have to pass a folder.
                     {
                         RepositoryStore = analysisTarget,
                         Logger = logger,

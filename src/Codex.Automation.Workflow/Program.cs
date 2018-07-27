@@ -24,10 +24,15 @@ namespace Codex.Automation.Workflow
     enum Mode
     {
         Prepare = 1 << 0,
-        AnalyzeOnly = 1 << 1,
-        UploadOnly = 1 << 2,
+        UploadOnly = 1 << 1,
+        IngestOnly = 1 << 2,
+        // For historical reasons, analyze only also includes upload
+        AnalyzeOnly = 1 << 3 | UploadOnly,
+        BuildOnly = 1 << 4,
         FullAnalyze = Prepare | AnalyzeOnly,
-        Upload = Prepare | UploadOnly
+        Ingest = Prepare | IngestOnly,
+        Upload = Prepare | UploadOnly,
+        Build = Prepare | BuildOnly | FullAnalyze | Upload,
     }
 
     class Program
@@ -125,9 +130,28 @@ namespace Codex.Automation.Workflow
             Mode mode = GetMode(ref args);
 
             Arguments arguments = ParseArguments(args);
+            if (string.IsNullOrEmpty(arguments.RepoName))
+            {
+                arguments.RepoName = GetRepoName(arguments);
+            }
 
             string codexBinDirectory = Path.Combine(arguments.CodexOutputRoot, "bin");
+            string binlogDirectory = Path.Combine(arguments.CodexOutputRoot, "binlogs");
             string analysisOutputDirectory = Path.Combine(arguments.CodexOutputRoot, "store");
+            string analysisArguments = string.Join(" ",
+                    "index",
+                    "-save",
+                    analysisOutputDirectory,
+                    "-p",
+                    arguments.SourcesDirectory,
+                    "-repoUrl",
+                    arguments.CodexRepoUrl,
+                    "-n",
+                    arguments.RepoName,
+                    arguments.AdditionalCodexArguments,
+                    "-bld",
+                    binlogDirectory);
+            string executablePath = Path.Combine(codexBinDirectory, "Codex.exe");
 
             if (HasModeFlag(mode, Mode.Prepare))
             {
@@ -153,29 +177,29 @@ namespace Codex.Automation.Workflow
 
                 Console.WriteLine($"##vso[task.setvariable variable=CodexBinDir;]{codexBinDirectory}");
                 Console.WriteLine($"##vso[task.setvariable variable=CodexAnalysisOutDir;]{analysisOutputDirectory}");
+                Console.WriteLine($"##vso[task.setvariable variable=CodexExePath;]{executablePath}");
+                Console.WriteLine($"##vso[task.setvariable variable=CodexAnalysisArguments;]{analysisArguments}");
+            }
+
+            if (HasModeFlag(mode, Mode.BuildOnly))
+            {
+                var analysisPreparation = new AnalysisPreparation(arguments, binlogDirectory);
+                analysisPreparation.Run();
             }
 
             if (HasModeFlag(mode, Mode.AnalyzeOnly))
             {
                 // run exe
                 Console.WriteLine("Running Process");
-                string executablePath = Path.Combine(codexBinDirectory, "Codex.exe");
-                Process runExe = Process.Start(new ProcessStartInfo(executablePath, string.Join(" ",
-                    "index",
-                    "-save",
-                    analysisOutputDirectory,
-                    "-p",
-                    arguments.SourcesDirectory,
-                    "-repoUrl",
-                    arguments.CodexRepoUrl,
-                    "-n",
-                    arguments.RepoName,
-                    arguments.AdditionalCodexArguments))
+                Process runExe = Process.Start(new ProcessStartInfo(executablePath, analysisArguments)
                 {
                     UseShellExecute = false
                 });
                 runExe.WaitForExit();
+            }
 
+            if (HasModeFlag(mode, Mode.UploadOnly))
+            {
                 // get json files and zip
                 Console.WriteLine("Zipping JSON files");
 
@@ -188,11 +212,11 @@ namespace Codex.Automation.Workflow
                 Console.WriteLine("##vso[build.addbuildtag]CodexOutputs");
             }
 
-            if (HasModeFlag(mode, Mode.UploadOnly))
+            if (HasModeFlag(mode, Mode.IngestOnly))
             {
-                string executablePath = Path.Combine(codexBinDirectory, "Codex.Ingester.exe");
+                string ingesterExecutablePath = Path.Combine(codexBinDirectory, "Codex.Ingester.exe");
                 string storeFolder = Path.Combine(arguments.CodexOutputRoot, "store");
-                Process runExe = Process.Start(new ProcessStartInfo(executablePath, string.Join(" ",
+                Process runExe = Process.Start(new ProcessStartInfo(ingesterExecutablePath, string.Join(" ",
                     "--file",
                     arguments.JsonFilePath,
                     "--out",
@@ -206,6 +230,23 @@ namespace Codex.Automation.Workflow
                 });
                 
             }
+        }
+
+        private static string GetRepoName(Arguments arguments)
+        {
+            var repoName = arguments.CodexRepoUrl;
+
+            if (!string.IsNullOrEmpty(repoName))
+            {
+                repoName = repoName.TrimEnd('/');
+                var lastSlashIndex = repoName.LastIndexOf('/');
+                if (lastSlashIndex > 0)
+                {
+                    repoName = repoName.Substring(lastSlashIndex);
+                }
+            }
+
+            return repoName;
         }
     }
 }

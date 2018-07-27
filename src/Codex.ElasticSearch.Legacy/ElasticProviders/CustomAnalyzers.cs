@@ -355,8 +355,8 @@ namespace Codex.Storage.ElasticProviders
         /// <summary>
         /// Func that can be used with <see cref="CreateIndexExtensions.CreateIndexAsync"/>.
         /// </summary>
-        public static Func<CreateIndexDescriptor, CreateIndexDescriptor> AddNGramAnalyzerFunc { get; } =
-            c => c.Settings(isd => isd.Analysis(descriptor => descriptor
+        public static Func<IndexSettingsDescriptor, IndexSettingsDescriptor> AddNGramAnalyzerFunc { get; } =
+            isd => isd.Analysis(descriptor => descriptor
                             .TokenFilters(tfd => AddTokenFilters(tfd))
                             .CharFilters(cfd => AddCharFilters(cfd))
                             .Normalizers(bases => bases
@@ -365,6 +365,6 @@ namespace Codex.Storage.ElasticProviders
                                 .UserDefined(PrefixFilterPartialNameNGramAnalyzerName, PrefixFilterIdentifierNGramAnalyzer)
                                 .UserDefined(PrefixFilterFullNameNGramAnalyzerName, PrefixFilterFullNameNGramAnalyzer)
                                 .UserDefined(LowerCaseKeywordAnalyzerName, LowerCaseKeywordAnalyzer)
-                                .UserDefined(EncodedFullTextAnalyzerName, EncodedFullTextAnalyzer))));
+                                .UserDefined(EncodedFullTextAnalyzerName, EncodedFullTextAnalyzer)));
     }
 }
