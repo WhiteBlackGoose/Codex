@@ -64,7 +64,7 @@ namespace Codex.Analysis.Projects
                             ReadArgsFile(file);
                         }
                     }
-                    else
+                    else if (File.Exists(argsFile))
                     {
                         ReadArgsFile(argsFile);
                     }

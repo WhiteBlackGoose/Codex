@@ -13,4 +13,6 @@
 
   <!-- Replace the build target with a call to Compile which will trigger the  -->
   <Target Name="Build" DependsOnTargets="Compile;GetTargetPath" />
+
+  <Target Name="CodexExtract" DependsOnTargets="Compile;GetTargetPath" />
 </Project>
