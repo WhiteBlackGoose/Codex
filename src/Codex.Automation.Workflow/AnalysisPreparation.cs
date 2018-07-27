@@ -16,7 +16,6 @@ namespace Codex.Automation.Workflow
         private readonly string DotNetPath = "dotnet";
         private readonly string NugetPath = "nuget";
 
-        private readonly List<string> binLogPaths = new List<string>();
         private readonly string binlogDirectory;
 
         public AnalysisPreparation(Arguments arguments, string binlogDirectory)
@@ -55,10 +54,13 @@ namespace Codex.Automation.Workflow
             Log(solution);
 
             var binlogName = ComputeBinLogName(solution);
-            var binLogPath = $@"{binlogDirectory}\{binlogName}.binlog";
-            binLogPaths.Add(binLogPath);
 
-            Invoke(MsBuildPath, $"/bl:{binLogPath}", solution);
+            if (Invoke(MsBuildPath, $@"/bl:{binlogDirectory}\{binlogName}.binlog", solution))
+            {
+                return;
+            }
+
+            Invoke(DotNetPath, "build", $@"/bl:{binlogDirectory}\{binlogName}.dn.binlog", solution);
         }
 
         private string ComputeBinLogName(string solution)
