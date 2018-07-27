@@ -247,7 +247,7 @@ namespace Codex.Automation.Workflow
                 var lastSlashIndex = repoName.LastIndexOf('/');
                 if (lastSlashIndex > 0)
                 {
-                    repoName = repoName.Substring(lastSlashIndex);
+                    repoName = repoName.Substring(lastSlashIndex + 1);
                 }
             }
 
