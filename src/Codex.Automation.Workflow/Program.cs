@@ -236,7 +236,7 @@ namespace Codex.Automation.Workflow
         {
             var repoName = arguments.CodexRepoUrl;
 
-            if (!string.IsNullOrEmpty(arguments.CodexRepoUrl))
+            if (!string.IsNullOrEmpty(repoName))
             {
                 repoName = repoName.TrimEnd('/');
                 var lastSlashIndex = repoName.LastIndexOf('/');
