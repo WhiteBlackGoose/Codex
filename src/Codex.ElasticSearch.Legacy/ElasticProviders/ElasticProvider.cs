@@ -486,15 +486,14 @@ namespace Codex.Storage.ElasticProviders
                 var client = CreateClient();
                 var response = await client
                     .CreateIndexAsync(indexName,
-                        c => CustomAnalyzers.AddNGramAnalyzerFunc(c)
-                            .Mappings(m => m.Map<SourceFileModel>(SourcesTypeName, tm => tm.AutoMapEx())
+                        c => c.Mappings(m => m.Map<SourceFileModel>(SourcesTypeName, tm => tm.AutoMapEx())
                                             .Map<PropertyModel>(SearchPropertiesTypeName, tm => tm.AutoMapEx())
                                             .Map<DefinitionSearchSpanModel>(SearchDefinitionTypeName, tm => tm.AutoMapEx())
                                             .Map<ReferenceSearchResultModel>(SearchReferenceTypeName, tm => tm.AutoMapEx())
                                             .Map<ProjectModel>(ProjectTypeName, tm => tm.AutoMapEx())
                                             .Map<RepositoryModel>(RepositoryTypeName, tm => tm.AutoMapEx())
                                             )
-                            .Settings(s => s.NumberOfShards(1))
+                            .Settings(s => CustomAnalyzers.AddNGramAnalyzerFunc(s).NumberOfShards(1))
                             .CaptureRequest(client, requestHolder)
                             )
                     .ThrowOnFailure();
