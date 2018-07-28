@@ -173,7 +173,7 @@ namespace Codex.ElasticSearch
         public override BulkDescriptor AddRegisterOperation(BulkDescriptor bd, IRegisteredEntity value)
         {
             // TODO: Use same registry index for all entities rather than one per type
-            return bd.Index<IRegisteredEntity>(bco => bco.Document(value)
+            return bd.Create<IRegisteredEntity>(bco => bco.Document(value)
                 .Index(RegistryIndexName)
                 .Version(value.EntityVersion)
                 .VersionType(VersionType.External)
