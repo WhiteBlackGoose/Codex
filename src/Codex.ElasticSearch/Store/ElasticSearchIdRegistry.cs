@@ -3,6 +3,7 @@ using Codex.ElasticSearch.Utilities;
 using Codex.ObjectModel;
 using Codex.Sdk.Utilities;
 using Codex.Storage.ElasticProviders;
+using Codex.Utilities;
 using Nest;
 using System;
 using System.Collections.Concurrent;
@@ -47,6 +48,9 @@ namespace Codex.ElasticSearch
             IReadOnlyList<string> completedReservations, 
             IReadOnlyList<int> unusedIds = null)
         {
+            completedReservations = completedReservations ?? CollectionUtilities.Empty<string>.Array;
+            unusedIds = unusedIds ?? CollectionUtilities.Empty<int>.Array;
+
             var response = await this.service.UseClient(context =>
             {
                 var client = context.Client;
