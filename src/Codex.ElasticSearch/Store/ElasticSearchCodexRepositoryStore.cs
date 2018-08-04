@@ -86,6 +86,8 @@ namespace Codex.ElasticSearch
             {
                 await batcher.AddAsync(store.ProjectStore, new ProjectSearchModel() { Project = project });
 
+                await AddBoundFilesAsync(project.AdditionalSourceFiles);
+
                 foreach (var projectReference in project.ProjectReferences)
                 {
                     batcher.Add(store.ProjectReferenceStore, new ProjectReferenceSearchModel(project)

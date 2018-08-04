@@ -46,11 +46,15 @@ namespace Codex.Import
 
         public RepoProjectAnalyzer Analyzer;
 
+        public AnalyzedProjectContext ProjectContext;
+
         public RepoProject(string projectId, Repo repo)
         {
             Repo = repo;
             ProjectId = projectId;
             Analyzer = RepoProjectAnalyzer.Default;
+            var analyzedProject = new AnalyzedProject(Repo.Name, ProjectId);
+            ProjectContext = new AnalyzedProjectContext(analyzedProject);
         }
 
         public void AddFile(RepoFile repoFile)

@@ -79,6 +79,8 @@ namespace Codex.ElasticSearch.Legacy.Bridge
                 foreach (var project in projects)
                 {
                     await Storage.AddProjectAsync(project, targetIndex);
+
+                    await AddBoundFilesAsync(project.AdditionalSourceFiles);
                 }
             }
 

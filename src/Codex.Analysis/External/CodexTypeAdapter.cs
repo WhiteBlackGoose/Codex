@@ -72,7 +72,7 @@ namespace Codex.Analysis.External
                 {
                     Id = symbolId,
                     ReferenceKind = store.ReferenceKinds[span.ReferenceKind].Name,
-                    Kind = "symbol",
+                    Kind = symbol.Kind,
                     ProjectId = projectId,
                 },
             };

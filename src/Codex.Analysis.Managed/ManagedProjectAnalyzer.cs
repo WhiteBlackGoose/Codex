@@ -30,9 +30,7 @@ namespace Codex.Analysis.Projects
             this.semanticServices = semanticServices;
             ProjectId = projectId;
             this.lazySolution = lazySolution;
-
-            var analyzedProject = new AnalyzedProject(repoProject.Repo.Name, repoProject.ProjectId);
-            ProjectContext = new AnalyzedProjectContext(analyzedProject);
+            ProjectContext = repoProject.ProjectContext;
         }
 
         public override async Task Analyze(RepoProject project)
@@ -73,10 +71,6 @@ namespace Codex.Analysis.Projects
                 }
 
                 await base.Analyze(project);
-
-                await ProjectContext.Finish(project);
-
-                await UploadProject(project, ProjectContext.Project);
 
                 project.Analyzer = RepoProjectAnalyzer.Null;
             }

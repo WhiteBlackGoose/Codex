@@ -19,19 +19,10 @@ namespace Codex.Analysis
 
     public class RepoProjectAnalyzerBase : RepoProjectAnalyzer
     {
-        public override Task UploadProject(RepoProject project)
-        {
-            return Task.CompletedTask;
-        }
     }
 
     public class NullRepoProjectAnalzyer : RepoProjectAnalyzer
     {
-        public override Task UploadProject(RepoProject project)
-        {
-            return Task.CompletedTask;
-        }
-
         public override Task Analyze(RepoProject project)
         {
             return Task.CompletedTask;
@@ -76,17 +67,12 @@ namespace Codex.Analysis
 
         public virtual bool IsCandidateProjectFile(RepoFile repoFile) => false;
 
-        public virtual async Task UploadProject(RepoProject project)
+        protected static async Task UploadProject(RepoProject project)
         {
-            AnalyzedProject analyzedProject = new AnalyzedProject(
-                repositoryName: project.Repo.Name, 
-                projectId: project.ProjectId);
+            await project.ProjectContext.Finish(project);
 
-            await UploadProject(project, analyzedProject);
-        }
+            var analyzedProject = project.ProjectContext.Project;
 
-        protected static async Task UploadProject(RepoProject project, AnalyzedProject analyzedProject)
-        {
             analyzedProject.ProjectKind = project.ProjectKind;
             foreach (var file in project.Files)
             {
@@ -95,16 +81,6 @@ namespace Codex.Analysis
                     RepoRelativePath = file.RepoRelativePath,
                     ProjectRelativePath = file.LogicalPath
                 });
-            }
-
-            if (analyzedProject.AdditionalSourceFiles.Count != 0)
-            {
-                await project.Repo.AnalysisServices.RepositoryStore.AddBoundFilesAsync(analyzedProject.AdditionalSourceFiles);
-            }
-
-            if (analyzedProject.ReferenceDefinitionMap.Count != 0)
-            {
-                await project.Repo.AnalysisServices.RepositoryStore.AddBoundFilesAsync(analyzedProject.AdditionalSourceFiles);
             }
 
             await project.Repo.AnalysisServices.RepositoryStore.AddProjectsAsync(new[] { analyzedProject });
