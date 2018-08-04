@@ -66,9 +66,7 @@ namespace Codex.ElasticSearch
 
                 if (Placeholder.IsCommitModelEnabled)
                 {
-                    var entityRef = new ElasticEntityRef(
-                            stableIdGroup: item.StableIdGroup,
-                            stableId: item.Entity.StableId);
+                    var entityRef = new ElasticEntityRef(item.Entity);
                     batcher.CommitSearchTypeStoredFilters[item.SearchType.Id].Add(entityRef);
                     foreach (var additionalStoredFilter in item.AdditionalStoredFilters)
                     {

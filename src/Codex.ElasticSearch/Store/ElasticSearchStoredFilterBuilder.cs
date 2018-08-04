@@ -16,6 +16,7 @@ using Codex.ObjectModel;
 
 using static Codex.ElasticSearch.StoredFilterUtilities;
 using Codex.ElasticSearch.Formats;
+using System.Diagnostics;
 
 namespace Codex.ElasticSearch
 {
@@ -59,7 +60,7 @@ namespace Codex.ElasticSearch
         public void Add(ElasticEntityRef entityRef)
         {
             var shardState = ShardStates[entityRef.StableIdGroup];
-            if (shardState.AddAndTryGetBatch(entityRef.StableId, out var batch))
+            if (shardState.AddAndTryGetBatch(entityRef, out var batch))
             {
                 storedFilterUpdateTasks.Enqueue(Store.Service.UseClient(async context =>
                 {
@@ -133,14 +134,20 @@ namespace Codex.ElasticSearch
             public SemaphoreSlim Mutex = TaskUtilities.CreateMutex();
             public RoaringDocIdSet RoaringFilter { get; set; }
 
-            public bool AddAndTryGetBatch(int id, out List<int> batch)
+            //private ConcurrentDictionary<int, ElasticEntityRef> dedupMap = new ConcurrentDictionary<int, ElasticEntityRef>();
+
+            public bool AddAndTryGetBatch(ElasticEntityRef entity, out List<int> batch)
             {
-                if (id == -1)
+                if (entity.StableId == -1)
                 {
-
+                    Debug.Fail($"{entity}");
                 }
+                //else if (!dedupMap.TryAdd(entity.StableId, entity))
+                //{
+                //    //Debug.Fail($"Conflict: [{entity}] | [{dedupMap[entity.StableId]}");
+                //}
 
-                return Queue.AddAndTryGetBatch(id, out batch);
+                return Queue.AddAndTryGetBatch(entity.StableId, out batch);
             }
 
             public void Complete()
@@ -156,11 +163,11 @@ namespace Codex.ElasticSearch
                 batch.Sort();
                 var filterBuilder = new RoaringDocIdSet.Builder();
 
-                IEnumerable<int> ids = batch;
+                IEnumerable<int> ids = batch.SortedUnique(Comparer<int>.Default);
 
                 if (RoaringFilter != null)
                 {
-                    ids = RoaringFilter.Enumerate().ExclusiveInterleave(batch, Comparer<int>.Default);
+                    ids = RoaringFilter.Enumerate().ExclusiveInterleave(ids, Comparer<int>.Default);
                 }
 
                 foreach (var id in ids)
@@ -175,13 +182,20 @@ namespace Codex.ElasticSearch
 
     public struct ElasticEntityRef
     {
+        public string Uid;
         public int StableIdGroup;
         public int StableId;
 
-        public ElasticEntityRef(int stableIdGroup, int stableId)
+        public ElasticEntityRef(ISearchEntity entity)
         {
-            StableIdGroup = stableIdGroup;
-            StableId = stableId;
+            Uid = entity.Uid;
+            StableIdGroup = entity.StableIdGroup;
+            StableId = entity.StableId;
+        }
+
+        public override string ToString()
+        {
+            return $"{Uid}:{StableIdGroup}#{StableId}";
         }
     }
 }

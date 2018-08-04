@@ -102,6 +102,21 @@ namespace Codex.Utilities
             }
         }
 
+        public static IEnumerable<T> SortedUnique<T>(this IEnumerable<T> items, IComparer<T> comparer)
+        {
+            T lastItem = default(T);
+            bool hasLastItem = false;
+            foreach (var item in items)
+            {
+                if (!hasLastItem || comparer.Compare(lastItem, item) != 0)
+                {
+                    hasLastItem = true;
+                    lastItem = item;
+                    yield return item;
+                }
+            }
+        }
+
         public static IEnumerable<T> ExclusiveInterleave<T>(this IEnumerable<T> items1, IEnumerable<T> items2, IComparer<T> comparer)
         {
             bool end1 = false;

@@ -20,7 +20,6 @@ namespace Codex.ElasticSearch
         internal readonly SearchType SearchType;
         internal readonly ElasticSearchStore Store;
         public readonly string IndexName;
-        public readonly string RegistryIndexName;
         public int ShardCount { get; protected set; }
 
         public ElasticSearchEntityStore(ElasticSearchStore store, SearchType searchType)
@@ -28,15 +27,12 @@ namespace Codex.ElasticSearch
             this.Store = store;
             this.SearchType = searchType;
             this.IndexName = GetIndexName(store, searchType);
-            this.RegistryIndexName = IndexName + ".reg";
         }
 
         public static string GetIndexName(ElasticSearchStore store, SearchType searchType)
         {
             return (store.Configuration.Prefix + searchType.IndexName).ToLowerInvariant();
         }
-
-        public abstract BulkDescriptor AddRegisterOperation(BulkDescriptor bd, IRegisteredEntity value);
 
         public abstract Task DeleteAsync(IEnumerable<string> uids);
 
@@ -47,7 +43,6 @@ namespace Codex.ElasticSearch
         where T : class, ISearchEntity
     {
         internal readonly SearchType<T> EntitySearchType;
-        private readonly string m_pipeline;
 
         public ElasticSearchEntityStore(ElasticSearchStore store, SearchType searchType)
             : base(store, searchType)
@@ -156,8 +151,7 @@ namespace Codex.ElasticSearch
                     .Routing(GetRouting(value.Uid))
                     .Index(IndexName)
                     .Version(value.EntityVersion)
-                    .VersionType(value.EntityVersion.HasValue ? VersionType.External : VersionType.Internal)
-                    .Pipeline(m_pipeline));
+                    .VersionType(value.EntityVersion.HasValue ? VersionType.External : VersionType.Internal));
             }
             else
             {
@@ -167,20 +161,8 @@ namespace Codex.ElasticSearch
                     .Routing(GetRouting(value.Uid))
                     .Index(IndexName)
                     .VersionType(value.EntityVersion.HasValue ? VersionType.External : VersionType.Internal)
-                    .Version(value.EntityVersion)
-                    .Pipeline(m_pipeline));
+                    .Version(value.EntityVersion));
             }
-        }
-
-        public override BulkDescriptor AddRegisterOperation(BulkDescriptor bd, IRegisteredEntity value)
-        {
-            // TODO: Use same registry index for all entities rather than one per type
-            return bd.Create<IRegisteredEntity>(bco => bco.Document(value)
-                .Index(RegistryIndexName)
-                .Version(value.EntityVersion)
-                .VersionType(VersionType.External)
-                .Routing(GetRouting(value.Uid))
-                .Id(value.Uid));
         }
 
         public async Task StoreAsync<TOut>(IReadOnlyList<T> values, UpdateMergeFunction<T> updateMergeFunction)
