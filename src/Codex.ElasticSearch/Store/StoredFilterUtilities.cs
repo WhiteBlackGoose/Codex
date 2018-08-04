@@ -15,6 +15,7 @@ namespace Codex.ElasticSearch
     {
         private const int ByteBitCount = 8;
         public const int StableIdGroupMaxValue = byte.MaxValue;
+        public const long MaxVersion = 1L << 40;
 
         public static Task UpdateStoredFiltersAsync(this ElasticSearchEntityStore<IStoredFilter> storedFilterStore, IReadOnlyList<IStoredFilter> storedFilters)
         {
@@ -28,15 +29,17 @@ namespace Codex.ElasticSearch
 
         public static int ExtractStableId(long version)
         {
-            version--;
-            return (int)(version >> ByteBitCount);
+            var encodedStableId = MaxVersion - version;
+            return (int)(encodedStableId >> ByteBitCount);
         }
 
         public static long ComputeVersion(int stableIdGroup, int stableId)
         {
             Contract.Assert(stableIdGroup >= 0 && stableIdGroup < StableIdGroupMaxValue);
-            long version =  (byte)stableIdGroup | (((long)stableId) << ByteBitCount);
-            return version + 1;
+            long encodedStableId =  (byte)stableIdGroup | (((long)stableId) << ByteBitCount);
+
+            // Version needs to be decrease in order to keep documents from being replaced
+            return MaxVersion - encodedStableId;
         }
 
         public static int GetStableIdGroup(this ISearchEntity entity)

@@ -53,28 +53,7 @@ namespace Codex.ElasticSearch
 
             // Reserve stable ids
             int batchIndex = 0;
-            using (var registration = await stableIdRegistry.SetStableIdsAsync(EntityItems))
-            {
-                var registerDescriptor = GetRegisterOperations();
-                var registerResponse = await context.Client.BulkAsync(registerDescriptor.CaptureRequest(context))
-                    .ThrowOnFailure(allowInvalid: true);
-                Contract.Assert(EntityItems.Count == registerResponse.Items.Count);
-
-                foreach (var registerResponseItem in registerResponse.Items)
-                {
-                    var item = EntityItems[batchIndex];
-                    batchIndex++;
-
-                    if (registerResponseItem.Version == 0)
-                    {
-
-                    }
-
-                    item.SetVersionAndStableIdUsingRegisteredVersion(registerResponseItem.Version);
-
-                    registration.Report(item, used: IsAdded(registerResponseItem));
-                }
-            }
+            await stableIdRegistry.SetStableIdsAsync(EntityItems);
 
             var response = await context.Client.BulkAsync(BulkDescriptor.CaptureRequest(context)).ThrowOnFailure(allowInvalid: true);
             Contract.Assert(EntityItems.Count == response.Items.Count);
@@ -104,18 +83,6 @@ namespace Codex.ElasticSearch
         private bool IsAdded(IBulkResponseItem item)
         {
             return item.Status == (int)HttpStatusCode.Created;
-        }
-
-        public BulkDescriptor GetRegisterOperations()
-        {
-            BulkDescriptor registryBulkDescriptor = new BulkDescriptor();
-
-            foreach (var item in EntityItems)
-            {
-                item.EntityStore.AddRegisterOperation(registryBulkDescriptor, item.RegisteredEntity);
-            }
-
-            return registryBulkDescriptor;
         }
 
         public bool TryAdd<T>(ElasticSearchEntityStore<T> store, T entity, ElasticSearchStoredFilterBuilder[] additionalStoredFilters)
@@ -171,7 +138,6 @@ namespace Codex.ElasticSearch
             public int? StableId { get; set; }
             public int BatchIndex { get; set; }
             public ISearchEntity Entity { get; }
-            public RegisteredEntity RegisteredEntity { get; set; }
             public SearchType SearchType => EntityStore.SearchType;
             public ElasticSearchEntityStore EntityStore { get; set; }
             public ElasticSearchStoredFilterBuilder[] AdditionalStoredFilters { get; set; }
@@ -191,28 +157,17 @@ namespace Codex.ElasticSearch
                 }
             }
 
+            public bool IsAdded { get; set; }
+
             public Item(ISearchEntity entity)
             {
                 Entity = entity;
-                RegisteredEntity = new RegisteredEntity(entity)
-                {
-                    DateAdded = DateTime.UtcNow
-                };
-            }
-
-            public void SetVersionAndStableIdUsingRegisteredVersion(long version)
-            {
-                Entity.EntityVersion = version;
-                var newStableId = StoredFilterUtilities.ExtractStableId(version);
-                Entity.StableId = newStableId;
             }
 
             public void SetStableId(int stableId)
             {
                 StableId = stableId;
-                RegisteredEntity.StableId = stableId;
                 Entity.StableId = stableId;
-                RegisteredEntity.EntityVersion = StoredFilterUtilities.ComputeVersion(StableIdGroup, stableId);
                 Entity.EntityVersion = StoredFilterUtilities.ComputeVersion(StableIdGroup, stableId);
             }
 

@@ -156,6 +156,7 @@ namespace Codex.ElasticSearch
                     .Routing(GetRouting(value.Uid))
                     .Index(IndexName)
                     .Version(value.EntityVersion)
+                    .VersionType(value.EntityVersion.HasValue ? VersionType.External : VersionType.Internal)
                     .Pipeline(m_pipeline));
             }
             else
@@ -165,6 +166,7 @@ namespace Codex.ElasticSearch
                     .Id(value.Uid)
                     .Routing(GetRouting(value.Uid))
                     .Index(IndexName)
+                    .VersionType(value.EntityVersion.HasValue ? VersionType.External : VersionType.Internal)
                     .Version(value.EntityVersion)
                     .Pipeline(m_pipeline));
             }

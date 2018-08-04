@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
+    <TargetFramework>net461</TargetFramework>
+  </PropertyGroup>
+  <Import Project="$(SrcRoot)\Common.props" />
+  <ItemGroup>
+    <PackageReference Include="RocksDbNative" Version="5.4.6.10" />
+    <PackageReference Include="RocksDbSharp" Version="5.4.6.10" />
+    <PackageReference Include="StrongNamer" Version="0.0.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Codex.ElasticSearch\Codex.ElasticSearch.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.IO.Compression" />
+  </ItemGroup>
+  <Import Project="$(SrcRoot)\Common.targets" />
+</Project>

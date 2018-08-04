@@ -95,16 +95,18 @@ namespace Codex.ElasticSearch.Tests
                 new TestStableIdItem(SearchTypes.Project, 1, expectedStableId: 1),
                 new TestStableIdItem(SearchTypes.Project, 2, expectedStableId: 0),
                 new TestStableIdItem(SearchTypes.BoundSource, 23, expectedStableId: 3),
+                new TestStableIdItem(SearchTypes.BoundSource, 23, expectedStableId: 2),
             };
 
-            using (var registration = await idRegistry.SetStableIdsAsync(testStableIdItems))
+            await idRegistry.SetStableIdsAsync(testStableIdItems);
+
+            var uids = new HashSet<(SearchType, string)>();
+
+            foreach (var item in testStableIdItems)
             {
-                foreach (var item in testStableIdItems)
-                {
-                    Assert.IsTrue(item.StableIdValue.HasValue);
-                    Assert.AreEqual(item.ExpectedStableId, item.StableId);
-                    registration.Report(item, used: !item.Unused);
-                }
+                Assert.IsTrue(item.IsAdded == uids.Add((item.SearchType, item.Uid)));
+                Assert.IsTrue(item.StableIdValue.HasValue);
+                Assert.AreEqual(item.ExpectedStableId, item.StableId);
             }
 
             await idRegistry.FinalizeAsync();
@@ -115,17 +117,20 @@ namespace Codex.ElasticSearch.Tests
         private class TestStableIdItem : IStableIdItem
         {
             public int StableIdGroup { get; }
+            public bool IsAdded { get; set; }
             public bool Unused { get; set; }
             public int? StableIdValue { get; set; }
             public int ExpectedStableId { get; }
             public int StableId { get => StableIdValue.Value; set => StableIdValue = value; }
             public SearchType SearchType { get; }
+            public string Uid { get; }
 
             public TestStableIdItem(SearchType searchType, int stableIdGroup, int expectedStableId)
             {
                 SearchType = searchType;
                 StableIdGroup = stableIdGroup;
                 ExpectedStableId = expectedStableId;
+                Uid = $"{stableIdGroup}:{expectedStableId}";
             }
         }
 

@@ -10,6 +10,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,6 +24,7 @@ namespace Codex.ElasticSearch
         private readonly ElasticSearchService service;
         private readonly ElasticSearchEntityStore entityStore;
         private readonly ElasticSearchEntityStore<IStableIdMarker> idStore;
+        private readonly ElasticSearchEntityStore<IRegisteredEntity> registryStore;
         private readonly IndexIdRegistry[] indexRegistries;
 
         public ElasticSearchIdRegistry(ElasticSearchStore store)
@@ -30,6 +32,7 @@ namespace Codex.ElasticSearch
             this.store = store;
             this.service = store.Service;
             this.idStore = store.StableIdMarkerStore;
+            this.registryStore = store.RegisteredEntityStore;
             this.indexRegistries = SearchTypes.RegisteredSearchTypes.Select(searchType => new IndexIdRegistry(this, searchType)).ToArray();
             this.entityStore = store.StableIdMarkerStore;
         }
@@ -74,23 +77,71 @@ namespace Codex.ElasticSearch
             var stableIdMarkerDocument = response.Result.Get.Source;
         }
 
-        public async Task<IStableIdRegistration> SetStableIdsAsync(IReadOnlyList<IStableIdItem> items)
+        public async Task SetStableIdsAsync(IReadOnlyList<IStableIdItem> items)
         {
-            var registration = new StableIdRegistration(this);
-            foreach (var item in items)
-            {
-                var indexRegistry = indexRegistries[item.SearchType.Id];
-                var nodeAndStableId = await indexRegistry.GetReservationNodeAndStableId(item.StableIdGroup);
-                item.StableId = nodeAndStableId.stableId;
-                registration.AddReservation(item, nodeAndStableId.node);
-            }
-
             // For each item, reserve ids from the {IndexName}:{StableIdGroup} StableIdMarker document and assign tentative ids for each
             // item
             // Next attempt to get or add a document with Uid = {IndexName}.{Uid}, StableIdGroup, StableId
             // Assign the StableId of the final document after the get or add to the item
 
-            return registration;
+            var registeredEntities = new RegisteredEntity[items.Count];
+            var reservations = new (ReservationNode node, int stableId)[items.Count];
+
+            var bd = new BulkDescriptor();
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                var item = items[i];
+                var indexRegistry = indexRegistries[item.SearchType.Id];
+                var nodeAndStableId = await indexRegistry.GetReservationNodeAndStableId(item.StableIdGroup);
+                reservations[i] = nodeAndStableId;
+
+                var version = StoredFilterUtilities.ComputeVersion(item.StableIdGroup, nodeAndStableId.stableId);
+
+                var registeredEntity = new RegisteredEntity()
+                {
+                    Uid = GetRegistrationUid(item.SearchType, item.Uid),
+                    StableId = nodeAndStableId.stableId,
+                    StableIdGroup = item.StableIdGroup,
+                    DateAdded = DateTime.UtcNow,
+                    EntityVersion = version,
+                };
+
+                registeredEntities[i] = registeredEntity;
+                registryStore.AddIndexOperation(bd, registeredEntity);
+            }
+
+            var registerResponse = await store.Service.UseClient(context => context.Client.BulkAsync(bd.CaptureRequest(context))
+                    .ThrowOnFailure(allowInvalid: true));
+
+            int index = 0;
+            foreach (var registerResponseItem in registerResponse.Result.Items)
+            {
+                var item = items[index];
+                var nodeAndStableId = reservations[index];
+                var node = nodeAndStableId.node;
+                var stableId = nodeAndStableId.stableId;
+
+                bool added = IsAdded(registerResponseItem);
+                item.IsAdded = added;
+                if (added)
+                {
+                    item.StableId = stableId;
+                    node.CommitId();
+                }
+                else
+                {
+                    item.StableId = StoredFilterUtilities.ExtractStableId(registerResponseItem.Version);
+                    node.ReturnId(stableId);
+                }
+
+                index++;
+            }
+        }
+
+        private bool IsAdded(IBulkResponseItem item)
+        {
+            return item.Status == (int)HttpStatusCode.Created;
         }
 
         public async Task<IStableIdReservation> ReserveIds(SearchType searchType, int stableIdGroup)
@@ -125,42 +176,9 @@ namespace Codex.ElasticSearch
             return $"{searchType.IndexName}#{stableIdGroup}";
         }
 
-        private class StableIdRegistration : IStableIdRegistration
+        private static string GetRegistrationUid(SearchType searchType, string entityUid)
         {
-            private readonly ElasticSearchIdRegistry registry;
-            private readonly Dictionary<IStableIdItem, ReservationNode> reservations = new Dictionary<IStableIdItem, ReservationNode>();
-
-            public StableIdRegistration(ElasticSearchIdRegistry registry)
-            {
-                this.registry = registry;
-            }
-
-            public void AddReservation(IStableIdItem item, ReservationNode node)
-            {
-                reservations.Add(item, node);
-            }
-
-            public void Dispose()
-            {
-                Contract.Assert(reservations.Count == 0);
-            }
-
-            public void Report(IStableIdItem item, bool used)
-            {
-                lock (reservations)
-                {
-                    var reservationNode = reservations[item];
-                    reservations.Remove(item);
-                    if (used)
-                    {
-                        reservationNode.CommitId();
-                    }
-                    else
-                    {
-                        reservationNode.ReturnId(item.StableId);
-                    }
-                }
-            }
+            return $"{searchType.IndexName}:{entityUid}";
         }
 
         private class ReservationNode

@@ -17,10 +17,7 @@ namespace Codex.ElasticSearch
 {
     public interface IStableIdRegistry
     {
-        /// <summary>
-        /// Reserves and sets the stable ids on the items
-        /// </summary>
-        Task<IStableIdRegistration> SetStableIdsAsync(IReadOnlyList<IStableIdItem> items);
+        Task SetStableIdsAsync(IReadOnlyList<IStableIdItem> uids);
 
         Task FinalizeAsync();
     }
@@ -32,6 +29,10 @@ namespace Codex.ElasticSearch
 
     public interface IStableIdItem
     {
+        bool IsAdded { set; }
+
+        string Uid { get; }
+
         /// <summary>
         /// The group to reserve the stable id in
         /// </summary>
