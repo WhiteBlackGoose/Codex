@@ -213,7 +213,7 @@ namespace Codex.Automation.Workflow
 
             if (HasModeFlag(mode, Mode.UploadOnly))
             {
-                if (!success)
+                if (success)
                 {
                     // get json files and zip
                     Console.WriteLine("Zipping analysis files.");
