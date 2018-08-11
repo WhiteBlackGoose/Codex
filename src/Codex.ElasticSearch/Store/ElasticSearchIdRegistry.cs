@@ -18,7 +18,7 @@ namespace Codex.ElasticSearch
 {
     public class ElasticSearchIdRegistry : IStableIdRegistry
     {
-        public const int ReserveCount = 20;
+        public const int ReserveCount = 500;
 
         private readonly ElasticSearchStore store;
         private readonly ElasticSearchService service;
@@ -47,7 +47,6 @@ namespace Codex.ElasticSearch
 
         public async Task CompleteReservations(
             SearchType searchType, 
-            int stableIdGroup,
             IReadOnlyList<string> completedReservations, 
             IReadOnlyList<int> unusedIds = null)
         {
@@ -57,7 +56,7 @@ namespace Codex.ElasticSearch
             var response = await this.service.UseClient(context =>
             {
                 var client = context.Client;
-                string stableIdMarkerId = GetStableIdMarkerId(searchType, stableIdGroup);
+                string stableIdMarkerId = searchType.IndexName;
                 return client.UpdateAsync<IStableIdMarker, IStableIdMarker>(stableIdMarkerId,
                     ud => ud
                     .Index(entityStore.IndexName)
@@ -93,16 +92,15 @@ namespace Codex.ElasticSearch
             {
                 var item = items[i];
                 var indexRegistry = indexRegistries[item.SearchType.Id];
-                var nodeAndStableId = await indexRegistry.GetReservationNodeAndStableId(item.StableIdGroup);
+                var nodeAndStableId = await indexRegistry.GetReservationNodeAndStableId();
                 reservations[i] = nodeAndStableId;
 
-                var version = StoredFilterUtilities.ComputeVersion(item.StableIdGroup, nodeAndStableId.stableId);
+                var version = StoredFilterUtilities.ComputeVersion(nodeAndStableId.stableId);
 
                 var registeredEntity = new RegisteredEntity()
                 {
                     Uid = GetRegistrationUid(item.SearchType, item.Uid),
                     StableId = nodeAndStableId.stableId,
-                    StableIdGroup = item.StableIdGroup,
                     DateAdded = DateTime.UtcNow,
                     EntityVersion = version,
                 };
@@ -144,13 +142,13 @@ namespace Codex.ElasticSearch
             return item.Status == (int)HttpStatusCode.Created;
         }
 
-        public async Task<IStableIdReservation> ReserveIds(SearchType searchType, int stableIdGroup)
+        public async Task<IStableIdReservation> ReserveIds(SearchType searchType)
         {
             string reservationId = Guid.NewGuid().ToString();
             var response = await this.service.UseClient(context =>
             {
                 var client = context.Client;
-                string stableIdMarkerId = GetStableIdMarkerId(searchType, stableIdGroup);
+                string stableIdMarkerId = searchType.IndexName;
                 return client.UpdateAsync<IStableIdMarker, IStableIdMarker>(stableIdMarkerId, 
                     ud => ud
                     .Index(entityStore.IndexName)
@@ -171,11 +169,6 @@ namespace Codex.ElasticSearch
             return stableIdMarkerDocument.PendingReservations.Where(r => r.ReservationId == reservationId).Single();
         }
 
-        private static string GetStableIdMarkerId(SearchType searchType, int stableIdGroup)
-        {
-            return $"{searchType.IndexName}#{stableIdGroup}";
-        }
-
         private static string GetRegistrationUid(SearchType searchType, string entityUid)
         {
             return $"{searchType.IndexName}:{entityUid}";
@@ -183,15 +176,13 @@ namespace Codex.ElasticSearch
 
         private class ReservationNode
         {
-            public readonly int StableIdGroup;
             public readonly IStableIdReservation IdReservation;
             private readonly HashSet<int> remainingIds;
             private int committedIdCount;
             public ReservationNode Next;
 
-            public ReservationNode(int stableIdGroup, IStableIdReservation idReservation, ReservationNode next)
+            public ReservationNode(IStableIdReservation idReservation, ReservationNode next)
             {
-                StableIdGroup = stableIdGroup;
                 IdReservation = idReservation;
                 Next = next;
                 remainingIds = new HashSet<int>(idReservation.ReservedIds);
@@ -267,19 +258,18 @@ namespace Codex.ElasticSearch
         {
             private readonly ElasticSearchIdRegistry idRegistry;
             public readonly SearchType SearchType;
-            private readonly ReservationNode[] groupReservationNodes;
-            private readonly ConcurrentDictionary<int, Box<Lazy<Task<ReservationNode>>>> reservationTasks = new ConcurrentDictionary<int, Box<Lazy<Task<ReservationNode>>>>();
+            private ReservationNode indexReservationNode = null;
+            private Lazy<Task<ReservationNode>> reservationTask;
 
             public IndexIdRegistry(ElasticSearchIdRegistry idRegistry, SearchType searchType)
             {
                 this.idRegistry = idRegistry;
                 this.SearchType = searchType;
-                this.groupReservationNodes = new ReservationNode[StoredFilterUtilities.StableIdGroupMaxValue];
             }
 
-            public async ValueTask<(ReservationNode node, int stableId)> GetReservationNodeAndStableId(int stableIdGroup)
+            public async ValueTask<(ReservationNode node, int stableId)> GetReservationNodeAndStableId()
             {
-                var node = groupReservationNodes[stableIdGroup];
+                var node = indexReservationNode;
                 if (node != null)
                 {
                     if (node.TryTakeId(out var reservedNode, out var stableId))
@@ -288,8 +278,7 @@ namespace Codex.ElasticSearch
                     }
                 }
 
-                var lazyReservationNodeBox = reservationTasks.GetOrAdd(stableIdGroup, new Lazy<Task<ReservationNode>>(() => CreateReservationNode(stableIdGroup)));
-                var lazyReservation = lazyReservationNodeBox.Value;
+                var lazyReservation = ThreadingUtilities.CompareSet(ref reservationTask, new Lazy<Task<ReservationNode>>(() => CreateReservationNode()), null);
 
                 while (true)
                 {
@@ -300,8 +289,8 @@ namespace Codex.ElasticSearch
                     }
                     else
                     {
-                        lazyReservation = Interlocked.CompareExchange(ref lazyReservationNodeBox.Value,
-                            new Lazy<Task<ReservationNode>>(() => CreateReservationNode(stableIdGroup, next: node)),
+                        lazyReservation = ThreadingUtilities.CompareSet(ref reservationTask,
+                            new Lazy<Task<ReservationNode>>(() => CreateReservationNode(next: node)),
                             lazyReservation);
                     }
                 }
@@ -309,24 +298,24 @@ namespace Codex.ElasticSearch
                 throw new Exception("Unreachable");
             }
 
-            private async Task<ReservationNode> CreateReservationNode(int stableIdGroup, ReservationNode next = null)
+            private async Task<ReservationNode> CreateReservationNode(ReservationNode next = null)
             {
-                var reservation = await idRegistry.ReserveIds(SearchType, stableIdGroup);
+                var reservation = await idRegistry.ReserveIds(SearchType);
 
-                next = await CompletePendingReservations(stableIdGroup, next, finalizationUnusedIds: null);
+                next = await CompletePendingReservations(next, finalizationUnusedIds: null);
 
-                var node = new ReservationNode(stableIdGroup, reservation, next);
-                groupReservationNodes[stableIdGroup] = node;
+                var node = new ReservationNode(reservation, next);
+                indexReservationNode = node;
                 return node;
             }
 
-            private async Task<ReservationNode> CompletePendingReservations(int stableIdGroup, ReservationNode node, List<int> finalizationUnusedIds)
+            private async Task<ReservationNode> CompletePendingReservations(ReservationNode node, List<int> finalizationUnusedIds)
             {
                 List<string> completedReservations = null;
                 node = node?.CollectCompletedReservationsAndGetNextUncompleted(ref completedReservations, finalizationUnusedIds: finalizationUnusedIds);
                 if (completedReservations != null)
                 {
-                    await idRegistry.CompleteReservations(SearchType, stableIdGroup, completedReservations, unusedIds: finalizationUnusedIds);
+                    await idRegistry.CompleteReservations(SearchType, completedReservations, unusedIds: finalizationUnusedIds);
                 }
 
                 return node;
@@ -334,13 +323,10 @@ namespace Codex.ElasticSearch
 
             public async Task FinalizeAsync()
             {
-                for (int stableIdGroup = 0; stableIdGroup < groupReservationNodes.Length; stableIdGroup++)
+                var reservationNode = indexReservationNode;
+                if (reservationNode != null)
                 {
-                    var reservationNode = groupReservationNodes[stableIdGroup];
-                    if (reservationNode != null)
-                    {
-                        await CompletePendingReservations(stableIdGroup, reservationNode, finalizationUnusedIds: new List<int>());
-                    }
+                    await CompletePendingReservations(reservationNode, finalizationUnusedIds: new List<int>());
                 }
             }
         }

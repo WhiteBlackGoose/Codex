@@ -105,16 +105,25 @@ namespace Codex
         DateTime DateUpdated { get; set; }
 
         /// <summary>
+        /// The name of the stored filter
+        /// </summary>
+        [SearchBehavior(SearchBehavior.Term)]
+        string Name { get; set; }
+
+        /// <summary>
         /// The name of the index to which the stored filter applies
         /// </summary>
         [SearchBehavior(SearchBehavior.Term)]
         string IndexName { get; }
 
         /// <summary>
-        /// Map from stored filter groups to corresponding stored filter bit set
+        /// Stored filter bit set
         /// </summary>
         [SearchBehavior(SearchBehavior.None)]
-        IGroupedStoredFilterIds StableIds { get; }
+        byte[] StableIds { get; }
+
+        [SearchBehavior(SearchBehavior.None)]
+        IReadOnlyList<IChildFilterReference> Children { get; }
 
         /// <summary>
         /// The hash of <see cref="Filter"/>
@@ -126,6 +135,19 @@ namespace Codex
         /// The count of elements matched by <see cref="Filter"/>
         /// </summary>
         int Cardinality { get; }
+    }
+
+    public interface IChildFilterReference
+    {
+        /// <summary>
+        /// The <see cref="ISearchEntity.Uid"/> of the child filter
+        /// </summary>
+        string ChildUid { get; }
+
+        /// <summary>
+        /// The <see cref="IStoredFilter.StableIds"/> of the child filter
+        /// </summary>
+        byte[] ChildStableIds { get; }
     }
 
     [AdapterType]

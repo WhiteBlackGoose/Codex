@@ -33,11 +33,6 @@ namespace Codex.ElasticSearch
 
         string Uid { get; }
 
-        /// <summary>
-        /// The group to reserve the stable id in
-        /// </summary>
-        int StableIdGroup { get; }
-
         int StableId { get; set; }
 
         SearchType SearchType { get; }

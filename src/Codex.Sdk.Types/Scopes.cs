@@ -43,7 +43,7 @@ namespace Codex
         /// NOTE: This value is derived from <see cref="RoutingKey"/>
         /// </summary>
         [Include(ObjectStage.Search)]
-        int StableIdGroup { get; set; }
+        int RoutingGroup { get; set; }
 
         /// <summary>
         /// The per-group stable identity
@@ -56,7 +56,7 @@ namespace Codex
         /// Value used for sorting (this should be computed based other values in the entity i.e. {FileName}/{RepoRelativePath} for files)
         /// The goal is so that similar entities should be clustered together to allow maximum compression
         /// </summary>
-        [SearchBehavior(SearchBehavior.Term)]
+        [SearchBehavior(SearchBehavior.NormalizedKeyword)]
         [Include(ObjectStage.Search)]
         string SortKey { get; set; }
 

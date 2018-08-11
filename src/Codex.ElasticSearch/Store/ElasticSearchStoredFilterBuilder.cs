@@ -17,6 +17,7 @@ using Codex.ObjectModel;
 using static Codex.ElasticSearch.StoredFilterUtilities;
 using Codex.ElasticSearch.Formats;
 using System.Diagnostics;
+using Codex.Serialization;
 
 namespace Codex.ElasticSearch
 {
@@ -25,32 +26,31 @@ namespace Codex.ElasticSearch
         public string IndexName => EntityStore.IndexName;
         public ElasticSearchStore Store => EntityStore.Store;
         public readonly ElasticSearchEntityStore EntityStore;
-        public readonly string FilterName;
+        public readonly string BaseFilterName;
         public readonly string IntermediateFilterSuffix;
 
         private const int BatchSize = 10000;
 
-        private readonly StableIdGroupBuild[] ShardStates;
+        private readonly StableIdBuild StableIdBuildState;
         private ConcurrentQueue<Task> storedFilterUpdateTasks = new ConcurrentQueue<Task>();
         private readonly string[] unionFilterNames;
 
         public ElasticSearchStoredFilterBuilder(ElasticSearchEntityStore entityStore, string filterName, params string[] unionFilterNames)
         {
             EntityStore = entityStore;
-            FilterName = filterName;
+            BaseFilterName = filterName;
             this.unionFilterNames = unionFilterNames;
 
             IntermediateFilterSuffix = Guid.NewGuid().ToString();
 
-            ShardStates = Enumerable.Range(0, StableIdGroupMaxValue).Select(stableIdGroupNumber => CreateShardState(stableIdGroupNumber)).ToArray();
+            StableIdBuildState = CreateStableIdBuild();
         }
 
-        private StableIdGroupBuild CreateShardState(int group)
+        private StableIdBuild CreateStableIdBuild()
         {
-            var shardState = new StableIdGroupBuild()
+            var shardState = new StableIdBuild()
             {
                 IndexName = IndexName,
-                Group = group,
                 Queue = new BatchQueue<int>(BatchSize)
             };
 
@@ -59,15 +59,14 @@ namespace Codex.ElasticSearch
 
         public void Add(ElasticEntityRef entityRef)
         {
-            var shardState = ShardStates[entityRef.StableIdGroup];
-            if (shardState.AddAndTryGetBatch(entityRef, out var batch))
+            if (StableIdBuildState.AddAndTryGetBatch(entityRef, out var batch))
             {
                 storedFilterUpdateTasks.Enqueue(Store.Service.UseClient(async context =>
                 {
                     var client = context.Client;
-                    using (await shardState.Mutex.AcquireAsync())
+                    using (await StableIdBuildState.Mutex.AcquireAsync())
                     {
-                        shardState.AddIds(batch);
+                        StableIdBuildState.AddIds(batch);
 
                         return None.Value;
                     }
@@ -97,21 +96,19 @@ namespace Codex.ElasticSearch
             var filter = new StoredFilter()
             {
                 DateUpdated = DateTime.UtcNow,
-                Uid = GetFilterId(FilterName, IndexName),
+                Name = GetFilterName(BaseFilterName, IndexName),
                 IndexName = IndexName,
-                StableIds = new GroupedStoredFilterIds()
             };
 
-            foreach (var shardState in ShardStates)
-            {
-                shardState.Complete();
+            StableIdBuildState.Complete();
 
-                if (shardState.RoaringFilter != null)
-                {
-                    filter.StableIds[shardState.Group] = shardState.RoaringFilter.GetBytes();
-                    filter.Cardinality += shardState.Queue.TotalCount;
-                }
+            if (StableIdBuildState.RoaringFilter != null)
+            {
+                filter.StableIds = StableIdBuildState.RoaringFilter.GetBytes();
+                filter.Cardinality += StableIdBuildState.Queue.TotalCount;
             }
+
+            filter.PopulateContentIdAndSize();
 
             await UpdateFilters(filter);
 
@@ -126,9 +123,8 @@ namespace Codex.ElasticSearch
             });
         }
 
-        private class StableIdGroupBuild
+        private class StableIdBuild
         {
-            public int Group;
             public string IndexName;
             public BatchQueue<int> Queue;
             public SemaphoreSlim Mutex = TaskUtilities.CreateMutex();
@@ -183,19 +179,17 @@ namespace Codex.ElasticSearch
     public struct ElasticEntityRef
     {
         public string Uid;
-        public int StableIdGroup;
         public int StableId;
 
         public ElasticEntityRef(ISearchEntity entity)
         {
             Uid = entity.Uid;
-            StableIdGroup = entity.StableIdGroup;
             StableId = entity.StableId;
         }
 
         public override string ToString()
         {
-            return $"{Uid}:{StableIdGroup}#{StableId}";
+            return $"{Uid}:{StableId}";
         }
     }
 }

@@ -73,6 +73,10 @@ namespace Codex.ElasticSearch.Utilities
                     case SearchBehavior.None:
                         return null;
                     case SearchBehavior.Term:
+                        if (propertyInfo.PropertyType == typeof(string))
+                        {
+                            return new CodexKeywordAttribute();
+                        }
                         return PropertyWalkerInferProperty(propertyInfo);
                     case SearchBehavior.NormalizedKeyword:
                         return new NormalizedKeywordAttribute();

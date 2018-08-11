@@ -140,7 +140,7 @@ namespace Codex.ElasticSearch
             public ElasticSearchEntityStore EntityStore { get; set; }
             public ElasticSearchStoredFilterBuilder[] AdditionalStoredFilters { get; set; }
 
-            public int StableIdGroup => Entity.StableIdGroup;
+            public int StableIdGroup => Entity.RoutingGroup;
             public string Uid => Entity.Uid;
 
             int IStableIdItem.StableId
@@ -166,7 +166,6 @@ namespace Codex.ElasticSearch
             {
                 StableId = stableId;
                 Entity.StableId = stableId;
-                Entity.EntityVersion = StoredFilterUtilities.ComputeVersion(StableIdGroup, stableId);
             }
 
             public override string ToString()

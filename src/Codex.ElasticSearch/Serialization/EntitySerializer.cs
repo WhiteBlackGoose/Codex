@@ -420,7 +420,7 @@ namespace Codex.Serialization
                     entity.SerializeEntityTo(encoderContext.Writer, stage: ObjectStage.Index);
                     entity.EntityContentId = encoderContext.ToBase64HashString();
                     entity.EntityContentSize = encoderContext.StringBuilder.Length;
-                    entity.StableIdGroup = entity.GetStableIdGroup();
+                    entity.RoutingGroup = entity.GetStableIdGroup();
 
                     if (entity.Uid == null)
                     {

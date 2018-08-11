@@ -22,24 +22,20 @@ namespace Codex.ElasticSearch
             return storedFilterStore.StoreAsync<StoredFilter>(storedFilters, updateMergeFunction: null);
         }
 
-        public static string GetFilterId(string baseFilterId, string indexName)
+        public static string GetFilterName(string baseFilterId, string indexName)
         {
-            return $"{indexName}|{baseFilterId}";
+            return $"{indexName}\\{baseFilterId}";
         }
 
         public static int ExtractStableId(long version)
         {
-            var encodedStableId = MaxVersion - version;
-            return (int)(encodedStableId >> ByteBitCount);
+            return (int)(MaxVersion - version);
         }
 
-        public static long ComputeVersion(int stableIdGroup, int stableId)
+        public static long ComputeVersion(int stableId)
         {
-            Contract.Assert(stableIdGroup >= 0 && stableIdGroup < StableIdGroupMaxValue);
-            long encodedStableId =  (byte)stableIdGroup | (((long)stableId) << ByteBitCount);
-
             // Version needs to be decrease in order to keep documents from being replaced
-            return MaxVersion - encodedStableId;
+            return MaxVersion - stableId;
         }
 
         public static int GetStableIdGroup(this ISearchEntity entity)
@@ -61,6 +57,7 @@ namespace Codex.ElasticSearch
             }
             else
             {
+
                 return uid.Substring(uid.LastIndexOf('#'));
             }
 

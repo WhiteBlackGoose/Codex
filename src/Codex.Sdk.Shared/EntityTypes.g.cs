@@ -117,6 +117,8 @@ namespace Codex.ObjectModel {
             typeMapping.Add(typeof(RegisteredEntity), typeof(Codex.IRegisteredEntity));
             typeMapping.Add(typeof(Codex.IStoredFilter), typeof(StoredFilter));
             typeMapping.Add(typeof(StoredFilter), typeof(Codex.IStoredFilter));
+            typeMapping.Add(typeof(Codex.IChildFilterReference), typeof(ChildFilterReference));
+            typeMapping.Add(typeof(ChildFilterReference), typeof(Codex.IChildFilterReference));
             typeMapping.Add(typeof(Codex.IGroupedStoredFilterIds), typeof(GroupedStoredFilterIds));
             typeMapping.Add(typeof(GroupedStoredFilterIds), typeof(Codex.IGroupedStoredFilterIds));
             typeMapping.Add(typeof(Codex.IDefinitionSearchModel), typeof(DefinitionSearchModel));
@@ -3345,7 +3347,7 @@ namespace Codex.ObjectModel {
         
         private System.Nullable<long> m_EntityVersion;
         
-        private int m_StableIdGroup;
+        private int m_RoutingGroup;
         
         private int m_StableId;
         
@@ -3415,12 +3417,12 @@ namespace Codex.ObjectModel {
         /// determined by this value)
         /// NOTE: This value is derived from <see cref="P:Codex.ISearchEntity.RoutingKey" />
         /// </summary>
-        public virtual int StableIdGroup {
+        public virtual int RoutingGroup {
             get {
-                return this.m_StableIdGroup;
+                return this.m_RoutingGroup;
             }
             set {
-                this.m_StableIdGroup = value;
+                this.m_RoutingGroup = value;
             }
         }
         
@@ -3469,7 +3471,7 @@ namespace Codex.ObjectModel {
             this.m_EntityContentId = ((Codex.ISearchEntity)(value)).EntityContentId;
             this.m_EntityContentSize = ((Codex.ISearchEntity)(value)).EntityContentSize;
             this.m_EntityVersion = ((Codex.ISearchEntity)(value)).EntityVersion;
-            this.m_StableIdGroup = ((Codex.ISearchEntity)(value)).StableIdGroup;
+            this.m_RoutingGroup = ((Codex.ISearchEntity)(value)).RoutingGroup;
             this.m_StableId = ((Codex.ISearchEntity)(value)).StableId;
             this.m_SortKey = ((Codex.ISearchEntity)(value)).SortKey;
             this.m_RoutingKey = ((Codex.ISearchEntity)(value)).RoutingKey;
@@ -3781,9 +3783,13 @@ namespace Codex.ObjectModel {
         
         private System.DateTime m_DateUpdated;
         
+        private string m_Name;
+        
         private string m_IndexName;
         
-        private GroupedStoredFilterIds m_StableIds;
+        private byte[] m_StableIds;
+        
+        private System.Collections.Generic.List<ChildFilterReference> m_Children = new System.Collections.Generic.List<ChildFilterReference>();
         
         private string m_FilterHash;
         
@@ -3813,6 +3819,18 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
+        /// The name of the stored filter
+        /// </summary>
+        public virtual string Name {
+            get {
+                return this.m_Name;
+            }
+            set {
+                this.m_Name = value;
+            }
+        }
+        
+        /// <summary>
         /// The name of the index to which the stored filter applies
         /// </summary>
         public virtual string IndexName {
@@ -3825,23 +3843,29 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// Map from stored filter groups to corresponding stored filter bit set
+        /// Stored filter bit set
         /// </summary>
-        Codex.IGroupedStoredFilterIds Codex.IStoredFilter.StableIds {
-            get {
-                return this.StableIds;
-            }
-        }
-        
-        /// <summary>
-        /// Map from stored filter groups to corresponding stored filter bit set
-        /// </summary>
-        public virtual GroupedStoredFilterIds StableIds {
+        public virtual byte[] StableIds {
             get {
                 return this.m_StableIds;
             }
             set {
                 this.m_StableIds = value;
+            }
+        }
+        
+        System.Collections.Generic.IReadOnlyList<Codex.IChildFilterReference> Codex.IStoredFilter.Children {
+            get {
+                return this.Children;
+            }
+        }
+        
+        public virtual System.Collections.Generic.List<ChildFilterReference> Children {
+            get {
+                return this.m_Children;
+            }
+            set {
+                this.m_Children = value;
             }
         }
         
@@ -3872,11 +3896,61 @@ namespace Codex.ObjectModel {
         public virtual TTarget CopyFrom<TTarget>(Codex.IStoredFilter value)
             where TTarget : StoredFilter {
             this.m_DateUpdated = ((Codex.IStoredFilter)(value)).DateUpdated;
+            this.m_Name = ((Codex.IStoredFilter)(value)).Name;
             this.m_IndexName = ((Codex.IStoredFilter)(value)).IndexName;
-            this.m_StableIds = EntityUtilities.NullOrCopy(value.StableIds, v => new GroupedStoredFilterIds().CopyFrom<GroupedStoredFilterIds>(v));;
+            this.m_StableIds = ((Codex.IStoredFilter)(value)).StableIds;
+            this.m_Children = new System.Collections.Generic.List<ChildFilterReference>(System.Linq.Enumerable.Select(((Codex.IStoredFilter)(value)).Children, v => EntityUtilities.NullOrCopy(v, _v => new ChildFilterReference().CopyFrom<ChildFilterReference>(_v))));
             this.m_FilterHash = ((Codex.IStoredFilter)(value)).FilterHash;
             this.m_Cardinality = ((Codex.IStoredFilter)(value)).Cardinality;
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
+            return ((TTarget)(this));
+        }
+    }
+    
+    [Codex.SerializationInterfaceAttribute(typeof(Codex.IChildFilterReference))]
+    public partial class ChildFilterReference : Codex.EntityBase, Codex.IChildFilterReference {
+        
+        private string m_ChildUid;
+        
+        private byte[] m_ChildStableIds;
+        
+        public ChildFilterReference() {
+            Initialize();
+        }
+        
+        public ChildFilterReference(Codex.IChildFilterReference value) {
+            Initialize();
+            this.CopyFrom<ChildFilterReference>(value);
+        }
+        
+        /// <summary>
+        /// The <see cref="P:Codex.ISearchEntity.Uid" /> of the child filter
+        /// </summary>
+        public virtual string ChildUid {
+            get {
+                return this.m_ChildUid;
+            }
+            set {
+                this.m_ChildUid = value;
+            }
+        }
+        
+        /// <summary>
+        /// The <see cref="P:Codex.IStoredFilter.StableIds" /> of the child filter
+        /// </summary>
+        public virtual byte[] ChildStableIds {
+            get {
+                return this.m_ChildStableIds;
+            }
+            set {
+                this.m_ChildStableIds = value;
+            }
+        }
+        
+        public virtual TTarget CopyFrom<TTarget>(Codex.IChildFilterReference value)
+            where TTarget : ChildFilterReference {
+            this.m_ChildUid = ((Codex.IChildFilterReference)(value)).ChildUid;
+            this.m_ChildStableIds = ((Codex.IChildFilterReference)(value)).ChildStableIds;
             return ((TTarget)(this));
         }
     }
@@ -5583,6 +5657,7 @@ namespace Codex.Framework.Types {
     using ProjectFileScopeEntity = Codex.ObjectModel.ProjectFileScopeEntity;
     using RegisteredEntity = Codex.ObjectModel.RegisteredEntity;
     using StoredFilter = Codex.ObjectModel.StoredFilter;
+    using ChildFilterReference = Codex.ObjectModel.ChildFilterReference;
     using GroupedStoredFilterIds = Codex.ObjectModel.GroupedStoredFilterIds;
     using DefinitionSearchModel = Codex.ObjectModel.DefinitionSearchModel;
     using LanguageSearchModel = Codex.ObjectModel.LanguageSearchModel;
