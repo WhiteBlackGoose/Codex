@@ -5,6 +5,7 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IncludeContentInPack>true</IncludeContentInPack>
     <Version Condition="'$(BUILD_BUILDID)' != ''">1.0.$(BUILD_BUILDID)</Version>
+    <Version Condition="'$(CodexNugetVersion)' != ''">$(CodexNugetVersion)</Version>
   </PropertyGroup>
 
   <Target Name="_IncludeDependenciesInPackage" AfterTargets="ResolveProjectReferences">
