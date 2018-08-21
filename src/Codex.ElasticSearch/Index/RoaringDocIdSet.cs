@@ -195,6 +195,12 @@ namespace Codex.ElasticSearch.Formats
             return result;
         }
 
+        internal static RoaringDocIdSet FromBytes(byte[] bytes)
+        {
+            ByteArrayDataInput input = new ByteArrayDataInput(bytes);
+            return Read(input);
+        }
+
         /**
          * {@link DocIdSet} implementation that can store documents up to 2^16-1 in a short[].
          */

@@ -409,10 +409,10 @@ namespace Codex.Serialization
             return attribute?.AllowedStages ?? ObjectStage.All;
         }
 
-        public static void PopulateContentIdAndSize<T>(this T entity)
+        public static void PopulateContentIdAndSize<T>(this T entity, bool force = false)
             where T : class, ISearchEntity
         {
-            if (entity.EntityContentId == null || entity.EntityContentSize == 0)
+            if (entity.EntityContentId == null || entity.EntityContentSize == 0 || force)
             {
                 using (var lease = Pools.EncoderContextPool.Acquire())
                 {
@@ -422,7 +422,7 @@ namespace Codex.Serialization
                     entity.EntityContentSize = encoderContext.StringBuilder.Length;
                     entity.RoutingGroup = entity.GetStableIdGroup();
 
-                    if (entity.Uid == null)
+                    if (entity.Uid == null || force)
                     {
                         entity.Uid = entity.EntityContentId + entity.GetRoutingSuffix();
                     }

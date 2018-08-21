@@ -3783,6 +3783,8 @@ namespace Codex.ObjectModel {
         
         private System.DateTime m_DateUpdated;
         
+        private string m_FullPath;
+        
         private string m_Name;
         
         private string m_IndexName;
@@ -3815,6 +3817,15 @@ namespace Codex.ObjectModel {
             }
             set {
                 this.m_DateUpdated = value;
+            }
+        }
+        
+        public virtual string FullPath {
+            get {
+                return this.m_FullPath;
+            }
+            set {
+                this.m_FullPath = value;
             }
         }
         
@@ -3896,6 +3907,7 @@ namespace Codex.ObjectModel {
         public virtual TTarget CopyFrom<TTarget>(Codex.IStoredFilter value)
             where TTarget : StoredFilter {
             this.m_DateUpdated = ((Codex.IStoredFilter)(value)).DateUpdated;
+            this.m_FullPath = ((Codex.IStoredFilter)(value)).FullPath;
             this.m_Name = ((Codex.IStoredFilter)(value)).Name;
             this.m_IndexName = ((Codex.IStoredFilter)(value)).IndexName;
             this.m_StableIds = ((Codex.IStoredFilter)(value)).StableIds;
@@ -3910,6 +3922,8 @@ namespace Codex.ObjectModel {
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IChildFilterReference))]
     public partial class ChildFilterReference : Codex.EntityBase, Codex.IChildFilterReference {
         
+        private string m_FullPath;
+        
         private string m_ChildUid;
         
         private byte[] m_ChildStableIds;
@@ -3921,6 +3935,15 @@ namespace Codex.ObjectModel {
         public ChildFilterReference(Codex.IChildFilterReference value) {
             Initialize();
             this.CopyFrom<ChildFilterReference>(value);
+        }
+        
+        public virtual string FullPath {
+            get {
+                return this.m_FullPath;
+            }
+            set {
+                this.m_FullPath = value;
+            }
         }
         
         /// <summary>
@@ -3949,6 +3972,7 @@ namespace Codex.ObjectModel {
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IChildFilterReference value)
             where TTarget : ChildFilterReference {
+            this.m_FullPath = ((Codex.IChildFilterReference)(value)).FullPath;
             this.m_ChildUid = ((Codex.IChildFilterReference)(value)).ChildUid;
             this.m_ChildStableIds = ((Codex.IChildFilterReference)(value)).ChildStableIds;
             return ((TTarget)(this));

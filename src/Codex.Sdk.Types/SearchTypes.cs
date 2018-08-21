@@ -104,6 +104,8 @@ namespace Codex
         /// </summary>
         DateTime DateUpdated { get; set; }
 
+        string FullPath { get; set; }
+
         /// <summary>
         /// The name of the stored filter
         /// </summary>
@@ -139,6 +141,8 @@ namespace Codex
 
     public interface IChildFilterReference
     {
+        string FullPath { get; }
+
         /// <summary>
         /// The <see cref="ISearchEntity.Uid"/> of the child filter
         /// </summary>

@@ -39,7 +39,7 @@ namespace Codex.ElasticSearch
         public abstract Task InitializeAsync();
     }
 
-    public class ElasticSearchEntityStore<T> : ElasticSearchEntityStore, IStore<T>
+    public class ElasticSearchEntityStore<T> : ElasticSearchEntityStore, IStore<T>, IEntityStore<T>
         where T : class, ISearchEntity
     {
         internal readonly SearchType<T> EntitySearchType;
@@ -224,6 +224,20 @@ namespace Codex.ElasticSearch
         public Task StoreAsync(IReadOnlyList<T> values)
         {
             return StoreAsync<T>(values, updateMergeFunction: null);
+        }
+
+        public async Task<IReadOnlyList<T>> GetAsync(IReadOnlyList<string> uids)
+        {
+            var result = await Store.Service.UseClient(async context =>
+            {
+                var response = await context.Client
+                    .MultiGetAsync(mg => mg.GetMany<T>(uids, (g, uid) => g.Routing(GetRouting(uid))).Index(IndexName))
+                    .ThrowOnFailure();
+
+                return response.Hits.Select(g => (T)g.Source).ToList();
+            });
+
+            return result.Result;
         }
     }
 }
