@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Codex\Codex.csproj" />
+    <ProjectReference Include="..\Codex.Ingester\Codex.Ingester.csproj" />
   </ItemGroup>
   <Import Project="NugetContent.targets" />
   <Import Project="$(SrcRoot)\Common.props" />

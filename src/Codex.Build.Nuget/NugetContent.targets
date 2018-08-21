@@ -9,7 +9,7 @@
 
   <Target Name="_IncludeDependenciesInPackage" AfterTargets="ResolveProjectReferences">
     <ItemGroup>
-      <Content Include="$(CommonOutputDirectory)\Codex\*.*" />
+      <Content Include="$(CommonOutputDirectory)\Codex.Ingester\*.*" />
     </ItemGroup>
     
     <Message Importance="high" Text="_IncludeDependenciesInPackage Ran" />
