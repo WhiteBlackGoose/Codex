@@ -23,11 +23,7 @@ namespace Codex.ElasticSearch.Tests
         {
             var filter = new StoredFilter()
             {
-                StableIds = new GroupedStoredFilterIds()
-                {
-                    { 0, new byte[] { 0, 2, 43 } },
-                    { 12, new byte[] { 0, 2, 43 } }
-                }
+                StableIds = new byte[] { 0, 2, 43 },
             };
 
             var filterResult = filter.SerializeEntity();
