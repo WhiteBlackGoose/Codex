@@ -14,6 +14,8 @@
     </ItemGroup>
     
     <Message Importance="high" Text="_IncludeDependenciesInPackage Ran" />
+    <Message Importance="high" Text="CodexNugetVersion: '$(CodexNugetVersion)'" />
+    <Message Importance="high" Text="Version: '$(Version)'" />
     <Message Importance="high" Text="Content: %(Content.Identity)" />
   </Target>
   
