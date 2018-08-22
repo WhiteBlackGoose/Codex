@@ -4,8 +4,7 @@
     <ContentTargetFolders>build</ContentTargetFolders>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IncludeContentInPack>true</IncludeContentInPack>
-    <Version Condition="'$(BUILD_BUILDID)' != ''">1.0.$(BUILD_BUILDID)</Version>
-    <Version Condition="'$(CodexNugetVersion)' != ''">$(CodexNugetVersion)</Version>
+    <PackageVersion Condition="'$(CodexNugetVersion)' != ''">$(CodexNugetVersion)</PackageVersion>
   </PropertyGroup>
 
   <Target Name="_IncludeDependenciesInPackage" AfterTargets="ResolveProjectReferences">
@@ -15,6 +14,7 @@
     
     <Message Importance="high" Text="_IncludeDependenciesInPackage Ran" />
     <Message Importance="high" Text="CodexNugetVersion: '$(CodexNugetVersion)'" />
+    <Message Importance="high" Text="PackageVersion: '$(PackageVersion)'" />
     <Message Importance="high" Text="Version: '$(Version)'" />
     <Message Importance="high" Text="Content: %(Content.Identity)" />
   </Target>
