@@ -136,22 +136,25 @@ namespace Codex.Analysis
                 });
             }
 
-            await CreateMetadataFile(repoProject, "ReferenceProjects.xml", () =>
-                {
-                    return Element("ReferenceProjects").ForEach(ReferencedProjects.Values
-                        .OrderBy(rp => rp.ProjectId, StringComparer.OrdinalIgnoreCase)
-                        .ThenBy(rp => rp.DisplayName, StringComparer.OrdinalIgnoreCase), (el, project) =>
+            if (ReferencedProjects.Count != 0)
+            {
+                await CreateMetadataFile(repoProject, "ReferenceProjects.xml", () =>
                     {
-                        ReferenceSymbol fileRef = project.Definitions.Count == 0 ? null : CreateFileReferenceSymbol(
-                                    GetMetadataFilePath(GetProjectReferenceSymbolsPath(project.ProjectId)),
-                                    Project.ProjectId);
-                        el.AddElement("Project", projElement =>
-                            projElement
-                            .AddAttribute("ReferenceCount", project.Definitions.Count.ToString(), fileRef)
-                            .AddAttribute("Name", project.ProjectId)
-                            .AddAttribute("FullName", project.DisplayName));
+                        return Element("ReferenceProjects").ForEach(ReferencedProjects.Values
+                            .OrderBy(rp => rp.ProjectId, StringComparer.OrdinalIgnoreCase)
+                            .ThenBy(rp => rp.DisplayName, StringComparer.OrdinalIgnoreCase), (el, project) =>
+                        {
+                            ReferenceSymbol fileRef = project.Definitions.Count == 0 ? null : CreateFileReferenceSymbol(
+                                        GetMetadataFilePath(GetProjectReferenceSymbolsPath(project.ProjectId)),
+                                        Project.ProjectId);
+                            el.AddElement("Project", projElement =>
+                                projElement
+                                .AddAttribute("ReferenceCount", project.Definitions.Count.ToString(), fileRef)
+                                .AddAttribute("Name", project.ProjectId)
+                                .AddAttribute("FullName", project.DisplayName));
+                        });
                     });
-                });
+            }
         }
 
         private string GetProjectReferenceSymbolsPath(string projectId)

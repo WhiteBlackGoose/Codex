@@ -88,7 +88,7 @@
       <CodexRepoRoot Condition="'$(CodexRepoRoot)' == ''">$(MSBuildProjectFullPath)</CodexRepoRoot>
     </PropertyGroup>
 
-    <Exec Command='$(CodexExePath) index -save "$(CodexProjectExtractionDirectory)" -projectMode -ca "$(CodexCompilerArgumentsFile)" -p "$(MSBuildProjectFullPath)" -n "$(CodexRepoName)"' />
+    <Exec Command='$(CodexExePath) index -save "$(CodexProjectExtractionDirectory)" -projectMode -ca "$(CodexCompilerArgumentsFile)" -p "$(CodexRepoRoot)" -n "$(CodexRepoName)"' />
   </Target>
 
 </Project>
