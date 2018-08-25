@@ -650,7 +650,7 @@ namespace Codex.Application
                                 new BinaryFileSystemFilter(new string[] { ".exe", ".dll", "*.blob", ".db" })
                                 ))
                         {
-                            DisableEnumeration = disableEnumeration || file.Length != 0
+                            DisableEnumeration = projectMode || disableEnumeration || file.Length != 0
                         }));
 
                 var includedSolutions = !string.IsNullOrEmpty(solutionPath) ? new string[] { Path.GetFullPath(solutionPath) } : null;

@@ -19,6 +19,8 @@
     $(TargetName) - the location of the output assembly of the compiler. Extraction directory is $(OutDir)\$(TargetName).cdx
     $(RunCodex) - specifies whether to run Codex.exe on extracted command line arguments
     $(CodexProjectExtractionRoot) - Optional extraction root
+    $(CodexRepoRoot) - the location of the root of the repository
+    @(IntermediateAssembly) - the location of the intermediate output assembly
   
     Common:
     set CustomBeforeMicrosoftCommonTargets=
@@ -45,9 +47,8 @@
 
   <Target Name="ComputeCodexExtractionRoot" BeforeTargets="BeforeCompile">
     <PropertyGroup>
-      <CodexProjectName>$(MSBuildProjectName)</CodexProjectName>
-      <_CodexTargetPath>$(OutDir)\$(TargetName).cdx</_CodexTargetPath>
-      <CodexProjectExtractionDirectory Condition="'$(CodexProjectExtractionDirectory)' == '' AND '$(CodexProjectExtractionRoot)' != ''">$(CodexProjectExtractionRoot)\$(CodexProjectName)\.$(_CodexTargetPath.GetHashCode().ToString('X'))</CodexProjectExtractionDirectory>
+      <_CodexTargetFingerprint>@(IntermediateAssembly)|$(OutDir)\$(TargetName)</_CodexTargetFingerprint>
+      <CodexProjectExtractionDirectory>$(CodexProjectExtractionRoot)\$(TargetName).$(_CodexTargetFingerprint.GetHashCode().ToString('X'))</CodexProjectExtractionDirectory>
       <CodexProjectExtractionDirectory Condition="'$(CodexProjectExtractionDirectory)' == ''">$(OutDir)\$(TargetName).cdx</CodexProjectExtractionDirectory>
       <CodexCompilerArgumentsFile Condition="'$(Language)' == 'C#'">$(CodexProjectExtractionDirectory)\csc.args.txt</CodexCompilerArgumentsFile>
       <CodexCompilerArgumentsFile Condition="'$(Language)' == 'VB'">$(CodexProjectExtractionDirectory)\vbc.args.txt</CodexCompilerArgumentsFile>
@@ -84,6 +85,7 @@
     <PropertyGroup>
       <CodexExePath Condition="'$(CodexExePath)' == ''">$(MSBuildThisFileDirectory)Codex.exe</CodexExePath>
       <CodexRepoName Condition="'$(CodexRepoName)' == ''">$(MSBuildProjectName)</CodexRepoName>
+      <CodexRepoRoot Condition="'$(CodexRepoRoot)' == ''">$(MSBuildProjectFullPath)</CodexRepoRoot>
     </PropertyGroup>
 
     <Exec Command='$(CodexExePath) index -save "$(CodexProjectExtractionDirectory)" -projectMode -ca "$(CodexCompilerArgumentsFile)" -p "$(MSBuildProjectFullPath)" -n "$(CodexRepoName)"' />
