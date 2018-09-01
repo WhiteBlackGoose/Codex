@@ -16,19 +16,20 @@ namespace Codex.ElasticSearch.Store
         public readonly IEntityStore<IStoredFilter> Store;
         private const int HashPathSegmentCount = 3;
 
-        public Task AddStoredFilter(string key, string name, IStoredFilter filter)
+        public StoredFilterManager(IEntityStore<IStoredFilter> store)
         {
-            return UpdateStoredFilter(key, name, filter, UpdateMode.Add);
+            Store = store;
         }
 
-        public Task RemoveStoredFilter(string key, string name, IStoredFilter filter)
-        {
-            return UpdateStoredFilter(key, name, filter, UpdateMode.Remove);
-        }
-
-        public Task ReplaceStoredFilter(string key, string name, IStoredFilter filter)
+        public Task AddStoredFilterAsync(string key, string name, IStoredFilter filter)
         {
             return UpdateStoredFilter(key, name, filter, UpdateMode.Replace);
+        }
+
+        public Task RemoveStoredFilterAsync(string key, string name)
+        {
+            IStoredFilter filter = null;
+            return UpdateStoredFilter(key, name, filter, UpdateMode.Remove);
         }
 
         private enum UpdateMode
@@ -49,6 +50,7 @@ namespace Codex.ElasticSearch.Store
             string childFullPath = path;
             IStoredFilter child = filter;
             UpdateMode mode = initialMode;
+            List<StoredFilter> modifiedAncestorChain = new List<StoredFilter>();
             foreach (StoredFilter parent in ancestorChain)
             {
                 if ((mode & UpdateMode.Remove) == UpdateMode.Remove)
@@ -61,44 +63,43 @@ namespace Codex.ElasticSearch.Store
 
                 if ((mode & UpdateMode.Add) == UpdateMode.Add)
                 {
+                    parent.IndexName = filter.IndexName;
                     AddChild(parent, child, childFullPath);
                 }
 
                 // Always need to replace going up the parent chain after initial modification
                 mode = UpdateMode.Replace;
 
-                RecomputeFilter(parent);
+                RecomputeFilter(parent, modifiedAncestorChain);
 
                 child = parent;
                 childFullPath = parent.FullPath;
             }
 
             // Update key with new stored filter
-            await Update(key, ancestorChain);
+            await Update(key, modifiedAncestorChain);
         }
 
         public static string GetHashPathFromName(string name)
         {
             name = name.ToLowerInvariant();
             var hash = IndexingUtilities.ComputeFullHash(name);
-            var path = Path.Combine(Enumerable.Range(1, HashPathSegmentCount).Select(i => i == HashPathSegmentCount ? name : hash.GetByte(i).ToString("X")).ToArray());
+            var path = Path.Combine(Enumerable.Range(1, HashPathSegmentCount).Select(i => i == HashPathSegmentCount ? name : hash.GetByte(i).ToString("X").ToLowerInvariant()).ToArray());
             return path;
         }
 
-        public void RecomputeFilter(StoredFilter filter)
+        public void RecomputeFilter(StoredFilter filter, List<StoredFilter> modifiedStoredFilters)
         {
-            var filterBuilder = new RoaringDocIdSet.Builder();
+            var priorUid = filter.Uid;
+            var priorContentId = filter.EntityContentId;
 
-            foreach (var id in CombineStableIds(0, filter.Children.Count, filter.Children))
-            {
-                filterBuilder.Add(id);
-            }
-
-            var stableIds = filterBuilder.Build();
-            filter.StableIds = stableIds.GetBytes();
-            filter.Cardinality = stableIds.Cardinality();
-
+            filter.ApplyStableIds(CombineStableIds(0, filter.Children.Count, filter.Children));
             filter.PopulateContentIdAndSize(force: true);
+
+            if (priorUid != filter.Uid || priorContentId != filter.EntityContentId)
+            {
+                modifiedStoredFilters.Add(filter);
+            }
         }
 
         public IEnumerable<int> CombineStableIds(int start, int length, IReadOnlyList<IChildFilterReference> children)
@@ -109,7 +110,7 @@ namespace Codex.ElasticSearch.Store
                 case 0:
                     return Enumerable.Empty<int>();
                 case 1:
-                    return RoaringDocIdSet.FromBytes(children[start].ChildStableIds).Enumerate();
+                    return RoaringDocIdSet.FromBytes(children[start].StableIds).Enumerate();
                 default:
                     return CollectionUtilities.ExclusiveInterleave(
                         CombineStableIds(start, halfLength, children),
@@ -127,8 +128,9 @@ namespace Codex.ElasticSearch.Store
         {
             parent.Children.Add(new ChildFilterReference()
             {
-                ChildStableIds = child.StableIds,
-                ChildUid = child.Uid,
+                Cardinality = child.Cardinality,
+                StableIds = child.StableIds,
+                Uid = child.Uid,
                 FullPath = childFullPath
             });
         }
@@ -148,34 +150,44 @@ namespace Codex.ElasticSearch.Store
             return false;
         }
 
-        public Task Update(string key, StoredFilter[] updatedChain)
+        public Task Update(string key, IReadOnlyList<StoredFilter> updatedChain)
         {
             var rootFilter = updatedChain.Last();
             rootFilter.Uid = key;
 
-            throw new NotImplementedException();
+            return Store.StoreAsync(updatedChain);
         }
 
         public async Task<StoredFilter[]> GetStoredFilterAncestorChainBottomUp(string key, string path)
         {
-            StoredFilter[] filters = new StoredFilter[HashPathSegmentCount + 1];
+            StoredFilter[] filters = new StoredFilter[HashPathSegmentCount];
 
             var uid = key;
             string currentPath = null;
-            for (int i = 0; i <= HashPathSegmentCount; i++)
+            for (int i = 0; i < HashPathSegmentCount; i++)
             {
-                var result = await Store.GetAsync(new[] { uid });
-                var filter = (StoredFilter)result.FirstOrDefault() ?? new StoredFilter()
+                var result = uid != null ? await Store.GetAsync(new[] { uid }) : CollectionUtilities.Empty<StoredFilter>.Array;
+                var retrievedFilter = (StoredFilter)result.FirstOrDefault();
+                var filter = retrievedFilter ?? new StoredFilter()
                 {
                     FullPath = currentPath,
                 };
 
                 filters[i] = filter;
-
-                currentPath = path.Substring(0, Math.Min(path.Length, 1 + i * 2));
+                
+                currentPath = path.Substring(0, Math.Min(path.Length, (i * 3) + 2 /* two hex chars and a slash */));
+                if (retrievedFilter != null && TryGetChildFilter(retrievedFilter, currentPath, out var childRef))
+                {
+                    uid = childRef.Uid;
+                }
+                else
+                {
+                    uid = null;
+                }
             }
 
-            throw new NotImplementedException();
+            Array.Reverse(filters);
+            return filters;
         }
     }
 }

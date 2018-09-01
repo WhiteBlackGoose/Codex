@@ -23,16 +23,14 @@ namespace Codex.ElasticSearch
 {
     internal class ElasticSearchStoredFilterBuilder
     {
-        public string IndexName => EntityStore.IndexName;
+        public string IndexName { get; set; }
         public ElasticSearchStore Store => EntityStore.Store;
         public readonly ElasticSearchEntityStore EntityStore;
         public readonly string BaseFilterName;
-        public readonly string IntermediateFilterSuffix;
 
-        private const int BatchSize = 10000;
+        private const int BatchSize = 2000;
 
         private readonly StableIdBuild StableIdBuildState;
-        private ConcurrentQueue<Task> storedFilterUpdateTasks = new ConcurrentQueue<Task>();
         private readonly string[] unionFilterNames;
 
         public ElasticSearchStoredFilterBuilder(ElasticSearchEntityStore entityStore, string filterName, params string[] unionFilterNames)
@@ -40,8 +38,7 @@ namespace Codex.ElasticSearch
             EntityStore = entityStore;
             BaseFilterName = filterName;
             this.unionFilterNames = unionFilterNames;
-
-            IntermediateFilterSuffix = Guid.NewGuid().ToString();
+            IndexName = entityStore.IndexName;
 
             StableIdBuildState = CreateStableIdBuild();
         }
@@ -50,7 +47,6 @@ namespace Codex.ElasticSearch
         {
             var shardState = new StableIdBuild()
             {
-                IndexName = IndexName,
                 Queue = new BatchQueue<int>(BatchSize)
             };
 
@@ -59,19 +55,7 @@ namespace Codex.ElasticSearch
 
         public void Add(ElasticEntityRef entityRef)
         {
-            if (StableIdBuildState.AddAndTryGetBatch(entityRef, out var batch))
-            {
-                storedFilterUpdateTasks.Enqueue(Store.Service.UseClient(async context =>
-                {
-                    var client = context.Client;
-                    using (await StableIdBuildState.Mutex.AcquireAsync())
-                    {
-                        StableIdBuildState.AddIds(batch);
-
-                        return None.Value;
-                    }
-                }));
-            }
+            StableIdBuildState.Add(entityRef);
         }
 
         private async Task UpdateFilters(params StoredFilter[] filters)
@@ -79,60 +63,38 @@ namespace Codex.ElasticSearch
             await Store.StoredFilterStore.UpdateStoredFiltersAsync(filters);
         }
 
-        public async Task FlushAsync()
+        public Task<StoredFilter> FinalizeAsync()
         {
-            foreach (var task in storedFilterUpdateTasks)
-            {
-                await task;
-            }
-        }
-
-        public async Task FinalizeAsync()
-        {
-            await FlushAsync();
-
-            await RefreshStoredFilterIndex();
+            //await RefreshStoredFilterIndex();
 
             var filter = new StoredFilter()
             {
                 DateUpdated = DateTime.UtcNow,
-                Name = GetFilterName(BaseFilterName, IndexName),
+                Name = BaseFilterName,
                 IndexName = IndexName,
             };
 
             StableIdBuildState.Complete();
-
-            if (StableIdBuildState.RoaringFilter != null)
-            {
-                filter.StableIds = StableIdBuildState.RoaringFilter.GetBytes();
-                filter.Cardinality += StableIdBuildState.Queue.TotalCount;
-            }
+            filter.ApplyStableIds(StableIdBuildState.RoaringFilter);
 
             filter.PopulateContentIdAndSize();
 
-            await UpdateFilters(filter);
+            //await UpdateFilters(filter);
 
-            await RefreshStoredFilterIndex();
-        }
+            return Task.FromResult(filter);
 
-        private async Task RefreshStoredFilterIndex()
-        {
-            await Store.Service.UseClient(async context =>
-            {
-                return await context.Client.RefreshAsync(Store.StoredFilterStore.IndexName).ThrowOnFailure();
-            });
+            //await RefreshStoredFilterIndex();
         }
 
         private class StableIdBuild
         {
-            public string IndexName;
             public BatchQueue<int> Queue;
-            public SemaphoreSlim Mutex = TaskUtilities.CreateMutex();
-            public RoaringDocIdSet RoaringFilter { get; set; }
+            private object mutex = new object();
+            public RoaringDocIdSet RoaringFilter { get; set; } = RoaringDocIdSet.Empty;
 
             //private ConcurrentDictionary<int, ElasticEntityRef> dedupMap = new ConcurrentDictionary<int, ElasticEntityRef>();
 
-            public bool AddAndTryGetBatch(ElasticEntityRef entity, out List<int> batch)
+            public void Add(ElasticEntityRef entity)
             {
                 if (entity.StableId == -1)
                 {
@@ -143,7 +105,10 @@ namespace Codex.ElasticSearch
                 //    //Debug.Fail($"Conflict: [{entity}] | [{dedupMap[entity.StableId]}");
                 //}
 
-                return Queue.AddAndTryGetBatch(entity.StableId, out batch);
+                if (Queue.AddAndTryGetBatch(entity.StableId, out var batch))
+                {
+                    AddIds(batch);
+                }
             }
 
             public void Complete()
@@ -156,22 +121,25 @@ namespace Codex.ElasticSearch
 
             public void AddIds(List<int> batch)
             {
-                batch.Sort();
-                var filterBuilder = new RoaringDocIdSet.Builder();
-
-                IEnumerable<int> ids = batch.SortedUnique(Comparer<int>.Default);
-
-                if (RoaringFilter != null)
+                lock (mutex)
                 {
-                    ids = RoaringFilter.Enumerate().ExclusiveInterleave(ids, Comparer<int>.Default);
-                }
+                    batch.Sort();
+                    var filterBuilder = new RoaringDocIdSet.Builder();
 
-                foreach (var id in ids)
-                {
-                    filterBuilder.Add(id);
-                }
+                    IEnumerable<int> ids = batch.SortedUnique(Comparer<int>.Default);
 
-                RoaringFilter = filterBuilder.Build();
+                    if (RoaringFilter.Count != 0)
+                    {
+                        ids = RoaringFilter.Enumerate().ExclusiveInterleave(ids, Comparer<int>.Default);
+                    }
+
+                    foreach (var id in ids)
+                    {
+                        filterBuilder.Add(id);
+                    }
+
+                    RoaringFilter = filterBuilder.Build();
+                }
             }
         }
     }

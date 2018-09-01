@@ -29,6 +29,8 @@ namespace Codex.ElasticSearch.Formats
         private const int MAX_ARRAY_LENGTH = 1 << 12;
         private static readonly long BASE_RAM_BYTES_USED = RamUsageEstimator.ShallowSizeOfInstance(typeof(RoaringDocIdSet));
 
+        public static readonly RoaringDocIdSet Empty = new Builder().Build();
+
         private enum DocIdSetType
         {
             NONE,
@@ -37,7 +39,7 @@ namespace Codex.ElasticSearch.Formats
         }
 
         private readonly DocIdSet[] docIdSets;
-        private readonly int cardinality;
+        public readonly int Count;
 
         /**
          * A builder of {@link RoaringDocIdSet}s.
@@ -382,12 +384,12 @@ namespace Codex.ElasticSearch.Formats
         private RoaringDocIdSet(DocIdSet[] docIdSets, int cardinality)
         {
             this.docIdSets = docIdSets;
-            this.cardinality = cardinality;
+            this.Count = cardinality;
         }
 
         public void Write(DataOutput output)
         {
-            output.WriteVInt32(cardinality);
+            output.WriteVInt32(Count);
             output.WriteVInt32(docIdSets.Length);
 
             foreach (DocIdSet set in docIdSets)
@@ -418,6 +420,17 @@ namespace Codex.ElasticSearch.Formats
                     }
                 }
             }
+        }
+
+        public static RoaringDocIdSet From(IEnumerable<int> orderedIds)
+        {
+            var builder = new Builder();
+            foreach (var id in orderedIds)
+            {
+                builder.Add(id);
+            }
+
+            return builder.Build();
         }
 
         public static RoaringDocIdSet Read(DataInput input)
@@ -459,7 +472,7 @@ namespace Codex.ElasticSearch.Formats
 
         public override DocIdSetIterator GetIterator()
         {
-            if (cardinality == 0)
+            if (Count == 0)
             {
                 return DocIdSetIterator.GetEmpty();
             }
@@ -559,7 +572,7 @@ namespace Codex.ElasticSearch.Formats
 
             public override long GetCost()
             {
-                return rdis.cardinality;
+                return rdis.Count;
             }
         }
 
@@ -568,12 +581,12 @@ namespace Codex.ElasticSearch.Formats
          */
         public int Cardinality()
         {
-            return cardinality;
+            return Count;
         }
 
         public override String ToString()
         {
-            return "RoaringDocIdSet(cardinality=" + cardinality + ")";
+            return "RoaringDocIdSet(cardinality=" + Count + ")";
         }
 
     }

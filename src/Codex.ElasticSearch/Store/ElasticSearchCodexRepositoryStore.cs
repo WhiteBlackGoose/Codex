@@ -34,7 +34,10 @@ namespace Codex.ElasticSearch
             IdRegistry = new ElasticSearchIdRegistry(store);
 
             Placeholder.Todo("Choose real values for the parameters");
-            this.batcher = new ElasticSearchBatcher(store, IdRegistry, commit.CommitId, repository.Name, $"{commit.CommitId}#Cumulative");
+            this.batcher = new ElasticSearchBatcher(store, IdRegistry, 
+                commitFilterName: $"commits/{commit.CommitId}",
+                repositoryFilterName: $"repos/{repository.Name}",
+                cumulativeCommitFilterName: $"cumulativeCommits/{commit.CommitId}");
 
             batcher.Add(store.RepositoryStore, new RepositorySearchModel()
             {
@@ -234,7 +237,7 @@ namespace Codex.ElasticSearch
                 CommitFiles = commitFilesByRepoRelativePath.Values.OrderBy(cf => cf.RepoRelativePath, StringComparer.OrdinalIgnoreCase).ToList()
             });
 
-            await batcher.FinalizeAsync();
+            await batcher.FinalizeAsync(repository.Name);
 
             await IdRegistry.FinalizeAsync();
         }

@@ -1,13 +1,14 @@
 {
   "branch": {
-    "headCommitId": "codextestrepo.180501.183852"
+    "headCommitId": "codextestrepo.180901.201312"
   },
   "commit": {
-    "commitId": "codextestrepo.180501.183852",
-    "dateUploaded": "2018-05-01T18:38:53.5227545Z",
+    "commitId": "codextestrepo.180901.201312",
+    "dateUploaded": "2018-09-01T20:13:13.6727838Z",
     "repositoryName": "CodexTestRepo"
   },
   "repository": {
+    "name": "CodexTestRepo",
     "sourceControlWebAddress": "https://github.com/Ref12/Codex/tree/feature/commitModelView/"
   }
 }

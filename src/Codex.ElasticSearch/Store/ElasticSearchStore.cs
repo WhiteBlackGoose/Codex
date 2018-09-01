@@ -139,6 +139,6 @@ namespace Codex.ElasticSearch
         /// </summary>
         public int? ShardCount;
 
-        public string DeclaredDefinitionFilterName { get; } = "AllDeclaredDefs";
+        public string CombinedSourcesFilterName { get; } = "allsources";
     }
 }

@@ -70,9 +70,9 @@ namespace Codex.ElasticSearch
             Placeholder.Todo("Disable replicas");
         }
 
-        public async Task FinalizeAsync()
+        public Task FinalizeAsync()
         {
-
+            return Task.CompletedTask;
         }
 
         private async Task CreateIndexAsync()
@@ -165,12 +165,13 @@ namespace Codex.ElasticSearch
             }
         }
 
-        public async Task StoreAsync<TOut>(IReadOnlyList<T> values, UpdateMergeFunction<T> updateMergeFunction)
+        public async Task StoreAsync<TOut>(IReadOnlyList<T> values, UpdateMergeFunction<T> updateMergeFunction, bool replace = false)
             where TOut : class, T
         {
             await Store.Service.UseClient(async context =>
             {
                 bool update = updateMergeFunction != null;
+                replace |= update;
                 var client = context.Client;
 
 
@@ -210,9 +211,9 @@ namespace Codex.ElasticSearch
 
 
                 var response = await client
-                    .BulkAsync(b => b.ForEach(values, (bd, value) => AddIndexOperation(bd, value, update)).CaptureRequest(context));
+                    .BulkAsync(b => b.ForEach(values, (bd, value) => AddIndexOperation(bd, value, replace)).CaptureRequest(context));
 
-                if (update || !response.ApiCall.Success)
+                if (replace || !response.ApiCall.Success)
                 {
                     response.ThrowOnFailure();
                 }
@@ -223,7 +224,7 @@ namespace Codex.ElasticSearch
 
         public Task StoreAsync(IReadOnlyList<T> values)
         {
-            return StoreAsync<T>(values, updateMergeFunction: null);
+            return StoreAsync<T>(values, updateMergeFunction: null, replace: true);
         }
 
         public async Task<IReadOnlyList<T>> GetAsync(IReadOnlyList<string> uids)

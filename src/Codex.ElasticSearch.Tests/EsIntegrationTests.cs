@@ -23,6 +23,7 @@ namespace Codex.ElasticSearch.Tests
 
             var store = new ElasticSearchStore(new ElasticSearchStoreConfiguration()
             {
+                ClearIndicesBeforeUse = true,
                 CreateIndices = true,
                 ShardCount = 1,
                 Prefix = "estest."
@@ -90,10 +91,10 @@ namespace Codex.ElasticSearch.Tests
                 new TestStableIdItem(SearchTypes.BoundSource, 23, expectedStableId: 2),
                 new TestStableIdItem(SearchTypes.TextSource, 1, expectedStableId: 0),
                 new TestStableIdItem(SearchTypes.TextSource, 1, expectedStableId: 1),
-                new TestStableIdItem(SearchTypes.Project, 0, expectedStableId: 0),
-                new TestStableIdItem(SearchTypes.Project, 1, expectedStableId: 0) { Unused = true },
-                new TestStableIdItem(SearchTypes.Project, 1, expectedStableId: 1),
-                new TestStableIdItem(SearchTypes.Project, 2, expectedStableId: 0),
+                new TestStableIdItem(SearchTypes.Project, 5, expectedStableId: 0),
+                new TestStableIdItem(SearchTypes.Project, 4, expectedStableId: 1) { Unused = true },
+                new TestStableIdItem(SearchTypes.Project, 4, expectedStableId: 1),
+                new TestStableIdItem(SearchTypes.Project, 3, expectedStableId: 3),
                 new TestStableIdItem(SearchTypes.BoundSource, 23, expectedStableId: 3),
                 new TestStableIdItem(SearchTypes.BoundSource, 23, expectedStableId: 2),
             };
@@ -118,6 +119,8 @@ namespace Codex.ElasticSearch.Tests
         {
             public int StableIdGroup { get; }
             public bool IsAdded { get; set; }
+
+            // TODO: What is this used for?
             public bool Unused { get; set; }
             public int? StableIdValue { get; set; }
             public int ExpectedStableId { get; }
@@ -132,6 +135,11 @@ namespace Codex.ElasticSearch.Tests
                 ExpectedStableId = expectedStableId;
                 Uid = $"{stableIdGroup}:{expectedStableId}";
             }
+
+            public override string ToString()
+            {
+                return $"Expect: {ExpectedStableId}, Actual: {StableIdValue}, Match: {ExpectedStableId == StableIdValue}";
+            }
         }
 
         [Test]
@@ -141,7 +149,7 @@ namespace Codex.ElasticSearch.Tests
             {
                 CreateIndices = true,
                 ShardCount = 1,
-                Prefix = "apptest"
+                Prefix = "estest."
             }, new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200")));
 
             var response = await codex.SearchAsync(new SearchArguments()

@@ -12,6 +12,7 @@ namespace Codex.ObjectModel
         public Repository(string name)
         {
             Contract.Requires(name != null);
+            Name = name;
         }
     }
 }

@@ -146,12 +146,17 @@ namespace Codex
         /// <summary>
         /// The <see cref="ISearchEntity.Uid"/> of the child filter
         /// </summary>
-        string ChildUid { get; }
+        string Uid { get; }
 
         /// <summary>
         /// The <see cref="IStoredFilter.StableIds"/> of the child filter
         /// </summary>
-        byte[] ChildStableIds { get; }
+        byte[] StableIds { get; }
+
+        /// <summary>
+        /// The <see cref="IStoredFilter.Cardinality"/> of the child filter
+        /// </summary>
+        int Cardinality { get; }
     }
 
     [AdapterType]

@@ -67,8 +67,8 @@ namespace Codex.Utilities
             T current1 = default(T);
             T current2 = default(T);
 
-            end1 = MoveNext(enumerator1, ref current1);
-            end2 = MoveNext(enumerator2, ref current2);
+            end1 = MoveNext(enumerator1, out current1);
+            end2 = MoveNext(enumerator2, out current2);
 
             while (!end1 || !end2)
             {
@@ -83,7 +83,7 @@ namespace Codex.Utilities
                         break;
                     }
 
-                    end1 = MoveNext(enumerator1, ref current1);
+                    end1 = MoveNext(enumerator1, out current1);
                 }
 
                 while (!end2)
@@ -97,7 +97,7 @@ namespace Codex.Utilities
                         break;
                     }
 
-                    end2 = MoveNext(enumerator2, ref current2);
+                    end2 = MoveNext(enumerator2, out current2);
                 }
             }
         }
@@ -119,30 +119,24 @@ namespace Codex.Utilities
 
         public static IEnumerable<T> ExclusiveInterleave<T>(this IEnumerable<T> items1, IEnumerable<T> items2, IComparer<T> comparer)
         {
-            bool end1 = false;
-            bool end2 = false;
-
             var enumerator1 = items1.GetEnumerator();
             var enumerator2 = items2.GetEnumerator();
 
-            T current1 = default(T);
-            T current2 = default(T);
+            bool hasCurrent1 = MoveNext(enumerator1, out var current1);
+            bool hasCurrent2 = MoveNext(enumerator2, out var current2);
 
-            end1 = MoveNext(enumerator1, ref current1);
-            end2 = MoveNext(enumerator2, ref current2);
-
-            while (!end1 || !end2)
+            while (hasCurrent1 || hasCurrent2)
             {
-                while (!end1)
+                while (hasCurrent1)
                 {
-                    if (end2 || comparer.Compare(current1, current2) <= 0)
+                    if (!hasCurrent2 || comparer.Compare(current1, current2) <= 0)
                     {
                         yield return current1;
 
                         // Skip over matching spans from second list
-                        while (!end2 && comparer.Compare(current1, current2) == 0)
+                        while (hasCurrent2 && comparer.Compare(current1, current2) == 0)
                         {
-                            end2 = MoveNext(enumerator2, ref current2);
+                            hasCurrent2 = MoveNext(enumerator2, out current2);
                         }
                     }
                     else
@@ -150,12 +144,12 @@ namespace Codex.Utilities
                         break;
                     }
 
-                    end1 = MoveNext(enumerator1, ref current1);
+                    hasCurrent1 = MoveNext(enumerator1, out current1);
                 }
 
-                while (!end2)
+                while (hasCurrent2)
                 {
-                    if (end1 || comparer.Compare(current1, current2) > 0)
+                    if (!hasCurrent1 || comparer.Compare(current1, current2) > 0)
                     {
                         yield return current2;
                     }
@@ -164,12 +158,12 @@ namespace Codex.Utilities
                         break;
                     }
 
-                    end2 = MoveNext(enumerator2, ref current2);
+                    hasCurrent2 = MoveNext(enumerator2, out current2);
                 }
             }
         }
 
-        private static bool MoveNext<T>(IEnumerator<T> enumerator1, ref T current)
+        private static bool MoveNext<T>(IEnumerator<T> enumerator1, out T current)
         {
             if (enumerator1.MoveNext())
             {
@@ -178,6 +172,7 @@ namespace Codex.Utilities
             }
             else
             {
+                current = default(T);
                 return false;
             }
         }

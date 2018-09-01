@@ -7,6 +7,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Codex.ObjectModel;
+using System.Collections.Generic;
+using Codex.ElasticSearch.Store;
+using static Codex.ElasticSearch.StoredFilterUtilities;
+using Codex.Storage.ElasticProviders;
 
 namespace Codex.ElasticSearch
 {
@@ -58,9 +63,12 @@ namespace Codex.ElasticSearch
                     unionFilterNames: new[] { repositoryFilterName, cumulativeCommitFilterName });
             }).ToArray();
 
-            DeclaredDefinitionStoredFilter = new[] { new ElasticSearchStoredFilterBuilder(
+            var declaredDefinitionStoredFilter = new ElasticSearchStoredFilterBuilder(
                     store.DefinitionStore,
-                    filterName: commitFilterName) };
+                    filterName: commitFilterName);
+
+            declaredDefinitionStoredFilter.IndexName = GetDeclaredDefinitionsIndexName(declaredDefinitionStoredFilter.IndexName);
+            DeclaredDefinitionStoredFilter = new[] { declaredDefinitionStoredFilter };
         }
 
         public async ValueTask<None> AddAsync<T>(ElasticSearchEntityStore<T> store, T entity, params ElasticSearchStoredFilterBuilder[] additionalStoredFilters)
@@ -137,7 +145,7 @@ namespace Codex.ElasticSearch
             entity.PopulateContentIdAndSize();
         }
 
-        public async Task FinalizeAsync()
+        public async Task FinalizeAsync(string repositoryName)
         {
             while (true)
             {
@@ -155,11 +163,32 @@ namespace Codex.ElasticSearch
                 await ExecuteBatchAsync(currentBatch);
             }
 
+            StoredFilterManager filterManager = new StoredFilterManager(store.StoredFilterStore);
+            var combinedSourcesFilterName = store.Configuration.CombinedSourcesFilterName;
+
             // Finalize the stored filters
-            foreach (var filter in CommitSearchTypeStoredFilters.Concat(DeclaredDefinitionStoredFilter))
+            foreach (var filterBuilder in CommitSearchTypeStoredFilters.Concat(DeclaredDefinitionStoredFilter))
             {
-                await filter.FinalizeAsync();
+                var filter = await filterBuilder.FinalizeAsync();
+
+                await filterManager.AddStoredFilterAsync(
+                    key: GetFilterName(combinedSourcesFilterName, indexName: filterBuilder.IndexName), 
+                    name: repositoryName, 
+                    filter: filter);
+
+                filter.Uid = GetFilterName(GetRepositoryBaseFilterName(repositoryName), indexName: filterBuilder.IndexName);
+                await store.StoredFilterStore.StoreAsync(new[] { filter });
             }
+
+            await RefreshStoredFilterIndex();
+        }
+
+        private async Task RefreshStoredFilterIndex()
+        {
+            await service.UseClient(async context =>
+            {
+                return await context.Client.RefreshAsync(store.StoredFilterStore.IndexName).ThrowOnFailure();
+            });
         }
     }
 }

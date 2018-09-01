@@ -1,0 +1,13 @@
+﻿Filter updates in response to index operation.
+
+Old indexing strategy using aliases
+
+allsources[{repoName}] = {commit};
+repos\{repoName} = {commit}
+
+Add(string key, string name)
+
+Add("{indexName}\repo\{repoName}", "{indexName}\{commit}");
+Add("{indexName}\cumulative\{commit}", "{indexName}\{commit}");
+
+{indexName}\{repository} += {indexName}\{commit}

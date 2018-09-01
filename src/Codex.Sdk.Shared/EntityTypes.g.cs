@@ -3924,9 +3924,11 @@ namespace Codex.ObjectModel {
         
         private string m_FullPath;
         
-        private string m_ChildUid;
+        private string m_Uid;
         
-        private byte[] m_ChildStableIds;
+        private byte[] m_StableIds;
+        
+        private int m_Cardinality;
         
         public ChildFilterReference() {
             Initialize();
@@ -3949,32 +3951,45 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// The <see cref="P:Codex.ISearchEntity.Uid" /> of the child filter
         /// </summary>
-        public virtual string ChildUid {
+        public virtual string Uid {
             get {
-                return this.m_ChildUid;
+                return this.m_Uid;
             }
             set {
-                this.m_ChildUid = value;
+                this.m_Uid = value;
             }
         }
         
         /// <summary>
         /// The <see cref="P:Codex.IStoredFilter.StableIds" /> of the child filter
         /// </summary>
-        public virtual byte[] ChildStableIds {
+        public virtual byte[] StableIds {
             get {
-                return this.m_ChildStableIds;
+                return this.m_StableIds;
             }
             set {
-                this.m_ChildStableIds = value;
+                this.m_StableIds = value;
+            }
+        }
+        
+        /// <summary>
+        /// The <see cref="P:Codex.IStoredFilter.Cardinality" /> of the child filter
+        /// </summary>
+        public virtual int Cardinality {
+            get {
+                return this.m_Cardinality;
+            }
+            set {
+                this.m_Cardinality = value;
             }
         }
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IChildFilterReference value)
             where TTarget : ChildFilterReference {
             this.m_FullPath = ((Codex.IChildFilterReference)(value)).FullPath;
-            this.m_ChildUid = ((Codex.IChildFilterReference)(value)).ChildUid;
-            this.m_ChildStableIds = ((Codex.IChildFilterReference)(value)).ChildStableIds;
+            this.m_Uid = ((Codex.IChildFilterReference)(value)).Uid;
+            this.m_StableIds = ((Codex.IChildFilterReference)(value)).StableIds;
+            this.m_Cardinality = ((Codex.IChildFilterReference)(value)).Cardinality;
             return ((TTarget)(this));
         }
     }

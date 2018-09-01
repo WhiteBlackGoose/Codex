@@ -72,7 +72,7 @@ namespace Codex.ElasticSearch.Store
             using (fileSystem)
             {
                 m_storeInfo = Read<RepositoryStoreInfo>(fileSystem, RepositoryInitializationFileName);
-                m_storeInfo.Repository.Name = repositoryName ?? m_storeInfo.Repository.Name;
+                m_storeInfo.Repository.Name = repositoryName ?? m_storeInfo.Repository.Name ?? m_storeInfo.Commit.RepositoryName;
 
                 ConcurrentQueue<Func<Task>> actionQueue = new ConcurrentQueue<Func<Task>>();
 

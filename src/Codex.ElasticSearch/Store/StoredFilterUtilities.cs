@@ -1,4 +1,5 @@
-﻿using Codex.ObjectModel;
+﻿using Codex.ElasticSearch.Formats;
+using Codex.ObjectModel;
 using Codex.Storage.ElasticProviders;
 using Codex.Utilities;
 using Nest;
@@ -22,9 +23,19 @@ namespace Codex.ElasticSearch
             return storedFilterStore.StoreAsync<StoredFilter>(storedFilters, updateMergeFunction: null);
         }
 
+        public static string GetDeclaredDefinitionsIndexName(string baseIndexName)
+        {
+            return $"{baseIndexName}.declared";
+        }
+
+        public static string GetRepositoryBaseFilterName(string repositoryName)
+        {
+            return $"repos/{repositoryName}";
+        }
+
         public static string GetFilterName(string baseFilterId, string indexName)
         {
-            return $"{indexName}\\{baseFilterId}";
+            return $"{indexName}/{baseFilterId}";
         }
 
         public static int ExtractStableId(long version)
@@ -47,6 +58,32 @@ namespace Codex.ElasticSearch
         {
             if (entity.RoutingKey == null) return string.Empty;
             return $"#{GetStableIdGroup(entity)}";
+        }
+
+        public static IEnumerable<int> GetStableIdValues(this IStoredFilter filter)
+        {
+            return RoaringDocIdSet.FromBytes(filter.StableIds).Enumerate();
+        }
+
+        public static StoredFilter ApplyStableIds(this StoredFilter filter, IEnumerable<int> stableIds)
+        {
+            var filterBuilder = new RoaringDocIdSet.Builder();
+
+            foreach (var id in stableIds)
+            {
+                filterBuilder.Add(id);
+            }
+
+            var stableIdSet = filterBuilder.Build();
+            return ApplyStableIds(filter, stableIdSet);
+        }
+
+        public static StoredFilter ApplyStableIds(this StoredFilter filter, RoaringDocIdSet stableIdSet)
+        {
+            filter.StableIds = stableIdSet.GetBytes();
+            filter.Cardinality = stableIdSet.Cardinality();
+
+            return filter;
         }
 
         public static string GetRouting(string uid)
