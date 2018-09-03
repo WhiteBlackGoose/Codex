@@ -34,8 +34,6 @@ namespace Codex.ElasticSearch
             return (store.Configuration.Prefix + searchType.IndexName).ToLowerInvariant();
         }
 
-        public abstract Task DeleteAsync(IEnumerable<string> uids);
-
         public abstract Task InitializeAsync();
     }
 
@@ -126,7 +124,7 @@ namespace Codex.ElasticSearch
             });
         }
 
-        public override async Task DeleteAsync(IEnumerable<string> uids)
+        public async Task DeleteAsync(IEnumerable<string> uids)
         {
             await Store.Service.UseClient(async context =>
             {

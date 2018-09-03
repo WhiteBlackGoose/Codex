@@ -9,9 +9,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Codex.Utilities;
 
 using static Codex.ElasticSearch.Utilities.ElasticUtility;
-using Codex.Utilities;
+using static Codex.ElasticSearch.StoredFilterUtilities;
 
 namespace Codex.ElasticSearch.Search
 {
@@ -258,7 +259,7 @@ namespace Codex.ElasticSearch.Search
 
                 var definitionsResult = await client.SearchAsync<IDefinitionSearchModel>(s => s
                         .Query(qcd => qcd.Bool(bq => bq
-                            .Filter(GetTermsFilter(terms))
+                            .Filter(GetTermsFilter(terms, allowReferencedDefinitions: arguments.AllowReferencedDefinitions))
                             .Should(GetTermsFilter(terms, boostOnly: true))))
                         .Index(Configuration.Prefix + SearchTypes.Definition.IndexName)
                         .Take(arguments.MaxResults)
@@ -316,15 +317,25 @@ namespace Codex.ElasticSearch.Search
             });
         }
 
-        private static Func<QueryContainerDescriptor<IDefinitionSearchModel>, QueryContainer> GetTermsFilter(string[] terms, bool boostOnly = false)
+        private string GetIndexName(SearchType searchType)
         {
-            return qcd => qcd.Bool(bq => bq.Filter(GetTermsFilters(terms, boostOnly)));
+            return Configuration.Prefix + searchType.IndexName;
         }
 
-        private static IEnumerable<Func<QueryContainerDescriptor<IDefinitionSearchModel>, QueryContainer>>
-            GetTermsFilters(string[] terms, bool boostOnly = false)
+        private Func<QueryContainerDescriptor<IDefinitionSearchModel>, QueryContainer> GetTermsFilter(
+            string[] terms, 
+            bool boostOnly = false,
+            bool allowReferencedDefinitions = false)
         {
-            bool allowReferencedDefinitions = false;
+            return qcd => qcd.Bool(bq => bq.Filter(GetTermsFilters(terms, boostOnly, allowReferencedDefinitions)));
+        }
+
+        private IEnumerable<Func<QueryContainerDescriptor<IDefinitionSearchModel>, QueryContainer>>
+            GetTermsFilters(
+            string[] terms, 
+            bool boostOnly = false,
+            bool allowReferencedDefinitions = false)
+        {
             foreach (var term in terms)
             {
                 if (term == "@all")
@@ -343,6 +354,15 @@ namespace Codex.ElasticSearch.Search
 
                 if (!allowReferencedDefinitions)
                 {
+                    yield return fq => fq.Terms(
+                        tsd => tsd
+                            .Field(e => e.StableId)
+                            .TermsLookup<IStoredFilter>(ld => ld
+                                .Index(GetIndexName(SearchTypes.StoredFilter))
+                                .Id(GetFilterName(
+                                    Configuration.CombinedSourcesFilterName, 
+                                    indexName: GetDeclaredDefinitionsIndexName(GetIndexName(SearchTypes.Definition))))
+                                .Path(sf => sf.StableIds)));
                     // TODO: Should referenced symbols only be allowed conditionally
                     // Maybe it should be an option to the search arguments
                     //yield return fq => fq.Bool(bqd => bqd.MustNot(fq1 => fq1.Term(dss => dss.IsReferencedSymbol, true)));

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,19 +22,42 @@ namespace Codex.ElasticSearch.Tests
         {
             var originalStore = DirectoryCodexStoreTests.CreateInputStore();
 
-            var store = new ElasticSearchStore(new ElasticSearchStoreConfiguration()
+            ElasticSearchStoreConfiguration configuration = new ElasticSearchStoreConfiguration()
             {
                 ClearIndicesBeforeUse = true,
                 CreateIndices = true,
                 ShardCount = 1,
                 Prefix = "estest."
-            }, new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200")));
+            };
+            ElasticSearchService service = new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200"));
+            var store = new ElasticSearchStore(configuration, service);
 
             await store.InitializeAsync();
 
             await originalStore.ReadAsync(store);
 
             await originalStore.ReadAsync(store);
+
+            await store.DefinitionStore.RefreshAsync();
+
+            var codex = new ElasticSearchCodex(configuration, service);
+
+            // Try searching for AssemblyCompanyAttribute which is defined outside of the 
+            // ingested code using two modes:
+            // AllowReferencedDefinitions = false (i.e. only symbols declared in ingested code should be returned in results)
+            // AllowReferencedDefinitions = true (i.e. symbols referenced by ingested code may be returned in results)
+            var arguments = new SearchArguments()
+            {
+                SearchString = nameof(AssemblyCompanyAttribute),
+                AllowReferencedDefinitions = false
+            };
+
+            var declaredSearch = await codex.SearchAsync(arguments);
+            Assert.AreEqual(0, declaredSearch.Result.Total);
+
+            arguments.AllowReferencedDefinitions = true;
+            var allSearch = await codex.SearchAsync(arguments);
+            Assert.True(allSearch.Result.Total > 0, "Search allowing referenced definitions should return some results");
         }
 
         [Test]

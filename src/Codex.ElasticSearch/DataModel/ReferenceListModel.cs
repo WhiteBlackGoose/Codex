@@ -159,7 +159,9 @@ namespace Codex.Storage.DataModel
 
         public override ReferenceSymbol GetShared(ReferenceSpan span)
         {
-            return span.Reference;
+            // Copy the reference so changes made during serialization do not affect
+            // original reference
+            return new ReferenceSymbol(span.Reference);
         }
 
         public override ReferenceSymbol GetSharedKey(ReferenceSpan span)

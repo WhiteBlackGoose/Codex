@@ -132,6 +132,8 @@ namespace Codex.Sdk.Search
     public class SearchArguments : ContextCodexArgumentsBase
     {
         public string SearchString { get; set; }
+
+        public bool AllowReferencedDefinitions { get; set; } = false;
     }
 
     public class GetProjectArguments : ContextCodexArgumentsBase
