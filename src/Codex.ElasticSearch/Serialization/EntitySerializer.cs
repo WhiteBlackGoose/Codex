@@ -242,6 +242,52 @@ namespace Codex.Serialization
             return contract;
         }
 
+        protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
+        {
+            var properties = base.CreateProperties(type, memberSerialization).AsList();
+
+            var serializationInterfaceAttribute = type.GetAttribute<SerializationInterfaceAttribute>();
+            if (serializationInterfaceAttribute != null)
+            {
+                var excludedSerializationProperties = new HashSet<string>(type.GetCustomAttributes<ExcludedSerializationPropertyAttribute>()
+                    .Select(attr => attr.PropertyName));
+
+                var serializationInterfaceType = serializationInterfaceAttribute.Type;
+
+                Dictionary<string, MemberInfo> interfaceMemberMap = new Dictionary<string, MemberInfo>(StringComparer.OrdinalIgnoreCase);
+                foreach (var property in new[] { serializationInterfaceType }.Concat(serializationInterfaceType.GetInterfaces())
+                    .SelectMany(i => i.GetProperties()))
+                {
+                    if (!interfaceMemberMap.ContainsKey(property.Name))
+                    {
+                        interfaceMemberMap.Add(property.Name, property);
+                    }
+                }
+
+                properties.RemoveAll(property =>
+                {
+                    if (excludedSerializationProperties.Contains(property.PropertyName))
+                    {
+                        return true;
+                    }
+
+                    if (interfaceMemberMap.TryGetValue(property.PropertyName, out var interfaceProperty))
+                    {
+                        if (!property.PropertyType.IsClass && (interfaceProperty.GetSearchBehavior() ?? SearchBehavior.None) != SearchBehavior.None)
+                        {
+                            property.DefaultValueHandling = DefaultValueHandling.Include;
+                        }
+
+                        return (interfaceProperty.GetAllowedStages() & stage) == 0;
+                    }
+
+                    return true;
+                });
+            }
+
+            return properties;
+        }
+
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
             var property = base.CreateProperty(member, memberSerialization);
@@ -290,48 +336,6 @@ namespace Codex.Serialization
             }
 
             return property;
-        }
-
-        protected override List<MemberInfo> GetSerializableMembers(Type objectType)
-        {
-            var members = base.GetSerializableMembers(objectType);
-            var excludedSerializationProperties = new HashSet<string>(objectType.GetCustomAttributes<ExcludedSerializationPropertyAttribute>()
-                .Select(attr => attr.PropertyName));
-
-            var serializationInterfaceAttribute = objectType.GetAttribute<SerializationInterfaceAttribute>();
-            if (serializationInterfaceAttribute != null)
-            {
-                var serializationInterfaceType = serializationInterfaceAttribute.Type;
-
-                Dictionary<string, MemberInfo> interfaceMemberMap = new Dictionary<string, MemberInfo>();
-                foreach (var property in new[] { serializationInterfaceType }.Concat(serializationInterfaceType.GetInterfaces())
-                    .SelectMany(i => i.GetProperties()))
-                {
-                    if (!interfaceMemberMap.ContainsKey(property.Name))
-                    {
-                        interfaceMemberMap.Add(property.Name, property);
-                    }
-                }
-
-                members.RemoveAll(m =>
-                {
-                    if (excludedSerializationProperties.Contains(m.Name))
-                    {
-                        return true;
-                    }
-
-                    if (interfaceMemberMap.TryGetValue(m.Name, out var interfaceProperty))
-                    {
-                        return (interfaceProperty.GetAllowedStages() & stage) == 0;
-                    }
-
-                    return true;
-                });
-            }
-
-            members.Sort(MemberComparer);
-
-            return members;
         }
     }
 

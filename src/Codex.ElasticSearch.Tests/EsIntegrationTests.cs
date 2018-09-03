@@ -161,133 +161,162 @@ namespace Codex.ElasticSearch.Tests
         }
 
         // TODO: Fix these
-        //[Test]
-        //public async Task StoredFilterTest()
-        //{
-        //    const int valuesToAdd = 1012;
+        [Test]
+        public async Task StoredFilterTest()
+        {
+            const int valuesToAdd = 1012;
 
-        //    var store = new ElasticSearchStore(new ElasticSearchStoreConfiguration()
-        //    {
-        //        CreateIndices = true,
-        //        ShardCount = 1,
-        //        Prefix = "estest."
-        //    }, new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200")));
+            var store = new ElasticSearchStore(new ElasticSearchStoreConfiguration()
+            {
+                CreateIndices = true,
+                ShardCount = 1,
+                Prefix = "sftest."
+            }, new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200")));
 
-        //    await store.Clear();
+            await store.Clear();
 
-        //    await store.InitializeAsync();
+            await store.InitializeAsync();
 
-        //    Random random = new Random(12);
+            Random random = new Random(12);
 
-        //    Dictionary<int, HashSet<int>> valuesMap = new Dictionary<int, HashSet<int>>();
+            Dictionary<int, HashSet<int>> valuesMap = new Dictionary<int, HashSet<int>>();
 
-        //    HashSet<int> valuesToStore = new HashSet<int>();
+            HashSet<int> valuesToStore = new HashSet<int>();
 
-        //    for (int i = 0; i < valuesToAdd; i++)
-        //    {
-        //        valuesToStore.Add(random.Next(valuesToAdd * 100, valuesToAdd * 200));
-        //    }
+            for (int i = 0; i < valuesToAdd; i++)
+            {
+                valuesToStore.Add(random.Next(valuesToAdd * 100, valuesToAdd * 200));
+            }
 
-        //    // Store initial filter
-        //    var filter1 = await StoreAndVerifyFilter(store, valuesMap, valuesToStore);
+            // Store initial filter
+            var filter1 = await StoreAndVerifyFilter(store, valuesMap, valuesToStore);
 
-        //    // Verify that adding same values DOES NOT change filter
-        //    var filter1_same = await StoreAndVerifyFilter(store, valuesMap, valuesToStore);
+            // Verify that adding same values DOES NOT change filter
+            var filter1_same = await StoreAndVerifyFilter(store, valuesMap, valuesToStore);
 
-        //    Assert.AreEqual(filter1.FilterHash, filter1_same.FilterHash);
+            Assert.AreEqual(filter1.FilterHash, filter1_same.FilterHash);
 
-        //    Assert.True(filter1.Filter.SequenceEqual(filter1_same.Filter), "Filter should be the same if unioned with same values");
+            AssertFilterEquals(filter1, filter1_same, "Filter should be the same if unioned with same values");
 
-        //    valuesToStore.Clear();
-        //    for (int i = 0; i < valuesToAdd; i++)
-        //    {
-        //        valuesToStore.Add(random.Next(valuesToAdd * 200, valuesToAdd * 300));
-        //    }
+            valuesToStore.Clear();
+            for (int i = 0; i < valuesToAdd; i++)
+            {
+                valuesToStore.Add(random.Next(valuesToAdd * 200, valuesToAdd * 300));
+            }
 
-        //    // Store initial filter
-        //    var filter2 = await StoreAndVerifyFilter(store, valuesMap, valuesToStore, filterId: 2);
+            // Store initial filter
+            var filter2 = await StoreAndVerifyFilter(store, valuesMap, valuesToStore, filterId: 2);
 
-        //    Assert.AreNotEqual(filter1.FilterHash, filter2.FilterHash);
+            Assert.AreNotEqual(filter1.FilterHash, filter2.FilterHash);
 
-        //    valuesToStore.Clear();
-        //    for (int i = 0; i < valuesToAdd; i++)
-        //    {
-        //        valuesToStore.Add(random.Next(valuesToAdd * 200, valuesToAdd * 300));
-        //    }
+            // Verify that filter 1 is unchanged
+            var filter1Unchanged = await RetrieveAndVerifyFilter(store, new HashSet<int>(filter1.GetStableIdValues()), filter1.Uid);
 
-        //    // Verify that adding different values DOES change filter
-        //    var filter1b = await StoreAndVerifyFilter(store, valuesMap, valuesToStore);
+            Assert.AreEqual(filter1.FilterHash, filter1Unchanged.FilterHash);
+            AssertFilterEquals(filter1, filter1Unchanged, "Filter should be the same if not modifications were made");
 
-        //    Assert.AreNotEqual(filter1.FilterHash, filter1b.FilterHash);
-        //    Assert.False(filter1.Filter.SequenceEqual(filter1b.Filter), "Filter should be the same if unioned with same values");
-        //}
+            valuesToStore.Clear();
+            for (int i = 0; i < valuesToAdd; i++)
+            {
+                valuesToStore.Add(random.Next(valuesToAdd * 200, valuesToAdd * 300));
+            }
 
-        //private async Task<IStoredFilter> StoreAndVerifyFilter(
-        //    ElasticSearchStore store,
-        //    Dictionary<int, HashSet<int>> valuesMap,
-        //    IEnumerable<int> valuesToStore,
-        //    int filterId = 1,
-        //    [CallerLineNumber] int line = 0)
-        //{
-        //    var values = valuesMap.GetOrAdd(filterId, new HashSet<int>());
-        //    valuesToStore = valuesToStore.ToList();
+            await StoreValues(store, valuesToStore);
 
-        //    values.UnionWith(valuesToStore);
+            // Verify that adding different values DOES change filter
+            var filter1b = await StoreAndVerifyFilter(store, valuesMap, valuesToStore);
 
-        //    await store.RegisteredEntityStore.StoreAsync(
-        //        valuesToStore.Select(stableId =>
-        //        {
-        //            return new RegisteredEntity()
-        //            {
-        //                Uid = GetUidFromStableId(stableId),
-        //                DateAdded = DateTime.UtcNow,
-        //                StableId = stableId,
-        //            };
-        //        }).ToArray());
+            Assert.AreNotEqual(filter1.FilterHash, filter1b.FilterHash);
+            AssertFilterEquals(filter1, filter1b, "Filter should be the ovewritten.", equals: false);
+        }
 
-        //    await store.StoredFilterStore.RefreshAsync();
+        private void AssertFilterEquals(IStoredFilter filter1, IStoredFilter filter2, string message, bool equals = true)
+        {
+            if (equals)
+            {
+                Assert.AreEqual(filter1.GetStableIdValues().ToList(), filter2.GetStableIdValues().ToList(), message);
+            }
+            else
+            {
+                Assert.AreNotEqual(filter1.GetStableIdValues().ToList(), filter2.GetStableIdValues().ToList(), message);
+            }
+        }
 
-        //    string baseFilterId = "TEST_STORED_FILTER#" + filterId;
-        //    string storedFilterId = StoredFilterUtilities.GetFilterId(baseFilterId, store.RegisteredEntityStore.IndexName, 0);
-        //    await store.StoredFilterStore.UpdateStoredFiltersAsync(new[]
-        //    {
-        //        new StoredFilter()
-        //        {
-        //            Uid = storedFilterId,
-        //            StableIds = valuesToStore.ToList(),
-        //            FilterHash = string.Empty,
-        //        }
-        //    });
+        private async Task<IStoredFilter> StoreAndVerifyFilter(
+            ElasticSearchStore store,
+            Dictionary<int, HashSet<int>> valuesMap,
+            IEnumerable<int> valuesToStore,
+            int filterId = 1,
+            [CallerLineNumber] int line = 0)
+        {
+            var values = valuesMap.GetOrAdd(filterId, new HashSet<int>());
+            valuesToStore = valuesToStore.ToList();
 
-        //    var retrievedFilterResponse = await store.StoredFilterStore.GetAsync(storedFilterId);
-        //    var retrievedFilter = retrievedFilterResponse.Result;
+            values.UnionWith(valuesToStore);
 
-        //    await store.StoredFilterStore.RefreshAsync();
-        //    var retrievedRefreshFilter = (await store.StoredFilterStore.GetAsync(storedFilterId)).Result;
+            await StoreValues(store, valuesToStore);
 
-        //    Assert.AreEqual(values.Count, retrievedRefreshFilter.FilterCount, $"Caller Line: {line}");// Sequence: '{string.Join(", ", values.OrderBy(v => v))}'");
-        //    Assert.AreEqual(values.Count, retrievedFilter.FilterCount, $"Caller Line: {line}");
-        //    Assert.AreNotEqual(string.Empty, retrievedFilter.FilterHash, $"Caller Line: {line}");
+            await store.StoredFilterStore.RefreshAsync();
 
-        //    await store.RegisteredEntityStore.RefreshAsync();
+            string storedFilterId = "TEST_STORED_FILTER#" + filterId;
 
-        //    var filteredEntitiesResponse = await store.RegisteredEntityStore.GetStoredFilterEntities(baseFilterId,
-        //        // Ensure that if there are more matches than expected that the API would return those results
-        //        maxCount: values.Count + 1);
-        //    var filteredEntities = filteredEntitiesResponse.Result;
+            var storedFilter = new StoredFilter()
+            {
+                Uid = storedFilterId,
+            }.ApplyStableIds(values.OrderBy(i => i));
 
-        //    var filteredEntityIds = new HashSet<int>(filteredEntities.Select(e => e.StableId));
+            var desids = storedFilter.GetStableIdValues().ToList();
 
-        //    var missingFilteredEntityIds = values.Except(filteredEntityIds).ToList();
-        //    Assert.IsEmpty(missingFilteredEntityIds);
+            await store.StoredFilterStore.UpdateStoredFiltersAsync(new[]
+            {
+                storedFilter
+            });
 
-        //    var extraFilteredEntityIds = filteredEntityIds.Except(values).ToList();
-        //    Assert.IsEmpty(extraFilteredEntityIds);
+            return await RetrieveAndVerifyFilter(store, values, storedFilterId, line);
+        }
 
-        //    Assert.AreEqual(values.Count, filteredEntities.Count, $"Caller Line: {line}");
+        private static async Task<IStoredFilter> RetrieveAndVerifyFilter(ElasticSearchStore store, HashSet<int> values, string storedFilterId, [CallerLineNumber] int line = 0)
+        {
+            await store.StoredFilterStore.RefreshAsync();
+            var retrievedFilterResponse = await store.StoredFilterStore.GetAsync(storedFilterId);
+            var retrievedFilter = retrievedFilterResponse.Result;
 
-        //    return retrievedFilter;
-        //}
+            Assert.AreEqual(values.Count, retrievedFilter.Cardinality, $"Caller Line: {line}");
+            Assert.AreNotEqual(string.Empty, retrievedFilter.FilterHash, $"Caller Line: {line}");
+
+            await store.RegisteredEntityStore.RefreshAsync();
+
+            var filteredEntitiesResponse = await store.RegisteredEntityStore.GetStoredFilterEntities(storedFilterId,
+                // Ensure that if there are more matches than expected that the API would return those results
+                maxCount: values.Count + 1);
+            var filteredEntities = filteredEntitiesResponse.Result;
+
+            var filteredEntityIds = new HashSet<int>(filteredEntities.Select(e => e.StableId));
+
+            var missingFilteredEntityIds = values.Except(filteredEntityIds).ToList();
+            Assert.IsEmpty(missingFilteredEntityIds);
+
+            var extraFilteredEntityIds = filteredEntityIds.Except(values).ToList();
+            Assert.IsEmpty(extraFilteredEntityIds);
+
+            Assert.AreEqual(values.Count, filteredEntities.Count, $"Caller Line: {line}");
+
+            return retrievedFilter;
+        }
+
+        private async Task StoreValues(ElasticSearchStore store, IEnumerable<int> valuesToStore)
+        {
+            await store.RegisteredEntityStore.StoreAsync(
+                valuesToStore.Select(stableId =>
+                {
+                    return new RegisteredEntity()
+                    {
+                        Uid = GetUidFromStableId(stableId),
+                        DateAdded = DateTime.UtcNow,
+                        StableId = stableId,
+                    };
+                }).ToArray());
+        }
 
         private string GetUidFromStableId(int stableId)
         {

@@ -44,7 +44,11 @@ namespace Codex.ElasticSearch.Store
             string path = GetHashPathFromName(name);
             // Get chain of stored filters leading to name including siblings of each
             // segment in the chain
-            var ancestorChain = await GetStoredFilterAncestorChainBottomUp(key, path);
+            var ancestorChain = await GetStoredFilterAncestorChainBottomUp(key, path, createIfMissing: initialMode != UpdateMode.Remove);
+            if (ancestorChain == null)
+            {
+                return;
+            }
 
             // For each segment, rewrite to replace child with the filter
             string childFullPath = path;
@@ -63,7 +67,6 @@ namespace Codex.ElasticSearch.Store
 
                 if ((mode & UpdateMode.Add) == UpdateMode.Add)
                 {
-                    parent.IndexName = filter.IndexName;
                     AddChild(parent, child, childFullPath);
                 }
 
@@ -158,7 +161,7 @@ namespace Codex.ElasticSearch.Store
             return Store.StoreAsync(updatedChain);
         }
 
-        public async Task<StoredFilter[]> GetStoredFilterAncestorChainBottomUp(string key, string path)
+        public async Task<StoredFilter[]> GetStoredFilterAncestorChainBottomUp(string key, string path, bool createIfMissing)
         {
             StoredFilter[] filters = new StoredFilter[HashPathSegmentCount];
 
@@ -172,6 +175,11 @@ namespace Codex.ElasticSearch.Store
                 {
                     FullPath = currentPath,
                 };
+
+                if (retrievedFilter == null && !createIfMissing)
+                {
+                    return null;
+                }
 
                 filters[i] = filter;
                 

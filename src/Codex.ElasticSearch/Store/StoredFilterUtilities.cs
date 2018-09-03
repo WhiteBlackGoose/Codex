@@ -20,7 +20,7 @@ namespace Codex.ElasticSearch
 
         public static Task UpdateStoredFiltersAsync(this ElasticSearchEntityStore<IStoredFilter> storedFilterStore, IReadOnlyList<IStoredFilter> storedFilters)
         {
-            return storedFilterStore.StoreAsync<StoredFilter>(storedFilters, updateMergeFunction: null);
+            return storedFilterStore.StoreAsync<StoredFilter>(storedFilters, updateMergeFunction: null, replace: true);
         }
 
         public static string GetDeclaredDefinitionsIndexName(string baseIndexName)
@@ -81,6 +81,7 @@ namespace Codex.ElasticSearch
         public static StoredFilter ApplyStableIds(this StoredFilter filter, RoaringDocIdSet stableIdSet)
         {
             filter.StableIds = stableIdSet.GetBytes();
+            filter.FilterHash = new Murmur3().ComputeHash(filter.StableIds).ToBase64String();
             filter.Cardinality = stableIdSet.Cardinality();
 
             return filter;
@@ -110,30 +111,31 @@ namespace Codex.ElasticSearch
         public static Task<ElasticSearchResponse<IReadOnlyList<T>>> GetStoredFilterEntities<T>(this ElasticSearchEntityStore<T> entityStore, string baseFilterId, int maxCount = 10)
             where T : class, ISearchEntity
         {
-            throw Placeholder.NotImplementedException();
+            //throw Placeholder.NotImplementedException();
 
-        //    return entityStore.Store.Service.UseClient<IReadOnlyList<T>>(async context =>
-        //    {
-        //        var client = context.Client;
+            return entityStore.Store.Service.UseClient<IReadOnlyList<T>>(async context =>
+            {
+                var client = context.Client;
 
-        //        var result = await client.SearchAsync<T>(
-        //            s => s.Query(f => f.Bool(bq => bq.Filter(qcd => qcd.StoredFilter(
-        //                sfq => sfq.Field(e => e.ShardStableId).FilterLookup<IStoredFilter>(fl => fl
-        //                    .Id(GetTokenizedFilterId(baseFilterId, entityStore.IndexName))
-        //                    .Index(entityStore.Store.StoredFilterStore.IndexName)
-        //                    .Path(sf => sf.Filter))))))
-        //            .Index(entityStore.IndexName)
-        //            .Take(maxCount))
-        //            .ThrowOnFailure();
+                var result = await client.SearchAsync<T>(
+                    s => s.Query(f => f.Bool(bq => bq.Filter(qcd => qcd.Terms(
+                        tsd => tsd.Field(e => e.StableId)
+                        .TermsLookup<IStoredFilter>(ld => ld
+                            .Index(entityStore.Store.StoredFilterStore.IndexName)
+                            .Id(baseFilterId)
+                            .Path(sf => sf.StableIds))))))
+                    .Index(entityStore.IndexName)
+                    .Take(maxCount))
+                    .ThrowOnFailure();
 
-        //        return result.Hits.Select(h => h.Source).ToList();
+                return result.Hits.Select(h => h.Source).ToList();
 
-        //        //var response = await context.Client
-        //        //    .GetAsync<T>(uid, g => g.Index(IndexName))
-        //        //    .ThrowOnFailure();
+                //var response = await context.Client
+                //    .GetAsync<T>(uid, g => g.Index(IndexName))
+                //    .ThrowOnFailure();
 
-        //        //return response.Source;
-        //    });
+                //return response.Source;
+            });
         }
     }
 }

@@ -43,6 +43,18 @@ namespace Codex.Utilities
             return result;
         }
 
+        public static List<T> AsList<T>(this IEnumerable<T> items)
+        {
+            if (items is List<T>)
+            {
+                return (List<T>)items;
+            }
+            else
+            {
+                return items.ToList();
+            }
+        }
+
         public static IReadOnlyList<T> AsReadOnlyList<T>(this IEnumerable<T> items)
         {
             if (items is IReadOnlyList<T>)
