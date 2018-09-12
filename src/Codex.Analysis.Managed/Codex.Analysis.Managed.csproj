@@ -10,7 +10,7 @@
     <PackageReference Include="ManagedEsent" Version="1.9.4" />
     <PackageReference Include="Microsoft.Build" Version="15.7.179" />
     <PackageReference Include="Microsoft.Build.Framework" Version="15.7.179" />
-    <PackageReference Include="Microsoft.Build.Logging.StructuredLogger" Version="1.1.224" />
+    <PackageReference Include="MSBuild.StructuredLogger" Version="2.0.4" />
     <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.7.179" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.7.179" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="2.9.0-beta4-62827-12" />
@@ -136,13 +136,6 @@
     <Compile Include="SolutionProjectAnalyzer.cs" />
     <Compile Include="WorkspaceHacks.cs" />
   </ItemGroup>
-  <Target Name="ApplyAliasesToPackageReferences" BeforeTargets="ResolveAssemblyReferences">
-    <ItemGroup>
-      <Reference>
-        <Aliases Condition="'%(Reference.NuGetPackageId)' == 'Microsoft.Build.Logging.StructuredLogger'">global,binlog</Aliases>
-      </Reference>
-    </ItemGroup>
-  </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>

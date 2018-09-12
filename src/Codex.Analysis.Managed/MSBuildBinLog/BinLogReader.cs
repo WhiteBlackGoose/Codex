@@ -1,18 +1,13 @@
-﻿extern alias binlog;
-
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Build.Framework;
-using Microsoft.Build.Logging;
 using Microsoft.Build.Logging.StructuredLogger;
 using Microsoft.CodeAnalysis;
-using BinaryLogReplayEventSource = binlog::Microsoft.Build.Logging.BinaryLogReplayEventSource;
 
 namespace Codex.Analysis.Managed
 {
-
     public class BinLogReader
     {
         /// <summary>
@@ -39,7 +34,7 @@ namespace Codex.Analysis.Managed
                 }
 
                 var invocations = new List<CompilerInvocation>();
-                var reader = new BinaryLogReplayEventSource();
+                var reader = new Microsoft.Build.Logging.StructuredLogger.BinLogReader();
                 var taskIdToInvocationMap = new Dictionary<(int, int), CompilerInvocation>();
 
                 void TryGetInvocationFromEvent(object sender, BuildEventArgs args)
