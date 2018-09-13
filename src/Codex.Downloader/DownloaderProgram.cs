@@ -34,6 +34,8 @@ namespace Codex.Downloader
 
             [Option("pat", Required = true, HelpText = "The personal access token used to access the account.")]
             public string PersonalAccessToken { get; set; }
+
+            public bool Preview { get; set; }
         }
 
         public static void Main(string[] args)
@@ -61,6 +63,7 @@ namespace Codex.Downloader
                 new VssClientCredentials(new VssFederatedCredentialPrompt()) :
                 new VssBasicCredential(string.Empty, options.PersonalAccessToken));
 
+            Console.WriteLine();
             Console.WriteLine($"Getting build definition: {options.BuildDefinitionId}");
 
             var definition = await client.GetDefinitionAsync(
@@ -80,18 +83,49 @@ namespace Codex.Downloader
             var lastBuild = (await client.GetBuildsAsync(
                 project: projectId,
                 definitions: new[] { definition.Id },
+                statusFilter: BuildStatus.Completed,
+                queryOrder: BuildQueryOrder.FinishTimeDescending,
+                top: 1)).FirstOrDefault();
+
+            var lastSuccessfulBuild = (await client.GetBuildsAsync(
+                project: projectId,
+                definitions: new[] { definition.Id },
                 tagFilters: new[] { "CodexOutputs" },
+                statusFilter: BuildStatus.Completed,
                 resultFilter: BuildResult.Succeeded | BuildResult.PartiallySucceeded,
                 queryOrder: BuildQueryOrder.FinishTimeDescending,
                 top: 1)).FirstOrDefault();
 
             if (lastBuild == null)
             {
-                Console.Error.WriteLine("Could not find successful build.");
+                PrintDefinitionUrl(options);
+                Console.Error.WriteLine("Could not find any build (successful or failed).");
                 return;
             }
+            else if (lastSuccessfulBuild == null)
+            {
+                PrintUrl(options, lastBuild);
+                Console.Error.WriteLine("Could not find successful build.");
+            }
+            else
+            {
+                PrintDefinitionUrl(options);
+            }
 
-            Console.WriteLine($"Found build: {lastBuild.BuildNumber} (id: {lastBuild.Id})");
+            if (lastBuild.Id != lastSuccessfulBuild?.Id)
+            {
+                Console.WriteLine($"Found last build: {lastBuild.BuildNumber} result: {lastBuild.Result}) (id: {lastBuild.Id}) Date: {lastBuild.QueueTime}");
+            }
+
+            if (lastSuccessfulBuild != null)
+            {
+                Console.WriteLine($"Found successful build: {lastSuccessfulBuild.BuildNumber} (id: {lastSuccessfulBuild.Id}) Date: {lastSuccessfulBuild.QueueTime}");
+            }
+
+            if (options.Preview || lastSuccessfulBuild == null)
+            {
+                return;
+            }
 
             destination = Path.GetFullPath(destination);
             Directory.CreateDirectory(Path.GetDirectoryName(destination));
@@ -101,7 +135,7 @@ namespace Codex.Downloader
                 FileAccess.ReadWrite,
                 FileShare.Delete, 64 << 10,
                 FileOptions.DeleteOnClose))
-            using (var stream = await client.GetArtifactContentZipAsync(projectId, lastBuild.Id, artifactName: "CodexOutputs"))
+            using (var stream = await client.GetArtifactContentZipAsync(projectId, lastSuccessfulBuild.Id, artifactName: "CodexOutputs"))
             {
                 stream.CopyTo(tempStream);
                 tempStream.Position = 0;
@@ -116,6 +150,18 @@ namespace Codex.Downloader
                     }
                 }
             }
+        }
+
+        private static void PrintDefinitionUrl(VSTSBuildOptions options)
+        {
+            var url = $"{options.CollectionUri.TrimEnd('/')}/{options.ProjectName}/_build?definitionId={options.BuildDefinitionId}";
+            Console.WriteLine(url);
+        }
+
+        private static void PrintUrl(VSTSBuildOptions options, Build lastBuild)
+        {
+            var url = $"{options.CollectionUri.TrimEnd('/')}/{options.ProjectName}/_build?buildId={lastBuild.Id}";
+            Console.WriteLine(url);
         }
 
         private static void HandleParseError(IEnumerable<Error> errors)

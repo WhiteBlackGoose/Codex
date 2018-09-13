@@ -25,13 +25,13 @@ namespace Codex.Ingester
             [Option("file", HelpText = "The location of a json file containing definition of repo analysis output locations.")]
             public string DefinitionsFile { get; set; }
 
-            [Option("out", Required = true, HelpText = "The temporary location to store analysis outputs before uploading.")]
+            [Option("out", Required = false, HelpText = "The temporary location to store analysis outputs before uploading.")]
             public string OutputFolder { get; set; }
 
             [Option("incremental", HelpText = "Specifies if files should not be downloaded if already present at output location.")]
             public bool Incremental { get; set; }
 
-            [Option("name", Required = true, HelpText = "The name of the repository to create.")]
+            [Option("name", Required = false, HelpText = "The name of the repository to create.")]
             public string RepoName { get; set; }
 
             [Option("es", HelpText = "The URL of the elasticsearch instance.")]
@@ -39,6 +39,9 @@ namespace Codex.Ingester
 
             [Option("newBackend", HelpText = "Specifies if new elasticsearch backend should be used.")]
             public bool NewBackend { get; set; }
+
+            [Option("preview", HelpText = "Specifies whether to preview downloading of build results.")]
+            public bool Preview { get; set; }
         }
 
         static void Main(string[] args)
@@ -55,6 +58,11 @@ namespace Codex.Ingester
 
         private static async Task RunAsync(Options options)
         {
+            if (options.OutputFolder == null)
+            {
+                options.Preview = true;
+            }
+
             if (!string.IsNullOrEmpty(options.DefinitionsFile))
             {
                 // Read the json file
@@ -63,13 +71,21 @@ namespace Codex.Ingester
                 // Download each of the repos to a subfolder with the repo name
                 // (maybe also in-proc)
 
-                Directory.CreateDirectory(options.OutputFolder);
+                if (!options.Preview)
+                {
+                    Directory.CreateDirectory(options.OutputFolder);
+                }
+
                 foreach (var repo in repoList.repos)
                 {
-                    var destination = Path.Combine(options.OutputFolder, repo.name + ".zip");
-                    if (options.Incremental && File.Exists(destination))
+                    string destination = null;
+                    if (!options.Preview)
                     {
-                        continue;
+                        destination = Path.Combine(options.OutputFolder, repo.name + ".zip");
+                        if (options.Incremental && File.Exists(destination))
+                        {
+                            continue;
+                        }
                     }
 
                     await DownloaderProgram.RunAsync(new DownloaderProgram.VSTSBuildOptions()
@@ -78,7 +94,8 @@ namespace Codex.Ingester
                         CollectionUri = repo.url,
                         Destination = destination,
                         ProjectName = repo.project,
-                        PersonalAccessToken = GetPersonalAccessToken(options, repo.pat)
+                        PersonalAccessToken = GetPersonalAccessToken(options, repo.pat),
+                        Preview = options.Preview
                     });
                 }
             }
@@ -87,7 +104,7 @@ namespace Codex.Ingester
             // specifying the root folder and a mode indicating that
             // they all go into the same partition
 
-            if (!string.IsNullOrEmpty(options.ElasticSearchUrl))
+            if (!string.IsNullOrEmpty(options.ElasticSearchUrl) && !options.Preview)
             {
                 CodexApplication.Ingest(
                     options.RepoName,
