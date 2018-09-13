@@ -138,6 +138,8 @@ namespace Codex.Automation.Workflow
                 arguments.RepoName = GetRepoName(arguments);
             }
 
+            Console.WriteLine("##vso[build.addbuildtag]CodexEnabled");
+
             string codexBinDirectory = Path.Combine(arguments.CodexOutputRoot, "bin");
             string binlogDirectory = Path.Combine(arguments.CodexOutputRoot, "binlogs");
             string analysisOutputDirectory = Path.Combine(arguments.CodexOutputRoot, "store");
@@ -198,7 +200,8 @@ namespace Codex.Automation.Workflow
             if (HasModeFlag(mode, Mode.AnalyzeOnly))
             {
                 // run exe
-                Console.WriteLine("Running Process");
+                Console.WriteLine("Running Process:");
+                Console.WriteLine(executablePath + " " + analysisArguments);
                 Process runExe = Process.Start(new ProcessStartInfo(executablePath, analysisArguments)
                 {
                     UseShellExecute = false
