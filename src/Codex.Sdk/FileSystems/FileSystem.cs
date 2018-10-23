@@ -28,6 +28,11 @@ namespace Codex
             return Stream.Null;
         }
 
+        public virtual long GetFileSize(string filePath)
+        {
+            return 0;
+        }
+
         public virtual void Dispose()
         {
         }
@@ -38,6 +43,11 @@ namespace Codex
         public override Stream OpenFile(string filePath)
         {
             return File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+        }
+
+        public override long GetFileSize(string filePath)
+        {
+            return new FileInfo(filePath).Length;
         }
     }
 }

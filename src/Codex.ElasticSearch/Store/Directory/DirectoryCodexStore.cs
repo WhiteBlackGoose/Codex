@@ -93,6 +93,12 @@ namespace Codex.ElasticSearch.Store
                         logger.LogMessage($"Reading {kind} infos from {kindDirectoryPath}");
                         foreach (var file in fileSystem.GetFiles(kind.Name))
                         {
+                            if (fileSystem.GetFileSize(file) > 1 << 20)
+                            {
+                                // Ignore files larger than 1 MB
+                                continue;
+                            }
+
                             actionQueue.Enqueue(async () =>
                             {
                                 var i = Interlocked.Increment(ref nextIndex);

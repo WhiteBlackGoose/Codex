@@ -538,39 +538,40 @@ namespace Codex.Application
                 loadDirectory = Path.Combine(loadDirectory, "store");
             }
 
-            Task.Run(async () =>
-            {
-                if (String.IsNullOrEmpty(loadDirectory)) throw new ArgumentException("Load directory must be specified. Use -d to provide it.");
+            LoadCoreAsync(logger, loadDirectory, finalizeRepository, targetIndexName).GetAwaiter().GetResult();
+        }
 
-                if (saveDirectory == null)
+        private static async Task LoadCoreAsync(Logger logger, string loadDirectory, bool finalizeRepository, string targetIndexName)
+        {
+            if (String.IsNullOrEmpty(loadDirectory)) throw new ArgumentException("Load directory must be specified. Use -d to provide it.");
+
+            if (saveDirectory == null)
+            {
+                if (newBackend)
                 {
-                    if (newBackend)
+                    InitService();
+                    store = await service.CreateStoreAsync(new ElasticSearchStoreConfiguration()
                     {
-                        InitService();
-                        store = await service.CreateStoreAsync(new ElasticSearchStoreConfiguration()
-                        {
-                            Prefix = "test.",
-                            ClearIndicesBeforeUse = reset
-                        });
-                    }
-                    else
-                    {
-                        store = new LegacyElasticSearchStore(new LegacyElasticSearchStoreConfiguration()
-                        {
-                            Endpoint = elasticSearchServer,
-                            TargetIndexName = targetIndexName
-                        });
-                    }
+                        Prefix = "test.",
+                        ClearIndicesBeforeUse = reset
+                    });
                 }
                 else
                 {
-                    store = new DirectoryCodexStore(saveDirectory) { Clean = clean, DisableOptimization = test };
+                    store = new LegacyElasticSearchStore(new LegacyElasticSearchStoreConfiguration()
+                    {
+                        Endpoint = elasticSearchServer,
+                        TargetIndexName = targetIndexName
+                    });
                 }
+            }
+            else
+            {
+                store = new DirectoryCodexStore(saveDirectory) { Clean = clean, DisableOptimization = test };
+            }
 
-                var loadDirectoryStore = new DirectoryCodexStore(loadDirectory, logger);
-                await loadDirectoryStore.ReadAsync(store, repositoryName: repoName, finalize: finalizeRepository);
-
-            }).GetAwaiter().GetResult();
+            var loadDirectoryStore = new DirectoryCodexStore(loadDirectory, logger);
+            await loadDirectoryStore.ReadAsync(store, repositoryName: repoName, finalize: finalizeRepository);
         }
 
         private static void ListIndices()

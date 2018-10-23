@@ -72,6 +72,11 @@ namespace Codex
             }
         }
 
+        public override long GetFileSize(string filePath)
+        {
+            return zipArchive.GetEntry(filePath).Length;
+        }
+
         public override IEnumerable<string> GetFiles()
         {
             return zipArchive.Entries.Where(e => e.Length != 0).Select(e => e.FullName).ToArray();

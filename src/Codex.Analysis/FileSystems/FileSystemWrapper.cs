@@ -25,6 +25,11 @@ namespace Codex.Analysis.FileSystems
         {
             return InnerFileSystem.OpenFile(filePath);
         }
+
+        public override long GetFileSize(string filePath)
+        {
+            return InnerFileSystem.GetFileSize(filePath);
+        }
     }
 
     public class CachingFileSystem : FileSystemWrapper
