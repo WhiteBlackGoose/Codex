@@ -62,6 +62,9 @@ namespace Codex.Storage.DataModel
         [Object(Ignore = true)]
         public IReadOnlyDictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
 
+        [Object(Ignore = true)]
+        public string IndexName { get; set; }
+
         public SourceFileModel()
         {
         }

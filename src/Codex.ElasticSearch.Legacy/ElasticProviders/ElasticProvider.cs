@@ -749,11 +749,13 @@ namespace Codex.Storage.ElasticProviders
                 .ThrowOnFailure();
 
             var sourceFileResponse = result.GetResponse<SourceFileModel>(SearchSourceTypeName);
-            var sourceFileResults = sourceFileResponse.Hits.Select(x => x.Source);
 
             SourceFileModel mergedSourceFileResult = null;
-            foreach (var sourceFileResult in sourceFileResults)
+            foreach (var hit in sourceFileResponse.Hits)
             {
+                var sourceFileResult = hit.Source;
+                sourceFileResult.IndexName = hit.Index;
+
                 if (mergedSourceFileResult == null)
                 {
                     mergedSourceFileResult = sourceFileResult;

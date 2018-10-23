@@ -79,6 +79,7 @@ namespace Codex.Storage
                 Path = boundSourceFile.SourceFile.Info.ProjectRelativePath,
                 ExcludeFromSearch = boundSourceFile.ExcludeFromSearch,
                 RepoRelativePath = boundSourceFile.SourceFile.Info.RepoRelativePath,
+                RepoId = boundSourceFile.RepositoryName,
                 WebAddress = boundSourceFile.SourceFile.Info.WebAddress,
                 ProjectId = boundSourceFile.ProjectId,
                 Classifications = FromObjectModel(boundSourceFile.Classifications),
@@ -375,9 +376,11 @@ namespace Codex.Storage
                         Language = sourceFile.Language,
                         ProjectRelativePath = sourceFile.Path,
                         WebAddress = sourceFile.WebAddress,
-                        RepoRelativePath = sourceFile.RepoRelativePath
+                        RepoRelativePath = sourceFile.RepoRelativePath,
+                        RepositoryName = sourceFile.RepoId
                     }
                 },
+                IndexName = sourceFile.IndexName,
                 ProjectId = sourceFile.ProjectId,
                 ExcludeFromSearch = sourceFile.ExcludeFromSearch,
                 // TODO: Possible NRE, Spans could be null

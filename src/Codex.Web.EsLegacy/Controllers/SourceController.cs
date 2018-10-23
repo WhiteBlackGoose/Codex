@@ -58,7 +58,10 @@ namespace WebUI.Controllers
                     return this.HttpNotFound();
                 }
 
-                var boundSourceFile = await Storage.GetBoundSourceFileAsync(this.GetSearchRepos(), projectId, filename);
+                string[] searchRepos = this.GetSearchRepos();
+                var projectContents = await Storage.GetProjectContentsAsync(searchRepos, projectId);
+
+                var boundSourceFile = await Storage.GetBoundSourceFileAsync(searchRepos, projectId, filename);
                 if (boundSourceFile == null)
                 {
                     return PartialView("~/Views/Source/Index.cshtml", new EditorModel { Error = $"Bound source file for {filename} in {projectId} not found." });
@@ -69,6 +72,9 @@ namespace WebUI.Controllers
                 Responses.PrepareResponse(Response);
 
                 var model = await renderer.RenderAsync();
+                model.IndexedOn = projectContents?.DateUploaded.ToLocalTime().ToString() ?? "Unknown";
+                model.RepoName = boundSourceFile.RepositoryName ?? "Unknown";
+                model.IndexName = boundSourceFile.IndexName;
                 foreach (var editEntry in m_edits)
                 {
                     if (model.WebLink?.StartsWith(editEntry.Key, StringComparison.OrdinalIgnoreCase) == true)

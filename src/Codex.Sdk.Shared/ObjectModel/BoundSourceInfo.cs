@@ -20,6 +20,8 @@ namespace Codex.ObjectModel
 
     partial class BoundSourceFile
     {
+        public string IndexName { get; set; }
+
         //protected override void OnSerializingCore()
         //{
         //    string projectId = this.ProjectId;
