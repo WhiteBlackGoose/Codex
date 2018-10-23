@@ -21,12 +21,12 @@ namespace Codex.ElasticSearch.Store
             Store = store;
         }
 
-        public Task AddStoredFilterAsync(string key, string name, IStoredFilter filter)
+        public Task<IStoredFilter> AddStoredFilterAsync(string key, string name, IStoredFilter filter)
         {
             return UpdateStoredFilter(key, name, filter, UpdateMode.Replace);
         }
 
-        public Task RemoveStoredFilterAsync(string key, string name)
+        public Task<IStoredFilter> RemoveStoredFilterAsync(string key, string name)
         {
             IStoredFilter filter = null;
             return UpdateStoredFilter(key, name, filter, UpdateMode.Remove);
@@ -39,7 +39,7 @@ namespace Codex.ElasticSearch.Store
             Replace = Add | Remove
         }
 
-        private async Task UpdateStoredFilter(string key, string name, IStoredFilter filter, UpdateMode initialMode)
+        private async Task<IStoredFilter> UpdateStoredFilter(string key, string name, IStoredFilter filter, UpdateMode initialMode)
         {
             string path = GetHashPathFromName(name);
             // Get chain of stored filters leading to name including siblings of each
@@ -47,7 +47,7 @@ namespace Codex.ElasticSearch.Store
             var ancestorChain = await GetStoredFilterAncestorChainBottomUp(key, path, createIfMissing: initialMode != UpdateMode.Remove);
             if (ancestorChain == null)
             {
-                return;
+                return null;
             }
 
             // For each segment, rewrite to replace child with the filter
@@ -80,7 +80,7 @@ namespace Codex.ElasticSearch.Store
             }
 
             // Update key with new stored filter
-            await Update(key, modifiedAncestorChain);
+            return await Update(key, modifiedAncestorChain);
         }
 
         public static string GetHashPathFromName(string name)
@@ -153,12 +153,14 @@ namespace Codex.ElasticSearch.Store
             return false;
         }
 
-        public Task Update(string key, IReadOnlyList<StoredFilter> updatedChain)
+        public async Task<IStoredFilter> Update(string key, List<StoredFilter> updatedChain)
         {
             var rootFilter = updatedChain.Last();
             rootFilter.Uid = key;
 
-            return Store.StoreAsync(updatedChain);
+            await Store.StoreAsync(updatedChain);
+
+            return rootFilter;
         }
 
         public async Task<StoredFilter[]> GetStoredFilterAncestorChainBottomUp(string key, string path, bool createIfMissing)

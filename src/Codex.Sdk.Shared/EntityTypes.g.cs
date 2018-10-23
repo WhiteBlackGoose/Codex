@@ -3349,7 +3349,7 @@ namespace Codex.ObjectModel {
         
         private int m_RoutingGroup;
         
-        private int m_StableId;
+        private long m_StableId;
         
         private string m_SortKey;
         
@@ -3429,7 +3429,7 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// The per-group stable identity
         /// </summary>
-        public virtual int StableId {
+        public virtual long StableId {
             get {
                 return this.m_StableId;
             }
