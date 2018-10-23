@@ -42,6 +42,9 @@ namespace Codex.Ingester
 
             [Option("preview", HelpText = "Specifies whether to preview downloading of build results.")]
             public bool Preview { get; set; }
+
+            [Option("debug", HelpText = "Launches debugger on start.")]
+            public bool Debug { get; set; }
         }
 
         static void Main(string[] args)
@@ -61,6 +64,11 @@ namespace Codex.Ingester
             if (options.OutputFolder == null)
             {
                 options.Preview = true;
+            }
+
+            if (options.Debug)
+            {
+                Debugger.Launch();
             }
 
             if (!string.IsNullOrEmpty(options.DefinitionsFile))
