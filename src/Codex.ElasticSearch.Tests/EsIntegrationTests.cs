@@ -315,7 +315,7 @@ namespace Codex.ElasticSearch.Tests
                 maxCount: values.Count + 1);
             var filteredEntities = filteredEntitiesResponse.Result;
 
-            var filteredEntityIds = new HashSet<int>(filteredEntities.Select(e => e.StableId));
+            var filteredEntityIds = new HashSet<int>(filteredEntities.Select(e => (int)e.StableId));
 
             var missingFilteredEntityIds = values.Except(filteredEntityIds).ToList();
             Assert.IsEmpty(missingFilteredEntityIds);

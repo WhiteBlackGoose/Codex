@@ -5,6 +5,7 @@ using Codex.Storage.ElasticProviders;
 using Codex.Storage.Utilities;
 using Nest;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,8 @@ namespace Codex.ElasticSearch.Search
         internal readonly ElasticSearchService Service;
         internal readonly ElasticSearchStoreConfiguration Configuration;
 
+        private ConcurrentDictionary<string, (DateTime resolveTime, string repositorySnapshotId)> resolvedRepositoryIds = new ConcurrentDictionary<string, (DateTime resolveTime, string repositorySnapshotId)>();
+
         /// <summary>
         /// Creates an elasticsearch store with the given prefix for indices
         /// </summary>
@@ -36,13 +39,11 @@ namespace Codex.ElasticSearch.Search
             {
                 var client = context.Client;
                 var referencesResult = await client.SearchAsync<IReferenceSearchModel>(s => s
-                    .Query(qcd => qcd.Bool(bq => bq.Filter(
+                    .StoredFilterQuery(context, IndexName(SearchTypes.Reference), qcd => qcd.Bool(bq => bq.Filter(
                         fq => fq.Term(r => r.Reference.ProjectId, arguments.ProjectId),
                         fq => fq.Term(r => r.Reference.Id, arguments.SymbolId))))
                     .Sort(sd => sd.Ascending(r => r.ProjectId))
-                    .Index(Configuration.Prefix + SearchTypes.Reference.IndexName)
-                    .Take(arguments.MaxResults)
-                    .CaptureRequest(context))
+                    .Take(arguments.MaxResults))
                 .ThrowOnFailure();
 
                 return referencesResult;
@@ -60,26 +61,22 @@ namespace Codex.ElasticSearch.Search
             {
                 var client = context.Client;
                 var referencesResult = await client.SearchAsync<IReferenceSearchModel>(s => s
-                                .Query(qcd => qcd.Bool(bq => bq.Filter(
-                                    fq => fq.Term(r => r.Reference.ProjectId, arguments.ProjectId),
-                                    fq => fq.Term(r => r.Reference.Id, arguments.SymbolId),
-                                    fq => fq.Term(r => r.Reference.ReferenceKind, nameof(ReferenceKind.Definition)))))
-                                .Index(Configuration.Prefix + SearchTypes.Reference.IndexName)
-                                .Take(arguments.MaxResults)
-                                .CaptureRequest(context))
-                            .ThrowOnFailure();
+                        .StoredFilterQuery(context, IndexName(SearchTypes.Reference), qcd => qcd.Bool(bq => bq.Filter(
+                            fq => fq.Term(r => r.Reference.ProjectId, arguments.ProjectId),
+                            fq => fq.Term(r => r.Reference.Id, arguments.SymbolId),
+                            fq => fq.Term(r => r.Reference.ReferenceKind, nameof(ReferenceKind.Definition)))))
+                        .Take(arguments.MaxResults))
+                    .ThrowOnFailure();
 
                 if (arguments.FallbackFindAllReferences && referencesResult.Total == 0)
                 {
                     // No definitions, return the the result of find all references 
                     referencesResult = await client.SearchAsync<IReferenceSearchModel>(s => s
-                        .Query(qcd => qcd.Bool(bq => bq.Filter(
+                        .StoredFilterQuery(context, IndexName(SearchTypes.Reference), qcd => qcd.Bool(bq => bq.Filter(
                             fq => fq.Term(r => r.Reference.ProjectId, arguments.ProjectId),
                             fq => fq.Term(r => r.Reference.Id, arguments.SymbolId))))
                         .Sort(sd => sd.Ascending(r => r.ProjectId))
-                        .Index(Configuration.Prefix + SearchTypes.Reference.IndexName)
-                        .Take(arguments.MaxResults)
-                        .CaptureRequest(context))
+                        .Take(arguments.MaxResults))
                     .ThrowOnFailure();
                 }
 
@@ -87,9 +84,9 @@ namespace Codex.ElasticSearch.Search
             });
         }
 
-        private async Task<IndexQueryResponse<ReferencesResult>> FindReferencesCore(FindSymbolArgumentsBase arguments, Func<ClientContext, Task<ISearchResponse<IReferenceSearchModel>>> getReferencesAsync)
+        private async Task<IndexQueryResponse<ReferencesResult>> FindReferencesCore(FindSymbolArgumentsBase arguments, Func<StoredFilterSearchContext, Task<ISearchResponse<IReferenceSearchModel>>> getReferencesAsync)
         {
-            return await UseClientSingle(async context =>
+            return await UseClientSingle(arguments, async context =>
             {
                 var client = context.Client;
 
@@ -119,16 +116,14 @@ namespace Codex.ElasticSearch.Search
             });
         }
 
-        private async Task<string> GetSymbolShortName(ClientContext context, FindSymbolArgumentsBase arguments)
+        private async Task<string> GetSymbolShortName(StoredFilterSearchContext context, FindSymbolArgumentsBase arguments)
         {
             var client = context.Client;
             var definitionsResult = await client.SearchAsync<IDefinitionSearchModel>(s => s
-                    .Query(qcd => qcd.Bool(bq => bq.Filter(
+                    .StoredFilterQuery(context, IndexName(SearchTypes.Definition), qcd => qcd.Bool(bq => bq.Filter(
                         fq => fq.Term(r => r.Definition.ProjectId, arguments.ProjectId),
                         fq => fq.Term(r => r.Definition.Id, arguments.SymbolId))))
-                    .Index(Configuration.Prefix + SearchTypes.Definition.IndexName)
-                    .Take(1)
-                    .CaptureRequest(context))
+                    .Take(1))
                 .ThrowOnFailure();
 
             return definitionsResult.Hits.FirstOrDefault()?.Source.Definition.ShortName;
@@ -136,38 +131,34 @@ namespace Codex.ElasticSearch.Search
 
         public async Task<IndexQueryResponse<IBoundSourceFile>> GetSourceAsync(GetSourceArguments arguments)
         {
-            return await UseClientSingle<IBoundSourceFile>(async context =>
+            return await UseClientSingle<IBoundSourceFile>(arguments, async context =>
             {
                 var client = context.Client;
 
                 var boundResults = await client.SearchAsync<BoundSourceSearchModel>(sd => sd
-                    .Query(qcd => qcd.Bool(bq => bq.Filter(
+                    .StoredFilterQuery(context, IndexName(SearchTypes.BoundSource), qcd => qcd.Bool(bq => bq.Filter(
                             fq => fq.Term(s => s.BindingInfo.ProjectId, arguments.ProjectId),
                             fq => fq.Term(s => s.BindingInfo.ProjectRelativePath, arguments.ProjectRelativePath))))
-                    .Index(Configuration.Prefix + SearchTypes.BoundSource.IndexName)
-                    .Take(1)
-                    .CaptureRequest(context))
+                    .Take(1))
                 .ThrowOnFailure();
 
                 if (boundResults.Hits.Count != 0)
                 {
                     var boundSearchModel = boundResults.Hits.First().Source;
-                    var textResults = await client.GetAsync<TextSourceSearchModel>(boundSearchModel.TextUid, 
+                    var textResults = await client.GetAsync<TextSourceSearchModel>(boundSearchModel.TextUid,
                         gd => gd.Index(Configuration.Prefix + SearchTypes.TextSource.IndexName))
                     .ThrowOnFailure();
 
                     var repoResults = await client.SearchAsync<RepositorySearchModel>(sd => sd
-                        .Query(qcd => qcd.Bool(bq => bq.Filter(
+                        .StoredFilterQuery(context, IndexName(SearchTypes.Repository), qcd => qcd.Bool(bq => bq.Filter(
                                 fq => fq.Term(s => s.Repository.Name, boundSearchModel.BindingInfo.RepositoryName))))
-                        .Index(Configuration.Prefix + SearchTypes.Repository.IndexName)
-                        .Take(1)
-                        .CaptureRequest(context))
+                        .Take(1))
                     .ThrowOnFailure();
 
                     var repo = repoResults.Hits.FirstOrDefault()?.Source.Repository;
 
                     var sourceFile = textResults.Source.File;
-                    if (sourceFile.Info.WebAddress == null 
+                    if (sourceFile.Info.WebAddress == null
                         && repo?.SourceControlWebAddress != null
                         && sourceFile.Info.RepoRelativePath != null
                         // Don't add web access link for files not under source tree (i.e. [Metadata])
@@ -188,36 +179,34 @@ namespace Codex.ElasticSearch.Search
 
         public async Task<IndexQueryResponse<GetProjectResult>> GetProjectAsync(GetProjectArguments arguments)
         {
-            return await UseClientSingle<GetProjectResult>(async context =>
+            return await UseClientSingle<GetProjectResult>(arguments, async context =>
             {
                 var client = context.Client;
 
                 var response = await client.SearchAsync<ProjectSearchModel>(sd => sd
-                    .Query(qcd => qcd.Bool(bq => bq.Filter(
+                    .StoredFilterQuery(context, IndexName(SearchTypes.Project), qcd => qcd.Bool(bq => bq.Filter(
                             fq => fq.Term(s => s.Project.ProjectId, arguments.ProjectId))))
-                    .Index(Configuration.Prefix + SearchTypes.Project.IndexName)
-                    .Take(1)
-                    .CaptureRequest(context))
+                    .Take(1))
                 .ThrowOnFailure();
 
                 if (response.Hits.Count != 0)
                 {
                     IProjectSearchModel projectSearchModel = response.Hits.First().Source;
 
+                    // TODO: Not sure why this is a good marker for when the project was uploaded. Since project search model may be deduplicated,
+                    // to a past result we probably need something more accurate. Maybe the upload date of the stored filter. That would more closely
+                    // match the legacy behavior.
                     var registeredResponse = await client.SearchAsync<IRegisteredEntity>(sd => sd
-                        .Query(qcd => qcd.Bool(bq => bq.Filter(
+                        .StoredFilterQuery(context, IndexName(SearchTypes.RegisteredEntity), qcd => qcd.Bool(bq => bq.Filter(
                                 fq => fq.Term(s => s.Uid, projectSearchModel.Uid))))
-                        .Index(Configuration.Prefix + SearchTypes.RegisteredEntity.IndexName)
                         .Take(1)
                         .CaptureRequest(context));
 
                     var referencesResult = await client.SearchAsync<IProjectReferenceSearchModel>(s => s
-                        .Query(qcd => qcd.Bool(bq => bq.Filter(
+                        .StoredFilterQuery(context, IndexName(SearchTypes.ProjectReference), qcd => qcd.Bool(bq => bq.Filter(
                             fq => fq.Term(r => r.ProjectReference.ProjectId, arguments.ProjectId))))
                         .Sort(sd => sd.Ascending(r => r.ProjectId))
-                        .Index(Configuration.Prefix + SearchTypes.ProjectReference.IndexName)
-                        .Take(arguments.MaxResults)
-                        .CaptureRequest(context))
+                        .Take(arguments.MaxResults))
                     .ThrowOnFailure();
 
                     return new GetProjectResult()
@@ -248,7 +237,7 @@ namespace Codex.ElasticSearch.Search
                 };
             }
 
-            return await UseClient(async context =>
+            return await UseClient(arguments, async context =>
             {
                 Placeholder.Todo("Allow filtering text matches by extension/path");
                 Placeholder.Todo("Extract method for getting index name from search type");
@@ -257,13 +246,18 @@ namespace Codex.ElasticSearch.Search
 
                 var terms = searchPhrase.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
+                bool allowReferencedDefinitions = terms.Any(t => t == "@all");
+                var indexName = IndexName(SearchTypes.Definition);
+                if (!allowReferencedDefinitions)
+                {
+                    indexName = GetDeclaredDefinitionsIndexName(indexName);
+                }
+
                 var definitionsResult = await client.SearchAsync<IDefinitionSearchModel>(s => s
-                        .Query(qcd => qcd.Bool(bq => bq
+                        .StoredFilterQuery(context, indexName, qcd => qcd.Bool(bq => bq
                             .Filter(GetTermsFilter(terms, allowReferencedDefinitions: arguments.AllowReferencedDefinitions))
                             .Should(GetTermsFilter(terms, boostOnly: true))))
-                        .Index(Configuration.Prefix + SearchTypes.Definition.IndexName)
-                        .Take(arguments.MaxResults)
-                        .CaptureRequest(context))
+                        .Take(arguments.MaxResults))
                     .ThrowOnFailure();
 
                 if (definitionsResult.Hits.Count != 0)
@@ -281,7 +275,7 @@ namespace Codex.ElasticSearch.Search
 
                 var textResults = await client.SearchAsync<ITextSourceSearchModel>(
                     s => s
-                        .Query(f =>
+                        .StoredFilterQuery(context, IndexName(SearchTypes.TextSource), f =>
                             f.Bool(bq =>
                             bq.Filter(qcd => !qcd.Term(sf => sf.File.ExcludeFromSearch, true))
                               .Must(qcd => qcd.ConfigureIfElse(isPrefix,
@@ -291,9 +285,7 @@ namespace Codex.ElasticSearch.Search
                         .Source(source => source
                             .Includes(sd => sd.Fields(
                                 sf => sf.File.Info)))
-                        .Index(Configuration.Prefix + SearchTypes.TextSource.IndexName)
-                        .Take(arguments.MaxResults)
-                        .CaptureRequest(context))
+                        .Take(arguments.MaxResults))
                     .ThrowOnFailure();
 
                 var sourceFileResults =
@@ -317,13 +309,13 @@ namespace Codex.ElasticSearch.Search
             });
         }
 
-        private string GetIndexName(SearchType searchType)
+        private string IndexName(SearchType searchType)
         {
             return Configuration.Prefix + searchType.IndexName;
         }
 
         private Func<QueryContainerDescriptor<IDefinitionSearchModel>, QueryContainer> GetTermsFilter(
-            string[] terms, 
+            string[] terms,
             bool boostOnly = false,
             bool allowReferencedDefinitions = false)
         {
@@ -332,7 +324,7 @@ namespace Codex.ElasticSearch.Search
 
         private IEnumerable<Func<QueryContainerDescriptor<IDefinitionSearchModel>, QueryContainer>>
             GetTermsFilters(
-            string[] terms, 
+            string[] terms,
             bool boostOnly = false,
             bool allowReferencedDefinitions = false)
         {
@@ -352,21 +344,21 @@ namespace Codex.ElasticSearch.Search
             {
                 yield return fq => fq.Bool(bqd => bqd.MustNot(fq1 => fq1.Term(dss => dss.Definition.ExcludeFromDefaultSearch, true)));
 
-                if (!allowReferencedDefinitions)
-                {
-                    yield return fq => fq.Terms(
-                        tsd => tsd
-                            .Field(e => e.StableId)
-                            .TermsLookup<IStoredFilter>(ld => ld
-                                .Index(GetIndexName(SearchTypes.StoredFilter))
-                                .Id(GetFilterName(
-                                    Configuration.CombinedSourcesFilterName, 
-                                    indexName: GetDeclaredDefinitionsIndexName(GetIndexName(SearchTypes.Definition))))
-                                .Path(sf => sf.StableIds)));
-                    // TODO: Should referenced symbols only be allowed conditionally
-                    // Maybe it should be an option to the search arguments
-                    //yield return fq => fq.Bool(bqd => bqd.MustNot(fq1 => fq1.Term(dss => dss.IsReferencedSymbol, true)));
-                }
+                //if (!allowReferencedDefinitions)
+                //{
+                //    yield return fq => fq.Terms(
+                //        tsd => tsd
+                //            .Field(e => e.StableId)
+                //            .TermsLookup<IStoredFilter>(ld => ld
+                //                .Index(IndexName(SearchTypes.StoredFilter))
+                //                .Id(GetFilterName(
+                //                    Configuration.CombinedSourcesFilterName, 
+                //                    indexName: GetDeclaredDefinitionsIndexName(IndexName(SearchTypes.Definition))))
+                //                .Path(sf => sf.StableIds)));
+                //    // TODO: Should referenced symbols only be allowed conditionally
+                //    // Maybe it should be an option to the search arguments
+                //    //yield return fq => fq.Bool(bqd => bqd.MustNot(fq1 => fq1.Term(dss => dss.IsReferencedSymbol, true)));
+                //}
             }
         }
 
@@ -451,13 +443,54 @@ namespace Codex.ElasticSearch.Search
             return d;
         }
 
-        private async Task<IndexQueryHitsResponse<T>> UseClient<T>(Func<ClientContext, Task<IndexQueryHits<T>>> useClient)
+        private async Task<StoredFilterSearchContext> GetStoredFilterContextAsync(ContextCodexArgumentsBase arguments, ClientContext context)
+        {
+            string aliasId = null;
+            var scopeId = arguments.RepositoryScopeId ?? Configuration.CombinedSourcesFilterName;
+
+            if (!resolvedRepositoryIds.TryGetValue(scopeId, out var resolvedEntry) || !GetValueFromEntry(resolvedEntry, out aliasId))
+            {
+                IGetResponse<PropertySearchModel> aliasResult = await context.Client.GetAsync<PropertySearchModel>(scopeId,
+                    gd => gd.Index(IndexName(SearchTypes.Property)))
+                    .ThrowOnFailure();
+
+                if (aliasResult.Found)
+                {
+                    aliasId = aliasResult.Source.Value;
+                    resolvedRepositoryIds.TryAdd(scopeId, (DateTime.UtcNow, aliasId));
+                }
+            }
+
+            if (aliasId == null)
+            {
+                throw new Exception($"Unable to find index with name: {scopeId}");
+            }
+
+            return new StoredFilterSearchContext(context, aliasId, IndexName(SearchTypes.StoredFilter), aliasId);
+        }
+
+        private bool GetValueFromEntry((DateTime resolveTime, string repositorySnapshotId) resolvedEntry, out string aliasId)
+        {
+            var age = DateTime.UtcNow - resolvedEntry.resolveTime;
+            if (age > Configuration.CachedAliasIdRetention)
+            {
+                // Entry is too old, need resolve the alias id
+                aliasId = null;
+                return false;
+            }
+
+            aliasId = resolvedEntry.repositorySnapshotId;
+            return true;
+        }
+
+        private async Task<IndexQueryHitsResponse<T>> UseClient<T>(ContextCodexArgumentsBase arguments, Func<StoredFilterSearchContext, Task<IndexQueryHits<T>>> useClient)
         {
             var elasticResponse = await Service.UseClient(async context =>
             {
                 try
                 {
-                    var result = await useClient(context);
+                    var sfContext = await GetStoredFilterContextAsync(arguments, context);
+                    var result = await useClient(sfContext);
                     return new IndexQueryHitsResponse<T>()
                     {
                         Result = result
@@ -478,13 +511,14 @@ namespace Codex.ElasticSearch.Search
             return response;
         }
 
-        private async Task<IndexQueryResponse<T>> UseClientSingle<T>(Func<ClientContext, Task<T>> useClient)
+        private async Task<IndexQueryResponse<T>> UseClientSingle<T>(ContextCodexArgumentsBase arguments, Func<StoredFilterSearchContext, Task<T>> useClient)
         {
             var elasticResponse = await Service.UseClient(async context =>
             {
                 try
                 {
-                    var result = await useClient(context);
+                    var sfContext = await GetStoredFilterContextAsync(arguments, context);
+                    var result = await useClient(sfContext);
                     return new IndexQueryResponse<T>()
                     {
                         Result = result

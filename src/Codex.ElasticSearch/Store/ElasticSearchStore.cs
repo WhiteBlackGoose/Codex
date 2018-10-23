@@ -2,6 +2,7 @@
 using Codex.Storage.ElasticProviders;
 using Codex.Utilities;
 using Nest;
+using System;
 using System.Threading.Tasks;
 
 namespace Codex.ElasticSearch
@@ -133,6 +134,8 @@ namespace Codex.ElasticSearch
         public bool UseStoredFilters = false;
 
         public bool ClearIndicesBeforeUse = true;
+
+        public TimeSpan CachedAliasIdRetention = TimeSpan.FromMinutes(30);
 
         /// <summary>
         /// The number of shards for created indices

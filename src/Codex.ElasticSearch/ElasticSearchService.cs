@@ -141,7 +141,19 @@ namespace Codex.ElasticSearch
         // TODO: Disable
         public bool CaptureRequests = true;
         public ElasticClient Client;
-        public List<string> Requests = new List<string>();
+        public List<string> Requests;
+
+        public ClientContext()
+        {
+            Requests = new List<string>();
+        }
+
+        public ClientContext(ClientContext other)
+        {
+            CaptureRequests = other.CaptureRequests;
+            Client = other.Client;
+            Requests = other.Requests;
+        }
     }
 
     public class ElasticSearchResponse<T>

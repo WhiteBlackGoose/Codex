@@ -152,7 +152,7 @@ namespace Codex.ElasticSearch
         public ElasticEntityRef(ISearchEntity entity)
         {
             Uid = entity.Uid;
-            StableId = entity.StableId;
+            StableId = (int)entity.StableId;
         }
 
         public override string ToString()

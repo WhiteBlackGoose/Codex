@@ -1,4 +1,6 @@
 ﻿using Codex.ElasticSearch.Formats;
+using Codex.ElasticSearch.Search;
+using Codex.ElasticSearch.Utilities;
 using Codex.ObjectModel;
 using Codex.Storage.ElasticProviders;
 using Codex.Utilities;
@@ -18,14 +20,42 @@ namespace Codex.ElasticSearch
         public const int StableIdGroupMaxValue = byte.MaxValue;
         public const long MaxVersion = 1L << 40;
 
+        private const string CACHED_STORED_FITLER_ID_SPECIFIER = ",#=";
+
         public static Task UpdateStoredFiltersAsync(this ElasticSearchEntityStore<IStoredFilter> storedFilterStore, IReadOnlyList<IStoredFilter> storedFilters)
         {
             return storedFilterStore.StoreAsync<StoredFilter>(storedFilters, updateMergeFunction: null, replace: true);
         }
 
+        public static SearchDescriptor<T> StoredFilterQuery<T>(this SearchDescriptor<T> searchDescriptor, StoredFilterSearchContext context, string indexName, Func<QueryContainerDescriptor<T>, QueryContainer> query)
+            where T : class, ISearchEntity
+        {
+            return searchDescriptor
+                .Query(q => q.Bool(bq => bq
+                    .Must(query)
+                    .Filter(q1 => q1.Terms(tq => tq.Field(e => e.StableId)
+                        .Name(CACHED_STORED_FITLER_ID_SPECIFIER + context.StoredFilterUid)
+                        .TermsLookup<IStoredFilter>(ld => ld
+                            .Index(context.StoredFilterIndexName)
+                            .Id(GetRepositoryFilterUid(context.RepositoryScopeId, indexName))
+                            .Path(sf => sf.StableIds))))))
+                .Index(indexName)
+                .CaptureRequest(context);
+        }
+
         public static string GetDeclaredDefinitionsIndexName(string baseIndexName)
         {
             return $"{baseIndexName}.declared";
+        }
+
+        public static string GetRepositoryFilterUid(string repositoryId, string indexName)
+        {
+            return GetFilterName(GetRepositoryBaseFilterName(repositoryId), indexName: indexName);
+        }
+
+        public static string GetStoredFilterAliasUid(string repositoryName)
+        {
+            return $"aliases/{GetRepositoryBaseFilterName(repositoryName)}";
         }
 
         public static string GetRepositoryBaseFilterName(string repositoryName)
