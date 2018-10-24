@@ -109,9 +109,17 @@ namespace Codex.ElasticSearch.Store
 
                     foreach (var span in CompressedReferences.LineSpanModel.SharedValues)
                     {
-                        var lineSpan = lineSpans[span.LineIndex];
-                        span.LineSpanText = lineSpan.LineSpanText;
-                        span.Start = lineSpan.Start;
+                        if (span.LineIndex >= 0 && span.LineIndex < lineSpans.Count)
+                        {
+                            var lineSpan = lineSpans[span.LineIndex];
+                            span.LineSpanText = lineSpan.LineSpanText;
+                            span.Start = lineSpan.Start;
+                        }
+                        else
+                        {
+                            // there's a case in VSO that we should investigate, 
+                            // see https://github.com/Ref12/Codex/issues/136
+                        }
                     }
                 }
 
