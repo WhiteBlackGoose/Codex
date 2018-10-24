@@ -103,7 +103,15 @@ namespace Codex.ElasticSearch.Store
                             {
                                 var i = Interlocked.Increment(ref nextIndex);
                                 logger.LogMessage($"{i}/{count}: Reading {kind} info at {file}");
-                                await kind.Add(this, fileSystem, file, repositoryStore);
+                                try
+                                {
+                                    await kind.Add(this, fileSystem, file, repositoryStore);
+                                }
+                                catch (Exception ex)
+                                {
+                                    logger.LogExceptionError("AddFile", ex);
+                                }
+
                                 logger.LogMessage($"{i}/{count}: Added {file} to store.");
                             });
                         }
