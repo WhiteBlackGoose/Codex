@@ -91,11 +91,12 @@ namespace Codex.ElasticSearch.Store
                     {
                         var kindDirectoryPath = Path.Combine(DirectoryPath, kind.Name);
                         logger.LogMessage($"Reading {kind} infos from {kindDirectoryPath}");
-                        foreach (var file in fileSystem.GetFiles(kind.Name))
+                        var files = fileSystem.GetFiles(kind.Name).ToList();
+                        foreach (var file in files)
                         {
-                            if (fileSystem.GetFileSize(file) > 1 << 20)
+                            if (kind == StoredEntityKind.BoundFiles && fileSystem.GetFileSize(file) > 10 << 20)
                             {
-                                // Ignore files larger than 1 MB
+                                // Ignore files larger than 10 MB
                                 continue;
                             }
 
