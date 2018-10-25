@@ -86,7 +86,7 @@ namespace Codex
         Task FinalizeAsync();
     }
 
-    public class NullCodexRepositoryStore : ICodexRepositoryStore
+    public class NullCodexRepositoryStore : ICodexRepositoryStore, ICodexStore
     {
         public Task AddBoundFilesAsync(IReadOnlyList<BoundSourceFile> files)
         {
@@ -111,6 +111,11 @@ namespace Codex
         public Task AddTextFilesAsync(IReadOnlyList<SourceFile> files)
         {
             return Task.CompletedTask;
+        }
+
+        public Task<ICodexRepositoryStore> CreateRepositoryStore(Repository repository, Commit commit, Branch branch)
+        {
+            return Task.FromResult<ICodexRepositoryStore>(this);
         }
 
         public Task FinalizeAsync()
