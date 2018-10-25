@@ -382,6 +382,7 @@ namespace Codex.Storage
                 },
                 IndexName = sourceFile.IndexName,
                 ProjectId = sourceFile.ProjectId,
+                RepositoryName = sourceFile.RepoId,
                 ExcludeFromSearch = sourceFile.ExcludeFromSearch,
                 // TODO: Possible NRE, Spans could be null
                 Classifications = IndexableListAdapter.GetSpanList(sourceFile.Classifications),
