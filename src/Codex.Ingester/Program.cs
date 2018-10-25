@@ -112,7 +112,7 @@ namespace Codex.Ingester
             // specifying the root folder and a mode indicating that
             // they all go into the same partition
 
-            if (!string.IsNullOrEmpty(options.ElasticSearchUrl) && !options.Preview)
+            if (!options.Preview)
             {
                 CodexApplication.Ingest(
                     options.RepoName,
