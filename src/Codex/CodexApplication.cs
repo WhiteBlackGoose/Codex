@@ -545,7 +545,7 @@ namespace Codex.Application
         {
             if (String.IsNullOrEmpty(loadDirectory)) throw new ArgumentException("Load directory must be specified. Use -d to provide it.");
 
-            if (saveDirectory == null)
+            if (!string.IsNullOrEmpty(elasticSearchServer))
             {
                 if (newBackend)
                 {
@@ -565,9 +565,13 @@ namespace Codex.Application
                     });
                 }
             }
-            else
+            else if (!string.IsNullOrEmpty(saveDirectory))
             {
                 store = new DirectoryCodexStore(saveDirectory) { Clean = clean, DisableOptimization = test };
+            }
+            else
+            {
+                store = new NullCodexRepositoryStore();
             }
 
             var loadDirectoryStore = new DirectoryCodexStore(loadDirectory, logger);
