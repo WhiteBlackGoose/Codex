@@ -117,8 +117,7 @@ namespace Codex.ElasticSearch.Store
                         }
                         else
                         {
-                            // there's a case in VSO that we should investigate, 
-                            // see https://github.com/Ref12/Codex/issues/136
+                            throw new Exception("Incorrect line number in file: " + BoundSourceFile.SourceFile.Info.RepoRelativePath);
                         }
                     }
                 }
