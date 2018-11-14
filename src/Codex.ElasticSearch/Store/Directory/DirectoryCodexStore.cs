@@ -34,6 +34,7 @@ namespace Codex.ElasticSearch.Store
         private RepositoryStoreInfo m_storeInfo;
 
         private Logger logger;
+        private bool flattenDirectory;
 
         /// <summary>
         /// Disables optimized serialization for use when testing
@@ -41,10 +42,11 @@ namespace Codex.ElasticSearch.Store
         public bool DisableOptimization { get; set; }
         public bool Clean { get; set; }
 
-        public DirectoryCodexStore(string directory, Logger logger = null)
+        public DirectoryCodexStore(string directory, Logger logger = null, bool flattenDirectory = false)
         {
             DirectoryPath = directory;
             this.logger = logger ?? Logger.Null;
+            this.flattenDirectory = flattenDirectory;
         }
 
         public static IEnumerable<string> GetEntityFiles(string directory)
@@ -57,12 +59,40 @@ namespace Codex.ElasticSearch.Store
             return CollectionUtilities.Empty<string>.Array;
         }
 
-        public async Task ReadAsync(ICodexStore store, bool finalize = true, string repositoryName = null)
+        public Task ReadAsync(ICodexStore store, bool finalize = true, string repositoryName = null)
+        {
+            return ReadCoreAsync(async fileSystem =>
+            {
+                m_storeInfo = Read<RepositoryStoreInfo>(fileSystem, RepositoryInitializationFileName);
+                m_storeInfo.Repository.Name = repositoryName ?? m_storeInfo.Repository.Name ?? m_storeInfo.Commit.RepositoryName;
+
+                logger.LogMessage("Reading repository information");
+                var repositoryStore = await store.CreateRepositoryStore(m_storeInfo.Repository, m_storeInfo.Commit, m_storeInfo.Branch);
+
+                logger.LogMessage($"Read repository information (repo name: {m_storeInfo.Repository.Name})");
+                return repositoryStore;
+            },
+            finalize: finalize);
+        }
+
+        public Task ReadAsync(ICodexRepositoryStore repositoryStore)
+        {
+            return ReadCoreAsync(fileSystem => Task.FromResult(repositoryStore), finalize: false);
+        }
+
+        private async Task ReadCoreAsync(Func<FileSystem, Task<ICodexRepositoryStore>> createRepositoryStoreAsync, bool finalize)
         {
             FileSystem fileSystem;
             if (Directory.Exists(DirectoryPath))
             {
-                fileSystem = new DirectoryFileSystem(DirectoryPath, "*" + EntityFileExtension);
+                if (flattenDirectory)
+                {
+                    fileSystem = new FlattenDirectoryFileSystem(DirectoryPath, "*" + EntityFileExtension);
+                }
+                else
+                {
+                    fileSystem = new DirectoryFileSystem(DirectoryPath, "*" + EntityFileExtension);
+                }
             }
             else
             {
@@ -71,77 +101,74 @@ namespace Codex.ElasticSearch.Store
 
             using (fileSystem)
             {
-                m_storeInfo = Read<RepositoryStoreInfo>(fileSystem, RepositoryInitializationFileName);
-                m_storeInfo.Repository.Name = repositoryName ?? m_storeInfo.Repository.Name ?? m_storeInfo.Commit.RepositoryName;
+                var repositoryStore = await createRepositoryStoreAsync(fileSystem);
+                await ReadCoreAsync(repositoryStore, fileSystem, finalize);
+            }
+        }
 
-                ConcurrentQueue<Func<Task>> actionQueue = new ConcurrentQueue<Func<Task>>();
-
-                logger.LogMessage("Reading repository information");
-                var repositoryStore = await store.CreateRepositoryStore(m_storeInfo.Repository, m_storeInfo.Commit, m_storeInfo.Branch);
-
-                logger.LogMessage($"Read repository information (repo name: {m_storeInfo.Repository.Name})");
-
-                int nextIndex = 0;
-                int count = 0;
-                List<Task> tasks = new List<Task>();
-                foreach (var kind in StoredEntityKind.Kinds)
+        private async Task ReadCoreAsync(ICodexRepositoryStore repositoryStore, FileSystem fileSystem, bool finalize)
+        {
+            ConcurrentQueue<Func<Task>> actionQueue = new ConcurrentQueue<Func<Task>>();
+            int nextIndex = 0;
+            int count = 0;
+            List<Task> tasks = new List<Task>();
+            foreach (var kind in StoredEntityKind.Kinds)
+            {
+                // TODO: Do we even need concurrency here?
+                tasks.Add(Task.Run(() =>
                 {
-                    // TODO: Do we even need concurrency here?
-                    tasks.Add(Task.Run(() =>
+                    var kindDirectoryPath = Path.Combine(DirectoryPath, kind.Name);
+                    logger.LogMessage($"Reading {kind} infos from {kindDirectoryPath}");
+                    var files = fileSystem.GetFiles(kind.Name).ToList();
+                    foreach (var file in files)
                     {
-                        var kindDirectoryPath = Path.Combine(DirectoryPath, kind.Name);
-                        logger.LogMessage($"Reading {kind} infos from {kindDirectoryPath}");
-                        var files = fileSystem.GetFiles(kind.Name).ToList();
-                        foreach (var file in files)
+                        if (kind == StoredEntityKind.BoundFiles && fileSystem.GetFileSize(file) > 10 << 20)
                         {
-                            if (kind == StoredEntityKind.BoundFiles && fileSystem.GetFileSize(file) > 10 << 20)
+                            // Ignore files larger than 10 MB
+                            continue;
+                        }
+
+                        actionQueue.Enqueue(async () =>
+                        {
+                            var i = Interlocked.Increment(ref nextIndex);
+                            logger.LogMessage($"{i}/{count}: Reading {kind} info at {file}");
+                            try
                             {
-                                // Ignore files larger than 10 MB
-                                continue;
+                                await kind.Add(this, fileSystem, file, repositoryStore);
+                            }
+                            catch (Exception ex)
+                            {
+                                logger.LogExceptionError("AddFile", ex);
                             }
 
-                            actionQueue.Enqueue(async () =>
-                            {
-                                var i = Interlocked.Increment(ref nextIndex);
-                                logger.LogMessage($"{i}/{count}: Reading {kind} info at {file}");
-                                try
-                                {
-                                    await kind.Add(this, fileSystem, file, repositoryStore);
-                                }
-                                catch (Exception ex)
-                                {
-                                    logger.LogExceptionError("AddFile", ex);
-                                }
-
-                                logger.LogMessage($"{i}/{count}: Added {file} to store.");
-                            });
-                        }
+                            logger.LogMessage($"{i}/{count}: Added {file} to store.");
+                        });
                     }
-                    ));
                 }
+                ));
+            }
 
-                await Task.WhenAll(tasks);
+            await Task.WhenAll(tasks);
 
-                count = actionQueue.Count;
-                tasks.Clear();
-                for (int i = 0; i < Math.Min(Environment.ProcessorCount, 32); i++)
+            count = actionQueue.Count;
+            tasks.Clear();
+            for (int i = 0; i < Math.Min(Environment.ProcessorCount, 32); i++)
+            {
+                tasks.Add(Task.Run(async () =>
                 {
-                    tasks.Add(Task.Run(async () =>
+                    while (actionQueue.TryDequeue(out var taskFactory))
                     {
-                        while (actionQueue.TryDequeue(out var taskFactory))
-                        {
-                            await taskFactory();
-                        }
+                        await taskFactory();
                     }
-                    ));
                 }
+                ));
+            }
 
-                await Task.WhenAll(tasks);
+            await Task.WhenAll(tasks);
 
-                if (finalize)
-                {
-                    await repositoryStore.FinalizeAsync();
-                }
+            if (finalize)
+            {
+                await repositoryStore.FinalizeAsync();
             }
         }
 
@@ -212,7 +239,11 @@ namespace Codex.ElasticSearch.Store
 
         private StoredBoundSourceFile CreateStoredBoundFile(BoundSourceFile boundSourceFile)
         {
-            boundSourceFile.RepositoryName = m_storeInfo.Repository.Name;
+            if (m_storeInfo != null)
+            {
+                boundSourceFile.RepositoryName = m_storeInfo.Repository.Name;
+            }
+
             boundSourceFile.ApplySourceFileInfo();
 
             var result = new StoredBoundSourceFile()
@@ -227,7 +258,11 @@ namespace Codex.ElasticSearch.Store
 
         private BoundSourceFile FromStoredBoundFile(StoredBoundSourceFile storedBoundFile)
         {
-            storedBoundFile.BoundSourceFile.RepositoryName = m_storeInfo.Repository.Name;
+            if (m_storeInfo != null)
+            {
+                storedBoundFile.BoundSourceFile.RepositoryName = m_storeInfo.Repository.Name;
+            }
+
             storedBoundFile.BoundSourceFile.ApplySourceFileInfo();
             storedBoundFile.AfterDeserialization();
 

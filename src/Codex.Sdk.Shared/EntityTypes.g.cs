@@ -2484,6 +2484,8 @@ namespace Codex.ObjectModel {
         
         private string m_ProjectKind;
         
+        private ProjectFileLink m_PrimaryFile;
+        
         private System.Collections.Generic.List<ProjectFileLink> m_Files = new System.Collections.Generic.List<ProjectFileLink>();
         
         private System.Collections.Generic.List<ReferencedProject> m_ProjectReferences = new System.Collections.Generic.List<ReferencedProject>();
@@ -2512,6 +2514,27 @@ namespace Codex.ObjectModel {
             }
             set {
                 this.m_ProjectKind = value;
+            }
+        }
+        
+        /// <summary>
+        /// The primary file of the project (i.e. the .csproj file)
+        /// </summary>
+        Codex.IProjectFileLink Codex.IProject.PrimaryFile {
+            get {
+                return this.PrimaryFile;
+            }
+        }
+        
+        /// <summary>
+        /// The primary file of the project (i.e. the .csproj file)
+        /// </summary>
+        public virtual ProjectFileLink PrimaryFile {
+            get {
+                return this.m_PrimaryFile;
+            }
+            set {
+                this.m_PrimaryFile = value;
             }
         }
         
@@ -2560,6 +2583,7 @@ namespace Codex.ObjectModel {
         public virtual TTarget CopyFrom<TTarget>(Codex.IProject value)
             where TTarget : AnalyzedProject {
             this.m_ProjectKind = ((Codex.IProject)(value)).ProjectKind;
+            this.m_PrimaryFile = EntityUtilities.NullOrCopy(value.PrimaryFile, v => new ProjectFileLink().CopyFrom<ProjectFileLink>(v));;
             this.m_Files = new System.Collections.Generic.List<ProjectFileLink>(System.Linq.Enumerable.Select(((Codex.IProject)(value)).Files, v => EntityUtilities.NullOrCopy(v, _v => new ProjectFileLink().CopyFrom<ProjectFileLink>(_v))));
             this.m_ProjectReferences = new System.Collections.Generic.List<ReferencedProject>(System.Linq.Enumerable.Select(((Codex.IProject)(value)).ProjectReferences, v => EntityUtilities.NullOrCopy(v, _v => new ReferencedProject().CopyFrom<ReferencedProject>(_v))));
             base.CopyFrom<ProjectScopeEntity>(((Codex.IProjectScopeEntity)(value)));

@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodexApplication.cs" />
+    <Compile Include="PreAnalyzedRepoProjectAnalyzer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

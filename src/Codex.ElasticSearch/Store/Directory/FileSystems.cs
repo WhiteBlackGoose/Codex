@@ -45,6 +45,45 @@ namespace Codex
         }
     }
 
+    public class FlattenDirectoryFileSystem : SystemFileSystem
+    {
+        public readonly string RootDirectory;
+        private readonly string SearchPattern;
+
+        public FlattenDirectoryFileSystem(string rootDirectory, string searchPattern = "*.*")
+        {
+            RootDirectory = rootDirectory;
+            SearchPattern = searchPattern;
+        }
+
+        public override IEnumerable<string> GetFiles()
+        {
+            return Directory.GetFiles(RootDirectory, SearchPattern, SearchOption.AllDirectories);
+        }
+
+        public override IEnumerable<string> GetFiles(string relativeDirectoryPath)
+        {
+            List<string> files = new List<string>();
+
+            foreach (var subDirectory in Directory.GetDirectories(RootDirectory))
+            {
+                var path = Path.Combine(subDirectory, relativeDirectoryPath);
+                if (Directory.Exists(path))
+                {
+                    files.AddRange(Directory.GetFiles(path, SearchPattern, SearchOption.AllDirectories));
+                }
+            }
+
+            return files;
+        }
+
+        public override Stream OpenFile(string filePath)
+        {
+            filePath = Path.Combine(RootDirectory, filePath);
+            return base.OpenFile(filePath);
+        }
+    }
+
     public class ZipFileSystem : FileSystem
     {
         public readonly string ArchivePath;

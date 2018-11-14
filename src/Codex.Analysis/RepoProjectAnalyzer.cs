@@ -65,22 +65,36 @@ namespace Codex.Analysis
 
         public virtual void CreateProjects(RepoFile repoFile) { }
 
+        public virtual bool ShouldAddProjectFileLink(RepoFile repoFile) => true;
+
         public virtual bool IsCandidateProjectFile(RepoFile repoFile) => false;
 
-        protected static async Task UploadProject(RepoProject project)
+        protected async Task UploadProject(RepoProject project)
         {
             await project.ProjectContext.Finish(project);
 
             var analyzedProject = project.ProjectContext.Project;
 
+            if (project.ProjectFile != null)
+            {
+                analyzedProject.PrimaryFile = new ProjectFileLink()
+                {
+                    RepoRelativePath = project.ProjectFile.RepoRelativePath,
+                    ProjectRelativePath = project.ProjectFile.LogicalPath
+                };
+            }
+
             analyzedProject.ProjectKind = project.ProjectKind;
             foreach (var file in project.Files)
             {
-                analyzedProject.Files.Add(new ProjectFileLink()
+                if (ShouldAddProjectFileLink(file))
                 {
-                    RepoRelativePath = file.RepoRelativePath,
-                    ProjectRelativePath = file.LogicalPath
-                });
+                    analyzedProject.Files.Add(new ProjectFileLink()
+                    {
+                        RepoRelativePath = file.RepoRelativePath,
+                        ProjectRelativePath = file.LogicalPath
+                    });
+                }
             }
 
             await project.Repo.AnalysisServices.RepositoryStore.AddProjectsAsync(new[] { analyzedProject });

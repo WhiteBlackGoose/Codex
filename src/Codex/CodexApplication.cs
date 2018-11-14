@@ -53,6 +53,7 @@ namespace Codex.Application
         static bool projectMode = false;
         static bool update = false;
         static List<string> externalDataDirectories = new List<string>();
+        static List<string> projectDataDirectories = new List<string>();
         static List<string> deleteIndices = new List<string>();
         static List<string> demoteIndices = new List<string>();
         static List<string> promoteIndices = new List<string>();
@@ -66,6 +67,7 @@ namespace Codex.Application
                     new OptionSet
                     {
                         { "ed|extData=", "Specifies one or more external data directories.", n => externalDataDirectories.Add(n) },
+                        { "pd|projectData=", "Specifies one or more project data directories.", n => projectDataDirectories.Add(n) },
                         { "noScan", "Disable scanning enlistment directory.", n => disableEnumeration = n != null },
                         { "noMsBuild", "Disable loading solutions using msbuild.", n => disableMsbuild = n != null },
                         { "noMsBuildLocator", "Disable loading solutions using msbuild.", n => disableMsbuildLocator = n != null },
@@ -705,6 +707,21 @@ namespace Codex.Application
                         {
                             HeadCommitId = targetIndexName,
                         });
+                }
+
+                if (projectDataDirectories.Count != 0)
+                {
+                    var preAnalysisAnalyzer = new PreAnalyzedRepoProjectAnalyzer();
+
+                    foreach (var projectDataDirectory in projectDataDirectories)
+                    {
+                        var interceptorStore = preAnalysisAnalyzer.CreateRepositoryStore(analysisTarget);
+                        var directoryStore = new DirectoryCodexStore(projectDataDirectory, logger, flattenDirectory: true);
+
+                        await directoryStore.ReadAsync(interceptorStore);
+                    }
+
+                    projectAnalyzers.Insert(0, preAnalysisAnalyzer);
                 }
 
                 RepositoryImporter importer = new RepositoryImporter(repoName,

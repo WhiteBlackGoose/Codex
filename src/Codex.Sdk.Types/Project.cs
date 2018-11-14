@@ -15,6 +15,11 @@ namespace Codex
         string ProjectKind { get; }
 
         /// <summary>
+        /// The primary file of the project (i.e. the .csproj file)
+        /// </summary>
+        IProjectFileLink PrimaryFile { get; }
+
+        /// <summary>
         /// References to files in the project
         /// </summary>
         IReadOnlyList<IProjectFileLink> Files { get; }

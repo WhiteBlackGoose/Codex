@@ -114,12 +114,12 @@ namespace Codex.Downloader
 
             if (lastBuild.Id != lastSuccessfulBuild?.Id)
             {
-                Console.WriteLine($"Found last build: {lastBuild.BuildNumber} result: {lastBuild.Result}) (id: {lastBuild.Id}) Date: {lastBuild.QueueTime}");
+                Console.WriteLine($"Found last build: {lastBuild.BuildNumber} result: {lastBuild.Result}) (id: {lastBuild.Id}) Date: {lastBuild.QueueTime?.ToLocalTime()}");
             }
 
             if (lastSuccessfulBuild != null)
             {
-                Console.WriteLine($"Found successful build: {lastSuccessfulBuild.BuildNumber} (id: {lastSuccessfulBuild.Id}) Date: {lastSuccessfulBuild.QueueTime}");
+                Console.WriteLine($"Found successful build: {lastSuccessfulBuild.BuildNumber} (id: {lastSuccessfulBuild.Id}) Date: {lastSuccessfulBuild.QueueTime?.ToLocalTime()}");
             }
 
             if (options.Preview || lastSuccessfulBuild == null)

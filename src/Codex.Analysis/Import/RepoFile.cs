@@ -21,7 +21,6 @@ namespace Codex.Import
 
         private string filePath;
 
-        public int? Length;
         public string FilePath
         {
             get
@@ -109,6 +108,11 @@ namespace Codex.Import
             list.Add(RepoRelativePath ?? "RepoRelativePath:null");
 
             return string.Join(";", list);
+        }
+
+        public void MarkAnalyzed()
+        {
+            m_analyzed = 1;
         }
 
         public Task Analyze()

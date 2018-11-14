@@ -46,15 +46,30 @@ namespace Codex.Import
 
         public RepoProjectAnalyzer Analyzer;
 
-        public AnalyzedProjectContext ProjectContext;
+        private AnalyzedProjectContext projectContext;
+        public AnalyzedProjectContext ProjectContext
+        {
+            get
+            {
+                if (projectContext == null)
+                {
+                    InitializeProjectContext(new AnalyzedProject(Repo.Name, ProjectId));
+                }
+
+                return projectContext;
+            }
+        }
+
+        public void InitializeProjectContext(AnalyzedProject project)
+        {
+            projectContext = new AnalyzedProjectContext(project);
+        }
 
         public RepoProject(string projectId, Repo repo)
         {
             Repo = repo;
             ProjectId = projectId;
             Analyzer = RepoProjectAnalyzer.Default;
-            var analyzedProject = new AnalyzedProject(Repo.Name, ProjectId);
-            ProjectContext = new AnalyzedProjectContext(analyzedProject);
         }
 
         public void AddFile(RepoFile repoFile)
@@ -114,11 +129,6 @@ namespace Codex.Import
         private RepoFile CreateNewProjectFile(string filePath, string logicalPath)
         {
             var file = new RepoFile(this, filePath, logicalPath);
-            if (!string.IsNullOrEmpty(filePath) && filePath.Length > 2 && filePath[1] == ':')
-            {
-                file.Length = (int)new FileInfo(filePath).Length;
-            }
-
             AddFile(file);
             return file;
         }
