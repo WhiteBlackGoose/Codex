@@ -133,10 +133,9 @@ namespace Codex.Analysis.Projects
                             continue;
                         }
 
-                        if (repo.ProjectsById.ContainsKey(projectInfo.AssemblyName) || 
-                            (projectFile != null && repo.ProjectsByPath.ContainsKey(projectFile.FilePath)))
+                        if (repo.ProjectsById.ContainsKey(projectInfo.AssemblyName))
                         {
-                            logger.LogMessage($"Project '{projectInfo.FilePath}' already has analyzer other than for solution '{solutionName}'");
+                            logger.LogMessage($"Project '{projectInfo.AssemblyName}' with path '{projectInfo.FilePath}' already has analyzer other than for solution '{solutionName}'");
                             continue;
                         }
 
