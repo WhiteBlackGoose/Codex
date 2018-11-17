@@ -75,8 +75,24 @@ namespace Codex.Analysis.Projects
                 projectDirectory: projectDirectory,
                 workspace: Workspace);
 
+            // Add additional document with command line args
+            projectInfo.WithAdditionalDocuments(
+                projectInfo.AdditionalDocuments.Concat(CreateCommandLineArgumentsDocument(args, projectName)));
+
             projectInfo = projectInfo.WithOutputFilePath(outputPath).WithFilePath(projectPath);
             return projectInfo;
+        }
+
+        private IEnumerable<DocumentInfo> CreateCommandLineArgumentsDocument(string[] args, string projectName)
+        {
+            var argumentsText = string.Join(Environment.NewLine, args);
+
+            yield return DocumentInfo.Create(
+                DocumentId.CreateNewId(ProjectId.CreateNewId()),
+                "CompilerArguments.txt",
+                loader: TextLoader.From(TextAndVersion.Create(SourceText.From(argumentsText), VersionStamp.Default)),
+                filePath: $@"[Metadata]\CompilerArguments.txt",
+                isGenerated: true);
         }
 
         private bool IsAnalyzerArg(string arg)
