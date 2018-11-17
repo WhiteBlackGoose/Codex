@@ -349,7 +349,7 @@ namespace Codex.Serialization
         {
             var maxStage = Enum.GetValues(typeof(ObjectStage)).OfType<ObjectStage>().Max();
             var serializers = new JsonSerializer[(int)maxStage + 1];
-            for (int stage = 0; stage <= serializers.Length; stage++)
+            for (int stage = 0; stage < serializers.Length; stage++)
             {
                 serializers[stage] = JsonSerializer.Create(new JsonSerializerSettings()
                 {
