@@ -218,7 +218,7 @@ namespace Codex.ElasticSearch.Store
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
             using (var streamWriter = new StreamWriter(fullPath))
             {
-                entity.SerializeEntityTo(new JsonTextWriter(streamWriter) { Formatting = Formatting.Indented });
+                entity.SerializeEntityTo(new JsonTextWriter(streamWriter) { Formatting = Formatting.Indented }, stage: ObjectStage.StoreRaw);
             }
         }
 

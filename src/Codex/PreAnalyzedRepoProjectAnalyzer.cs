@@ -63,7 +63,7 @@ namespace Codex.Analysis
             if (project.PrimaryFile == null)
             {
                 // TODO: Is this ok?
-                return @"\\Projects\";
+                return $@"\\Projects\{project.ProjectId}";
             }
 
             return Path.Combine(repo.DefaultRepoProject.ProjectDirectory, Path.GetDirectoryName(project.PrimaryFile.RepoRelativePath));
@@ -107,7 +107,7 @@ namespace Codex.Analysis
                     analyzer.projectsById[project.ProjectId] = project;
                 }
 
-                return innerStore.AddProjectsAsync(projects);
+                return Task.CompletedTask;
             }
 
             public Task AddTextFilesAsync(IReadOnlyList<SourceFile> files)

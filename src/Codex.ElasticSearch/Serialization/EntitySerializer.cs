@@ -273,7 +273,9 @@ namespace Codex.Serialization
 
                     if (interfaceMemberMap.TryGetValue(property.PropertyName, out var interfaceProperty))
                     {
-                        if (!property.PropertyType.IsClass && (interfaceProperty.GetSearchBehavior() ?? SearchBehavior.None) != SearchBehavior.None)
+                        // Include default values for searchable properties except when storing the raw value (i.e. not
+                        // serializing for the purpose of indexing but instead just to write to disk)
+                        if (stage != ObjectStage.StoreRaw && !property.PropertyType.IsClass && (interfaceProperty.GetSearchBehavior() ?? SearchBehavior.None) != SearchBehavior.None)
                         {
                             property.DefaultValueHandling = DefaultValueHandling.Include;
                         }

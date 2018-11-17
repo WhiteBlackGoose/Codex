@@ -130,7 +130,8 @@ namespace Codex
         Analysis = 1,
         Index = 1 << 1,
         Search = 1 << 2 | Index,
-        All = Search | Index | Analysis
+        All = Search | Index | Analysis,
+        StoreRaw = 1 << 3 | All
     }
 
     public enum SearchBehavior
