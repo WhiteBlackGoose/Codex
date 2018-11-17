@@ -11,3 +11,44 @@ Add("{indexName}\repo\{repoName}", "{indexName}\{commit}");
 Add("{indexName}\cumulative\{commit}", "{indexName}\{commit}");
 
 {indexName}\{repository} += {indexName}\{commit}
+
+Scheme:
+
+Given sample repository, codextestrepo
+
+RepositorySnapshotId = codextestrepo/616b9887-0761-4649-9d27-4c579c6d49ef
+CombinedSourcesFilterName = allsources
+CombinedSourcesSnapshotId = allsources/616b9887-0761-4649-9d27-4c579c6d49ef
+CombinedSourcesFilterName (typed) = allsources/boundsource | allsources/definition | ...
+
+StoredFilters:
+repos/allsources/616b9887-0761-4649-9d27-4c579c6d49ef/declareddefinition
+repos/allsources/616b9887-0761-4649-9d27-4c579c6d49ef/definition
+repos/allsources/616b9887-0761-4649-9d27-4c579c6d49ef/boundsource
+...
+
+repos/codextestrepo/616b9887-0761-4649-9d27-4c579c6d49ef/declareddefinition
+repos/codextestrepo/616b9887-0761-4649-9d27-4c579c6d49ef/definition
+repos/codextestrepo/616b9887-0761-4649-9d27-4c579c6d49ef/boundsource
+...
+
+Stored Filter Properties:
+{
+	Uid: "aliases/repos/allsources",
+	Key: "CombinedSourcesSnapshotId",
+	Value: "allsources/616b9887-0761-4649-9d27-4c579c6d49ef"
+},
+{
+	Uid: "aliases/repos/codextestrepo",
+	Key: "RepositorySnapshotId",
+	Value: "codextestrepo/616b9887-0761-4649-9d27-4c579c6d49ef"
+}
+
+Uri Scheme:
+ref12.com/roslyn
+ref12.com/dotnet
+ref12.com/netfx
+ref12.com/codex
+ref12.com/codextestrepo
+
+Register root name when adding repository. Probably should only allow registering if github.com/org/repoName is the target repository. GitHub source of truth. What about VSTS? What about renamed repositories?
