@@ -8,14 +8,14 @@
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
     <PackageReference Include="ManagedEsent" Version="1.9.4" />
-    <PackageReference Include="Microsoft.CodeAnalysis" Version="2.9.0-beta4-62827-12" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.6.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.9.0-beta4-62827-12" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.9.0-beta4-62827-12" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.9.0-beta4-62827-12" />
-    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="2.9.0-beta4-62827-12" />
-    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" Version="2.9.0-beta4-62827-12" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="2.9.0-beta4-62827-12" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="2.10.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.6.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.10.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.10.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.10.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="2.10.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" Version="2.10.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="2.10.0" />
     <PackageReference Include="Microsoft.Composition" Version="1.0.31" />
     <PackageReference Include="Mono.Cecil" Version="0.10.0" />
     <PackageReference Include="System.AppContext" Version="4.3.0" />
