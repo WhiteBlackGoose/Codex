@@ -31,6 +31,7 @@ namespace Codex.Application
         static bool finalize = true;
         static bool analysisOnly = false; // Set this to disable uploading to ElasticSearch
         static string repoName;
+        static string alias;
         static string rootDirectory;
         static string repoUrl;
         static string saveDirectory;
@@ -118,6 +119,7 @@ namespace Codex.Application
                     new Action(() => ChangeIndices()),
                     new OptionSet
                     {
+                        { "alias=", "The alias to modify.", n => alias = n },
                         { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
                         { "promote=", "List the indices to promote.", n => promoteIndices.Add(n) },
                         { "demote=", "List the indices to demote.", n => demoteIndices.Add(n) },
@@ -445,7 +447,7 @@ namespace Codex.Application
 
             if ((promoteIndices.Count > 0) || (demoteIndices.Count > 0))
             {
-                storage.Provider.ChangeIndices(promoteIndices: promoteIndices, demoteIndices: demoteIndices).GetAwaiter().GetResult();
+                storage.Provider.ChangeIndices(promoteIndices: promoteIndices, demoteIndices: demoteIndices, alias: alias).GetAwaiter().GetResult();
 
                 ListIndices();
             }

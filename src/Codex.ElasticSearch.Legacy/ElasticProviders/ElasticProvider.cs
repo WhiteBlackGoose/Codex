@@ -331,14 +331,15 @@ namespace Codex.Storage.ElasticProviders
             });
         }
 
-        public Task ChangeIndices(IReadOnlyList<string> promoteIndices, IReadOnlyList<string> demoteIndices)
+        public Task ChangeIndices(IReadOnlyList<string> promoteIndices, IReadOnlyList<string> demoteIndices, string alias = null)
         {
+            alias = alias ?? CombinedSourcesIndexAlias;
             return UseElasticClient(async client =>
             {
                 return await client.AliasAsync(
                     ba => ba
-                    .ForEach(promoteIndices, (b, index) => b.Add(a => a.Index(index).Alias(CombinedSourcesIndexAlias)))
-                    .ForEach(demoteIndices, (b, index) => b.Remove(a => a.Index(index).Alias(CombinedSourcesIndexAlias)))
+                    .ForEach(promoteIndices, (b, index) => b.Add(a => a.Index(index).Alias(alias)))
+                    .ForEach(demoteIndices, (b, index) => b.Remove(a => a.Index(index).Alias(alias)))
                     );
             });
         }
