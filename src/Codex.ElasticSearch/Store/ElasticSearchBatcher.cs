@@ -163,12 +163,15 @@ namespace Codex.ElasticSearch
                 await ExecuteBatchAsync(currentBatch);
             }
 
+            // For each typed stored filter,
+            // Store the filter under 
+
             StoredFilterManager filterManager = new StoredFilterManager(store.StoredFilterStore);
             var combinedSourcesFilterName = store.Configuration.CombinedSourcesFilterName;
 
-            var snapshotGuid = Guid.NewGuid();
-            string repositorySnapshotId = $"{repositoryName}/{snapshotGuid}";
-            string combinedSourceSnapshotId = $"{store.Configuration.CombinedSourcesFilterName}/{snapshotGuid}";
+            var ingestId = Guid.NewGuid();
+            string repositorySnapshotId = GetRepositoryBaseFilterName($"{repositoryName}/{ingestId}");
+            string combinedSourcesSnapshotId = GetRepositoryBaseFilterName($"{store.Configuration.CombinedSourcesFilterName}/{ingestId}");
 
             Console.WriteLine($"Writing repository snapshot filters: {repositorySnapshotId}");
 
@@ -182,10 +185,12 @@ namespace Codex.ElasticSearch
                     name: repositoryName, 
                     filter: filter);
 
-                filter.Uid = GetRepositoryFilterUid(repositorySnapshotId, filterBuilder.IndexName);
+                // repos/{repositoryName}/{ingestId}:{indexName}
+                filter.Uid = GetIndexRepositoryFilterUid(repositorySnapshotId, filterBuilder.IndexName);
                 combinedSourceFilter = new StoredFilter(combinedSourceFilter)
                 {
-                    Uid = GetRepositoryFilterUid(combinedSourceSnapshotId, filterBuilder.IndexName)
+                    // repos/allsources/{ingestId}:{indexName}
+                    Uid = GetIndexRepositoryFilterUid(combinedSourcesSnapshotId, filterBuilder.IndexName)
                 };
 
                 await store.StoredFilterStore.StoreAsync(new[] { filter, combinedSourceFilter });
@@ -195,15 +200,20 @@ namespace Codex.ElasticSearch
 
             await store.PropertyStore.StoreAsync(new[] { new PropertySearchModel()
                 {
+                    // aliases/repos/{repositoryName}
                     Uid = GetStoredFilterAliasUid(repositoryName),
                     Key = "RepositorySnapshotId",
+
+                    // repos/{repositoryName}/{ingestId}
                     Value = repositorySnapshotId,
                 },
                 new PropertySearchModel()
                 {
+                    // aliases/repos/allsources
                     Uid = GetStoredFilterAliasUid(store.Configuration.CombinedSourcesFilterName),
                     Key = "CombinedSourcesSnapshotId",
-                    Value = combinedSourceSnapshotId,
+                    // repos/allsources/{ingestId}
+                    Value = combinedSourcesSnapshotId,
                 }
             });
 

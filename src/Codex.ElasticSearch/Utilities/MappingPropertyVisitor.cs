@@ -83,7 +83,7 @@ namespace Codex.ElasticSearch.Utilities
                     case SearchBehavior.Sortword:
                         return new SortwordAttribute();
                     case SearchBehavior.HierarchicalPath:
-                        return new HierachicalPathAttribute();
+                        return new HierarchicalPathAttribute();
                     case SearchBehavior.FullText:
                         return new FullTextAttribute(dataInclusion);
                     case SearchBehavior.Prefix:

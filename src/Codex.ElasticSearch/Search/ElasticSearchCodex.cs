@@ -131,6 +131,7 @@ namespace Codex.ElasticSearch.Search
 
         public async Task<IndexQueryResponse<IBoundSourceFile>> GetSourceAsync(GetSourceArguments arguments)
         {
+            // TODO: Add get repo for getting uploaded date and web address.
             return await UseClientSingle<IBoundSourceFile>(arguments, async context =>
             {
                 var client = context.Client;
@@ -445,28 +446,34 @@ namespace Codex.ElasticSearch.Search
 
         private async Task<StoredFilterSearchContext> GetStoredFilterContextAsync(ContextCodexArgumentsBase arguments, ClientContext context)
         {
-            string aliasId = null;
-            var scopeId = arguments.RepositoryScopeId ?? Configuration.CombinedSourcesFilterName;
+            string resolvedAliasStoredFilterPrefix = null;
+            var repositoryId = arguments.RepositoryScopeId ?? Configuration.CombinedSourcesFilterName;
+            var aliasUid = GetStoredFilterAliasUid(repositoryId);
 
-            if (!resolvedRepositoryIds.TryGetValue(scopeId, out var resolvedEntry) || !GetValueFromEntry(resolvedEntry, out aliasId))
+            if (!resolvedRepositoryIds.TryGetValue(repositoryId, out var resolvedEntry) || !GetValueFromEntry(resolvedEntry, out resolvedAliasStoredFilterPrefix))
             {
-                IGetResponse<PropertySearchModel> aliasResult = await context.Client.GetAsync<PropertySearchModel>(scopeId,
+                IGetResponse<PropertySearchModel> aliasResult = await context.Client.GetAsync<PropertySearchModel>(aliasUid,
                     gd => gd.Index(IndexName(SearchTypes.Property)))
                     .ThrowOnFailure();
 
                 if (aliasResult.Found)
                 {
-                    aliasId = aliasResult.Source.Value;
-                    resolvedRepositoryIds.TryAdd(scopeId, (DateTime.UtcNow, aliasId));
+                    resolvedAliasStoredFilterPrefix = aliasResult.Source.Value;
+                    resolvedRepositoryIds.TryAdd(repositoryId, (DateTime.UtcNow, resolvedAliasStoredFilterPrefix));
                 }
             }
 
-            if (aliasId == null)
+            if (resolvedAliasStoredFilterPrefix == null)
             {
-                throw new Exception($"Unable to find index with name: {scopeId}");
+                throw new Exception($"Unable to find index with name: {repositoryId}");
             }
 
-            return new StoredFilterSearchContext(context, aliasId, IndexName(SearchTypes.StoredFilter), aliasId);
+            return new StoredFilterSearchContext(
+                context,
+                repositoryScopeId: repositoryId, 
+                storedFilterIndexName: IndexName(SearchTypes.StoredFilter),
+                // repos/{repositoryName}/{ingestId}
+                storedFilterUidPrefix: resolvedAliasStoredFilterPrefix);
         }
 
         private bool GetValueFromEntry((DateTime resolveTime, string repositorySnapshotId) resolvedEntry, out string aliasId)

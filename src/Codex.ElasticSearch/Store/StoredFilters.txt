@@ -15,33 +15,34 @@ Add("{indexName}\cumulative\{commit}", "{indexName}\{commit}");
 Scheme:
 
 Given sample repository, codextestrepo
+where {ingestId} is unique guid for an ingestion operation
 
-RepositorySnapshotId = codextestrepo/616b9887-0761-4649-9d27-4c579c6d49ef
+RepositorySnapshotId = codextestrepo/{ingestId}
 CombinedSourcesFilterName = allsources
-CombinedSourcesSnapshotId = allsources/616b9887-0761-4649-9d27-4c579c6d49ef
+CombinedSourcesSnapshotId = allsources/{ingestId}
 CombinedSourcesFilterName (typed) = allsources/boundsource | allsources/definition | ...
 
 StoredFilters:
-repos/allsources/616b9887-0761-4649-9d27-4c579c6d49ef/declareddefinition
-repos/allsources/616b9887-0761-4649-9d27-4c579c6d49ef/definition
-repos/allsources/616b9887-0761-4649-9d27-4c579c6d49ef/boundsource
+repos/allsources/{ingestId}:declareddefinition
+repos/allsources/{ingestId}:definition
+repos/allsources/{ingestId}:boundsource
 ...
 
-repos/codextestrepo/616b9887-0761-4649-9d27-4c579c6d49ef/declareddefinition
-repos/codextestrepo/616b9887-0761-4649-9d27-4c579c6d49ef/definition
-repos/codextestrepo/616b9887-0761-4649-9d27-4c579c6d49ef/boundsource
+repos/codextestrepo/{ingestId}:declareddefinition
+repos/codextestrepo/{ingestId}:definition
+repos/codextestrepo/{ingestId}:boundsource
 ...
 
 Stored Filter Properties:
 {
 	Uid: "aliases/repos/allsources",
 	Key: "CombinedSourcesSnapshotId",
-	Value: "allsources/616b9887-0761-4649-9d27-4c579c6d49ef"
+	Value: "allsources/{ingestId}"
 },
 {
 	Uid: "aliases/repos/codextestrepo",
 	Key: "RepositorySnapshotId",
-	Value: "codextestrepo/616b9887-0761-4649-9d27-4c579c6d49ef"
+	Value: "codextestrepo/{ingestId}"
 }
 
 Uri Scheme:

@@ -20,7 +20,7 @@ namespace Codex.ElasticSearch
         public const int StableIdGroupMaxValue = byte.MaxValue;
         public const long MaxVersion = 1L << 40;
 
-        private const string CACHED_STORED_FITLER_ID_SPECIFIER = ",#=";
+        private const string CACHED_STORED_FILTER_ID_SPECIFIER = ",#=";
 
         public static Task UpdateStoredFiltersAsync(this ElasticSearchEntityStore<IStoredFilter> storedFilterStore, IReadOnlyList<IStoredFilter> storedFilters)
         {
@@ -30,14 +30,19 @@ namespace Codex.ElasticSearch
         public static SearchDescriptor<T> StoredFilterQuery<T>(this SearchDescriptor<T> searchDescriptor, StoredFilterSearchContext context, string indexName, Func<QueryContainerDescriptor<T>, QueryContainer> query)
             where T : class, ISearchEntity
         {
+            var storedFilterUid = GetFilterName(context.StoredFilterUidPrefix, indexName);
             return searchDescriptor
                 .Query(q => q.Bool(bq => bq
                     .Must(query)
                     .Filter(q1 => q1.Terms(tq => tq.Field(e => e.StableId)
-                        .Name(CACHED_STORED_FITLER_ID_SPECIFIER + context.StoredFilterUid)
+                        // Specify the id under which the stored filter is cached. This is unique id of the stored filter
+                        // i.e. repos/allsources/{ingestId}/{indexName}
+                        .Name(CACHED_STORED_FILTER_ID_SPECIFIER + storedFilterUid)
                         .TermsLookup<IStoredFilter>(ld => ld
                             .Index(context.StoredFilterIndexName)
-                            .Id(GetRepositoryFilterUid(context.RepositoryScopeId, indexName))
+                            // Specifies the id of the stored filter to lookup. This is typically the alias
+                            // i.e. repos/allsources/{ingestId}/{indexName}
+                            .Id(storedFilterUid)
                             .Path(sf => sf.StableIds))))))
                 .Index(indexName)
                 .CaptureRequest(context);
@@ -48,9 +53,12 @@ namespace Codex.ElasticSearch
             return $"{baseIndexName}.declared";
         }
 
-        public static string GetRepositoryFilterUid(string repositoryId, string indexName)
+        /// <summary>
+        /// {indexName}/repos/{repositoryId}
+        /// </summary>
+        public static string GetIndexRepositoryFilterUid(string baseId, string indexName)
         {
-            return GetFilterName(GetRepositoryBaseFilterName(repositoryId), indexName: indexName);
+            return GetFilterName(baseId, indexName: indexName);
         }
 
         public static string GetStoredFilterAliasUid(string repositoryName)
@@ -65,7 +73,7 @@ namespace Codex.ElasticSearch
 
         public static string GetFilterName(string baseFilterId, string indexName)
         {
-            return $"{indexName}/{baseFilterId}";
+            return $"{baseFilterId}:{indexName}";
         }
 
         public static int ExtractStableId(long version)

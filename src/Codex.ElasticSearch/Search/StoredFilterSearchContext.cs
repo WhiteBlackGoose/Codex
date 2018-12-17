@@ -10,14 +10,14 @@ namespace Codex.ElasticSearch.Search
 
         public string StoredFilterIndexName { get; }
 
-        public string StoredFilterUid { get; }
+        public string StoredFilterUidPrefix { get; }
 
-        public StoredFilterSearchContext(ClientContext context, string repositoryScopeId, string storedFilterIndexName, string storedFilterUid)
+        public StoredFilterSearchContext(ClientContext context, string repositoryScopeId, string storedFilterIndexName, string storedFilterUidPrefix)
             : base(context)
         {
             RepositoryScopeId = repositoryScopeId;
             StoredFilterIndexName = storedFilterIndexName;
-            StoredFilterUid = storedFilterUid;
+            StoredFilterUidPrefix = storedFilterUidPrefix;
         }
     }
 }

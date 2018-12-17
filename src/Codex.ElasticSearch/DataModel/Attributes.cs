@@ -123,9 +123,9 @@ namespace Codex.Storage.DataModel
     /// <summary>
     /// TODO: Set options for search a path
     /// </summary>
-    public class HierachicalPathAttribute : CodexKeywordAttribute
+    public class HierarchicalPathAttribute : CodexKeywordAttribute
     {
-        public HierachicalPathAttribute()
+        public HierarchicalPathAttribute()
         {
         }
     }
