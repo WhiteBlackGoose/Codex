@@ -80,10 +80,8 @@
     <Compile Include="Rendering\ProjectExplorerRenderer.cs" />
     <Compile Include="Rendering\Responses.cs" />
     <Compile Include="Rendering\SourceFileRenderer.cs" />
-    <Compile Include="Util\LegacyTypes.cs" />
     <Compile Include="Util\Requests.cs" />
     <Compile Include="Util\ScopeHelpers.cs" />
-    <Compile Include="Util\SearchResultSorter.cs" />
     <Compile Include="Util\StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -414,10 +412,6 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Codex.ElasticSearch.Legacy\Codex.ElasticSearch.Legacy.csproj">
-      <Project>{7001F919-92BB-46DB-9647-66D492EF0E86}</Project>
-      <Name>Codex.ElasticSearch.Legacy</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Codex.ElasticSearch\Codex.ElasticSearch.csproj">
       <Project>{4573f8bc-6b87-4526-a815-42f473452f8c}</Project>
       <Name>Codex.ElasticSearch</Name>
