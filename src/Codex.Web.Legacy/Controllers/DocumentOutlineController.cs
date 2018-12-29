@@ -25,7 +25,8 @@ namespace WebUI.Controllers
                 var getSourceResponse = await Storage.GetSourceAsync(new GetSourceArguments()
                 {
                     ProjectId = projectId,
-                    ProjectRelativePath = filePath
+                    ProjectRelativePath = filePath,
+                    DefinitionOutline = true
                 });
 
                 var boundSourceFile = getSourceResponse.ThrowOnError().Result;

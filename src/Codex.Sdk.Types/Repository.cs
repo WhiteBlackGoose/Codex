@@ -9,7 +9,7 @@ namespace Codex
     public interface IRepository
     {
         /// <summary>
-        /// The name fo the repository
+        /// The name of the repository
         /// </summary>
         [SearchBehavior(SearchBehavior.NormalizedKeyword)]
         string Name { get; }

@@ -483,6 +483,10 @@ namespace Codex.ObjectModel {
         
         private SourceFile m_SourceFile;
         
+        private Commit m_Commit;
+        
+        private Repository m_Repo;
+        
         public BoundSourceFile() {
         }
         
@@ -519,9 +523,53 @@ namespace Codex.ObjectModel {
             }
         }
         
+        /// <summary>
+        /// Gets the commit referencing the file.
+        /// </summary>
+        Codex.ICommit Codex.IBoundSourceFile.Commit {
+            get {
+                return this.Commit;
+            }
+        }
+        
+        /// <summary>
+        /// Gets the commit referencing the file.
+        /// </summary>
+        public virtual Commit Commit {
+            get {
+                return this.m_Commit;
+            }
+            set {
+                this.m_Commit = value;
+            }
+        }
+        
+        /// <summary>
+        /// Gets the repository containing the file.
+        /// </summary>
+        Codex.IRepository Codex.IBoundSourceFile.Repo {
+            get {
+                return this.Repo;
+            }
+        }
+        
+        /// <summary>
+        /// Gets the repository containing the file.
+        /// </summary>
+        public virtual Repository Repo {
+            get {
+                return this.m_Repo;
+            }
+            set {
+                this.m_Repo = value;
+            }
+        }
+        
         public virtual TTarget CopyFrom<TTarget>(Codex.IBoundSourceFile value)
             where TTarget : BoundSourceFile {
             this.m_SourceFile = EntityUtilities.NullOrCopy(value.SourceFile, v => new SourceFile().CopyFrom<SourceFile>(v));;
+            this.m_Commit = EntityUtilities.NullOrCopy(value.Commit, v => new Commit().CopyFrom<Commit>(v));;
+            this.m_Repo = EntityUtilities.NullOrCopy(value.Repo, v => new Repository().CopyFrom<Repository>(v));;
             base.CopyFrom<BoundSourceInfo>(((Codex.IBoundSourceInfo)(value)));
             return ((TTarget)(this));
         }

@@ -9,5 +9,8 @@
         public string Text { get; set; }
         public string LineNumberText { get; set; }
         public string Error { get; set; }
+        public string RepoName { get; set; }
+        public string IndexName { get; set; }
+        public string IndexedOn { get; set; }
     }
 }

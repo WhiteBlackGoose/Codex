@@ -30,19 +30,22 @@ else
                     @if (!string.IsNullOrEmpty(webLink))
                     {
                         <td style="text-align: right;">
-                            <a id="webAccessLink" style="margin-right: 16px;" class="blueLink" href="@HttpUtility.HtmlAttributeEncode(webLink)" target="_blank">@HttpUtility.HtmlAttributeEncode(Model.RepoRelativePath ?? "Source Control")</a>
+                            <a id="webAccessLink" style="margin-right: 16px;" class="blueLink" href="@HttpUtility.HtmlAttributeEncode(webLink)" title="Repo: @HttpUtility.HtmlAttributeEncode(Model.RepoName)" target="_blank">@HttpUtility.HtmlAttributeEncode(Model.RepoRelativePath ?? "Source Control")</a>
                         </td>
                     }
                     else if (!string.IsNullOrEmpty(Model.RepoRelativePath))
                     {
                         <td style="text-align: right;">
-                            <div style="margin-right: 16px;">@HttpUtility.HtmlAttributeEncode(Model.RepoRelativePath)</div>
+                            <div style="margin-right: 16px;" title="Repo: @HttpUtility.HtmlAttributeEncode(Model.RepoName)">@HttpUtility.HtmlAttributeEncode(Model.RepoRelativePath)</div>
                         </td>
                     }
                 </tr>
                 <tr>
                     <td>
                         Project:&nbsp;<a id="projectExplorerLink" class="blueLink" href="/?leftProject=@Model.ProjectId" onclick="if (event.button === 0) { LoadProjectExplorer('@Model.ProjectId'); return false; }">@Model.ProjectId</a>
+                    </td>
+                    <td style="text-align: right;">
+                        <div style="margin-right: 16px;" title="Index: @HttpUtility.HtmlAttributeEncode(Model.IndexName)">Indexed on: @Model.IndexedOn</div>
                     </td>
                 </tr>
             </tbody>

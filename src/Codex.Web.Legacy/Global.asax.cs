@@ -5,6 +5,7 @@ using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
 using Codex.ElasticSearch;
+using Codex.ElasticSearch.Legacy.Bridge;
 using Codex.ElasticSearch.Search;
 using Codex.ObjectModel;
 using Codex.Sdk.Search;
@@ -38,14 +39,22 @@ namespace WebUI
             //    .As<IStorage>()
             //    .SingleInstance();
 
-            builder.Register(_ => new ElasticSearchCodex(
-                new ElasticSearchStoreConfiguration()
+            builder.Register(_ => new LegacyElasticSearchCodex(
+                new LegacyElasticSearchStoreConfiguration()
                 {
-                    Prefix = "estest."
-                },
-                new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200"))))
+                    Endpoint = "http://ddindex:9125"
+                }))
                 .As<ICodex>()
                 .SingleInstance();
+
+            //builder.Register(_ => new ElasticSearchCodex(
+            //    new ElasticSearchStoreConfiguration()
+            //    {
+            //        Prefix = "estest."
+            //    },
+            //    new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200"))))
+            //    .As<ICodex>()
+            //    .SingleInstance();
 
             DependencyResolver.SetResolver(new AutofacDependencyResolver(builder.Build()));
         }

@@ -122,9 +122,10 @@ namespace Codex.Sdk.Search
 
     public class FindAllReferencesArguments : FindSymbolArgumentsBase
     {
+        public string ReferenceKind { get; set; }
     }
 
-    public class FindDefinitionLocationArguments : FindSymbolArgumentsBase
+    public class FindDefinitionLocationArguments : FindAllReferencesArguments
     {
         public bool FallbackFindAllReferences { get; set; } = true;
     }
@@ -152,11 +153,15 @@ namespace Codex.Sdk.Search
 
     public class GetSourceArguments : ContextCodexArgumentsBase
     {
+        // TODO: Add argument for getting just text content
+
         public string ProjectId { get; set; }
 
         public string ProjectRelativePath { get; set; }
 
         public bool IncludeWebAddress { get; set; }
+
+        public bool DefinitionOutline { get; set; } = false;
     }
 
     public interface IReferenceSearchResult : IProjectFileScopeEntity
@@ -255,16 +260,25 @@ namespace Codex.Sdk.Search
 
     public class IndexQueryHits<T>
     {
+        private long total;
+
         /// <summary>
         /// The total number of results matching the query. 
         /// NOTE: This may be greater than the number of hits returned.
         /// </summary>
-        public long Total { get; set; }
+        public long Total
+        {
+            get => total == 0 ? Hits?.Count ?? 0 : total;
+            set
+            {
+                total = value;
+            }
+        }
 
         /// <summary>
         /// The results of the query
         /// </summary>
-        public List<T> Hits { get; set; }
+        public List<T> Hits { get; set; } = new List<T>(0);
 
         public override string ToString()
         {

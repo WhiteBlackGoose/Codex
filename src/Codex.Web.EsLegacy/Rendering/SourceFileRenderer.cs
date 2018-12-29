@@ -13,10 +13,10 @@ namespace WebUI.Rendering
 {
     public class SourceFileRenderer
     {
-        BoundSourceFile _sourceFile;
+        IBoundSourceFile _sourceFile;
         private string projectId;
 
-        public SourceFileRenderer(BoundSourceFile sourceFile, string projectId)
+        public SourceFileRenderer(IBoundSourceFile sourceFile, string projectId)
         {
             Contract.Requires(sourceFile != null);
 
@@ -53,7 +53,7 @@ namespace WebUI.Rendering
             using (StringWriter sw = new StringWriter(ret))
             {
                 int referenceIndex = -1;
-                ReferenceSpan referenceSpan = null;
+                IReferenceSpan referenceSpan = null;
 
                 foreach (ClassificationSpan span in _sourceFile.Classifications.OrderBy(s => s.Start))
                 {
@@ -151,13 +151,13 @@ namespace WebUI.Rendering
             return lineCount;
         }
 
-        private void WriteReferenceText(TextWriter tw, ClassificationSpan span, string spanText, ref int referenceIndex, ref ReferenceSpan currentReference, IReadOnlyList<ReferenceSpan> referenceSpans)
+        private void WriteReferenceText(TextWriter tw, IClassificationSpan span, string spanText, ref int referenceIndex, ref IReferenceSpan currentReference, IReadOnlyList<IReferenceSpan> referenceSpans)
         {
             int startPosition = span.Start;
             int currentPosition = span.Start;
-            int end = span.End;
+            int end = span.End();
 
-            while (currentReference != null && currentReference.Start >= currentPosition && currentReference.Start < end && currentReference.End <= end)
+            while (currentReference != null && currentReference.Start >= currentPosition && currentReference.Start < end && currentReference.End() <= end)
             {
                 if (currentReference != null)
                 {
@@ -175,7 +175,7 @@ namespace WebUI.Rendering
                     var htmlElementInfo = GenerateHyperlinkForReference(currentReference.Reference);
                     WriteHtmlElement(tw, htmlElementInfo, spanText.Substring(currentReference.Start - startPosition, currentReference.Length));
 
-                    currentPosition = currentReference.End;
+                    currentPosition = currentReference.End();
                 }
 
                 referenceIndex++;
@@ -195,7 +195,7 @@ namespace WebUI.Rendering
             }
         }
 
-        private void GetBestReference(ref int referenceIndex, ref ReferenceSpan currentReference, IReadOnlyList<ReferenceSpan> referenceSpans)
+        private void GetBestReference(ref int referenceIndex, ref IReferenceSpan currentReference, IReadOnlyList<IReferenceSpan> referenceSpans)
         {
             for (int i = referenceIndex; i < referenceSpans.Count; i++)
             {
@@ -213,7 +213,7 @@ namespace WebUI.Rendering
             }
         }
 
-        private void GenerateSpan(TextWriter tw, ClassificationSpan span, string spanText, ref int referenceIndex, ref ReferenceSpan currentReference, IReadOnlyList<ReferenceSpan> referenceSpans)
+        private void GenerateSpan(TextWriter tw, IClassificationSpan span, string spanText, ref int referenceIndex, ref IReferenceSpan currentReference, IReadOnlyList<IReferenceSpan> referenceSpans)
         {
             while ((currentReference == null || currentReference.Start < span.Start) && referenceIndex < referenceSpans.Count)
             {
@@ -339,7 +339,7 @@ namespace WebUI.Rendering
             return false;
         }
 
-        HtmlElementInfo GenerateHyperlinkForReference(ReferenceSymbol symbol)
+        HtmlElementInfo GenerateHyperlinkForReference(IReferenceSymbol symbol)
         {
             string idHash = symbol.Id.Value;
 

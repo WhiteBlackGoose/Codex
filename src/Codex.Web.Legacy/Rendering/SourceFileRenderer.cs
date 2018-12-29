@@ -32,13 +32,16 @@ namespace WebUI.Rendering
         /// <returns></returns>
         public async Task<EditorModel> RenderAsync()
         {
-            var filePath = _sourceFile.ProjectRelativePath;
+            var filePath = _sourceFile.SourceFile?.Info?.ProjectRelativePath;
             var model = new EditorModel()
             {
                 ProjectId = projectId,
                 FilePath = filePath,
                 WebLink = _sourceFile.SourceFile?.Info?.WebAddress,
-                RepoRelativePath = _sourceFile.SourceFile?.Info?.RepoRelativePath
+                RepoRelativePath = _sourceFile.SourceFile?.Info?.RepoRelativePath,
+                IndexedOn = _sourceFile.Commit?.DateUploaded.ToLocalTime().ToString() ?? "Unknown",
+                RepoName = _sourceFile.RepositoryName ?? "Unknown",
+                IndexName = _sourceFile.Commit?.CommitId,
             };
 
             string sourceText = _sourceFile.SourceFile.Content;

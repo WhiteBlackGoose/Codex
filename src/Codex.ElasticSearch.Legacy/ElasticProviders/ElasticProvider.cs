@@ -945,7 +945,7 @@ namespace Codex.Storage.ElasticProviders
                 repos,
                 symbol.ProjectId,
                 symbol.Id.Value,
-                symbol.Kind,
+                (symbol as IReferenceSymbol)?.ReferenceKind ?? symbol.Kind,
                 maxNumberOfItems,
                 relatedDefinitionProjectId: symbol.GetReferenceSearchExtensionData()?.ProjectScope);
         }

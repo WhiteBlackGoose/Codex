@@ -22,25 +22,6 @@ namespace WebUI.Controllers
             .CompareByAfter(rs => rs.ProjectId)
             .CompareByAfter(rs => rs.ProjectRelativePath);
 
-        public struct LinkEdit
-        {
-            public string Inserted;
-            public int Offset;
-            public int TruncateLength;
-            public bool ReplacePrefix;
-        }
-
-        public Dictionary<string, LinkEdit> m_edits = new Dictionary<string, LinkEdit>(StringComparer.OrdinalIgnoreCase)
-        {
-            //{  "https://devdiv.visualstudio.com/DefaultCollection/DevDiv/_git/VS?path=",
-            //    new LinkEdit() { Inserted = "/src", Offset = 3 } },
-            //{  "https://mseng.visualstudio.com/DefaultCollection/VSIDEProj/_git/VSIDEProj.Threading#path=/src/",
-            //    new LinkEdit() { TruncateLength = 11, Inserted = "?path=" } },
-            //{  "https://mseng.visualstudio.com/DefaultCollection/VSIDEProj/_git/VSIDEProj.MEF#path=/src/",
-            //    new LinkEdit() { ReplacePrefix = true, Inserted = "https://devdiv.visualstudio.com/DevDiv/_git/VSMEF?path=" } }
-        };
-
-
         public SourceController(ICodex storage)
         {
             Storage = storage;
@@ -78,22 +59,6 @@ namespace WebUI.Controllers
                 Responses.PrepareResponse(Response);
 
                 var model = await renderer.RenderAsync();
-                foreach (var editEntry in m_edits)
-                {
-                    if (model.WebLink?.StartsWith(editEntry.Key, StringComparison.OrdinalIgnoreCase) == true)
-                    {
-                        var truncateLength = editEntry.Value.TruncateLength;
-                        if (editEntry.Value.ReplacePrefix)
-                        {
-                            truncateLength = editEntry.Key.Length;
-                        }
-
-                        var start = model.WebLink.Substring(0, editEntry.Key.Length - truncateLength);
-                        var end = model.WebLink.Substring(editEntry.Key.Length + editEntry.Value.Offset);
-
-                        model.WebLink = start + editEntry.Value.Inserted + end;
-                    }
-                }
 
                 if (partial)
                 {

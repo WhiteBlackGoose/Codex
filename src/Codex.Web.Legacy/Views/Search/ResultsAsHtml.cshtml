@@ -8,6 +8,10 @@
     if (Model == null || Model.Entries.Count == 0)
     {
         <div class="note">No results found.</div>
+        if (Model != null && !string.IsNullOrWhiteSpace(Model.QueryText) && !Model.QueryText.StartsWith("`"))
+        {
+            <div class="note"><a class="blueLink" href="/?query=@HttpUtility.UrlEncode("`" + Model.QueryText)">Search text results for: @Model.QueryText</a></div>
+        }
     }
     else if (Model != null && Model.Error != null)
     {
@@ -48,7 +52,7 @@
                                     }
                                     else
                                     {
-                                        <a onclick="LoadDefinitionCore('@searchResult.Symbol.ProjectId.AsJavaScriptStringEncoded()', '@searchResult.Symbol.Id');return false;" href="/?rightProject=@searchResult.Symbol.ProjectId&rightSymbol=@searchResult.Symbol.Id">
+                                        <a onclick="LoadDefinitionCore('@searchResult.Symbol.ProjectId.AsJavaScriptStringEncoded()', '@searchResult.Symbol.Id');return false;" href="/?leftProject=@searchResult.Symbol.ProjectId&leftSymbol=@searchResult.Symbol.Id">
                                             <div class="resultItem">
                                                 <img src="/content/icons/@searchResult.Glyph" height="16" width="16" /><div class="resultKind">@searchResult.Symbol.Kind.ToLowerInvariant()</div><div class="resultName">@searchResult.Symbol.ShortName</div><div class="resultDescription">@searchResult.DisplayName</div>
                                             </div>

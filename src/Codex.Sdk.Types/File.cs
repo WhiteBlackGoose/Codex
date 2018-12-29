@@ -18,6 +18,16 @@ namespace Codex
         ISourceFile SourceFile { get; }
 
         /// <summary>
+        /// Gets the commit referencing the file.
+        /// </summary>
+        ICommit Commit { get; }
+
+        /// <summary>
+        /// Gets the repository containing the file.
+        /// </summary>
+        IRepository Repo { get; }
+
+        /// <summary>
         /// The lines in the source file
         /// </summary>
         //[Include(ObjectStage.Analysis)]

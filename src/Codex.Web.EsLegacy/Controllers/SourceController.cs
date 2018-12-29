@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Codex.ObjectModel;
+using Codex.Sdk.Search;
 using Codex.Utilities;
 using WebUI.Rendering;
 
@@ -12,7 +13,7 @@ namespace WebUI.Controllers
 {
     public class SourceController : Controller
     {
-        private readonly IStorage Storage;
+        private readonly ICodex Storage;
 
         private readonly static IEqualityComparer<SymbolReferenceEntry> m_referenceEquator = new EqualityComparerBuilder<SymbolReferenceEntry>()
             .CompareByAfter(rs => rs.Span.Reference.Id)
@@ -21,26 +22,7 @@ namespace WebUI.Controllers
             .CompareByAfter(rs => rs.ReferringProjectId)
             .CompareByAfter(rs => rs.ReferringFilePath);
 
-        public struct LinkEdit
-        {
-            public string Inserted;
-            public int Offset;
-            public int TruncateLength;
-            public bool ReplacePrefix;
-        }
-
-        public Dictionary<string, LinkEdit> m_edits = new Dictionary<string, LinkEdit>(StringComparer.OrdinalIgnoreCase)
-        {
-            //{  "https://devdiv.visualstudio.com/DefaultCollection/DevDiv/_git/VS?path=",
-            //    new LinkEdit() { Inserted = "/src", Offset = 3 } },
-            //{  "https://mseng.visualstudio.com/DefaultCollection/VSIDEProj/_git/VSIDEProj.Threading#path=/src/",
-            //    new LinkEdit() { TruncateLength = 11, Inserted = "?path=" } },
-            //{  "https://mseng.visualstudio.com/DefaultCollection/VSIDEProj/_git/VSIDEProj.MEF#path=/src/",
-            //    new LinkEdit() { ReplacePrefix = true, Inserted = "https://devdiv.visualstudio.com/DevDiv/_git/VSMEF?path=" } }
-        };
-
-
-        public SourceController(IStorage storage)
+        public SourceController(ICodex storage)
         {
             Storage = storage;
         }
@@ -58,10 +40,17 @@ namespace WebUI.Controllers
                     return this.HttpNotFound();
                 }
 
-                string[] searchRepos = this.GetSearchRepos();
-                var projectContents = await Storage.GetProjectContentsAsync(searchRepos, projectId);
+                var getSourceResponse = await Storage.GetSourceAsync(new GetSourceArguments()
+                {
+                    ProjectId = projectId,
+                    ProjectRelativePath = filename,
+                    RepositoryScopeId = this.GetSearchRepo()
+                });
 
-                var boundSourceFile = await Storage.GetBoundSourceFileAsync(searchRepos, projectId, filename);
+                getSourceResponse.ThrowOnError();
+
+                var boundSourceFile = getSourceResponse.Result;
+
                 if (boundSourceFile == null)
                 {
                     return PartialView("~/Views/Source/Index.cshtml", new EditorModel { Error = $"Bound source file for {filename} in {projectId} not found." });
@@ -72,25 +61,9 @@ namespace WebUI.Controllers
                 Responses.PrepareResponse(Response);
 
                 var model = await renderer.RenderAsync();
-                model.IndexedOn = projectContents?.DateUploaded.ToLocalTime().ToString() ?? "Unknown";
+                model.IndexedOn = boundSourceFile.Commit?.DateUploaded.ToLocalTime().ToString() ?? "Unknown";
                 model.RepoName = boundSourceFile.RepositoryName ?? "Unknown";
-                model.IndexName = boundSourceFile.IndexName;
-                foreach (var editEntry in m_edits)
-                {
-                    if (model.WebLink?.StartsWith(editEntry.Key, StringComparison.OrdinalIgnoreCase) == true)
-                    {
-                        var truncateLength = editEntry.Value.TruncateLength;
-                        if (editEntry.Value.ReplacePrefix)
-                        {
-                            truncateLength = editEntry.Key.Length;
-                        }
-
-                        var start = model.WebLink.Substring(0, editEntry.Key.Length - truncateLength);
-                        var end = model.WebLink.Substring(editEntry.Key.Length + editEntry.Value.Offset);
-
-                        model.WebLink = start + editEntry.Value.Inserted + end;
-                    }
-                }
+                model.IndexName = boundSourceFile.Commit?.CommitId;
 
                 if (partial)
                 {
@@ -114,6 +87,18 @@ namespace WebUI.Controllers
             try
             {
                 Requests.LogRequest(this);
+
+                var definitionResponse = await Storage.FindDefinitionLocationAsync(
+                    new FindDefinitionLocationArguments()
+                    {
+                        RepositoryScopeId = this.GetSearchRepo(),
+                        SymbolId = symbolId,
+                        ProjectId = projectId,
+                    });
+
+                definitionResponse.ThrowOnError();
+
+                var definitions = definitionResponse.Result;
 
                 var definitions = await Storage.GetReferencesToSymbolAsync(
                     this.GetSearchRepos(),

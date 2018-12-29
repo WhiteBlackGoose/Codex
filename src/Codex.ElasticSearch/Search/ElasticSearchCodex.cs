@@ -156,7 +156,14 @@ namespace Codex.ElasticSearch.Search
                         .Take(1))
                     .ThrowOnFailure();
 
+                    var commitResults = await client.SearchAsync<CommitSearchModel>(sd => sd
+                        .StoredFilterQuery(context, IndexName(SearchTypes.Commit), qcd => qcd.Bool(bq => bq.Filter(
+                                fq => fq.Term(s => s.Commit.RepositoryName, boundSearchModel.BindingInfo.RepositoryName))))
+                        .Take(1))
+                    .ThrowOnFailure();
+
                     var repo = repoResults.Hits.FirstOrDefault()?.Source.Repository;
+                    var commit = commitResults.Hits.FirstOrDefault()?.Source.Commit;
 
                     var sourceFile = textResults.Source.File;
                     if (sourceFile.Info.WebAddress == null
@@ -170,7 +177,9 @@ namespace Codex.ElasticSearch.Search
 
                     return new BoundSourceFile(boundSearchModel.BindingInfo)
                     {
-                        SourceFile = textResults.Source.File
+                        SourceFile = textResults.Source.File,
+                        Commit = commit,
+                        Repo = repo
                     };
                 }
 

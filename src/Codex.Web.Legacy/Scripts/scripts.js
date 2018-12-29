@@ -258,7 +258,7 @@ function LoadSourceCodeCore(project, file, symbolId, lineNumber) {
         return;
     }
 
-    var url = "/source/" + encodeURI(project) + "/?filename=" + encodeURIComponent(file) + "&partial=true";
+    var url = codexWebRootPrefix + "/source/" + encodeURI(project) + "/?filename=" + encodeURIComponent(file) + "&partial=true";
     FillRightPane(url, symbolId, lineNumber);
 }
 

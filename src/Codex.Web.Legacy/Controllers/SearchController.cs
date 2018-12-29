@@ -33,7 +33,7 @@ namespace WebUI.Controllers
                 Requests.LogRequest(this, searchTerm);
                 searchTerm = HttpUtility.UrlDecode(searchTerm);
 
-                if (string.IsNullOrWhiteSpace(searchTerm))
+                if (string.IsNullOrWhiteSpace(searchTerm) || searchTerm.Length < 3)
                 {
                     //Still render view even if we have an invalid search term - it'll display a "results not found" message
                     Debug.WriteLine("GetSearchResult - searchTerm is null or whitespace");

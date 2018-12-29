@@ -452,7 +452,7 @@ namespace Codex.Storage
             {
                 File = s.FilePath,
                 ReferenceKind = s.ReferenceKind,
-                Span = ToObjectModel(s.Span).SetUid(s.Uid)
+                Symbol = ToObjectModel(s.Span).SetUid(s.Uid)?.Definition
             }.Process()).ToList();
         }
 
@@ -483,32 +483,32 @@ namespace Codex.Storage
 
         public static SymbolSearchResultEntry Process(this SymbolSearchResultEntry s)
         {
-            s.Glyph = GetGlyph(s.Span, s.File);
+            s.Glyph = GetGlyph(s.Symbol, s.File);
             return s;
         }
 
-        public static string GetGlyph(this DefinitionSpan s, string filePath = null)
+        private static string GetGlyph(IDefinitionSymbol s, string filePath = null)
         {
             return GetGlyphCore(s, filePath) + ".png";
         }
 
-        private static string GetGlyphCore(DefinitionSpan s, string filePath)
+        private static string GetGlyphCore(IDefinitionSymbol s, string filePath)
         {
-            var glyph = s.Definition.Glyph;
+            var glyph = s.Glyph;
             if (glyph != Glyph.Unknown)
             {
                 return glyph.GetGlyphNumber().ToString();
             }
 
             int result = 0;
-            if (glyphs.TryGetValue(s.Definition.Kind, out result))
+            if (glyphs.TryGetValue(s.Kind, out result))
             {
                 return result.ToString();
             }
 
             if (!string.IsNullOrEmpty(filePath))
             {
-                if (string.Equals(s.Definition.Kind, nameof(SymbolKinds.File), StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(s.Kind, nameof(SymbolKinds.File), StringComparison.OrdinalIgnoreCase))
                 {
                     return GetFileNameGlyph(filePath);
                 }

@@ -10,6 +10,12 @@ namespace WebUI
     {
         public const string RepoNameKey = "repoName";
 
+        public static string GetSearchRepo(this Controller controller)
+        {
+            string repo = controller.RouteData.Values[RepoNameKey] as string;
+            return repo;
+        }
+
         public static string[] GetSearchRepos(this Controller controller)
         {
             string repo = controller.RouteData.Values[RepoNameKey] as string;
