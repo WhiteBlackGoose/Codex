@@ -77,6 +77,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Registrar", "src\Code
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Build.Tasks", "src\Codex.Build.Tasks\Codex.Build.Tasks.csproj", "{A649607D-BF0E-4727-A7D0-B2D6376A618F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Web.Mvc", "src\Codex.Web.Mvc\Codex.Web.Mvc.csproj", "{0F9A2532-D41C-4D23-8BBF-A20BA5BF4F3A}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		src\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems*{2322a932-05f4-4931-8547-71377c6ab49e}*SharedItemsImports = 4
@@ -188,6 +190,10 @@ Global
 		{A649607D-BF0E-4727-A7D0-B2D6376A618F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A649607D-BF0E-4727-A7D0-B2D6376A618F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A649607D-BF0E-4727-A7D0-B2D6376A618F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F9A2532-D41C-4D23-8BBF-A20BA5BF4F3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F9A2532-D41C-4D23-8BBF-A20BA5BF4F3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F9A2532-D41C-4D23-8BBF-A20BA5BF4F3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F9A2532-D41C-4D23-8BBF-A20BA5BF4F3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -212,6 +218,7 @@ Global
 		{9B0F9558-E181-4972-BE12-70C18B64061A} = {5B49B5ED-0C4F-47DD-8D72-6BD21518E7FD}
 		{13BCFB1A-C0C5-453F-9FC2-733C0FF0F116} = {5B49B5ED-0C4F-47DD-8D72-6BD21518E7FD}
 		{A649607D-BF0E-4727-A7D0-B2D6376A618F} = {5B49B5ED-0C4F-47DD-8D72-6BD21518E7FD}
+		{0F9A2532-D41C-4D23-8BBF-A20BA5BF4F3A} = {25E4BE1A-D5A5-45B4-B612-F524C796082E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BA03C0DC-5D0A-4126-9F26-77704FB5FD5B}

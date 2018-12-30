@@ -8,6 +8,7 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <AssemblyName>Codex.Web.Legacy</AssemblyName>
     <RootNamespace>Codex.Web</RootNamespace>
+    <DeployDefaultTargetFrameworkVersion>4.6.1</DeployDefaultTargetFrameworkVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <UseIISExpress>true</UseIISExpress>
@@ -389,7 +390,10 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <None Include="Project_Readme.html" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
+    <None Include="Properties\PublishProfiles\ref12test1 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\ref12test2 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\Ref12TestWeb.pubxml" />
     <None Include="Properties\PublishProfiles\test.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

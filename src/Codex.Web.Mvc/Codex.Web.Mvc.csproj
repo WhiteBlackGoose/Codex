@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\scripts\jquery-1.10.2.intellisense.js" />
+    <Content Remove="wwwroot\scripts\jquery.validate-vsdoc.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\scripts\jquery-1.10.2.intellisense.js" />
+    <None Include="wwwroot\scripts\jquery.validate-vsdoc.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Codex.ElasticSearch.Legacy\Codex.ElasticSearch.Legacy.csproj" />
+    <ProjectReference Include="..\Codex.ElasticSearch\Codex.ElasticSearch.csproj" />
+    <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />
+  </ItemGroup>
+
+</Project>
