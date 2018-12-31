@@ -9,6 +9,43 @@
     ]
   },
   {
+    "outputFileName": "wwwroot/bundles/modernizr.js",
+    // An array of relative input file paths. Globbing patterns supported
+    "inputFiles": [
+      "wwwroot/scripts/modernizr-*"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/bundles/jquery.js",
+    // An array of relative input file paths. Globbing patterns supported
+    "inputFiles": [
+      "wwwroot/scripts/jquery*.js",
+      "!wwwroot/scripts/jquery*vsdoc.js",
+      "!wwwroot/scripts/*.min.js"
+    ],
+    // Optionally specify minification options
+    "minify": {
+      "enabled": false
+    }
+  },
+  {
+    "outputFileName": "wwwroot/bundles/header.js",
+    // An array of relative input file paths. Globbing patterns supported
+    "inputFiles": [
+      "wwwroot/scripts/search.js",
+      "wwwroot/scripts/split.js",
+      "wwwroot/scripts/scripts.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/bundles/bootstrap.js",
+    // An array of relative input file paths. Globbing patterns supported
+    "inputFiles": [
+      "wwwroot/scripts/bootstrap.js",
+      "wwwroot/scripts/respond.js"
+    ]
+  },
+  {
     "outputFileName": "wwwroot/js/site.min.js",
     "inputFiles": [
       "wwwroot/js/site.js"

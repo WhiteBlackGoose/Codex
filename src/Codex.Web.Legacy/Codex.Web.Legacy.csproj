@@ -70,7 +70,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="LegacyElasticSearchCodex.cs" />
     <Compile Include="Models\EditorModel.cs" />
     <Compile Include="Models\StateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

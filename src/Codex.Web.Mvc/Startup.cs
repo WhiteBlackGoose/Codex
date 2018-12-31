@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Codex.ElasticSearch;
+using Codex.ElasticSearch.Legacy.Bridge;
+using Codex.Sdk.Search;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,11 +25,22 @@ namespace Codex.Web.Mvc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            services.Add(ServiceDescriptor.Singleton<ICodex>(_ => new LegacyElasticSearchCodex(
+                new LegacyElasticSearchStoreConfiguration()
+                {
+                    Endpoint = "http://ddindex:9125"
+                })));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.Use(async (context, next) =>
+            {
+                await next.Invoke();
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();

@@ -259,3 +259,6 @@ paket-files/
 **/launchSettings.json
 *.vsix
 *.zip
+
+**/wwwroot/bundles/
+**/wwwroot/app_data/**/bin
