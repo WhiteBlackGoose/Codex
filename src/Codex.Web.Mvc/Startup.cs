@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Codex.ElasticSearch;
 using Codex.ElasticSearch.Legacy.Bridge;
@@ -24,13 +27,40 @@ namespace Codex.Web.Mvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            StartElasticSearch();
+
             services.AddMvc();
 
             services.Add(ServiceDescriptor.Singleton<ICodex>(_ => new LegacyElasticSearchCodex(
                 new LegacyElasticSearchStoreConfiguration()
                 {
-                    Endpoint = "http://ddindex:9125"
+                    Endpoint = "http://localhost:9200"
                 })));
+        }
+
+        public void StartElasticSearch()
+        {
+            Console.WriteLine("Drives:");
+            Console.WriteLine(string.Join(Environment.NewLine, DriveInfo.GetDrives().Select(d => $"Drive '{d.Name}'")));
+
+            VolumeFunctions.DefineDosDevice(0, "G:", @"C:\ext\");
+
+            Console.WriteLine("Drives:");
+            Console.WriteLine(string.Join(Environment.NewLine, DriveInfo.GetDrives().Select(d => $"Drive '{d.Name}'")));
+
+            string testPath = @"G:\es\bin\test.txt";
+            File.WriteAllText(testPath, "Wrote this text to a file");
+            Console.WriteLine($"Wrote '{testPath}': {File.ReadAllText(testPath)}");
+
+            string elasticsearchPath = @"G:\es\bin\elasticsearch.bat";
+            Console.WriteLine($"Starting ElasticSearch '{elasticsearchPath}'");
+            Process.Start(new ProcessStartInfo("cmd.exe", $@"/C {elasticsearchPath}")
+            {
+                EnvironmentVariables =
+                {
+                    { "JAVA_HOME", @"G:\jdk" }
+                }
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,5 +94,11 @@ namespace Codex.Web.Mvc
                     template: "repos/{repoName}/{controller=Home}/{action=Index}/{id?}");
             });
         }
+    }
+
+    public class VolumeFunctions
+    {
+        [DllImport("kernel32.dll")]
+        internal static extern bool DefineDosDevice(uint dwFlags, string lpDeviceName, string lpTargetPath);
     }
 }

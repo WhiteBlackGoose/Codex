@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,9 +30,19 @@
     <ProjectReference Include="..\Codex.ElasticSearch\Codex.ElasticSearch.csproj" />
     <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\app_data\jobs\continuous\elasticsearch\" />
-  </ItemGroup>
+  
+  <!--<Target Name="_RetargetAppDataFilesToRoot" BeforeTargets="GetCopyToPublishDirectoryItems">
+    <ItemGroup>
+      <WwwrootAppDataContent Include="wwwroot\app_data\**\*.*" TargetPath="app_data\%(RecursiveDir)%(Filename)%(Extension)" />
+      <ContentWithTargetPath Remove="@(WwwrootAppDataContent)" />
+      <ContentWithTargetPath Include="@(WwwrootAppDataContent)" />
+      
+    </ItemGroup>
+    
+  </Target>-->
+  
+<Target Name="_IncludeWebJobFilesDuringPublish" BeforeTargets="_CopyFilesToPublishIntermediateOutputPath">
+  <Warning Text="Running _ListenToPublish" />
+</Target>
 
 </Project>
