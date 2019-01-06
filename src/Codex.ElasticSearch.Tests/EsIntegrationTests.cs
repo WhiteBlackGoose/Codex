@@ -58,6 +58,7 @@ namespace Codex.ElasticSearch.Tests
             arguments.AllowReferencedDefinitions = true;
             var allSearch = await codex.SearchAsync(arguments);
             Assert.True(allSearch.Result.Total > 0, "Search allowing referenced definitions should return some results");
+            Assert.True(allSearch.Result.Hits.Where(h => h.Definition != null).Count() > 0, "Search allowing referenced definitions should have definition results");
         }
 
         [Test]

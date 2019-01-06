@@ -3250,7 +3250,7 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// The name fo the repository
+        /// The name of the repository
         /// </summary>
         public virtual string Name {
             get {
@@ -3421,7 +3421,7 @@ namespace Codex.ObjectModel {
         
         private int m_RoutingGroup;
         
-        private long m_StableId;
+        private int m_StableId;
         
         private string m_SortKey;
         
@@ -3501,7 +3501,7 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// The per-group stable identity
         /// </summary>
-        public virtual long StableId {
+        public virtual int StableId {
             get {
                 return this.m_StableId;
             }

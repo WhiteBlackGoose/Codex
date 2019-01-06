@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Codex.ElasticSearch;
 using Codex.ElasticSearch.Legacy.Bridge;
+using Codex.ElasticSearch.Search;
 using Codex.Sdk.Search;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,15 +28,37 @@ namespace Codex.Web.Mvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            StartElasticSearch();
+            if (Environment.GetEnvironmentVariable("CODEX_START_ES") == "1")
+            {
+                StartElasticSearch();
+            }
 
             services.AddMvc();
 
-            services.Add(ServiceDescriptor.Singleton<ICodex>(_ => new LegacyElasticSearchCodex(
-                new LegacyElasticSearchStoreConfiguration()
+            if (Environment.GetEnvironmentVariable("CODEX_USE_COMMITMODEL") != "1")
+            {
+                services.Add(ServiceDescriptor.Singleton<ICodex>(_ => new LegacyElasticSearchCodex(
+                    new LegacyElasticSearchStoreConfiguration()
+                    {
+                        Endpoint = "http://localhost:9200"
+                    })));
+            }
+            else
+            {
+                services.Add(ServiceDescriptor.Singleton<ICodex>(_ =>
                 {
-                    Endpoint = "http://localhost:9200"
-                })));
+                    ElasticSearchStoreConfiguration configuration = new ElasticSearchStoreConfiguration()
+                    {
+                        CreateIndices = true,
+                        ShardCount = 1,
+                        Prefix = "estest."
+                    };
+
+                    ElasticSearchService service = new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200"));
+
+                    return new ElasticSearchCodex(configuration, service);
+                }));
+            }
         }
 
         public void StartElasticSearch()

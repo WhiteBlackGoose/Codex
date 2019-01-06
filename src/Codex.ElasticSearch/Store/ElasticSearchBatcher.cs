@@ -42,6 +42,9 @@ namespace Codex.ElasticSearch
         private readonly ElasticSearchStore store;
         private readonly SemaphoreSlim batchSemaphore;
 
+        public long TotalSize;
+        public long TotalAddedSize;
+
         private ElasticSearchBatch currentBatch;
         private AtomicBool backgroundDequeueReservation = new AtomicBool();
 
@@ -97,6 +100,9 @@ namespace Codex.ElasticSearch
         {
             if (batch.TryReserveExecute())
             {
+                Interlocked.Add(ref TotalSize, batch.CurrentSize);
+                Interlocked.Add(ref TotalAddedSize, batch.AddedSize);
+
                 using (await batchSemaphore.AcquireAsync())
                 {
                     currentBatch = new ElasticSearchBatch(this);
@@ -162,6 +168,8 @@ namespace Codex.ElasticSearch
 
                 await ExecuteBatchAsync(currentBatch);
             }
+
+            Console.WriteLine($"Finished processing batches: TotalSize={TotalSize}, TotalAddedSize={TotalAddedSize}");
 
             // For each typed stored filter,
             // Store the filter under 

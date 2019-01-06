@@ -256,17 +256,15 @@ namespace Codex.ElasticSearch.Search
 
                 var terms = searchPhrase.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-                bool allowReferencedDefinitions = terms.Any(t => t == "@all");
-                var indexName = IndexName(SearchTypes.Definition);
-                if (!allowReferencedDefinitions)
-                {
-                    indexName = GetDeclaredDefinitionsIndexName(indexName);
-                }
+                bool allowReferencedDefinitions = terms.Any(t => IsAllowReferenceDefinitionsTerm(t)) || arguments.AllowReferencedDefinitions;
+                terms = terms.Where(t => !IsAllowReferenceDefinitionsTerm(t)).ToArray();
 
+                var indexName = IndexName(SearchTypes.Definition);
                 var definitionsResult = await client.SearchAsync<IDefinitionSearchModel>(s => s
                         .StoredFilterQuery(context, indexName, qcd => qcd.Bool(bq => bq
-                            .Filter(GetTermsFilter(terms, allowReferencedDefinitions: arguments.AllowReferencedDefinitions))
-                            .Should(GetTermsFilter(terms, boostOnly: true))))
+                            .Filter(GetTermsFilter(terms, allowReferencedDefinitions: allowReferencedDefinitions))
+                            .Should(GetTermsFilter(terms, boostOnly: true))),
+                            filterIndexName: allowReferencedDefinitions ? indexName : GetDeclaredDefinitionsIndexName(indexName))
                         .Take(arguments.MaxResults))
                     .ThrowOnFailure();
 
@@ -317,6 +315,11 @@ namespace Codex.ElasticSearch.Search
                     Total = textResults.Total
                 };
             });
+        }
+
+        private static bool IsAllowReferenceDefinitionsTerm(string t)
+        {
+            return t.Equals("@all", StringComparison.OrdinalIgnoreCase);
         }
 
         private string IndexName(SearchType searchType)

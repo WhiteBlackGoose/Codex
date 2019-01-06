@@ -27,10 +27,10 @@ namespace Codex.ElasticSearch
             return storedFilterStore.StoreAsync<StoredFilter>(storedFilters, updateMergeFunction: null, replace: true);
         }
 
-        public static SearchDescriptor<T> StoredFilterQuery<T>(this SearchDescriptor<T> searchDescriptor, StoredFilterSearchContext context, string indexName, Func<QueryContainerDescriptor<T>, QueryContainer> query)
+        public static SearchDescriptor<T> StoredFilterQuery<T>(this SearchDescriptor<T> searchDescriptor, StoredFilterSearchContext context, string indexName, Func<QueryContainerDescriptor<T>, QueryContainer> query, string filterIndexName = null)
             where T : class, ISearchEntity
         {
-            var storedFilterUid = GetFilterName(context.StoredFilterUidPrefix, indexName);
+            var storedFilterUid = GetFilterName(context.StoredFilterUidPrefix, filterIndexName ?? indexName);
             return searchDescriptor
                 .Query(q => q.Bool(bq => bq
                     .Must(query)

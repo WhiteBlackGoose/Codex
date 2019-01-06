@@ -50,7 +50,7 @@ namespace Codex
         /// </summary>
         [SearchBehavior(SearchBehavior.Term)]
         [Include(ObjectStage.Search)]
-        long StableId { get; set; }
+        int StableId { get; set; }
 
         /// <summary>
         /// Value used for sorting (this should be computed based other values in the entity i.e. {FileName}/{RepoRelativePath} for files)

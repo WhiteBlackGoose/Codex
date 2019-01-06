@@ -22,7 +22,8 @@ namespace Codex.ElasticSearch
 
         private readonly AtomicBool canReserveExecute = new AtomicBool();
 
-        private int CurrentSize = 0;
+        public int CurrentSize { get; private set; } = 0;
+        public int AddedSize { get; private set; } = 0;
 
         private readonly ElasticSearchBatcher batcher;
         private readonly IStableIdRegistry stableIdRegistry;
@@ -48,9 +49,6 @@ namespace Codex.ElasticSearch
                 TryReserveExecute();
             }
 
-            //Task.Delay(1);
-            //return null;
-
             // Reserve stable ids
             int batchIndex = 0;
             await stableIdRegistry.SetStableIdsAsync(EntityItems);
@@ -72,6 +70,11 @@ namespace Codex.ElasticSearch
                     {
                         additionalStoredFilter.Add(entityRef);
                     }
+                }
+
+                if (IsAdded(responseItem))
+                {
+                    AddedSize += item.Entity.EntityContentSize;
                 }
             }
 
