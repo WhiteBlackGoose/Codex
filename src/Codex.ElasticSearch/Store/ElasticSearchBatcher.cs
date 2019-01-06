@@ -100,14 +100,14 @@ namespace Codex.ElasticSearch
         {
             if (batch.TryReserveExecute())
             {
-                Interlocked.Add(ref TotalSize, batch.CurrentSize);
-                Interlocked.Add(ref TotalAddedSize, batch.AddedSize);
-
                 using (await batchSemaphore.AcquireAsync())
                 {
                     currentBatch = new ElasticSearchBatch(this);
                     await service.UseClient(batch.ExecuteAsync);
                 }
+
+                Interlocked.Add(ref TotalSize, batch.CurrentSize);
+                Interlocked.Add(ref TotalAddedSize, batch.AddedSize);
 
                 if (backgroundDequeueReservation.TrySet(true))
                 {

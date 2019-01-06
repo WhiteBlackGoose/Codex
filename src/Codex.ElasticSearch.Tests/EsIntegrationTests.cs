@@ -49,7 +49,7 @@ namespace Codex.ElasticSearch.Tests
             var arguments = new SearchArguments()
             {
                 SearchString = nameof(AssemblyCompanyAttribute),
-                AllowReferencedDefinitions = false
+                AllowReferencedDefinitions = false,
             };
 
             var declaredSearch = await codex.SearchAsync(arguments);

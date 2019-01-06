@@ -106,7 +106,7 @@ namespace Codex.ElasticSearch.Formats
                             Contract.Assert(excludedDoc != DocIdSetIterator.NO_MORE_DOCS);
                             excludedDocs[i] = (short)excludedDoc;
                         }
-                        Contract.Assert(excludedDoc + 1 == denseBuffer.Length || denseBuffer.NextSetBit(excludedDoc + 1) == DocIdSetIterator.NO_MORE_DOCS);
+                        Contract.Assert(excludedDoc + 1 == denseBuffer.Length || denseBuffer.NextSetBit(excludedDoc + 1) == -1);
                         sets[currentBlock] = new ShortArrayDocIdSet(excludedDocs, true);
                     }
                     else

@@ -191,7 +191,7 @@ function LoadDefinition(project, symbolId) {
 function LoadDefinitionCore(project, symbolId) {
     var url = codexWebRootPrefix + "/definitions/" + encodeURI(project) + "/?symbolId=" + encodeURIComponent(symbolId);
     callServer(url, function (data) {
-        if (startsWith(data, "<!--Definitions-->")) {
+        if (startsWith(data.trim(), "<!--Definitions-->")) {
             setLeftPane(data);
             return;
         }

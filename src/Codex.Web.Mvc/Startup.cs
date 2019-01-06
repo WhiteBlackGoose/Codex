@@ -28,19 +28,20 @@ namespace Codex.Web.Mvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            if (Environment.GetEnvironmentVariable("CODEX_START_ES") == "1")
+            if (Configuration["CODEX_START_ES"] == "1")
             {
                 StartElasticSearch();
             }
 
             services.AddMvc();
 
-            if (Environment.GetEnvironmentVariable("CODEX_USE_COMMITMODEL") != "1")
+            var useCommitModel = Configuration["CODEX_USE_COMMITMODEL"];
+            if (useCommitModel != "1")
             {
                 services.Add(ServiceDescriptor.Singleton<ICodex>(_ => new LegacyElasticSearchCodex(
                     new LegacyElasticSearchStoreConfiguration()
                     {
-                        Endpoint = "http://localhost:9200"
+                        Endpoint = "http://ddindex:9125"
                     })));
             }
             else

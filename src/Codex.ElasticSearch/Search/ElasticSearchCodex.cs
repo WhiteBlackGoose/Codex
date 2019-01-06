@@ -268,7 +268,7 @@ namespace Codex.ElasticSearch.Search
                         .Take(arguments.MaxResults))
                     .ThrowOnFailure();
 
-                if (definitionsResult.Hits.Count != 0)
+                if (definitionsResult.Hits.Count != 0 || !arguments.FallbackToTextSearch)
                 {
                     return new IndexQueryHits<ISearchResult>()
                     {
@@ -281,6 +281,7 @@ namespace Codex.ElasticSearch.Search
                     };
                 }
 
+                // Fallback to performing text phrase search
                 var textResults = await client.SearchAsync<ITextSourceSearchModel>(
                     s => s
                         .StoredFilterQuery(context, IndexName(SearchTypes.TextSource), f =>
