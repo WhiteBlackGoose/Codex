@@ -1,4 +1,4 @@
-﻿This project/folder defines containers.
+﻿This project/folder defines containers. Currently deployment of these containers does not work properly to Azure App Service.
 
 -- Externally defined containers
 microsoft/dotnet:2.1-aspnetcore-runtime-nanoserver-sac2016 
