@@ -61,7 +61,7 @@ namespace WebUI.Rendering
                 bool hasChildren = nextIndex != boundSourceFile.Definitions.Count &&
                     boundSourceFile.Definitions[nextIndex].Definition.SymbolDepth > depth;
 
-                WriteFolderName(text, sb, definition.Definition.Id.Value, definition.Definition.Kind.ToLowerInvariant(), definition.GetGlyph(boundSourceFile?.SourceFile?.Info?.ProjectRelativePath), hasChildren);
+                WriteFolderName(text, sb, definition.Definition.Id.Value, definition.Definition.Kind.ToLowerInvariant(), definition.Definition.GetGlyph(boundSourceFile?.SourceFile?.Info?.ProjectRelativePath), hasChildren);
                 if (hasChildren)
                 {
                     WriteFolderChildrenContainer(sb);
