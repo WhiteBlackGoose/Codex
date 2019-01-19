@@ -21,17 +21,21 @@ namespace Codex.ElasticSearch
         public readonly List<Item> ReturnedStableIdItems = new List<Item>();
 
         private readonly AtomicBool canReserveExecute = new AtomicBool();
+        private readonly TaskCompletionSource<None> completion = new TaskCompletionSource<None>(TaskCreationOptions.RunContinuationsAsynchronously);
 
         public int CurrentSize { get; private set; } = 0;
         public int AddedSize { get; private set; } = 0;
+        public int Index { get; }
+
 
         private readonly ElasticSearchBatcher batcher;
         private readonly IStableIdRegistry stableIdRegistry;
 
-        public ElasticSearchBatch(ElasticSearchBatcher batcher)
+        public ElasticSearchBatch(ElasticSearchBatcher batcher, int index)
         {
             this.batcher = batcher;
             this.stableIdRegistry = batcher.StableIdRegistry;
+            Index = index;
         }
 
         public bool TryReserveExecute()
@@ -39,46 +43,61 @@ namespace Codex.ElasticSearch
             return canReserveExecute.TrySet(value: true);
         }
 
+        public Task Completion => completion.Task;
+
         public async Task<IBulkResponse> ExecuteAsync(ClientContext context)
         {
-            lock (this)
+            try
             {
-                // Prevent any subsequent additions by calling this in the lock.
-                // Generally, TryReserveExecute would already be called except
-                // for final batch which may not reach capacity before being flushed
-                TryReserveExecute();
-            }
-
-            // Reserve stable ids
-            int batchIndex = 0;
-            await stableIdRegistry.SetStableIdsAsync(EntityItems);
-
-            var response = await context.Client.BulkAsync(BulkDescriptor.CaptureRequest(context)).ThrowOnFailure(allowInvalid: true);
-            Contract.Assert(EntityItems.Count == response.Items.Count);
-
-            batchIndex = 0;
-            foreach (var responseItem in response.Items)
-            {
-                var item = EntityItems[batchIndex];
-                batchIndex++;
-
-                if (Placeholder.IsCommitModelEnabled)
+                lock (this)
                 {
-                    var entityRef = new ElasticEntityRef(item.Entity);
-                    batcher.CommitSearchTypeStoredFilters[item.SearchType.Id].Add(entityRef);
-                    foreach (var additionalStoredFilter in item.AdditionalStoredFilters)
+                    // Prevent any subsequent additions by calling this in the lock.
+                    // Generally, TryReserveExecute would already be called except
+                    // for final batch which may not reach capacity before being flushed
+                    TryReserveExecute();
+                }
+
+                // Reserve stable ids
+                int batchIndex = 0;
+                await stableIdRegistry.SetStableIdsAsync(EntityItems);
+
+                var response = await context.Client.BulkAsync(BulkDescriptor.CaptureRequest(context)).ThrowOnFailure(allowInvalid: true);
+                Contract.Assert(EntityItems.Count == response.Items.Count);
+
+                batchIndex = 0;
+                foreach (var responseItem in response.Items)
+                {
+                    var item = EntityItems[batchIndex];
+                    batchIndex++;
+
+                    if (Placeholder.IsCommitModelEnabled)
                     {
-                        additionalStoredFilter.Add(entityRef);
+                        var entityRef = new ElasticEntityRef(item.Entity);
+                        batcher.CommitSearchTypeStoredFilters[item.SearchType.Id].Add(entityRef);
+                        foreach (var additionalStoredFilter in item.AdditionalStoredFilters)
+                        {
+                            additionalStoredFilter.Add(entityRef);
+                        }
+                    }
+
+                    if (IsAdded(responseItem))
+                    {
+                        AddedSize += item.Entity.EntityContentSize;
+                        item.IsEntityAdded = true;
                     }
                 }
 
-                if (IsAdded(responseItem))
+                if (AddedSize != 0)
                 {
-                    AddedSize += item.Entity.EntityContentSize;
+                    batcher.store.Configuration.Logger.LogMessage($"AddedItems: [{string.Join(", ", EntityItems.Where(i => i.IsEntityAdded).Select(i => $"{i.Entity.Uid}:{i.SearchType.Name}:{i.IsAdded}"))}]");
                 }
-            }
 
-            return response;
+                return response;
+            }
+            finally
+            {
+                completion.SetResult(None.Value);
+            }
         }
 
         private bool IsAdded(IBulkResponseItem item)
@@ -159,6 +178,7 @@ namespace Codex.ElasticSearch
             }
 
             public bool IsAdded { get; set; }
+            public bool IsEntityAdded { get; set; }
 
             public Item(ISearchEntity entity)
             {

@@ -557,7 +557,8 @@ namespace Codex.Application
                     store = await service.CreateStoreAsync(new ElasticSearchStoreConfiguration()
                     {
                         Prefix = "test.",
-                        ClearIndicesBeforeUse = reset
+                        ClearIndicesBeforeUse = reset,
+                        Logger = logger
                     });
                 }
                 else

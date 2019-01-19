@@ -1,4 +1,5 @@
-﻿using Codex.ObjectModel;
+﻿using Codex.Logging;
+using Codex.ObjectModel;
 using Codex.Storage.ElasticProviders;
 using Codex.Utilities;
 using Nest;
@@ -134,6 +135,8 @@ namespace Codex.ElasticSearch
         public bool UseStoredFilters = false;
 
         public bool ClearIndicesBeforeUse = true;
+
+        public Logger Logger = Logger.Null;
 
         public TimeSpan CachedAliasIdRetention = TimeSpan.FromMinutes(30);
 

@@ -21,5 +21,11 @@ namespace Codex.Utilities
                 return originalValue;
             }
         }
+
+        public static bool TryCompareExchange(ref int field, int value, int comparand)
+        {
+            var originalValue = Interlocked.CompareExchange(ref field, value, comparand);
+            return originalValue == comparand;
+        }
     }
 }

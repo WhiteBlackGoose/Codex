@@ -154,14 +154,13 @@ namespace Codex.ElasticSearch.Store
             tasks.Clear();
             for (int i = 0; i < Math.Min(Environment.ProcessorCount, 32); i++)
             {
-                tasks.Add(Task.Run(async () =>
+                tasks.Add(Task.Factory.StartNew(() =>
                 {
                     while (actionQueue.TryDequeue(out var taskFactory))
                     {
-                        await taskFactory();
+                        taskFactory().GetAwaiter().GetResult();
                     }
-                }
-                ));
+                }, TaskCreationOptions.LongRunning));
             }
 
             await Task.WhenAll(tasks);
