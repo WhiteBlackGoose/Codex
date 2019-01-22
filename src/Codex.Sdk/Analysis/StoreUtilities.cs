@@ -14,6 +14,11 @@ namespace Codex.Utilities
                 new Regex(@"(?<host>https?://[^/]+/)(?<project>[^/]+/)?(_git/)(?<repoName>[^/?#]+)"), 
                 "${host}${project}_git/${repoName}?path=");
 
+        private static Tuple<Regex, string> azDevReplacement
+            = Tuple.Create(
+                new Regex(@"(?<host>https?://[^/]+/[^/]+/)(?<project>[^/]+/)?(_git/)(?<repoName>[^/?#]+)"),
+                "${host}${project}_git/${repoName}?path=");
+
         private static Tuple<Regex, string> githubReplacement
             = Tuple.Create(
                 new Regex(@"(?<host>https?://[^/]+/)(?<owner>[^/]+/)(?<project>[^/]+)/?"), 
@@ -69,6 +74,16 @@ namespace Codex.Utilities
                     !repoSourceControlAddress.ContainsIgnoreCase("#path="))
                 {
                     ApplyReplacement(ref repoSourceControlAddress, vstsReplacement);
+                }
+            }
+            else if (repoSourceControlAddress.ContainsIgnoreCase("dev.azure.com"))
+            {
+                // VSTS web address
+                // Ensure not already property formatted
+                if (!repoSourceControlAddress.ContainsIgnoreCase("?path=") &&
+                    !repoSourceControlAddress.ContainsIgnoreCase("#path="))
+                {
+                    ApplyReplacement(ref repoSourceControlAddress, azDevReplacement);
                 }
             }
             else if (repoSourceControlAddress.ContainsIgnoreCase("github.com"))

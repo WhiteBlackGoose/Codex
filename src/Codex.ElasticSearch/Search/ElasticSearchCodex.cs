@@ -173,7 +173,7 @@ namespace Codex.ElasticSearch.Search
                         // Don't add web access link for files not under source tree (i.e. [Metadata])
                         && !sourceFile.Info.RepoRelativePath.StartsWith("["))
                     {
-                        sourceFile.Info.WebAddress = (repo.SourceControlWebAddress.EnsureTrailingSlash() + sourceFile.Info.RepoRelativePath).Replace("\\", "/");
+                        sourceFile.Info.WebAddress = StoreUtilities.GetFileWebAddress(repo.SourceControlWebAddress, sourceFile.Info.RepoRelativePath);
                     }
 
                     return new BoundSourceFile(boundSearchModel.BindingInfo)
