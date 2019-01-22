@@ -1,4 +1,6 @@
-﻿using Codex.ElasticSearch.Search;
+﻿using Codex.ElasticSearch.Formats;
+using Codex.ElasticSearch.Search;
+using Codex.ElasticSearch.Store;
 using Codex.ObjectModel;
 using Codex.Sdk.Search;
 using Codex.Utilities;
@@ -24,7 +26,7 @@ namespace Codex.ElasticSearch.Tests
 
             ElasticSearchStoreConfiguration configuration = new ElasticSearchStoreConfiguration()
             {
-                ClearIndicesBeforeUse = true,
+                ClearIndicesBeforeUse = false,
                 CreateIndices = true,
                 ShardCount = 1,
                 Prefix = "estest."
@@ -50,6 +52,7 @@ namespace Codex.ElasticSearch.Tests
             {
                 SearchString = nameof(AssemblyCompanyAttribute),
                 AllowReferencedDefinitions = false,
+                FallbackToTextSearch = false
             };
 
             var declaredSearch = await codex.SearchAsync(arguments);
@@ -59,6 +62,51 @@ namespace Codex.ElasticSearch.Tests
             var allSearch = await codex.SearchAsync(arguments);
             Assert.True(allSearch.Result.Total > 0, "Search allowing referenced definitions should return some results");
             Assert.True(allSearch.Result.Hits.Where(h => h.Definition != null).Count() > 0, "Search allowing referenced definitions should have definition results");
+        }
+
+        [Test]
+        public async Task TestExhaustive()
+        {
+            bool populate = false;
+
+            ElasticSearchStoreConfiguration configuration = new ElasticSearchStoreConfiguration()
+            {
+                ClearIndicesBeforeUse = populate,
+                CreateIndices = populate,
+                ShardCount = 1,
+                Prefix = "test."
+            };
+            ElasticSearchService service = new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200"));
+            var store = new ElasticSearchStore(configuration, service);
+
+            await store.InitializeAsync();
+
+            if (populate)
+            {
+                DirectoryCodexStore originalStore = DirectoryCodexStoreTests.CreateInputStore();
+                await store.FinalizeAsync();
+                await originalStore.ReadAsync(store);
+            }
+
+            await store.RegisteredEntityStore.RefreshAsync();
+
+            var codex = new ElasticSearchCodex(configuration, service);
+
+            foreach (var searchType in SearchTypes.RegisteredSearchTypes.Where(s => s == SearchTypes.BoundSource))
+            {
+                var searchEntityInfo = await codex.GetSearchEntityInfoAsync(searchType);
+
+                var searchEntityMap = searchEntityInfo.Result.Hits.ToLookup(s => s.Uid);
+                var registeredEntities = await codex.GetRegisteredEntitiesAsync(searchType);
+
+                var registeredEntityMap = registeredEntities.Result.Hits.ToLookup(s => s.EntityUid);
+
+                var leftKeys = searchEntityMap.Select(s => s.Key);
+                var rightKeys = registeredEntityMap.Select(s => s.Key);
+
+                var leftOnlyKeys = leftKeys.Except(rightKeys).ToList();
+                var rightOnlyKeys = rightKeys.Except(leftKeys).ToList();
+            }
         }
 
         [Test]
@@ -144,6 +192,7 @@ namespace Codex.ElasticSearch.Tests
         {
             public int StableIdGroup { get; }
             public bool IsAdded { get; set; }
+            public bool IsCommitted { get; set; }
 
             // TODO: What is this used for?
             public bool Unused { get; set; }
@@ -170,12 +219,31 @@ namespace Codex.ElasticSearch.Tests
         [Test]
         public async Task TestSearch()
         {
-            var codex = new ElasticSearchCodex(new ElasticSearchStoreConfiguration()
+            ElasticSearchStoreConfiguration configuration = new ElasticSearchStoreConfiguration()
             {
-                CreateIndices = true,
+                ClearIndicesBeforeUse = false,
+                CreateIndices = false,
                 ShardCount = 1,
-                Prefix = "estest."
-            }, new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200")));
+                Prefix = "test."
+            };
+
+            ElasticSearchService service = new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200"));
+            var codex = new ElasticSearchCodex(configuration, service);
+
+            var store = new ElasticSearchStore(configuration, service);
+
+            await store.InitializeAsync();
+
+            var filterResult = await store.StoredFilterStore.GetAsync("repos/domino/fe7ebf3f-8dce-4254-90ff-c33854122ae9:test.boundsource");
+            var filter = filterResult.Result.GetStableIdSet();
+            var ids = filter.Enumerate().ToList();
+
+            var f1 = RoaringDocIdSet.From(new[] { 11844 });
+            var c1 = f1.Contains(11844);
+
+            var f2 = RoaringDocIdSet.From(CollectionUtilities.ExclusiveInterleave(filter.Enumerate(), f1.Enumerate(), Comparer<int>.Default));
+            var c2 = f2.Contains(11844);
+            var hasFile = filter.Contains(11844);
 
             var response = await codex.SearchAsync(new SearchArguments()
             {

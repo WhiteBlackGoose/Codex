@@ -8,6 +8,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using Codex.Sdk.Utilities;
+using System.Threading.Tasks;
+using Codex.Storage.ElasticProviders;
 
 namespace Codex.ElasticSearch.Utilities
 {
@@ -231,6 +233,23 @@ namespace Codex.ElasticSearch.Utilities
             where T : class
         {
             return mappingDescriptor.Properties(pd => new PropertiesDescriptor<T>(MappingPropertyVisitor.GetProperties(typeof(T)))).Dynamic(false);
+        }
+
+        public static async Task<List<ISearchResponse<T>>> SearchAllAsync<T>(this ElasticClient client, 
+            Func<SearchDescriptor<T>, ISearchRequest> selector)
+            where T : class
+        {
+            var scrollTime = TimeSpan.FromSeconds(30);
+            List<ISearchResponse<T>> responses = new List<ISearchResponse<T>>();
+            var result = await client.SearchAsync<T>(sd => selector(sd.Take(5000).Scroll(scrollTime))).ThrowOnFailure();
+
+            while (result.Hits.Count != 0)
+            {
+                responses.Add(result);
+                result = await client.ScrollAsync<T>(scrollTime, result.ScrollId).ThrowOnFailure();
+            }
+
+            return responses;
         }
     }
 }

@@ -171,8 +171,7 @@ namespace Codex.ElasticSearch.Store
             string currentPath = null;
             for (int i = 0; i < HashPathSegmentCount; i++)
             {
-                var result = uid != null ? await Store.GetAsync(new[] { uid }) : CollectionUtilities.Empty<StoredFilter>.Array;
-                var retrievedFilter = (StoredFilter)result.FirstOrDefault();
+                StoredFilter retrievedFilter = await TryGetStoredFilterById(uid);
                 var filter = retrievedFilter ?? new StoredFilter()
                 {
                     FullPath = currentPath,
@@ -184,7 +183,7 @@ namespace Codex.ElasticSearch.Store
                 }
 
                 filters[i] = filter;
-                
+
                 currentPath = path.Substring(0, Math.Min(path.Length, (i * 3) + 2 /* two hex chars and a slash */));
                 if (retrievedFilter != null && TryGetChildFilter(retrievedFilter, currentPath, out var childRef))
                 {
@@ -198,6 +197,13 @@ namespace Codex.ElasticSearch.Store
 
             Array.Reverse(filters);
             return filters;
+        }
+
+        public async Task<StoredFilter> TryGetStoredFilterById(string uid)
+        {
+            var result = uid != null ? await Store.GetAsync(new[] { uid }) : CollectionUtilities.Empty<StoredFilter>.Array;
+            var retrievedFilter = (StoredFilter)result.FirstOrDefault();
+            return retrievedFilter;
         }
     }
 }

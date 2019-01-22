@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Codex.ElasticSearch.Formats
@@ -40,6 +41,278 @@ namespace Codex.ElasticSearch.Formats
 
         private readonly DocIdSet[] docIdSets;
         public readonly int Count;
+        private RoaringDocIdSet(DocIdSet[] docIdSets, int cardinality)
+        {
+            this.docIdSets = docIdSets;
+            this.Count = cardinality;
+        }
+
+        public bool Contains(int id)
+        {
+            int targetBlockIndex = id >> 16;
+            if (targetBlockIndex >= docIdSets.Length)
+            {
+                return false;
+            }
+
+            var targetBlock = docIdSets[targetBlockIndex];
+            if (targetBlock == null)
+            {
+                return false;
+            }
+
+            ushort subIndex = (ushort)(id & 0xFFFF);
+            if (targetBlock is ShortArrayDocIdSet set)
+            {
+                return set.Contains(subIndex);
+            }
+            else if (targetBlock is FixedBitSet fixedSet)
+            {
+                return fixedSet.Get(subIndex);
+            }
+
+            throw new Exception("Unreachable");
+        }
+
+        public byte[] GetBytes()
+        {
+            GrowableByteArrayDataOutput output = new GrowableByteArrayDataOutput(1024);
+            Write(output);
+
+            byte[] result = new byte[output.Length];
+            Array.Copy(output.Bytes, result, output.Length);
+
+            // FOR DEBUGGING PURPOSES:
+            //try
+            //{
+            //    FromBytes(result);
+            //}
+            //catch
+            //{
+            //    File.WriteAllLines($@"C:\temp\roardbg.{Guid.NewGuid().ToString().Substring(0, 8)}.txt", this.Enumerate().Select(s => s.ToString()));
+            //    throw;
+            //}
+
+            return result;
+        }
+
+        public static RoaringDocIdSet FromBytes(byte[] bytes)
+        {
+            ByteArrayDataInput input = new ByteArrayDataInput(bytes);
+            return Read(input);
+        }
+
+        public static RoaringDocIdSet From(IEnumerable<int> orderedIds)
+        {
+            var builder = new Builder();
+            foreach (var id in orderedIds)
+            {
+                builder.Add(id);
+            }
+
+            return builder.Build();
+        }
+
+        public void Write(DataOutput output)
+        {
+            output.WriteVInt32(Count);
+            output.WriteVInt32(docIdSets.Length);
+
+            foreach (DocIdSet set in docIdSets)
+            {
+                if (set == null)
+                {
+                    output.WriteByte((byte)DocIdSetType.NONE);
+                }
+                else if (set is ShortArrayDocIdSet)
+                {
+                    output.WriteByte((byte)DocIdSetType.SHORT_ARRAY);
+                    ShortArrayDocIdSet shortSet = (ShortArrayDocIdSet)set;
+                    shortSet.Write(output);
+                }
+                else
+                {
+                    // set is FixedBitSet
+                    output.WriteByte((byte)DocIdSetType.BIT);
+                    FixedBitSet fixedBits = (FixedBitSet)set;
+                    // TODO: This is serializing cost is not needed but we do so
+                    // for compat with standard Lucene roaring doc id set
+                    // This should be removed next time we compile elasticsearch
+                    output.WriteVInt64(fixedBits.Cardinality());
+
+                    long[] longs = fixedBits.GetBits();
+
+                    output.WriteVInt32(fixedBits.Length);
+                    output.WriteVInt32(longs.Length);
+
+                    foreach (long l in longs)
+                    {
+                        output.WriteInt64(l);
+                    }
+                }
+            }
+        }
+
+        public static RoaringDocIdSet Read(DataInput input)
+        {
+            int cardinality = input.ReadVInt32();
+            int docIdSetsLength = input.ReadVInt32();
+
+            DocIdSet[]
+            docIdSets = new DocIdSet[docIdSetsLength];
+            for (int i = 0; i < docIdSetsLength; i++)
+            {
+                DocIdSetType type = (DocIdSetType)input.ReadByte();
+                if (type == DocIdSetType.NONE)
+                {
+                    docIdSets[i] = null;
+                }
+                else if (type == DocIdSetType.SHORT_ARRAY)
+                {
+                    docIdSets[i] = ShortArrayDocIdSet.read(input);
+                }
+                else
+                {
+                    // type == DocIdSetType.BITSET
+                    // TODO: This is serializing cost is not needed but we do so
+                    // for compat with standard Lucene roaring doc id set
+                    // This should be removed next time we compile elasticsearch
+                    long cost = input.ReadVInt64();
+
+                    int numBits = input.ReadVInt32();
+                    int longsLength = input.ReadVInt32();
+
+                    long[] longs = new long[longsLength];
+                    for (int j = 0; j < longsLength; j++)
+                    {
+                        longs[j] = input.ReadInt64();
+                    }
+
+                    docIdSets[i] = new FixedBitSet(longs, numBits);
+                }
+            }
+
+            return new RoaringDocIdSet(docIdSets, cardinality);
+        }
+
+        public override DocIdSetIterator GetIterator()
+        {
+            if (Count == 0)
+            {
+                return DocIdSetIterator.GetEmpty();
+            }
+
+            return new Iterator(this);
+        }
+
+        public IEnumerable<int> Enumerate()
+        {
+            var iterator = GetIterator();
+            while (true)
+            {
+                var doc = iterator.NextDoc();
+                if (doc == DocIdSetIterator.NO_MORE_DOCS)
+                {
+                    yield break;
+                }
+
+                yield return doc;
+            }
+        }
+
+        private class Iterator : DocIdSetIterator
+        {
+            RoaringDocIdSet rdis;
+            int block;
+            DocIdSetIterator sub = null;
+            int doc;
+
+            public Iterator(RoaringDocIdSet rdis)
+            {
+                doc = -1;
+                block = -1;
+                this.rdis = rdis;
+                sub = DocIdSetIterator.GetEmpty();
+            }
+
+            public override int DocID => doc;
+
+            public override int NextDoc()
+            {
+                int subNext = sub.NextDoc();
+                if (subNext == NO_MORE_DOCS)
+                {
+                    return firstDocFromNextBlock();
+                }
+                return doc = (block << 16) | subNext;
+            }
+
+
+            public override int Advance(int target)
+            {
+                int targetBlock = target >> 16;
+                if (targetBlock != block)
+                {
+                    block = targetBlock;
+                    if (block >= rdis.docIdSets.Length)
+                    {
+                        sub = null;
+                        return doc = NO_MORE_DOCS;
+                    }
+                    if (rdis.docIdSets[block] == null)
+                    {
+                        return firstDocFromNextBlock();
+                    }
+                    sub = rdis.docIdSets[block].GetIterator();
+                }
+
+                int subNext = sub.Advance(target & 0xFFFF);
+                if (subNext == NO_MORE_DOCS)
+                {
+                    return firstDocFromNextBlock();
+                }
+                return doc = (block << 16) | subNext;
+            }
+
+            private int firstDocFromNextBlock()
+            {
+                while (true)
+                {
+                    block += 1;
+                    if (block >= rdis.docIdSets.Length)
+                    {
+                        sub = null;
+                        return doc = NO_MORE_DOCS;
+                    }
+                    else if (rdis.docIdSets[block] != null)
+                    {
+                        sub = rdis.docIdSets[block].GetIterator();
+                        int subNext = sub.NextDoc();
+                        Contract.Assert(subNext != NO_MORE_DOCS);
+                        return doc = (block << 16) | subNext;
+                    }
+                }
+            }
+
+
+            public override long GetCost()
+            {
+                return rdis.Count;
+            }
+        }
+
+        /**
+         * Return the exact number of documents that are contained in this set.
+         */
+        public int Cardinality()
+        {
+            return Count;
+        }
+
+        public override String ToString()
+        {
+            return "RoaringDocIdSet(cardinality=" + Count + ")";
+        }
 
         /**
          * A builder of {@link RoaringDocIdSet}s.
@@ -55,7 +328,7 @@ namespace Codex.ElasticSearch.Formats
 
             // We start by filling the buffer and when it's full we copy the content of
             // the buffer to the FixedBitSet and put further documents in that bitset
-            private readonly short[] buffer;
+            private readonly ushort[] buffer;
             private FixedBitSet denseBuffer;
 
             /**
@@ -65,7 +338,7 @@ namespace Codex.ElasticSearch.Formats
             {
                 lastDocId = -1;
                 currentBlock = -1;
-                buffer = new short[MAX_ARRAY_LENGTH];
+                buffer = new ushort[MAX_ARRAY_LENGTH];
             }
 
             private void EnsureCapacity()
@@ -97,14 +370,14 @@ namespace Codex.ElasticSearch.Formats
                     if (denseBuffer.Length == BLOCK_SIZE && BLOCK_SIZE - currentBlockCardinality < MAX_ARRAY_LENGTH)
                     {
                         // Doc ids are very dense, inverse the encoding
-                        short[] excludedDocs = new short[BLOCK_SIZE - currentBlockCardinality];
+                        ushort[] excludedDocs = new ushort[BLOCK_SIZE - currentBlockCardinality];
                         denseBuffer.Flip(0, denseBuffer.Length);
                         int excludedDoc = -1;
                         for (int i = 0; i < excludedDocs.Length; ++i)
                         {
                             excludedDoc = denseBuffer.NextSetBit(excludedDoc + 1);
                             Contract.Assert(excludedDoc != DocIdSetIterator.NO_MORE_DOCS);
-                            excludedDocs[i] = (short)excludedDoc;
+                            excludedDocs[i] = (ushort)excludedDoc;
                         }
                         Contract.Assert(excludedDoc + 1 == denseBuffer.Length || denseBuffer.NextSetBit(excludedDoc + 1) == -1);
                         sets[currentBlock] = new ShortArrayDocIdSet(excludedDocs, true);
@@ -143,7 +416,7 @@ namespace Codex.ElasticSearch.Formats
 
                 if (currentBlockCardinality < MAX_ARRAY_LENGTH)
                 {
-                    buffer[currentBlockCardinality] = (short)docId;
+                    buffer[currentBlockCardinality] = (ushort)docId;
                 }
                 else
                 {
@@ -187,22 +460,6 @@ namespace Codex.ElasticSearch.Formats
 
         }
 
-        internal byte[] GetBytes()
-        {
-            GrowableByteArrayDataOutput output = new GrowableByteArrayDataOutput(1024);
-            Write(output);
-
-            byte[] result = new byte[output.Length];
-            Array.Copy(output.Bytes, result, output.Length);
-            return result;
-        }
-
-        internal static RoaringDocIdSet FromBytes(byte[] bytes)
-        {
-            ByteArrayDataInput input = new ByteArrayDataInput(bytes);
-            return Read(input);
-        }
-
         /**
          * {@link DocIdSet} implementation that can store documents up to 2^16-1 in a short[].
          */
@@ -210,13 +467,19 @@ namespace Codex.ElasticSearch.Formats
         {
             private static readonly long BASE_RAM_BYTES_USED = RamUsageEstimator.ShallowSizeOfInstance(typeof(ShortArrayDocIdSet));
 
-            private readonly short[] docIDs;
+            private readonly ushort[] docIDs;
             private readonly bool invert;
 
-            public ShortArrayDocIdSet(short[] docIDs, bool invert)
+            public ShortArrayDocIdSet(ushort[] docIDs, bool invert)
             {
                 this.docIDs = docIDs;
                 this.invert = invert;
+            }
+
+            public bool Contains(ushort index)
+            {
+                var found = Array.BinarySearch(docIDs, index) >= 0;
+                return invert ? !found : found;
             }
 
             public void Write(DataOutput output)
@@ -224,8 +487,8 @@ namespace Codex.ElasticSearch.Formats
                 output.WriteByte((byte)(invert ? 1 : 0));
                 output.WriteVInt32(docIDs.Length);
 
-                short last = 0;
-                foreach (short id in docIDs)
+                ushort last = 0;
+                foreach (ushort id in docIDs)
                 {
                     output.WriteVInt32(id - last);
                     last = id;
@@ -236,12 +499,12 @@ namespace Codex.ElasticSearch.Formats
             {
                 bool invert = input.ReadByte() == 1;
                 int docIDsLength = input.ReadVInt32();
-                short[] docIDs = new short[docIDsLength];
+                ushort[] docIDs = new ushort[docIDsLength];
 
-                short last = 0;
+                ushort last = 0;
                 for (int i = 0; i < docIDsLength; i++)
                 {
-                    last += (short)input.ReadVInt32();
+                    last += (ushort)input.ReadVInt32();
                     docIDs[i] = last;
                 }
 
@@ -380,214 +643,5 @@ namespace Codex.ElasticSearch.Formats
                 }
             }
         }
-
-        private RoaringDocIdSet(DocIdSet[] docIdSets, int cardinality)
-        {
-            this.docIdSets = docIdSets;
-            this.Count = cardinality;
-        }
-
-        public void Write(DataOutput output)
-        {
-            output.WriteVInt32(Count);
-            output.WriteVInt32(docIdSets.Length);
-
-            foreach (DocIdSet set in docIdSets)
-            {
-                if (set == null)
-                {
-                    output.WriteByte((byte)DocIdSetType.NONE);
-                }
-                else if (set is ShortArrayDocIdSet)
-                {
-                    output.WriteByte((byte)DocIdSetType.SHORT_ARRAY);
-                    ShortArrayDocIdSet shortSet = (ShortArrayDocIdSet)set;
-                    shortSet.Write(output);
-                }
-                else
-                {
-                    // set is FixedBitSet
-                    output.WriteByte((byte)DocIdSetType.BIT);
-                    FixedBitSet fixedBits = (FixedBitSet)set;
-                    long[] longs = fixedBits.GetBits();
-
-                    output.WriteVInt32(fixedBits.Length);
-                    output.WriteVInt32(longs.Length);
-
-                    foreach (long l in longs)
-                    {
-                        output.WriteInt64(l);
-                    }
-                }
-            }
-        }
-
-        public static RoaringDocIdSet From(IEnumerable<int> orderedIds)
-        {
-            var builder = new Builder();
-            foreach (var id in orderedIds)
-            {
-                builder.Add(id);
-            }
-
-            return builder.Build();
-        }
-
-        public static RoaringDocIdSet Read(DataInput input)
-        {
-            int cardinality = input.ReadVInt32();
-            int docIdSetsLength = input.ReadVInt32();
-
-            DocIdSet[]
-            docIdSets = new DocIdSet[docIdSetsLength];
-            for (int i = 0; i < docIdSetsLength; i++)
-            {
-                DocIdSetType type = (DocIdSetType)input.ReadByte();
-                if (type == DocIdSetType.NONE)
-                {
-                    docIdSets[i] = null;
-                }
-                else if (type == DocIdSetType.SHORT_ARRAY)
-                {
-                    docIdSets[i] = ShortArrayDocIdSet.read(input);
-                }
-                else
-                {
-                    // type == DocIdSetType.BITSET
-                    int numBits = input.ReadVInt32();
-                    int longsLength = input.ReadVInt32();
-
-                    long[] longs = new long[longsLength];
-                    for (int j = 0; j < longsLength; j++)
-                    {
-                        longs[j] = input.ReadInt64();
-                    }
-
-                    docIdSets[i] = new FixedBitSet(longs, numBits);
-                }
-            }
-
-            return new RoaringDocIdSet(docIdSets, cardinality);
-        }
-
-        public override DocIdSetIterator GetIterator()
-        {
-            if (Count == 0)
-            {
-                return DocIdSetIterator.GetEmpty();
-            }
-
-            return new Iterator(this);
-        }
-
-        public IEnumerable<int> Enumerate()
-        {
-            var iterator = GetIterator();
-            while (true)
-            {
-                var doc = iterator.NextDoc();
-                if (doc == DocIdSetIterator.NO_MORE_DOCS)
-                {
-                    yield break;
-                }
-
-                yield return doc;
-            }
-        }
-
-        private class Iterator : DocIdSetIterator
-        {
-            RoaringDocIdSet rdis;
-            int block;
-            DocIdSetIterator sub = null;
-            int doc;
-
-            public Iterator(RoaringDocIdSet rdis)
-            {
-                doc = -1;
-                block = -1;
-                this.rdis = rdis;
-                sub = DocIdSetIterator.GetEmpty();
-            }
-
-            public override int DocID => doc;
-
-            public override int NextDoc()
-            {
-                int subNext = sub.NextDoc();
-                if (subNext == NO_MORE_DOCS)
-                {
-                    return firstDocFromNextBlock();
-                }
-                return doc = (block << 16) | subNext;
-            }
-
-
-            public override int Advance(int target)
-            {
-                int targetBlock = target >> 16;
-                if (targetBlock != block)
-                {
-                    block = targetBlock;
-                    if (block >= rdis.docIdSets.Length)
-                    {
-                        sub = null;
-                        return doc = NO_MORE_DOCS;
-                    }
-                    if (rdis.docIdSets[block] == null)
-                    {
-                        return firstDocFromNextBlock();
-                    }
-                    sub = rdis.docIdSets[block].GetIterator();
-                }
-
-                int subNext = sub.Advance(target & 0xFFFF);
-                if (subNext == NO_MORE_DOCS)
-                {
-                    return firstDocFromNextBlock();
-                }
-                return doc = (block << 16) | subNext;
-            }
-
-            private int firstDocFromNextBlock()
-            {
-                while (true)
-                {
-                    block += 1;
-                    if (block >= rdis.docIdSets.Length)
-                    {
-                        sub = null;
-                        return doc = NO_MORE_DOCS;
-                    }
-                    else if (rdis.docIdSets[block] != null)
-                    {
-                        sub = rdis.docIdSets[block].GetIterator();
-                        int subNext = sub.NextDoc();
-                        Contract.Assert(subNext != NO_MORE_DOCS);
-                        return doc = (block << 16) | subNext;
-                    }
-                }
-            }
-
-
-            public override long GetCost()
-            {
-                return rdis.Count;
-            }
-        }
-
-        /**
-         * Return the exact number of documents that are contained in this set.
-         */
-        public int Cardinality()
-        {
-            return Count;
-        }
-
-        public override String ToString()
-        {
-            return "RoaringDocIdSet(cardinality=" + Count + ")";
-        }
-
     }
 }

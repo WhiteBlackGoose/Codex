@@ -92,6 +92,18 @@ namespace Codex
         /// The date in which the entity was registered (i.e. added to the store)
         /// </summary>
         DateTime DateAdded { get; set; }
+
+        /// <summary>
+        /// The id of the originating entity
+        /// </summary>
+        [SearchBehavior(SearchBehavior.Term)]
+        string EntityUid { get; set; }
+
+        /// <summary>
+        /// The index of the originating entity
+        /// </summary>
+        [SearchBehavior(SearchBehavior.Term)]
+        string IndexName { get; set; }
     }
 
     /// <summary>

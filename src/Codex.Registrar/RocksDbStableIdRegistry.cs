@@ -114,5 +114,10 @@ namespace Codex.Registrar
         {
             throw new NotImplementedException();
         }
+
+        public Task CommitStableIds(IReadOnlyList<IStableIdItem> uids)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

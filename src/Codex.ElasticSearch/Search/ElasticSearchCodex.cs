@@ -147,7 +147,8 @@ namespace Codex.ElasticSearch.Search
                 {
                     var boundSearchModel = boundResults.Hits.First().Source;
                     var textResults = await client.GetAsync<TextSourceSearchModel>(boundSearchModel.TextUid,
-                        gd => gd.Index(Configuration.Prefix + SearchTypes.TextSource.IndexName))
+                        gd => gd.Index(Configuration.Prefix + SearchTypes.TextSource.IndexName)
+                                .Routing(GetRouting(boundSearchModel.TextUid)))
                     .ThrowOnFailure();
 
                     var repoResults = await client.SearchAsync<RepositorySearchModel>(sd => sd
@@ -529,6 +530,48 @@ namespace Codex.ElasticSearch.Search
             response.RawQueries = elasticResponse.Requests.ToList();
             response.Duration = elasticResponse.Duration;
             return response;
+        }
+
+        public Task<IndexQueryHitsResponse<IRegisteredEntity>> GetRegisteredEntitiesAsync(SearchType searchType)
+        {
+            var arguments = new ContextCodexArgumentsBase();
+            return UseClient<IRegisteredEntity>(arguments, async context =>
+            {
+                var client = context.Client;
+                var result = await client.SearchAllAsync<IRegisteredEntity>(s => s
+                    .Query(qcd => qcd.Bool(bq => bq.Filter(
+                        fq => fq.Term(r => r.IndexName, searchType.IndexName))))
+                    .Index(IndexName(SearchTypes.RegisteredEntity)));
+
+                return new IndexQueryHits<IRegisteredEntity>()
+                {
+                    Hits = result.SelectMany(s => s.Hits.Select(h => h.Source)).ToList(),
+                    Total = result.FirstOrDefault()?.Total ?? 0
+                };
+            });
+        }
+
+        public Task<IndexQueryHitsResponse<ISearchEntity>> GetSearchEntityInfoAsync(SearchType searchType)
+        {
+            var arguments = new ContextCodexArgumentsBase();
+            return UseClient<ISearchEntity>(arguments, async context =>
+            {
+                var client = context.Client;
+
+                await client.RefreshAsync(IndexName(searchType));
+
+                var result = await client.SearchAllAsync<ISearchEntity>(s => s
+                    .Query(qcd => qcd.MatchAll())
+                    .Index(IndexName(searchType))
+                    .Source(sf => sf.Includes(f => f.Fields(e => e.Uid, e => e.EntityVersion, e => e.StableId)))
+                    .Type(searchType.Type));
+
+                return new IndexQueryHits<ISearchEntity>()
+                {
+                    Hits = result.SelectMany(s => s.Hits.Select(h => h.Source)).ToList(),
+                    Total = result.FirstOrDefault()?.Total ?? 0
+                };
+            });
         }
 
         private async Task<IndexQueryResponse<T>> UseClientSingle<T>(ContextCodexArgumentsBase arguments, Func<StoredFilterSearchContext, Task<T>> useClient)

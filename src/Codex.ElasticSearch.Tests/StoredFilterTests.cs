@@ -25,6 +25,14 @@ namespace Codex.ElasticSearch.Tests
     public class StoredFilterTests
     {
         [Test]
+        public void TestRoaringBitSet()
+        {
+            var bitSet = RoaringDocIdSet.From(new int[] { short.MaxValue - 2, ushort.MaxValue - 2 });
+            var bytes = bitSet.GetBytes();
+            var deserializedBitSet = RoaringDocIdSet.FromBytes(bytes);
+        }
+
+        [Test]
         public async Task TestFilterTree()
         {
             var testStore = new TestFilterStore();

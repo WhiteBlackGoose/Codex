@@ -100,7 +100,12 @@ namespace Codex.ElasticSearch
 
         public static IEnumerable<int> GetStableIdValues(this IStoredFilter filter)
         {
-            return RoaringDocIdSet.FromBytes(filter.StableIds).Enumerate();
+            return GetStableIdSet(filter).Enumerate();
+        }
+
+        public static RoaringDocIdSet GetStableIdSet(this IStoredFilter filter)
+        {
+            return RoaringDocIdSet.FromBytes(filter.StableIds);
         }
 
         public static StoredFilter ApplyStableIds(this StoredFilter filter, IEnumerable<int> stableIds)

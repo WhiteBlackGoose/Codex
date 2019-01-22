@@ -222,7 +222,7 @@ namespace Codex.Web.Mvc.Controllers
                         {
                             Write(writer, "<div class=\"rF\">");
                             var fileName = sameFileReferencesGroup.Item1;
-                            var glyph = "url('content/icons/" + GetGlyph(fileName) + ".png');";
+                            var glyph = "url('/content/icons/" + GetGlyph(fileName) + ".png');";
                             WriteLine(writer, "<div class=\"rN\" style=\"background-image: {2}\">{0} ({1})</div>", fileName, CountItems(sameFileReferencesGroup), glyph);
 
                             foreach (var sameLineReferencesGroup in sameFileReferencesGroup.Item2)

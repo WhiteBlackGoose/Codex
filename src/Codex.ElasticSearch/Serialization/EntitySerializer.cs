@@ -416,7 +416,7 @@ namespace Codex.Serialization
             return attribute?.AllowedStages ?? ObjectStage.All;
         }
 
-        public static void PopulateContentIdAndSize<T>(this T entity, bool force = false)
+        public static T PopulateContentIdAndSize<T>(this T entity, bool force = false)
             where T : class, ISearchEntity
         {
             if (entity.EntityContentId == null || entity.EntityContentSize == 0 || force)
@@ -435,6 +435,8 @@ namespace Codex.Serialization
                     }
                 }
             }
+
+            return entity;
         }
 
         public static string GetEntityContentId(this EntityBase entity, ObjectStage stage = ObjectStage.All)

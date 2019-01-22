@@ -165,7 +165,7 @@ namespace Codex.Web.Mvc.Rendering
 
         private void WriteFolderName(string folderName, StringBuilder sb, string folderIcon = "202.png")
         {
-            sb.Append($"<div class=\"folderTitle\" onclick=\"ToggleExpandCollapse(this);ToggleFolderIcon(this);\" style=\"background-image:url('../../content/images/plus.png');\"><img src=\"../../content/icons/{folderIcon}\" class=\"imageFolder\" />{folderName}</div>");
+            sb.Append($"<div class=\"folderTitle\" onclick=\"ToggleExpandCollapse(this);ToggleFolderIcon(this);\" style=\"background-image:url('/content/images/plus.png');\"><img src=\"/content/icons/{folderIcon}\" class=\"imageFolder\" />{folderName}</div>");
         }
 
         private static readonly HashSet<string> wellKnownExtensions = new HashSet<string>(

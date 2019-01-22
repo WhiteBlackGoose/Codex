@@ -11,18 +11,19 @@ using Codex.Storage.DataModel;
 using Codex.Storage.Utilities;
 using System.Collections.Concurrent;
 using Codex.ElasticSearch.Utilities;
+using Codex.Logging;
 
 namespace Codex.ElasticSearch
 {
     class ElasticSearchCodexRepositoryStore : ICodexRepositoryStore
     {
-        internal ElasticSearchIdRegistry IdRegistry { get; }
         private readonly ElasticSearchStore store;
         private readonly ElasticSearchBatcher batcher;
         private readonly Repository repository;
         private readonly Commit commit;
         private readonly Branch branch;
         private readonly ConcurrentDictionary<string, CommitFileLink> commitFilesByRepoRelativePath = new ConcurrentDictionary<string, CommitFileLink>(StringComparer.OrdinalIgnoreCase);
+        internal Logger Logger => store.Configuration.Logger;
 
         public ElasticSearchCodexRepositoryStore(ElasticSearchStore store, Repository repository, Commit commit, Branch branch)
         {
@@ -31,10 +32,8 @@ namespace Codex.ElasticSearch
             this.commit = commit;
             this.branch = branch;
 
-            IdRegistry = new ElasticSearchIdRegistry(store);
-
             Placeholder.Todo("Choose real values for the parameters");
-            this.batcher = new ElasticSearchBatcher(store, IdRegistry, 
+            this.batcher = new ElasticSearchBatcher(store, 
                 commitFilterName: $"commits/{commit.CommitId}",
                 repositoryFilterName: $"repos/{repository.Name}",
                 cumulativeCommitFilterName: $"cumulativeCommits/{commit.CommitId}");
@@ -162,6 +161,7 @@ namespace Codex.ElasticSearch
         public async Task AddBoundSourceFileAsync(BoundSourceFile boundSourceFile)
         {
             var sourceFileInfo = boundSourceFile.SourceFile.Info;
+            Logger.LogDiagnosticWithProvenance($"{sourceFileInfo.ProjectId}:{sourceFileInfo.ProjectRelativePath}");
             boundSourceFile.ApplySourceFileInfo();
 
             Placeholder.Todo($"Get {nameof(ISourceControlFileInfo.SourceControlContentId)} from source control provider during analysis");
@@ -173,6 +173,8 @@ namespace Codex.ElasticSearch
             };
 
             batcher.Add(store.TextSourceStore, textModel);
+            Logger.LogDiagnosticWithProvenance($"[Text#{textModel.Uid}] {sourceFileInfo.ProjectId}:{sourceFileInfo.ProjectRelativePath}");
+
             UpdateCommitFile(textModel);
 
             var boundSourceModel = new BoundSourceSearchModel(textModel)
@@ -186,6 +188,7 @@ namespace Codex.ElasticSearch
             await batcher.AddAsync(store.BoundSourceStore, boundSourceModel);
 
             AddBoundSourceFileAssociatedData(boundSourceFile, boundSourceModel);
+            Logger.LogDiagnosticWithProvenance($"[Bound#{boundSourceModel.Uid}|Text#{textModel.Uid}] {sourceFileInfo.ProjectId}:{sourceFileInfo.ProjectRelativePath}");
         }
 
         private void UpdateCommitFile(TextSourceSearchModel sourceSearchModel)
@@ -238,8 +241,6 @@ namespace Codex.ElasticSearch
             });
 
             await batcher.FinalizeAsync(repository.Name);
-
-            await IdRegistry.FinalizeAsync();
         }
     }
 }

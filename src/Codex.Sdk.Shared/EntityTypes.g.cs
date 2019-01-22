@@ -3816,6 +3816,10 @@ namespace Codex.ObjectModel {
         
         private System.DateTime m_DateAdded;
         
+        private string m_EntityUid;
+        
+        private string m_IndexName;
+        
         public RegisteredEntity() {
         }
         
@@ -3839,9 +3843,35 @@ namespace Codex.ObjectModel {
             }
         }
         
+        /// <summary>
+        /// The id of the originating entity
+        /// </summary>
+        public virtual string EntityUid {
+            get {
+                return this.m_EntityUid;
+            }
+            set {
+                this.m_EntityUid = value;
+            }
+        }
+        
+        /// <summary>
+        /// The index of the originating entity
+        /// </summary>
+        public virtual string IndexName {
+            get {
+                return this.m_IndexName;
+            }
+            set {
+                this.m_IndexName = value;
+            }
+        }
+        
         public virtual TTarget CopyFrom<TTarget>(Codex.IRegisteredEntity value)
             where TTarget : RegisteredEntity {
             this.m_DateAdded = ((Codex.IRegisteredEntity)(value)).DateAdded;
+            this.m_EntityUid = ((Codex.IRegisteredEntity)(value)).EntityUid;
+            this.m_IndexName = ((Codex.IRegisteredEntity)(value)).IndexName;
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
             return ((TTarget)(this));
         }

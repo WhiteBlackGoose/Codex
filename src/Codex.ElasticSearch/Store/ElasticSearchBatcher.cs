@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using Codex.ElasticSearch.Store;
 using static Codex.ElasticSearch.StoredFilterUtilities;
 using Codex.Storage.ElasticProviders;
+using Codex.Logging;
 
 namespace Codex.ElasticSearch
 {
@@ -38,8 +39,11 @@ namespace Codex.ElasticSearch
         private readonly ConcurrentQueue<ValueTask<None>> backgroundTasks = new ConcurrentQueue<ValueTask<None>>();
 
         internal IStableIdRegistry StableIdRegistry { get; }
+        private Logger Logger => store.Configuration.Logger;
+
         private readonly ElasticSearchService service;
         internal readonly ElasticSearchStore store;
+        private readonly Guid ingestId;
 
         public long BatchIndex;
         public long TotalSize;
@@ -49,12 +53,14 @@ namespace Codex.ElasticSearch
         private int batchCounter = 0;
         private AtomicBool backgroundDequeueReservation = new AtomicBool();
 
-        public ElasticSearchBatcher(ElasticSearchStore store, IStableIdRegistry stableIdRegistry, string commitFilterName, string repositoryFilterName, string cumulativeCommitFilterName)
+        public ElasticSearchBatcher(ElasticSearchStore store, string commitFilterName, string repositoryFilterName, string cumulativeCommitFilterName)
         {
             Debug.Assert(store.Initialized, "Store must be initialized");
 
             this.store = store;
-            this.StableIdRegistry = stableIdRegistry;
+            this.ingestId = Guid.NewGuid();
+            Logger.LogMessage($"Ingest Id: {ingestId}");
+            this.StableIdRegistry = new ElasticSearchIdRegistry(store, ingestId);
             service = store.Service;
             batches = Enumerable.Range(0, store.Configuration.MaxBatchConcurrency).Select(i => new ElasticSearchBatch(this, i)).ToArray();
 
@@ -90,13 +96,13 @@ namespace Codex.ElasticSearch
                     if (batch.TryReserveExecute())
                     {
                         await ExecuteBatchAsync(batch);
-                        return None.Value;
                     }
                     else
                     {
                         await batch.Completion;
-                        Interlocked.CompareExchange(ref batches[index], new ElasticSearchBatch(this, index), batch);
                     }
+
+                    Interlocked.CompareExchange(ref batches[index], new ElasticSearchBatch(this, index), batch);
                 }
                 else
                 {
@@ -109,24 +115,14 @@ namespace Codex.ElasticSearch
         private async Task ExecuteBatchAsync(ElasticSearchBatch batch)
         {
             await service.UseClient(batch.ExecuteAsync);
-            Console.WriteLine($"Sent batch ({Interlocked.Increment(ref BatchIndex)}#{batch.Index}): Size={batch.CurrentSize}, AddedSize={batch.AddedSize}, TotalSize={TotalSize}, TotalAddedSize={TotalAddedSize}");
+            Logger.LogMessage($"Sent batch ({Interlocked.Increment(ref BatchIndex)}#{batch.Index}): Size={batch.CurrentSize}, AddedSize={batch.AddedSize}, TotalSize={TotalSize}, TotalAddedSize={TotalAddedSize}");
 
             Interlocked.Add(ref TotalSize, batch.CurrentSize);
             Interlocked.Add(ref TotalAddedSize, batch.AddedSize);
 
             if (backgroundDequeueReservation.TrySet(true))
             {
-                while (backgroundTasks.TryPeek(out var dequeuedTask))
-                {
-                    if (dequeuedTask.IsCompleted)
-                    {
-                        backgroundTasks.TryDequeue(out dequeuedTask);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
+                await FlushBackgroundOperations();
 
                 backgroundDequeueReservation.TrySet(false);
             }
@@ -157,13 +153,9 @@ namespace Codex.ElasticSearch
         {
             while (true)
             {
-                // Flush any background operations
-                while (backgroundTasks.TryDequeue(out var backgroundTask))
-                {
-                    await backgroundTask;
-                }
+                await FlushBackgroundOperations();
 
-                int beforeBatchCounter = batchCounter;
+                int beforeBatchCounter = Volatile.Read(ref batchCounter);
                 foreach (var batch in batches)
                 {
                     if (batch.EntityItems.Count == 0)
@@ -181,13 +173,13 @@ namespace Codex.ElasticSearch
                     }
                 }
 
-                if (batchCounter == beforeBatchCounter && backgroundTasks.IsEmpty)
+                if (Volatile.Read(ref batchCounter) == beforeBatchCounter && backgroundTasks.IsEmpty)
                 {
                     break;
                 }
             }
 
-            Console.WriteLine($"Finished processing batches: TotalSize={TotalSize}, TotalAddedSize={TotalAddedSize}");
+            Logger.LogMessage($"Finished processing batches: TotalSize={TotalSize}, TotalAddedSize={TotalAddedSize}");
 
             // For each typed stored filter,
             // Store the filter under 
@@ -195,11 +187,10 @@ namespace Codex.ElasticSearch
             StoredFilterManager filterManager = new StoredFilterManager(store.StoredFilterStore);
             var combinedSourcesFilterName = store.Configuration.CombinedSourcesFilterName;
 
-            var ingestId = Guid.NewGuid();
             string repositorySnapshotId = GetRepositoryBaseFilterName($"{repositoryName}/{ingestId}");
             string combinedSourcesSnapshotId = GetRepositoryBaseFilterName($"{store.Configuration.CombinedSourcesFilterName}/{ingestId}");
 
-            Console.WriteLine($"Writing repository snapshot filters: {repositorySnapshotId}");
+            Logger.LogMessage($"Writing repository snapshot filters: {repositorySnapshotId}");
 
             // Finalize the stored filters
             foreach (var filterBuilder in CommitSearchTypeStoredFilters.Concat(DeclaredDefinitionStoredFilter))
@@ -222,7 +213,7 @@ namespace Codex.ElasticSearch
                 await store.StoredFilterStore.StoreAsync(new[] { filter, combinedSourceFilter });
             }
 
-            Console.WriteLine($"Writing repository snapshot: {repositorySnapshotId}");
+            Logger.LogMessage($"Writing repository snapshot: {repositorySnapshotId}");
 
             await store.PropertyStore.StoreAsync(new[] { new PropertySearchModel()
                 {
@@ -244,6 +235,17 @@ namespace Codex.ElasticSearch
             });
 
             await RefreshStoredFilterIndex();
+
+            await StableIdRegistry.FinalizeAsync();
+        }
+
+        private async Task FlushBackgroundOperations()
+        {
+            // Flush any background operations
+            while (backgroundTasks.TryDequeue(out var backgroundTask))
+            {
+                await backgroundTask;
+            }
         }
 
         private async Task RefreshStoredFilterIndex()

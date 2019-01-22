@@ -17,7 +17,9 @@ namespace Codex.ElasticSearch
 {
     public interface IStableIdRegistry
     {
-        Task SetStableIdsAsync(IReadOnlyList<IStableIdItem> uids);
+        Task SetStableIdsAsync(IReadOnlyList<IStableIdItem> items);
+
+        Task CommitStableIdsAsync(IReadOnlyList<IStableIdItem> items);
 
         Task FinalizeAsync();
     }
@@ -30,6 +32,8 @@ namespace Codex.ElasticSearch
     public interface IStableIdItem
     {
         bool IsAdded { set; }
+
+        bool IsCommitted { set; }
 
         string Uid { get; }
 

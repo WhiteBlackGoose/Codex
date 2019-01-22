@@ -130,13 +130,13 @@ namespace Codex.ElasticSearch
         /// </summary>
         public bool CreateIndices = true;
 
-        public int MaxBatchConcurrency = 32;
+        public int MaxBatchConcurrency = 16;
 
         public bool UseStoredFilters = false;
 
         public bool ClearIndicesBeforeUse = true;
 
-        public Logger Logger = Logger.Null;
+        public Logger Logger = new ConsoleLogger();
 
         public TimeSpan CachedAliasIdRetention = TimeSpan.FromMinutes(30);
 

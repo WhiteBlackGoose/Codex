@@ -9,27 +9,28 @@ using Codex.ElasticSearch.Utilities;
 using Codex.Storage.ElasticProviders;
 using Codex.ObjectModel;
 using System.Net;
+using Codex.Logging;
 
 namespace Codex.ElasticSearch
 {
     internal class ElasticSearchBatch
     {
         public readonly BulkDescriptor BulkDescriptor = new BulkDescriptor();
+        public static readonly IBulkResponse EmptyResponse = new BulkResponse();
 
         public readonly List<Item> EntityItems = new List<Item>();
+        private readonly List<Item> UncommittedEntityItems = new List<Item>();
 
-        public readonly List<Item> ReturnedStableIdItems = new List<Item>();
-
-        private readonly AtomicBool canReserveExecute = new AtomicBool();
+        private readonly AtomicBool isReservedForExecute = new AtomicBool();
         private readonly TaskCompletionSource<None> completion = new TaskCompletionSource<None>(TaskCreationOptions.RunContinuationsAsynchronously);
 
         public int CurrentSize { get; private set; } = 0;
         public int AddedSize { get; private set; } = 0;
         public int Index { get; }
 
-
         private readonly ElasticSearchBatcher batcher;
         private readonly IStableIdRegistry stableIdRegistry;
+        internal Logger Logger => batcher.store.Configuration.Logger;
 
         public ElasticSearchBatch(ElasticSearchBatcher batcher, int index)
         {
@@ -40,7 +41,16 @@ namespace Codex.ElasticSearch
 
         public bool TryReserveExecute()
         {
-            return canReserveExecute.TrySet(value: true);
+            if (isReservedForExecute.TrySet(value: true))
+            {
+                lock (this)
+                {
+                    // Acquire lock to ensure that all additions are finished
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public Task Completion => completion.Task;
@@ -58,26 +68,60 @@ namespace Codex.ElasticSearch
                 }
 
                 // Reserve stable ids
-                int batchIndex = 0;
                 await stableIdRegistry.SetStableIdsAsync(EntityItems);
 
-                var response = await context.Client.BulkAsync(BulkDescriptor.CaptureRequest(context)).ThrowOnFailure(allowInvalid: true);
-                Contract.Assert(EntityItems.Count == response.Items.Count);
+                foreach (var item in EntityItems)
+                {
+                    //if (item.SearchType == SearchTypes.BoundSource && item.Entity is IBoundSourceSearchModel boundSource
+                    //    && boundSource.BindingInfo.ProjectId == "Domino.Scheduler" && boundSource.BindingInfo.ProjectRelativePath == "DominoScheduler.cs")
+                    //{
+                    //    System.Diagnostics.Debugger.Launch();
+                    //}
 
-                batchIndex = 0;
+                    if (item.IsCommitted)
+                    {
+                        AddItemToFilters(item);
+                    }
+                    else
+                    {
+                        item.AddIndexOperation(BulkDescriptor);
+                        UncommittedEntityItems.Add(item);
+                    }
+
+                    if (item.SearchType == SearchTypes.Definition)
+                    {
+                        Logger.LogDiagnosticWithProvenance2($"Uid={item.Uid}, Sid={item.StableId}, Cmt={item.IsCommitted}");
+                    }
+                }
+
+                if (UncommittedEntityItems.Count == 0)
+                {
+                    return EmptyResponse;
+                }
+
+                var response = await context.Client.BulkAsync(BulkDescriptor.CaptureRequest(context)).ThrowOnFailure(allowInvalid: true);
+                Contract.Assert(UncommittedEntityItems.Count == response.Items.Count);
+
+                int batchIndex = 0;
                 foreach (var responseItem in response.Items)
                 {
-                    var item = EntityItems[batchIndex];
+                    var item = UncommittedEntityItems[batchIndex];
                     batchIndex++;
 
-                    if (Placeholder.IsCommitModelEnabled)
+                    AddItemToFilters(item);
+
+                    if (item.SearchType == SearchTypes.Definition)
                     {
-                        var entityRef = new ElasticEntityRef(item.Entity);
-                        batcher.CommitSearchTypeStoredFilters[item.SearchType.Id].Add(entityRef);
-                        foreach (var additionalStoredFilter in item.AdditionalStoredFilters)
-                        {
-                            additionalStoredFilter.Add(entityRef);
-                        }
+                        Logger.LogDiagnosticWithProvenance2($"Uid={item.Uid}, Sid={item.StableId}, Cmt={item.IsCommitted}, Rsp={responseItem.Status} [Err={responseItem.Error != null}]");
+                    }
+
+                    if (item.SearchType == SearchTypes.TextSource && item.Entity is ITextSourceSearchModel textSource)
+                    {
+                        Logger.LogDiagnosticWithProvenance($"[Text#{textSource.Uid}] Text({responseItem.Status}|{item.IsAdded}/{item.IsCommitted}|{item.StableId}): {textSource.File.Info.ProjectId}:{textSource.File.Info.ProjectRelativePath}");
+                    }
+                    else if (item.SearchType == SearchTypes.BoundSource && item.Entity is IBoundSourceSearchModel boundSource)
+                    {
+                        Logger.LogDiagnosticWithProvenance($"[Bound#{boundSource.Uid}|Text#{boundSource.TextUid}] Bound({responseItem.Status}|{item.IsAdded}/{item.IsCommitted}|{item.StableId}): {boundSource.BindingInfo.ProjectId}:{boundSource.BindingInfo.ProjectRelativePath}");
                     }
 
                     if (IsAdded(responseItem))
@@ -87,16 +131,26 @@ namespace Codex.ElasticSearch
                     }
                 }
 
-                if (AddedSize != 0)
-                {
-                    batcher.store.Configuration.Logger.LogMessage($"AddedItems: [{string.Join(", ", EntityItems.Where(i => i.IsEntityAdded).Select(i => $"{i.Entity.Uid}:{i.SearchType.Name}:{i.IsAdded}"))}]");
-                }
+                await stableIdRegistry.CommitStableIdsAsync(UncommittedEntityItems);
 
                 return response;
             }
             finally
             {
                 completion.SetResult(None.Value);
+            }
+        }
+
+        private void AddItemToFilters(Item item)
+        {
+            if (Placeholder.IsCommitModelEnabled)
+            {
+                var entityRef = new ElasticEntityRef(item.Entity);
+                batcher.CommitSearchTypeStoredFilters[item.SearchType.Id].Add(entityRef);
+                foreach (var additionalStoredFilter in item.AdditionalStoredFilters)
+                {
+                    additionalStoredFilter.Add(entityRef);
+                }
             }
         }
 
@@ -122,16 +176,13 @@ namespace Codex.ElasticSearch
 
                 CurrentSize += entity.EntityContentSize;
 
-                var item = new Item(entity)
+                var item = new Item<T>(entity, store)
                 {
                     BatchIndex = EntityItems.Count,
-                    EntityStore = store,
                     AdditionalStoredFilters = additionalStoredFilters
                 };
 
                 EntityItems.Add(item);
-
-                store.AddIndexOperation(BulkDescriptor, entity);
                 return true;
             }
         }
@@ -144,7 +195,7 @@ namespace Codex.ElasticSearch
                 return false;
             }
 
-            if (canReserveExecute.Value)
+            if (isReservedForExecute.Value)
             {
                 // Already reserved for execution
                 return false;
@@ -153,13 +204,35 @@ namespace Codex.ElasticSearch
             return true;
         }
 
-        public class Item : IStableIdItem
+        private class Item<T> : Item
+            where T : class, ISearchEntity
+        {
+            private T entity;
+            private ElasticSearchEntityStore<T> store;
+
+            public Item(T entity, ElasticSearchEntityStore<T> store)
+            {
+                this.entity = entity;
+                this.store = store;
+            }
+
+            public override ElasticSearchEntityStore EntityStore => store;
+
+            public override ISearchEntity Entity => entity;
+
+            public override void AddIndexOperation(BulkDescriptor bulkDescriptor)
+            {
+                store.AddIndexOperation(bulkDescriptor, entity);
+            }
+        }
+
+        internal abstract class Item : IStableIdItem
         {
             public int? StableId { get; set; }
             public int BatchIndex { get; set; }
-            public ISearchEntity Entity { get; }
+            public abstract ISearchEntity Entity { get; }
             public SearchType SearchType => EntityStore.SearchType;
-            public ElasticSearchEntityStore EntityStore { get; set; }
+            public abstract ElasticSearchEntityStore EntityStore { get; }
             public ElasticSearchStoredFilterBuilder[] AdditionalStoredFilters { get; set; }
 
             public int StableIdGroup => Entity.RoutingGroup;
@@ -178,12 +251,10 @@ namespace Codex.ElasticSearch
             }
 
             public bool IsAdded { get; set; }
+            public bool IsCommitted { get; set; }
             public bool IsEntityAdded { get; set; }
 
-            public Item(ISearchEntity entity)
-            {
-                Entity = entity;
-            }
+            public abstract void AddIndexOperation(BulkDescriptor bulkDescriptor);
 
             public void SetStableId(int stableId)
             {

@@ -93,7 +93,7 @@ namespace Codex.ElasticSearch
                         c => c.Mappings(m => m.Map<T>(tm => tm.AutoMapEx()))
                             .Settings(s => s
                                 .AddAnalyzerSettings()
-                                .Setting("index.mapper.dynamic", false)
+                                //.Setting("index.mapper.dynamic", false)
                                 .NumberOfShards(SearchType == SearchTypes.StoredFilter ? 1 : Store.Configuration.ShardCount)
                                 .RefreshInterval(TimeSpan.FromMinutes(1)))
                             .CaptureRequest(context))

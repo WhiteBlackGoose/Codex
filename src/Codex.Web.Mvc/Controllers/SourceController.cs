@@ -52,7 +52,7 @@ namespace Codex.Web.Mvc.Controllers
 
                 if (boundSourceFile == null)
                 {
-                    return PartialView("Views/Source/Index.cshtml", new EditorModel { Error = $"Bound source file for {filename} in {projectId} not found." });
+                    return PartialView("Views/Source/Index.cshtml", new EditorModel { Error = $"Bound source file for {filename} in {projectId} not found:\n{string.Join("\n\n\n", getSourceResponse.RawQueries)}" });
                 }
 
                 var renderer = new SourceFileRenderer(boundSourceFile, projectId);
