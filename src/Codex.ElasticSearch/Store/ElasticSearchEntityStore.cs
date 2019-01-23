@@ -225,6 +225,11 @@ namespace Codex.ElasticSearch
             return StoreAsync<T>(values, updateMergeFunction: null, replace: true);
         }
 
+        public Task AddAsync(IReadOnlyList<T> values, bool replace = false)
+        {
+            return StoreAsync<T>(values, updateMergeFunction: null, replace: replace);
+        }
+
         public async Task<IReadOnlyList<T>> GetAsync(IReadOnlyList<string> uids)
         {
             var result = await Store.Service.UseClient(async context =>

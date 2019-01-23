@@ -111,16 +111,16 @@ namespace Codex.ElasticSearch.Tests
         }
 
         [Test]
-        public async Task TestConsistency()
+        public async Task TestStoreEntityDoesNotReplace()
         {
-            bool populate = false;
+            bool populate = true;
 
             ElasticSearchStoreConfiguration configuration = new ElasticSearchStoreConfiguration()
             {
                 ClearIndicesBeforeUse = populate,
                 CreateIndices = populate,
                 ShardCount = 1,
-                Prefix = "test."
+                Prefix = "estest."
             };
             ElasticSearchService service = new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200"));
             var store = new ElasticSearchStore(configuration, service);
@@ -131,18 +131,34 @@ namespace Codex.ElasticSearch.Tests
 
             var codex = new ElasticSearchCodex(configuration, service);
 
-            var text = await store.TextSourceStore.GetAsync("GlcklL1PTAx1cbVktczdYQ#157");
+            var priorValue = "Before";
 
-            var text2 = new TextSourceSearchModel(text.Result);
+            var entity = new RegisteredEntity()
+            {
+                Uid = "1iLAiQFJ7U+k0bYx7uqfyg",
+                EntityVersion = 2,
+                EntityContentId = priorValue
+            };
 
-            text2.PopulateContentIdAndSize(force: true);
+            await store.RegisteredEntityStore.AddAsync(new[] { entity });
+            await store.RegisteredEntityStore.RefreshAsync();
 
-            var reference = await store.ReferenceStore.GetAsync("GlcklL1PTAx1cbVktczdYQ#157");
+            var retrievedEntity = await store.RegisteredEntityStore.GetAsync(entity.Uid);
 
-            var reference2 = new ReferenceSearchModel(reference.Result);
+            entity.EntityContentId = "After";
+            await store.RegisteredEntityStore.AddAsync(new[] { entity });
+            await store.RegisteredEntityStore.RefreshAsync();
 
-            reference2.PopulateContentIdAndSize(force: true);
+            retrievedEntity = await store.RegisteredEntityStore.GetAsync(entity.Uid);
+            Assert.AreEqual(priorValue, retrievedEntity.Result.EntityContentId);
 
+            // Now try with higher version number
+            entity.EntityVersion += 10;
+            await store.RegisteredEntityStore.AddAsync(new[] { entity });
+            await store.RegisteredEntityStore.RefreshAsync();
+
+            retrievedEntity = await store.RegisteredEntityStore.GetAsync(entity.Uid);
+            Assert.AreEqual(priorValue, retrievedEntity.Result.EntityContentId);
         }
 
         [Test]
