@@ -423,6 +423,10 @@ namespace Codex.Serialization
             {
                 using (var lease = Pools.EncoderContextPool.Acquire())
                 {
+                    // TODO: These fields and routing and stable id should be excluded from serialization when hashing
+                    entity.EntityContentId = null;
+                    entity.EntityContentSize = 0;
+
                     var encoderContext = lease.Instance;
                     entity.SerializeEntityTo(encoderContext.Writer, stage: ObjectStage.Index);
                     entity.EntityContentId = encoderContext.ToBase64HashString();

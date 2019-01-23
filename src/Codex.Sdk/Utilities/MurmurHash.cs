@@ -14,7 +14,7 @@ namespace Codex.Utilities
     {
         // 128 bit output, 64 bit platform version
 
-        public static ulong READ_SIZE = 16;
+        public const int READ_SIZE = 16;
         private static ulong C1 = 0x87c37b91114253d5L;
         private static ulong C2 = 0x4cf5ad432745937fL;
 
@@ -22,6 +22,9 @@ namespace Codex.Utilities
         private uint seed; // if want to start with a seed, create a constructor
         ulong high;
         ulong low;
+
+        private int stateOffset;
+        private State state;
 
         public MurmurHash ComputeHash(byte[] bb, int start = 0, int length = -1)
         {
@@ -45,12 +48,14 @@ namespace Codex.Utilities
 
         private void ProcessBytes(byte[] bb, int start, int length)
         {
-            Reset();
-
             int pos = start;
             ulong remaining = (ulong)length;
 
-            // read 128 bits, 16 bytes, 2 longs in eacy cycle
+            int read = state.ConsumeInitial(ref this, bb, start, length);
+            pos += read;
+            remaining -= (ulong)read;
+
+            // read 128 bits, 16 bytes, 2 longs in each cycle
             while (remaining >= READ_SIZE)
             {
                 ulong k1 = bb.GetUInt64(pos);
@@ -59,17 +64,17 @@ namespace Codex.Utilities
                 ulong k2 = bb.GetUInt64(pos);
                 pos += 8;
 
-                processedCount += READ_SIZE;
                 remaining -= READ_SIZE;
 
                 MixBody(k1, k2);
             }
 
-            // if the input MOD 16 != 0
-            if (remaining > 0)
+            if (remaining >= 0)
             {
-                ProcessBytesRemaining(bb, remaining, pos);
+                read = state.ConsumeRemaining(ref this, bb, pos, (int)remaining);
             }
+
+            processedCount += (ulong)length;
         }
 
         private void Reset()
@@ -81,6 +86,11 @@ namespace Codex.Utilities
 
         private void ProcessFinal()
         {
+            if (stateOffset > 0)
+            {
+                MixRemaining(state.K1, state.K2);
+            }
+
             high ^= processedCount;
             low ^= processedCount;
 
@@ -98,7 +108,6 @@ namespace Codex.Utilities
         {
             ulong k1 = 0;
             ulong k2 = 0;
-            processedCount += remaining;
 
             // little endian (x86) processing
             switch (remaining)
@@ -152,6 +161,11 @@ namespace Codex.Utilities
                     throw new Exception("Something went wrong with remaining bytes calculation.");
             }
 
+            MixRemaining(k1, k2);
+        }
+
+        private void MixRemaining(ulong k1, ulong k2)
+        {
             high ^= MixKey1(k1);
             low ^= MixKey2(k2);
         }
@@ -208,6 +222,72 @@ namespace Codex.Utilities
             get
             {
                 return new MurmurHash() { High = high, Low = low };
+            }
+        }
+
+        [StructLayout(LayoutKind.Explicit)]
+        private unsafe struct State
+        {
+            public const int BYTE_LENGTH = 16;
+
+            [FieldOffset(0)]
+            public ulong K1;
+
+            [FieldOffset(8)]
+            public ulong K2;
+
+            [FieldOffset(0)]
+            private fixed byte bytes[BYTE_LENGTH];
+
+            public byte this[int i]
+            {
+                get
+                {
+                    fixed (byte* bytes = this.bytes)
+                    {
+                        return bytes[i];
+                    }
+                }
+
+                set
+                {
+                    fixed (byte* bytes = this.bytes)
+                    {
+                        bytes[i] = value;
+                    }
+                }
+            }
+
+            public int ConsumeInitial(ref Murmur3 murmur, byte[] bb, int offset, int length)
+            {
+                if (murmur.stateOffset != 0)
+                {
+                    return ConsumeRemaining(ref murmur, bb, offset, length);
+                }
+
+                return 0;
+            }
+
+            public int ConsumeRemaining(ref Murmur3 murmur, byte[] bb, int offset, int length)
+            {
+                fixed (byte* bytes = this.bytes)
+                {
+                    int i = 0;
+                    for (i = 0; i < length && murmur.stateOffset < BYTE_LENGTH; i++, murmur.stateOffset++)
+                    {
+                        bytes[murmur.stateOffset] = bb[i + offset];
+                    }
+
+                    if (murmur.stateOffset == READ_SIZE)
+                    {
+                        murmur.MixBody(K1, K2);
+                        murmur.stateOffset = 0;
+                        K1 = 0;
+                        K2 = 0;
+                    }
+
+                    return i;
+                }
             }
         }
     }

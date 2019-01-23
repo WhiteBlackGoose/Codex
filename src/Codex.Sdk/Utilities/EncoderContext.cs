@@ -6,13 +6,15 @@ namespace Codex.Sdk.Utilities
     public class EncoderContext
     {
         public readonly StringBuilder StringBuilder = new StringBuilder();
-        public readonly byte[] ByteBuffer = new byte[Encoding.UTF8.GetMaxByteCount(1024)];
-        public readonly char[] CharBuffer = new char[1024];
+        public readonly byte[] ByteBuffer;
+        public readonly char[] CharBuffer;
         public readonly StringWriter Writer;
 
-        public EncoderContext()
+        public EncoderContext(int charBufferSize = 1024)
         {
             Writer = new StringWriter(StringBuilder);
+            CharBuffer = new char[charBufferSize];
+            ByteBuffer = new byte[Encoding.UTF8.GetMaxByteCount(charBufferSize)];
         }
     }
 }

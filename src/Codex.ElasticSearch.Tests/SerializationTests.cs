@@ -94,15 +94,49 @@ namespace Codex.ElasticSearch.Tests
             Assert.Pass(elasticResult);
         }
 
+        private IEnumerable<ArraySegment<byte>> GetByteSegments(byte[] bytes, int segmentLength)
+        {
+            for (int i = 0; i < bytes.Length; i += segmentLength)
+            {
+                yield return new ArraySegment<byte>(bytes, i, Math.Min(segmentLength, bytes.Length - i));
+            }
+        }
+
         [Test]
         public void TestHashing()
         {
             var content = string.Join("||", Enumerable.Range(0, 10000));
+
             EncoderContext context = new EncoderContext();
             context.StringBuilder.Append(content);
             var contentHash = context.ToBase64HashString();
             var sameContentHash = context.ToBase64HashString();
             Assert.AreEqual(contentHash, sameContentHash, "Hashes of the same content should be the same");
+
+            var bytes = Encoding.UTF8.GetBytes(content);
+            var fullHash = new Murmur3().ComputeHash(bytes).ToBase64String();
+            for (int i = 3; i < 7; i++)
+            {
+                var segmentLength = (int)Math.Pow(10, i);
+                var segmentsHash = new Murmur3().ComputeHash(GetByteSegments(bytes, segmentLength)).ToBase64String();
+                Assert.AreEqual(fullHash, segmentsHash, "Hash based on segments and full content should be the same");
+            }
+
+            for (int charBufferSize = 1024; charBufferSize < 1030; charBufferSize++)
+            {
+                EncoderContext context2 = new EncoderContext(charBufferSize);
+                context2.StringBuilder.Append(content);
+                var contentHash2 = context2.ToBase64HashString();
+                Assert.AreEqual(contentHash, contentHash2, "Hashes of the same content should be the same");
+            }
+
+            for (int charBufferSize = 10000; charBufferSize < 10005; charBufferSize++)
+            {
+                EncoderContext context2 = new EncoderContext(charBufferSize);
+                context2.StringBuilder.Append(content);
+                var contentHash2 = context2.ToBase64HashString();
+                Assert.AreEqual(contentHash, contentHash2, "Hashes of the same content should be the same");
+            }
 
             for (int i = 0; i < 20; i++)
             {

@@ -3,6 +3,7 @@ using Codex.ElasticSearch.Search;
 using Codex.ElasticSearch.Store;
 using Codex.ObjectModel;
 using Codex.Sdk.Search;
+using Codex.Serialization;
 using Codex.Utilities;
 using NUnit.Framework;
 using System;
@@ -107,6 +108,41 @@ namespace Codex.ElasticSearch.Tests
                 var leftOnlyKeys = leftKeys.Except(rightKeys).ToList();
                 var rightOnlyKeys = rightKeys.Except(leftKeys).ToList();
             }
+        }
+
+        [Test]
+        public async Task TestConsistency()
+        {
+            bool populate = false;
+
+            ElasticSearchStoreConfiguration configuration = new ElasticSearchStoreConfiguration()
+            {
+                ClearIndicesBeforeUse = populate,
+                CreateIndices = populate,
+                ShardCount = 1,
+                Prefix = "test."
+            };
+            ElasticSearchService service = new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200"));
+            var store = new ElasticSearchStore(configuration, service);
+
+            await store.InitializeAsync();
+
+            await store.RegisteredEntityStore.RefreshAsync();
+
+            var codex = new ElasticSearchCodex(configuration, service);
+
+            var text = await store.TextSourceStore.GetAsync("GlcklL1PTAx1cbVktczdYQ#157");
+
+            var text2 = new TextSourceSearchModel(text.Result);
+
+            text2.PopulateContentIdAndSize(force: true);
+
+            var reference = await store.ReferenceStore.GetAsync("GlcklL1PTAx1cbVktczdYQ#157");
+
+            var reference2 = new ReferenceSearchModel(reference.Result);
+
+            reference2.PopulateContentIdAndSize(force: true);
+
         }
 
         [Test]
