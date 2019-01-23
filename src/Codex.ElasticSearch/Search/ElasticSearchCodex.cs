@@ -207,9 +207,9 @@ namespace Codex.ElasticSearch.Search
                     // TODO: Not sure why this is a good marker for when the project was uploaded. Since project search model may be deduplicated,
                     // to a past result we probably need something more accurate. Maybe the upload date of the stored filter. That would more closely
                     // match the legacy behavior.
-                    var registeredResponse = await client.SearchAsync<IRegisteredEntity>(sd => sd
-                        .StoredFilterQuery(context, IndexName(SearchTypes.RegisteredEntity), qcd => qcd.Bool(bq => bq.Filter(
-                                fq => fq.Term(s => s.Uid, projectSearchModel.Uid))))
+                    var commitResponse = await client.SearchAsync<ICommitSearchModel>(sd => sd
+                        .StoredFilterQuery(context, IndexName(SearchTypes.Commit), qcd => qcd.Bool(bq => bq.Filter(
+                                fq => fq.Term(s => s.Commit.RepositoryName, projectSearchModel.Project.RepositoryName))))
                         .Take(1)
                         .CaptureRequest(context));
 
@@ -217,13 +217,14 @@ namespace Codex.ElasticSearch.Search
                         .StoredFilterQuery(context, IndexName(SearchTypes.ProjectReference), qcd => qcd.Bool(bq => bq.Filter(
                             fq => fq.Term(r => r.ProjectReference.ProjectId, arguments.ProjectId))))
                         .Sort(sd => sd.Ascending(r => r.ProjectId))
+                        .Source(sfd => sfd.Includes(f => f.Field(r => r.ProjectId)))
                         .Take(arguments.MaxResults))
                     .ThrowOnFailure();
 
                     return new GetProjectResult()
                     {
                         Project = projectSearchModel.Project,
-                        DateUploaded = registeredResponse?.Hits.FirstOrDefault()?.Source.DateAdded ?? default(DateTime),
+                        DateUploaded = commitResponse?.Hits.FirstOrDefault()?.Source.Commit.DateUploaded ?? default(DateTime),
                         ReferencingProjects = referencesResult?.Hits.Select(h => h.Source.ProjectId).ToList()
                     };
                 }
