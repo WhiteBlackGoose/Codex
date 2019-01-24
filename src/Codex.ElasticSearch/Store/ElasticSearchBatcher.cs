@@ -44,6 +44,7 @@ namespace Codex.ElasticSearch
         private readonly ElasticSearchService service;
         internal readonly ElasticSearchStore store;
         private readonly Guid ingestId;
+        private string commitId;
 
         public long BatchIndex;
         public long TotalSize;
@@ -53,11 +54,12 @@ namespace Codex.ElasticSearch
         private int batchCounter = 0;
         private AtomicBool backgroundDequeueReservation = new AtomicBool();
 
-        public ElasticSearchBatcher(ElasticSearchStore store, string commitFilterName, string repositoryFilterName, string cumulativeCommitFilterName)
+        public ElasticSearchBatcher(ElasticSearchStore store, string commitFilterName, string repositoryFilterName, string cumulativeCommitFilterName, string commitId)
         {
             Debug.Assert(store.Initialized, "Store must be initialized");
 
             this.store = store;
+            this.commitId = commitId;
             this.ingestId = Guid.NewGuid();
             Logger.LogMessage($"Ingest Id: {ingestId}");
             this.StableIdRegistry = new ElasticSearchIdRegistry(store, ingestId);
@@ -215,11 +217,20 @@ namespace Codex.ElasticSearch
 
             Logger.LogMessage($"Writing repository snapshot: {repositorySnapshotId}");
 
-            await store.PropertyStore.StoreAsync(new[] { new PropertySearchModel()
+            PropertySearchModel[] snapshotMappings = new[] { new PropertySearchModel()
                 {
                     // aliases/repos/{repositoryName}
                     Uid = GetStoredFilterAliasUid(repositoryName),
                     Key = "RepositorySnapshotId",
+
+                    // repos/{repositoryName}/{ingestId}
+                    Value = repositorySnapshotId,
+                },
+                new PropertySearchModel()
+                {
+                    // aliases/repos/{commitId}
+                    Uid = GetStoredFilterAliasUid(commitId),
+                    Key = "CommitSnapshotId",
 
                     // repos/{repositoryName}/{ingestId}
                     Value = repositorySnapshotId,
@@ -232,11 +243,22 @@ namespace Codex.ElasticSearch
                     // repos/allsources/{ingestId}
                     Value = combinedSourcesSnapshotId,
                 }
-            });
+            };
+            await MapSnapshots(snapshotMappings);
 
             await RefreshStoredFilterIndex();
 
             await StableIdRegistry.FinalizeAsync();
+        }
+
+        private async Task MapSnapshots(PropertySearchModel[] snapshotMappings)
+        {
+            foreach (var mapping in snapshotMappings)
+            {
+                Logger.LogMessage($"Mapping: [{mapping.Key}] {mapping.Uid} => {mapping.Value}");
+            }
+
+            await store.PropertyStore.StoreAsync(snapshotMappings);
         }
 
         private async Task FlushBackgroundOperations()

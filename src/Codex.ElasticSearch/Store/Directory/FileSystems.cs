@@ -93,6 +93,9 @@ namespace Codex
         {
             ArchivePath = archivePath;
             zipArchive = new ZipArchive(File.Open(archivePath, FileMode.Open, FileAccess.Read, FileShare.Read), ZipArchiveMode.Read, leaveOpen: false);
+            
+            // Ensure entries are read
+            var entries = zipArchive.Entries;
         }
 
         public override Stream OpenFile(string filePath)

@@ -36,7 +36,8 @@ namespace Codex.ElasticSearch
             this.batcher = new ElasticSearchBatcher(store, 
                 commitFilterName: $"commits/{commit.CommitId}",
                 repositoryFilterName: $"repos/{repository.Name}",
-                cumulativeCommitFilterName: $"cumulativeCommits/{commit.CommitId}");
+                cumulativeCommitFilterName: $"cumulativeCommits/{commit.CommitId}",
+                commitId: commit.CommitId);
 
             batcher.Add(store.RepositoryStore, new RepositorySearchModel()
             {
