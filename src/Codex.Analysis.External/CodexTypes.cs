@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
@@ -10,14 +11,13 @@ namespace Codex.Analysis.External
 {
     public class CodexSemanticStore
     {
-        public ListMap<CodexProject> Projects = new ListMap<CodexProject>();
-        public ListMap<CodexFile> Files = new ListMap<CodexFile>();
-        public ListMap<CodexSymbol> Symbols = new ListMap<CodexSymbol>();
-        public ListMap<CodexClassification> Classifications = new ListMap<CodexClassification>();
-        public ListMap<CodexRefKind> ReferenceKinds = new ListMap<CodexRefKind>();
+        public readonly ListMap<CodexProject> Projects = new ListMap<CodexProject>();
+        public readonly ListMap<CodexFile> Files = new ListMap<CodexFile>();
+        public readonly ListMap<CodexSymbol> Symbols = new ListMap<CodexSymbol>();
+        public readonly ListMap<CodexClassification> Classifications = new ListMap<CodexClassification>();
+        public readonly ListMap<CodexRefKind> ReferenceKinds = new ListMap<CodexRefKind>();
 
-        private CodexId<CodexRefKind>[] m_wellKnownReferenceKinds;
-
+        private readonly CodexId<CodexRefKind>[] m_wellKnownReferenceKinds;
 
         private readonly string m_directory;
         private readonly string m_filesDirectory;
@@ -187,7 +187,7 @@ namespace Codex.Analysis.External
     public class ListMap<TValue> where TValue : IIdentifiable
     {
         public List<TValue> List = new List<TValue>();
-        public Dictionary<string, int> Map = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        public Dictionary<string, int> Map = new Dictionary<string, int>();
 
         public CodexId<TValue> Add(TValue value)
         {
@@ -263,7 +263,7 @@ namespace Codex.Analysis.External
         public List<CodexSpan> Spans = new List<CodexSpan>();
         public CodexId<CodexProject> Project;
 
-        string IIdentifiable.Identity => Path;
+        string IIdentifiable.Identity => Path.ToLowerInvariant();
 
         public static string Columns = "#{Path}|{Length}|{AnnotationFileName}|{Hash}|{Project}";
 
@@ -281,8 +281,8 @@ namespace Codex.Analysis.External
             foreach (var span in Spans)
             {
                 // Check if span fits in file;
-                Contract.Assume(span.Start + span.Length < Length, "Span would fall outside of the file.");
-                Contract.Assume(span.Length > 0, "Can't have empty spans...");
+                Contract.Assert(span.Start + span.Length < Length, "Span would fall outside of the file.");
+                Contract.Assert(span.Length > 0, "Can't have empty spans...");
 
                 span.Write(writer);
             }
@@ -320,8 +320,8 @@ namespace Codex.Analysis.External
                 }
 
                 var span = CodexSpan.Read(line);
-                Contract.Assume(span.Length > 0, "Must have some length..");
-                Contract.Assume(span.Start + span.Length < Length, "Span must fit in file...");
+                Debug.Assert(span.Length > 0, "Must have some length..");
+                Debug.Assert(span.Start + span.Length < Length, "Span must fit in file...");
 
                 Spans.Add(span);
             }
