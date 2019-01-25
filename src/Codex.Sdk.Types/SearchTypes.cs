@@ -39,14 +39,14 @@ namespace Codex
             .Route(rs => rs.Reference.Id.Value);
         //.CopyTo(rs => rs.Spans.First().Reference, rs => rs.Reference);
 
-        public static SearchType TextSource = SearchType.Create<ITextSourceSearchModel>(RegisteredSearchTypes)
+        public static SearchType<ITextSourceSearchModel> TextSource = SearchType.Create<ITextSourceSearchModel>(RegisteredSearchTypes)
             .Route(ss => PathUtilities.GetFileName(ss.File.Info.RepoRelativePath));
         //.CopyTo(ss => ss.File.SourceFile.Content, ss => ss.Content)
         //.CopyTo(ss => ss.File.SourceFile.Info.RepoRelativePath, ss => ss.RepoRelativePath)
         //.CopyTo(ss => ss.File.ProjectId, ss => ss.ProjectId)
         //.CopyTo(ss => ss.File.Info.Path, ss => ss.FilePath);
 
-        public static SearchType BoundSource = SearchType.Create<IBoundSourceSearchModel>(RegisteredSearchTypes)
+        public static SearchType<IBoundSourceSearchModel> BoundSource = SearchType.Create<IBoundSourceSearchModel>(RegisteredSearchTypes)
             .Route(ss => PathUtilities.GetFileName(ss.BindingInfo.RepoRelativePath));
         //.CopyTo(ss => ss.File.SourceFile.Content, ss => ss.Content)
         //.CopyTo(ss => ss.File.SourceFile.Info.RepoRelativePath, ss => ss.RepoRelativePath)

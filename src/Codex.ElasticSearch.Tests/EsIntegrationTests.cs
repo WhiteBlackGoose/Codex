@@ -9,6 +9,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -107,6 +108,55 @@ namespace Codex.ElasticSearch.Tests
 
                 var leftOnlyKeys = leftKeys.Except(rightKeys).ToList();
                 var rightOnlyKeys = rightKeys.Except(leftKeys).ToList();
+            }
+        }
+
+        [Test]
+        public async Task TestDelta()
+        {
+            bool populate = false;
+
+            ElasticSearchStoreConfiguration configuration = new ElasticSearchStoreConfiguration()
+            {
+                ClearIndicesBeforeUse = populate,
+                CreateIndices = populate,
+                ShardCount = 1,
+                Prefix = "test."
+            };
+            ElasticSearchService service = new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200"));
+            var store = new ElasticSearchStore(configuration, service);
+
+            await store.InitializeAsync();
+
+            if (populate)
+            {
+                DirectoryCodexStore originalStore = DirectoryCodexStoreTests.CreateInputStore();
+                await store.FinalizeAsync();
+                await originalStore.ReadAsync(store);
+            }
+
+            await store.RegisteredEntityStore.RefreshAsync();
+
+            var codex = new ElasticSearchCodex(configuration, service);
+
+            var leftName = "domino.190119.031356";
+            var rightName = "domino.190123.031537";
+            string root = @"D:\temp\diff";
+
+            await EmitBoundFilesDiff(codex, leftName, rightName, root);
+            await EmitBoundFilesDiff(codex, rightName, leftName, root);
+        }
+
+        private static async Task EmitBoundFilesDiff(ElasticSearchCodex codex, string leftName, string rightName, string root)
+        {
+            var searchType = SearchTypes.BoundSource;
+            var leftEntities = await codex.GetLeftOnlyEntitiesAsync(searchType, leftName, rightName);
+
+            var leftRoot = Path.Combine(root, leftName, searchType.Name);
+            Directory.CreateDirectory(leftRoot);
+            foreach (var entity in leftEntities.Result.Hits)
+            {
+                File.WriteAllText(Path.Combine(leftRoot, $"{entity.BindingInfo.ProjectId}_{Path.GetFileName(entity.BindingInfo.ProjectRelativePath)}.json"), entity.ElasticSerialize());
             }
         }
 

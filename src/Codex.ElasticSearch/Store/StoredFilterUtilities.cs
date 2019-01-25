@@ -27,14 +27,26 @@ namespace Codex.ElasticSearch
             return storedFilterStore.StoreAsync<StoredFilter>(storedFilters, updateMergeFunction: null, replace: true);
         }
 
-        public static SearchDescriptor<T> StoredFilterQuery<T>(this SearchDescriptor<T> searchDescriptor, StoredFilterSearchContext context, string indexName, Func<QueryContainerDescriptor<T>, QueryContainer> query, string filterIndexName = null)
+        public static SearchDescriptor<T> StoredFilterSearch<T>(this SearchDescriptor<T> searchDescriptor, StoredFilterSearchContext context, string indexName, Func<QueryContainerDescriptor<T>, QueryContainer> query, string filterIndexName = null)
             where T : class, ISearchEntity
         {
-            var storedFilterUid = GetFilterName(context.StoredFilterUidPrefix, filterIndexName ?? indexName);
             return searchDescriptor
                 .Query(q => q.Bool(bq => bq
                     .Must(query)
-                    .Filter(q1 => q1.Terms(tq => tq.Field(e => e.StableId)
+                    .Filter(q1 => q1.StoredFilterQuery(context, filterIndexName ?? indexName))))
+                .Index(indexName)
+                .CaptureRequest(context);
+        }
+
+
+        public static QueryContainer StoredFilterQuery<T>(
+            this QueryContainerDescriptor<T> q1, 
+            StoredFilterSearchContext context, 
+            string filterIndexName)
+            where T : class, ISearchEntity
+        {
+            var storedFilterUid = GetFilterName(context.StoredFilterUidPrefix, filterIndexName);
+            return q1.Terms(tq => tq.Field(e => e.StableId)
                         // Specify the id under which the stored filter is cached. This is unique id of the stored filter
                         // i.e. repos/allsources/{ingestId}/{indexName}
                         .Name(CACHED_STORED_FILTER_ID_SPECIFIER + storedFilterUid)
@@ -43,10 +55,9 @@ namespace Codex.ElasticSearch
                             // Specifies the id of the stored filter to lookup. This is typically the alias
                             // i.e. repos/allsources/{ingestId}/{indexName}
                             .Id(storedFilterUid)
-                            .Path(sf => sf.StableIds))))))
-                .Index(indexName)
-                .CaptureRequest(context);
+                            .Path(sf => sf.StableIds)));
         }
+
 
         public static string GetDeclaredDefinitionsIndexName(string baseIndexName)
         {

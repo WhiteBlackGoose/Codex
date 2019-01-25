@@ -39,7 +39,7 @@ namespace Codex.ElasticSearch.Search
             {
                 var client = context.Client;
                 var referencesResult = await client.SearchAsync<IReferenceSearchModel>(s => s
-                    .StoredFilterQuery(context, IndexName(SearchTypes.Reference), qcd => qcd.Bool(bq => bq.Filter(
+                    .StoredFilterSearch(context, IndexName(SearchTypes.Reference), qcd => qcd.Bool(bq => bq.Filter(
                         fq => fq.Term(r => r.Reference.ProjectId, arguments.ProjectId),
                         fq => fq.Term(r => r.Reference.Id, arguments.SymbolId))))
                     .Sort(sd => sd.Ascending(r => r.ProjectId))
@@ -61,7 +61,7 @@ namespace Codex.ElasticSearch.Search
             {
                 var client = context.Client;
                 var referencesResult = await client.SearchAsync<IReferenceSearchModel>(s => s
-                        .StoredFilterQuery(context, IndexName(SearchTypes.Reference), qcd => qcd.Bool(bq => bq.Filter(
+                        .StoredFilterSearch(context, IndexName(SearchTypes.Reference), qcd => qcd.Bool(bq => bq.Filter(
                             fq => fq.Term(r => r.Reference.ProjectId, arguments.ProjectId),
                             fq => fq.Term(r => r.Reference.Id, arguments.SymbolId),
                             fq => fq.Term(r => r.Reference.ReferenceKind, nameof(ReferenceKind.Definition)))))
@@ -72,7 +72,7 @@ namespace Codex.ElasticSearch.Search
                 {
                     // No definitions, return the the result of find all references 
                     referencesResult = await client.SearchAsync<IReferenceSearchModel>(s => s
-                        .StoredFilterQuery(context, IndexName(SearchTypes.Reference), qcd => qcd.Bool(bq => bq.Filter(
+                        .StoredFilterSearch(context, IndexName(SearchTypes.Reference), qcd => qcd.Bool(bq => bq.Filter(
                             fq => fq.Term(r => r.Reference.ProjectId, arguments.ProjectId),
                             fq => fq.Term(r => r.Reference.Id, arguments.SymbolId))))
                         .Sort(sd => sd.Ascending(r => r.ProjectId))
@@ -120,7 +120,7 @@ namespace Codex.ElasticSearch.Search
         {
             var client = context.Client;
             var definitionsResult = await client.SearchAsync<IDefinitionSearchModel>(s => s
-                    .StoredFilterQuery(context, IndexName(SearchTypes.Definition), qcd => qcd.Bool(bq => bq.Filter(
+                    .StoredFilterSearch(context, IndexName(SearchTypes.Definition), qcd => qcd.Bool(bq => bq.Filter(
                         fq => fq.Term(r => r.Definition.ProjectId, arguments.ProjectId),
                         fq => fq.Term(r => r.Definition.Id, arguments.SymbolId))))
                     .Take(1))
@@ -137,7 +137,7 @@ namespace Codex.ElasticSearch.Search
                 var client = context.Client;
 
                 var boundResults = await client.SearchAsync<BoundSourceSearchModel>(sd => sd
-                    .StoredFilterQuery(context, IndexName(SearchTypes.BoundSource), qcd => qcd.Bool(bq => bq.Filter(
+                    .StoredFilterSearch(context, IndexName(SearchTypes.BoundSource), qcd => qcd.Bool(bq => bq.Filter(
                             fq => fq.Term(s => s.BindingInfo.ProjectId, arguments.ProjectId),
                             fq => fq.Term(s => s.BindingInfo.ProjectRelativePath, arguments.ProjectRelativePath))))
                     .Take(1))
@@ -152,13 +152,13 @@ namespace Codex.ElasticSearch.Search
                     .ThrowOnFailure();
 
                     var repoResults = await client.SearchAsync<RepositorySearchModel>(sd => sd
-                        .StoredFilterQuery(context, IndexName(SearchTypes.Repository), qcd => qcd.Bool(bq => bq.Filter(
+                        .StoredFilterSearch(context, IndexName(SearchTypes.Repository), qcd => qcd.Bool(bq => bq.Filter(
                                 fq => fq.Term(s => s.Repository.Name, boundSearchModel.BindingInfo.RepositoryName))))
                         .Take(1))
                     .ThrowOnFailure();
 
                     var commitResults = await client.SearchAsync<CommitSearchModel>(sd => sd
-                        .StoredFilterQuery(context, IndexName(SearchTypes.Commit), qcd => qcd.Bool(bq => bq.Filter(
+                        .StoredFilterSearch(context, IndexName(SearchTypes.Commit), qcd => qcd.Bool(bq => bq.Filter(
                                 fq => fq.Term(s => s.Commit.RepositoryName, boundSearchModel.BindingInfo.RepositoryName))))
                         .Take(1))
                     .ThrowOnFailure();
@@ -195,7 +195,7 @@ namespace Codex.ElasticSearch.Search
                 var client = context.Client;
 
                 var response = await client.SearchAsync<ProjectSearchModel>(sd => sd
-                    .StoredFilterQuery(context, IndexName(SearchTypes.Project), qcd => qcd.Bool(bq => bq.Filter(
+                    .StoredFilterSearch(context, IndexName(SearchTypes.Project), qcd => qcd.Bool(bq => bq.Filter(
                             fq => fq.Term(s => s.Project.ProjectId, arguments.ProjectId))))
                     .Take(1))
                 .ThrowOnFailure();
@@ -208,13 +208,13 @@ namespace Codex.ElasticSearch.Search
                     // to a past result we probably need something more accurate. Maybe the upload date of the stored filter. That would more closely
                     // match the legacy behavior.
                     var commitResponse = await client.SearchAsync<ICommitSearchModel>(sd => sd
-                        .StoredFilterQuery(context, IndexName(SearchTypes.Commit), qcd => qcd.Bool(bq => bq.Filter(
+                        .StoredFilterSearch(context, IndexName(SearchTypes.Commit), qcd => qcd.Bool(bq => bq.Filter(
                                 fq => fq.Term(s => s.Commit.RepositoryName, projectSearchModel.Project.RepositoryName))))
                         .Take(1)
                         .CaptureRequest(context));
 
                     var referencesResult = await client.SearchAsync<IProjectReferenceSearchModel>(s => s
-                        .StoredFilterQuery(context, IndexName(SearchTypes.ProjectReference), qcd => qcd.Bool(bq => bq.Filter(
+                        .StoredFilterSearch(context, IndexName(SearchTypes.ProjectReference), qcd => qcd.Bool(bq => bq.Filter(
                             fq => fq.Term(r => r.ProjectReference.ProjectId, arguments.ProjectId))))
                         .Sort(sd => sd.Ascending(r => r.ProjectId))
                         .Source(sfd => sfd.Includes(f => f.Field(r => r.ProjectId)))
@@ -263,7 +263,7 @@ namespace Codex.ElasticSearch.Search
 
                 var indexName = IndexName(SearchTypes.Definition);
                 var definitionsResult = await client.SearchAsync<IDefinitionSearchModel>(s => s
-                        .StoredFilterQuery(context, indexName, qcd => qcd.Bool(bq => bq
+                        .StoredFilterSearch(context, indexName, qcd => qcd.Bool(bq => bq
                             .Filter(GetTermsFilter(terms, allowReferencedDefinitions: allowReferencedDefinitions))
                             .Should(GetTermsFilter(terms, boostOnly: true))),
                             filterIndexName: allowReferencedDefinitions ? indexName : GetDeclaredDefinitionsIndexName(indexName))
@@ -286,7 +286,7 @@ namespace Codex.ElasticSearch.Search
                 // Fallback to performing text phrase search
                 var textResults = await client.SearchAsync<ITextSourceSearchModel>(
                     s => s
-                        .StoredFilterQuery(context, IndexName(SearchTypes.TextSource), f =>
+                        .StoredFilterSearch(context, IndexName(SearchTypes.TextSource), f =>
                             f.Bool(bq =>
                             bq.Filter(qcd => !qcd.Term(sf => sf.File.ExcludeFromSearch, true))
                               .Must(qcd => qcd.ConfigureIfElse(isPrefix,
@@ -485,7 +485,7 @@ namespace Codex.ElasticSearch.Search
 
             return new StoredFilterSearchContext(
                 context,
-                repositoryScopeId: repositoryId, 
+                repositoryScopeId: repositoryId,
                 storedFilterIndexName: IndexName(SearchTypes.StoredFilter),
                 // repos/{repositoryName}/{ingestId}
                 storedFilterUidPrefix: resolvedAliasStoredFilterPrefix);
@@ -549,6 +549,38 @@ namespace Codex.ElasticSearch.Search
                     Hits = result.SelectMany(s => s.Hits.Select(h => h.Source)).ToList(),
                     Total = result.FirstOrDefault()?.Total ?? 0
                 };
+            });
+        }
+
+        public Task<IndexQueryHitsResponse<T>> GetLeftOnlyEntitiesAsync<T>(
+            SearchType<T> searchType,
+            string leftName,
+            string rightName)
+            where T : class, ISearchEntity
+        {
+            return UseClient<T>(new ContextCodexArgumentsBase() { RepositoryScopeId = leftName }, async leftContext =>
+            {
+                var r = await UseClient<T>(new ContextCodexArgumentsBase() { RepositoryScopeId = rightName }, async rightContext =>
+                {
+                    var client = leftContext.Client;
+
+                    var result = await client.SearchAllAsync<T>(s => s
+                        .Query(qcd => qcd.Bool(bq => bq
+                            .MustNot(q1 => q1.StoredFilterQuery(rightContext, IndexName(searchType)))
+                            .Filter(q1 => q1.StoredFilterQuery(leftContext, IndexName(searchType)))
+                            ))
+                        .Index(IndexName(searchType))
+                        .Type(searchType.Type));
+
+                    return new IndexQueryHits<T>()
+                    {
+                        Hits = result.SelectMany(s => s.Hits.Select(h => h.Source)).ToList(),
+                        Total = result.FirstOrDefault()?.Total ?? 0
+                    };
+
+                });
+
+                return r.Result;
             });
         }
 
