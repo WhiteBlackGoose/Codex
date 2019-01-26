@@ -1,4 +1,5 @@
-﻿using Codex.Framework.Types;
+﻿using Codex.ElasticSearch.Tests.Properties;
+using Codex.Framework.Types;
 using Codex.ObjectModel;
 using Codex.Sdk.Utilities;
 using Codex.Serialization;
@@ -7,6 +8,7 @@ using Codex.Utilities;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -61,11 +63,26 @@ namespace Codex.ElasticSearch.Tests
                         {
                             Reference = new DefinitionSymbol()
                             {
-                                ContainerQualifiedName = "cqn",
+                                ContainerQualifiedName = "excluded.cqn",
                                 ReferenceKind = "rkind"
                             }
                         }
                     }
+            };
+
+            var referenceSpanList = new ReferenceSearchModel()
+            {
+                Spans = new[]
+                {
+                    new ReferenceSpan()
+                    {
+                        Reference = new ReferenceSymbol()
+                        {
+                            Id = SymbolId.UnsafeCreateWithValue("excluded.refid")
+                        },
+                        Start = 323
+                    }
+                }
             };
 
             var entity = new BoundSourceSearchModel()
@@ -74,9 +91,10 @@ namespace Codex.ElasticSearch.Tests
                 CompressedReferences = new ReferenceListModel(boundInfo.References)
             };
 
-            var entityResult = entity.ElasticSerialize();
+            var entityResult = (refs: referenceSpanList, bound: entity).ElasticSerialize();
             Assert.True(entityResult.ToLowerInvariant().Contains("rkind"), "Property of ReferenceSymbol should be serialized when the property type is ReferenceSymbol");
             Assert.False(entityResult.ToLowerInvariant().Contains("cqn"), "Property of DefinitionSymbol should not be serialized when the property type is ReferenceSymbol");
+            Assert.False(entityResult.ToLowerInvariant().Contains("refid"), "Property of ReferenceSpan should not be serialized when the property type is SymbolSpan");
             Assert.Pass(entityResult);
         }
 
@@ -100,6 +118,56 @@ namespace Codex.ElasticSearch.Tests
             {
                 yield return new ArraySegment<byte>(bytes, i, Math.Min(segmentLength, bytes.Length - i));
             }
+        }
+
+        [Test]
+        public void TestChunking()
+        {
+            var chunkMap = new ConcurrentDictionary<string, (int count, IReadOnlyList<string> chunk)>();
+            var lineMap = new ConcurrentDictionary<string, int>();
+            var fileSlices = Resources.ChunkedFileHistory.Split(new[] { "###" }, StringSplitOptions.RemoveEmptyEntries)
+                .Where(f => f.Length > 2000) // Remove header
+                .ToArray();
+
+            int deduplicatedChunks = 0;
+            int deduplicatedLines = 0;
+            int totalLines = 0;
+            int totalDuplicateLines = 0;
+            int totalChunks = 0;
+            int totalChunkLines = 0;
+            var encoderContext = new EncoderContext();
+            foreach (var fileSlice in fileSlices)
+            {
+                var lines = fileSlice.GetLines(includeLineBreak: true);
+                foreach (var line in lines)
+                {
+                    var count = lineMap.AddOrUpdate(line, 1, (k, v) => v + 1);
+                    if (count > 1)
+                    {
+                        totalDuplicateLines++;
+                    }
+                }
+
+                totalLines += lines.Count;
+                var chunks = IndexingUtilities.GetTextIndexingChunks(lines);
+                totalChunks += chunks.Count;
+                foreach (var chunk in chunks)
+                {
+                    totalChunkLines += chunk.Count;
+
+                    var hash = encoderContext.ToBase64HashString(chunk);
+                    var value = chunkMap.AddOrUpdate(hash, (1, chunk), (k, v) => (v.count + 1, v.chunk));
+                    if (value.count > 1)
+                    {
+                        deduplicatedChunks++;
+                        deduplicatedLines += chunk.Count;
+                    }
+                }
+            }
+
+            Assert.AreEqual(totalLines, totalChunkLines);
+            Assert.LessOrEqual(fileSlices.Length, deduplicatedChunks);
+            Assert.Pass($"Total Lines: {totalLines}, Total Dupe Lines: {totalDuplicateLines}, Deduped Lines: {deduplicatedLines}, Deduplicated Chunks: {deduplicatedChunks}, Total Chunks: {totalChunks}");
         }
 
         [Test]

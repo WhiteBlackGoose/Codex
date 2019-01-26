@@ -139,8 +139,8 @@ namespace Codex.ElasticSearch.Tests
 
             var codex = new ElasticSearchCodex(configuration, service);
 
-            var leftName = "domino.190119.031356";
-            var rightName = "domino.190123.031537";
+            var leftName = "domino.190125.054145";
+            var rightName = "domino.190125.055104";
             string root = @"D:\temp\diff";
 
             await EmitBoundFilesDiff(codex, leftName, rightName, root);
@@ -149,6 +149,14 @@ namespace Codex.ElasticSearch.Tests
 
         private static async Task EmitBoundFilesDiff(ElasticSearchCodex codex, string leftName, string rightName, string root)
         {
+            if (Directory.Exists(Path.Combine(root, leftName)))
+            {
+                Directory.Delete(Path.Combine(root, leftName), recursive: true);
+            }
+
+            await EmitTextFilesDiff(codex, leftName, rightName, root);
+            return;
+
             var searchType = SearchTypes.BoundSource;
             var leftEntities = await codex.GetLeftOnlyEntitiesAsync(searchType, leftName, rightName);
 
@@ -157,6 +165,23 @@ namespace Codex.ElasticSearch.Tests
             foreach (var entity in leftEntities.Result.Hits)
             {
                 File.WriteAllText(Path.Combine(leftRoot, $"{entity.BindingInfo.ProjectId}_{Path.GetFileName(entity.BindingInfo.ProjectRelativePath)}.json"), entity.ElasticSerialize());
+            }
+        }
+
+        private static async Task EmitTextFilesDiff(ElasticSearchCodex codex, string leftName, string rightName, string root)
+        {
+            if (Directory.Exists(Path.Combine(root, leftName)))
+            {
+                Directory.Delete(Path.Combine(root, leftName), recursive: true);
+            }
+            var searchType = SearchTypes.TextSource;
+            var leftEntities = await codex.GetLeftOnlyEntitiesAsync(searchType, leftName, rightName);
+
+            var leftRoot = Path.Combine(root, leftName, searchType.Name);
+            Directory.CreateDirectory(leftRoot);
+            foreach (var entity in leftEntities.Result.Hits)
+            {
+                File.WriteAllText(Path.Combine(leftRoot, $"{entity.File.Info.ProjectId}_{Path.GetFileName(entity.File.Info.ProjectRelativePath)}.json"), entity.ElasticSerialize());
             }
         }
 
@@ -336,20 +361,9 @@ namespace Codex.ElasticSearch.Tests
 
             await store.InitializeAsync();
 
-            var filterResult = await store.StoredFilterStore.GetAsync("repos/domino/fe7ebf3f-8dce-4254-90ff-c33854122ae9:test.boundsource");
-            var filter = filterResult.Result.GetStableIdSet();
-            var ids = filter.Enumerate().ToList();
-
-            var f1 = RoaringDocIdSet.From(new[] { 11844 });
-            var c1 = f1.Contains(11844);
-
-            var f2 = RoaringDocIdSet.From(CollectionUtilities.ExclusiveInterleave(filter.Enumerate(), f1.Enumerate(), Comparer<int>.Default));
-            var c2 = f2.Contains(11844);
-            var hasFile = filter.Contains(11844);
-
             var response = await codex.SearchAsync(new SearchArguments()
             {
-                SearchString = "assem"
+                SearchString = "retrieved temporal cache"
             });
 
             Assert.IsNull(response.Error);

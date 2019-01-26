@@ -135,7 +135,7 @@ namespace Codex.Storage.DataModel
         public FullTextAttribute(DataInclusionOptions option)
         {
             IndexOptions = IndexOptions.Offsets;
-            TermVector = TermVectorOption.WithPositionsOffsets;
+            TermVector = TermVectorOption.Yes;
             Analyzer = CustomAnalyzers.EncodedFullTextAnalyzerName;
             PositionIncrementGap = 0;
             if (!DataInclusion.HasOption(option))

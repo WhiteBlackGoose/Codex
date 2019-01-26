@@ -199,9 +199,10 @@ namespace Codex.Serialization
 
                 // Set the item contract and final item contract, so collection items
                 // are serialized based on collection item type rather than type of 
-                // actual member
+                // actual member. Also, need to set as sealed.
                 itemContractFieldSetter(arrayContract, itemContract);
                 finalItemContractFieldSetter(arrayContract, itemContract);
+                isSealedFieldSetter(arrayContract, true);
             }
 
             return arrayContract;
@@ -273,13 +274,6 @@ namespace Codex.Serialization
 
                     if (interfaceMemberMap.TryGetValue(property.PropertyName, out var interfaceProperty))
                     {
-                        // Include default values for searchable properties except when storing the raw value (i.e. not
-                        // serializing for the purpose of indexing but instead just to write to disk)
-                        if (stage != ObjectStage.StoreRaw && !property.PropertyType.IsClass && (interfaceProperty.GetSearchBehavior() ?? SearchBehavior.None) != SearchBehavior.None)
-                        {
-                            property.DefaultValueHandling = DefaultValueHandling.Include;
-                        }
-
                         return (interfaceProperty.GetAllowedStages() & stage) == 0;
                     }
 

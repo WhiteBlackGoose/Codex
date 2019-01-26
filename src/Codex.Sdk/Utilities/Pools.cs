@@ -24,6 +24,6 @@ namespace Codex.Sdk.Utilities
 
         public static readonly ObjectPool<EncoderContext> EncoderContextPool = new ObjectPool<EncoderContext>(
             () => new EncoderContext(),
-            sw => sw.StringBuilder.Clear());
+            sw => sw.Reset());
     }
 }

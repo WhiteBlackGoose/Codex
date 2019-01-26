@@ -86,29 +86,6 @@ namespace Codex.Utilities
             return ComputeSymbolUidOld(symbolIdName);
         }
 
-        public static string ToBase64HashString(this EncoderContext context)
-        {
-            return new Murmur3().ComputeHash(GetByteStream(context)).ToBase64String();
-        }
-
-        public static IEnumerable<ArraySegment<byte>> GetByteStream(EncoderContext context)
-        {
-            int offset = 0;
-            int remainingChars = context.StringBuilder.Length;
-            var builder = context.StringBuilder;
-            var chars = context.CharBuffer;
-            var bytes = context.ByteBuffer;
-            while (remainingChars > 0)
-            {
-                var copiedChars = Math.Min(remainingChars, chars.Length);
-                builder.CopyTo(offset, chars, 0, copiedChars);
-                var byteLength = Encoding.UTF8.GetBytes(chars, 0, copiedChars, bytes, 0);
-                yield return new ArraySegment<byte>(bytes, 0, byteLength);
-                offset += copiedChars;
-                remainingChars -= copiedChars;
-            }
-        }
-
         public static string ComputeSymbolUidOld(string symbolIdName)
         {
             string uidPadded = ComputeHashString(symbolIdName);
@@ -246,6 +223,11 @@ namespace Codex.Utilities
 
             qn.Name = fullyQualifiedTerm.Substring(indexOfLastDot + 1);
             return qn;
+        }
+
+        public static List<IReadOnlyList<string>> GetTextIndexingChunks(IReadOnlyList<string> lines)
+        {
+            return TextChunker.GetConsistentChunks(lines, chunkSizeHint: lines.Count / 100, minChunkSize: 20);
         }
     }
 

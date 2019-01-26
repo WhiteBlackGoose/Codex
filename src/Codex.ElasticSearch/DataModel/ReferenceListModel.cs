@@ -26,7 +26,6 @@ namespace Codex.Storage.DataModel
         public SymbolLineSpanListModel LineSpanModel { get; set; }
 
         public IntegerListModel LineIndices;
-        public IntegerListModel ExcludedFromSearchSpans;
 
         public ReferenceListModel()
         {
