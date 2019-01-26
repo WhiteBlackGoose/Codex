@@ -11,6 +11,7 @@
     <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
     <Platform Condition="'$(Platform)'==''">Mixed Platforms</Platform>
     <BuildOutputRoot>$(SrcRoot)\out</BuildOutputRoot>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Intermediate Output directory">
