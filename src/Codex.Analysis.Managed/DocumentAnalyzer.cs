@@ -378,42 +378,41 @@ namespace Codex.Analysis
                 return;
             }
 
+            var overriddenSymbol = GetOverriddenSymbol(declaredSymbol);
+            if (overriddenSymbol != null)
+            {
+                references.Add(symbolSpan.CreateReference(GetReferenceSymbol(overriddenSymbol, ReferenceKind.Override), relatedDefinition));
+
+                if (excludeFromSearch)
+                {
+                    references[references.Count - 1].Reference.ExcludeFromSearch = true;
+                }
+            }
+
+            // TODO: Should we add transitive overrides
+        }
+
+        private ISymbol GetOverriddenSymbol(ISymbol declaredSymbol)
+        {
             IMethodSymbol method = declaredSymbol as IMethodSymbol;
             if (method != null)
             {
-                var overriddenMethod = method.OverriddenMethod;
-                if (overriddenMethod != null)
-                {
-                    references.Add(symbolSpan.CreateReference(GetReferenceSymbol(overriddenMethod, ReferenceKind.Override), relatedDefinition));
-                }
+                return method.OverriddenMethod;
             }
 
             IPropertySymbol property = declaredSymbol as IPropertySymbol;
             if (property != null)
             {
-                var overriddenProperty = property.OverriddenProperty;
-                if (overriddenProperty != null)
-                {
-                    references.Add(symbolSpan.CreateReference(GetReferenceSymbol(overriddenProperty, ReferenceKind.Override), relatedDefinition));
-                }
+                return property.OverriddenProperty;
             }
 
             IEventSymbol eventSymbol = declaredSymbol as IEventSymbol;
             if (eventSymbol != null)
             {
-                var overriddenEvent = eventSymbol.OverriddenEvent;
-                if (overriddenEvent != null)
-                {
-                    references.Add(symbolSpan.CreateReference(GetReferenceSymbol(overriddenEvent, ReferenceKind.Override), relatedDefinition));
-                }
+                return eventSymbol.OverriddenEvent;
             }
 
-            if (excludeFromSearch)
-            {
-                references[references.Count - 1].Reference.ExcludeFromSearch = true;
-            }
-
-            // TODO: Should we add transitive overrides
+            return null;
         }
 
         private ISymbol GetExplicitlyImplementedMember(ISymbol symbol)
