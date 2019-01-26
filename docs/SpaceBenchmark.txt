@@ -1,0 +1,68 @@
+// Steps:
+// 1. Run CodexIngester on test analysis results from MSBuild repo
+// Test analysis is here: https://github.com/Ref12/HelperUploads/releases/download/benchmarkmsbuild/MSBuild.zip
+out\bin\Debug\Codex.Ingester\Codex.Ingester.exe  --file d:\code\CodexIngest\msbuild.json --out C:\temp\msbuild --es http://localhost:9200 --name msbuild --newBackend --incremental
+
+// 2. Collect index data using 'ElasticSearch for VSCode' extension and paste below. (TODO: Track sizes by file type)
+
+// For reference: Baseline MSBuild source code is ~40 MB
+
+// Current data:
+[
+    {
+        "i": "test.textsource",
+        "store.size": "53mb"
+    },
+    {
+        "i": "test.storedfilter",
+        "store.size": "49.3kb"
+    },
+    {
+        "i": "test.stableidmarker",
+        "store.size": "3mb"
+    },
+    {
+        "i": "test.repository",
+        "store.size": "4.5kb"
+    },
+    {
+        "i": "test.registeredentity",
+        "store.size": "32.9mb"
+    },
+    {
+        "i": "test.reference",
+        "store.size": "64.2mb"
+    },
+    {
+        "i": "test.property",
+        "store.size": "951.1kb"
+    },
+    {
+        "i": "test.projectreference",
+        "store.size": "627.1kb"
+    },
+    {
+        "i": "test.project",
+        "store.size": "568.1kb"
+    },
+    {
+        "i": "test.language",
+        "store.size": "1.1kb"
+    },
+    {
+        "i": "test.definition",
+        "store.size": "33.3mb"
+    },
+    {
+        "i": "test.commitfiles",
+        "store.size": "4.3kb"
+    },
+    {
+        "i": "test.commit",
+        "store.size": "5.3kb"
+    },
+    {
+        "i": "test.boundsource",
+        "store.size": "13.6mb"
+    }
+]
