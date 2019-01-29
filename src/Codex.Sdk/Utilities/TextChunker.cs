@@ -9,9 +9,9 @@ namespace Codex
 {
     public static class TextChunker
     {
-        public static List<IReadOnlyList<string>> GetConsistentChunks(IReadOnlyList<string> lines, int chunkSizeHint, int minChunkSize)
+        public static List<ListSegment<string>> GetConsistentChunks(IReadOnlyList<string> lines, int chunkSizeHint, int minChunkSize)
         {
-            List<IReadOnlyList<string>> chunks = new List<IReadOnlyList<string>>();
+            var chunks = new List<ListSegment<string>>();
             using (var lease = Pools.EncoderContextPool.Acquire())
             {
                 EncoderContext context = lease.Instance;
@@ -78,7 +78,7 @@ namespace Codex
             }
         }
 
-        private static void AddChunk(List<IReadOnlyList<string>> chunks, IReadOnlyList<string> lines, int chunkStartIndex, int chunkEndIndex)
+        private static void AddChunk(List<ListSegment<string>> chunks, IReadOnlyList<string> lines, int chunkStartIndex, int chunkEndIndex)
         {
             if (chunkEndIndex >= chunkStartIndex)
             {
@@ -88,9 +88,9 @@ namespace Codex
 
         private static ulong ComputeLineHash(EncoderContext context, string line, uint lineNumber)
         {
-            if (string.IsNullOrWhiteSpace(line))
+            if (string.IsNullOrWhiteSpace(line) || IsPunctuationOrWhitespace(line))
             {
-                return lineNumber;
+                return 1_000_000 - lineNumber;
             }
             else if (IsPunctuationOrWhitespace(line))
             {

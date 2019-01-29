@@ -127,7 +127,9 @@ namespace Codex.ElasticSearch.Tests
             var lineMap = new ConcurrentDictionary<string, int>();
             var fileSlices = Resources.ChunkedFileHistory.Split(new[] { "###" }, StringSplitOptions.RemoveEmptyEntries)
                 .Where(f => f.Length > 2000) // Remove header
+                .Select(f => f.Trim())
                 .ToArray();
+            var chunkInfo = new List<(int chunkIndex, int chunkCount, int startLine, int endLine)>();
 
             int deduplicatedChunks = 0;
             int deduplicatedLines = 0;
@@ -151,14 +153,17 @@ namespace Codex.ElasticSearch.Tests
                 totalLines += lines.Count;
                 var chunks = IndexingUtilities.GetTextIndexingChunks(lines);
                 totalChunks += chunks.Count;
+                int chunkIndex = 0;
                 foreach (var chunk in chunks)
                 {
+                    chunkIndex++;
                     totalChunkLines += chunk.Count;
 
                     var hash = encoderContext.ToBase64HashString(chunk);
                     var value = chunkMap.AddOrUpdate(hash, (1, chunk), (k, v) => (v.count + 1, v.chunk));
                     if (value.count > 1)
                     {
+                        chunkInfo.Add((chunkIndex, chunks.Count, chunk.Start, chunk.End));
                         deduplicatedChunks++;
                         deduplicatedLines += chunk.Count;
                     }
@@ -167,7 +172,7 @@ namespace Codex.ElasticSearch.Tests
 
             Assert.AreEqual(totalLines, totalChunkLines);
             Assert.LessOrEqual(fileSlices.Length, deduplicatedChunks);
-            Assert.Pass($"Total Lines: {totalLines}, Total Dupe Lines: {totalDuplicateLines}, Deduped Lines: {deduplicatedLines}, Deduplicated Chunks: {deduplicatedChunks}, Total Chunks: {totalChunks}");
+            Assert.Pass($"Total Lines: {totalLines}, Total Dupe Lines: {totalDuplicateLines}, Deduped Lines: {deduplicatedLines}, Deduplicated Chunks: {deduplicatedChunks}, Total Chunks: {totalChunks}\n{string.Join(Environment.NewLine, chunkInfo)}");
         }
 
         [Test]

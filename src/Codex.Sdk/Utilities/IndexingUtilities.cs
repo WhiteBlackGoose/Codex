@@ -225,9 +225,9 @@ namespace Codex.Utilities
             return qn;
         }
 
-        public static List<IReadOnlyList<string>> GetTextIndexingChunks(IReadOnlyList<string> lines)
+        public static List<ListSegment<string>> GetTextIndexingChunks(IReadOnlyList<string> lines)
         {
-            return TextChunker.GetConsistentChunks(lines, chunkSizeHint: lines.Count / 100, minChunkSize: 20);
+            return TextChunker.GetConsistentChunks(lines, chunkSizeHint: lines.Count / 100, minChunkSize: 10);
         }
     }
 
