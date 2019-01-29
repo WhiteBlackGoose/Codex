@@ -292,7 +292,7 @@ namespace Codex.ElasticSearch.Search
                               .Must(qcd => qcd.ConfigureIfElse(isPrefix,
                                 f0 => f0.MatchPhrasePrefix(mpp => mpp.Field(sf => sf.File.Content).Query(searchPhrase).MaxExpansions(100)),
                                 f0 => f0.MatchPhrase(mpp => mpp.Field(sf => sf.File.Content).Query(searchPhrase))))))
-                        .Highlight(h => h.Fields(hf => hf.Field(sf => sf.File.Content).BoundaryScanner(BoundaryScanner.Characters).BoundaryCharacters("\n\r")))
+                        .Highlight(h => h.Fields(hf => hf.Field(sf => sf.File.Content).BoundaryCharacters("\n\r")))
                         .Source(source => source
                             .Includes(sd => sd.Fields(
                                 sf => sf.File.Info)))
