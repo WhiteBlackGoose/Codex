@@ -134,7 +134,7 @@ namespace Codex.Framework.Generation
                         break;
                     }
 
-                    if (i.GetInterfaces().Length == interfaces.Length - 1)
+                    if (i.GetInterfaces().Length == interfaces.Length - 1 && DefinitionsByType.ContainsKey(i))
                     {
                         baseType = i;
                         baseTypeCount++;
@@ -148,7 +148,7 @@ namespace Codex.Framework.Generation
                     baseTypeEnumerable = new[] { baseType }.Concat(baseType.GetInterfaces());
                 }
 
-                typeDefinition.Interfaces.AddRange(interfaces.Except(baseTypeEnumerable).Select(t => DefinitionsByType[t]));
+                typeDefinition.Interfaces.AddRange(interfaces.Except(baseTypeEnumerable).Where(t => DefinitionsByType.ContainsKey(t)).Select(t => DefinitionsByType[t]));
             }
 
             foreach (var typeDefinition in DefinitionsByType.Values)
@@ -262,6 +262,7 @@ namespace Codex.Framework.Generation
 
                 if (visitedSearchTypeDefinitions.Add(typeDefinition))
                 {
+                    typeDefinition.SearchType = searchType;
                     CodeTypeDeclaration typeDeclaration = new CodeTypeDeclaration(typeDefinition.SearchDescriptorName);
                     //searchDescriptorsNamespace.Types.Add(typeDeclaration);
 
@@ -273,6 +274,10 @@ namespace Codex.Framework.Generation
                     usedMemberNames.Clear();
 
                     PopulateIndexProperties(visitedTypeDefinitions, usedMemberNames, new CodeTypeReference(typeDeclaration.Name), typeDefinition, typeDeclaration);
+                }
+                else
+                {
+                    throw new Exception($"Duplicate search types ({searchType.Name}, {typeDefinition.SearchType.Name}) for type: {typeDefinition.Type.Name}");
                 }
             }
 
@@ -300,9 +305,9 @@ namespace Codex.Framework.Generation
                         new CodeAttributeArgument(new CodeTypeOfExpression(typeDefinition.Type))));
 
                 typeMappingCreatorMethod.Statements.Add(new CodeMethodInvokeExpression(
-                    new CodeVariableReferenceExpression(typeMappingVariableName), 
-                    "Add", 
-                    new CodeTypeOfExpression(typeDefinition.Type), 
+                    new CodeVariableReferenceExpression(typeMappingVariableName),
+                    "Add",
+                    new CodeTypeOfExpression(typeDefinition.Type),
                     new CodeTypeOfExpression(typeDefinition.ClassName)));
 
                 typeMappingCreatorMethod.Statements.Add(new CodeMethodInvokeExpression(
@@ -314,6 +319,37 @@ namespace Codex.Framework.Generation
                 if (typeDefinition.Migrated)
                 {
                     typesNamespace.Imports.Add(new CodeNamespaceImport($"{typeDefinition.ClassName} = {modelNamespace.Name}.{typeDefinition.ClassName}"));
+                }
+
+                if (typeDefinition.SearchType != null)
+                {
+                    var searchTypeMethod = new CodeMemberMethod()
+                    {
+                        Name = nameof(ISearchEntityBase.GetSearchType),
+                        Attributes = MemberAttributes.Override | MemberAttributes.Public,
+                        ReturnType = new CodeTypeReference(typeof(SearchType)),
+                    };
+
+                    var searchTypeReferenceExpression = new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(typeof(SearchTypes)), typeDefinition.SearchType.Name);
+                    searchTypeMethod.Statements.Add(new CodeMethodReturnStatement(searchTypeReferenceExpression));
+
+                    var routingKeyMethod = new CodeMemberMethod()
+                    {
+                        Name = nameof(ISearchEntityBase.GetRoutingKey),
+                        Attributes = MemberAttributes.Override | MemberAttributes.Public,
+                        ReturnType = new CodeTypeReference(typeof(string)),
+                    };
+
+                    routingKeyMethod.Statements.Add(
+                        new CodeMethodReturnStatement(
+                            new CodeMethodInvokeExpression(
+                                new CodeThisReferenceExpression(),
+                                routingKeyMethod.Name,
+                                searchTypeReferenceExpression,
+                                new CodeThisReferenceExpression()
+                        )));
+
+                    typeDeclaration.Members.Add(routingKeyMethod);
                 }
 
                 var nspace = typeDefinition.Migrated ? modelNamespace : typesNamespace;

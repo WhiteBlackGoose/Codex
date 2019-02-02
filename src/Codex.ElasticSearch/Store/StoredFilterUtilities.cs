@@ -100,12 +100,12 @@ namespace Codex.ElasticSearch
 
         public static int GetStableIdGroup(this ISearchEntity entity)
         {
-            return IndexingUtilities.ComputeFullHash(entity.RoutingKey ?? entity.Uid ?? entity.EntityContentId).GetByte(0) % StableIdGroupMaxValue;
+            return IndexingUtilities.ComputeFullHash(entity.GetRoutingKey() ?? entity.Uid ?? entity.EntityContentId).GetByte(0) % StableIdGroupMaxValue;
         }
 
         public static string GetRoutingSuffix(this ISearchEntity entity)
         {
-            if (entity.RoutingKey == null) return string.Empty;
+            if (entity.GetRoutingKey() == null) return string.Empty;
             return $"#{GetStableIdGroup(entity)}";
         }
 

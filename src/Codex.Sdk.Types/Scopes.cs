@@ -6,11 +6,18 @@ using System.Threading.Tasks;
 
 namespace Codex
 {
+    public interface ISearchEntityBase
+    {
+        SearchType GetSearchType();
+
+        string GetRoutingKey();
+    }
+
     /// <summary>
     /// Marker interface for searchable entities
     /// TODO: Consider moving <see cref="EntityContentId"/> out if its not needed by all searchable entities
     /// </summary>
-    public partial interface ISearchEntity
+    public partial interface ISearchEntity : ISearchEntityBase
     {
         string Uid { get; set; }
 
@@ -60,14 +67,14 @@ namespace Codex
         [Include(ObjectStage.Search)]
         string SortKey { get; set; }
 
-        /// <summary>
-        /// Value used for routing (this should be computed based other values in the entity i.e. {FileName} for files)
-        /// The goal is so that similar entities should be routed to same shard to allow maximum compression
-        /// This should be composed into uid
-        /// </summary>
-        [SearchBehavior(SearchBehavior.Term)]
-        [Include(ObjectStage.None)]
-        string RoutingKey { get; set; }
+        ///// <summary>
+        ///// Value used for routing (this should be computed based other values in the entity i.e. {FileName} for files)
+        ///// The goal is so that similar entities should be routed to same shard to allow maximum compression
+        ///// This should be composed into uid
+        ///// </summary>
+        //[SearchBehavior(SearchBehavior.Term)]
+        //[Include(ObjectStage.None)]
+        //string RoutingKey { get; set; }
     }
 
     public interface IRepoScopeEntity

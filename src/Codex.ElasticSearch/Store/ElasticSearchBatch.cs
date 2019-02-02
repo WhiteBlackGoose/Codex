@@ -121,7 +121,7 @@ namespace Codex.ElasticSearch
                     }
                     else if (item.SearchType == SearchTypes.BoundSource && item.Entity is IBoundSourceSearchModel boundSource)
                     {
-                        Logger.LogDiagnosticWithProvenance($"[Bound#{boundSource.Uid}|Text#{boundSource.TextUid}] Bound({responseItem.Status}|{item.IsAdded}/{item.IsCommitted}|{item.StableId}): {boundSource.BindingInfo.ProjectId}:{boundSource.BindingInfo.ProjectRelativePath}");
+                        Logger.LogDiagnosticWithProvenance($"[Bound#{boundSource.Uid}|Text#{boundSource.TextUid}] Bound({responseItem.Status}|{item.IsAdded}/{item.IsCommitted}|{item.StableId}): {boundSource.File.Info.ProjectId}:{boundSource.File.Info.ProjectRelativePath}");
                     }
 
                     if (IsAdded(responseItem))

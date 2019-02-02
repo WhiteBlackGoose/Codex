@@ -107,16 +107,28 @@ namespace Codex.ElasticSearch
         {
             foreach (var file in files)
             {
-                var textModel = new TextSourceSearchModel()
-                {
-                    // TODO: This should probably be handled by custom serializer
-                    File = file.EnableFullTextSearch()
-                };
+                TextSourceSearchModel textModel = await AddTextFileAsync(file);
 
-                await batcher.AddAsync(store.TextSourceStore, textModel);
                 UpdateCommitFile(textModel);
                 AddProperties(textModel, file.Info.Properties);
             }
+        }
+
+        private async Task<TextSourceSearchModel> AddTextFileAsync(SourceFile file)
+        {
+            TextIndexingUtilities.ToChunks(file, file.ExcludeFromSearch, out var chunkFile, out var chunks, encodeFullText: true);
+            var textModel = new TextSourceSearchModel()
+            {
+                File = chunkFile
+            };
+
+            await batcher.AddAsync(store.TextSourceStore, textModel);
+            foreach (var chunk in chunks)
+            {
+                await batcher.AddAsync(store.TextChunkStore, chunk);
+            }
+
+            return textModel;
         }
 
         private void AddDefinitions(IEnumerable<DefinitionSymbol> definitions, bool declared)
@@ -166,12 +178,8 @@ namespace Codex.ElasticSearch
             boundSourceFile.ApplySourceFileInfo();
 
             Placeholder.Todo($"Get {nameof(ISourceControlFileInfo.SourceControlContentId)} from source control provider during analysis");
-            var textModel = new TextSourceSearchModel()
-            {
-                // TODO: This should probably be handled by custom serializer
-                File = boundSourceFile.SourceFile.EnableFullTextSearch(),
-                SourceControlInfo = new SourceControlFileInfo(sourceFileInfo)
-            };
+
+            TextSourceSearchModel textModel = await AddTextFileAsync(boundSourceFile.SourceFile);
 
             batcher.Add(store.TextSourceStore, textModel);
             Logger.LogDiagnosticWithProvenance($"[Text#{textModel.Uid}] {sourceFileInfo.ProjectId}:{sourceFileInfo.ProjectRelativePath}");

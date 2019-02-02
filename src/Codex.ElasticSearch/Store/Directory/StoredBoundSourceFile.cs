@@ -27,7 +27,7 @@ namespace Codex.ElasticSearch.Store
 
             if (optimize)
             {
-                string projectId = this.BoundSourceFile.ProjectId;
+                string projectId = this.BoundSourceFile.SourceFile.Info.ProjectId;
                 string containerQualifiedName = null;
                 string kind = null;
                 Glyph glyph = default(Glyph);
@@ -125,7 +125,7 @@ namespace Codex.ElasticSearch.Store
                 BoundSourceFile.References = CompressedReferences.ToList();
             }
 
-            string projectId = this.BoundSourceFile.ProjectId;
+            string projectId = this.BoundSourceFile.SourceFile.Info.ProjectId;
             string containerQualifiedName = null;
             string kind = null;
             Glyph glyph = default(Glyph);

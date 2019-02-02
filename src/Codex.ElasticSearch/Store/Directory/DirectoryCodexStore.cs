@@ -233,14 +233,14 @@ namespace Codex.ElasticSearch.Store
 
         public Task AddBoundFilesAsync(IReadOnlyList<BoundSourceFile> files)
         {
-            return AddAsync(files.SelectList(CreateStoredBoundFile), StoredEntityKind.BoundFiles, e => Path.Combine(e.BoundSourceFile.ProjectId, Path.GetFileName(e.BoundSourceFile.SourceFile.Info.RepoRelativePath)));
+            return AddAsync(files.SelectList(CreateStoredBoundFile), StoredEntityKind.BoundFiles, e => Path.Combine(e.BoundSourceFile.SourceFile.Info.ProjectId, Path.GetFileName(e.BoundSourceFile.SourceFile.Info.RepoRelativePath)));
         }
 
         private StoredBoundSourceFile CreateStoredBoundFile(BoundSourceFile boundSourceFile)
         {
             if (m_storeInfo != null)
             {
-                boundSourceFile.RepositoryName = m_storeInfo.Repository.Name;
+                boundSourceFile.SourceFile.Info.RepositoryName = m_storeInfo.Repository.Name;
             }
 
             boundSourceFile.ApplySourceFileInfo();
@@ -259,7 +259,7 @@ namespace Codex.ElasticSearch.Store
         {
             if (m_storeInfo != null)
             {
-                storedBoundFile.BoundSourceFile.RepositoryName = m_storeInfo.Repository.Name;
+                storedBoundFile.BoundSourceFile.SourceFile.Info.RepositoryName = m_storeInfo.Repository.Name;
             }
 
             storedBoundFile.BoundSourceFile.ApplySourceFileInfo();
@@ -333,7 +333,7 @@ namespace Codex.ElasticSearch.Store
         private abstract class StoredEntityKind
         {
             public static readonly StoredEntityKind<StoredBoundSourceFile> BoundFiles = Create<StoredBoundSourceFile>(
-                (entity) => ToStableId(entity.BoundSourceFile.ProjectId, entity.BoundSourceFile.ProjectRelativePath),
+                (entity) => ToStableId(entity.BoundSourceFile.SourceFile.Info.ProjectId, entity.BoundSourceFile.SourceFile.Info.ProjectRelativePath),
                 (entity, repositoryStore, directoryStore) => repositoryStore.AddBoundFilesAsync(new[] { directoryStore.FromStoredBoundFile(entity) }));
             public static readonly StoredEntityKind<AnalyzedProject> Projects = Create<AnalyzedProject>(
                 (entity) => ToStableId(entity.ProjectId),

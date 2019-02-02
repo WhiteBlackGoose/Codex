@@ -14,6 +14,7 @@ using Codex.ElasticSearch.Utilities;
 using Codex.ObjectModel;
 using Codex.ElasticSearch.Search;
 using Nest.JsonNetSerializer;
+using static Codex.ElasticSearch.StoredFilterUtilities;
 
 namespace Codex.ElasticSearch
 {
@@ -59,6 +60,21 @@ namespace Codex.ElasticSearch
                 Duration = stopwatch.Elapsed - startTime,
                 Result = result
             };
+        }
+
+        public async Task<IReadOnlyList<T>> GetAsync<T>(SearchType<T> searchType, string indexName, IReadOnlyList<string> uids)
+            where T : class, ISearchEntity
+        {
+            var result = await UseClient(async context =>
+            {
+                var response = await context.Client
+                    .MultiGetAsync(mg => mg.GetMany<T>(uids, (g, uid) => g.Routing(GetRouting(uid))).Index(indexName))
+                    .ThrowOnFailure();
+
+                return response.Hits.Select(g => (T)g.Source).ToList();
+            });
+
+            return result.Result;
         }
 
         public Task ClearAsync()

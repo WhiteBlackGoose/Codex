@@ -37,8 +37,16 @@ namespace Codex.ObjectModel {
             typeMapping.Add(typeof(SourceFileInfo), typeof(Codex.ISourceFileInfo));
             typeMapping.Add(typeof(Codex.IEncodingDescription), typeof(EncodingDescription));
             typeMapping.Add(typeof(EncodingDescription), typeof(Codex.IEncodingDescription));
+            typeMapping.Add(typeof(Codex.ISourceFileBase), typeof(SourceFileBase));
+            typeMapping.Add(typeof(SourceFileBase), typeof(Codex.ISourceFileBase));
             typeMapping.Add(typeof(Codex.ISourceFile), typeof(SourceFile));
             typeMapping.Add(typeof(SourceFile), typeof(Codex.ISourceFile));
+            typeMapping.Add(typeof(Codex.IChunkedSourceFile), typeof(ChunkedSourceFile));
+            typeMapping.Add(typeof(ChunkedSourceFile), typeof(Codex.IChunkedSourceFile));
+            typeMapping.Add(typeof(Codex.IChunkReference), typeof(ChunkReference));
+            typeMapping.Add(typeof(ChunkReference), typeof(Codex.IChunkReference));
+            typeMapping.Add(typeof(Codex.ISourceFileContentChunk), typeof(SourceFileContentChunk));
+            typeMapping.Add(typeof(SourceFileContentChunk), typeof(Codex.ISourceFileContentChunk));
             typeMapping.Add(typeof(Codex.IOutliningRegion), typeof(OutliningRegion));
             typeMapping.Add(typeof(OutliningRegion), typeof(Codex.IOutliningRegion));
             typeMapping.Add(typeof(Codex.IDefinitionSpan), typeof(DefinitionSpan));
@@ -133,6 +141,8 @@ namespace Codex.ObjectModel {
             typeMapping.Add(typeof(BoundSourceSearchModel), typeof(Codex.IBoundSourceSearchModel));
             typeMapping.Add(typeof(Codex.ITextSourceSearchModel), typeof(TextSourceSearchModel));
             typeMapping.Add(typeof(TextSourceSearchModel), typeof(Codex.ITextSourceSearchModel));
+            typeMapping.Add(typeof(Codex.ITextChunkSearchModel), typeof(TextChunkSearchModel));
+            typeMapping.Add(typeof(TextChunkSearchModel), typeof(Codex.ITextChunkSearchModel));
             typeMapping.Add(typeof(Codex.IRepositorySearchModel), typeof(RepositorySearchModel));
             typeMapping.Add(typeof(RepositorySearchModel), typeof(Codex.IRepositorySearchModel));
             typeMapping.Add(typeof(Codex.IProjectSearchModel), typeof(ProjectSearchModel));
@@ -498,10 +508,6 @@ namespace Codex.ObjectModel {
                 base(value) {
         }
         
-        public BoundSourceFile(Codex.IProjectFileScopeEntity value) : 
-                base(value) {
-        }
-        
         /// <summary>
         /// The source file
         /// </summary>
@@ -576,7 +582,7 @@ namespace Codex.ObjectModel {
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IBoundSourceInfo))]
-    public partial class BoundSourceInfo : ProjectFileScopeEntity, Codex.IBoundSourceInfo {
+    public partial class BoundSourceInfo : Codex.EntityBase, Codex.IBoundSourceInfo {
         
         private System.Nullable<int> m_ReferenceCount;
         
@@ -595,14 +601,12 @@ namespace Codex.ObjectModel {
         private bool m_ExcludeFromSearch;
         
         public BoundSourceInfo() {
+            Initialize();
         }
         
         public BoundSourceInfo(Codex.IBoundSourceInfo value) {
+            Initialize();
             this.CopyFrom<BoundSourceInfo>(value);
-        }
-        
-        public BoundSourceInfo(Codex.IProjectFileScopeEntity value) : 
-                base(value) {
         }
         
         /// <summary>
@@ -748,7 +752,6 @@ namespace Codex.ObjectModel {
             this.m_Classifications = new System.Collections.Generic.List<ClassificationSpan>(System.Linq.Enumerable.Select(((Codex.IBoundSourceInfo)(value)).Classifications, v => EntityUtilities.NullOrCopy(v, _v => new ClassificationSpan().CopyFrom<ClassificationSpan>(_v))));
             this.m_OutliningRegions = new System.Collections.Generic.List<OutliningRegion>(System.Linq.Enumerable.Select(((Codex.IBoundSourceInfo)(value)).OutliningRegions, v => EntityUtilities.NullOrCopy(v, _v => new OutliningRegion().CopyFrom<OutliningRegion>(_v))));
             this.m_ExcludeFromSearch = ((Codex.IBoundSourceInfo)(value)).ExcludeFromSearch;
-            base.CopyFrom<ProjectFileScopeEntity>(((Codex.IProjectFileScopeEntity)(value)));
             return ((TTarget)(this));
         }
     }
@@ -1100,31 +1103,26 @@ namespace Codex.ObjectModel {
         }
     }
     
-    /// <summary>
-    /// Defines text contents of a file and associated data
-    /// </summary>
-    [Codex.SerializationInterfaceAttribute(typeof(Codex.ISourceFile))]
-    public partial class SourceFile : Codex.EntityBase, Codex.ISourceFile {
+    [Codex.SerializationInterfaceAttribute(typeof(Codex.ISourceFileBase))]
+    public partial class SourceFileBase : Codex.EntityBase, Codex.ISourceFileBase {
         
         private SourceFileInfo m_Info;
         
-        private string m_Content;
-        
         private bool m_ExcludeFromSearch;
         
-        public SourceFile() {
+        public SourceFileBase() {
             Initialize();
         }
         
-        public SourceFile(Codex.ISourceFile value) {
+        public SourceFileBase(Codex.ISourceFileBase value) {
             Initialize();
-            this.CopyFrom<SourceFile>(value);
+            this.CopyFrom<SourceFileBase>(value);
         }
         
         /// <summary>
         /// The information about the source file
         /// </summary>
-        Codex.ISourceFileInfo Codex.ISourceFile.Info {
+        Codex.ISourceFileInfo Codex.ISourceFileBase.Info {
             get {
                 return this.Info;
             }
@@ -1143,18 +1141,6 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// The content of the file
-        /// </summary>
-        public virtual string Content {
-            get {
-                return this.m_Content;
-            }
-            set {
-                this.m_Content = value;
-            }
-        }
-        
-        /// <summary>
         /// Indicates that the file should be excluded from text search
         /// </summary>
         public virtual bool ExcludeFromSearch {
@@ -1166,11 +1152,184 @@ namespace Codex.ObjectModel {
             }
         }
         
+        public virtual TTarget CopyFrom<TTarget>(Codex.ISourceFileBase value)
+            where TTarget : SourceFileBase {
+            this.m_Info = EntityUtilities.NullOrCopy(value.Info, v => new SourceFileInfo().CopyFrom<SourceFileInfo>(v));;
+            this.m_ExcludeFromSearch = ((Codex.ISourceFileBase)(value)).ExcludeFromSearch;
+            return ((TTarget)(this));
+        }
+    }
+    
+    /// <summary>
+    /// Defines text contents of a file and associated data
+    /// </summary>
+    [Codex.SerializationInterfaceAttribute(typeof(Codex.ISourceFile))]
+    public partial class SourceFile : SourceFileBase, Codex.ISourceFile {
+        
+        private string m_Content;
+        
+        public SourceFile() {
+        }
+        
+        public SourceFile(Codex.ISourceFile value) {
+            this.CopyFrom<SourceFile>(value);
+        }
+        
+        public SourceFile(Codex.ISourceFileBase value) : 
+                base(value) {
+        }
+        
+        /// <summary>
+        /// The content of the file
+        /// </summary>
+        public virtual string Content {
+            get {
+                return this.m_Content;
+            }
+            set {
+                this.m_Content = value;
+            }
+        }
+        
         public virtual TTarget CopyFrom<TTarget>(Codex.ISourceFile value)
             where TTarget : SourceFile {
-            this.m_Info = EntityUtilities.NullOrCopy(value.Info, v => new SourceFileInfo().CopyFrom<SourceFileInfo>(v));;
             this.m_Content = ((Codex.ISourceFile)(value)).Content;
-            this.m_ExcludeFromSearch = ((Codex.ISourceFile)(value)).ExcludeFromSearch;
+            base.CopyFrom<SourceFileBase>(((Codex.ISourceFileBase)(value)));
+            return ((TTarget)(this));
+        }
+    }
+    
+    /// <summary>
+    /// Defines text contents of a file and associated data
+    /// </summary>
+    [Codex.SerializationInterfaceAttribute(typeof(Codex.IChunkedSourceFile))]
+    public partial class ChunkedSourceFile : SourceFileBase, Codex.IChunkedSourceFile {
+        
+        private System.Collections.Generic.List<ChunkReference> m_Chunks = new System.Collections.Generic.List<ChunkReference>();
+        
+        public ChunkedSourceFile() {
+        }
+        
+        public ChunkedSourceFile(Codex.IChunkedSourceFile value) {
+            this.CopyFrom<ChunkedSourceFile>(value);
+        }
+        
+        public ChunkedSourceFile(Codex.ISourceFileBase value) : 
+                base(value) {
+        }
+        
+        /// <summary>
+        /// The content of the file
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<Codex.IChunkReference> Codex.IChunkedSourceFile.Chunks {
+            get {
+                return this.Chunks;
+            }
+        }
+        
+        /// <summary>
+        /// The content of the file
+        /// </summary>
+        public virtual System.Collections.Generic.List<ChunkReference> Chunks {
+            get {
+                return this.m_Chunks;
+            }
+            set {
+                this.m_Chunks = value;
+            }
+        }
+        
+        public virtual TTarget CopyFrom<TTarget>(Codex.IChunkedSourceFile value)
+            where TTarget : ChunkedSourceFile {
+            this.m_Chunks = new System.Collections.Generic.List<ChunkReference>(System.Linq.Enumerable.Select(((Codex.IChunkedSourceFile)(value)).Chunks, v => EntityUtilities.NullOrCopy(v, _v => new ChunkReference().CopyFrom<ChunkReference>(_v))));
+            base.CopyFrom<SourceFileBase>(((Codex.ISourceFileBase)(value)));
+            return ((TTarget)(this));
+        }
+    }
+    
+    [Codex.SerializationInterfaceAttribute(typeof(Codex.IChunkReference))]
+    public partial class ChunkReference : Codex.EntityBase, Codex.IChunkReference {
+        
+        private string m_Id;
+        
+        private int m_StartLineNumber;
+        
+        public ChunkReference() {
+            Initialize();
+        }
+        
+        public ChunkReference(Codex.IChunkReference value) {
+            Initialize();
+            this.CopyFrom<ChunkReference>(value);
+        }
+        
+        public virtual string Id {
+            get {
+                return this.m_Id;
+            }
+            set {
+                this.m_Id = value;
+            }
+        }
+        
+        public virtual int StartLineNumber {
+            get {
+                return this.m_StartLineNumber;
+            }
+            set {
+                this.m_StartLineNumber = value;
+            }
+        }
+        
+        public virtual TTarget CopyFrom<TTarget>(Codex.IChunkReference value)
+            where TTarget : ChunkReference {
+            this.m_Id = ((Codex.IChunkReference)(value)).Id;
+            this.m_StartLineNumber = ((Codex.IChunkReference)(value)).StartLineNumber;
+            return ((TTarget)(this));
+        }
+    }
+    
+    /// <summary>
+    /// Defines a chunk of text lines from a source file
+    /// </summary>s
+    [Codex.SerializationInterfaceAttribute(typeof(Codex.ISourceFileContentChunk))]
+    public partial class SourceFileContentChunk : Codex.EntityBase, Codex.ISourceFileContentChunk {
+        
+        private System.Collections.Generic.List<string> m_ContentLines = new System.Collections.Generic.List<string>();
+        
+        public SourceFileContentChunk() {
+            Initialize();
+        }
+        
+        public SourceFileContentChunk(Codex.ISourceFileContentChunk value) {
+            Initialize();
+            this.CopyFrom<SourceFileContentChunk>(value);
+        }
+        
+        /// <summary>
+        /// Lines defined as part of the chunk
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<string> Codex.ISourceFileContentChunk.ContentLines {
+            get {
+                return this.ContentLines;
+            }
+        }
+        
+        /// <summary>
+        /// Lines defined as part of the chunk
+        /// </summary>
+        public virtual System.Collections.Generic.List<string> ContentLines {
+            get {
+                return this.m_ContentLines;
+            }
+            set {
+                this.m_ContentLines = value;
+            }
+        }
+        
+        public virtual TTarget CopyFrom<TTarget>(Codex.ISourceFileContentChunk value)
+            where TTarget : SourceFileContentChunk {
+            this.m_ContentLines = new System.Collections.Generic.List<string>(((Codex.ISourceFileContentChunk)(value)).ContentLines);
             return ((TTarget)(this));
         }
     }
@@ -2317,6 +2476,10 @@ namespace Codex.ObjectModel {
             }
         }
         
+        public override string GetRoutingKey() {
+            return this.GetRoutingKey(Codex.SearchTypes.StableIdMarker, this);
+        }
+        
         public virtual TTarget CopyFrom<TTarget>(Codex.IStableIdMarker value)
             where TTarget : StableIdMarker {
             this.m_NextValue = ((Codex.IStableIdMarker)(value)).NextValue;
@@ -3193,6 +3356,10 @@ namespace Codex.ObjectModel {
             }
         }
         
+        public override string GetRoutingKey() {
+            return this.GetRoutingKey(Codex.SearchTypes.Property, this);
+        }
+        
         public virtual TTarget CopyFrom<TTarget>(Codex.IPropertySearchModel value)
             where TTarget : PropertySearchModel {
             this.m_Key = ((Codex.IPropertySearchModel)(value)).Key;
@@ -3425,8 +3592,6 @@ namespace Codex.ObjectModel {
         
         private string m_SortKey;
         
-        private string m_RoutingKey;
-        
         public SearchEntity() {
             Initialize();
         }
@@ -3487,7 +3652,7 @@ namespace Codex.ObjectModel {
         /// Entities are split into separate groups (specified by an integral value) which in turn
         /// are sent to specific shards based on the ElasticSearch routing policy (i.e. the routing value is
         /// determined by this value)
-        /// NOTE: This value is derived from <see cref="P:Codex.ISearchEntity.RoutingKey" />
+        /// NOTE: This value is derived from <see cref="!:RoutingKey" />
         /// </summary>
         public virtual int RoutingGroup {
             get {
@@ -3523,20 +3688,6 @@ namespace Codex.ObjectModel {
             }
         }
         
-        /// <summary>
-        /// Value used for routing (this should be computed based other values in the entity i.e. {FileName} for files)
-        /// The goal is so that similar entities should be routed to same shard to allow maximum compression
-        /// This should be composed into uid
-        /// </summary>
-        public virtual string RoutingKey {
-            get {
-                return this.m_RoutingKey;
-            }
-            set {
-                this.m_RoutingKey = value;
-            }
-        }
-        
         public virtual TTarget CopyFrom<TTarget>(Codex.ISearchEntity value)
             where TTarget : SearchEntity {
             this.m_Uid = ((Codex.ISearchEntity)(value)).Uid;
@@ -3546,7 +3697,6 @@ namespace Codex.ObjectModel {
             this.m_RoutingGroup = ((Codex.ISearchEntity)(value)).RoutingGroup;
             this.m_StableId = ((Codex.ISearchEntity)(value)).StableId;
             this.m_SortKey = ((Codex.ISearchEntity)(value)).SortKey;
-            this.m_RoutingKey = ((Codex.ISearchEntity)(value)).RoutingKey;
             return ((TTarget)(this));
         }
     }
@@ -3867,6 +4017,10 @@ namespace Codex.ObjectModel {
             }
         }
         
+        public override string GetRoutingKey() {
+            return this.GetRoutingKey(Codex.SearchTypes.RegisteredEntity, this);
+        }
+        
         public virtual TTarget CopyFrom<TTarget>(Codex.IRegisteredEntity value)
             where TTarget : RegisteredEntity {
             this.m_DateAdded = ((Codex.IRegisteredEntity)(value)).DateAdded;
@@ -4004,6 +4158,10 @@ namespace Codex.ObjectModel {
             set {
                 this.m_Cardinality = value;
             }
+        }
+        
+        public override string GetRoutingKey() {
+            return this.GetRoutingKey(Codex.SearchTypes.StoredFilter, this);
         }
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IStoredFilter value)
@@ -4172,6 +4330,10 @@ namespace Codex.ObjectModel {
             }
         }
         
+        public override string GetRoutingKey() {
+            return this.GetRoutingKey(Codex.SearchTypes.Definition, this);
+        }
+        
         public virtual TTarget CopyFrom<TTarget>(Codex.IDefinitionSearchModel value)
             where TTarget : DefinitionSearchModel {
             this.m_Definition = EntityUtilities.NullOrCopy(value.Definition, v => new DefinitionSymbol().CopyFrom<DefinitionSymbol>(v));;
@@ -4210,6 +4372,10 @@ namespace Codex.ObjectModel {
             set {
                 this.m_Language = value;
             }
+        }
+        
+        public override string GetRoutingKey() {
+            return this.GetRoutingKey(Codex.SearchTypes.Language, this);
         }
         
         public virtual TTarget CopyFrom<TTarget>(Codex.ILanguageSearchModel value)
@@ -4360,6 +4526,10 @@ namespace Codex.ObjectModel {
             }
         }
         
+        public override string GetRoutingKey() {
+            return this.GetRoutingKey(Codex.SearchTypes.Reference, this);
+        }
+        
         public virtual TTarget CopyFrom<TTarget>(Codex.IRepoScopeEntity value)
             where TTarget : ReferenceSearchModel {
             this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
@@ -4406,6 +4576,8 @@ namespace Codex.ObjectModel {
         
         private SourceControlFileInfo m_SourceControlInfo;
         
+        private ChunkedSourceFile m_File;
+        
         public SourceSearchModelBase() {
         }
         
@@ -4438,9 +4610,25 @@ namespace Codex.ObjectModel {
             }
         }
         
+        Codex.IChunkedSourceFile Codex.ISourceSearchModelBase.File {
+            get {
+                return this.File;
+            }
+        }
+        
+        public virtual ChunkedSourceFile File {
+            get {
+                return this.m_File;
+            }
+            set {
+                this.m_File = value;
+            }
+        }
+        
         public virtual TTarget CopyFrom<TTarget>(Codex.ISourceSearchModelBase value)
             where TTarget : SourceSearchModelBase {
             this.m_SourceControlInfo = EntityUtilities.NullOrCopy(value.SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
+            this.m_File = EntityUtilities.NullOrCopy(value.File, v => new ChunkedSourceFile().CopyFrom<ChunkedSourceFile>(v));;
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
             return ((TTarget)(this));
         }
@@ -4451,8 +4639,6 @@ namespace Codex.ObjectModel {
         
         private string m_TextUid;
         
-        private SourceFileInfo m_SourceInfo;
-        
         private BoundSourceInfo m_BindingInfo;
         
         private Codex.IClassificationList m_CompressedClassifications;
@@ -4460,6 +4646,8 @@ namespace Codex.ObjectModel {
         private Codex.IReferenceList m_CompressedReferences;
         
         private SourceControlFileInfo m_SourceControlInfo;
+        
+        private ChunkedSourceFile m_File;
         
         public BoundSourceSearchModel() {
         }
@@ -4485,27 +4673,6 @@ namespace Codex.ObjectModel {
             }
             set {
                 this.m_TextUid = value;
-            }
-        }
-        
-        /// <summary>
-        /// Information about the source file
-        /// </summary>
-        Codex.ISourceFileInfo Codex.IBoundSourceSearchModel.SourceInfo {
-            get {
-                return this.SourceInfo;
-            }
-        }
-        
-        /// <summary>
-        /// Information about the source file
-        /// </summary>
-        public virtual SourceFileInfo SourceInfo {
-            get {
-                return this.m_SourceInfo;
-            }
-            set {
-                this.m_SourceInfo = value;
             }
         }
         
@@ -4575,21 +4742,41 @@ namespace Codex.ObjectModel {
             }
         }
         
+        Codex.IChunkedSourceFile Codex.ISourceSearchModelBase.File {
+            get {
+                return this.File;
+            }
+        }
+        
+        public virtual ChunkedSourceFile File {
+            get {
+                return this.m_File;
+            }
+            set {
+                this.m_File = value;
+            }
+        }
+        
+        public override string GetRoutingKey() {
+            return this.GetRoutingKey(Codex.SearchTypes.BoundSource, this);
+        }
+        
         public virtual TTarget CopyFrom<TTarget>(Codex.ISourceSearchModelBase value)
             where TTarget : BoundSourceSearchModel {
             this.m_SourceControlInfo = EntityUtilities.NullOrCopy(value.SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
+            this.m_File = EntityUtilities.NullOrCopy(value.File, v => new ChunkedSourceFile().CopyFrom<ChunkedSourceFile>(v));;
             return ((TTarget)(this));
         }
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IBoundSourceSearchModel value)
             where TTarget : BoundSourceSearchModel {
             this.m_TextUid = ((Codex.IBoundSourceSearchModel)(value)).TextUid;
-            this.m_SourceInfo = EntityUtilities.NullOrCopy(value.SourceInfo, v => new SourceFileInfo().CopyFrom<SourceFileInfo>(v));;
             this.m_BindingInfo = EntityUtilities.NullOrCopy(value.BindingInfo, v => new BoundSourceInfo().CopyFrom<BoundSourceInfo>(v));;
             this.m_CompressedClassifications = ((Codex.IBoundSourceSearchModel)(value)).CompressedClassifications;
             this.m_CompressedReferences = ((Codex.IBoundSourceSearchModel)(value)).CompressedReferences;
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
             this.m_SourceControlInfo = EntityUtilities.NullOrCopy(value.SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
+            this.m_File = EntityUtilities.NullOrCopy(value.File, v => new ChunkedSourceFile().CopyFrom<ChunkedSourceFile>(v));;
             return ((TTarget)(this));
         }
     }
@@ -4597,9 +4784,9 @@ namespace Codex.ObjectModel {
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ITextSourceSearchModel))]
     public partial class TextSourceSearchModel : SearchEntity, Codex.ITextSourceSearchModel {
         
-        private SourceFile m_File;
-        
         private SourceControlFileInfo m_SourceControlInfo;
+        
+        private ChunkedSourceFile m_File;
         
         public TextSourceSearchModel() {
         }
@@ -4614,21 +4801,6 @@ namespace Codex.ObjectModel {
         
         public TextSourceSearchModel(Codex.ISourceSearchModelBase value) {
             this.CopyFrom<TextSourceSearchModel>(value);
-        }
-        
-        Codex.ISourceFile Codex.ITextSourceSearchModel.File {
-            get {
-                return this.File;
-            }
-        }
-        
-        public virtual SourceFile File {
-            get {
-                return this.m_File;
-            }
-            set {
-                this.m_File = value;
-            }
         }
         
         /// <summary>
@@ -4652,17 +4824,110 @@ namespace Codex.ObjectModel {
             }
         }
         
+        Codex.IChunkedSourceFile Codex.ISourceSearchModelBase.File {
+            get {
+                return this.File;
+            }
+        }
+        
+        public virtual ChunkedSourceFile File {
+            get {
+                return this.m_File;
+            }
+            set {
+                this.m_File = value;
+            }
+        }
+        
+        public override string GetRoutingKey() {
+            return this.GetRoutingKey(Codex.SearchTypes.TextSource, this);
+        }
+        
         public virtual TTarget CopyFrom<TTarget>(Codex.ISourceSearchModelBase value)
             where TTarget : TextSourceSearchModel {
             this.m_SourceControlInfo = EntityUtilities.NullOrCopy(value.SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
+            this.m_File = EntityUtilities.NullOrCopy(value.File, v => new ChunkedSourceFile().CopyFrom<ChunkedSourceFile>(v));;
             return ((TTarget)(this));
         }
         
         public virtual TTarget CopyFrom<TTarget>(Codex.ITextSourceSearchModel value)
             where TTarget : TextSourceSearchModel {
-            this.m_File = EntityUtilities.NullOrCopy(value.File, v => new SourceFile().CopyFrom<SourceFile>(v));;
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
             this.m_SourceControlInfo = EntityUtilities.NullOrCopy(value.SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
+            this.m_File = EntityUtilities.NullOrCopy(value.File, v => new ChunkedSourceFile().CopyFrom<ChunkedSourceFile>(v));;
+            return ((TTarget)(this));
+        }
+    }
+    
+    [Codex.SerializationInterfaceAttribute(typeof(Codex.ITextChunkSearchModel))]
+    public partial class TextChunkSearchModel : SearchEntity, Codex.ITextChunkSearchModel {
+        
+        private SourceFileContentChunk m_Chunk;
+        
+        private SourceFileContentChunk m_RawChunk;
+        
+        public TextChunkSearchModel() {
+        }
+        
+        public TextChunkSearchModel(Codex.ITextChunkSearchModel value) {
+            this.CopyFrom<TextChunkSearchModel>(value);
+        }
+        
+        public TextChunkSearchModel(Codex.ISearchEntity value) : 
+                base(value) {
+        }
+        
+        /// <summary>
+        /// The text content. Set when the chunk IS searched
+        /// </summary>
+        Codex.ISourceFileContentChunk Codex.ITextChunkSearchModel.Chunk {
+            get {
+                return this.Chunk;
+            }
+        }
+        
+        /// <summary>
+        /// The text content. Set when the chunk IS searched
+        /// </summary>
+        public virtual SourceFileContentChunk Chunk {
+            get {
+                return this.m_Chunk;
+            }
+            set {
+                this.m_Chunk = value;
+            }
+        }
+        
+        /// <summary>
+        /// The text content. Set when the chunk IS NOT searched
+        /// </summary>
+        Codex.ISourceFileContentChunk Codex.ITextChunkSearchModel.RawChunk {
+            get {
+                return this.RawChunk;
+            }
+        }
+        
+        /// <summary>
+        /// The text content. Set when the chunk IS NOT searched
+        /// </summary>
+        public virtual SourceFileContentChunk RawChunk {
+            get {
+                return this.m_RawChunk;
+            }
+            set {
+                this.m_RawChunk = value;
+            }
+        }
+        
+        public override string GetRoutingKey() {
+            return this.GetRoutingKey(Codex.SearchTypes.TextChunk, this);
+        }
+        
+        public virtual TTarget CopyFrom<TTarget>(Codex.ITextChunkSearchModel value)
+            where TTarget : TextChunkSearchModel {
+            this.m_Chunk = EntityUtilities.NullOrCopy(value.Chunk, v => new SourceFileContentChunk().CopyFrom<SourceFileContentChunk>(v));;
+            this.m_RawChunk = EntityUtilities.NullOrCopy(value.RawChunk, v => new SourceFileContentChunk().CopyFrom<SourceFileContentChunk>(v));;
+            base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
             return ((TTarget)(this));
         }
     }
@@ -4696,6 +4961,10 @@ namespace Codex.ObjectModel {
             set {
                 this.m_Repository = value;
             }
+        }
+        
+        public override string GetRoutingKey() {
+            return this.GetRoutingKey(Codex.SearchTypes.Repository, this);
         }
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IRepositorySearchModel value)
@@ -4735,6 +5004,10 @@ namespace Codex.ObjectModel {
             set {
                 this.m_Project = value;
             }
+        }
+        
+        public override string GetRoutingKey() {
+            return this.GetRoutingKey(Codex.SearchTypes.Project, this);
         }
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IProjectSearchModel value)
@@ -4812,6 +5085,10 @@ namespace Codex.ObjectModel {
             }
         }
         
+        public override string GetRoutingKey() {
+            return this.GetRoutingKey(Codex.SearchTypes.ProjectReference, this);
+        }
+        
         public virtual TTarget CopyFrom<TTarget>(Codex.IRepoScopeEntity value)
             where TTarget : ProjectReferenceSearchModel {
             this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
@@ -4863,6 +5140,10 @@ namespace Codex.ObjectModel {
             set {
                 this.m_Commit = value;
             }
+        }
+        
+        public override string GetRoutingKey() {
+            return this.GetRoutingKey(Codex.SearchTypes.Commit, this);
         }
         
         public virtual TTarget CopyFrom<TTarget>(Codex.ICommitSearchModel value)
@@ -4942,6 +5223,10 @@ namespace Codex.ObjectModel {
             set {
                 this.m_RepositoryName = value;
             }
+        }
+        
+        public override string GetRoutingKey() {
+            return this.GetRoutingKey(Codex.SearchTypes.CommitFiles, this);
         }
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IRepoScopeEntity value)
@@ -5758,7 +6043,11 @@ namespace Codex.Framework.Types {
     using SourceControlFileInfo = Codex.ObjectModel.SourceControlFileInfo;
     using SourceFileInfo = Codex.ObjectModel.SourceFileInfo;
     using EncodingDescription = Codex.ObjectModel.EncodingDescription;
+    using SourceFileBase = Codex.ObjectModel.SourceFileBase;
     using SourceFile = Codex.ObjectModel.SourceFile;
+    using ChunkedSourceFile = Codex.ObjectModel.ChunkedSourceFile;
+    using ChunkReference = Codex.ObjectModel.ChunkReference;
+    using SourceFileContentChunk = Codex.ObjectModel.SourceFileContentChunk;
     using OutliningRegion = Codex.ObjectModel.OutliningRegion;
     using DefinitionSpan = Codex.ObjectModel.DefinitionSpan;
     using ParameterDefinitionSpan = Codex.ObjectModel.ParameterDefinitionSpan;
@@ -5806,6 +6095,7 @@ namespace Codex.Framework.Types {
     using SourceSearchModelBase = Codex.ObjectModel.SourceSearchModelBase;
     using BoundSourceSearchModel = Codex.ObjectModel.BoundSourceSearchModel;
     using TextSourceSearchModel = Codex.ObjectModel.TextSourceSearchModel;
+    using TextChunkSearchModel = Codex.ObjectModel.TextChunkSearchModel;
     using RepositorySearchModel = Codex.ObjectModel.RepositorySearchModel;
     using ProjectSearchModel = Codex.ObjectModel.ProjectSearchModel;
     using ProjectReferenceSearchModel = Codex.ObjectModel.ProjectReferenceSearchModel;

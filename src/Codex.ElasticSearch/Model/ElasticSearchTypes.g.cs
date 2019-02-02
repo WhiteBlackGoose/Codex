@@ -17,6 +17,8 @@ namespace Codex.ElasticSearch {
         
         private ElasticSearchEntityStore<Codex.IReferenceSearchModel> m_ReferenceStore;
         
+        private ElasticSearchEntityStore<Codex.ITextChunkSearchModel> m_TextChunkStore;
+        
         private ElasticSearchEntityStore<Codex.ITextSourceSearchModel> m_TextSourceStore;
         
         private ElasticSearchEntityStore<Codex.IBoundSourceSearchModel> m_BoundSourceStore;
@@ -50,6 +52,12 @@ namespace Codex.ElasticSearch {
         public virtual ElasticSearchEntityStore<Codex.IReferenceSearchModel> ReferenceStore {
             get {
                 return this.m_ReferenceStore;
+            }
+        }
+        
+        public virtual ElasticSearchEntityStore<Codex.ITextChunkSearchModel> TextChunkStore {
+            get {
+                return this.m_TextChunkStore;
             }
         }
         
@@ -128,6 +136,7 @@ namespace Codex.ElasticSearch {
         public virtual async System.Threading.Tasks.Task InitializeAsync() {
             m_DefinitionStore = await this.CreateStoreAsync<Codex.IDefinitionSearchModel>(Codex.SearchTypes.Definition);
             m_ReferenceStore = await this.CreateStoreAsync<Codex.IReferenceSearchModel>(Codex.SearchTypes.Reference);
+            m_TextChunkStore = await this.CreateStoreAsync<Codex.ITextChunkSearchModel>(Codex.SearchTypes.TextChunk);
             m_TextSourceStore = await this.CreateStoreAsync<Codex.ITextSourceSearchModel>(Codex.SearchTypes.TextSource);
             m_BoundSourceStore = await this.CreateStoreAsync<Codex.IBoundSourceSearchModel>(Codex.SearchTypes.BoundSource);
             m_LanguageStore = await this.CreateStoreAsync<Codex.ILanguageSearchModel>(Codex.SearchTypes.Language);
@@ -145,6 +154,7 @@ namespace Codex.ElasticSearch {
         public virtual async System.Threading.Tasks.Task FinalizeAsync() {
             await m_DefinitionStore.FinalizeAsync();
             await m_ReferenceStore.FinalizeAsync();
+            await m_TextChunkStore.FinalizeAsync();
             await m_TextSourceStore.FinalizeAsync();
             await m_BoundSourceStore.FinalizeAsync();
             await m_LanguageStore.FinalizeAsync();

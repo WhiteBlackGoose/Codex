@@ -211,5 +211,44 @@ namespace Codex.Utilities
 
             return value;
         }
+
+        public static Dictionary<TKey, TValue> ToDictionarySafe<TValue, TKey>(this IEnumerable<TValue> source, Func<TValue, TKey> keySelector)
+        {
+            Dictionary<TKey, TValue> result = new Dictionary<TKey, TValue>();
+
+            foreach (var element in source)
+            {
+                var key = keySelector(element);
+
+                if (!result.ContainsKey(key))
+                {
+                    result.Add(key, element);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Converts sequence to dictionary, but accepts duplicate keys. First will win.
+        /// </summary>
+        public static Dictionary<TKey, TValue> ToDictionarySafe<T, TKey, TValue>(this IEnumerable<T> source, Func<T, TKey> keySelector,
+            Func<T, TValue> valueSelector)
+        {
+            Dictionary<TKey, TValue> result = new Dictionary<TKey, TValue>();
+
+            foreach (var element in source)
+            {
+                var key = keySelector(element);
+                var value = valueSelector(element);
+
+                if (!result.ContainsKey(key))
+                {
+                    result.Add(key, value);
+                }
+            }
+
+            return result;
+        }
     }
 }

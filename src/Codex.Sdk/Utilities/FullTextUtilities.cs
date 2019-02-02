@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Codex.ObjectModel;
+using Codex.Sdk.Utilities;
 
 namespace Codex.Storage.Utilities
 {
@@ -15,6 +17,7 @@ namespace Codex.Storage.Utilities
         public const string HighlightEndTagCharString = "\u0002";
         private const string HighlightStartTag = "<em>";
         private const string HighlightEndTag = "</em>";
+        private const int MaxLineEncodingDistance = 40;
         private static readonly char[] NewLineChars = new[] { '\n', '\r' };
 
         public static string Capitalize(this string s)
@@ -47,7 +50,7 @@ namespace Codex.Storage.Utilities
             return StartOfLineSpecifierChar + lineSpecifier + EndOfLineSpecifierChar;
         }
 
-        public static IEnumerable<TextLineSpan> ParseHighlightSpans(string highlight)
+        public static IEnumerable<TextLineSpan> ParseHighlightSpans(string highlight, int lineOffset = 0)
         {
             highlight = highlight.Replace(HighlightStartTag, HighlightStartTagCharString);
             highlight = highlight.Replace(HighlightEndTag, HighlightEndTagCharString);
@@ -115,6 +118,7 @@ namespace Codex.Storage.Utilities
 
                         currentSpan.LineSpanText = builder.ToString();
                         currentSpan.LineSpanText = currentSpan.LineSpanText.Trim();
+                        currentSpan.LineIndex += lineOffset;
                         spans.Add(currentSpan);
                         currentSpan = new SymbolSpan();
                         builder.Clear();
@@ -206,14 +210,35 @@ namespace Codex.Storage.Utilities
             return sourceFile;
         }
 
-        public static string DecodeFullTextString(string str)
+        public static void DecodeFullText(string str, StringBuilder stringBuilder)
+        {
+            for (int i = 0; i < str.Length; i++)
+            {
+                if (str[i] == StartOfLineSpecifierChar)
+                {
+                    for (i = i + 1; i < str.Length; i++)
+                    {
+                        if (str[i] == EndOfLineSpecifierChar)
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    stringBuilder.Append(str[i]);
+                }
+            }
+        }
+
+        public static string DecodeFullTextString(string str, StringBuilder stringBuilder = null)
         {
             if (string.IsNullOrEmpty(str))
             {
                 return str;
             }
 
-            var stringBuilder = new StringBuilder();
+            stringBuilder = stringBuilder ?? new StringBuilder();
             for (int i = 0; i < str.Length; i++)
             {
                 if (str[i] == StartOfLineSpecifierChar)
@@ -235,6 +260,53 @@ namespace Codex.Storage.Utilities
             return stringBuilder.ToString();
         }
 
+        public static void DecodeFullText(List<string> contentLines)
+        {
+            if (contentLines == null)
+            {
+                return;
+            }
+
+            using (var lease = Pools.EncoderContextPool.Acquire())
+            {
+                EncoderContext context = lease.Instance;
+                var sb = context.StringBuilder;
+                for (int lineNumber = 0; lineNumber < contentLines.Count; lineNumber++)
+                {
+                    sb.Clear();
+                    contentLines[lineNumber] = DecodeFullTextString(contentLines[lineNumber], sb);
+                }
+            }
+        }
+
+        public static void EncodeFullText(List<string> contentLines)
+        {
+            if (contentLines == null)
+            {
+                return;
+            }
+
+            using (var lease = Pools.EncoderContextPool.Acquire())
+            {
+                EncoderContext context = lease.Instance;
+                var sb = context.StringBuilder;
+                for (int lineNumber = 0; lineNumber < contentLines.Count; lineNumber++)
+                {
+                    sb.Clear();
+                    var line = contentLines[lineNumber];
+                    var remaining = line.Length;
+                    while (remaining >= 0)
+                    {
+                        EncodeLineNumber(lineNumber, sb);
+                        sb.Append(line, line.Length - remaining, Math.Min(remaining, MaxLineEncodingDistance));
+                        remaining -= MaxLineEncodingDistance;
+                    }
+
+                    contentLines[lineNumber] = sb.ToString();
+                }
+            }
+        }
+
         public static string EncodeFullTextString(string str)
         {
             if (string.IsNullOrEmpty(str))
@@ -254,7 +326,7 @@ namespace Codex.Storage.Utilities
                     EncodeAndIncrementLineNumber(ref lineNumber, stringBuilder);
                     lineEncodingDistance = 0;
                 }
-                else if (lineEncodingDistance > 40 && char.IsWhiteSpace(str[i]))
+                else if (lineEncodingDistance > MaxLineEncodingDistance && char.IsWhiteSpace(str[i]))
                 {
                     EncodeLineNumber(lineNumber - 1, stringBuilder);
                     lineEncodingDistance = 0;

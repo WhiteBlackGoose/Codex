@@ -138,35 +138,37 @@ namespace Codex.ElasticSearch.Search
 
                 var boundResults = await client.SearchAsync<BoundSourceSearchModel>(sd => sd
                     .StoredFilterSearch(context, IndexName(SearchTypes.BoundSource), qcd => qcd.Bool(bq => bq.Filter(
-                            fq => fq.Term(s => s.BindingInfo.ProjectId, arguments.ProjectId),
-                            fq => fq.Term(s => s.BindingInfo.ProjectRelativePath, arguments.ProjectRelativePath))))
+                            fq => fq.Term(s => s.File.Info.ProjectId, arguments.ProjectId),
+                            fq => fq.Term(s => s.File.Info.ProjectRelativePath, arguments.ProjectRelativePath))))
                     .Take(1))
                 .ThrowOnFailure();
 
                 if (boundResults.Hits.Count != 0)
                 {
                     var boundSearchModel = boundResults.Hits.First().Source;
-                    var textResults = await client.GetAsync<TextSourceSearchModel>(boundSearchModel.TextUid,
-                        gd => gd.Index(Configuration.Prefix + SearchTypes.TextSource.IndexName)
-                                .Routing(GetRouting(boundSearchModel.TextUid)))
-                    .ThrowOnFailure();
+                    //var textResults = await client.GetAsync<TextSourceSearchModel>(boundSearchModel.TextUid,
+                    //    gd => gd.Index(Configuration.Prefix + SearchTypes.TextSource.IndexName)
+                    //            .Routing(GetRouting(boundSearchModel.TextUid)))
+                    //.ThrowOnFailure();
+
+                    var chunks = await Service.GetAsync(SearchTypes.TextChunk, IndexName(SearchTypes.TextChunk), boundSearchModel.File.Chunks.SelectList(c => c.Id));
 
                     var repoResults = await client.SearchAsync<RepositorySearchModel>(sd => sd
                         .StoredFilterSearch(context, IndexName(SearchTypes.Repository), qcd => qcd.Bool(bq => bq.Filter(
-                                fq => fq.Term(s => s.Repository.Name, boundSearchModel.BindingInfo.RepositoryName))))
+                                fq => fq.Term(s => s.Repository.Name, boundSearchModel.File.Info.RepositoryName))))
                         .Take(1))
                     .ThrowOnFailure();
 
                     var commitResults = await client.SearchAsync<CommitSearchModel>(sd => sd
                         .StoredFilterSearch(context, IndexName(SearchTypes.Commit), qcd => qcd.Bool(bq => bq.Filter(
-                                fq => fq.Term(s => s.Commit.RepositoryName, boundSearchModel.BindingInfo.RepositoryName))))
+                                fq => fq.Term(s => s.Commit.RepositoryName, boundSearchModel.File.Info.RepositoryName))))
                         .Take(1))
                     .ThrowOnFailure();
 
                     var repo = repoResults.Hits.FirstOrDefault()?.Source.Repository;
                     var commit = commitResults.Hits.FirstOrDefault()?.Source.Commit;
 
-                    var sourceFile = textResults.Source.File;
+                    var sourceFile = boundSearchModel.File;
                     if (sourceFile.Info.WebAddress == null
                         && repo?.SourceControlWebAddress != null
                         && sourceFile.Info.RepoRelativePath != null
@@ -178,7 +180,7 @@ namespace Codex.ElasticSearch.Search
 
                     return new BoundSourceFile(boundSearchModel.BindingInfo)
                     {
-                        SourceFile = textResults.Source.File,
+                        SourceFile = TextIndexingUtilities.FromChunks(boundSearchModel.File, chunks),
                         Commit = commit,
                         Repo = repo
                     };
@@ -284,33 +286,39 @@ namespace Codex.ElasticSearch.Search
                 }
 
                 // Fallback to performing text phrase search
+                var textChunkResults = await client.SearchAsync<ITextChunkSearchModel>(
+                    s => s
+                        .StoredFilterSearch(context, IndexName(SearchTypes.TextChunk), f =>
+                            f.Bool(bq =>
+                            bq.Must(qcd => qcd.ConfigureIfElse(isPrefix,
+                                f0 => f0.MatchPhrasePrefix(mpp => mpp.Field(sf => sf.Chunk.ContentLines).Query(searchPhrase).MaxExpansions(100)),
+                                f0 => f0.MatchPhrase(mpp => mpp.Field(sf => sf.Chunk.ContentLines).Query(searchPhrase))))))
+                        .Highlight(h => h.Fields(hf => hf.Field(sf => sf.Chunk.ContentLines).BoundaryCharacters("\n\r")))
+                        .Take(arguments.MaxResults))
+                    .ThrowOnFailure();
+
+                var chunkIds = textChunkResults.Hits.ToDictionarySafe(s => s.Id);
+
                 var textResults = await client.SearchAsync<ITextSourceSearchModel>(
                     s => s
-                        .StoredFilterSearch(context, IndexName(SearchTypes.TextSource), f =>
-                            f.Bool(bq =>
-                            bq.Filter(qcd => !qcd.Term(sf => sf.File.ExcludeFromSearch, true))
-                              .Must(qcd => qcd.ConfigureIfElse(isPrefix,
-                                f0 => f0.MatchPhrasePrefix(mpp => mpp.Field(sf => sf.File.Content).Query(searchPhrase).MaxExpansions(100)),
-                                f0 => f0.MatchPhrase(mpp => mpp.Field(sf => sf.File.Content).Query(searchPhrase))))))
-                        .Highlight(h => h.Fields(hf => hf.Field(sf => sf.File.Content).BoundaryCharacters("\n\r")))
-                        .Source(source => source
-                            .Includes(sd => sd.Fields(
-                                sf => sf.File.Info)))
+                        .StoredFilterSearch(context, IndexName(SearchTypes.TextSource), qcd =>
+                            qcd.Terms(tq => tq.Terms(chunkIds.Keys).Field(tss => tss.File.Chunks.First().Id)))
                         .Take(arguments.MaxResults))
                     .ThrowOnFailure();
 
                 var sourceFileResults =
-                    (from hit in textResults.Hits
-                     from highlightHit in hit.Highlights.Values
-                     from highlight in highlightHit.Highlights
-                     from span in FullTextUtilities.ParseHighlightSpans(highlight)
-                     select new SearchResult()
-                     {
-                         TextLine = new TextLineSpanResult(hit.Source.File.Info)
-                         {
-                             TextSpan = span
-                         }
-                     }).ToList<ISearchResult>();
+                   (from hit in textResults.Hits
+                    from chunkHit in hit.Source.File.Chunks.Select(c => (hit: chunkIds.GetOrDefault(c.Id), c.StartLineNumber)).Where(h => h.hit != null)
+                    from highlightHit in chunkHit.hit.Highlights.Values
+                    from highlight in highlightHit.Highlights
+                    from span in FullTextUtilities.ParseHighlightSpans(highlight, lineOffset: chunkHit.StartLineNumber)
+                    select new SearchResult()
+                    {
+                        TextLine = new TextLineSpanResult(hit.Source.File.Info)
+                        {
+                            TextSpan = span
+                        }
+                    }).ToList<ISearchResult>();
 
                 return new IndexQueryHits<ISearchResult>()
                 {

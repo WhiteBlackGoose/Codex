@@ -39,6 +39,7 @@ namespace Codex.Framework.Generation
         public bool IsAdapter;
 
         public List<TypeDefinition> Interfaces = new List<TypeDefinition>();
+        public SearchType SearchType;
 
         public TypeDefinition(Type type)
         {

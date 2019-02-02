@@ -13,21 +13,11 @@ namespace Codex.ElasticSearch.Utilities
         {
             var sourceFileInfo = boundSourceFile.SourceFile.Info;
 
-            boundSourceFile.RepositoryName = boundSourceFile.RepositoryName ?? sourceFileInfo.RepositoryName;
-            sourceFileInfo.RepositoryName = boundSourceFile.RepositoryName;
-
-            boundSourceFile.RepoRelativePath = boundSourceFile.RepoRelativePath ?? sourceFileInfo.RepoRelativePath;
-            sourceFileInfo.RepoRelativePath = boundSourceFile.RepoRelativePath;
-
             // TODO: These properties should not be defined on ISourceFileInfo as they require binding information
             boundSourceFile.Language = boundSourceFile.Language ?? sourceFileInfo.Language;
-            boundSourceFile.ProjectRelativePath = boundSourceFile.ProjectRelativePath ?? sourceFileInfo.ProjectRelativePath;
-            boundSourceFile.ProjectId = boundSourceFile.ProjectId ?? sourceFileInfo.ProjectId;
 
             // Apply the final versions of the properties to the source file info
             sourceFileInfo.Language = boundSourceFile.Language;
-            sourceFileInfo.ProjectRelativePath = boundSourceFile.ProjectRelativePath;
-            sourceFileInfo.ProjectId = boundSourceFile.ProjectId;
 
             return boundSourceFile;
         }

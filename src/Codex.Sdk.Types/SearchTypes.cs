@@ -24,7 +24,7 @@ namespace Codex
     {
         public static readonly List<SearchType> RegisteredSearchTypes = new List<SearchType>();
 
-        public static SearchType Definition = SearchType.Create<IDefinitionSearchModel>(RegisteredSearchTypes)
+        public static SearchType<IDefinitionSearchModel> Definition = SearchType.Create<IDefinitionSearchModel>(RegisteredSearchTypes)
             .Route(ds => ds.Definition.Id.Value);
         //.CopyTo(ds => ds.Definition.Modifiers, ds => ds.Keywords)
         //.CopyTo(ds => ds.Definition.Kind, ds => ds.Kind)
@@ -35,9 +35,12 @@ namespace Codex
         //.CopyTo(ds => ds.Definition.ProjectId, ds => ds.ProjectId)
         //.CopyTo(ds => ds.Definition.ProjectId, ds => ds.Keywords);
 
-        public static SearchType Reference = SearchType.Create<IReferenceSearchModel>(RegisteredSearchTypes)
+        public static SearchType<IReferenceSearchModel> Reference = SearchType.Create<IReferenceSearchModel>(RegisteredSearchTypes)
             .Route(rs => rs.Reference.Id.Value);
         //.CopyTo(rs => rs.Spans.First().Reference, rs => rs.Reference);
+
+
+        public static SearchType<ITextChunkSearchModel> TextChunk = SearchType.Create<ITextChunkSearchModel>(RegisteredSearchTypes);
 
         public static SearchType<ITextSourceSearchModel> TextSource = SearchType.Create<ITextSourceSearchModel>(RegisteredSearchTypes)
             .Route(ss => PathUtilities.GetFileName(ss.File.Info.RepoRelativePath));
@@ -47,36 +50,36 @@ namespace Codex
         //.CopyTo(ss => ss.File.Info.Path, ss => ss.FilePath);
 
         public static SearchType<IBoundSourceSearchModel> BoundSource = SearchType.Create<IBoundSourceSearchModel>(RegisteredSearchTypes)
-            .Route(ss => PathUtilities.GetFileName(ss.BindingInfo.RepoRelativePath));
+            .Route(ss => PathUtilities.GetFileName(ss.File.Info.RepoRelativePath));
         //.CopyTo(ss => ss.File.SourceFile.Content, ss => ss.Content)
         //.CopyTo(ss => ss.File.SourceFile.Info.RepoRelativePath, ss => ss.RepoRelativePath)
         //.CopyTo(ss => ss.BindingInfo.ProjectId, ss => ss.ProjectId)
         //.CopyTo(ss => ss.FilePath, ss => ss.FilePath);
 
-        public static SearchType Language = SearchType.Create<ILanguageSearchModel>(RegisteredSearchTypes)
+        public static SearchType<ILanguageSearchModel> Language = SearchType.Create<ILanguageSearchModel>(RegisteredSearchTypes)
             .Route(ls => ls.Language.Name);
 
-        public static SearchType Repository = SearchType.Create<IRepositorySearchModel>(RegisteredSearchTypes)
+        public static SearchType<IRepositorySearchModel> Repository = SearchType.Create<IRepositorySearchModel>(RegisteredSearchTypes)
             .Route(rs => rs.Repository.Name);
 
-        public static SearchType Project = SearchType.Create<IProjectSearchModel>(RegisteredSearchTypes)
+        public static SearchType<IProjectSearchModel> Project = SearchType.Create<IProjectSearchModel>(RegisteredSearchTypes)
             .Route(sm => sm.Project.ProjectId)
             .Exclude(sm => sm.Project.ProjectReferences.First().Definitions);
 
-        public static SearchType Commit = SearchType.Create<ICommitSearchModel>(RegisteredSearchTypes);
+        public static SearchType<ICommitSearchModel> Commit = SearchType.Create<ICommitSearchModel>(RegisteredSearchTypes);
 
         // TODO: Should these be one per file to allow mapping text files to their corresponding project for text search
-        public static SearchType CommitFiles = SearchType.Create<ICommitFilesSearchModel>(RegisteredSearchTypes);
+        public static SearchType<ICommitFilesSearchModel> CommitFiles = SearchType.Create<ICommitFilesSearchModel>(RegisteredSearchTypes);
 
-        public static SearchType ProjectReference = SearchType.Create<IProjectReferenceSearchModel>(RegisteredSearchTypes);
+        public static SearchType<IProjectReferenceSearchModel> ProjectReference = SearchType.Create<IProjectReferenceSearchModel>(RegisteredSearchTypes);
 
-        public static SearchType Property = SearchType.Create<IPropertySearchModel>(RegisteredSearchTypes);
+        public static SearchType<IPropertySearchModel> Property = SearchType.Create<IPropertySearchModel>(RegisteredSearchTypes);
 
-        public static SearchType StoredFilter = SearchType.Create<IStoredFilter>(RegisteredSearchTypes);
+        public static SearchType<IStoredFilter> StoredFilter = SearchType.Create<IStoredFilter>(RegisteredSearchTypes);
 
-        public static SearchType StableIdMarker = SearchType.Create<IStableIdMarker>(RegisteredSearchTypes);
+        public static SearchType<IStableIdMarker> StableIdMarker = SearchType.Create<IStableIdMarker>(RegisteredSearchTypes);
 
-        public static SearchType RegisteredEntity = SearchType.Create<IRegisteredEntity>(RegisteredSearchTypes);
+        public static SearchType<IRegisteredEntity> RegisteredEntity = SearchType.Create<IRegisteredEntity>(RegisteredSearchTypes);
     }
 
     /// <summary>
@@ -222,6 +225,8 @@ namespace Codex
         /// Information about the source file from source control provider (may be null)
         /// </summary>
         ISourceControlFileInfo SourceControlInfo { get; }
+
+        IChunkedSourceFile File { get; }
     }
 
     public interface IBoundSourceSearchModel : ISourceSearchModelBase
@@ -230,11 +235,6 @@ namespace Codex
         /// The unique identifier of the associated <see cref="ISourceFile"/>
         /// </summary>
         string TextUid { get; }
-
-        /// <summary>
-        /// Information about the source file
-        /// </summary>
-        ISourceFileInfo SourceInfo { get; }
 
         /// <summary>
         /// The binding info
@@ -256,7 +256,20 @@ namespace Codex
 
     public interface ITextSourceSearchModel : ISourceSearchModelBase
     {
-        ISourceFile File { get; }
+    }
+
+    public interface ITextChunkSearchModel : ISearchEntity
+    {
+        /// <summary>
+        /// The text content. Set when the chunk IS searched
+        /// </summary>
+        ISourceFileContentChunk Chunk { get; }
+
+        /// <summary>
+        /// The text content. Set when the chunk IS NOT searched
+        /// </summary>
+        [SearchBehavior(SearchBehavior.None)]
+        ISourceFileContentChunk RawChunk { get; }
     }
 
     public interface IRepositorySearchModel : ISearchEntity

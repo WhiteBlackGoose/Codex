@@ -10,7 +10,7 @@ namespace Codex
     /// <summary>
     /// Represents a source file with associated semantic bindings
     /// </summary>
-    public interface IBoundSourceFile : IBoundSourceInfo
+    public partial interface IBoundSourceFile : IBoundSourceInfo
     {
         /// <summary>
         /// The source file
@@ -34,7 +34,7 @@ namespace Codex
         //IReadOnlyList<string> SourceFileContentLines { get; }
     }
 
-    public interface IBoundSourceInfo : IProjectFileScopeEntity
+    public interface IBoundSourceInfo
     {
         /// <summary>
         /// The number of references in the file
@@ -155,28 +155,61 @@ namespace Codex
         byte[] Preamble { get; }
     }
 
-    /// <summary>
-    /// Defines text contents of a file and associated data
-    /// </summary>
-    public interface ISourceFile
+    public interface ISourceFileBase
     {
         /// <summary>
         /// The information about the source file
         /// </summary>
-        [SearchBehavior(SearchBehavior.None)]
         ISourceFileInfo Info { get; }
-
-        /// <summary>
-        /// The content of the file
-        /// </summary>
-        [SearchBehavior(SearchBehavior.FullText)]
-        string Content { get; }
 
         /// <summary>
         /// Indicates that the file should be excluded from text search
         /// </summary>
         [SearchBehavior(SearchBehavior.Term)]
         bool ExcludeFromSearch { get; }
+    }
+
+    /// <summary>
+    /// Defines text contents of a file and associated data
+    /// </summary>
+    public interface ISourceFile : ISourceFileBase
+    {
+        /// <summary>
+        /// The content of the file
+        /// </summary>
+        [SearchBehavior(SearchBehavior.FullText)]
+        string Content { get; }
+    }
+
+    /// <summary>
+    /// Defines text contents of a file and associated data
+    /// </summary>
+    public interface IChunkedSourceFile : ISourceFileBase
+    {
+        /// <summary>
+        /// The content of the file
+        /// </summary>
+        IReadOnlyList<IChunkReference> Chunks { get; }
+    }
+
+    public interface IChunkReference
+    {
+        [SearchBehavior(SearchBehavior.Term)]
+        string Id { get; }
+
+        int StartLineNumber { get; }
+    }
+
+    /// <summary>
+    /// Defines a chunk of text lines from a source file
+    /// </summary>s
+    public interface ISourceFileContentChunk
+    {
+        /// <summary>
+        /// Lines defined as part of the chunk
+        /// </summary>
+        [SearchBehavior(SearchBehavior.FullText)]
+        IReadOnlyList<string> ContentLines { get; }
     }
 
     public interface IOutliningRegion

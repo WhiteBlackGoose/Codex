@@ -3,18 +3,19 @@ using Codex.Utilities;
 
 namespace Codex.ObjectModel
 {
-    partial class TextSourceSearchModel
+    partial class TextChunkSearchModel
     {
         private bool m_encoded = true;
 
+        protected override void OnSerializingCore()
+        {
+            FullTextUtilities.EncodeFullText(Chunk?.ContentLines);
+            base.OnSerializingCore();
+        }
+
         protected override void OnDeserializedCore()
         {
-            if(m_encoded && File != null)
-            {
-                File.Content = FullTextUtilities.DecodeFullTextString(File.Content);
-                m_encoded = false;
-            }
-
+            FullTextUtilities.DecodeFullText(Chunk?.ContentLines);
             base.OnDeserializedCore();
         }
     }
