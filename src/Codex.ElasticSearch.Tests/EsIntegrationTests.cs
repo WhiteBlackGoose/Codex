@@ -155,7 +155,7 @@ namespace Codex.ElasticSearch.Tests
             }
 
             await EmitTextFilesDiff(codex, leftName, rightName, root);
-            return;
+            //return;
 
             var searchType = SearchTypes.BoundSource;
             var leftEntities = await codex.GetLeftOnlyEntitiesAsync(searchType, leftName, rightName);
@@ -164,7 +164,7 @@ namespace Codex.ElasticSearch.Tests
             Directory.CreateDirectory(leftRoot);
             foreach (var entity in leftEntities.Result.Hits)
             {
-                File.WriteAllText(Path.Combine(leftRoot, $"{entity.BindingInfo.ProjectId}_{Path.GetFileName(entity.BindingInfo.ProjectRelativePath)}.json"), entity.ElasticSerialize());
+                File.WriteAllText(Path.Combine(leftRoot, $"{entity.File.Info.ProjectId}_{Path.GetFileName(entity.File.Info.ProjectRelativePath)}.json"), entity.ElasticSerialize());
             }
         }
 
