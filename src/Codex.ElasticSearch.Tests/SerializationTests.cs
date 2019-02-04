@@ -56,7 +56,7 @@ namespace Codex.ElasticSearch.Tests
         {
             var boundInfo = new BoundSourceInfo()
             {
-                ProjectId = "testProjectId",
+                Language = "testLanguage",
                 References = new[]
                     {
                         new ReferenceSpan()
@@ -102,8 +102,8 @@ namespace Codex.ElasticSearch.Tests
         public void TestDefaultValueSerialization()
         {
             var entity = new BoundSourceInfo()
-            {
-                ProjectId = "testProjectId"
+            { 
+                Language = "testLanguage"
             };
 
             var entityResult = entity.SerializeEntity();
