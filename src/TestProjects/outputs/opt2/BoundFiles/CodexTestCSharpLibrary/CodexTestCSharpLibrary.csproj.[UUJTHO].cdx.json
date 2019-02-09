@@ -8,33 +8,31 @@
           "id": "tyldgiuze05e",
           "isImplicitlyDeclared": true,
           "kind": "File",
+          "referenceKind": "Definition",
           "shortName": "CodexTestCSharpLibrary.csproj"
         }
       },
       {
         "definition": {
           "containerQualifiedName": "Checksum.Sha1",
-          "id": "qehzpjkzigtt",
+          "id": "nyl29jvobejv",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
-          "shortName": "0819D6D690302B788D430E28166D561FEFBAB4A7"
+          "referenceKind": "Definition",
+          "shortName": "245884718571AABD82E1E32C59A3720D53570BB8"
         }
       }
     ],
     "language": "msbuild",
-    "projectId": "CodexTestCSharpLibrary",
-    "projectRelativePath": "CodexTestCSharpLibrary.csproj",
-    "referenceCount": 52,
-    "repoRelativePath": "CodexTestCSharpLibrary\\CodexTestCSharpLibrary.csproj",
-    "repositoryName": "CodexTestRepo",
+    "referenceCount": 54,
     "sourceFile": {
       "info": {
         "language": "msbuild",
-        "lines": 56,
+        "lines": 57,
         "projectId": "CodexTestCSharpLibrary",
         "projectRelativePath": "CodexTestCSharpLibrary.csproj",
         "properties": {
-          "Checksum.Sha1": "0819D6D690302B788D430E28166D561FEFBAB4A7"
+          "Checksum.Sha1": "245884718571AABD82E1E32C59A3720D53570BB8"
         },
         "repoRelativePath": "CodexTestCSharpLibrary\\CodexTestCSharpLibrary.csproj",
         "repositoryName": "CodexTestRepo"
@@ -42,34 +40,34 @@
     }
   },
   "compressedClassifications": {
-    "count": 358,
+    "count": 366,
     "segments": [
       {
-        "fullLength": 2617,
+        "fullLength": 2664,
         "lengths": {
-          "cdata": "lVLLDoIwENzlWSiCBzEhMfHEyZP6DZ79/7+xzE5r6I0mSzvb7swsrUohjWyjCNFiVYXQEI144DLEKe1UWL3ERs3qTwiH1ZfVA9DA7MJ6Zb5l/kIWpXYfYg2oB+rgQjGLnJFRzMY/Jz5PZI5ncs7pZMGTmvl6sg+PPmO9I3L0as7b5KlLnkZ4Vszmvk7ujcs4c903dR07/CuVOyW/U6oOKDl+G/5hu5WI+wyPGb5leDpY3wFrciHo0/buEt+X4WuG1wwvO6744h7IllLrdrdb7gc=",
-          "compressedLength": 209,
-          "decompressedLength": 716,
+          "cdata": "lZJLDsIwDETtftOmFIQoUiUkVl2xAs7AmvvfhnQ8CWp2jeQmz4ntcROVQhpZRxGsxaoKpsEa8eAy2CHtVFi9xEbN6E8wh9WX0QNooHdmvNLf0n9hFmXtPtgSqAd1UKGYRU7wKGbLP6V8nmSKJ+ac0smCJzXT9WQfHn3GeEdy1GrK26SpS5pGaFbMpr5O6i2X5czrvlnXscN/pXJTyW8qVTsqOX4b/mG7lch9xmPGt4yPO+M7sCYVgj5t7y7xfRlfM14ynjM+b3LHF/iAt5Ra17tefT8=",
+          "compressedLength": 212,
+          "decompressedLength": 732,
           "minValue": 1,
           "valueByteWidth": 2
         },
         "localSymbolGroupIds": {
-          "cdata": "Y2AYBbQHAA==",
+          "cdata": "Y2AYBfQDAA==",
           "compressedLength": 7,
-          "decompressedLength": 358,
+          "decompressedLength": 366,
           "valueByteWidth": 1
         },
         "optimized": true,
         "sharedIndices": {
-          "cdata": "Y2BkYmBmYQYTDAxIHEwRIAfGZ2DFYJNOwfTTTS+KPnJp4kxBMNlAPAA=",
+          "cdata": "Y2BkYmBmYQYTDAxIHEwRIAfGZ2DFYJNOwfTTTS+KPnJp0kxBMNlAPAA=",
           "compressedLength": 41,
-          "decompressedLength": 358,
+          "decompressedLength": 366,
           "valueByteWidth": 1
         },
         "starts": {
-          "cdata": "Y2BgZGACYghEsBgZmHHIIKthxamGFUyzo6mHQXzitOWxYnH38LKXFYlEDWcmuvOp6RZsIQgTZQaTAA==",
+          "cdata": "Y2BgZGACYghEsBgZmHHIIKthxamGFUyzo6mHQXzitOWxYnH38LKXFYlEDWcmuvNp6RZsIQoTZQaTAA==",
           "compressedLength": 58,
-          "decompressedLength": 716,
+          "decompressedLength": 732,
           "valueByteWidth": 2
         }
       }
@@ -106,18 +104,18 @@
     ]
   },
   "compressedReferences": {
-    "count": 52,
+    "count": 54,
     "lineIndices": {
-      "cdata": "AAIEBQYHCAkKCwwODxAREhMUFRcYGRobHB0gISIjJCUmJyorLC0v",
+      "cdata": "AAIEBQYHCAkKCwwODxAREhMUFRcYGRobHB0gISIjJCUmJyorLC0uMA==",
       "valueByteWidth": 1
     },
     "lineSpanModel": {
-      "count": 52,
+      "count": 54,
       "segments": [
         {
-          "fullLength": 2302,
+          "fullLength": 2349,
           "sharedIndices": {
-            "data": "AAAAAQEBAQICAwMEBQYHCAkKCwsMDQ4PEBESExMUFRYXGBkaGxwdHh8gISIiIyMkJCUlJg==",
+            "data": "AAAAAQEBAQICAwMEBQYHCAkKCwsMDQ4PEBESExMUFRYXGBkaGxwdHh8gISIiIyMkJCUlJiYn",
             "valueByteWidth": 1
           }
         }
@@ -125,69 +123,73 @@
     },
     "segments": [
       {
-        "fullLength": 2302,
+        "fullLength": 2349,
         "lengths": {
-          "cdata": "Y2BgEBUWFebl5eDg5hLk5REDsng4Obj4uXl4OSA0JxSwQ4EAAA==",
+          "cdata": "Y2BgEBUWFebl5eDg5hLk5REDsng4Obj4uXl4OSA0JxSww4EAAA==",
           "compressedLength": 37,
-          "decompressedLength": 52,
+          "decompressedLength": 54,
           "valueByteWidth": 1
         },
         "optimized": true,
         "sharedIndices": {
-          "cdata": "Y2Vg4xLjEhPg5+GWkhAWkeTl5OeW4ROSFRSV5ueG0BxQwM7CzsjOzM4kDgA=",
-          "compressedLength": 44,
-          "decompressedLength": 52,
+          "cdata": "Y2Ng5xbnFhcU4OWRlhQRleLjEuCR5ReWExKTEeCB0JxQwMHKwcjBwsHEwSwBAA==",
+          "compressedLength": 46,
+          "decompressedLength": 54,
           "valueByteWidth": 1
         },
         "starts": {
-          "cdata": "FYs5CoBAEASLBR9gpuDigVekgiaCYir4WZ9oOUPTPV0M/POSsKidlFG1nEQGZibvR1JSkLsVveS2qW0yGpvIYa7pWKW/XwQ/gymwqZsP",
-          "compressedLength": 78,
-          "decompressedLength": 104,
+          "cdata": "FYvNCkBgEEVPX3kAO4r85G+FYqNIdsrLekTHTKd7594G/nmJmGUjZpCGg5yeidH7sSnISN2SzuY2qUwSapOcXV/Rstj+ehL8DLrAKoNcfA==",
+          "compressedLength": 79,
+          "decompressedLength": 108,
           "valueByteWidth": 2
         }
       }
     ],
     "sharedValues": [
       {
-        "id": "qehzpjkzigtt",
+        "referenceKind": "Definition",
         "isImplicitlyDeclared": true,
-        "kind": "Checksum.Sha1",
         "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
+        "id": "nyl29jvobejv",
+        "kind": "Checksum.Sha1"
       },
       {
+        "referenceKind": "Reference",
+        "isImplicitlyDeclared": true,
         "id": "cf0zwkaulygj",
+        "kind": "File"
+      },
+      {
         "isImplicitlyDeclared": true,
-        "kind": "File",
-        "referenceKind": "Reference"
+        "id": "fj6tjzorh59i"
       },
       {
-        "id": "fj6tjzorh59i",
-        "isImplicitlyDeclared": true
-      },
-      {
-        "id": "mw6l0prf2548",
-        "isImplicitlyDeclared": true
-      },
-      {
-        "id": "phmxgc9mt2wi",
-        "isImplicitlyDeclared": true
-      },
-      {
-        "id": "tyldgiuze05e",
         "isImplicitlyDeclared": true,
-        "referenceKind": "Definition"
+        "id": "hrlh94cacyzy"
       },
       {
-        "id": "oojcfpqfkvvk",
         "isImplicitlyDeclared": true,
-        "projectId": "CodexTestRepo(Repo)"
+        "id": "mw6l0prf2548"
       },
       {
-        "id": "m6ub6jgkq1kb",
-        "kind": "MSBuildItem",
+        "isImplicitlyDeclared": true,
+        "id": "phmxgc9mt2wi"
+      },
+      {
+        "referenceKind": "Definition",
+        "isImplicitlyDeclared": true,
+        "id": "tyldgiuze05e"
+      },
+      {
+        "isImplicitlyDeclared": true,
+        "projectId": "CodexTestRepo(Repo)",
+        "id": "oojcfpqfkvvk"
+      },
+      {
+        "referenceKind": "Write",
         "projectId": "MSBuild Files",
-        "referenceKind": "Write"
+        "id": "m6ub6jgkq1kb",
+        "kind": "MSBuildItem"
       },
       {
         "id": "xvbu3irfrodn"
@@ -197,8 +199,8 @@
         "kind": "MSBuildProperty"
       },
       {
-        "id": "ch9iiiqcjkoq",
-        "referenceKind": "Read"
+        "referenceKind": "Read",
+        "id": "ch9iiiqcjkoq"
       },
       {
         "id": "do1gcpzyzomc"
@@ -213,8 +215,8 @@
         "id": "fskmmtsvs6pk"
       },
       {
-        "id": "glxaswv65k4l",
-        "referenceKind": "Read"
+        "referenceKind": "Read",
+        "id": "glxaswv65k4l"
       },
       {
         "referenceKind": "Write"
@@ -235,15 +237,15 @@
         "id": "mrqklgqxbyss"
       },
       {
-        "id": "qgboobmwe2su",
-        "referenceKind": "Read"
+        "referenceKind": "Read",
+        "id": "qgboobmwe2su"
       },
       {
         "id": "sdoij93z8j0r"
       },
       {
-        "id": "v25azsxpeqzf",
-        "referenceKind": "Write"
+        "referenceKind": "Write",
+        "id": "v25azsxpeqzf"
       },
       {
         "id": "vdcvqg5o51oo"
@@ -309,6 +311,7 @@
     "    <Compile Include=\"Cases\\MemberOverride.cs\" />\r\n",
     "    <Compile Include=\"Cases\\InterfaceMemberImplementation.cs\" />\r\n",
     "    <Compile Include=\"Properties\\AssemblyInfo.cs\" />\r\n",
+    "    <Compile Include=\"Cases\\TextSearch.cs\" />\r\n",
     "  </ItemGroup>\r\n",
     "  <Import Project=\"$(MSBuildToolsPath)\\Microsoft.CSharp.targets\" />\r\n",
     "  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. \r\n",

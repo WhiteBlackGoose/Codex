@@ -8,6 +8,7 @@
           "id": "fj6tjzorh59i",
           "isImplicitlyDeclared": true,
           "kind": "File",
+          "referenceKind": "Definition",
           "shortName": "AssemblyInfo.cs"
         }
       },
@@ -17,16 +18,13 @@
           "id": "nevkzgkgawuz",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
+          "referenceKind": "Definition",
           "shortName": "BAA9D4B4B4C30D2D7DEECFE82B254A4CA08102A5"
         }
       }
     ],
     "language": "C#",
-    "projectId": "CodexTestCSharpLibrary",
-    "projectRelativePath": "Properties\\AssemblyInfo.cs",
     "referenceCount": 27,
-    "repoRelativePath": "CodexTestCSharpLibrary\\Properties\\AssemblyInfo.cs",
-    "repositoryName": "CodexTestRepo",
     "sourceFile": {
       "info": {
         "language": "C#",
@@ -140,27 +138,27 @@
     ],
     "sharedValues": [
       {
-        "id": "nevkzgkgawuz",
+        "referenceKind": "Definition",
         "isImplicitlyDeclared": true,
-        "kind": "Checksum.Sha1",
         "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
+        "id": "nevkzgkgawuz",
+        "kind": "Checksum.Sha1"
       },
       {
-        "id": "fj6tjzorh59i",
         "isImplicitlyDeclared": true,
+        "id": "fj6tjzorh59i",
         "kind": "File"
       },
       {
-        "id": "jt014kvrjbyh",
         "isImplicitlyDeclared": true,
-        "projectId": "CodexTestRepo(Repo)"
+        "projectId": "CodexTestRepo(Repo)",
+        "id": "jt014kvrjbyh"
       },
       {
-        "id": "cekgdiwfsy8q",
-        "kind": "Class",
+        "referenceKind": "Instantiation",
         "projectId": "mscorlib",
-        "referenceKind": "Instantiation"
+        "id": "cekgdiwfsy8q",
+        "kind": "Class"
       },
       {
         "id": "d7zlvzfupcol"
@@ -196,9 +194,9 @@
         "id": "zpyv4zicoqy4"
       },
       {
+        "referenceKind": "Reference",
         "id": "bv3kxqc9ozrz",
-        "kind": "Constructor",
-        "referenceKind": "Reference"
+        "kind": "Constructor"
       },
       {
         "id": "c38l4kmhtlby"

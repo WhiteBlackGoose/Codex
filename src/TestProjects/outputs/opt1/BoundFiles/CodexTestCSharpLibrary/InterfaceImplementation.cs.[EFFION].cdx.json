@@ -8,6 +8,7 @@
           "id": "phmxgc9mt2wi",
           "isImplicitlyDeclared": true,
           "kind": "File",
+          "referenceKind": "Definition",
           "shortName": "InterfaceImplementation.cs"
         }
       },
@@ -17,6 +18,7 @@
           "id": "dsf2bljc5kpf",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
+          "referenceKind": "Definition",
           "shortName": "272BE6F96423C66FA54A8301A74078A4C40C89D0"
         }
       },
@@ -29,10 +31,11 @@
           "glyph": 35,
           "id": "mrmqhpalox2j",
           "kind": "Interface",
+          "referenceKind": "Definition",
           "shortName": "IXedoc"
         },
-        "length": 6,
-        "start": 211
+        "start": 211,
+        "length": 6
       },
       {
         "definition": {
@@ -40,10 +43,11 @@
           "declarationName": "public interface CodexTestCSharpLibrary.Cases.InterfaceImplementation.ITypeWithParams<T0, T1>",
           "displayName": "CodexTestCSharpLibrary.Cases.InterfaceImplementation.ITypeWithParams<T0, T1>",
           "id": "il71lvemucbf",
+          "referenceKind": "Definition",
           "shortName": "ITypeWithParams<T0, T1>"
         },
-        "length": 15,
-        "start": 258
+        "start": 258,
+        "length": 15
       },
       {
         "definition": {
@@ -51,18 +55,15 @@
           "declarationName": "public interface CodexTestCSharpLibrary.Cases.InterfaceImplementation.XedocImpl",
           "displayName": "CodexTestCSharpLibrary.Cases.InterfaceImplementation.XedocImpl",
           "id": "d6gmw0nyzfwe",
+          "referenceKind": "Definition",
           "shortName": "XedocImpl"
         },
-        "length": 9,
-        "start": 440
+        "start": 440,
+        "length": 9
       }
     ],
     "language": "C#",
-    "projectId": "CodexTestCSharpLibrary",
-    "projectRelativePath": "Cases\\InterfaceImplementation.cs",
     "referenceCount": 10,
-    "repoRelativePath": "CodexTestCSharpLibrary\\Cases\\InterfaceImplementation.cs",
-    "repositoryName": "CodexTestRepo",
     "sourceFile": {
       "info": {
         "language": "C#",
@@ -174,15 +175,15 @@
     ],
     "sharedValues": [
       {
-        "id": "dsf2bljc5kpf",
+        "referenceKind": "Definition",
         "isImplicitlyDeclared": true,
-        "kind": "Checksum.Sha1",
         "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
+        "id": "dsf2bljc5kpf",
+        "kind": "Checksum.Sha1"
       },
       {
-        "id": "phmxgc9mt2wi",
         "isImplicitlyDeclared": true,
+        "id": "phmxgc9mt2wi",
         "kind": "File"
       },
       {
@@ -196,8 +197,8 @@
         "referenceKind": "InterfaceInheritance"
       },
       {
-        "id": "mrmqhpalox2j",
-        "referenceKind": "Definition"
+        "referenceKind": "Definition",
+        "id": "mrmqhpalox2j"
       },
       {
         "referenceKind": "InterfaceInheritance"
@@ -206,17 +207,17 @@
         "referenceKind": "Reference"
       },
       {
-        "id": "hklfxml4ypnb",
+        "referenceKind": "Definition",
         "isImplicitlyDeclared": true,
-        "kind": "File",
         "projectId": "CodexTestRepo(Repo)",
-        "referenceKind": "Definition"
+        "id": "hklfxml4ypnb",
+        "kind": "File"
       },
       {
-        "id": "cuycniiqolxa",
-        "kind": "Class",
+        "referenceKind": "Reference",
         "projectId": "mscorlib",
-        "referenceKind": "Reference"
+        "id": "cuycniiqolxa",
+        "kind": "Class"
       }
     ]
   },

@@ -21,6 +21,10 @@
       "repoRelativePath": "CodexTestCSharpLibrary\\Properties\\AssemblyInfo.cs"
     },
     {
+      "projectRelativePath": "Cases\\TextSearch.cs",
+      "repoRelativePath": "CodexTestCSharpLibrary\\Cases\\TextSearch.cs"
+    },
+    {
       "projectRelativePath": ".NETFramework,Version=v4.5.2.AssemblyAttributes.cs",
       "repoRelativePath": "[Temp]\\.NETFramework,Version=v4.5.2.AssemblyAttributes.cs"
     },
@@ -37,417 +41,488 @@
       "repoRelativePath": "[External]\\\\\\Codex\\ProjectMetadata\\CodexTestCSharpLibrary\\[Metadata]\\ReferenceProjects.xml"
     }
   ],
+  "primaryFile": {
+    "projectRelativePath": "CodexTestCSharpLibrary.csproj",
+    "repoRelativePath": "CodexTestCSharpLibrary\\CodexTestCSharpLibrary.csproj"
+  },
   "projectId": "CodexTestCSharpLibrary",
   "projectKind": "Source",
   "projectReferences": [
     {
-      "displayName": "Microsoft.CSharp, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
       "projectId": "Microsoft.CSharp",
+      "displayName": "Microsoft.CSharp, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
       "properties": {
         "PublicKey": "002400000480000094000000060200000024000052534131000400000100010007D1FA57C4AED9F0A32E84AA0FAEFD0DE9E8FD6AEC8F87FB03766C834C99921EB23BE79AD9D5DCC1DD9AD236132102900B723CF980957FC4E177108FC607774F29E8320E92EA05ECE4E821C0A5EFE8F1645C4C0C93C1AB99285D622CAA652C1DFAD63D745D6F2DE5F17E5EAF0FC4963D261C8A12436518206DC093344D5AD293"
       }
     },
     {
+      "projectId": "mscorlib",
       "definitions": [
         {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection",
-          "declarationName": "public class System.Reflection.AssemblyCompanyAttribute",
-          "displayName": "System.Reflection.AssemblyCompanyAttribute",
-          "glyph": 3,
-          "id": "ymmm1xbqot1r",
-          "kind": "Class",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyCompanyAttribute"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection.AssemblyCompanyAttribute",
-          "declarationName": "public AssemblyCompanyAttribute.AssemblyCompanyAttribute(string company)",
-          "displayName": "System.Reflection.AssemblyCompanyAttribute.AssemblyCompanyAttribute(System.String)",
-          "glyph": 44,
-          "id": "jyyyk9k2knea",
-          "kind": "Constructor",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyCompanyAttribute",
-          "symbolDepth": 1,
-          "typeName": "Void"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection",
-          "declarationName": "public class System.Reflection.AssemblyConfigurationAttribute",
-          "displayName": "System.Reflection.AssemblyConfigurationAttribute",
-          "glyph": 3,
-          "id": "ugc4cfruh6uv",
-          "kind": "Class",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyConfigurationAttribute"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection.AssemblyConfigurationAttribute",
-          "declarationName": "public AssemblyConfigurationAttribute.AssemblyConfigurationAttribute(string configuration)",
-          "displayName": "System.Reflection.AssemblyConfigurationAttribute.AssemblyConfigurationAttribute(System.String)",
-          "glyph": 44,
-          "id": "k95qbgte30kn",
-          "kind": "Constructor",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyConfigurationAttribute",
-          "symbolDepth": 1,
-          "typeName": "Void"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection",
-          "declarationName": "public class System.Reflection.AssemblyCopyrightAttribute",
-          "displayName": "System.Reflection.AssemblyCopyrightAttribute",
-          "glyph": 3,
-          "id": "cekgdiwfsy8q",
-          "kind": "Class",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyCopyrightAttribute"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection.AssemblyCopyrightAttribute",
-          "declarationName": "public AssemblyCopyrightAttribute.AssemblyCopyrightAttribute(string copyright)",
-          "displayName": "System.Reflection.AssemblyCopyrightAttribute.AssemblyCopyrightAttribute(System.String)",
-          "glyph": 44,
-          "id": "yxt4gpkb4tiv",
-          "kind": "Constructor",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyCopyrightAttribute",
-          "symbolDepth": 1,
-          "typeName": "Void"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection",
-          "declarationName": "public class System.Reflection.AssemblyCultureAttribute",
-          "displayName": "System.Reflection.AssemblyCultureAttribute",
-          "glyph": 3,
-          "id": "ilzi8qywxj5d",
-          "kind": "Class",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyCultureAttribute"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection.AssemblyCultureAttribute",
-          "declarationName": "public AssemblyCultureAttribute.AssemblyCultureAttribute(string culture)",
-          "displayName": "System.Reflection.AssemblyCultureAttribute.AssemblyCultureAttribute(System.String)",
-          "glyph": 44,
-          "id": "t2nno4ugsft3",
-          "kind": "Constructor",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyCultureAttribute",
-          "symbolDepth": 1,
-          "typeName": "Void"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection",
-          "declarationName": "public class System.Reflection.AssemblyDescriptionAttribute",
-          "displayName": "System.Reflection.AssemblyDescriptionAttribute",
-          "glyph": 3,
-          "id": "zpyv4zicoqy4",
-          "kind": "Class",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyDescriptionAttribute"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection.AssemblyDescriptionAttribute",
-          "declarationName": "public AssemblyDescriptionAttribute.AssemblyDescriptionAttribute(string description)",
-          "displayName": "System.Reflection.AssemblyDescriptionAttribute.AssemblyDescriptionAttribute(System.String)",
-          "glyph": 44,
-          "id": "ifegugrv95ue",
-          "kind": "Constructor",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyDescriptionAttribute",
-          "symbolDepth": 1,
-          "typeName": "Void"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection",
-          "declarationName": "public class System.Reflection.AssemblyFileVersionAttribute",
-          "displayName": "System.Reflection.AssemblyFileVersionAttribute",
-          "glyph": 3,
-          "id": "g1uxbc9evuqp",
-          "kind": "Class",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyFileVersionAttribute"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection.AssemblyFileVersionAttribute",
-          "declarationName": "public AssemblyFileVersionAttribute.AssemblyFileVersionAttribute(string version)",
-          "displayName": "System.Reflection.AssemblyFileVersionAttribute.AssemblyFileVersionAttribute(System.String)",
-          "glyph": 44,
-          "id": "exjoiusmafos",
-          "kind": "Constructor",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyFileVersionAttribute",
-          "symbolDepth": 1,
-          "typeName": "Void"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection",
-          "declarationName": "public class System.Reflection.AssemblyProductAttribute",
-          "displayName": "System.Reflection.AssemblyProductAttribute",
-          "glyph": 3,
-          "id": "xxbdd8vgzz9q",
-          "kind": "Class",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyProductAttribute"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection.AssemblyProductAttribute",
-          "declarationName": "public AssemblyProductAttribute.AssemblyProductAttribute(string product)",
-          "displayName": "System.Reflection.AssemblyProductAttribute.AssemblyProductAttribute(System.String)",
-          "glyph": 44,
-          "id": "gvbjpbcxwy2k",
-          "kind": "Constructor",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyProductAttribute",
-          "symbolDepth": 1,
-          "typeName": "Void"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection",
-          "declarationName": "public class System.Reflection.AssemblyTitleAttribute",
-          "displayName": "System.Reflection.AssemblyTitleAttribute",
-          "glyph": 3,
-          "id": "iggnvlryy8pl",
-          "kind": "Class",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyTitleAttribute"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection.AssemblyTitleAttribute",
-          "declarationName": "public AssemblyTitleAttribute.AssemblyTitleAttribute(string title)",
-          "displayName": "System.Reflection.AssemblyTitleAttribute.AssemblyTitleAttribute(System.String)",
-          "glyph": 44,
-          "id": "i65jqbopyhle",
-          "kind": "Constructor",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyTitleAttribute",
-          "symbolDepth": 1,
-          "typeName": "Void"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection",
-          "declarationName": "public class System.Reflection.AssemblyTrademarkAttribute",
-          "displayName": "System.Reflection.AssemblyTrademarkAttribute",
-          "glyph": 3,
-          "id": "gbbsioq1lr7p",
-          "kind": "Class",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyTrademarkAttribute"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection.AssemblyTrademarkAttribute",
-          "declarationName": "public AssemblyTrademarkAttribute.AssemblyTrademarkAttribute(string trademark)",
-          "displayName": "System.Reflection.AssemblyTrademarkAttribute.AssemblyTrademarkAttribute(System.String)",
-          "glyph": 44,
-          "id": "rhqleoomjaub",
-          "kind": "Constructor",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyTrademarkAttribute",
-          "symbolDepth": 1,
-          "typeName": "Void"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection",
-          "declarationName": "public class System.Reflection.AssemblyVersionAttribute",
-          "displayName": "System.Reflection.AssemblyVersionAttribute",
-          "glyph": 3,
-          "id": "oxstkbpff3nk",
-          "kind": "Class",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyVersionAttribute"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Reflection.AssemblyVersionAttribute",
-          "declarationName": "public AssemblyVersionAttribute.AssemblyVersionAttribute(string version)",
-          "displayName": "System.Reflection.AssemblyVersionAttribute.AssemblyVersionAttribute(System.String)",
-          "glyph": 44,
-          "id": "c38l4kmhtlby",
-          "kind": "Constructor",
-          "projectId": "mscorlib",
-          "shortName": "AssemblyVersionAttribute",
-          "symbolDepth": 1,
-          "typeName": "Void"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Runtime.InteropServices",
-          "declarationName": "public class System.Runtime.InteropServices.ComVisibleAttribute",
-          "displayName": "System.Runtime.InteropServices.ComVisibleAttribute",
-          "glyph": 3,
-          "id": "vhsblzyr6fft",
-          "kind": "Class",
-          "projectId": "mscorlib",
-          "shortName": "ComVisibleAttribute"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Runtime.InteropServices.ComVisibleAttribute",
-          "declarationName": "public ComVisibleAttribute.ComVisibleAttribute(bool visibility)",
-          "displayName": "System.Runtime.InteropServices.ComVisibleAttribute.ComVisibleAttribute(System.Boolean)",
-          "glyph": 44,
-          "id": "y42a7756tggw",
-          "kind": "Constructor",
-          "projectId": "mscorlib",
-          "shortName": "ComVisibleAttribute",
-          "symbolDepth": 1,
-          "typeName": "Void"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Runtime.InteropServices",
-          "declarationName": "public class System.Runtime.InteropServices.GuidAttribute",
-          "displayName": "System.Runtime.InteropServices.GuidAttribute",
-          "glyph": 3,
-          "id": "d7zlvzfupcol",
-          "kind": "Class",
-          "projectId": "mscorlib",
-          "shortName": "GuidAttribute"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Runtime.InteropServices.GuidAttribute",
-          "declarationName": "public GuidAttribute.GuidAttribute(string guid)",
-          "displayName": "System.Runtime.InteropServices.GuidAttribute.GuidAttribute(System.String)",
-          "glyph": 44,
-          "id": "bv3kxqc9ozrz",
-          "kind": "Constructor",
-          "projectId": "mscorlib",
-          "shortName": "GuidAttribute",
-          "symbolDepth": 1,
-          "typeName": "Void"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Runtime.Versioning",
-          "declarationName": "public class System.Runtime.Versioning.TargetFrameworkAttribute",
-          "displayName": "System.Runtime.Versioning.TargetFrameworkAttribute",
-          "glyph": 3,
-          "id": "zng0jvzsohnn",
-          "kind": "Class",
-          "projectId": "mscorlib",
-          "shortName": "TargetFrameworkAttribute"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Runtime.Versioning.TargetFrameworkAttribute",
-          "declarationName": "public string TargetFrameworkAttribute.FrameworkDisplayName { get; set; }",
-          "displayName": "System.Runtime.Versioning.TargetFrameworkAttribute.FrameworkDisplayName",
-          "glyph": 55,
-          "id": "i7vzz3amryno",
-          "kind": "Property",
-          "projectId": "mscorlib",
-          "shortName": "FrameworkDisplayName",
-          "symbolDepth": 1,
-          "typeName": "String"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System.Runtime.Versioning.TargetFrameworkAttribute",
-          "declarationName": "public TargetFrameworkAttribute.TargetFrameworkAttribute(string frameworkName)",
-          "displayName": "System.Runtime.Versioning.TargetFrameworkAttribute.TargetFrameworkAttribute(System.String)",
-          "glyph": 44,
-          "id": "oxmmbdshugky",
-          "kind": "Constructor",
-          "projectId": "mscorlib",
-          "shortName": "TargetFrameworkAttribute",
-          "symbolDepth": 1,
-          "typeName": "Void"
-        },
-        {
-          "comment": "",
+          "displayName": "System.Int32",
+          "shortName": "Int32",
           "containerQualifiedName": "System",
-          "declarationName": "public class System.String",
-          "displayName": "System.String",
-          "glyph": 3,
-          "id": "cuycniiqolxa",
-          "kind": "Class",
-          "projectId": "mscorlib",
-          "shortName": "String"
-        },
-        {
-          "comment": "",
-          "containerQualifiedName": "System",
-          "declarationName": "public struct System.Void",
-          "displayName": "System.Void",
           "glyph": 61,
-          "id": "bkkllbfoc0jy",
-          "kind": "Struct",
+          "declarationName": "public struct System.Int32",
+          "comment": "",
+          "referenceKind": "Definition",
           "projectId": "mscorlib",
-          "shortName": "Void"
+          "id": "g13dpcmnysjl",
+          "kind": "Struct"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyCompanyAttribute",
+          "shortName": "AssemblyCompanyAttribute",
+          "containerQualifiedName": "System.Reflection",
+          "glyph": 3,
+          "declarationName": "public class System.Reflection.AssemblyCompanyAttribute",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "ymmm1xbqot1r",
+          "kind": "Class"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyCompanyAttribute.AssemblyCompanyAttribute(System.String)",
+          "shortName": "AssemblyCompanyAttribute",
+          "containerQualifiedName": "System.Reflection.AssemblyCompanyAttribute",
+          "glyph": 44,
+          "symbolDepth": 1,
+          "typeName": "Void",
+          "declarationName": "public AssemblyCompanyAttribute.AssemblyCompanyAttribute(string company)",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "jyyyk9k2knea",
+          "kind": "Constructor"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyConfigurationAttribute",
+          "shortName": "AssemblyConfigurationAttribute",
+          "containerQualifiedName": "System.Reflection",
+          "glyph": 3,
+          "declarationName": "public class System.Reflection.AssemblyConfigurationAttribute",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "ugc4cfruh6uv",
+          "kind": "Class"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyConfigurationAttribute.AssemblyConfigurationAttribute(System.String)",
+          "shortName": "AssemblyConfigurationAttribute",
+          "containerQualifiedName": "System.Reflection.AssemblyConfigurationAttribute",
+          "glyph": 44,
+          "symbolDepth": 1,
+          "typeName": "Void",
+          "declarationName": "public AssemblyConfigurationAttribute.AssemblyConfigurationAttribute(string configuration)",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "k95qbgte30kn",
+          "kind": "Constructor"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyCopyrightAttribute",
+          "shortName": "AssemblyCopyrightAttribute",
+          "containerQualifiedName": "System.Reflection",
+          "glyph": 3,
+          "declarationName": "public class System.Reflection.AssemblyCopyrightAttribute",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "cekgdiwfsy8q",
+          "kind": "Class"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyCopyrightAttribute.AssemblyCopyrightAttribute(System.String)",
+          "shortName": "AssemblyCopyrightAttribute",
+          "containerQualifiedName": "System.Reflection.AssemblyCopyrightAttribute",
+          "glyph": 44,
+          "symbolDepth": 1,
+          "typeName": "Void",
+          "declarationName": "public AssemblyCopyrightAttribute.AssemblyCopyrightAttribute(string copyright)",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "yxt4gpkb4tiv",
+          "kind": "Constructor"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyCultureAttribute",
+          "shortName": "AssemblyCultureAttribute",
+          "containerQualifiedName": "System.Reflection",
+          "glyph": 3,
+          "declarationName": "public class System.Reflection.AssemblyCultureAttribute",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "ilzi8qywxj5d",
+          "kind": "Class"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyCultureAttribute.AssemblyCultureAttribute(System.String)",
+          "shortName": "AssemblyCultureAttribute",
+          "containerQualifiedName": "System.Reflection.AssemblyCultureAttribute",
+          "glyph": 44,
+          "symbolDepth": 1,
+          "typeName": "Void",
+          "declarationName": "public AssemblyCultureAttribute.AssemblyCultureAttribute(string culture)",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "t2nno4ugsft3",
+          "kind": "Constructor"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyDescriptionAttribute",
+          "shortName": "AssemblyDescriptionAttribute",
+          "containerQualifiedName": "System.Reflection",
+          "glyph": 3,
+          "declarationName": "public class System.Reflection.AssemblyDescriptionAttribute",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "zpyv4zicoqy4",
+          "kind": "Class"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyDescriptionAttribute.AssemblyDescriptionAttribute(System.String)",
+          "shortName": "AssemblyDescriptionAttribute",
+          "containerQualifiedName": "System.Reflection.AssemblyDescriptionAttribute",
+          "glyph": 44,
+          "symbolDepth": 1,
+          "typeName": "Void",
+          "declarationName": "public AssemblyDescriptionAttribute.AssemblyDescriptionAttribute(string description)",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "ifegugrv95ue",
+          "kind": "Constructor"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyFileVersionAttribute",
+          "shortName": "AssemblyFileVersionAttribute",
+          "containerQualifiedName": "System.Reflection",
+          "glyph": 3,
+          "declarationName": "public class System.Reflection.AssemblyFileVersionAttribute",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "g1uxbc9evuqp",
+          "kind": "Class"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyFileVersionAttribute.AssemblyFileVersionAttribute(System.String)",
+          "shortName": "AssemblyFileVersionAttribute",
+          "containerQualifiedName": "System.Reflection.AssemblyFileVersionAttribute",
+          "glyph": 44,
+          "symbolDepth": 1,
+          "typeName": "Void",
+          "declarationName": "public AssemblyFileVersionAttribute.AssemblyFileVersionAttribute(string version)",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "exjoiusmafos",
+          "kind": "Constructor"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyProductAttribute",
+          "shortName": "AssemblyProductAttribute",
+          "containerQualifiedName": "System.Reflection",
+          "glyph": 3,
+          "declarationName": "public class System.Reflection.AssemblyProductAttribute",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "xxbdd8vgzz9q",
+          "kind": "Class"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyProductAttribute.AssemblyProductAttribute(System.String)",
+          "shortName": "AssemblyProductAttribute",
+          "containerQualifiedName": "System.Reflection.AssemblyProductAttribute",
+          "glyph": 44,
+          "symbolDepth": 1,
+          "typeName": "Void",
+          "declarationName": "public AssemblyProductAttribute.AssemblyProductAttribute(string product)",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "gvbjpbcxwy2k",
+          "kind": "Constructor"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyTitleAttribute",
+          "shortName": "AssemblyTitleAttribute",
+          "containerQualifiedName": "System.Reflection",
+          "glyph": 3,
+          "declarationName": "public class System.Reflection.AssemblyTitleAttribute",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "iggnvlryy8pl",
+          "kind": "Class"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyTitleAttribute.AssemblyTitleAttribute(System.String)",
+          "shortName": "AssemblyTitleAttribute",
+          "containerQualifiedName": "System.Reflection.AssemblyTitleAttribute",
+          "glyph": 44,
+          "symbolDepth": 1,
+          "typeName": "Void",
+          "declarationName": "public AssemblyTitleAttribute.AssemblyTitleAttribute(string title)",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "i65jqbopyhle",
+          "kind": "Constructor"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyTrademarkAttribute",
+          "shortName": "AssemblyTrademarkAttribute",
+          "containerQualifiedName": "System.Reflection",
+          "glyph": 3,
+          "declarationName": "public class System.Reflection.AssemblyTrademarkAttribute",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "gbbsioq1lr7p",
+          "kind": "Class"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyTrademarkAttribute.AssemblyTrademarkAttribute(System.String)",
+          "shortName": "AssemblyTrademarkAttribute",
+          "containerQualifiedName": "System.Reflection.AssemblyTrademarkAttribute",
+          "glyph": 44,
+          "symbolDepth": 1,
+          "typeName": "Void",
+          "declarationName": "public AssemblyTrademarkAttribute.AssemblyTrademarkAttribute(string trademark)",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "rhqleoomjaub",
+          "kind": "Constructor"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyVersionAttribute",
+          "shortName": "AssemblyVersionAttribute",
+          "containerQualifiedName": "System.Reflection",
+          "glyph": 3,
+          "declarationName": "public class System.Reflection.AssemblyVersionAttribute",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "oxstkbpff3nk",
+          "kind": "Class"
+        },
+        {
+          "displayName": "System.Reflection.AssemblyVersionAttribute.AssemblyVersionAttribute(System.String)",
+          "shortName": "AssemblyVersionAttribute",
+          "containerQualifiedName": "System.Reflection.AssemblyVersionAttribute",
+          "glyph": 44,
+          "symbolDepth": 1,
+          "typeName": "Void",
+          "declarationName": "public AssemblyVersionAttribute.AssemblyVersionAttribute(string version)",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "c38l4kmhtlby",
+          "kind": "Constructor"
+        },
+        {
+          "displayName": "System.Runtime.CompilerServices.CallerLineNumberAttribute",
+          "shortName": "CallerLineNumberAttribute",
+          "containerQualifiedName": "System.Runtime.CompilerServices",
+          "glyph": 3,
+          "declarationName": "public class System.Runtime.CompilerServices.CallerLineNumberAttribute",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "jckzih8iijrs",
+          "kind": "Class"
+        },
+        {
+          "displayName": "System.Runtime.CompilerServices.CallerLineNumberAttribute.CallerLineNumberAttribute()",
+          "shortName": "CallerLineNumberAttribute",
+          "containerQualifiedName": "System.Runtime.CompilerServices.CallerLineNumberAttribute",
+          "glyph": 44,
+          "symbolDepth": 1,
+          "typeName": "Void",
+          "declarationName": "public CallerLineNumberAttribute.CallerLineNumberAttribute()",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "bgsfggmjvt31",
+          "kind": "Constructor"
+        },
+        {
+          "displayName": "System.Runtime.InteropServices.ComVisibleAttribute",
+          "shortName": "ComVisibleAttribute",
+          "containerQualifiedName": "System.Runtime.InteropServices",
+          "glyph": 3,
+          "declarationName": "public class System.Runtime.InteropServices.ComVisibleAttribute",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "vhsblzyr6fft",
+          "kind": "Class"
+        },
+        {
+          "displayName": "System.Runtime.InteropServices.ComVisibleAttribute.ComVisibleAttribute(System.Boolean)",
+          "shortName": "ComVisibleAttribute",
+          "containerQualifiedName": "System.Runtime.InteropServices.ComVisibleAttribute",
+          "glyph": 44,
+          "symbolDepth": 1,
+          "typeName": "Void",
+          "declarationName": "public ComVisibleAttribute.ComVisibleAttribute(bool visibility)",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "y42a7756tggw",
+          "kind": "Constructor"
+        },
+        {
+          "displayName": "System.Runtime.InteropServices.GuidAttribute",
+          "shortName": "GuidAttribute",
+          "containerQualifiedName": "System.Runtime.InteropServices",
+          "glyph": 3,
+          "declarationName": "public class System.Runtime.InteropServices.GuidAttribute",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "d7zlvzfupcol",
+          "kind": "Class"
+        },
+        {
+          "displayName": "System.Runtime.InteropServices.GuidAttribute.GuidAttribute(System.String)",
+          "shortName": "GuidAttribute",
+          "containerQualifiedName": "System.Runtime.InteropServices.GuidAttribute",
+          "glyph": 44,
+          "symbolDepth": 1,
+          "typeName": "Void",
+          "declarationName": "public GuidAttribute.GuidAttribute(string guid)",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "bv3kxqc9ozrz",
+          "kind": "Constructor"
+        },
+        {
+          "displayName": "System.Runtime.Versioning.TargetFrameworkAttribute",
+          "shortName": "TargetFrameworkAttribute",
+          "containerQualifiedName": "System.Runtime.Versioning",
+          "glyph": 3,
+          "declarationName": "public class System.Runtime.Versioning.TargetFrameworkAttribute",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "zng0jvzsohnn",
+          "kind": "Class"
+        },
+        {
+          "displayName": "System.Runtime.Versioning.TargetFrameworkAttribute.FrameworkDisplayName",
+          "shortName": "FrameworkDisplayName",
+          "containerQualifiedName": "System.Runtime.Versioning.TargetFrameworkAttribute",
+          "glyph": 55,
+          "symbolDepth": 1,
+          "typeName": "String",
+          "declarationName": "public string TargetFrameworkAttribute.FrameworkDisplayName { get; set; }",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "i7vzz3amryno",
+          "kind": "Property"
+        },
+        {
+          "displayName": "System.Runtime.Versioning.TargetFrameworkAttribute.TargetFrameworkAttribute(System.String)",
+          "shortName": "TargetFrameworkAttribute",
+          "containerQualifiedName": "System.Runtime.Versioning.TargetFrameworkAttribute",
+          "glyph": 44,
+          "symbolDepth": 1,
+          "typeName": "Void",
+          "declarationName": "public TargetFrameworkAttribute.TargetFrameworkAttribute(string frameworkName)",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "oxmmbdshugky",
+          "kind": "Constructor"
+        },
+        {
+          "displayName": "System.String",
+          "shortName": "String",
+          "containerQualifiedName": "System",
+          "glyph": 3,
+          "declarationName": "public class System.String",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "cuycniiqolxa",
+          "kind": "Class"
+        },
+        {
+          "displayName": "System.Void",
+          "shortName": "Void",
+          "containerQualifiedName": "System",
+          "glyph": 61,
+          "declarationName": "public struct System.Void",
+          "comment": "",
+          "referenceKind": "Definition",
+          "projectId": "mscorlib",
+          "id": "bkkllbfoc0jy",
+          "kind": "Struct"
         }
       ],
       "displayName": "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-      "projectId": "mscorlib",
       "properties": {
         "PublicKey": "00000000000000000400000000000000"
       }
     },
     {
-      "displayName": "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
       "projectId": "System",
+      "displayName": "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
       "properties": {
         "PublicKey": "00000000000000000400000000000000"
       }
     },
     {
-      "displayName": "System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
       "projectId": "System.Core",
+      "displayName": "System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
       "properties": {
         "PublicKey": "00000000000000000400000000000000"
       }
     },
     {
-      "displayName": "System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
       "projectId": "System.Data",
+      "displayName": "System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
       "properties": {
         "PublicKey": "00000000000000000400000000000000"
       }
     },
     {
-      "displayName": "System.Data.DataSetExtensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
       "projectId": "System.Data.DataSetExtensions",
+      "displayName": "System.Data.DataSetExtensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
       "properties": {
         "PublicKey": "00000000000000000400000000000000"
       }
     },
     {
-      "displayName": "System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
       "projectId": "System.Net.Http",
+      "displayName": "System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
       "properties": {
         "PublicKey": "002400000480000094000000060200000024000052534131000400000100010007D1FA57C4AED9F0A32E84AA0FAEFD0DE9E8FD6AEC8F87FB03766C834C99921EB23BE79AD9D5DCC1DD9AD236132102900B723CF980957FC4E177108FC607774F29E8320E92EA05ECE4E821C0A5EFE8F1645C4C0C93C1AB99285D622CAA652C1DFAD63D745D6F2DE5F17E5EAF0FC4963D261C8A12436518206DC093344D5AD293"
       }
     },
     {
-      "displayName": "System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
       "projectId": "System.Xml",
+      "displayName": "System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
       "properties": {
         "PublicKey": "00000000000000000400000000000000"
       }
     },
     {
-      "displayName": "System.Xml.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
       "projectId": "System.Xml.Linq",
+      "displayName": "System.Xml.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
       "properties": {
         "PublicKey": "00000000000000000400000000000000"
       }

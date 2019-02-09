@@ -2,221 +2,221 @@
   "boundSourceFile": {
     "classifications": [
       {
-        "classification": "keyword",
         "defaultClassificationColor": -1,
+        "classification": "keyword",
         "length": 5
       },
       {
-        "classification": "identifier",
         "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 6
+        "classification": "identifier",
+        "start": 6,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 5,
-        "start": 15
+        "start": 15,
+        "length": 5
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 21
+        "start": 21,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 11,
-        "start": 28
+        "start": 28,
+        "length": 11
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 7,
-        "start": 40
+        "start": 40,
+        "length": 7
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 5,
-        "start": 50
+        "start": 50,
+        "length": 5
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 56
+        "start": 56,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 4,
-        "start": 63
+        "start": 63,
+        "length": 4
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 5,
-        "start": 70
+        "start": 70,
+        "length": 5
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 76
+        "start": 76,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 4,
-        "start": 83
+        "start": 83,
+        "length": 4
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 5,
-        "start": 90
+        "start": 90,
+        "length": 5
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 96
+        "start": 96,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 9,
-        "start": 103
+        "start": 103,
+        "length": 9
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 5,
-        "start": 113
+        "start": 113,
+        "length": 5
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 9,
-        "start": 123
+        "start": 123,
+        "length": 9
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 22,
-        "start": 133
+        "start": 133,
+        "length": 22
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 5,
-        "start": 156
+        "start": 156,
+        "length": 5
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 23,
-        "start": 162
+        "start": 162,
+        "length": 23
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 194
+        "start": 194,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 9,
-        "start": 201
+        "start": 201,
+        "length": 9
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "interface name",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 211
+        "start": 211,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 241
+        "start": 241,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 9,
-        "start": 248
+        "start": 248,
+        "length": 9
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "interface name",
-        "defaultClassificationColor": -1,
-        "length": 15,
-        "start": 258
+        "start": 258,
+        "length": 15
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "type parameter name",
-        "defaultClassificationColor": -1,
-        "length": 2,
         "localGroupId": 1,
-        "start": 274
+        "start": 274,
+        "length": 2
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "type parameter name",
-        "defaultClassificationColor": -1,
-        "length": 2,
         "localGroupId": 2,
-        "start": 278
+        "start": 278,
+        "length": 2
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "comment",
-        "defaultClassificationColor": -1,
-        "length": 114,
-        "start": 303
+        "start": 303,
+        "length": 114
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 423
+        "start": 423,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 9,
-        "start": 430
+        "start": 430,
+        "length": 9
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "interface name",
-        "defaultClassificationColor": -1,
-        "length": 9,
-        "start": 440
+        "start": 440,
+        "length": 9
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "interface name",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 452
+        "start": 452,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "interface name",
-        "defaultClassificationColor": -1,
-        "length": 15,
-        "start": 460
+        "start": 460,
+        "length": 15
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "interface name",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 476
+        "start": 476,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 484
+        "start": 484,
+        "length": 6
       }
     ],
     "definitionCount": 5,
@@ -228,6 +228,7 @@
           "isImplicitlyDeclared": true,
           "kind": "File",
           "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
           "shortName": "InterfaceImplementation.cs"
         }
       },
@@ -238,6 +239,7 @@
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
           "shortName": "272BE6F96423C66FA54A8301A74078A4C40C89D0"
         }
       },
@@ -251,10 +253,11 @@
           "id": "mrmqhpalox2j",
           "kind": "Interface",
           "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
           "shortName": "IXedoc"
         },
-        "length": 6,
-        "start": 211
+        "start": 211,
+        "length": 6
       },
       {
         "definition": {
@@ -266,10 +269,11 @@
           "id": "il71lvemucbf",
           "kind": "Interface",
           "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
           "shortName": "ITypeWithParams<T0, T1>"
         },
-        "length": 15,
-        "start": 258
+        "start": 258,
+        "length": 15
       },
       {
         "definition": {
@@ -281,144 +285,141 @@
           "id": "d6gmw0nyzfwe",
           "kind": "Interface",
           "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
           "shortName": "XedocImpl"
         },
-        "length": 9,
-        "start": 440
+        "start": 440,
+        "length": 9
       }
     ],
     "language": "C#",
-    "projectId": "CodexTestCSharpLibrary",
-    "projectRelativePath": "Cases\\InterfaceImplementation.cs",
     "referenceCount": 10,
     "references": [
       {
-        "lineNumber": 1,
-        "lineSpanText": "using System;",
         "reference": {
           "id": "phmxgc9mt2wi",
           "isImplicitlyDeclared": true,
           "kind": "File",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
-        }
+        },
+        "lineSpanText": "using System;",
+        "lineNumber": 1
       },
       {
-        "lineNumber": 1,
-        "lineSpanText": "using System;",
         "reference": {
           "id": "hklfxml4ypnb",
           "isImplicitlyDeclared": true,
           "kind": "File",
           "projectId": "CodexTestRepo(Repo)",
           "referenceKind": "Definition"
-        }
+        },
+        "lineSpanText": "using System;",
+        "lineNumber": 1
       },
       {
-        "lineNumber": 1,
-        "lineSpanText": "using System;",
         "reference": {
           "id": "dsf2bljc5kpf",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
-        }
+        },
+        "lineSpanText": "using System;",
+        "lineNumber": 1
       },
       {
-        "length": 6,
-        "lineNumber": 9,
-        "lineSpanStart": 17,
-        "lineSpanText": "public interface IXedoc",
         "reference": {
           "id": "mrmqhpalox2j",
           "kind": "Interface",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
         },
-        "start": 211
+        "lineSpanText": "public interface IXedoc",
+        "lineNumber": 9,
+        "lineSpanStart": 17,
+        "start": 211,
+        "length": 6
       },
       {
-        "length": 15,
-        "lineNumber": 14,
-        "lineSpanStart": 17,
-        "lineSpanText": "public interface ITypeWithParams<T0, T1>",
         "reference": {
           "id": "il71lvemucbf",
           "kind": "Interface",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
         },
-        "start": 258
+        "lineSpanText": "public interface ITypeWithParams<T0, T1>",
+        "lineNumber": 14,
+        "lineSpanStart": 17,
+        "start": 258,
+        "length": 15
       },
       {
-        "length": 9,
-        "lineNumber": 19,
-        "lineSpanStart": 17,
-        "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
         "reference": {
           "id": "d6gmw0nyzfwe",
           "kind": "Interface",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
         },
-        "start": 440
+        "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
+        "lineNumber": 19,
+        "lineSpanStart": 17,
+        "start": 440,
+        "length": 9
       },
       {
-        "length": 6,
-        "lineNumber": 19,
-        "lineSpanStart": 29,
-        "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
         "reference": {
           "id": "mrmqhpalox2j",
           "kind": "Interface",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "InterfaceInheritance"
         },
-        "start": 452
+        "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
+        "lineNumber": 19,
+        "lineSpanStart": 29,
+        "start": 452,
+        "length": 6
       },
       {
-        "length": 15,
-        "lineNumber": 19,
-        "lineSpanStart": 37,
-        "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
         "reference": {
           "id": "il71lvemucbf",
           "kind": "Interface",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "InterfaceInheritance"
         },
-        "start": 460
+        "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
+        "lineNumber": 19,
+        "lineSpanStart": 37,
+        "start": 460,
+        "length": 15
       },
       {
-        "length": 6,
-        "lineNumber": 19,
-        "lineSpanStart": 53,
-        "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
         "reference": {
           "id": "mrmqhpalox2j",
           "kind": "Interface",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Reference"
         },
-        "start": 476
+        "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
+        "lineNumber": 19,
+        "lineSpanStart": 53,
+        "start": 476,
+        "length": 6
       },
       {
-        "length": 6,
-        "lineNumber": 19,
-        "lineSpanStart": 61,
-        "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
         "reference": {
           "id": "cuycniiqolxa",
           "kind": "Class",
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "start": 484
+        "lineSpanText": "public interface XedocImpl : IXedoc, ITypeWithParams<IXedoc, string>",
+        "lineNumber": 19,
+        "lineSpanStart": 61,
+        "start": 484,
+        "length": 6
       }
     ],
-    "repoRelativePath": "CodexTestCSharpLibrary\\Cases\\InterfaceImplementation.cs",
-    "repositoryName": "CodexTestRepo",
     "sourceFile": {
       "info": {
         "language": "C#",

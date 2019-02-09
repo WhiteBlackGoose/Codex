@@ -2,267 +2,267 @@
   "boundSourceFile": {
     "classifications": [
       {
-        "classification": "keyword",
         "defaultClassificationColor": -1,
+        "classification": "keyword",
         "length": 5
       },
       {
-        "classification": "identifier",
         "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 6
+        "classification": "identifier",
+        "start": 6,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 5,
-        "start": 15
+        "start": 15,
+        "length": 5
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 21
+        "start": 21,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 11,
-        "start": 28
+        "start": 28,
+        "length": 11
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 7,
-        "start": 40
+        "start": 40,
+        "length": 7
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 5,
-        "start": 50
+        "start": 50,
+        "length": 5
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 56
+        "start": 56,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 4,
-        "start": 63
+        "start": 63,
+        "length": 4
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 5,
-        "start": 70
+        "start": 70,
+        "length": 5
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 76
+        "start": 76,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 4,
-        "start": 83
+        "start": 83,
+        "length": 4
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 5,
-        "start": 90
+        "start": 90,
+        "length": 5
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 96
+        "start": 96,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 9,
-        "start": 103
+        "start": 103,
+        "length": 9
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 5,
-        "start": 113
+        "start": 113,
+        "length": 5
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 9,
-        "start": 123
+        "start": 123,
+        "length": 9
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 22,
-        "start": 133
+        "start": 133,
+        "length": 22
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 5,
-        "start": 156
+        "start": 156,
+        "length": 5
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 14,
-        "start": 162
+        "start": 162,
+        "length": 14
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 185
+        "start": 185,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 8,
-        "start": 192
+        "start": 192,
+        "length": 8
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 5,
-        "start": 201
+        "start": 201,
+        "length": 5
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "class name",
-        "defaultClassificationColor": -1,
-        "length": 9,
-        "start": 207
+        "start": 207,
+        "length": 9
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 233
+        "start": 233,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 8,
-        "start": 240
+        "start": 240,
+        "length": 8
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 4,
-        "start": 249
+        "start": 249,
+        "length": 4
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "method name",
-        "defaultClassificationColor": -1,
-        "length": 8,
-        "start": 254
+        "start": 254,
+        "length": 8
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 277
+        "start": 277,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 7,
-        "start": 284
+        "start": 284,
+        "length": 7
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 4,
-        "start": 292
+        "start": 292,
+        "length": 4
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "method name",
-        "defaultClassificationColor": -1,
-        "length": 7,
-        "start": 297
+        "start": 297,
+        "length": 7
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 345
+        "start": 345,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 5,
-        "start": 352
+        "start": 352,
+        "length": 5
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "class name",
-        "defaultClassificationColor": -1,
-        "length": 9,
-        "start": 358
+        "start": 358,
+        "length": 9
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "class name",
-        "defaultClassificationColor": -1,
-        "length": 9,
-        "start": 370
+        "start": 370,
+        "length": 9
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 396
+        "start": 396,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 8,
-        "start": 403
+        "start": 403,
+        "length": 8
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 4,
-        "start": 412
+        "start": 412,
+        "length": 4
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "method name",
-        "defaultClassificationColor": -1,
-        "length": 8,
-        "start": 417
+        "start": 417,
+        "length": 8
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 461
+        "start": 461,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 8,
-        "start": 468
+        "start": 468,
+        "length": 8
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 4,
-        "start": 477
+        "start": 477,
+        "length": 4
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "method name",
-        "defaultClassificationColor": -1,
-        "length": 7,
-        "start": 482
+        "start": 482,
+        "length": 7
       }
     ],
     "definitionCount": 8,
@@ -274,6 +274,7 @@
           "isImplicitlyDeclared": true,
           "kind": "File",
           "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
           "shortName": "MemberOverride.cs"
         }
       },
@@ -284,6 +285,7 @@
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
           "shortName": "A2F19B1BB212C3C9DACADB90019A723A5A2CF287"
         }
       },
@@ -297,10 +299,11 @@
           "id": "gl7z45hdnojl",
           "kind": "Class",
           "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
           "shortName": "XedocBase"
         },
-        "length": 9,
-        "start": 207
+        "start": 207,
+        "length": 9
       },
       {
         "definition": {
@@ -312,12 +315,13 @@
           "id": "i8xspsqvz4oz",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
           "shortName": "Abstract",
           "symbolDepth": 1,
           "typeName": "Void"
         },
-        "length": 8,
-        "start": 254
+        "start": 254,
+        "length": 8
       },
       {
         "definition": {
@@ -329,12 +333,13 @@
           "id": "tlxmyrhpqmwu",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
           "shortName": "Virtual",
           "symbolDepth": 1,
           "typeName": "Void"
         },
-        "length": 7,
-        "start": 297
+        "start": 297,
+        "length": 7
       },
       {
         "definition": {
@@ -346,10 +351,11 @@
           "id": "focaqdch24tt",
           "kind": "Class",
           "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
           "shortName": "XedocImpl"
         },
-        "length": 9,
-        "start": 358
+        "start": 358,
+        "length": 9
       },
       {
         "definition": {
@@ -361,12 +367,13 @@
           "id": "qzzztsebhqp3",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
           "shortName": "Abstract",
           "symbolDepth": 1,
           "typeName": "Void"
         },
-        "length": 8,
-        "start": 417
+        "start": 417,
+        "length": 8
       },
       {
         "definition": {
@@ -378,148 +385,143 @@
           "id": "ud2cojqpu3ak",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
           "shortName": "Virtual",
           "symbolDepth": 1,
           "typeName": "Void"
         },
-        "length": 7,
-        "start": 482
+        "start": 482,
+        "length": 7
       }
     ],
     "language": "C#",
-    "projectId": "CodexTestCSharpLibrary",
-    "projectRelativePath": "Cases\\MemberOverride.cs",
     "referenceCount": 18,
     "references": [
       {
-        "lineNumber": 1,
-        "lineSpanText": "using System;",
         "reference": {
           "id": "cf0zwkaulygj",
           "isImplicitlyDeclared": true,
           "kind": "File",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
-        }
+        },
+        "lineSpanText": "using System;",
+        "lineNumber": 1
       },
       {
-        "lineNumber": 1,
-        "lineSpanText": "using System;",
         "reference": {
           "id": "lpocwezis0zn",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
-        }
+        },
+        "lineSpanText": "using System;",
+        "lineNumber": 1
       },
       {
-        "lineNumber": 1,
-        "lineSpanText": "using System;",
         "reference": {
           "id": "hufrp9hvvkvb",
           "isImplicitlyDeclared": true,
           "kind": "File",
           "projectId": "CodexTestRepo(Repo)",
           "referenceKind": "Definition"
-        }
+        },
+        "lineSpanText": "using System;",
+        "lineNumber": 1
       },
       {
-        "length": 9,
-        "lineNumber": 9,
-        "lineSpanStart": 22,
-        "lineSpanText": "public abstract class XedocBase",
         "reference": {
           "id": "gl7z45hdnojl",
           "kind": "Class",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
         },
-        "start": 207
+        "lineSpanText": "public abstract class XedocBase",
+        "lineNumber": 9,
+        "lineSpanStart": 22,
+        "start": 207,
+        "length": 9
       },
       {
-        "length": 4,
-        "lineNumber": 11,
-        "lineSpanStart": 16,
-        "lineSpanText": "public abstract void Abstract();",
         "reference": {
           "id": "bkkllbfoc0jy",
           "kind": "Struct",
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "start": 249
+        "lineSpanText": "public abstract void Abstract();",
+        "lineNumber": 11,
+        "lineSpanStart": 16,
+        "start": 249,
+        "length": 4
       },
       {
-        "length": 8,
-        "lineNumber": 11,
-        "lineSpanStart": 21,
-        "lineSpanText": "public abstract void Abstract();",
         "reference": {
           "id": "i8xspsqvz4oz",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
         },
-        "start": 254
+        "lineSpanText": "public abstract void Abstract();",
+        "lineNumber": 11,
+        "lineSpanStart": 21,
+        "start": 254,
+        "length": 8
       },
       {
-        "length": 4,
-        "lineNumber": 13,
-        "lineSpanStart": 15,
-        "lineSpanText": "public virtual void Virtual()",
         "reference": {
           "id": "bkkllbfoc0jy",
           "kind": "Struct",
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "start": 292
+        "lineSpanText": "public virtual void Virtual()",
+        "lineNumber": 13,
+        "lineSpanStart": 15,
+        "start": 292,
+        "length": 4
       },
       {
-        "length": 7,
-        "lineNumber": 13,
-        "lineSpanStart": 20,
-        "lineSpanText": "public virtual void Virtual()",
         "reference": {
           "id": "tlxmyrhpqmwu",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
         },
-        "start": 297
+        "lineSpanText": "public virtual void Virtual()",
+        "lineNumber": 13,
+        "lineSpanStart": 20,
+        "start": 297,
+        "length": 7
       },
       {
-        "length": 9,
-        "lineNumber": 19,
-        "lineSpanStart": 13,
-        "lineSpanText": "public class XedocImpl : XedocBase",
         "reference": {
           "id": "focaqdch24tt",
           "kind": "Class",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
         },
-        "start": 358
+        "lineSpanText": "public class XedocImpl : XedocBase",
+        "lineNumber": 19,
+        "lineSpanStart": 13,
+        "start": 358,
+        "length": 9
       },
       {
-        "length": 9,
-        "lineNumber": 19,
-        "lineSpanStart": 25,
-        "lineSpanText": "public class XedocImpl : XedocBase",
         "reference": {
           "id": "gl7z45hdnojl",
           "kind": "Class",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "DerivedType"
         },
-        "start": 370
+        "lineSpanText": "public class XedocImpl : XedocBase",
+        "lineNumber": 19,
+        "lineSpanStart": 25,
+        "start": 370,
+        "length": 9
       },
       {
-        "length": 8,
-        "lineNumber": 21,
-        "lineSpanStart": 7,
-        "lineSpanText": "public override void Abstract()",
         "reference": {
           "excludeFromSearch": true,
           "id": "i8xspsqvz4oz",
@@ -527,53 +529,53 @@
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Override"
         },
-        "start": 403
+        "lineSpanText": "public override void Abstract()",
+        "lineNumber": 21,
+        "lineSpanStart": 7,
+        "start": 403,
+        "length": 8
       },
       {
-        "length": 4,
-        "lineNumber": 21,
-        "lineSpanStart": 16,
-        "lineSpanText": "public override void Abstract()",
         "reference": {
           "id": "bkkllbfoc0jy",
           "kind": "Struct",
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "start": 412
+        "lineSpanText": "public override void Abstract()",
+        "lineNumber": 21,
+        "lineSpanStart": 16,
+        "start": 412,
+        "length": 4
       },
       {
-        "length": 8,
-        "lineNumber": 21,
-        "lineSpanStart": 21,
-        "lineSpanText": "public override void Abstract()",
         "reference": {
           "id": "qzzztsebhqp3",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
         },
-        "start": 417
-      },
-      {
-        "length": 8,
+        "lineSpanText": "public override void Abstract()",
         "lineNumber": 21,
         "lineSpanStart": 21,
-        "lineSpanText": "public override void Abstract()",
+        "start": 417,
+        "length": 8
+      },
+      {
+        "relatedDefinition": "qzzztsebhqp3",
         "reference": {
           "id": "i8xspsqvz4oz",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Override"
         },
-        "relatedDefinition": "qzzztsebhqp3",
-        "start": 417
+        "lineSpanText": "public override void Abstract()",
+        "lineNumber": 21,
+        "lineSpanStart": 21,
+        "start": 417,
+        "length": 8
       },
       {
-        "length": 8,
-        "lineNumber": 25,
-        "lineSpanStart": 7,
-        "lineSpanText": "public override void Virtual()",
         "reference": {
           "excludeFromSearch": true,
           "id": "tlxmyrhpqmwu",
@@ -581,51 +583,53 @@
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Override"
         },
-        "start": 468
+        "lineSpanText": "public override void Virtual()",
+        "lineNumber": 25,
+        "lineSpanStart": 7,
+        "start": 468,
+        "length": 8
       },
       {
-        "length": 4,
-        "lineNumber": 25,
-        "lineSpanStart": 16,
-        "lineSpanText": "public override void Virtual()",
         "reference": {
           "id": "bkkllbfoc0jy",
           "kind": "Struct",
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "start": 477
+        "lineSpanText": "public override void Virtual()",
+        "lineNumber": 25,
+        "lineSpanStart": 16,
+        "start": 477,
+        "length": 4
       },
       {
-        "length": 7,
-        "lineNumber": 25,
-        "lineSpanStart": 21,
-        "lineSpanText": "public override void Virtual()",
+        "relatedDefinition": "ud2cojqpu3ak",
         "reference": {
           "id": "tlxmyrhpqmwu",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Override"
         },
-        "relatedDefinition": "ud2cojqpu3ak",
-        "start": 482
-      },
-      {
-        "length": 7,
+        "lineSpanText": "public override void Virtual()",
         "lineNumber": 25,
         "lineSpanStart": 21,
-        "lineSpanText": "public override void Virtual()",
+        "start": 482,
+        "length": 7
+      },
+      {
         "reference": {
           "id": "ud2cojqpu3ak",
           "kind": "Method",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
         },
-        "start": 482
+        "lineSpanText": "public override void Virtual()",
+        "lineNumber": 25,
+        "lineSpanStart": 21,
+        "start": 482,
+        "length": 7
       }
     ],
-    "repoRelativePath": "CodexTestCSharpLibrary\\Cases\\MemberOverride.cs",
-    "repositoryName": "CodexTestRepo",
     "sourceFile": {
       "info": {
         "language": "C#",

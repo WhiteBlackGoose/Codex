@@ -8,6 +8,7 @@
           "id": "mw6l0prf2548",
           "isImplicitlyDeclared": true,
           "kind": "File",
+          "referenceKind": "Definition",
           "shortName": "InterfaceMemberImplementation.cs"
         }
       },
@@ -17,6 +18,7 @@
           "id": "d40xtbxyllit",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
+          "referenceKind": "Definition",
           "shortName": "8EE23C759E86079F48B17D231D01A9338414CF42"
         }
       },
@@ -29,10 +31,11 @@
           "glyph": 35,
           "id": "hubxj3ihkrbe",
           "kind": "Interface",
+          "referenceKind": "Definition",
           "shortName": "IXedoc"
         },
-        "length": 6,
-        "start": 217
+        "start": 217,
+        "length": 6
       },
       {
         "definition": {
@@ -43,12 +46,13 @@
           "glyph": 44,
           "id": "ov2v153rs2dy",
           "kind": "Method",
+          "referenceKind": "Definition",
           "shortName": "Run",
           "symbolDepth": 1,
           "typeName": "Void"
         },
-        "length": 3,
-        "start": 245
+        "start": 245,
+        "length": 3
       },
       {
         "definition": {
@@ -59,10 +63,11 @@
           "glyph": 3,
           "id": "ysgoespli6db",
           "kind": "Class",
+          "referenceKind": "Definition",
           "shortName": "XedocImpl"
         },
-        "length": 9,
-        "start": 279
+        "start": 279,
+        "length": 9
       },
       {
         "definition": {
@@ -73,20 +78,17 @@
           "glyph": 44,
           "id": "wj6da2bm7ihh",
           "kind": "Method",
+          "referenceKind": "Definition",
           "shortName": "Run",
           "symbolDepth": 1,
           "typeName": "Void"
         },
-        "length": 3,
-        "start": 326
+        "start": 326,
+        "length": 3
       }
     ],
     "language": "C#",
-    "projectId": "CodexTestCSharpLibrary",
-    "projectRelativePath": "Cases\\InterfaceMemberImplementation.cs",
     "referenceCount": 11,
-    "repoRelativePath": "CodexTestCSharpLibrary\\Cases\\InterfaceMemberImplementation.cs",
-    "repositoryName": "CodexTestRepo",
     "sourceFile": {
       "info": {
         "language": "C#",
@@ -208,19 +210,19 @@
     ],
     "sharedValues": [
       {
-        "id": "d40xtbxyllit",
+        "referenceKind": "Definition",
         "isImplicitlyDeclared": true,
-        "kind": "Checksum.Sha1",
         "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
+        "id": "d40xtbxyllit",
+        "kind": "Checksum.Sha1"
       },
       {
         "id": "ysgoespli6db",
         "kind": "Class"
       },
       {
-        "id": "mw6l0prf2548",
         "isImplicitlyDeclared": true,
+        "id": "mw6l0prf2548",
         "kind": "File"
       },
       {
@@ -231,28 +233,28 @@
         "referenceKind": "InterfaceImplementation"
       },
       {
+        "referenceKind": "Definition",
         "id": "ov2v153rs2dy",
-        "kind": "Method",
-        "referenceKind": "Definition"
+        "kind": "Method"
       },
       {
         "referenceKind": "InterfaceMemberImplementation"
       },
       {
-        "id": "wj6da2bm7ihh",
-        "referenceKind": "Definition"
+        "referenceKind": "Definition",
+        "id": "wj6da2bm7ihh"
       },
       {
-        "id": "cvoirbojyqcu",
         "isImplicitlyDeclared": true,
-        "kind": "File",
-        "projectId": "CodexTestRepo(Repo)"
+        "projectId": "CodexTestRepo(Repo)",
+        "id": "cvoirbojyqcu",
+        "kind": "File"
       },
       {
-        "id": "bkkllbfoc0jy",
-        "kind": "Struct",
+        "referenceKind": "Reference",
         "projectId": "mscorlib",
-        "referenceKind": "Reference"
+        "id": "bkkllbfoc0jy",
+        "kind": "Struct"
       }
     ]
   },

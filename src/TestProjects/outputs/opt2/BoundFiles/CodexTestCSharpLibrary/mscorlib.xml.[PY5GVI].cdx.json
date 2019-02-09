@@ -8,34 +8,32 @@
           "id": "zmsmzhdzwdzx",
           "isImplicitlyDeclared": true,
           "kind": "File",
+          "referenceKind": "Definition",
           "shortName": "mscorlib.xml"
         }
       },
       {
         "definition": {
           "containerQualifiedName": "Checksum.Sha1",
-          "id": "tz2zdjz2awru",
+          "id": "si3xeduyfsn9",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
-          "shortName": "CE8E48E3FD20E6CFE48080F44BB615F16977568E"
+          "referenceKind": "Definition",
+          "shortName": "05BB0E1EA270DD66F5FC5FA998A99E30CCC8B092"
         }
       }
     ],
     "excludeFromSearch": true,
     "language": "xml",
-    "projectId": "CodexTestCSharpLibrary",
-    "projectRelativePath": "[Metadata]\\ReferenceSymbols\\mscorlib.xml",
-    "referenceCount": 31,
-    "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceSymbols\\mscorlib.xml",
-    "repositoryName": "CodexTestRepo",
+    "referenceCount": 34,
     "sourceFile": {
       "info": {
         "language": "xml",
-        "lines": 39,
+        "lines": 44,
         "projectId": "CodexTestCSharpLibrary",
         "projectRelativePath": "[Metadata]\\ReferenceSymbols\\mscorlib.xml",
         "properties": {
-          "Checksum.Sha1": "CE8E48E3FD20E6CFE48080F44BB615F16977568E"
+          "Checksum.Sha1": "05BB0E1EA270DD66F5FC5FA998A99E30CCC8B092"
         },
         "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceSymbols\\mscorlib.xml",
         "repositoryName": "CodexTestRepo"
@@ -43,34 +41,34 @@
     }
   },
   "compressedClassifications": {
-    "count": 432,
+    "count": 482,
     "segments": [
       {
-        "fullLength": 2731,
+        "fullLength": 3013,
         "lengths": {
-          "cdata": "Y+BnYWBgZGBg4GBmYBAA0qxAWpyBF8gCCoM49sgcWWSONzJHEpnjjMzBbZo0MsedOBncpokic6wpcBsjByQ4ZKHBIYSsyAyZw4PM0UTTLoEtNHXwWcgK1cGKrIgZoYiRnwEA",
-          "compressedLength": 99,
-          "decompressedLength": 432,
+          "cdata": "Y+BnYWBgZGBg4GBmYGAF0qxAmoWBF8gCCrOCBZE4zFAOIwdEhwBUhziyIntkjiwyxxuZI4nMcUbm4DZNGpnjTpwMbtNEkTnWFLgNFhxy0OCQQFZkgqZIFqpICFmRGTKHB5mjiaZdAluQ6+BwFSM/AwA=",
+          "compressedLength": 113,
+          "decompressedLength": 482,
           "minValue": 1,
           "valueByteWidth": 1
         },
         "localSymbolGroupIds": {
-          "cdata": "Y2AYBUMJAAA=",
+          "cdata": "Y2AYBcMbAAA=",
           "compressedLength": 8,
-          "decompressedLength": 432,
+          "decompressedLength": 482,
           "valueByteWidth": 1
         },
         "optimized": true,
         "sharedIndices": {
-          "cdata": "Y2BkYmBmYWZgQKVHOIfC4CBdO1E6QAgA",
-          "compressedLength": 24,
-          "decompressedLength": 432,
+          "cdata": "Y2BkYmBmYWZgQKUJc0jXMaw5RAUHhWFGViQxAAA=",
+          "compressedLength": 29,
+          "decompressedLength": 482,
           "valueByteWidth": 1
         },
         "starts": {
-          "cdata": "Y2BgZGACYhhkReOzo/CRWaMyI0mGlWEgUwc9bKeeHRCTmMEkAA==",
-          "compressedLength": 37,
-          "decompressedLength": 864,
+          "cdata": "Y2BgZGACYhhkReOzo/CRWeTIsNLBjlGZoSpDvdQxsOmMHrZD7GAGkwA=",
+          "compressedLength": 41,
+          "decompressedLength": 964,
           "valueByteWidth": 2
         }
       }
@@ -99,18 +97,18 @@
     ]
   },
   "compressedReferences": {
-    "count": 31,
+    "count": 34,
     "lineIndices": {
-      "cdata": "AAIDBAUGBwgJCgsMDQ4PEBESExQVGBkaGx4fICMk",
+      "cdata": "AAIDBAcICQoLDA0ODxAREhMUFRYXGBkaHR4hIiMkJygp",
       "valueByteWidth": 1
     },
     "lineSpanModel": {
-      "count": 31,
+      "count": 34,
       "segments": [
         {
-          "fullLength": 2671,
+          "fullLength": 2953,
           "sharedIndices": {
-            "data": "AAABAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHQ==",
+            "data": "AAABAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fIA==",
             "valueByteWidth": 1
           }
         }
@@ -119,47 +117,47 @@
     "segments": [
       {
         "excludedFromSearchSpans": {
-          "cdata": "/P//fw==",
+          "cdata": "/P///wM=",
           "valueByteWidth": 1
         },
-        "fullLength": 2671,
+        "fullLength": 2953,
         "lengths": {
-          "cdata": "Y2CQcJDzkXKRcJDxkPGQcBCzAbGFzXm1JHQd2FgA",
-          "compressedLength": 30,
-          "decompressedLength": 31,
+          "cdata": "Y2BgZWORcJDzkXKRcJDxkPGQcBCzAbElTYXNebUkdB0A",
+          "compressedLength": 33,
+          "decompressedLength": 34,
           "valueByteWidth": 1
         },
         "optimized": true,
         "sharedIndices": {
-          "cdata": "AQANFgoXAhwIGg8VBRIMEwcUBhkJEQsbBBAOHRgDHg==",
+          "cdata": "AQAhAyAOGAsZAh4IHBAXBRQNFQcWBhsKEwkRDB0EEg8fGg==",
           "valueByteWidth": 1
         },
         "starts": {
-          "cdata": "Y2BgYIhi0CEKFkLpHDAZCcQA",
-          "compressedLength": 18,
-          "decompressedLength": 62,
+          "cdata": "Y2BgYPBn0AHCFDBJGBYBcSGUnQMmAQ==",
+          "compressedLength": 22,
+          "decompressedLength": 68,
           "valueByteWidth": 2
         }
       }
     ],
     "sharedValues": [
       {
-        "id": "tz2zdjz2awru",
+        "referenceKind": "Definition",
         "isImplicitlyDeclared": true,
-        "kind": "Checksum.Sha1",
         "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
+        "id": "si3xeduyfsn9",
+        "kind": "Checksum.Sha1"
       },
       {
-        "id": "zmsmzhdzwdzx",
         "isImplicitlyDeclared": true,
+        "id": "zmsmzhdzwdzx",
         "kind": "File"
       },
       {
-        "id": "cekgdiwfsy8q",
-        "kind": "Class",
+        "referenceKind": "ProjectLevelReference",
         "projectId": "mscorlib",
-        "referenceKind": "ProjectLevelReference"
+        "id": "cekgdiwfsy8q",
+        "kind": "Class"
       },
       {
         "id": "cuycniiqolxa"
@@ -178,6 +176,9 @@
       },
       {
         "id": "ilzi8qywxj5d"
+      },
+      {
+        "id": "jckzih8iijrs"
       },
       {
         "id": "oxstkbpff3nk"
@@ -201,8 +202,11 @@
         "id": "zpyv4zicoqy4"
       },
       {
-        "id": "bv3kxqc9ozrz",
+        "id": "bgsfggmjvt31",
         "kind": "Constructor"
+      },
+      {
+        "id": "bv3kxqc9ozrz"
       },
       {
         "id": "c38l4kmhtlby"
@@ -247,11 +251,19 @@
       {
         "id": "bkkllbfoc0jy",
         "kind": "Struct"
+      },
+      {
+        "id": "g13dpcmnysjl"
       }
     ]
   },
   "sourceFileContentLines": [
-    "<ReferenceSymbols Count=\"29\">\r\n",
+    "<ReferenceSymbols Count=\"32\">\r\n",
+    "  <Namespace Name=\"System\">\r\n",
+    "    <Symbol Name=\"Int32\" ReferenceCount=\"5\" />\r\n",
+    "    <Symbol Name=\"String\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"Void\" ReferenceCount=\"6\" />\r\n",
+    "  </Namespace>\r\n",
     "  <Namespace Name=\"System.Reflection\">\r\n",
     "    <Symbol Name=\"AssemblyCompanyAttribute\" ReferenceCount=\"1\" />\r\n",
     "    <Symbol Name=\"AssemblyCompanyAttribute.AssemblyCompanyAttribute(System.String)\" ReferenceCount=\"1\" />\r\n",
@@ -274,6 +286,10 @@
     "    <Symbol Name=\"AssemblyVersionAttribute\" ReferenceCount=\"1\" />\r\n",
     "    <Symbol Name=\"AssemblyVersionAttribute.AssemblyVersionAttribute(System.String)\" ReferenceCount=\"1\" />\r\n",
     "  </Namespace>\r\n",
+    "  <Namespace Name=\"System.Runtime.CompilerServices\">\r\n",
+    "    <Symbol Name=\"CallerLineNumberAttribute\" ReferenceCount=\"1\" />\r\n",
+    "    <Symbol Name=\"CallerLineNumberAttribute.CallerLineNumberAttribute()\" ReferenceCount=\"1\" />\r\n",
+    "  </Namespace>\r\n",
     "  <Namespace Name=\"System.Runtime.InteropServices\">\r\n",
     "    <Symbol Name=\"ComVisibleAttribute\" ReferenceCount=\"1\" />\r\n",
     "    <Symbol Name=\"ComVisibleAttribute.ComVisibleAttribute(System.Boolean)\" ReferenceCount=\"1\" />\r\n",
@@ -284,10 +300,6 @@
     "    <Symbol Name=\"TargetFrameworkAttribute\" ReferenceCount=\"2\" />\r\n",
     "    <Symbol Name=\"TargetFrameworkAttribute.FrameworkDisplayName\" ReferenceCount=\"1\" />\r\n",
     "    <Symbol Name=\"TargetFrameworkAttribute.TargetFrameworkAttribute(System.String)\" ReferenceCount=\"2\" />\r\n",
-    "  </Namespace>\r\n",
-    "  <Namespace Name=\"System\">\r\n",
-    "    <Symbol Name=\"String\" ReferenceCount=\"1\" />\r\n",
-    "    <Symbol Name=\"Void\" ReferenceCount=\"6\" />\r\n",
     "  </Namespace>\r\n",
     "</ReferenceSymbols>"
   ]

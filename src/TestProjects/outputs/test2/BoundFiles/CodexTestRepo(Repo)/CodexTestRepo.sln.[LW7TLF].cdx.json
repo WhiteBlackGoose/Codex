@@ -2,16 +2,16 @@
   "boundSourceFile": {
     "classifications": [
       {
-        "classification": "xml literal - attribute value",
         "defaultClassificationColor": -1,
-        "length": 22,
-        "start": 215
+        "classification": "xml literal - attribute value",
+        "start": 215,
+        "length": 22
       },
       {
-        "classification": "xml literal - attribute value",
         "defaultClassificationColor": -1,
-        "length": 52,
-        "start": 241
+        "classification": "xml literal - attribute value",
+        "start": 241,
+        "length": 52
       }
     ],
     "definitionCount": 2,
@@ -23,6 +23,7 @@
           "isImplicitlyDeclared": true,
           "kind": "File",
           "projectId": "CodexTestRepo(Repo)",
+          "referenceKind": "Definition",
           "shortName": "CodexTestRepo.sln"
         }
       },
@@ -33,56 +34,51 @@
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestRepo(Repo)",
+          "referenceKind": "Definition",
           "shortName": "46EF8D8E2CA88EDFAB8680A788650147C405FF27"
         }
       }
     ],
     "language": "sln",
-    "projectId": "CodexTestRepo(Repo)",
-    "projectRelativePath": "CodexTestRepo.sln",
     "referenceCount": 4,
     "references": [
       {
-        "lineNumber": 1,
-        "lineSpanText": "",
         "reference": {
           "id": "zbury1mkviqo",
           "isImplicitlyDeclared": true,
           "kind": "File",
           "projectId": "CodexTestRepo(Repo)",
           "referenceKind": "Definition"
-        }
+        },
+        "lineSpanText": "",
+        "lineNumber": 1
       },
       {
-        "lineNumber": 1,
-        "lineSpanText": "",
         "reference": {
           "id": "xfnkzuywvmuy",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestRepo(Repo)",
           "referenceKind": "Definition"
-        }
+        },
+        "lineSpanText": "",
+        "lineNumber": 1
       },
       {
-        "length": 22,
+        "reference": {
+          "id": "oojcfpqfkvvk",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "projectId": "CodexTestRepo(Repo)",
+          "referenceKind": "Reference"
+        },
+        "lineSpanText": "Project(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"CodexTestCSharpLibrary\", \"CodexTestCSharpLibrary\\CodexTestCSharpLibrary.csproj\", \"{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}\"",
         "lineNumber": 6,
         "lineSpanStart": 53,
-        "lineSpanText": "Project(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"CodexTestCSharpLibrary\", \"CodexTestCSharpLibrary\\CodexTestCSharpLibrary.csproj\", \"{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}\"",
-        "reference": {
-          "id": "oojcfpqfkvvk",
-          "isImplicitlyDeclared": true,
-          "kind": "File",
-          "projectId": "CodexTestRepo(Repo)",
-          "referenceKind": "Reference"
-        },
-        "start": 215
+        "start": 215,
+        "length": 22
       },
       {
-        "length": 52,
-        "lineNumber": 6,
-        "lineSpanStart": 79,
-        "lineSpanText": "Project(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"CodexTestCSharpLibrary\", \"CodexTestCSharpLibrary\\CodexTestCSharpLibrary.csproj\", \"{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}\"",
         "reference": {
           "id": "oojcfpqfkvvk",
           "isImplicitlyDeclared": true,
@@ -90,11 +86,13 @@
           "projectId": "CodexTestRepo(Repo)",
           "referenceKind": "Reference"
         },
-        "start": 241
+        "lineSpanText": "Project(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"CodexTestCSharpLibrary\", \"CodexTestCSharpLibrary\\CodexTestCSharpLibrary.csproj\", \"{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}\"",
+        "lineNumber": 6,
+        "lineSpanStart": 79,
+        "start": 241,
+        "length": 52
       }
     ],
-    "repoRelativePath": "CodexTestRepo.sln",
-    "repositoryName": "CodexTestRepo",
     "sourceFile": {
       "info": {
         "language": "sln",

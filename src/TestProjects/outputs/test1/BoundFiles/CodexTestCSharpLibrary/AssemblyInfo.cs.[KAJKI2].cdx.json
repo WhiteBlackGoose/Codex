@@ -2,309 +2,309 @@
   "boundSourceFile": {
     "classifications": [
       {
-        "classification": "keyword",
         "defaultClassificationColor": -1,
+        "classification": "keyword",
         "length": 5
       },
       {
-        "classification": "identifier",
         "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 6
+        "classification": "identifier",
+        "start": 6,
+        "length": 6
       },
       {
-        "classification": "identifier",
         "defaultClassificationColor": -1,
-        "length": 10,
-        "start": 13
+        "classification": "identifier",
+        "start": 13,
+        "length": 10
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 5,
-        "start": 26
+        "start": 26,
+        "length": 5
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 32
+        "start": 32,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 7,
-        "start": 39
+        "start": 39,
+        "length": 7
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 16,
-        "start": 47
+        "start": 47,
+        "length": 16
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 5,
-        "start": 66
+        "start": 66,
+        "length": 5
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 6,
-        "start": 72
+        "start": 72,
+        "length": 6
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 7,
-        "start": 79
+        "start": 79,
+        "length": 7
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "identifier",
-        "defaultClassificationColor": -1,
-        "length": 15,
-        "start": 87
+        "start": 87,
+        "length": 15
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "comment",
-        "defaultClassificationColor": -1,
-        "length": 189,
-        "start": 107
+        "start": 107,
+        "length": 189
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 8,
-        "start": 299
+        "start": 299,
+        "length": 8
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "class name",
-        "defaultClassificationColor": -1,
-        "length": 13,
-        "start": 309
+        "start": 309,
+        "length": 13
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "string",
-        "defaultClassificationColor": -1,
-        "length": 24,
-        "start": 323
+        "start": 323,
+        "length": 24
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 8,
-        "start": 352
+        "start": 352,
+        "length": 8
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "class name",
-        "defaultClassificationColor": -1,
-        "length": 19,
-        "start": 362
+        "start": 362,
+        "length": 19
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "string",
-        "defaultClassificationColor": -1,
-        "length": 2,
-        "start": 382
+        "start": 382,
+        "length": 2
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 8,
-        "start": 389
+        "start": 389,
+        "length": 8
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "class name",
-        "defaultClassificationColor": -1,
-        "length": 21,
-        "start": 399
+        "start": 399,
+        "length": 21
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "string",
-        "defaultClassificationColor": -1,
-        "length": 2,
-        "start": 421
+        "start": 421,
+        "length": 2
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 8,
-        "start": 428
+        "start": 428,
+        "length": 8
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "class name",
-        "defaultClassificationColor": -1,
-        "length": 15,
-        "start": 438
+        "start": 438,
+        "length": 15
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "string",
-        "defaultClassificationColor": -1,
-        "length": 2,
-        "start": 454
+        "start": 454,
+        "length": 2
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 8,
-        "start": 461
+        "start": 461,
+        "length": 8
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "class name",
-        "defaultClassificationColor": -1,
-        "length": 15,
-        "start": 471
+        "start": 471,
+        "length": 15
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "string",
-        "defaultClassificationColor": -1,
-        "length": 24,
-        "start": 487
+        "start": 487,
+        "length": 24
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 8,
-        "start": 516
+        "start": 516,
+        "length": 8
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "class name",
-        "defaultClassificationColor": -1,
-        "length": 17,
-        "start": 526
+        "start": 526,
+        "length": 17
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "string",
-        "defaultClassificationColor": -1,
-        "length": 19,
-        "start": 544
+        "start": 544,
+        "length": 19
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 8,
-        "start": 568
+        "start": 568,
+        "length": 8
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "class name",
-        "defaultClassificationColor": -1,
-        "length": 17,
-        "start": 578
+        "start": 578,
+        "length": 17
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "string",
-        "defaultClassificationColor": -1,
-        "length": 2,
-        "start": 596
+        "start": 596,
+        "length": 2
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 8,
-        "start": 603
+        "start": 603,
+        "length": 8
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "class name",
-        "defaultClassificationColor": -1,
-        "length": 15,
-        "start": 613
+        "start": 613,
+        "length": 15
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "string",
-        "defaultClassificationColor": -1,
-        "length": 2,
-        "start": 629
+        "start": 629,
+        "length": 2
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "comment",
-        "defaultClassificationColor": -1,
-        "length": 212,
-        "start": 637
+        "start": 637,
+        "length": 212
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 8,
-        "start": 852
+        "start": 852,
+        "length": 8
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "class name",
-        "defaultClassificationColor": -1,
-        "length": 10,
-        "start": 862
+        "start": 862,
+        "length": 10
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 5,
-        "start": 873
+        "start": 873,
+        "length": 5
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "comment",
-        "defaultClassificationColor": -1,
-        "length": 84,
-        "start": 884
+        "start": 884,
+        "length": 84
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 8,
-        "start": 971
+        "start": 971,
+        "length": 8
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "class name",
-        "defaultClassificationColor": -1,
-        "length": 4,
-        "start": 981
+        "start": 981,
+        "length": 4
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "string",
-        "defaultClassificationColor": -1,
-        "length": 38,
-        "start": 986
+        "start": 986,
+        "length": 38
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "comment",
-        "defaultClassificationColor": -1,
-        "length": 336,
-        "start": 1030
+        "start": 1030,
+        "length": 336
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 8,
-        "start": 1369
+        "start": 1369,
+        "length": 8
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "class name",
-        "defaultClassificationColor": -1,
-        "length": 15,
-        "start": 1379
+        "start": 1379,
+        "length": 15
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "string",
-        "defaultClassificationColor": -1,
-        "length": 9,
-        "start": 1395
+        "start": 1395,
+        "length": 9
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "keyword",
-        "defaultClassificationColor": -1,
-        "length": 8,
-        "start": 1409
+        "start": 1409,
+        "length": 8
       },
       {
+        "defaultClassificationColor": -1,
         "classification": "class name",
-        "defaultClassificationColor": -1,
-        "length": 19,
-        "start": 1419
+        "start": 1419,
+        "length": 19
       },
       {
-        "classification": "string",
         "defaultClassificationColor": -1,
-        "length": 9,
-        "start": 1439
+        "classification": "string",
+        "start": 1439,
+        "length": 9
       }
     ],
     "definitionCount": 2,
@@ -316,6 +316,7 @@
           "isImplicitlyDeclared": true,
           "kind": "File",
           "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
           "shortName": "AssemblyInfo.cs"
         }
       },
@@ -326,363 +327,360 @@
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
           "shortName": "BAA9D4B4B4C30D2D7DEECFE82B254A4CA08102A5"
         }
       }
     ],
     "language": "C#",
-    "projectId": "CodexTestCSharpLibrary",
-    "projectRelativePath": "Properties\\AssemblyInfo.cs",
     "referenceCount": 27,
     "references": [
       {
-        "lineNumber": 1,
-        "lineSpanText": "using System.Reflection;",
         "reference": {
           "id": "fj6tjzorh59i",
           "isImplicitlyDeclared": true,
           "kind": "File",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
-        }
+        },
+        "lineSpanText": "using System.Reflection;",
+        "lineNumber": 1
       },
       {
-        "lineNumber": 1,
-        "lineSpanText": "using System.Reflection;",
         "reference": {
           "id": "nevkzgkgawuz",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
-        }
+        },
+        "lineSpanText": "using System.Reflection;",
+        "lineNumber": 1
       },
       {
-        "lineNumber": 1,
-        "lineSpanText": "using System.Reflection;",
         "reference": {
           "id": "jt014kvrjbyh",
           "isImplicitlyDeclared": true,
           "kind": "File",
           "projectId": "CodexTestRepo(Repo)",
           "referenceKind": "Definition"
-        }
+        },
+        "lineSpanText": "using System.Reflection;",
+        "lineNumber": 1
       },
       {
-        "length": 13,
-        "lineNumber": 8,
-        "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyTitle(\"CodexTestCSharpLibrary\")]",
         "reference": {
           "id": "i65jqbopyhle",
           "kind": "Constructor",
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "start": 309
-      },
-      {
-        "length": 13,
+        "lineSpanText": "[assembly: AssemblyTitle(\"CodexTestCSharpLibrary\")]",
         "lineNumber": 8,
         "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyTitle(\"CodexTestCSharpLibrary\")]",
+        "start": 309,
+        "length": 13
+      },
+      {
         "reference": {
           "id": "iggnvlryy8pl",
           "kind": "Class",
           "projectId": "mscorlib",
           "referenceKind": "Instantiation"
         },
-        "start": 309
+        "lineSpanText": "[assembly: AssemblyTitle(\"CodexTestCSharpLibrary\")]",
+        "lineNumber": 8,
+        "lineSpanStart": 11,
+        "start": 309,
+        "length": 13
       },
       {
-        "length": 19,
-        "lineNumber": 9,
-        "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyDescription(\"\")]",
         "reference": {
           "id": "ifegugrv95ue",
           "kind": "Constructor",
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "start": 362
-      },
-      {
-        "length": 19,
+        "lineSpanText": "[assembly: AssemblyDescription(\"\")]",
         "lineNumber": 9,
         "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyDescription(\"\")]",
+        "start": 362,
+        "length": 19
+      },
+      {
         "reference": {
           "id": "zpyv4zicoqy4",
           "kind": "Class",
           "projectId": "mscorlib",
           "referenceKind": "Instantiation"
         },
-        "start": 362
+        "lineSpanText": "[assembly: AssemblyDescription(\"\")]",
+        "lineNumber": 9,
+        "lineSpanStart": 11,
+        "start": 362,
+        "length": 19
       },
       {
-        "length": 21,
-        "lineNumber": 10,
-        "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyConfiguration(\"\")]",
         "reference": {
           "id": "k95qbgte30kn",
           "kind": "Constructor",
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "start": 399
-      },
-      {
-        "length": 21,
+        "lineSpanText": "[assembly: AssemblyConfiguration(\"\")]",
         "lineNumber": 10,
         "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyConfiguration(\"\")]",
+        "start": 399,
+        "length": 21
+      },
+      {
         "reference": {
           "id": "ugc4cfruh6uv",
           "kind": "Class",
           "projectId": "mscorlib",
           "referenceKind": "Instantiation"
         },
-        "start": 399
+        "lineSpanText": "[assembly: AssemblyConfiguration(\"\")]",
+        "lineNumber": 10,
+        "lineSpanStart": 11,
+        "start": 399,
+        "length": 21
       },
       {
-        "length": 15,
-        "lineNumber": 11,
-        "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyCompany(\"\")]",
         "reference": {
           "id": "jyyyk9k2knea",
           "kind": "Constructor",
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "start": 438
-      },
-      {
-        "length": 15,
+        "lineSpanText": "[assembly: AssemblyCompany(\"\")]",
         "lineNumber": 11,
         "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyCompany(\"\")]",
+        "start": 438,
+        "length": 15
+      },
+      {
         "reference": {
           "id": "ymmm1xbqot1r",
           "kind": "Class",
           "projectId": "mscorlib",
           "referenceKind": "Instantiation"
         },
-        "start": 438
+        "lineSpanText": "[assembly: AssemblyCompany(\"\")]",
+        "lineNumber": 11,
+        "lineSpanStart": 11,
+        "start": 438,
+        "length": 15
       },
       {
-        "length": 15,
-        "lineNumber": 12,
-        "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyProduct(\"CodexTestCSharpLibrary\")]",
         "reference": {
           "id": "gvbjpbcxwy2k",
           "kind": "Constructor",
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "start": 471
-      },
-      {
-        "length": 15,
+        "lineSpanText": "[assembly: AssemblyProduct(\"CodexTestCSharpLibrary\")]",
         "lineNumber": 12,
         "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyProduct(\"CodexTestCSharpLibrary\")]",
+        "start": 471,
+        "length": 15
+      },
+      {
         "reference": {
           "id": "xxbdd8vgzz9q",
           "kind": "Class",
           "projectId": "mscorlib",
           "referenceKind": "Instantiation"
         },
-        "start": 471
+        "lineSpanText": "[assembly: AssemblyProduct(\"CodexTestCSharpLibrary\")]",
+        "lineNumber": 12,
+        "lineSpanStart": 11,
+        "start": 471,
+        "length": 15
       },
       {
-        "length": 17,
-        "lineNumber": 13,
-        "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyCopyright(\"Copyright ©  2017\")]",
         "reference": {
           "id": "cekgdiwfsy8q",
           "kind": "Class",
           "projectId": "mscorlib",
           "referenceKind": "Instantiation"
         },
-        "start": 526
-      },
-      {
-        "length": 17,
+        "lineSpanText": "[assembly: AssemblyCopyright(\"Copyright ©  2017\")]",
         "lineNumber": 13,
         "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyCopyright(\"Copyright ©  2017\")]",
+        "start": 526,
+        "length": 17
+      },
+      {
         "reference": {
           "id": "yxt4gpkb4tiv",
           "kind": "Constructor",
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "start": 526
+        "lineSpanText": "[assembly: AssemblyCopyright(\"Copyright ©  2017\")]",
+        "lineNumber": 13,
+        "lineSpanStart": 11,
+        "start": 526,
+        "length": 17
       },
       {
-        "length": 17,
-        "lineNumber": 14,
-        "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyTrademark(\"\")]",
         "reference": {
           "id": "gbbsioq1lr7p",
           "kind": "Class",
           "projectId": "mscorlib",
           "referenceKind": "Instantiation"
         },
-        "start": 578
-      },
-      {
-        "length": 17,
+        "lineSpanText": "[assembly: AssemblyTrademark(\"\")]",
         "lineNumber": 14,
         "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyTrademark(\"\")]",
+        "start": 578,
+        "length": 17
+      },
+      {
         "reference": {
           "id": "rhqleoomjaub",
           "kind": "Constructor",
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "start": 578
+        "lineSpanText": "[assembly: AssemblyTrademark(\"\")]",
+        "lineNumber": 14,
+        "lineSpanStart": 11,
+        "start": 578,
+        "length": 17
       },
       {
-        "length": 15,
-        "lineNumber": 15,
-        "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyCulture(\"\")]",
         "reference": {
           "id": "t2nno4ugsft3",
           "kind": "Constructor",
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "start": 613
-      },
-      {
-        "length": 15,
+        "lineSpanText": "[assembly: AssemblyCulture(\"\")]",
         "lineNumber": 15,
         "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyCulture(\"\")]",
+        "start": 613,
+        "length": 15
+      },
+      {
         "reference": {
           "id": "ilzi8qywxj5d",
           "kind": "Class",
           "projectId": "mscorlib",
           "referenceKind": "Instantiation"
         },
-        "start": 613
+        "lineSpanText": "[assembly: AssemblyCulture(\"\")]",
+        "lineNumber": 15,
+        "lineSpanStart": 11,
+        "start": 613,
+        "length": 15
       },
       {
-        "length": 10,
-        "lineNumber": 20,
-        "lineSpanStart": 11,
-        "lineSpanText": "[assembly: ComVisible(false)]",
         "reference": {
           "id": "y42a7756tggw",
           "kind": "Constructor",
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "start": 862
-      },
-      {
-        "length": 10,
+        "lineSpanText": "[assembly: ComVisible(false)]",
         "lineNumber": 20,
         "lineSpanStart": 11,
-        "lineSpanText": "[assembly: ComVisible(false)]",
+        "start": 862,
+        "length": 10
+      },
+      {
         "reference": {
           "id": "vhsblzyr6fft",
           "kind": "Class",
           "projectId": "mscorlib",
           "referenceKind": "Instantiation"
         },
-        "start": 862
+        "lineSpanText": "[assembly: ComVisible(false)]",
+        "lineNumber": 20,
+        "lineSpanStart": 11,
+        "start": 862,
+        "length": 10
       },
       {
-        "length": 4,
-        "lineNumber": 23,
-        "lineSpanStart": 11,
-        "lineSpanText": "[assembly: Guid(\"f16a9de8-193f-4d07-9d86-1dd2fb087a96\")]",
         "reference": {
           "id": "bv3kxqc9ozrz",
           "kind": "Constructor",
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "start": 981
-      },
-      {
-        "length": 4,
+        "lineSpanText": "[assembly: Guid(\"f16a9de8-193f-4d07-9d86-1dd2fb087a96\")]",
         "lineNumber": 23,
         "lineSpanStart": 11,
-        "lineSpanText": "[assembly: Guid(\"f16a9de8-193f-4d07-9d86-1dd2fb087a96\")]",
+        "start": 981,
+        "length": 4
+      },
+      {
         "reference": {
           "id": "d7zlvzfupcol",
           "kind": "Class",
           "projectId": "mscorlib",
           "referenceKind": "Instantiation"
         },
-        "start": 981
+        "lineSpanText": "[assembly: Guid(\"f16a9de8-193f-4d07-9d86-1dd2fb087a96\")]",
+        "lineNumber": 23,
+        "lineSpanStart": 11,
+        "start": 981,
+        "length": 4
       },
       {
-        "length": 15,
-        "lineNumber": 35,
-        "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyVersion(\"1.0.0.0\")]",
         "reference": {
           "id": "c38l4kmhtlby",
           "kind": "Constructor",
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "start": 1379
-      },
-      {
-        "length": 15,
+        "lineSpanText": "[assembly: AssemblyVersion(\"1.0.0.0\")]",
         "lineNumber": 35,
         "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyVersion(\"1.0.0.0\")]",
+        "start": 1379,
+        "length": 15
+      },
+      {
         "reference": {
           "id": "oxstkbpff3nk",
           "kind": "Class",
           "projectId": "mscorlib",
           "referenceKind": "Instantiation"
         },
-        "start": 1379
+        "lineSpanText": "[assembly: AssemblyVersion(\"1.0.0.0\")]",
+        "lineNumber": 35,
+        "lineSpanStart": 11,
+        "start": 1379,
+        "length": 15
       },
       {
-        "length": 19,
-        "lineNumber": 36,
-        "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyFileVersion(\"1.0.0.0\")]",
         "reference": {
           "id": "exjoiusmafos",
           "kind": "Constructor",
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "start": 1419
-      },
-      {
-        "length": 19,
+        "lineSpanText": "[assembly: AssemblyFileVersion(\"1.0.0.0\")]",
         "lineNumber": 36,
         "lineSpanStart": 11,
-        "lineSpanText": "[assembly: AssemblyFileVersion(\"1.0.0.0\")]",
+        "start": 1419,
+        "length": 19
+      },
+      {
         "reference": {
           "id": "g1uxbc9evuqp",
           "kind": "Class",
           "projectId": "mscorlib",
           "referenceKind": "Instantiation"
         },
-        "start": 1419
+        "lineSpanText": "[assembly: AssemblyFileVersion(\"1.0.0.0\")]",
+        "lineNumber": 36,
+        "lineSpanStart": 11,
+        "start": 1419,
+        "length": 19
       }
     ],
-    "repoRelativePath": "CodexTestCSharpLibrary\\Properties\\AssemblyInfo.cs",
-    "repositoryName": "CodexTestRepo",
     "sourceFile": {
       "info": {
         "language": "C#",

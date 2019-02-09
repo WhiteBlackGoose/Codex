@@ -8,6 +8,7 @@
           "id": "m6vnvk1bhctc",
           "isImplicitlyDeclared": true,
           "kind": "File",
+          "referenceKind": "Definition",
           "shortName": ".NETFramework,Version=v4.5.2.AssemblyAttributes.cs"
         }
       },
@@ -17,16 +18,13 @@
           "id": "hba7qalusuz1",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
+          "referenceKind": "Definition",
           "shortName": "D8E2B16929FE645273F7C5697AD942E9356C1B75"
         }
       }
     ],
     "language": "C#",
-    "projectId": "CodexTestCSharpLibrary",
-    "projectRelativePath": ".NETFramework,Version=v4.5.2.AssemblyAttributes.cs",
     "referenceCount": 8,
-    "repoRelativePath": "[Temp]\\.NETFramework,Version=v4.5.2.AssemblyAttributes.cs",
-    "repositoryName": "CodexTestRepo",
     "sourceFile": {
       "info": {
         "language": "C#",
@@ -138,37 +136,37 @@
     ],
     "sharedValues": [
       {
-        "id": "hba7qalusuz1",
+        "referenceKind": "Definition",
         "isImplicitlyDeclared": true,
-        "kind": "Checksum.Sha1",
         "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
+        "id": "hba7qalusuz1",
+        "kind": "Checksum.Sha1"
       },
       {
-        "id": "m6vnvk1bhctc",
         "isImplicitlyDeclared": true,
+        "id": "m6vnvk1bhctc",
         "kind": "File"
       },
       {
-        "id": "u8iiz1swj1dp",
         "isImplicitlyDeclared": true,
-        "projectId": "CodexTestRepo(Repo)"
+        "projectId": "CodexTestRepo(Repo)",
+        "id": "u8iiz1swj1dp"
       },
       {
-        "id": "zng0jvzsohnn",
-        "kind": "Class",
+        "referenceKind": "Instantiation",
         "projectId": "mscorlib",
-        "referenceKind": "Instantiation"
+        "id": "zng0jvzsohnn",
+        "kind": "Class"
       },
       {
+        "referenceKind": "Reference",
         "id": "oxmmbdshugky",
-        "kind": "Constructor",
-        "referenceKind": "Reference"
+        "kind": "Constructor"
       },
       {
+        "referenceKind": "Write",
         "id": "i7vzz3amryno",
-        "kind": "Property",
-        "referenceKind": "Write"
+        "kind": "Property"
       }
     ]
   },

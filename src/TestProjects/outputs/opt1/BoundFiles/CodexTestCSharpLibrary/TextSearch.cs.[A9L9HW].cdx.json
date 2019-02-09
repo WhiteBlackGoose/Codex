@@ -1,0 +1,314 @@
+{
+  "boundSourceFile": {
+    "definitionCount": 7,
+    "definitions": [
+      {
+        "definition": {
+          "containerQualifiedName": "Cases",
+          "id": "hrlh94cacyzy",
+          "isImplicitlyDeclared": true,
+          "kind": "File",
+          "referenceKind": "Definition",
+          "shortName": "TextSearch.cs"
+        }
+      },
+      {
+        "definition": {
+          "containerQualifiedName": "Checksum.Sha1",
+          "id": "xcfw3lbeqlwl",
+          "isImplicitlyDeclared": true,
+          "kind": "Checksum.Sha1",
+          "referenceKind": "Definition",
+          "shortName": "7511B0623B9B50CCAC648B30322A55700B197BA8"
+        }
+      },
+      {
+        "definition": {
+          "comment": "",
+          "containerQualifiedName": "CodexTestCSharpLibrary",
+          "declarationName": "internal class CodexTestCSharpLibrary.TextSearch",
+          "displayName": "CodexTestCSharpLibrary.TextSearch",
+          "glyph": 6,
+          "id": "hcyhdejfniqb",
+          "kind": "Class",
+          "referenceKind": "Definition",
+          "shortName": "TextSearch"
+        },
+        "start": 307,
+        "length": 10
+      },
+      {
+        "definition": {
+          "comment": "",
+          "containerQualifiedName": "CodexTestCSharpLibrary.TextSearch",
+          "declarationName": "public static int TextSearch.GetNextLineNumber([int lineNumber = 0])",
+          "displayName": "CodexTestCSharpLibrary.TextSearch.GetNextLineNumber(System.Int32)",
+          "glyph": 44,
+          "id": "jj80iyl3izfh",
+          "kind": "Method",
+          "referenceKind": "Definition",
+          "shortName": "GetNextLineNumber",
+          "symbolDepth": 1,
+          "typeName": "Int32"
+        },
+        "start": 352,
+        "length": 17
+      },
+      {
+        "definition": {
+          "comment": "",
+          "declarationName": "public int TextSearch.CommentWithSameTextLineNumber1",
+          "displayName": "CodexTestCSharpLibrary.TextSearch.CommentWithSameTextLineNumber1",
+          "glyph": 31,
+          "id": "qpgl9jpdlpvv",
+          "kind": "Field",
+          "referenceKind": "Definition",
+          "shortName": "CommentWithSameTextLineNumber1",
+          "symbolDepth": 1,
+          "typeName": "Int32"
+        },
+        "start": 450,
+        "length": 30
+      },
+      {
+        "definition": {
+          "comment": "",
+          "declarationName": "public int TextSearch.MultiLineCommentLineNumber",
+          "displayName": "CodexTestCSharpLibrary.TextSearch.MultiLineCommentLineNumber",
+          "id": "ozzhhrshhqmr",
+          "referenceKind": "Definition",
+          "shortName": "MultiLineCommentLineNumber",
+          "symbolDepth": 1,
+          "typeName": "Int32"
+        },
+        "start": 561,
+        "length": 26
+      },
+      {
+        "definition": {
+          "comment": "",
+          "declarationName": "public int TextSearch.CommentWithSameTextLineNumber2",
+          "displayName": "CodexTestCSharpLibrary.TextSearch.CommentWithSameTextLineNumber2",
+          "id": "rapzpz7nygk6",
+          "referenceKind": "Definition",
+          "shortName": "CommentWithSameTextLineNumber2",
+          "symbolDepth": 1,
+          "typeName": "Int32"
+        },
+        "start": 761,
+        "length": 30
+      }
+    ],
+    "language": "C#",
+    "referenceCount": 18,
+    "sourceFile": {
+      "info": {
+        "language": "C#",
+        "lines": 29,
+        "projectId": "CodexTestCSharpLibrary",
+        "projectRelativePath": "Cases\\TextSearch.cs",
+        "properties": {
+          "Checksum.Sha1": "7511B0623B9B50CCAC648B30322A55700B197BA8"
+        },
+        "repoRelativePath": "CodexTestCSharpLibrary\\Cases\\TextSearch.cs",
+        "repositoryName": "CodexTestRepo",
+        "size": 861
+      }
+    }
+  },
+  "compressedClassifications": {
+    "count": 50,
+    "segments": [
+      {
+        "fullLength": 849,
+        "lengths": {
+          "cdata": "Y2FlYeViY2FlZmFl4wdTHCwcolEsnKysTAL8TJwMnAysTLICEqxMkgKlYBYA",
+          "compressedLength": 45,
+          "decompressedLength": 50,
+          "minValue": 1,
+          "valueByteWidth": 1
+        },
+        "localSymbolGroupIds": {
+          "cdata": "Y2DACxiBEA0AAA==",
+          "compressedLength": 10,
+          "decompressedLength": 50,
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "Y2BkYGQEYRSKiYGZgYGBhZmBlY2VjYGBnYUJQQAA",
+          "compressedLength": 30,
+          "decompressedLength": 50,
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "Y2BgYmABYiY4jZ3HBsRcDOxAUggqwgyEIHk2IOaDquVj4MXCAgA=",
+          "compressedLength": 38,
+          "decompressedLength": 100,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "color": -1,
+        "name": "keyword"
+      },
+      {
+        "color": -1,
+        "name": "identifier"
+      },
+      {
+        "color": -1,
+        "name": "comment"
+      },
+      {
+        "color": -1,
+        "name": "class name"
+      },
+      {
+        "color": -1,
+        "name": "method name"
+      },
+      {
+        "color": -1,
+        "name": "parameter name"
+      },
+      {
+        "color": -1,
+        "name": "number"
+      },
+      {
+        "color": -1,
+        "name": "field name"
+      }
+    ]
+  },
+  "compressedReferences": {
+    "count": 18,
+    "lineIndices": {
+      "cdata": "AAwOEBMY",
+      "valueByteWidth": 1
+    },
+    "lineSpanModel": {
+      "count": 18,
+      "segments": [
+        {
+          "fullLength": 811,
+          "sharedIndices": {
+            "data": "AAAAAQICAgICAwMDBAQEBQUF",
+            "valueByteWidth": 1
+          }
+        }
+      ]
+    },
+    "segments": [
+      {
+        "fullLength": 811,
+        "lengths": {
+          "cdata": "AAAACgMREBADAx4RAxoRAx4R",
+          "valueByteWidth": 1
+        },
+        "optimized": true,
+        "sharedIndices": {
+          "cdata": "BQAIAQsGCgkLCwMHCwIHCwQH",
+          "valueByteWidth": 1
+        },
+        "starts": {
+          "cdata": "Y2AAARNGBQYmBmYgi5nBHMhiYbACk9PBJAA=",
+          "compressedLength": 26,
+          "decompressedLength": 36,
+          "valueByteWidth": 2
+        }
+      }
+    ],
+    "sharedValues": [
+      {
+        "referenceKind": "Definition",
+        "isImplicitlyDeclared": true,
+        "projectId": "CodexTestCSharpLibrary",
+        "id": "xcfw3lbeqlwl",
+        "kind": "Checksum.Sha1"
+      },
+      {
+        "id": "hcyhdejfniqb",
+        "kind": "Class"
+      },
+      {
+        "id": "ozzhhrshhqmr",
+        "kind": "Field"
+      },
+      {
+        "id": "qpgl9jpdlpvv"
+      },
+      {
+        "id": "rapzpz7nygk6"
+      },
+      {
+        "isImplicitlyDeclared": true,
+        "id": "hrlh94cacyzy",
+        "kind": "File"
+      },
+      {
+        "id": "jj80iyl3izfh",
+        "kind": "Method"
+      },
+      {
+        "referenceKind": "Reference"
+      },
+      {
+        "referenceKind": "Definition",
+        "isImplicitlyDeclared": true,
+        "projectId": "CodexTestRepo(Repo)",
+        "id": "zl47yz4igjyc",
+        "kind": "File"
+      },
+      {
+        "referenceKind": "Instantiation",
+        "projectId": "mscorlib",
+        "id": "jckzih8iijrs",
+        "kind": "Class"
+      },
+      {
+        "referenceKind": "Reference",
+        "id": "bgsfggmjvt31",
+        "kind": "Constructor"
+      },
+      {
+        "id": "g13dpcmnysjl",
+        "kind": "Struct"
+      }
+    ]
+  },
+  "sourceFileContentLines": [
+    "using System;\r\n",
+    "using System.Collections.Generic;\r\n",
+    "using System.Linq;\r\n",
+    "using System.Runtime.CompilerServices;\r\n",
+    "using System.Text;\r\n",
+    "using System.Threading.Tasks;\r\n",
+    "\r\n",
+    "namespace CodexTestCSharpLibrary\r\n",
+    "{\r\n",
+    "    /// <summary>\r\n",
+    "    /// This class is used to verify text search results\r\n",
+    "    /// </summary>\r\n",
+    "    class TextSearch\r\n",
+    "    {\r\n",
+    "        public static int GetNextLineNumber([CallerLineNumber] int lineNumber = 0) => lineNumber + 1;\r\n",
+    "\r\n",
+    "        public int CommentWithSameTextLineNumber1 = GetNextLineNumber();\r\n",
+    "        // Comment with same text\r\n",
+    "\r\n",
+    "        public int MultiLineCommentLineNumber = GetNextLineNumber();\r\n",
+    "        // Multiline comment where\r\n",
+    "        // we should find the comment when\r\n",
+    "        // searching for phrase spanning lines\r\n",
+    "\r\n",
+    "        public int CommentWithSameTextLineNumber2 = GetNextLineNumber();\r\n",
+    "        // Comment with same text\r\n",
+    "    }\r\n",
+    "}\r\n",
+    ""
+  ]
+}

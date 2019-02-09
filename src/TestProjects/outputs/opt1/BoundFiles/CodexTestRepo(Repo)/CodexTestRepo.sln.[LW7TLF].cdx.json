@@ -8,6 +8,7 @@
           "id": "zbury1mkviqo",
           "isImplicitlyDeclared": true,
           "kind": "File",
+          "referenceKind": "Definition",
           "shortName": "CodexTestRepo.sln"
         }
       },
@@ -17,16 +18,13 @@
           "id": "xfnkzuywvmuy",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
+          "referenceKind": "Definition",
           "shortName": "46EF8D8E2CA88EDFAB8680A788650147C405FF27"
         }
       }
     ],
     "language": "sln",
-    "projectId": "CodexTestRepo(Repo)",
-    "projectRelativePath": "CodexTestRepo.sln",
     "referenceCount": 4,
-    "repoRelativePath": "CodexTestRepo.sln",
-    "repositoryName": "CodexTestRepo",
     "sourceFile": {
       "info": {
         "language": "sln",
@@ -112,22 +110,22 @@
     ],
     "sharedValues": [
       {
-        "id": "xfnkzuywvmuy",
+        "referenceKind": "Definition",
         "isImplicitlyDeclared": true,
-        "kind": "Checksum.Sha1",
         "projectId": "CodexTestRepo(Repo)",
-        "referenceKind": "Definition"
+        "id": "xfnkzuywvmuy",
+        "kind": "Checksum.Sha1"
       },
       {
+        "referenceKind": "Reference",
+        "isImplicitlyDeclared": true,
         "id": "oojcfpqfkvvk",
-        "isImplicitlyDeclared": true,
-        "kind": "File",
-        "referenceKind": "Reference"
+        "kind": "File"
       },
       {
-        "id": "zbury1mkviqo",
+        "referenceKind": "Definition",
         "isImplicitlyDeclared": true,
-        "referenceKind": "Definition"
+        "id": "zbury1mkviqo"
       }
     ]
   },

@@ -8,34 +8,32 @@
           "id": "d2xcyy2aphpa",
           "isImplicitlyDeclared": true,
           "kind": "File",
+          "referenceKind": "Definition",
           "shortName": "CodexTestCSharpLibrary.xml"
         }
       },
       {
         "definition": {
           "containerQualifiedName": "Checksum.Sha1",
-          "id": "hbh3ty0mlayl",
+          "id": "uumkh4pzeaqi",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
-          "shortName": "BFDFDEEF6056A7382C148C3CEBC12903935B4025"
+          "referenceKind": "Definition",
+          "shortName": "F42015C67F6F3498C66CB3E4C6530FB3A59281C0"
         }
       }
     ],
     "excludeFromSearch": true,
     "language": "xml",
-    "projectId": "CodexTestCSharpLibrary",
-    "projectRelativePath": "[Metadata]\\ReferenceSymbols\\CodexTestCSharpLibrary.xml",
-    "referenceCount": 15,
-    "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceSymbols\\CodexTestCSharpLibrary.xml",
-    "repositoryName": "CodexTestRepo",
+    "referenceCount": 20,
     "sourceFile": {
       "info": {
         "language": "xml",
-        "lines": 21,
+        "lines": 28,
         "projectId": "CodexTestCSharpLibrary",
         "projectRelativePath": "[Metadata]\\ReferenceSymbols\\CodexTestCSharpLibrary.xml",
         "properties": {
-          "Checksum.Sha1": "BFDFDEEF6056A7382C148C3CEBC12903935B4025"
+          "Checksum.Sha1": "F42015C67F6F3498C66CB3E4C6530FB3A59281C0"
         },
         "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceSymbols\\CodexTestCSharpLibrary.xml",
         "repositoryName": "CodexTestRepo"
@@ -43,34 +41,34 @@
     }
   },
   "compressedClassifications": {
-    "count": 213,
+    "count": 289,
     "segments": [
       {
-        "fullLength": 1055,
+        "fullLength": 1502,
         "lengths": {
-          "cdata": "Y+BnYWBgZGBg4GBmYDAG0qxAWoyBF8gCCoM4rMgcDiiHkQOiwxKqA0URNzYdYA4fmnYtqHYURcLIHCGcZmFVBjSYkZ8BAA==",
-          "compressedLength": 70,
-          "decompressedLength": 213,
+          "cdata": "Y+BnYWBgZGBg4GBmYDAG0qxAWoyBF8gCCoM4rMgcDiiHkQOiwxKqA0URNzYdYA4fmnYtqHYURcLIHCGcZmFVBjNYFGowJ7IiDZwcTWSOCsIsRn4GAA==",
+          "compressedLength": 85,
+          "decompressedLength": 289,
           "minValue": 1,
           "valueByteWidth": 1
         },
         "localSymbolGroupIds": {
-          "cdata": "Y2AYhgAA",
-          "compressedLength": 6,
-          "decompressedLength": 213,
+          "cdata": "Y2AYBXgBAA==",
+          "compressedLength": 7,
+          "decompressedLength": 289,
           "valueByteWidth": 1
         },
         "optimized": true,
         "sharedIndices": {
-          "cdata": "Y2BkYmBmYWZgQKUJc0jXQU3teA1mAAA=",
+          "cdata": "Y2BkYmBmYWZgQKUJc0jXQU3t9DEYhAA=",
           "compressedLength": 23,
-          "decompressedLength": 213,
+          "decompressedLength": 289,
           "valueByteWidth": 1
         },
         "starts": {
-          "cdata": "Y2BgZGACYhhkReOzo/CRWeTIsNLBjsFqO/kuZgaTAA==",
-          "compressedLength": 31,
-          "decompressedLength": 426,
+          "cdata": "Y2BgZGACYhhkReOzo/CRWeTIsNLBjsFq+3ByMcRdzGASAA==",
+          "compressedLength": 34,
+          "decompressedLength": 578,
           "valueByteWidth": 2
         }
       }
@@ -99,18 +97,18 @@
     ]
   },
   "compressedReferences": {
-    "count": 15,
+    "count": 20,
     "lineIndices": {
-      "cdata": "AAIDBAcICQoNDg8QERI=",
+      "cdata": "AAIDBAcICQoNDg8QERIVFhcYGQ==",
       "valueByteWidth": 1
     },
     "lineSpanModel": {
-      "count": 15,
+      "count": 20,
       "segments": [
         {
-          "fullLength": 995,
+          "fullLength": 1442,
           "sharedIndices": {
-            "data": "AAABAgMEBQYHCAkKCwwN",
+            "data": "AAABAgMEBQYHCAkKCwwNDg8QERI=",
             "valueByteWidth": 1
           }
         }
@@ -119,56 +117,69 @@
     "segments": [
       {
         "excludedFromSearchSpans": {
-          "cdata": "/H8=",
+          "cdata": "/P8P",
           "valueByteWidth": 1
         },
-        "fullLength": 995,
+        "fullLength": 1442,
         "lengths": {
-          "cdata": "AAAXBgkGDAkPCRQTCRQT",
+          "cdata": "AAAXBgkGDAkPCRQTCRQTCikpKiU=",
           "valueByteWidth": 1
         },
         "optimized": true,
         "sharedIndices": {
-          "cdata": "BAAHCAUGCgMOAgkMAQsN",
+          "cdata": "CAALDAkKDwQTAg0RARASAwYHDgU=",
           "valueByteWidth": 1
         },
         "starts": {
-          "cdata": "Y2BgYKhl0AHCXjCpw1AHpUEQAA==",
-          "compressedLength": 19,
-          "decompressedLength": 30,
+          "cdata": "Y2BgYKhl0AHCXjCpw1AHpUEwE84CAA==",
+          "compressedLength": 22,
+          "decompressedLength": 40,
           "valueByteWidth": 2
         }
       }
     ],
     "sharedValues": [
       {
-        "id": "hbh3ty0mlayl",
+        "referenceKind": "Definition",
         "isImplicitlyDeclared": true,
-        "kind": "Checksum.Sha1",
         "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
+        "id": "uumkh4pzeaqi",
+        "kind": "Checksum.Sha1"
       },
       {
+        "referenceKind": "ProjectLevelReference",
         "id": "focaqdch24tt",
-        "kind": "Class",
-        "referenceKind": "ProjectLevelReference"
+        "kind": "Class"
       },
       {
         "id": "gl7z45hdnojl"
       },
       {
+        "id": "hcyhdejfniqb"
+      },
+      {
         "id": "ysgoespli6db"
       },
       {
-        "id": "d2xcyy2aphpa",
-        "isImplicitlyDeclared": true,
-        "kind": "File",
-        "referenceKind": "Definition"
+        "id": "ozzhhrshhqmr",
+        "kind": "Field"
       },
       {
+        "id": "qpgl9jpdlpvv"
+      },
+      {
+        "id": "rapzpz7nygk6"
+      },
+      {
+        "referenceKind": "Definition",
+        "isImplicitlyDeclared": true,
+        "id": "d2xcyy2aphpa",
+        "kind": "File"
+      },
+      {
+        "referenceKind": "ProjectLevelReference",
         "id": "d6gmw0nyzfwe",
-        "kind": "Interface",
-        "referenceKind": "ProjectLevelReference"
+        "kind": "Interface"
       },
       {
         "id": "hubxj3ihkrbe"
@@ -182,6 +193,9 @@
       {
         "id": "i8xspsqvz4oz",
         "kind": "Method"
+      },
+      {
+        "id": "jj80iyl3izfh"
       },
       {
         "id": "ov2v153rs2dy"
@@ -201,7 +215,7 @@
     ]
   },
   "sourceFileContentLines": [
-    "<ReferenceSymbols Count=\"13\">\r\n",
+    "<ReferenceSymbols Count=\"18\">\r\n",
     "  <Namespace Name=\"CodexTestCSharpLibrary.Cases.InterfaceImplementation\">\r\n",
     "    <Symbol Name=\"ITypeWithParams˂T0, T1˃\" ReferenceCount=\"1\" />\r\n",
     "    <Symbol Name=\"IXedoc\" ReferenceCount=\"2\" />\r\n",
@@ -220,6 +234,13 @@
     "    <Symbol Name=\"XedocImpl\" ReferenceCount=\"0\" />\r\n",
     "    <Symbol Name=\"XedocImpl.Abstract()\" ReferenceCount=\"0\" />\r\n",
     "    <Symbol Name=\"XedocImpl.Virtual()\" ReferenceCount=\"0\" />\r\n",
+    "  </Namespace>\r\n",
+    "  <Namespace Name=\"CodexTestCSharpLibrary\">\r\n",
+    "    <Symbol Name=\"TextSearch\" ReferenceCount=\"0\" />\r\n",
+    "    <Symbol Name=\"TextSearch.CommentWithSameTextLineNumber1\" ReferenceCount=\"0\" />\r\n",
+    "    <Symbol Name=\"TextSearch.CommentWithSameTextLineNumber2\" ReferenceCount=\"0\" />\r\n",
+    "    <Symbol Name=\"TextSearch.GetNextLineNumber(System.Int32)\" ReferenceCount=\"3\" />\r\n",
+    "    <Symbol Name=\"TextSearch.MultiLineCommentLineNumber\" ReferenceCount=\"0\" />\r\n",
     "  </Namespace>\r\n",
     "</ReferenceSymbols>"
   ]

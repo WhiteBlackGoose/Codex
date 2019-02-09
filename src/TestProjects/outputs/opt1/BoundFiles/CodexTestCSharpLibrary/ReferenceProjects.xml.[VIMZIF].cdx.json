@@ -8,26 +8,24 @@
           "id": "couybickr8yz",
           "isImplicitlyDeclared": true,
           "kind": "File",
+          "referenceKind": "Definition",
           "shortName": "ReferenceProjects.xml"
         }
       },
       {
         "definition": {
           "containerQualifiedName": "Checksum.Sha1",
-          "id": "nlyn4i6d0zyp",
+          "id": "zqr4ywoyemy4",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
-          "shortName": "46F1D0B36ACE5EF64738A717155E955DBE412DF1"
+          "referenceKind": "Definition",
+          "shortName": "19466A0992DFCA80BE9F4F4689DF5FAE5394B013"
         }
       }
     ],
     "excludeFromSearch": true,
     "language": "xml",
-    "projectId": "CodexTestCSharpLibrary",
-    "projectRelativePath": "[Metadata]\\ReferenceProjects.xml",
     "referenceCount": 4,
-    "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceProjects.xml",
-    "repositoryName": "CodexTestRepo",
     "sourceFile": {
       "info": {
         "language": "xml",
@@ -35,7 +33,7 @@
         "projectId": "CodexTestCSharpLibrary",
         "projectRelativePath": "[Metadata]\\ReferenceProjects.xml",
         "properties": {
-          "Checksum.Sha1": "46F1D0B36ACE5EF64738A717155E955DBE412DF1"
+          "Checksum.Sha1": "19466A0992DFCA80BE9F4F4689DF5FAE5394B013"
         },
         "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceProjects.xml",
         "repositoryName": "CodexTestRepo"
@@ -136,33 +134,33 @@
     ],
     "sharedValues": [
       {
-        "id": "nlyn4i6d0zyp",
+        "referenceKind": "Definition",
         "isImplicitlyDeclared": true,
-        "kind": "Checksum.Sha1",
         "projectId": "CodexTestCSharpLibrary",
-        "referenceKind": "Definition"
+        "id": "zqr4ywoyemy4",
+        "kind": "Checksum.Sha1"
       },
       {
-        "id": "couybickr8yz",
         "isImplicitlyDeclared": true,
+        "id": "couybickr8yz",
         "kind": "File"
       },
       {
-        "id": "d2xcyy2aphpa",
+        "referenceKind": "Reference",
         "isImplicitlyDeclared": true,
-        "referenceKind": "Reference"
+        "id": "d2xcyy2aphpa"
       },
       {
-        "id": "zmsmzhdzwdzx",
-        "isImplicitlyDeclared": true
+        "isImplicitlyDeclared": true,
+        "id": "zmsmzhdzwdzx"
       }
     ]
   },
   "sourceFileContentLines": [
     "<ReferenceProjects>\r\n",
-    "  <Project ReferenceCount=\"13\" Name=\"CodexTestCSharpLibrary\" FullName=\"CodexTestCSharpLibrary\" />\r\n",
+    "  <Project ReferenceCount=\"18\" Name=\"CodexTestCSharpLibrary\" FullName=\"CodexTestCSharpLibrary\" />\r\n",
     "  <Project ReferenceCount=\"0\" Name=\"Microsoft.CSharp\" FullName=\"Microsoft.CSharp, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\" />\r\n",
-    "  <Project ReferenceCount=\"29\" Name=\"mscorlib\" FullName=\"mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n",
+    "  <Project ReferenceCount=\"32\" Name=\"mscorlib\" FullName=\"mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n",
     "  <Project ReferenceCount=\"0\" Name=\"System\" FullName=\"System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n",
     "  <Project ReferenceCount=\"0\" Name=\"System.Core\" FullName=\"System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n",
     "  <Project ReferenceCount=\"0\" Name=\"System.Data\" FullName=\"System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n",
