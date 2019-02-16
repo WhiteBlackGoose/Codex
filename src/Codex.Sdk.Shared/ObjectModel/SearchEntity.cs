@@ -22,7 +22,7 @@ namespace Codex.ObjectModel
             where TBase : class, ISearchEntity
             where T : TBase
         {
-            return searchType?.GetRoutingKey(entity);
+            return searchType?.GetRoutingKey?.Invoke(entity);
         }
     }
 }

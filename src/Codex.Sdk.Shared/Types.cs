@@ -153,9 +153,11 @@ namespace Codex.ObjectModel
         }
     }
 
-    partial class SymbolSpan
+    partial class TextLineSpan
     {
         public int LineSpanEnd => LineSpanStart + Length;
+
+        public string Segment => this.GetSegment();
 
         public void Trim()
         {
@@ -176,7 +178,10 @@ namespace Codex.ObjectModel
                 Length = Math.Min(LineSpanText.Length, Length);
             }
         }
+    }
 
+    partial class SymbolSpan
+    {
         public ReferenceSpan CreateReference(ReferenceSymbol referenceSymbol, SymbolId relatedDefinition = default(SymbolId))
         {
             return new ReferenceSpan(this)

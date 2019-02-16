@@ -1654,61 +1654,49 @@
         "defaultClassificationColor": -1,
         "classification": "xml - attribute value",
         "start": 1405,
-        "length": 37
+        "length": 46
       },
       {
         "defaultClassificationColor": -1,
         "classification": "xml - attribute quotes",
-        "start": 1442,
+        "start": 1451,
         "length": 1
       },
       {
         "defaultClassificationColor": -1,
         "classification": "xml - attribute name",
-        "start": 1444,
+        "start": 1453,
         "length": 14
       },
       {
         "defaultClassificationColor": -1,
         "classification": "xml - delimiter",
-        "start": 1458,
+        "start": 1467,
         "length": 1
       },
       {
         "defaultClassificationColor": -1,
         "classification": "xml - attribute quotes",
-        "start": 1459,
+        "start": 1468,
         "length": 1
       },
       {
         "defaultClassificationColor": -1,
         "classification": "xml - attribute value",
-        "start": 1460,
+        "start": 1469,
         "length": 1
       },
       {
         "defaultClassificationColor": -1,
         "classification": "xml - attribute quotes",
-        "start": 1461,
+        "start": 1470,
         "length": 1
       },
       {
         "defaultClassificationColor": -1,
         "classification": "xml - delimiter",
-        "start": 1463,
+        "start": 1472,
         "length": 2
-      },
-      {
-        "defaultClassificationColor": -1,
-        "classification": "xml - delimiter",
-        "start": 1469,
-        "length": 2
-      },
-      {
-        "defaultClassificationColor": -1,
-        "classification": "xml - name",
-        "start": 1471,
-        "length": 9
       },
       {
         "defaultClassificationColor": -1,
@@ -1718,20 +1706,110 @@
       },
       {
         "defaultClassificationColor": -1,
+        "classification": "xml - name",
+        "start": 1481,
+        "length": 6
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "xml - attribute name",
+        "start": 1488,
+        "length": 4
+      },
+      {
+        "defaultClassificationColor": -1,
         "classification": "xml - delimiter",
-        "start": 1483,
+        "start": 1492,
+        "length": 1
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "xml - attribute quotes",
+        "start": 1493,
+        "length": 1
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "xml - attribute value",
+        "start": 1494,
+        "length": 37
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "xml - attribute quotes",
+        "start": 1531,
+        "length": 1
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "xml - attribute name",
+        "start": 1533,
+        "length": 14
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "xml - delimiter",
+        "start": 1547,
+        "length": 1
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "xml - attribute quotes",
+        "start": 1548,
+        "length": 1
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "xml - attribute value",
+        "start": 1549,
+        "length": 1
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "xml - attribute quotes",
+        "start": 1550,
+        "length": 1
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "xml - delimiter",
+        "start": 1552,
+        "length": 2
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "xml - delimiter",
+        "start": 1558,
         "length": 2
       },
       {
         "defaultClassificationColor": -1,
         "classification": "xml - name",
-        "start": 1485,
+        "start": 1560,
+        "length": 9
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "xml - delimiter",
+        "start": 1569,
+        "length": 1
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "xml - delimiter",
+        "start": 1572,
+        "length": 2
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "xml - name",
+        "start": 1574,
         "length": 16
       },
       {
         "defaultClassificationColor": -1,
         "classification": "xml - delimiter",
-        "start": 1501,
+        "start": 1590,
         "length": 1
       }
     ],
@@ -1751,18 +1829,18 @@
       {
         "definition": {
           "containerQualifiedName": "Checksum.Sha1",
-          "id": "uumkh4pzeaqi",
+          "id": "ptr18sizyo96",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition",
-          "shortName": "F42015C67F6F3498C66CB3E4C6530FB3A59281C0"
+          "shortName": "419F1E29041FBC8D9159BE4EFCCC600AF0414C0D"
         }
       }
     ],
     "excludeFromSearch": true,
     "language": "xml",
-    "referenceCount": 20,
+    "referenceCount": 21,
     "references": [
       {
         "reference": {
@@ -1772,18 +1850,18 @@
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
         },
-        "lineSpanText": "<ReferenceSymbols Count=\"18\">",
+        "lineSpanText": "<ReferenceSymbols Count=\"19\">",
         "lineNumber": 1
       },
       {
         "reference": {
-          "id": "uumkh4pzeaqi",
+          "id": "ptr18sizyo96",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
         },
-        "lineSpanText": "<ReferenceSymbols Count=\"18\">",
+        "lineSpanText": "<ReferenceSymbols Count=\"19\">",
         "lineNumber": 1
       },
       {
@@ -2018,11 +2096,25 @@
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "ProjectLevelReference"
         },
-        "lineSpanText": "<Symbol Name=\"TextSearch.GetNextLineNumber(System.Int32)\" ReferenceCount=\"3\" />",
+        "lineSpanText": "<Symbol Name=\"TextSearch.GetNextLineNumber(System.Int32)\" ReferenceCount=\"4\" />",
         "lineNumber": 25,
         "lineSpanStart": 14,
         "start": 1320,
         "length": 42
+      },
+      {
+        "reference": {
+          "excludeFromSearch": true,
+          "id": "foj5xcxgesje",
+          "kind": "Field",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "ProjectLevelReference"
+        },
+        "lineSpanText": "<Symbol Name=\"TextSearch.MultiCommentWithSameTextLineNumber3\" ReferenceCount=\"0\" />",
+        "lineNumber": 26,
+        "lineSpanStart": 14,
+        "start": 1405,
+        "length": 46
       },
       {
         "reference": {
@@ -2033,20 +2125,20 @@
           "referenceKind": "ProjectLevelReference"
         },
         "lineSpanText": "<Symbol Name=\"TextSearch.MultiLineCommentLineNumber\" ReferenceCount=\"0\" />",
-        "lineNumber": 26,
+        "lineNumber": 27,
         "lineSpanStart": 14,
-        "start": 1405,
+        "start": 1494,
         "length": 37
       }
     ],
     "sourceFile": {
       "info": {
         "language": "xml",
-        "lines": 28,
+        "lines": 29,
         "projectId": "CodexTestCSharpLibrary",
         "projectRelativePath": "[Metadata]\\ReferenceSymbols\\CodexTestCSharpLibrary.xml",
         "properties": {
-          "Checksum.Sha1": "F42015C67F6F3498C66CB3E4C6530FB3A59281C0"
+          "Checksum.Sha1": "419F1E29041FBC8D9159BE4EFCCC600AF0414C0D"
         },
         "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceSymbols\\CodexTestCSharpLibrary.xml",
         "repositoryName": "CodexTestRepo"
@@ -2054,7 +2146,7 @@
     }
   },
   "sourceFileContentLines": [
-    "<ReferenceSymbols Count=\"18\">\r\n",
+    "<ReferenceSymbols Count=\"19\">\r\n",
     "  <Namespace Name=\"CodexTestCSharpLibrary.Cases.InterfaceImplementation\">\r\n",
     "    <Symbol Name=\"ITypeWithParams˂T0, T1˃\" ReferenceCount=\"1\" />\r\n",
     "    <Symbol Name=\"IXedoc\" ReferenceCount=\"2\" />\r\n",
@@ -2078,7 +2170,8 @@
     "    <Symbol Name=\"TextSearch\" ReferenceCount=\"0\" />\r\n",
     "    <Symbol Name=\"TextSearch.CommentWithSameTextLineNumber1\" ReferenceCount=\"0\" />\r\n",
     "    <Symbol Name=\"TextSearch.CommentWithSameTextLineNumber2\" ReferenceCount=\"0\" />\r\n",
-    "    <Symbol Name=\"TextSearch.GetNextLineNumber(System.Int32)\" ReferenceCount=\"3\" />\r\n",
+    "    <Symbol Name=\"TextSearch.GetNextLineNumber(System.Int32)\" ReferenceCount=\"4\" />\r\n",
+    "    <Symbol Name=\"TextSearch.MultiCommentWithSameTextLineNumber3\" ReferenceCount=\"0\" />\r\n",
     "    <Symbol Name=\"TextSearch.MultiLineCommentLineNumber\" ReferenceCount=\"0\" />\r\n",
     "  </Namespace>\r\n",
     "</ReferenceSymbols>"

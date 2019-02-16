@@ -5,6 +5,7 @@ using Codex.ObjectModel;
 using Codex.Sdk.Search;
 using Codex.Serialization;
 using Codex.Utilities;
+using CodexTestCSharpLibrary;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -24,27 +25,11 @@ namespace Codex.ElasticSearch.Tests
         [Test]
         public async Task TestDuplicate()
         {
-            var originalStore = DirectoryCodexStoreTests.CreateInputStore();
-
-            ElasticSearchStoreConfiguration configuration = new ElasticSearchStoreConfiguration()
-            {
-                ClearIndicesBeforeUse = false,
-                CreateIndices = true,
-                ShardCount = 1,
-                Prefix = "estest."
-            };
-            ElasticSearchService service = new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200"));
-            var store = new ElasticSearchStore(configuration, service);
-
-            await store.InitializeAsync();
-
-            await originalStore.ReadAsync(store);
-
-            await originalStore.ReadAsync(store);
+            (var store, var codex) = await InitializeAsync("estest.", populateCount: 0);
+            await store.RegisteredEntityStore.RefreshAsync();
 
             await store.DefinitionStore.RefreshAsync();
-
-            var codex = new ElasticSearchCodex(configuration, service);
+            await store.StoredFilterStore.RefreshAsync();
 
             // Try searching for AssemblyCompanyAttribute which is defined outside of the 
             // ingested code using two modes:
@@ -67,16 +52,51 @@ namespace Codex.ElasticSearch.Tests
         }
 
         [Test]
-        public async Task TestExhaustive()
+        public async Task TestTextSearch()
         {
-            bool populate = false;
+            (var store, var codex) = await InitializeAsync("text.estest.", populateCount: 1);
+            await store.RegisteredEntityStore.RefreshAsync();
+
+            await store.TextChunkStore.RefreshAsync();
+
+            await store.TextSourceStore.RefreshAsync();
+
+            // Try searching for AssemblyCompanyAttribute which is defined outside of the 
+            // ingested code using two modes:
+            // AllowReferencedDefinitions = false (i.e. only symbols declared in ingested code should be returned in results)
+            // AllowReferencedDefinitions = true (i.e. symbols referenced by ingested code may be returned in results)
+            var arguments = new SearchArguments()
+            {
+                SearchString = "Comment with same text",
+                AllowReferencedDefinitions = false,
+                TextSearch = true
+            };
+
+            var textSearchResult = await codex.SearchAsync(arguments);
+            var hits = textSearchResult.Result.Hits;
+
+            var expected = new (int lineNumber, string text)[]
+            {
+                (TextSearch.CommentWithSameTextLineNumber1, "Comment with same text"),
+                (TextSearch.CommentWithSameTextLineNumber2, "Comment with SAME text"),
+                (TextSearch.MultiCommentWithSameTextLineNumber3, "comment"),
+                (TextSearch.MultiCommentWithSameTextLineNumber3 + 1, "with same text"),
+            };
+
+            Assert.AreEqual(expected.Select(s => s.lineNumber), hits.Select(s => s.TextLine.TextSpan.LineNumber));
+            Assert.AreEqual(expected.Select(s => s.text), hits.Select(s => s.TextLine.TextSpan.GetSegment()));
+        }
+
+        private async Task<(ElasticSearchStore store, ElasticSearchCodex codex)> InitializeAsync(string prefix, int populateCount)
+        {
+            bool populate = populateCount > 0;
 
             ElasticSearchStoreConfiguration configuration = new ElasticSearchStoreConfiguration()
             {
                 ClearIndicesBeforeUse = populate,
                 CreateIndices = populate,
                 ShardCount = 1,
-                Prefix = "test."
+                Prefix = prefix
             };
             ElasticSearchService service = new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200"));
             var store = new ElasticSearchStore(configuration, service);
@@ -87,12 +107,23 @@ namespace Codex.ElasticSearch.Tests
             {
                 DirectoryCodexStore originalStore = DirectoryCodexStoreTests.CreateInputStore();
                 await store.FinalizeAsync();
-                await originalStore.ReadAsync(store);
+
+                for (int i = 0; i < populateCount; i++)
+                {
+                    await originalStore.ReadAsync(store);
+                }
             }
 
-            await store.RegisteredEntityStore.RefreshAsync();
-
             var codex = new ElasticSearchCodex(configuration, service);
+
+            return (store, codex);
+        }
+
+        [Test]
+        public async Task TestExhaustive()
+        {
+            (var store, var codex) = await InitializeAsync("test.", populateCount: 0);
+            await store.RegisteredEntityStore.RefreshAsync();
 
             foreach (var searchType in SearchTypes.RegisteredSearchTypes.Where(s => s == SearchTypes.BoundSource))
             {
@@ -114,30 +145,8 @@ namespace Codex.ElasticSearch.Tests
         [Test]
         public async Task TestDelta()
         {
-            bool populate = false;
-
-            ElasticSearchStoreConfiguration configuration = new ElasticSearchStoreConfiguration()
-            {
-                ClearIndicesBeforeUse = populate,
-                CreateIndices = populate,
-                ShardCount = 1,
-                Prefix = "test."
-            };
-            ElasticSearchService service = new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200"));
-            var store = new ElasticSearchStore(configuration, service);
-
-            await store.InitializeAsync();
-
-            if (populate)
-            {
-                DirectoryCodexStore originalStore = DirectoryCodexStoreTests.CreateInputStore();
-                await store.FinalizeAsync();
-                await originalStore.ReadAsync(store);
-            }
-
+            (var store, var codex) = await InitializeAsync("test.", populateCount: 0);
             await store.RegisteredEntityStore.RefreshAsync();
-
-            var codex = new ElasticSearchCodex(configuration, service);
 
             var leftName = "domino.190125.054145";
             var rightName = "domino.190125.055104";
@@ -188,23 +197,8 @@ namespace Codex.ElasticSearch.Tests
         [Test]
         public async Task TestStoreEntityDoesNotReplace()
         {
-            bool populate = true;
-
-            ElasticSearchStoreConfiguration configuration = new ElasticSearchStoreConfiguration()
-            {
-                ClearIndicesBeforeUse = populate,
-                CreateIndices = populate,
-                ShardCount = 1,
-                Prefix = "estest."
-            };
-            ElasticSearchService service = new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200"));
-            var store = new ElasticSearchStore(configuration, service);
-
-            await store.InitializeAsync();
-
+            (var store, var codex) = await InitializeAsync("estest.", populateCount: 1);
             await store.RegisteredEntityStore.RefreshAsync();
-
-            var codex = new ElasticSearchCodex(configuration, service);
 
             var priorValue = "Before";
 

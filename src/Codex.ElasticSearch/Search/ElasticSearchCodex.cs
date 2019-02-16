@@ -258,31 +258,34 @@ namespace Codex.ElasticSearch.Search
 
                 var client = context.Client;
 
-                var terms = searchPhrase.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-                bool allowReferencedDefinitions = terms.Any(t => IsAllowReferenceDefinitionsTerm(t)) || arguments.AllowReferencedDefinitions;
-                terms = terms.Where(t => !IsAllowReferenceDefinitionsTerm(t)).ToArray();
-
-                var indexName = IndexName(SearchTypes.Definition);
-                var definitionsResult = await client.SearchAsync<IDefinitionSearchModel>(s => s
-                        .StoredFilterSearch(context, indexName, qcd => qcd.Bool(bq => bq
-                            .Filter(GetTermsFilter(terms, allowReferencedDefinitions: allowReferencedDefinitions))
-                            .Should(GetTermsFilter(terms, boostOnly: true))),
-                            filterIndexName: allowReferencedDefinitions ? indexName : GetDeclaredDefinitionsIndexName(indexName))
-                        .Take(arguments.MaxResults))
-                    .ThrowOnFailure();
-
-                if (definitionsResult.Hits.Count != 0 || !arguments.FallbackToTextSearch)
+                if (!arguments.TextSearch)
                 {
-                    return new IndexQueryHits<ISearchResult>()
+                    var terms = searchPhrase.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    bool allowReferencedDefinitions = terms.Any(t => IsAllowReferenceDefinitionsTerm(t)) || arguments.AllowReferencedDefinitions;
+                    terms = terms.Where(t => !IsAllowReferenceDefinitionsTerm(t)).ToArray();
+
+                    var indexName = IndexName(SearchTypes.Definition);
+                    var definitionsResult = await client.SearchAsync<IDefinitionSearchModel>(s => s
+                            .StoredFilterSearch(context, indexName, qcd => qcd.Bool(bq => bq
+                                .Filter(GetTermsFilter(terms, allowReferencedDefinitions: allowReferencedDefinitions))
+                                .Should(GetTermsFilter(terms, boostOnly: true))),
+                                filterIndexName: allowReferencedDefinitions ? indexName : GetDeclaredDefinitionsIndexName(indexName))
+                            .Take(arguments.MaxResults))
+                        .ThrowOnFailure();
+
+                    if (definitionsResult.Hits.Count != 0 || !arguments.FallbackToTextSearch)
                     {
-                        Hits = new List<ISearchResult>(definitionsResult.Hits.Select(hit =>
-                            new SearchResult()
-                            {
-                                Definition = new DefinitionSymbol(hit.Source.Definition)
-                            })),
-                        Total = definitionsResult.Total
-                    };
+                        return new IndexQueryHits<ISearchResult>()
+                        {
+                            Hits = new List<ISearchResult>(definitionsResult.Hits.Select(hit =>
+                                new SearchResult()
+                                {
+                                    Definition = new DefinitionSymbol(hit.Source.Definition)
+                                })),
+                            Total = definitionsResult.Total
+                        };
+                    }
                 }
 
                 // Fallback to performing text phrase search

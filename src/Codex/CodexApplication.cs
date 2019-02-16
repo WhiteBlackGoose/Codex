@@ -549,7 +549,11 @@ namespace Codex.Application
         {
             if (String.IsNullOrEmpty(loadDirectory)) throw new ArgumentException("Load directory must be specified. Use -d to provide it.");
 
-            if (!string.IsNullOrEmpty(elasticSearchServer))
+            if (!string.IsNullOrEmpty(saveDirectory))
+            {
+                store = new DirectoryCodexStore(saveDirectory) { Clean = clean, DisableOptimization = test };
+            }
+            else if (!string.IsNullOrEmpty(elasticSearchServer))
             {
                 if (newBackend)
                 {
@@ -569,10 +573,6 @@ namespace Codex.Application
                         TargetIndexName = targetIndexName
                     });
                 }
-            }
-            else if (!string.IsNullOrEmpty(saveDirectory))
-            {
-                store = new DirectoryCodexStore(saveDirectory) { Clean = clean, DisableOptimization = test };
             }
             else
             {

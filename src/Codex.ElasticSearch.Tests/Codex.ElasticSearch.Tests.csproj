@@ -17,8 +17,11 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\TestProjects\CodexTestRepo.cdx\TestInputsDirectoryPath.cs">
+    <Compile Include="..\TestProjects\outputs\TestInputsDirectoryPath.cs">
       <Link>TestInputsDirectoryPath.cs</Link>
+    </Compile>
+    <Compile Include="..\TestProjects\CodexTestRepo\CodexTestCSharpLibrary\Cases\TextSearch.cs">
+      <Link>TextSearch.cs</Link>
     </Compile>
     <Compile Include="EsIntegrationTests.cs" />
     <Compile Include="DirectoryCodexStoreTests.cs" />

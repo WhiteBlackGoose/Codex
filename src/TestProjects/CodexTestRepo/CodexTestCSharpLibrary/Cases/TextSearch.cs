@@ -14,15 +14,19 @@ namespace CodexTestCSharpLibrary
     {
         public static int GetNextLineNumber([CallerLineNumber] int lineNumber = 0) => lineNumber + 1;
 
-        public int CommentWithSameTextLineNumber1 = GetNextLineNumber();
+        public static int CommentWithSameTextLineNumber1 = GetNextLineNumber();
         // Comment with same text
 
-        public int MultiLineCommentLineNumber = GetNextLineNumber();
+        public static int MultiLineCommentLineNumber = GetNextLineNumber();
         // Multiline comment where
         // we should find the comment when
         // searching for phrase spanning lines
 
-        public int CommentWithSameTextLineNumber2 = GetNextLineNumber();
-        // Comment with same text
+        public static int CommentWithSameTextLineNumber2 = GetNextLineNumber();
+        // Comment with SAME text
+
+        public static int MultiCommentWithSameTextLineNumber3 = GetNextLineNumber();
+        // Multiline comment 
+        // with same text
     }
 }

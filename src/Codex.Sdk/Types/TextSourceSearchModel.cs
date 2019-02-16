@@ -9,7 +9,7 @@ namespace Codex.ObjectModel
 
         protected override void OnSerializingCore()
         {
-            FullTextUtilities.EncodeFullText(Chunk?.ContentLines);
+            //FullTextUtilities.EncodeFullText(Chunk?.ContentLines);
             base.OnSerializingCore();
         }
 

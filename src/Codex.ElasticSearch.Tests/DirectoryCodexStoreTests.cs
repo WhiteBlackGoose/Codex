@@ -66,7 +66,7 @@ namespace Codex.ElasticSearch.Tests
 
         public static DirectoryCodexStore CreateInputStore()
         {
-            return new DirectoryCodexStore(TestInputsDirectoryHelper.FullPath);
+            return new DirectoryCodexStore(Path.Combine(TestInputsDirectoryHelper.FullPath, "test1"));
         }
     }
 }

@@ -117,19 +117,27 @@ namespace Codex.Utilities
 
         public static void CollectLineSpans(this string text, ICollection<Span> spans, bool includeLineBreakInSpan = true)
         {
-            if (text == null)
-            {
-                throw new ArgumentNullException(nameof(text));
-            }
-
             if (spans == null)
             {
                 throw new ArgumentNullException(nameof(spans));
             }
 
+            foreach (var span in text.EnumerateLineSpans(includeLineBreakInSpan))
+            {
+                spans.Add(span);
+            }
+        }
+
+        public static IEnumerable<Span> EnumerateLineSpans(this string text, bool includeLineBreakInSpan = true)
+        {
+            if (text == null)
+            {
+                throw new ArgumentNullException(nameof(text));
+            }
+
             if (text.Length == 0)
             {
-                return;
+                yield break;
             }
 
             int currentPosition = 0;
@@ -148,7 +156,7 @@ namespace Codex.Utilities
                             currentLineLength--;
                         }
 
-                        spans.Add(new Span(currentPosition, currentLineLength));
+                        yield return new Span(currentPosition, currentLineLength);
 
                         currentPosition += lineLengthIncludingLineBreak;
                         currentLineLength = 1;
@@ -174,7 +182,7 @@ namespace Codex.Utilities
                         lineLength = currentLineLength;
                     }
 
-                    spans.Add(new Span(currentPosition, lineLength));
+                    yield return new Span(currentPosition, lineLength);
                     currentPosition += currentLineLength;
                     currentLineLength = 0;
                 }
@@ -188,7 +196,7 @@ namespace Codex.Utilities
                             lineLength--;
                         }
 
-                        spans.Add(new Span(currentPosition, lineLength));
+                        yield return new Span(currentPosition, lineLength);
                         currentPosition += currentLineLength;
                         currentLineLength = 0;
                     }
@@ -204,11 +212,11 @@ namespace Codex.Utilities
                 finalLength--;
             }
 
-            spans.Add(new Span(currentPosition, finalLength));
+            yield return new Span(currentPosition, finalLength);
 
             if (previousWasCarriageReturn)
             {
-                spans.Add(new Span(currentPosition, 0));
+                yield return new Span(currentPosition, 0);
             }
         }
 

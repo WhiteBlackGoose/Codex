@@ -1,6 +1,6 @@
 {
   "boundSourceFile": {
-    "definitionCount": 7,
+    "definitionCount": 8,
     "definitions": [
       {
         "definition": {
@@ -15,11 +15,11 @@
       {
         "definition": {
           "containerQualifiedName": "Checksum.Sha1",
-          "id": "xcfw3lbeqlwl",
+          "id": "qtz1wxkulk70",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "referenceKind": "Definition",
-          "shortName": "7511B0623B9B50CCAC648B30322A55700B197BA8"
+          "shortName": "51758CB768017B3735C53E049BBB4E20CE2776C0"
         }
       },
       {
@@ -57,7 +57,7 @@
       {
         "definition": {
           "comment": "",
-          "declarationName": "public int TextSearch.CommentWithSameTextLineNumber1",
+          "declarationName": "public static int TextSearch.CommentWithSameTextLineNumber1",
           "displayName": "CodexTestCSharpLibrary.TextSearch.CommentWithSameTextLineNumber1",
           "glyph": 31,
           "id": "qpgl9jpdlpvv",
@@ -67,13 +67,13 @@
           "symbolDepth": 1,
           "typeName": "Int32"
         },
-        "start": 450,
+        "start": 457,
         "length": 30
       },
       {
         "definition": {
           "comment": "",
-          "declarationName": "public int TextSearch.MultiLineCommentLineNumber",
+          "declarationName": "public static int TextSearch.MultiLineCommentLineNumber",
           "displayName": "CodexTestCSharpLibrary.TextSearch.MultiLineCommentLineNumber",
           "id": "ozzhhrshhqmr",
           "referenceKind": "Definition",
@@ -81,13 +81,13 @@
           "symbolDepth": 1,
           "typeName": "Int32"
         },
-        "start": 561,
+        "start": 575,
         "length": 26
       },
       {
         "definition": {
           "comment": "",
-          "declarationName": "public int TextSearch.CommentWithSameTextLineNumber2",
+          "declarationName": "public static int TextSearch.CommentWithSameTextLineNumber2",
           "displayName": "CodexTestCSharpLibrary.TextSearch.CommentWithSameTextLineNumber2",
           "id": "rapzpz7nygk6",
           "referenceKind": "Definition",
@@ -95,56 +95,70 @@
           "symbolDepth": 1,
           "typeName": "Int32"
         },
-        "start": 761,
+        "start": 782,
         "length": 30
+      },
+      {
+        "definition": {
+          "comment": "",
+          "declarationName": "public static int TextSearch.MultiCommentWithSameTextLineNumber3",
+          "displayName": "CodexTestCSharpLibrary.TextSearch.MultiCommentWithSameTextLineNumber3",
+          "id": "foj5xcxgesje",
+          "referenceKind": "Definition",
+          "shortName": "MultiCommentWithSameTextLineNumber3",
+          "symbolDepth": 1,
+          "typeName": "Int32"
+        },
+        "start": 900,
+        "length": 35
       }
     ],
     "language": "C#",
-    "referenceCount": 18,
+    "referenceCount": 21,
     "sourceFile": {
       "info": {
         "language": "C#",
-        "lines": 29,
+        "lines": 33,
         "projectId": "CodexTestCSharpLibrary",
         "projectRelativePath": "Cases\\TextSearch.cs",
         "properties": {
-          "Checksum.Sha1": "7511B0623B9B50CCAC648B30322A55700B197BA8"
+          "Checksum.Sha1": "51758CB768017B3735C53E049BBB4E20CE2776C0"
         },
         "repoRelativePath": "CodexTestCSharpLibrary\\Cases\\TextSearch.cs",
         "repositoryName": "CodexTestRepo",
-        "size": 861
+        "size": 1028
       }
     }
   },
   "compressedClassifications": {
-    "count": 50,
+    "count": 59,
     "segments": [
       {
-        "fullLength": 849,
+        "fullLength": 1016,
         "lengths": {
-          "cdata": "Y2FlYeViY2FlZmFl4wdTHCwcolEsnKysTAL8TJwMnAysTLICEqxMkgKlYBYA",
-          "compressedLength": 45,
-          "decompressedLength": 50,
+          "cdata": "Y2FlYeViY2FlZmFl4wdTHCwcolEsnKysTAL8TJwMnAxAlqyABJCUFCiFs5UE9AE=",
+          "compressedLength": 47,
+          "decompressedLength": 59,
           "minValue": 1,
           "valueByteWidth": 1
         },
         "localSymbolGroupIds": {
-          "cdata": "Y2DACxiBEA0AAA==",
+          "cdata": "Y2DACxiBEBcAAA==",
           "compressedLength": 10,
-          "decompressedLength": 50,
+          "decompressedLength": 59,
           "valueByteWidth": 1
         },
         "optimized": true,
         "sharedIndices": {
-          "cdata": "Y2BkYGQEYRSKiYGZgYGBhZmBlY2VjYGBnYUJQQAA",
-          "compressedLength": 30,
-          "decompressedLength": 50,
+          "cdata": "Y2BkYGQEYRSKiYGZgYGBhZmBlY2VDchiZ2HCJAE=",
+          "compressedLength": 29,
+          "decompressedLength": 59,
           "valueByteWidth": 1
         },
         "starts": {
-          "cdata": "Y2BgYmABYiY4jZ3HBsRcDOxAUggqwgyEIHk2IOaDquVj4MXCAgA=",
+          "cdata": "Y2BgYmABYiY4jZ3HBsRcDOxAUggqwgyEIHk2IOaD6+Fj4CWCDQA=",
           "compressedLength": 38,
-          "decompressedLength": 100,
+          "decompressedLength": 118,
           "valueByteWidth": 2
         }
       }
@@ -185,18 +199,18 @@
     ]
   },
   "compressedReferences": {
-    "count": 18,
+    "count": 21,
     "lineIndices": {
-      "cdata": "AAwOEBMY",
+      "cdata": "AAwOEBMYGw==",
       "valueByteWidth": 1
     },
     "lineSpanModel": {
-      "count": 18,
+      "count": 21,
       "segments": [
         {
-          "fullLength": 811,
+          "fullLength": 955,
           "sharedIndices": {
-            "data": "AAAAAQICAgICAwMDBAQEBQUF",
+            "data": "AAAAAQICAgICAwMDBAQEBQUFBgYG",
             "valueByteWidth": 1
           }
         }
@@ -204,20 +218,22 @@
     },
     "segments": [
       {
-        "fullLength": 811,
+        "fullLength": 955,
         "lengths": {
-          "cdata": "AAAACgMREBADAx4RAxoRAx4R",
+          "cdata": "Y2Bg4GIWFBBgZpYTZJYSBJHKggA=",
+          "compressedLength": 20,
+          "decompressedLength": 21,
           "valueByteWidth": 1
         },
         "optimized": true,
         "sharedIndices": {
-          "cdata": "BQAIAQsGCgkLCwMHCwIHCwQH",
+          "cdata": "BgAJAQwHCwoMDAQIDAMIDAUIDAII",
           "valueByteWidth": 1
         },
         "starts": {
-          "cdata": "Y2AAARNGBQYmBmYgi5nBHMhiYbACk9PBJAA=",
+          "cdata": "Y2AAARNGBQYmBmYgi5nBDshiYXAEk/OQ2AA=",
           "compressedLength": 26,
-          "decompressedLength": 36,
+          "decompressedLength": 42,
           "valueByteWidth": 2
         }
       }
@@ -227,7 +243,7 @@
         "referenceKind": "Definition",
         "isImplicitlyDeclared": true,
         "projectId": "CodexTestCSharpLibrary",
-        "id": "xcfw3lbeqlwl",
+        "id": "qtz1wxkulk70",
         "kind": "Checksum.Sha1"
       },
       {
@@ -235,8 +251,11 @@
         "kind": "Class"
       },
       {
-        "id": "ozzhhrshhqmr",
+        "id": "foj5xcxgesje",
         "kind": "Field"
+      },
+      {
+        "id": "ozzhhrshhqmr"
       },
       {
         "id": "qpgl9jpdlpvv"
@@ -297,16 +316,20 @@
     "    {\r\n",
     "        public static int GetNextLineNumber([CallerLineNumber] int lineNumber = 0) => lineNumber + 1;\r\n",
     "\r\n",
-    "        public int CommentWithSameTextLineNumber1 = GetNextLineNumber();\r\n",
+    "        public static int CommentWithSameTextLineNumber1 = GetNextLineNumber();\r\n",
     "        // Comment with same text\r\n",
     "\r\n",
-    "        public int MultiLineCommentLineNumber = GetNextLineNumber();\r\n",
+    "        public static int MultiLineCommentLineNumber = GetNextLineNumber();\r\n",
     "        // Multiline comment where\r\n",
     "        // we should find the comment when\r\n",
     "        // searching for phrase spanning lines\r\n",
     "\r\n",
-    "        public int CommentWithSameTextLineNumber2 = GetNextLineNumber();\r\n",
-    "        // Comment with same text\r\n",
+    "        public static int CommentWithSameTextLineNumber2 = GetNextLineNumber();\r\n",
+    "        // Comment with SAME text\r\n",
+    "\r\n",
+    "        public static int MultiCommentWithSameTextLineNumber3 = GetNextLineNumber();\r\n",
+    "        // Multiline comment \r\n",
+    "        // with same text\r\n",
     "    }\r\n",
     "}\r\n",
     ""

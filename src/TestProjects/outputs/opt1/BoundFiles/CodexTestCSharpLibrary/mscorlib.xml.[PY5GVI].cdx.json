@@ -15,11 +15,11 @@
       {
         "definition": {
           "containerQualifiedName": "Checksum.Sha1",
-          "id": "si3xeduyfsn9",
+          "id": "fcpuvgfr8mi3",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "referenceKind": "Definition",
-          "shortName": "05BB0E1EA270DD66F5FC5FA998A99E30CCC8B092"
+          "shortName": "E5C4F0967116C812B16FC23682DFD8262C4F5216"
         }
       }
     ],
@@ -33,7 +33,7 @@
         "projectId": "CodexTestCSharpLibrary",
         "projectRelativePath": "[Metadata]\\ReferenceSymbols\\mscorlib.xml",
         "properties": {
-          "Checksum.Sha1": "05BB0E1EA270DD66F5FC5FA998A99E30CCC8B092"
+          "Checksum.Sha1": "E5C4F0967116C812B16FC23682DFD8262C4F5216"
         },
         "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceSymbols\\mscorlib.xml",
         "repositoryName": "CodexTestRepo"
@@ -145,7 +145,7 @@
         "referenceKind": "Definition",
         "isImplicitlyDeclared": true,
         "projectId": "CodexTestCSharpLibrary",
-        "id": "si3xeduyfsn9",
+        "id": "fcpuvgfr8mi3",
         "kind": "Checksum.Sha1"
       },
       {
@@ -260,7 +260,7 @@
   "sourceFileContentLines": [
     "<ReferenceSymbols Count=\"32\">\r\n",
     "  <Namespace Name=\"System\">\r\n",
-    "    <Symbol Name=\"Int32\" ReferenceCount=\"5\" />\r\n",
+    "    <Symbol Name=\"Int32\" ReferenceCount=\"6\" />\r\n",
     "    <Symbol Name=\"String\" ReferenceCount=\"1\" />\r\n",
     "    <Symbol Name=\"Void\" ReferenceCount=\"6\" />\r\n",
     "  </Namespace>\r\n",

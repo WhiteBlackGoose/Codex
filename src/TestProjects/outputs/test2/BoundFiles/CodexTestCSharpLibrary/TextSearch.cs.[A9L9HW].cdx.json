@@ -222,88 +222,142 @@
         "defaultClassificationColor": -1,
         "classification": "keyword",
         "start": 446,
+        "length": 6
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "keyword",
+        "start": 453,
         "length": 3
       },
       {
         "defaultClassificationColor": -1,
         "classification": "field name",
-        "start": 450,
+        "start": 457,
         "length": 30
       },
       {
         "defaultClassificationColor": -1,
         "classification": "method name",
-        "start": 483,
+        "start": 490,
         "length": 17
       },
       {
         "defaultClassificationColor": -1,
         "classification": "comment",
-        "start": 513,
+        "start": 520,
         "length": 25
-      },
-      {
-        "defaultClassificationColor": -1,
-        "classification": "keyword",
-        "start": 550,
-        "length": 6
       },
       {
         "defaultClassificationColor": -1,
         "classification": "keyword",
         "start": 557,
-        "length": 3
-      },
-      {
-        "defaultClassificationColor": -1,
-        "classification": "field name",
-        "start": 561,
-        "length": 26
-      },
-      {
-        "defaultClassificationColor": -1,
-        "classification": "method name",
-        "start": 590,
-        "length": 17
-      },
-      {
-        "defaultClassificationColor": -1,
-        "classification": "comment",
-        "start": 620,
-        "length": 118
-      },
-      {
-        "defaultClassificationColor": -1,
-        "classification": "keyword",
-        "start": 750,
         "length": 6
       },
       {
         "defaultClassificationColor": -1,
         "classification": "keyword",
-        "start": 757,
+        "start": 564,
+        "length": 6
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "keyword",
+        "start": 571,
         "length": 3
       },
       {
         "defaultClassificationColor": -1,
         "classification": "field name",
-        "start": 761,
-        "length": 30
+        "start": 575,
+        "length": 26
       },
       {
         "defaultClassificationColor": -1,
         "classification": "method name",
-        "start": 794,
+        "start": 604,
         "length": 17
       },
       {
         "defaultClassificationColor": -1,
         "classification": "comment",
-        "start": 824,
+        "start": 634,
+        "length": 118
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "keyword",
+        "start": 764,
+        "length": 6
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "keyword",
+        "start": 771,
+        "length": 6
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "keyword",
+        "start": 778,
+        "length": 3
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "field name",
+        "start": 782,
+        "length": 30
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "method name",
+        "start": 815,
+        "length": 17
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "comment",
+        "start": 845,
         "length": 25
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "keyword",
+        "start": 882,
+        "length": 6
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "keyword",
+        "start": 889,
+        "length": 6
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "keyword",
+        "start": 896,
+        "length": 3
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "field name",
+        "start": 900,
+        "length": 35
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "method name",
+        "start": 938,
+        "length": 17
+      },
+      {
+        "defaultClassificationColor": -1,
+        "classification": "comment",
+        "start": 968,
+        "length": 48
       }
     ],
-    "definitionCount": 7,
+    "definitionCount": 8,
     "definitions": [
       {
         "definition": {
@@ -319,12 +373,12 @@
       {
         "definition": {
           "containerQualifiedName": "Checksum.Sha1",
-          "id": "xcfw3lbeqlwl",
+          "id": "qtz1wxkulk70",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition",
-          "shortName": "7511B0623B9B50CCAC648B30322A55700B197BA8"
+          "shortName": "51758CB768017B3735C53E049BBB4E20CE2776C0"
         }
       },
       {
@@ -365,7 +419,7 @@
         "definition": {
           "comment": "",
           "containerQualifiedName": "CodexTestCSharpLibrary.TextSearch",
-          "declarationName": "public int TextSearch.CommentWithSameTextLineNumber1",
+          "declarationName": "public static int TextSearch.CommentWithSameTextLineNumber1",
           "displayName": "CodexTestCSharpLibrary.TextSearch.CommentWithSameTextLineNumber1",
           "glyph": 31,
           "id": "qpgl9jpdlpvv",
@@ -376,14 +430,14 @@
           "symbolDepth": 1,
           "typeName": "Int32"
         },
-        "start": 450,
+        "start": 457,
         "length": 30
       },
       {
         "definition": {
           "comment": "",
           "containerQualifiedName": "CodexTestCSharpLibrary.TextSearch",
-          "declarationName": "public int TextSearch.MultiLineCommentLineNumber",
+          "declarationName": "public static int TextSearch.MultiLineCommentLineNumber",
           "displayName": "CodexTestCSharpLibrary.TextSearch.MultiLineCommentLineNumber",
           "glyph": 31,
           "id": "ozzhhrshhqmr",
@@ -394,14 +448,14 @@
           "symbolDepth": 1,
           "typeName": "Int32"
         },
-        "start": 561,
+        "start": 575,
         "length": 26
       },
       {
         "definition": {
           "comment": "",
           "containerQualifiedName": "CodexTestCSharpLibrary.TextSearch",
-          "declarationName": "public int TextSearch.CommentWithSameTextLineNumber2",
+          "declarationName": "public static int TextSearch.CommentWithSameTextLineNumber2",
           "displayName": "CodexTestCSharpLibrary.TextSearch.CommentWithSameTextLineNumber2",
           "glyph": 31,
           "id": "rapzpz7nygk6",
@@ -412,12 +466,30 @@
           "symbolDepth": 1,
           "typeName": "Int32"
         },
-        "start": 761,
+        "start": 782,
         "length": 30
+      },
+      {
+        "definition": {
+          "comment": "",
+          "containerQualifiedName": "CodexTestCSharpLibrary.TextSearch",
+          "declarationName": "public static int TextSearch.MultiCommentWithSameTextLineNumber3",
+          "displayName": "CodexTestCSharpLibrary.TextSearch.MultiCommentWithSameTextLineNumber3",
+          "glyph": 31,
+          "id": "foj5xcxgesje",
+          "kind": "Field",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition",
+          "shortName": "MultiCommentWithSameTextLineNumber3",
+          "symbolDepth": 1,
+          "typeName": "Int32"
+        },
+        "start": 900,
+        "length": 35
       }
     ],
     "language": "C#",
-    "referenceCount": 18,
+    "referenceCount": 21,
     "references": [
       {
         "reference": {
@@ -432,7 +504,7 @@
       },
       {
         "reference": {
-          "id": "xcfw3lbeqlwl",
+          "id": "qtz1wxkulk70",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestCSharpLibrary",
@@ -537,10 +609,10 @@
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "lineSpanText": "public int CommentWithSameTextLineNumber1 = GetNextLineNumber();",
+        "lineSpanText": "public static int CommentWithSameTextLineNumber1 = GetNextLineNumber();",
         "lineNumber": 17,
-        "lineSpanStart": 7,
-        "start": 446,
+        "lineSpanStart": 14,
+        "start": 453,
         "length": 3
       },
       {
@@ -550,10 +622,10 @@
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
         },
-        "lineSpanText": "public int CommentWithSameTextLineNumber1 = GetNextLineNumber();",
+        "lineSpanText": "public static int CommentWithSameTextLineNumber1 = GetNextLineNumber();",
         "lineNumber": 17,
-        "lineSpanStart": 11,
-        "start": 450,
+        "lineSpanStart": 18,
+        "start": 457,
         "length": 30
       },
       {
@@ -563,10 +635,10 @@
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Reference"
         },
-        "lineSpanText": "public int CommentWithSameTextLineNumber1 = GetNextLineNumber();",
+        "lineSpanText": "public static int CommentWithSameTextLineNumber1 = GetNextLineNumber();",
         "lineNumber": 17,
-        "lineSpanStart": 44,
-        "start": 483,
+        "lineSpanStart": 51,
+        "start": 490,
         "length": 17
       },
       {
@@ -576,10 +648,10 @@
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "lineSpanText": "public int MultiLineCommentLineNumber = GetNextLineNumber();",
+        "lineSpanText": "public static int MultiLineCommentLineNumber = GetNextLineNumber();",
         "lineNumber": 20,
-        "lineSpanStart": 7,
-        "start": 557,
+        "lineSpanStart": 14,
+        "start": 571,
         "length": 3
       },
       {
@@ -589,10 +661,10 @@
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
         },
-        "lineSpanText": "public int MultiLineCommentLineNumber = GetNextLineNumber();",
+        "lineSpanText": "public static int MultiLineCommentLineNumber = GetNextLineNumber();",
         "lineNumber": 20,
-        "lineSpanStart": 11,
-        "start": 561,
+        "lineSpanStart": 18,
+        "start": 575,
         "length": 26
       },
       {
@@ -602,10 +674,10 @@
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Reference"
         },
-        "lineSpanText": "public int MultiLineCommentLineNumber = GetNextLineNumber();",
+        "lineSpanText": "public static int MultiLineCommentLineNumber = GetNextLineNumber();",
         "lineNumber": 20,
-        "lineSpanStart": 40,
-        "start": 590,
+        "lineSpanStart": 47,
+        "start": 604,
         "length": 17
       },
       {
@@ -615,10 +687,10 @@
           "projectId": "mscorlib",
           "referenceKind": "Reference"
         },
-        "lineSpanText": "public int CommentWithSameTextLineNumber2 = GetNextLineNumber();",
+        "lineSpanText": "public static int CommentWithSameTextLineNumber2 = GetNextLineNumber();",
         "lineNumber": 25,
-        "lineSpanStart": 7,
-        "start": 757,
+        "lineSpanStart": 14,
+        "start": 778,
         "length": 3
       },
       {
@@ -628,10 +700,10 @@
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition"
         },
-        "lineSpanText": "public int CommentWithSameTextLineNumber2 = GetNextLineNumber();",
+        "lineSpanText": "public static int CommentWithSameTextLineNumber2 = GetNextLineNumber();",
         "lineNumber": 25,
-        "lineSpanStart": 11,
-        "start": 761,
+        "lineSpanStart": 18,
+        "start": 782,
         "length": 30
       },
       {
@@ -641,25 +713,64 @@
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Reference"
         },
-        "lineSpanText": "public int CommentWithSameTextLineNumber2 = GetNextLineNumber();",
+        "lineSpanText": "public static int CommentWithSameTextLineNumber2 = GetNextLineNumber();",
         "lineNumber": 25,
-        "lineSpanStart": 44,
-        "start": 794,
+        "lineSpanStart": 51,
+        "start": 815,
+        "length": 17
+      },
+      {
+        "reference": {
+          "id": "g13dpcmnysjl",
+          "kind": "Struct",
+          "projectId": "mscorlib",
+          "referenceKind": "Reference"
+        },
+        "lineSpanText": "public static int MultiCommentWithSameTextLineNumber3 = GetNextLineNumber();",
+        "lineNumber": 28,
+        "lineSpanStart": 14,
+        "start": 896,
+        "length": 3
+      },
+      {
+        "reference": {
+          "id": "foj5xcxgesje",
+          "kind": "Field",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Definition"
+        },
+        "lineSpanText": "public static int MultiCommentWithSameTextLineNumber3 = GetNextLineNumber();",
+        "lineNumber": 28,
+        "lineSpanStart": 18,
+        "start": 900,
+        "length": 35
+      },
+      {
+        "reference": {
+          "id": "jj80iyl3izfh",
+          "kind": "Method",
+          "projectId": "CodexTestCSharpLibrary",
+          "referenceKind": "Reference"
+        },
+        "lineSpanText": "public static int MultiCommentWithSameTextLineNumber3 = GetNextLineNumber();",
+        "lineNumber": 28,
+        "lineSpanStart": 56,
+        "start": 938,
         "length": 17
       }
     ],
     "sourceFile": {
       "info": {
         "language": "C#",
-        "lines": 29,
+        "lines": 33,
         "projectId": "CodexTestCSharpLibrary",
         "projectRelativePath": "Cases\\TextSearch.cs",
         "properties": {
-          "Checksum.Sha1": "7511B0623B9B50CCAC648B30322A55700B197BA8"
+          "Checksum.Sha1": "51758CB768017B3735C53E049BBB4E20CE2776C0"
         },
         "repoRelativePath": "CodexTestCSharpLibrary\\Cases\\TextSearch.cs",
         "repositoryName": "CodexTestRepo",
-        "size": 861
+        "size": 1028
       }
     }
   },
@@ -680,16 +791,20 @@
     "    {\r\n",
     "        public static int GetNextLineNumber([CallerLineNumber] int lineNumber = 0) => lineNumber + 1;\r\n",
     "\r\n",
-    "        public int CommentWithSameTextLineNumber1 = GetNextLineNumber();\r\n",
+    "        public static int CommentWithSameTextLineNumber1 = GetNextLineNumber();\r\n",
     "        // Comment with same text\r\n",
     "\r\n",
-    "        public int MultiLineCommentLineNumber = GetNextLineNumber();\r\n",
+    "        public static int MultiLineCommentLineNumber = GetNextLineNumber();\r\n",
     "        // Multiline comment where\r\n",
     "        // we should find the comment when\r\n",
     "        // searching for phrase spanning lines\r\n",
     "\r\n",
-    "        public int CommentWithSameTextLineNumber2 = GetNextLineNumber();\r\n",
-    "        // Comment with same text\r\n",
+    "        public static int CommentWithSameTextLineNumber2 = GetNextLineNumber();\r\n",
+    "        // Comment with SAME text\r\n",
+    "\r\n",
+    "        public static int MultiCommentWithSameTextLineNumber3 = GetNextLineNumber();\r\n",
+    "        // Multiline comment \r\n",
+    "        // with same text\r\n",
     "    }\r\n",
     "}\r\n",
     ""

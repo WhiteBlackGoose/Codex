@@ -137,6 +137,8 @@ namespace Codex.Sdk.Search
         public bool AllowReferencedDefinitions { get; set; } = false;
 
         public bool FallbackToTextSearch { get; set; } = true;
+
+        public bool TextSearch { get; set; } = false;
     }
 
     public class GetProjectArguments : ContextCodexArgumentsBase

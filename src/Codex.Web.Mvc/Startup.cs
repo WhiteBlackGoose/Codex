@@ -52,7 +52,7 @@ namespace Codex.Web.Mvc
                     {
                         CreateIndices = true,
                         ShardCount = 1,
-                        Prefix = "estest."
+                        Prefix = "test."
                     };
 
                     ElasticSearchService service = new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200"));

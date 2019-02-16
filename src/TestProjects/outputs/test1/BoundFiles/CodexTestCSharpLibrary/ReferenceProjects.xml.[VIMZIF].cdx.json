@@ -1133,12 +1133,12 @@
       {
         "definition": {
           "containerQualifiedName": "Checksum.Sha1",
-          "id": "zqr4ywoyemy4",
+          "id": "nxxwcjamcxob",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Definition",
-          "shortName": "19466A0992DFCA80BE9F4F4689DF5FAE5394B013"
+          "shortName": "546B7E1CF614B6CEDEF41C2911910BCE39FD043A"
         }
       }
     ],
@@ -1159,7 +1159,7 @@
       },
       {
         "reference": {
-          "id": "zqr4ywoyemy4",
+          "id": "nxxwcjamcxob",
           "isImplicitlyDeclared": true,
           "kind": "Checksum.Sha1",
           "projectId": "CodexTestCSharpLibrary",
@@ -1176,7 +1176,7 @@
           "projectId": "CodexTestCSharpLibrary",
           "referenceKind": "Reference"
         },
-        "lineSpanText": "<Project ReferenceCount=\"18\" Name=\"CodexTestCSharpLibrary\" FullName=\"CodexTestCSharpLibrary\" />",
+        "lineSpanText": "<Project ReferenceCount=\"19\" Name=\"CodexTestCSharpLibrary\" FullName=\"CodexTestCSharpLibrary\" />",
         "lineNumber": 2,
         "lineSpanStart": 25,
         "start": 48,
@@ -1204,7 +1204,7 @@
         "projectId": "CodexTestCSharpLibrary",
         "projectRelativePath": "[Metadata]\\ReferenceProjects.xml",
         "properties": {
-          "Checksum.Sha1": "19466A0992DFCA80BE9F4F4689DF5FAE5394B013"
+          "Checksum.Sha1": "546B7E1CF614B6CEDEF41C2911910BCE39FD043A"
         },
         "repoRelativePath": "[RepoRoot]\\CodexTestCSharpLibrary\\\\[Metadata]\\ReferenceProjects.xml",
         "repositoryName": "CodexTestRepo"
@@ -1213,7 +1213,7 @@
   },
   "sourceFileContentLines": [
     "<ReferenceProjects>\r\n",
-    "  <Project ReferenceCount=\"18\" Name=\"CodexTestCSharpLibrary\" FullName=\"CodexTestCSharpLibrary\" />\r\n",
+    "  <Project ReferenceCount=\"19\" Name=\"CodexTestCSharpLibrary\" FullName=\"CodexTestCSharpLibrary\" />\r\n",
     "  <Project ReferenceCount=\"0\" Name=\"Microsoft.CSharp\" FullName=\"Microsoft.CSharp, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\" />\r\n",
     "  <Project ReferenceCount=\"32\" Name=\"mscorlib\" FullName=\"mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n",
     "  <Project ReferenceCount=\"0\" Name=\"System\" FullName=\"System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\" />\r\n",

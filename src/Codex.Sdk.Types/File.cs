@@ -362,6 +362,11 @@ namespace Codex
             return lineSpan.LineSpanStart + lineSpan.Length;
         }
 
+        public static string GetSegment(this ITextLineSpan lineSpan)
+        {
+            return lineSpan.LineSpanText.Substring(lineSpan.LineSpanStart, lineSpan.Length);
+        }
+
         public static int End(this ISpan lineSpan)
         {
             return lineSpan.Start + lineSpan.Length;

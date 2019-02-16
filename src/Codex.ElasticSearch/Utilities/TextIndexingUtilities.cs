@@ -61,7 +61,7 @@ namespace Codex.Utilities
                 if (encodeFullText)
                 {
                     // TODO: This should probably be handled by custom serializer
-                    FullTextUtilities.EncodeFullText(chunk.ContentLines);
+                    //FullTextUtilities.EncodeFullText(chunk.ContentLines);
                 }
 
                 var chunkSearchModel = new TextChunkSearchModel();

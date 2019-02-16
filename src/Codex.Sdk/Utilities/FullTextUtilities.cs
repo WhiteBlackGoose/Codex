@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 using Codex.ObjectModel;
 using Codex.Sdk.Utilities;
+using Codex.Utilities;
 
 namespace Codex.Storage.Utilities
 {
@@ -50,7 +52,106 @@ namespace Codex.Storage.Utilities
             return StartOfLineSpecifierChar + lineSpecifier + EndOfLineSpecifierChar;
         }
 
-        public static IEnumerable<TextLineSpan> ParseHighlightSpans(string highlight, int lineOffset = 0)
+        public static IEnumerable<TextLineSpan> ParseHighlightSpans(string highlight, int lineOffset)
+        {
+            List<TextLineSpan> spans = new List<TextLineSpan>(1);
+
+            using (var sbLease = Pools.StringBuilderPool.Acquire())
+            {
+                var sb = sbLease.Instance;
+                sb.Append("<r>");
+                foreach (var lineSpan in highlight.EnumerateLineSpans(includeLineBreakInSpan: false))
+                {
+                    sb.Append("<l>");
+                    sb.Append(highlight.Substring(lineSpan.Start, lineSpan.Length));
+                    var lineElementText = $"<r>{lineSpan}</r>";
+                    sb.Append("</l>");
+                }
+                sb.Append("</r>");
+
+                XElement element = XElement.Parse(sb.ToString(), LoadOptions.PreserveWhitespace);
+                int? lineIndex = null;
+
+                foreach (var lineElement in element.Elements())
+                {
+                    lineIndex++;
+
+                    TextLineSpan span = null;
+                    sb.Clear();
+
+                    int end = 0;
+
+                    foreach (var child in lineElement.Nodes())
+                    {
+                        if (child is XElement childElement)
+                        {
+                            var name = childElement.Name.LocalName;
+                            if (name == "fv")
+                            {
+                                lineIndex = lineOffset + (int)childElement.Attribute("idx");
+                                continue;
+                            }
+
+                            if (name == "em")
+                            {
+                                span = span ?? new TextLineSpan()
+                                {
+                                    // Set start to non-zero value to indicate that the line index hasn't been set
+                                    // yet
+                                    Start = short.MaxValue,
+                                    LineSpanStart = sb.Length
+                                };
+
+                                sb.Append(childElement.Value);
+                                end = sb.Length;
+                            }
+                        }
+                        else if (child is XText text)
+                        {
+                            sb.Append(text.Value);
+                        }
+                    }
+
+                    if (span != null)
+                    {
+                        if (lineIndex != null)
+                        {
+                            // Set start to 0 to indicate that the span has the right line index set
+                            span.Start = 0;
+                        }
+
+                        span.LineIndex = lineIndex ?? lineOffset;
+                        span.Length = end - span.LineSpanStart;
+                    }
+
+                    span.LineSpanText = sb.ToString();
+                    spans.Add(span);
+                }
+            }
+
+            // Moving in reverse, try to set the line index for span i based on line index for span i + 1
+            int lastLineIndex = lineOffset;
+            for (int i = spans.Count - 1; i >= 0; i--)
+            {
+                var span = spans[i];
+                if (span.Start != 0)
+                {
+                    span.Start = 0;
+                    span.LineIndex = lastLineIndex;
+                    span.Trim();
+                }
+                else
+                {
+                    lastLineIndex = span.LineIndex;
+                }
+
+                lastLineIndex--;
+            }
+
+            return spans;
+        }
+
+        public static IEnumerable<TextLineSpan> ParseHighlightSpans(string highlight)
         {
             highlight = highlight.Replace(HighlightStartTag, HighlightStartTagCharString);
             highlight = highlight.Replace(HighlightEndTag, HighlightEndTagCharString);
@@ -118,7 +219,6 @@ namespace Codex.Storage.Utilities
 
                         currentSpan.LineSpanText = builder.ToString();
                         currentSpan.LineSpanText = currentSpan.LineSpanText.Trim();
-                        currentSpan.LineIndex += lineOffset;
                         spans.Add(currentSpan);
                         currentSpan = new SymbolSpan();
                         builder.Clear();
