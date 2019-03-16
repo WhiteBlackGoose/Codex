@@ -61,6 +61,8 @@ namespace Codex.ElasticSearch.Tests
                     SearchTypes.Definition,
                 });
 
+            Dictionary<string, DefinitionSymbol> defMap = new Dictionary<string, DefinitionSymbol>();
+
             var definitions = new[]
                 {
                     new DefinitionSymbol()
@@ -77,14 +79,17 @@ namespace Codex.ElasticSearch.Tests
                     },
                     new DefinitionSymbol()
                     {
+                        ContainerQualifiedName = "Codex.Test1",
                         ShortName = "XedocAbstract",
                     },
                     new DefinitionSymbol()
                     {
+                        ContainerQualifiedName = "Codex.Test2",
                         ShortName = "XedocImpl",
                     },
                     new DefinitionSymbol()
                     {
+                        ContainerQualifiedName = "Index.Test1",
                         ShortName = "XedocImplementer",
                     },
                     new DefinitionSymbol()
@@ -92,6 +97,11 @@ namespace Codex.ElasticSearch.Tests
                         ShortName = "XedocInterface",
                     }
                 };
+
+            foreach (var def in definitions)
+            {
+                defMap[string.Join(".", def.ContainerQualifiedName, def.ShortName)] = def;
+            }
 
             if (populate)
             {
@@ -108,6 +118,8 @@ namespace Codex.ElasticSearch.Tests
                 TextSearch = false
             };
 
+            DefinitionSymbol[] noDefinitions = null;
+
             await verify("xedoci");
             await verify("xedoc");
             await verify("xed");
@@ -120,14 +132,28 @@ namespace Codex.ElasticSearch.Tests
             await verify("xedn");
             await verify("xedp");
 
-            // Use leading space to indicate suffix matches which should have no results
-            await verify(" *mpl");
+            await verify("*mpl", noDefinitions);
+            await verify("test1.xedoc",
+                defMap["Codex.Test1.XedocAbstract"],
+                defMap["Index.Test1.XedocImplementer"]);
 
-            async Task verify(string searchText)
+            await verify("index.test1.xedoc",
+                defMap["Index.Test1.XedocImplementer"]);
+
+            async Task verify(string searchText, params DefinitionSymbol[] expectedDefinitionsOverride)
             {
                 Func<DefinitionSymbol, bool> predicate = d => d.ShortName.StartsWith(searchText, StringComparison.OrdinalIgnoreCase);
 
-                if (searchText.StartsWith("*"))
+                if (expectedDefinitionsOverride == null)
+                {
+                    predicate = d => false;
+                }
+                else if (expectedDefinitionsOverride.Length != 0)
+                {
+                    var definitionSet = new HashSet<DefinitionSymbol>(expectedDefinitionsOverride, new EqualityComparerBuilder<DefinitionSymbol>().CompareByAfter(d => d.ShortName).CompareByAfter(d => d.ContainerQualifiedName));
+                    predicate = d => definitionSet.Contains(d);
+                }
+                else if (searchText.StartsWith("*"))
                 {
                     predicate = d => d.ShortName.IndexOf(searchText.Trim('*'), StringComparison.OrdinalIgnoreCase) >= 0;
                 }
