@@ -17,7 +17,13 @@ namespace Codex.Storage.ElasticProviders
                 return default(T);
             }
 
-            if (!result.ApiCall.Success || (!allowInvalid && !result.IsValid))
+            bool failed = !result.ApiCall.Success || (!allowInvalid && !result.IsValid);
+            if (result is IBulkResponse bulkResponse)
+            {
+                failed |= bulkResponse.Errors;
+            }
+
+            if (failed)
             {
                 throw new ElasticProviderCommunicationException(result, result.DebugInformation);
             }

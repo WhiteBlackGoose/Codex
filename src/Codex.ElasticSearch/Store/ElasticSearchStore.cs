@@ -4,6 +4,7 @@ using Codex.Storage.ElasticProviders;
 using Codex.Utilities;
 using Nest;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Codex.ElasticSearch
@@ -129,6 +130,8 @@ namespace Codex.ElasticSearch
         /// Indicates where indices should be created when <see cref="ElasticSearchStore.InitializeAsync"/> is called.
         /// </summary>
         public bool CreateIndices = true;
+
+        public HashSet<SearchType> ActiveIndices;
 
         public int MaxBatchConcurrency = 16;
 

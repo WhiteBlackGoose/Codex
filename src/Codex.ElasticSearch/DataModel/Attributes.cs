@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Codex.Storage.ElasticProviders;
 using Newtonsoft.Json;
+using System.Runtime.Serialization;
 
 namespace Codex.Storage.DataModel
 {
@@ -41,27 +42,25 @@ namespace Codex.Storage.DataModel
         }
     }
 
-    [JsonObject(MemberSerialization.OptIn)]
     public interface IPrefixTextProperty : ITextProperty
     {
         /// <summary>
         /// Indicates whether to store property in prefix format
         /// </summary>
-        [JsonProperty("use_prefix", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [PropertyName("use_prefix")]
         bool UsePrefix { get; set; }
     }
 
     // TODO: Use this for Definition ShortName search when 
     public class PrefixTextAttribute : SearchStringAttribute, IPrefixTextProperty
     {
-        public IProperty SelfProperty => this;
-
         public bool UsePrefix { get; set; }
+
+        bool? ITextProperty.Norms { get; set; }
 
         public PrefixTextAttribute()
         {
-            // TODO: Enable
-            //UsePrefix = true;
+            UsePrefix = true;
             Analyzer = CustomAnalyzers.PrefixFilterPartialNameNGramAnalyzerName;
         }
     }

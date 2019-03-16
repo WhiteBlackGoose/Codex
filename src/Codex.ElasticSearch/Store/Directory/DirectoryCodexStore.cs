@@ -139,6 +139,7 @@ namespace Codex.ElasticSearch.Store
                             catch (Exception ex)
                             {
                                 logger.LogExceptionError("AddFile", ex);
+                                throw;
                             }
 
                             logger.LogMessage($"{i}/{count}: Added {file} to store.");

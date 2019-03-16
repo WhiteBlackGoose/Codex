@@ -2,6 +2,7 @@
 using Codex.ElasticSearch.Search;
 using Codex.ElasticSearch.Utilities;
 using Codex.ObjectModel;
+using Codex.Sdk.Search;
 using Codex.Storage.ElasticProviders;
 using Codex.Utilities;
 using Nest;
@@ -33,7 +34,7 @@ namespace Codex.ElasticSearch
             return searchDescriptor
                 .Query(q => q.Bool(bq => bq
                     .Must(query)
-                    .Filter(q1 => q1.StoredFilterQuery(context, filterIndexName ?? indexName))))
+                    .ConfigureIf(context.RepositoryScopeId != ContextCodexArgumentsBase.AllRepositoryScopeId, b => b.Filter(q1 => q1.StoredFilterQuery(context, filterIndexName ?? indexName)))))
                 .Index(indexName)
                 .CaptureRequest(context);
         }

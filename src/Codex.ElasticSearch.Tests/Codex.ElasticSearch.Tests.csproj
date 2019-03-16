@@ -34,6 +34,7 @@
     <Compile Include="StoredFilterTests.cs" />
     <Compile Include="MappingTests.cs" />
     <Compile Include="SerializationTests.cs" />
+    <Compile Include="TestExtensions.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

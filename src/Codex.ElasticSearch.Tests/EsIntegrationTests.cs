@@ -52,6 +52,121 @@ namespace Codex.ElasticSearch.Tests
         }
 
         [Test]
+        public async Task TestPrefix()
+        {
+            bool populate = true;
+
+            (var store, var codex) = await InitializeAsync("estest.", populateCount: 0, clear: populate, activeIndices: new[]
+                {
+                    SearchTypes.Definition,
+                });
+
+            var definitions = new[]
+                {
+                    new DefinitionSymbol()
+                    {
+                        ShortName = "XedocBase",
+                    },
+                    new DefinitionSymbol()
+                    {
+                        ShortName = "XedXedoc",
+                    },
+                    new DefinitionSymbol()
+                    {
+                        ShortName = "NotXedoc",
+                    },
+                    new DefinitionSymbol()
+                    {
+                        ShortName = "XedocAbstract",
+                    },
+                    new DefinitionSymbol()
+                    {
+                        ShortName = "XedocImpl",
+                    },
+                    new DefinitionSymbol()
+                    {
+                        ShortName = "XedocImplementer",
+                    },
+                    new DefinitionSymbol()
+                    {
+                        ShortName = "XedocInterface",
+                    }
+                };
+
+            if (populate)
+            {
+                await store.DefinitionStore.AddDefinitions(definitions);
+
+                await store.DefinitionStore.RefreshAsync();
+            }
+
+            var arguments = new SearchArguments()
+            {
+                RepositoryScopeId = SearchArguments.AllRepositoryScopeId,
+                AllowReferencedDefinitions = false,
+                FallbackToTextSearch = false,
+                TextSearch = false
+            };
+
+            await verify("xedoci");
+            await verify("xedoc");
+            await verify("xed");
+            await verify("none");
+            await verify("impl");
+            await verify("*imp");
+            await verify("*abs");
+            await verify("*xed");
+            await verify("xed");
+            await verify("xedn");
+            await verify("xedp");
+
+            // Use leading space to indicate suffix matches which should have no results
+            await verify(" *mpl");
+
+            async Task verify(string searchText)
+            {
+                Func<DefinitionSymbol, bool> predicate = d => d.ShortName.StartsWith(searchText, StringComparison.OrdinalIgnoreCase);
+
+                if (searchText.StartsWith("*"))
+                {
+                    predicate = d => d.ShortName.IndexOf(searchText.Trim('*'), StringComparison.OrdinalIgnoreCase) >= 0;
+                }
+
+                arguments.SearchString = searchText;
+                var response = await codex.SearchAsync(arguments);
+
+                Console.WriteLine($"Found {response.Result?.Total ?? -1} results for '{searchText}'");
+
+                CollectionAssert.AreEquivalent(
+                    definitions.Where(predicate).Select(d => d.ShortName),
+                    response.Result.Hits.Select(s => s.Definition.ShortName),
+                    $"Should find all results for: {searchText}:" 
+                    + Environment.NewLine
+                    + string.Join(Environment.NewLine, response.RawQueries));
+            }
+        }
+
+        [Test]
+        public async Task TestSearch()
+        {
+            (var store, var codex) = await InitializeAsync("estest.", populateCount: 1);
+            await store.RegisteredEntityStore.RefreshAsync();
+
+            await store.DefinitionStore.RefreshAsync();
+
+            await store.StoredFilterStore.RefreshAsync();
+
+            var arguments = new SearchArguments()
+            {
+                SearchString = "xedocb",
+                AllowReferencedDefinitions = false,
+                TextSearch = false
+            };
+
+            var results = await codex.SearchAsync(arguments);
+        }
+
+        [Test]
         public async Task TestTextSearch()
         {
             (var store, var codex) = await InitializeAsync("text.estest.", populateCount: 1);
@@ -61,10 +176,6 @@ namespace Codex.ElasticSearch.Tests
 
             await store.TextSourceStore.RefreshAsync();
 
-            // Try searching for AssemblyCompanyAttribute which is defined outside of the 
-            // ingested code using two modes:
-            // AllowReferencedDefinitions = false (i.e. only symbols declared in ingested code should be returned in results)
-            // AllowReferencedDefinitions = true (i.e. symbols referenced by ingested code may be returned in results)
             var arguments = new SearchArguments()
             {
                 SearchString = "Comment with same text",
@@ -87,14 +198,21 @@ namespace Codex.ElasticSearch.Tests
             Assert.AreEqual(expected.Select(s => s.text), hits.Select(s => s.TextLine.TextSpan.GetSegment()));
         }
 
-        private async Task<(ElasticSearchStore store, ElasticSearchCodex codex)> InitializeAsync(string prefix, int populateCount)
+        private async Task<(ElasticSearchStore store, ElasticSearchCodex codex)> InitializeAsync(
+            string prefix,
+            int populateCount,
+            bool clear = false,
+            SearchType[] activeIndices = null)
         {
             bool populate = populateCount > 0;
 
             ElasticSearchStoreConfiguration configuration = new ElasticSearchStoreConfiguration()
             {
-                ClearIndicesBeforeUse = populate,
-                CreateIndices = populate,
+                ActiveIndices = activeIndices != null
+                    ? new HashSet<SearchType>(activeIndices)
+                    : null,
+                ClearIndicesBeforeUse = populate || clear,
+                CreateIndices = populate || clear,
                 ShardCount = 1,
                 Prefix = prefix
             };
@@ -335,32 +453,6 @@ namespace Codex.ElasticSearch.Tests
             {
                 return $"Expect: {ExpectedStableId}, Actual: {StableIdValue}, Match: {ExpectedStableId == StableIdValue}";
             }
-        }
-
-        [Test]
-        public async Task TestSearch()
-        {
-            ElasticSearchStoreConfiguration configuration = new ElasticSearchStoreConfiguration()
-            {
-                ClearIndicesBeforeUse = false,
-                CreateIndices = false,
-                ShardCount = 1,
-                Prefix = "test."
-            };
-
-            ElasticSearchService service = new ElasticSearchService(new ElasticSearchServiceConfiguration("http://localhost:9200"));
-            var codex = new ElasticSearchCodex(configuration, service);
-
-            var store = new ElasticSearchStore(configuration, service);
-
-            await store.InitializeAsync();
-
-            var response = await codex.SearchAsync(new SearchArguments()
-            {
-                SearchString = "retrieved temporal cache"
-            });
-
-            Assert.IsNull(response.Error);
         }
 
         // TODO: Fix these

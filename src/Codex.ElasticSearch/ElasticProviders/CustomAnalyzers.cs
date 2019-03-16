@@ -47,50 +47,26 @@ namespace Codex.Storage.ElasticProviders
         {
             Filter = new List<string>
             {
-                "name_gram_delimiter_start_inserter",
-                "name_gram_delimiter_inserter",
-                "name_gram_prefix_delimiter_processor",
-                "code_preprocess_gram",
-                "name_gram_delimiter_exclusion",
-                "unique",
-                "name_gram_delimiter_remover",
-                // Camel case is superceded by name_gram_delimiter_inserter, which
-                // seems to put a delimiter at all the right places
-                // does not help with a sequence of digits but that probably doesn't matter
-                //"camel_case_filter",
-                "name_gram_length_exclusion",
+                "name_gram_boundary_inserter",
+                "lower_to_upper_delimiter_inserter",
+                "number_to_letter_delimiter_inserter",
+                "delimited_name_prefix_generator",
 
-                // (built in) normalize to lowercase
                 "lowercase",
-
-                // (built in) Only pass unique tokens to name_ngrams to prevent excessive proliferation of tokens
-                "unique",
-                "name_ngrams",
-
-                // Remove 3 character strings with the first character '^'
-                // which is only the prefix marker character
-                // Since that means there are only 2 actual searchable characters (3 searchable characters is required)
-                "prefix_min_length_remover",
-                "name_gram_length_exclusion",
-
+                
                 // (built in) normalize to ascii equivalents
                 "asciifolding",
 
-                // (built in) Finally only index unique tokens
-                "unique",
+                "name_gram_delimiter_remover"
             },
             Tokenizer = "keyword",
-
         };
 
         public static CustomAnalyzer PrefixFilterFullNameNGramAnalyzer { get; } = new CustomAnalyzer
         {
             Filter = new List<string>
             {
-                "leading_dot_inserter",
-                "code_preprocess_gram",
-                "leading_dot_full_name_only_exclusion",
-                "name_gram_length_exclusion",
+                "container_name_prefix_generator",
 
                 // TODO: All the filters above here could be replaced with path_hierarchy tokenizer with delimiter '.' and reverse=true.
 
@@ -99,9 +75,6 @@ namespace Codex.Storage.ElasticProviders
 
                 // (built in) normalize to ascii equivalents
                 "asciifolding",
-
-                // (built in) Only pass unique tokens to name_ngrams to prevent excessive proliferation of tokens
-                "unique",
             },
             Tokenizer = "keyword",
 
@@ -118,29 +91,6 @@ namespace Codex.Storage.ElasticProviders
             CharFilter = new List<string>
             {
                 "punctuation_to_space_replacement",
-                "remove_line_encoding"
-            }
-        };
-
-        public static readonly IDictionary<string, ITokenizer> TokenizersMap = new Dictionary<string, ITokenizer>()
-        {
-            {
-                // Ex. Turns [one.two.three] into [one.two.three, two.three, three]
-                "end_edge_dot_hierarchy",
-                new PathHierarchyTokenizer()
-                {
-                    Delimiter = '.',
-                    Reverse = true,
-                }
-            },
-            {
-                // Ex. Turns [one@two@three] into [one@two@three, two@three, three]
-                "end_edge_at_hierarchy",
-                new PathHierarchyTokenizer()
-                {
-                    Delimiter = '@',
-                    Reverse = true,
-                }
             }
         };
 
@@ -156,15 +106,6 @@ namespace Codex.Storage.ElasticProviders
                     //Pattern = $"[{Regex.Escape("!\"#%&'()*,-./:;?@[\\]_{}")}]",
                     Replacement = " "
                 }
-            },
-            {
-                // Remove encoded line numbers
-                "remove_line_encoding",
-                new PatternReplaceCharFilter()
-                {
-                    Pattern = FullTextUtilities.EncodeLineSpecifier("\\d+"),
-                    Replacement = ""
-                }
             }
         };
 
@@ -172,61 +113,45 @@ namespace Codex.Storage.ElasticProviders
         {
             {
                 // Add '@^' symbols at the beginning of string
-                "name_gram_delimiter_start_inserter",
+                "name_gram_boundary_inserter",
                 new PatternReplaceTokenFilter()
                 {
                     Pattern = "^(.*)",
-                    Replacement = "@\\^$1^"
+                    Replacement = "\\^$1^"
                 }
             },
             {
                 // Add @ symbol before upper to lower case transition
-                "name_gram_delimiter_inserter",
+                "lower_to_upper_delimiter_inserter",
                 new PatternReplaceTokenFilter()
                 {
-                    Pattern = "(?:(?<leading>\\p{Lu})(?<trailing>\\p{Ll}))",
-                    Replacement = "@${leading}${trailing}"
+                    Pattern = "(?:(?<leading>\\p{Ll})(?<trailing>\\p{Lu}))",
+                    Replacement = "${leading}@${trailing}"
                 }
             },
             {
-                // Replace @^@ with @^ so only strict prefix always starts with ^ symbol
-                "name_gram_prefix_delimiter_processor",
+                // Add @ symbol before number to letter transition
+                "number_to_letter_delimiter_inserter",
                 new PatternReplaceTokenFilter()
                 {
-                    Pattern = "@\\^@",
-                    Replacement = "@\\^"
+                    Pattern = "(?:(?<leading>\\d+)(?<trailing>\\w))",
+                    Replacement = "${leading}@${trailing}"
                 }
             },
             {
-                // Split out end aligned ngrams
-                "code_preprocess_gram",
-                new EdgeNGramTokenFilter()
+                "delimited_name_prefix_generator",
+                new PathHierarchyTokenFilter()
                 {
-                    MaxGram = MaxGram,
-                    MinGram = MinGram,
-                    Side = EdgeNGramSide.Back
+                    Delimiter = '@',
+                    Reverse = true
                 }
             },
             {
-                // Add @ symbol before upper to lower case transition
-                "name_ngrams",
-                new EdgeNGramTokenFilter()
+                "container_name_prefix_generator",
+                new PathHierarchyTokenFilter()
                 {
-                    MaxGram = MaxGram,
-                    MinGram = MinGram,
-                }
-            },
-            {
-                // Clear grams not containing @ symbol marker
-                // This ensures that random substrings will be removed later that
-                // don't mark significant name boundaries.
-                // Also, remove grams containing closing angle bracket,
-                // without opening angle bracket or starting with angle bracket
-                "name_gram_delimiter_exclusion",
-                new PatternReplaceTokenFilter()
-                {
-                    Pattern = "((^[^@]*$)|(^[^@].*$)|(^[^\\<]*\\>$)|(^\\^..$))",
-                    Replacement = ""
+                    Delimiter = '.',
+                    Reverse = true
                 }
             },
             {
@@ -237,56 +162,6 @@ namespace Codex.Storage.ElasticProviders
                 {
                     Pattern = "\\@",
                     Replacement = ""
-                }
-            },
-            {
-                // Only include full name symbols (which contain a dot other
-                // than the starting dot character added due to normalization
-                // using leading_dot_inserter)
-                "leading_dot_full_name_only_exclusion",
-                new PatternReplaceTokenFilter()
-                {
-                    Pattern = "^(?<empty>)(([^\\.].*)|(\\.(?<value>.*)))$",
-                    Replacement = "${empty}${value}"
-                }
-            },
-            {
-                // Normalize full name symbols so they all start with
-                // leading dot. This allows selecting only n-grams
-                // which contain starting dot and inner dot
-                // meaning the token represents a valid fragment
-                // of the full symbol
-                "leading_dot_inserter",
-                new PatternReplaceTokenFilter()
-                {
-                    Pattern = "^.*$",
-                    Replacement = ".$0"
-                }
-            },
-            {
-                // Remove 3 character strings with the first character '^'
-                // which is only the prefix marker character
-                // Since that means there are only 2 actual searchable characters
-                "prefix_min_length_remover",
-                new PatternReplaceTokenFilter()
-                {
-                    Pattern = "(^\\^..$)",
-                    Replacement = ""
-                }
-            },
-            {
-                // Capture camel casing groups
-                "camel_case_filter",
-                CamelCaseFilter
-            },
-            {
-                // Clear grams not containing @ symbol marker
-                // This ensures that random substrings will be removed later that
-                // don't mark significant name boundaries
-                "name_gram_length_exclusion",
-                new LengthTokenFilter()
-                {
-                    Min = 2,
                 }
             }
         };
@@ -370,6 +245,15 @@ namespace Codex.Storage.ElasticProviders
                                 .UserDefined(PrefixFilterFullNameNGramAnalyzerName, PrefixFilterFullNameNGramAnalyzer)
                                 .UserDefined(LowerCaseKeywordAnalyzerName, LowerCaseKeywordAnalyzer)
                                 .UserDefined(EncodedFullTextAnalyzerName, EncodedFullTextAnalyzer)));
+        }
+
+        private class PathHierarchyTokenFilter : PathHierarchyTokenizer, ITokenFilter
+        {
+            public PathHierarchyTokenFilter()
+            {
+                Type = "edge_ngram_delimited";
+                Delimiter = '\\';
+            }
         }
     }
 }

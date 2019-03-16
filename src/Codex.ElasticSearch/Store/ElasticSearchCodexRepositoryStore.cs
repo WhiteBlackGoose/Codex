@@ -221,7 +221,7 @@ namespace Codex.ElasticSearch
 
             foreach (var referenceGroup in referenceLookup)
             {
-                var referenceModel = new ReferenceSearchModel((IProjectFileScopeEntity)boundSourceFile)
+                var referenceModel = new ReferenceSearchModel(Requires.Expect<IProjectFileScopeEntity>(boundSourceFile.SourceFile.Info))
                 {
                     Reference = referenceGroup.Key,
                 };

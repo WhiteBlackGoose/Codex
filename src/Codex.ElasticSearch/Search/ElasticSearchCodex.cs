@@ -478,22 +478,25 @@ namespace Codex.ElasticSearch.Search
             var repositoryId = arguments.RepositoryScopeId ?? Configuration.CombinedSourcesFilterName;
             var aliasUid = GetStoredFilterAliasUid(repositoryId);
 
-            if (!resolvedRepositoryIds.TryGetValue(repositoryId, out var resolvedEntry) || !GetValueFromEntry(resolvedEntry, out resolvedAliasStoredFilterPrefix))
+            if (repositoryId != ContextCodexArgumentsBase.AllRepositoryScopeId)
             {
-                IGetResponse<PropertySearchModel> aliasResult = await context.Client.GetAsync<PropertySearchModel>(aliasUid,
-                    gd => gd.Index(IndexName(SearchTypes.Property)))
-                    .ThrowOnFailure();
-
-                if (aliasResult.Found)
+                if (!resolvedRepositoryIds.TryGetValue(repositoryId, out var resolvedEntry) || !GetValueFromEntry(resolvedEntry, out resolvedAliasStoredFilterPrefix))
                 {
-                    resolvedAliasStoredFilterPrefix = aliasResult.Source.Value;
-                    resolvedRepositoryIds.TryAdd(repositoryId, (DateTime.UtcNow, resolvedAliasStoredFilterPrefix));
-                }
-            }
+                    IGetResponse<PropertySearchModel> aliasResult = await context.Client.GetAsync<PropertySearchModel>(aliasUid,
+                        gd => gd.Index(IndexName(SearchTypes.Property)))
+                        .ThrowOnFailure();
 
-            if (resolvedAliasStoredFilterPrefix == null)
-            {
-                throw new Exception($"Unable to find index with name: {repositoryId}");
+                    if (aliasResult.Found)
+                    {
+                        resolvedAliasStoredFilterPrefix = aliasResult.Source.Value;
+                        resolvedRepositoryIds.TryAdd(repositoryId, (DateTime.UtcNow, resolvedAliasStoredFilterPrefix));
+                    }
+                }
+
+                if (resolvedAliasStoredFilterPrefix == null)
+                {
+                    throw new Exception($"Unable to find index with name: {repositoryId}");
+                }
             }
 
             return new StoredFilterSearchContext(

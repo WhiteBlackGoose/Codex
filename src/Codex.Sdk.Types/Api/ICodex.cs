@@ -70,6 +70,8 @@ namespace Codex.Sdk.Search
 
     public class ContextCodexArgumentsBase : CodexArgumentsBase
     {
+        public const string AllRepositoryScopeId = "_all";
+
         /// <summary>
         /// The id of the repository to which to scope search results
         /// </summary>

@@ -174,10 +174,6 @@ namespace Codex.ElasticSearch.Formats
                 else
                 {
                     // type == DocIdSetType.BITSET
-                    // TODO: This is serializing cost is not needed but we do so
-                    // for compat with standard Lucene roaring doc id set
-                    // This should be removed next time we compile elasticsearch
-                    long cost = input.ReadVInt64();
 
                     int numBits = input.ReadVInt32();
                     int longsLength = input.ReadVInt32();
