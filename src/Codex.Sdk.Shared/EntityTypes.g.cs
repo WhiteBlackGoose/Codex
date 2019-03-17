@@ -5526,6 +5526,8 @@ namespace Codex.ObjectModel {
         
         private string m_DisplayName;
         
+        private string m_AbbreviatedName;
+        
         private string m_ShortName;
         
         private string m_ContainerQualifiedName;
@@ -5582,6 +5584,19 @@ namespace Codex.ObjectModel {
             }
             set {
                 this.m_DisplayName = value;
+            }
+        }
+        
+        /// <summary>
+        /// The abbreviated name of the symbol (i.e. ElasticSearchCodex =&gt; esc).
+        /// This is used to find the symbol when search term does not contain '.'
+        /// </summary>
+        public virtual string AbbreviatedName {
+            get {
+                return this.CoerceAbbreviatedName(this.m_AbbreviatedName);
+            }
+            set {
+                this.m_AbbreviatedName = value;
             }
         }
         
@@ -5709,6 +5724,7 @@ namespace Codex.ObjectModel {
             where TTarget : DefinitionSymbol {
             this.m_Uid = ((Codex.IDefinitionSymbol)(value)).Uid;
             this.m_DisplayName = ((Codex.IDefinitionSymbol)(value)).DisplayName;
+            this.m_AbbreviatedName = ((Codex.IDefinitionSymbol)(value)).AbbreviatedName;
             this.m_ShortName = ((Codex.IDefinitionSymbol)(value)).ShortName;
             this.m_ContainerQualifiedName = ((Codex.IDefinitionSymbol)(value)).ContainerQualifiedName;
             this.m_Modifiers = ((Codex.IDefinitionSymbol)(value)).Modifiers;

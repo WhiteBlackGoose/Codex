@@ -409,9 +409,15 @@ namespace Codex.ElasticSearch.Search
             }
             else
             {
-                return fq.Term(dss => dss.Definition.ShortName, terms.NameTerm.ToLowerInvariant())
-                        || fq.Term(dss => dss.Definition.ShortName, terms.SecondaryNameTerm.ToLowerInvariant());
+                return NameFilterCore(fq, terms);
             }
+        }
+
+        private static QueryContainer NameFilterCore(QueryContainerDescriptor<IDefinitionSearchModel> fq, QualifiedNameTerms terms)
+        {
+            return fq.Term(dss => dss.Definition.ShortName, terms.NameTerm.ToLowerInvariant())
+                                    || fq.Term(dss => dss.Definition.ShortName, terms.SecondaryNameTerm.ToLowerInvariant())
+                                    || fq.Term(dss => dss.Definition.AbbreviatedName, terms.RawNameTerm);
         }
 
         private static QueryContainer QualifiedNameTermFilters(string term, QueryContainerDescriptor<IDefinitionSearchModel> fq)
@@ -426,8 +432,7 @@ namespace Codex.ElasticSearch.Search
             }
 
             return fq.Bool(bq => bq.Filter(
-                fq1 => fq1.Term(dss => dss.Definition.ShortName, terms.NameTerm.ToLowerInvariant())
-                    || fq1.Term(dss => dss.Definition.ShortName, terms.SecondaryNameTerm.ToLowerInvariant()),
+                fq1 => NameFilterCore(fq1, terms),
                 fq1 => fq1.Term(dss => dss.Definition.ContainerQualifiedName, terms.ContainerTerm.ToLowerInvariant())));
         }
 

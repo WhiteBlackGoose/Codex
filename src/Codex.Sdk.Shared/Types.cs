@@ -70,6 +70,83 @@ namespace Codex.ObjectModel
             base.Initialize();
         }
 
+        private string CoerceAbbreviatedName(string value)
+        {
+            if (value == null && ShortName != null)
+            {
+                int abbreviationLength = GetAbbreviationLength();
+                if (abbreviationLength >= 3)
+                {
+                    AbbreviatedName = value = AccumulateAbbreviationCharacters(
+                        new StringBuilder(abbreviationLength), 
+                        (sb, c) => sb.Append(c)).ToString();
+                }
+            }
+
+            return value;
+        }
+
+        private int GetAbbreviationLength()
+        {
+            return AccumulateAbbreviationCharacters(0, (i, c) => i + 1);
+        }
+
+        /// <summary>
+        /// Essentially extracts all upper-case characters no preceded by another uppercase character
+        /// </summary>
+        internal T AccumulateAbbreviationCharacters<T>(T initial, Func<T, char, T> accumulator)
+        {
+            if (ShortName.Length < 3)
+            {
+                return initial;
+            }
+
+            var value = initial;
+            (bool isUpper, bool isAccumulated) state = default;
+            for (int i = 0; i < ShortName.Length; i++)
+            {
+                var ch = ShortName[i];
+                var lastState = state;
+                state = (char.IsUpper(ch), false);
+
+                if (i == 0 && char.IsLetter(ShortName[0]))
+                {
+                    state.isAccumulated = true;
+                    value = accumulator(value, ch);
+                    continue;
+                }
+
+                if (state.isUpper)
+                {
+                    //if (!lastCharacterWasUppercase || 
+                    //    // Special case interface names which start with canonical 'I{UpperChar}{LowerChar}' prefix
+                    //    // For instance IDefinitionSymbol should be abbreviated as IDS even though ID are two consecutive upper characters
+                    //    (i == 1 && ShortName[0] == 'I' && !char.IsUpper(ShortName[2])))
+                    //{
+                    //    value = accumulator(value, ShortName[i]);
+                    //}
+
+                    if (!lastState.isUpper)
+                    {
+                        state.isAccumulated = true;
+                        value = accumulator(value, ch);
+                        continue;
+                    }
+                }
+                else
+                {
+                    if (lastState.isUpper && !lastState.isAccumulated && char.IsLower(ch))
+                    {
+                        // Current char is a lowercase character after an uppercase character which was not accumulated.
+                        // Assume that the prior character must have been the start of a work and accumulate it
+                        value = accumulator(value, ShortName[i - 1]);
+                    }
+                }
+            }
+
+            return value;
+        }
+
         private string CoerceShortName(string value)
         {
             return value ?? "";

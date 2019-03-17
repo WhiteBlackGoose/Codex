@@ -142,7 +142,8 @@ namespace Codex
         Sortword,
         HierarchicalPath,
         FullText,
-        Prefix,
+        PrefixTerm,
+        PrefixShortName,
         PrefixFullName
     }
 

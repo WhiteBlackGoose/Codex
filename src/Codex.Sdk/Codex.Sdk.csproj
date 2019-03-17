@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
@@ -11,6 +11,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.ValueTuple" Version="4.3.0" />
+  </ItemGroup>
+  
   <Import Project="$(SrcRoot)\Common.props" />
   <Import Project="..\Codex.Sdk.Types\Codex.Sdk.Types.projitems" Label="Shared" />
   <Import Project="..\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems" Label="Shared" />

@@ -67,7 +67,7 @@ namespace Codex.ElasticSearch.Tests
                 {
                     new DefinitionSymbol()
                     {
-                        ShortName = "XedocBase",
+                        ShortName = "XedocBaseObjectDefinition",
                     },
                     new DefinitionSymbol()
                     {
@@ -129,6 +129,8 @@ namespace Codex.ElasticSearch.Tests
             await verify("*abs");
             await verify("*xed");
             await verify("xed");
+            await verify("xbo");
+            await verify("xbod");
             await verify("xedn");
             await verify("xedp");
 
@@ -142,7 +144,7 @@ namespace Codex.ElasticSearch.Tests
 
             async Task verify(string searchText, params DefinitionSymbol[] expectedDefinitionsOverride)
             {
-                Func<DefinitionSymbol, bool> predicate = d => d.ShortName.StartsWith(searchText, StringComparison.OrdinalIgnoreCase);
+                Func<DefinitionSymbol, bool> predicate = d => d.ShortName.StartsWith(searchText, StringComparison.OrdinalIgnoreCase) || d.AbbreviatedName?.StartsWith(searchText, StringComparison.OrdinalIgnoreCase) == true;
 
                 if (expectedDefinitionsOverride == null)
                 {
@@ -161,7 +163,7 @@ namespace Codex.ElasticSearch.Tests
                 arguments.SearchString = searchText;
                 var response = await codex.SearchAsync(arguments);
 
-                Console.WriteLine($"Found {response.Result?.Total ?? -1} results for '{searchText}'");
+                Console.WriteLine($"Found {response.Result?.Total ?? -1} results for '{searchText}': Error='{response.Error}'");
 
                 CollectionAssert.AreEquivalent(
                     definitions.Where(predicate).Select(d => d.ShortName),

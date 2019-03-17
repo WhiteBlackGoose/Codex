@@ -16,6 +16,7 @@ namespace Codex.ElasticSearch.Utilities
     public class QualifiedNameTerms
     {
         public string ContainerTerm = string.Empty;
+        public string RawNameTerm = string.Empty;
         public string NameTerm = string.Empty;
         public string SecondaryNameTerm = string.Empty;
         public string ExactNameTerm => NameTerm + "^";
@@ -108,6 +109,7 @@ namespace Codex.ElasticSearch.Utilities
 
         public static QualifiedNameTerms CreateNameTerm(this string nameTerm)
         {
+            var terms = new QualifiedNameTerms();
             string secondaryNameTerm = string.Empty;
             if (!string.IsNullOrEmpty(nameTerm))
             {
@@ -115,6 +117,8 @@ namespace Codex.ElasticSearch.Utilities
                 nameTerm = nameTerm.TrimStart('"');
                 if (!string.IsNullOrEmpty(nameTerm))
                 {
+                    terms.RawNameTerm = nameTerm;
+
                     if (nameTerm.EndsWith("\""))
                     {
                         nameTerm = nameTerm.TrimEnd('"');
@@ -137,7 +141,10 @@ namespace Codex.ElasticSearch.Utilities
                 }
             }
 
-            return new QualifiedNameTerms() { NameTerm = nameTerm, SecondaryNameTerm = secondaryNameTerm };
+            terms.NameTerm = nameTerm;
+            terms.SecondaryNameTerm = secondaryNameTerm;
+
+            return terms;
         }
 
         public static QualifiedNameTerms ParseContainerAndName(string fullyQualifiedTerm)
@@ -152,6 +159,7 @@ namespace Codex.ElasticSearch.Utilities
             terms.NameTerm = fullyQualifiedTerm.Substring(indexOfLastDot + 1);
             if (terms.NameTerm.Length > 0)
             {
+                terms.RawNameTerm = terms.NameTerm;
                 terms.NameTerm = "^" + terms.NameTerm;
             }
             return terms;

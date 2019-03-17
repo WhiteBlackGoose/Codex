@@ -51,14 +51,26 @@ namespace Codex.Storage.DataModel
         bool UsePrefix { get; set; }
     }
 
-    // TODO: Use this for Definition ShortName search when 
-    public class PrefixTextAttribute : SearchStringAttribute, IPrefixTextProperty
+    public class PrefixTermAttribute : SearchStringAttribute, IPrefixTextProperty
     {
         public bool UsePrefix { get; set; }
 
         bool? ITextProperty.Norms { get; set; }
 
-        public PrefixTextAttribute()
+        public PrefixTermAttribute()
+        {
+            UsePrefix = true;
+            Analyzer = CustomAnalyzers.LowerCaseKeywordAnalyzerName;
+        }
+    }
+
+    public class PrefixPartialNameAttribute : SearchStringAttribute, IPrefixTextProperty
+    {
+        public bool UsePrefix { get; set; }
+
+        bool? ITextProperty.Norms { get; set; }
+
+        public PrefixPartialNameAttribute()
         {
             UsePrefix = true;
             Analyzer = CustomAnalyzers.PrefixFilterPartialNameNGramAnalyzerName;

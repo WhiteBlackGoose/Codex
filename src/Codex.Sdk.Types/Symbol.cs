@@ -22,10 +22,19 @@ namespace Codex
         string DisplayName { get; }
 
         /// <summary>
+        /// The abbreviated name of the symbol (i.e. ElasticSearchCodex => esc).
+        /// This is used to find the symbol when search term does not contain '.'
+        /// </summary>
+        // TODO: In theory this doesn't need to be serialized since it is derived from short name
+        [SearchBehavior(SearchBehavior.PrefixTerm)]
+        [CoerceGet]
+        string AbbreviatedName { get; }
+
+        /// <summary>
         /// The short name of the symbol (i.e. Task).
         /// This is used to find the symbol when search term does not contain '.'
         /// </summary>
-        [SearchBehavior(SearchBehavior.Prefix)]
+        [SearchBehavior(SearchBehavior.PrefixShortName)]
         [CoerceGet]
         string ShortName { get; }
 

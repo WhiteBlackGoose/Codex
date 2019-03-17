@@ -86,8 +86,10 @@ namespace Codex.ElasticSearch.Utilities
                         return new HierarchicalPathAttribute();
                     case SearchBehavior.FullText:
                         return new FullTextAttribute(dataInclusion);
-                    case SearchBehavior.Prefix:
-                        return new PrefixTextAttribute();
+                    case SearchBehavior.PrefixTerm:
+                        return new PrefixTermAttribute();
+                    case SearchBehavior.PrefixShortName:
+                        return new PrefixPartialNameAttribute();
                     case SearchBehavior.PrefixFullName:
                         return new PrefixFullTextTextAttribute();
                 }

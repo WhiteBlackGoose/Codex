@@ -26,6 +26,7 @@
     <Compile Include="EsIntegrationTests.cs" />
     <Compile Include="DirectoryCodexStoreTests.cs" />
     <Compile Include="AnalysisTests.cs" />
+    <Compile Include="EntityTests.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
