@@ -107,11 +107,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analyzers\DocumentDiagnosticAnalyzer.cs" />
     <Compile Include="CompilationServices.cs" />
     <Compile Include="CompilerInvocation.cs" />
     <Compile Include="DisplayFormats.cs" />
     <Compile Include="DocumentAnalyzer.cs" />
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ManagedAnalysisHost.cs" />
     <Compile Include="ManagedProjectAnalyzer.cs" />
     <Compile Include="ManagedSolutionProjectAnalyzer.cs" />
@@ -132,6 +134,9 @@
     <Compile Include="SemanticServices.cs" />
     <Compile Include="SolutionFileAnalyzer.cs" />
     <Compile Include="SolutionProjectAnalyzer.cs" />
+    <Compile Include="Symbols\BaseSymbolWrapper.cs" />
+    <Compile Include="Symbols\MethodSymbolWrapper.cs" />
+    <Compile Include="Symbols\OperatorSymbolDisplayOverride.cs" />
     <Compile Include="WorkspaceHacks.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

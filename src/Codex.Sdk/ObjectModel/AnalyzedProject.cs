@@ -19,10 +19,5 @@ namespace Codex.ObjectModel
         /// Additional source files to add to the repository
         /// </summary>
         public List<BoundSourceFile> AdditionalSourceFiles { get; set; } = new List<BoundSourceFile>();
-
-        /// <summary>
-        /// The definitions of reference symbols
-        /// </summary>
-        public ConcurrentDictionary<Symbol, DefinitionSymbol> ReferenceDefinitionMap = new ConcurrentDictionary<Symbol, DefinitionSymbol>();
     }
 }

@@ -44,14 +44,12 @@ namespace Codex.Analysis
 
         public bool IsNewKeyword(SyntaxToken token)
         {
-            return (language == LanguageNames.CSharp && token.IsKind(Microsoft.CodeAnalysis.CSharp.SyntaxKind.NewKeyword))
-                || (language == LanguageNames.VisualBasic && token.IsKind(Microsoft.CodeAnalysis.VisualBasic.SyntaxKind.NewKeyword));
+            return token.IsEquivalentKind(CS.SyntaxKind.NewKeyword);
         }
 
         public bool IsOverrideKeyword(SyntaxToken token)
         {
-            return (language == LanguageNames.CSharp && token.IsKind(CS.SyntaxKind.OverrideKeyword))
-                || (language == LanguageNames.VisualBasic && token.IsKind(VB.SyntaxKind.OverridesKeyword));
+            return token.IsEquivalentKind(CS.SyntaxKind.OverrideKeyword);
         }
 
         public SyntaxNode TryGetUsingExpressionFromToken(SyntaxToken token)

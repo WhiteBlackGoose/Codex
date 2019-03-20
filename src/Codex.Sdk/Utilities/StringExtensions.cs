@@ -21,6 +21,11 @@ namespace Codex.Utilities
             return s.IndexOf(value, StringComparison.OrdinalIgnoreCase) > -1;
         }
 
+        public static bool EndsWithIgnoreCase(this string s, string value)
+        {
+            return s.EndsWith(value, StringComparison.OrdinalIgnoreCase);
+        }
+
         public static string TrimEndIgnoreCase(this string s, string value)
         {
             if (s.EndsWith(value, StringComparison.OrdinalIgnoreCase))

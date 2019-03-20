@@ -58,6 +58,7 @@ namespace Codex.Application
         static List<string> deleteIndices = new List<string>();
         static List<string> demoteIndices = new List<string>();
         static List<string> promoteIndices = new List<string>();
+        static OptionSet indexOptions;
 
         static Dictionary<string, (Action act, OptionSet options)> actions = new Dictionary<string, (Action, OptionSet)>(StringComparer.OrdinalIgnoreCase)
         {
@@ -65,7 +66,7 @@ namespace Codex.Application
                 "index",
                 (
                     new Action(() => Index()),
-                    new OptionSet
+                    indexOptions = new OptionSet
                     {
                         { "ed|extData=", "Specifies one or more external data directories.", n => externalDataDirectories.Add(n) },
                         { "pd|projectData=", "Specifies one or more project data directories.", n => projectDataDirectories.Add(n) },
@@ -93,13 +94,7 @@ namespace Codex.Application
                 "dryRun",
                 (
                     new Action(() => Analyze()),
-                    new OptionSet
-                    {
-                        { "n|name=", "Name of the project.", n => repoName = n },
-                        { "p|path=", "Path to the repo to analyze.", n => rootDirectory = n },
-                        { "l|logDirectory", "Optional. Path to log directory", n => logDirectory = n },
-                        { "s|solution", "Optionally, path to the solution to analyze.", n => solutionPath = n },
-                    }
+                    indexOptions
                 )
             },
             {
@@ -169,7 +164,7 @@ namespace Codex.Application
             }
         };
 
-        static void Main(string[] args)
+        public static void Main(params string[] args)
         {
             if (Environment.GetEnvironmentVariable("CodexDebugOnStart") == "1")
             {

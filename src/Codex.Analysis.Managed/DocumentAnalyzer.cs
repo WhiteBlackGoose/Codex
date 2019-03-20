@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Codex.Analysis.Managed;
+using Codex.Analysis.Managed.Symbols;
 using Codex.ObjectModel;
 using Codex.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Classification;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
+using CS = Microsoft.CodeAnalysis.CSharp;
 
 namespace Codex.Analysis
 {
@@ -59,6 +64,9 @@ namespace Codex.Analysis
 
         public async Task<BoundSourceFile> CreateBoundSourceFile()
         {
+            var compilationWithAnalyzer = _compilation.WithAnalyzers(new DiagnosticAnalyzer[] { new DocumentDiagnosticAnalyzer() }.ToImmutableArray());
+
+            var diagnostics = await compilationWithAnalyzer.GetAnalyzerDiagnosticsAsync();
             var syntaxRoot = await _document.GetSyntaxRootAsync();
             var syntaxTree = syntaxRoot.SyntaxTree;
             SemanticModel = _compilation.GetSemanticModel(syntaxTree);
@@ -101,6 +109,7 @@ namespace Codex.Analysis
 
                 ISymbol symbol = null;
                 ISymbol declaredSymbol = null;
+                SyntaxNode bindableParentNode = null;
                 bool isThis = false;
 
                 if (span.ClassificationType != ClassificationTypeNames.Keyword)
@@ -144,10 +153,10 @@ namespace Codex.Analysis
 
                     if (declaredSymbol == null)
                     {
-                        var node = GetBindableParent(token);
-                        if (node != null)
+                        bindableParentNode = GetBindableParent(token);
+                        if (bindableParentNode != null)
                         {
-                            symbol = GetSymbol(node, out isThis);
+                            symbol = GetSymbol(bindableParentNode, out isThis);
                         }
                     }
                 }
@@ -207,15 +216,6 @@ namespace Codex.Analysis
                         // but should navigate to type for go to definition
                         referenceSymbol.ExcludeFromSearch = isThis;// token.IsKind(SyntaxKind.ThisKeyword) || token.IsKind(SyntaxKind.BaseKeyword);
                         references.Add(referenceSpan);
-
-                        // Reference to external project
-                        if (referenceSymbol.ProjectId != _analyzedProject.ProjectId)
-                        {
-                            if (!_analyzedProject.ReferenceDefinitionMap.ContainsKey(referenceSymbol))
-                            {
-                                _analyzedProject.ReferenceDefinitionMap.TryAdd(referenceSymbol, GetDefinitionSymbol(symbol, documentationId));
-                            }
-                        }
 
                         AddAdditionalReferenceSymbols(symbol, referenceSpan, token);
                     }
@@ -285,7 +285,6 @@ namespace Codex.Analysis
 
             if (symbol.Kind == SymbolKind.Method)
             {
-
                 IMethodSymbol methodSymbol = symbol as IMethodSymbol;
                 if (methodSymbol != null)
                 {
@@ -297,6 +296,16 @@ namespace Codex.Analysis
                         definition.ExcludeFromDefaultSearch = true;
                         references.Add(symbolSpan.CreateReference(GetReferenceSymbol(methodSymbol.ContainingType, ReferenceKind.Constructor)));
                     }
+                }
+            }
+            else if (symbol.Kind == SymbolKind.Field)
+            {
+                // Handle enum fields
+                if (symbol is IFieldSymbol fieldSymbol 
+                    && fieldSymbol.HasConstantValue 
+                    && symbol.ContainingType.TypeKind == TypeKind.Enum)
+                {
+                    definition.Keywords.Add(fieldSymbol.ConstantValue.ToString());
                 }
             }
         }
@@ -314,6 +323,10 @@ namespace Codex.Analysis
                         // Exclude constructors from default search
                         // Add a constructor reference with the containing type
                         return nameof(MethodKind.Constructor);
+                    }
+                    else if (methodSymbol.MethodKind == MethodKind.UserDefinedOperator)
+                    {
+                        return nameof(SymbolKinds.Operator);
                     }
                 }
 
@@ -444,10 +457,23 @@ namespace Codex.Analysis
             symbol = symbol.OriginalDefinition;
             id = id ?? GetDocumentationCommentId(symbol);
 
+            ISymbol displaySymbol = symbol;
+
             bool isMember = symbol.Kind == SymbolKind.Field ||
                 symbol.Kind == SymbolKind.Method ||
                 symbol.Kind == SymbolKind.Event ||
                 symbol.Kind == SymbolKind.Property;
+
+            if (isMember)
+            {
+                if (symbol.Kind == SymbolKind.Method && symbol is IMethodSymbol methodSymbol)
+                {
+                    if (methodSymbol.MethodKind == MethodKind.UserDefinedOperator)
+                    {
+                        displaySymbol = new OperatorMethodSymbolDisplayOverride(methodSymbol);
+                    }
+                }
+            }
 
             string containerQualifierName = string.Empty;
             if (symbol.ContainingSymbol != null)
@@ -459,14 +485,14 @@ namespace Codex.Analysis
             {
                 ProjectId = symbol.ContainingAssembly.Name,
                 Id = CreateSymbolId(id),
-                DisplayName = symbol.GetDisplayString(),
-                ShortName = symbol.ToDisplayString(DisplayFormats.ShortNameDisplayFormat),
+                DisplayName = displaySymbol.GetDisplayString(),
+                ShortName = displaySymbol.ToDisplayString(DisplayFormats.ShortNameDisplayFormat),
                 ContainerQualifiedName = containerQualifierName,
                 Kind = GetSymbolKind(symbol),
                 Glyph = symbol.GetGlyph(),
                 SymbolDepth = symbol.GetSymbolDepth(),
                 Comment = symbol.GetDocumentationCommentXml(),
-                DeclarationName = symbol.ToDeclarationName(),
+                DeclarationName = displaySymbol.ToDeclarationName(),
                 TypeName = GetTypeName(symbol)
             };
 
@@ -840,7 +866,6 @@ namespace Codex.Analysis
             {
                 case ClassificationTypeNames.WhiteSpace:
                 case ClassificationTypeNames.Punctuation:
-                case ClassificationTypeNames.Operator:
                     return true;
                 default:
                     return false;
@@ -893,6 +918,7 @@ namespace Codex.Analysis
             {
                 case ClassificationTypeNames.Keyword:
                 case ClassificationTypeNames.Identifier:
+                case ClassificationTypeNames.Operator:
                 case ClassificationTypeNames.ClassName:
                 case ClassificationTypeNames.InterfaceName:
                 case ClassificationTypeNames.StructName:

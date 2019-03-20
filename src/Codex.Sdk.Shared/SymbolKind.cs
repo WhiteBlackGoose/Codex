@@ -13,6 +13,7 @@
         MSBuildItemMetadata,
         MSBuildTask,
         MSBuildTarget,
-        MSBuildTaskParameter
+        MSBuildTaskParameter,
+        Operator
     }
 }

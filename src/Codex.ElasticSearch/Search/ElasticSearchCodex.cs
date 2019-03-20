@@ -38,16 +38,21 @@ namespace Codex.ElasticSearch.Search
             return FindReferencesCore(arguments, async context =>
             {
                 var client = context.Client;
-                var referencesResult = await client.SearchAsync<IReferenceSearchModel>(s => s
-                    .StoredFilterSearch(context, IndexName(SearchTypes.Reference), qcd => qcd.Bool(bq => bq.Filter(
-                        fq => fq.Term(r => r.Reference.ProjectId, arguments.ProjectId),
-                        fq => fq.Term(r => r.Reference.Id, arguments.SymbolId))))
-                    .Sort(sd => sd.Ascending(r => r.ProjectId))
-                    .Take(arguments.MaxResults))
-                .ThrowOnFailure();
+                ISearchResponse<IReferenceSearchModel> referencesResult = await FindAllReferencesAsyncCore(context, arguments);
 
                 return referencesResult;
             });
+        }
+
+        private async Task<ISearchResponse<IReferenceSearchModel>> FindAllReferencesAsyncCore(StoredFilterSearchContext context, FindAllReferencesArguments arguments)
+        {
+            return await context.Client.SearchAsync<IReferenceSearchModel>(s => s
+                .StoredFilterSearch(context, IndexName(SearchTypes.Reference), qcd => qcd.Bool(bq => bq.Filter(
+                    fq => fq.Term(r => r.Reference.ProjectId, arguments.ProjectId),
+                    fq => fq.Term(r => r.Reference.Id, arguments.SymbolId))))
+                .Sort(sd => sd.Ascending(r => r.ProjectId))
+                .Take(arguments.MaxResults))
+            .ThrowOnFailure();
         }
 
         public Task<IndexQueryHitsResponse<IDefinitionSearchModel>> FindDefinitionAsync(FindDefinitionArguments arguments)
@@ -71,13 +76,7 @@ namespace Codex.ElasticSearch.Search
                 if (arguments.FallbackFindAllReferences && referencesResult.Total == 0)
                 {
                     // No definitions, return the the result of find all references 
-                    referencesResult = await client.SearchAsync<IReferenceSearchModel>(s => s
-                        .StoredFilterSearch(context, IndexName(SearchTypes.Reference), qcd => qcd.Bool(bq => bq.Filter(
-                            fq => fq.Term(r => r.Reference.ProjectId, arguments.ProjectId),
-                            fq => fq.Term(r => r.Reference.Id, arguments.SymbolId))))
-                        .Sort(sd => sd.Ascending(r => r.ProjectId))
-                        .Take(arguments.MaxResults))
-                    .ThrowOnFailure();
+                    referencesResult = await FindAllReferencesAsyncCore(context, arguments);
                 }
 
                 return referencesResult;
@@ -363,7 +362,7 @@ namespace Codex.ElasticSearch.Search
                 }
                 else
                 {
-                    yield return fq => ApplyTermFilter(term, fq, boostOnly);
+                    yield return fq => ApplyTermFilter(term.ToLowerInvariant(), fq, boostOnly);
                 }
             }
 
@@ -389,14 +388,10 @@ namespace Codex.ElasticSearch.Search
             }
         }
 
-        private static QueryContainer FileFilter(string term, QueryContainerDescriptor<IDefinitionSearchModel> fq)
+        private static QueryContainer KeywordFilter(string term, QueryContainerDescriptor<IDefinitionSearchModel> fq)
         {
-            if (term.Contains('.'))
-            {
-                return fq.Term(dss => dss.Keywords, term.ToLowerInvariant());
-            }
-
-            return fq;
+            return fq.Term(dss => dss.Keywords, term.ToLowerInvariant())
+                    || fq.Term(dss => dss.Definition.Keywords, term.ToLowerInvariant());
         }
 
         private static QueryContainer NameFilter(string term, QueryContainerDescriptor<IDefinitionSearchModel> fq, bool boostOnly)
@@ -415,8 +410,8 @@ namespace Codex.ElasticSearch.Search
 
         private static QueryContainer NameFilterCore(QueryContainerDescriptor<IDefinitionSearchModel> fq, QualifiedNameTerms terms)
         {
-            return fq.Term(dss => dss.Definition.ShortName, terms.NameTerm.ToLowerInvariant())
-                                    || fq.Term(dss => dss.Definition.ShortName, terms.SecondaryNameTerm.ToLowerInvariant())
+            return fq.Term(dss => dss.Definition.ShortName, terms.NameTerm)
+                                    || fq.Term(dss => dss.Definition.ShortName, terms.SecondaryNameTerm)
                                     || fq.Term(dss => dss.Definition.AbbreviatedName, terms.RawNameTerm);
         }
 
@@ -433,25 +428,7 @@ namespace Codex.ElasticSearch.Search
 
             return fq.Bool(bq => bq.Filter(
                 fq1 => NameFilterCore(fq1, terms),
-                fq1 => fq1.Term(dss => dss.Definition.ContainerQualifiedName, terms.ContainerTerm.ToLowerInvariant())));
-        }
-
-        private static QueryContainer ProjectTermFilters(string term, QueryContainerDescriptor<IDefinitionSearchModel> fq)
-        {
-            var result = fq.Term(dss => dss.Definition.ProjectId, term)
-                || fq.Term(dss => dss.Definition.ProjectId, term.Capitalize());
-            if (term != term.ToLowerInvariant())
-            {
-                result |= fq.Term(dss => dss.Definition.ProjectId, term.ToLowerInvariant());
-            }
-
-            return result;
-        }
-
-        private static QueryContainer KindTermFilters(string term, QueryContainerDescriptor<IDefinitionSearchModel> fq)
-        {
-            return fq.Term(dss => dss.Definition.Kind, term.ToLowerInvariant())
-                || fq.Term(dss => dss.Definition.Kind, term.Capitalize());
+                fq1 => fq1.Term(dss => dss.Definition.ContainerQualifiedName, terms.ContainerTerm)));
         }
 
         private static QueryContainer IndexTermFilters(string term, QueryContainerDescriptor<IDefinitionSearchModel> fq)
@@ -466,12 +443,12 @@ namespace Codex.ElasticSearch.Search
             if (!boostOnly)
             {
                 // Advanced case where symbol id is mentioned as a term
-                d |= fq.Term(dss => dss.Definition.Id, term.ToLowerInvariant());
-                d |= FileFilter(term, fq);
                 d |= QualifiedNameTermFilters(term, fq);
-                d |= ProjectTermFilters(term, fq);
                 d |= IndexTermFilters(term, fq);
-                d |= KindTermFilters(term, fq);
+                d |= KeywordFilter(term, fq);
+                d |= fq.Term(dss => dss.Definition.Id, term.ToLowerInvariant());
+                d |= fq.Term(dss => dss.Definition.ProjectId, term);
+                d |= fq.Term(dss => dss.Definition.Kind, term);
             }
 
             return d;

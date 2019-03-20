@@ -5528,6 +5528,8 @@ namespace Codex.ObjectModel {
         
         private string m_AbbreviatedName;
         
+        private System.Collections.Generic.List<string> m_Keywords = new System.Collections.Generic.List<string>();
+        
         private string m_ShortName;
         
         private string m_ContainerQualifiedName;
@@ -5597,6 +5599,29 @@ namespace Codex.ObjectModel {
             }
             set {
                 this.m_AbbreviatedName = value;
+            }
+        }
+        
+        /// <summary>
+        /// Additional search terms for the symbol.
+        /// (i.e. integral value for enum field)
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<string> Codex.IDefinitionSymbol.Keywords {
+            get {
+                return this.Keywords;
+            }
+        }
+        
+        /// <summary>
+        /// Additional search terms for the symbol.
+        /// (i.e. integral value for enum field)
+        /// </summary>
+        public virtual System.Collections.Generic.List<string> Keywords {
+            get {
+                return this.m_Keywords;
+            }
+            set {
+                this.m_Keywords = value;
             }
         }
         
@@ -5725,6 +5750,7 @@ namespace Codex.ObjectModel {
             this.m_Uid = ((Codex.IDefinitionSymbol)(value)).Uid;
             this.m_DisplayName = ((Codex.IDefinitionSymbol)(value)).DisplayName;
             this.m_AbbreviatedName = ((Codex.IDefinitionSymbol)(value)).AbbreviatedName;
+            this.m_Keywords = new System.Collections.Generic.List<string>(((Codex.IDefinitionSymbol)(value)).Keywords);
             this.m_ShortName = ((Codex.IDefinitionSymbol)(value)).ShortName;
             this.m_ContainerQualifiedName = ((Codex.IDefinitionSymbol)(value)).ContainerQualifiedName;
             this.m_Modifiers = ((Codex.IDefinitionSymbol)(value)).Modifiers;

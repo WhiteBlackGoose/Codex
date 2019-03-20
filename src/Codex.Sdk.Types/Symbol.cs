@@ -31,6 +31,13 @@ namespace Codex
         string AbbreviatedName { get; }
 
         /// <summary>
+        /// Additional search terms for the symbol.
+        /// (i.e. integral value for enum field)
+        /// </summary>
+        [SearchBehavior(SearchBehavior.NormalizedKeyword)]
+        IReadOnlyList<string> Keywords { get; }
+
+        /// <summary>
         /// The short name of the symbol (i.e. Task).
         /// This is used to find the symbol when search term does not contain '.'
         /// </summary>

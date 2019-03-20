@@ -48,7 +48,7 @@
   <Target Name="ComputeCodexExtractionRoot" BeforeTargets="BeforeCompile">
     <PropertyGroup>
       <_CodexTargetFingerprint>@(IntermediateAssembly)|$(OutDir)\$(TargetName)</_CodexTargetFingerprint>
-      <CodexProjectExtractionDirectory>$(CodexProjectExtractionRoot)\$(TargetName).$(_CodexTargetFingerprint.GetHashCode().ToString('X'))</CodexProjectExtractionDirectory>
+      <CodexProjectExtractionDirectory Condition="'$(CodexProjectExtractionDirectory)' == ''">$(CodexProjectExtractionRoot)\$(TargetName).$(_CodexTargetFingerprint.GetHashCode().ToString('X'))</CodexProjectExtractionDirectory>
       <CodexProjectExtractionDirectory Condition="'$(CodexProjectExtractionDirectory)' == ''">$(OutDir)\$(TargetName).cdx</CodexProjectExtractionDirectory>
       <CodexCompilerArgumentsFile Condition="'$(Language)' == 'C#'">$(CodexProjectExtractionDirectory)\csc.args.txt</CodexCompilerArgumentsFile>
       <CodexCompilerArgumentsFile Condition="'$(Language)' == 'VB'">$(CodexProjectExtractionDirectory)\vbc.args.txt</CodexCompilerArgumentsFile>

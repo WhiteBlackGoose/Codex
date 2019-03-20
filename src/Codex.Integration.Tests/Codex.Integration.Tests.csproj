@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
+    <TargetFrameworks>net461</TargetFrameworks>
+  </PropertyGroup>
+  <Import Project="$(SrcRoot)\Common.props" />
+  <ItemGroup>
+    <Compile Remove="Model\ElasticSearchTypes.target.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NUnit" Version="3.9.0" />
+    <PackageReference Include="Lucene.Net" Version="4.8.0-beta00005" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Codex.Analysis.Managed.Decompilation\Codex.Analysis.Managed.Decompilation.csproj" />
+    <ProjectReference Include="..\Codex.Analysis.Managed\Codex.Analysis.Managed.csproj" />
+    <ProjectReference Include="..\Codex.Analysis\Codex.Analysis.csproj" />
+    <ProjectReference Include="..\Codex.ElasticSearch\Codex.ElasticSearch.csproj" />
+    <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />
+    <ProjectReference Include="..\Codex\Codex.csproj" UseAppConfig="true" />
+    <ProjectReference Include="..\TestProjects\CodexTestRepo\CodexTestCSharpLibrary\CodexTestCSharpLibrary.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Target Name="CopyBindingRedirects" AfterTargets="ResolveReferences">
+    <ItemGroup>
+      <_CodexExe Include="@(_ResolvedProjectReferencePaths)" Condition="'%(_ResolvedProjectReferencePaths.UseAppConfig)' == 'true'">
+      </_CodexExe>
+    </ItemGroup>
+    
+    <PropertyGroup>
+      <CodexExeDirectory>@(_CodexExe -> '%(RootDir)%(Directory)')</CodexExeDirectory>
+    </PropertyGroup>
+    <ItemGroup>
+      <ContentWithTargetPath Include="@(_CodexExe -> '%(FullPath).config')">
+        <TargetPath>$(AssemblyName).dll.config</TargetPath>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </ContentWithTargetPath>
+      <Content Include="$(CodexExeDirectory)\*.*">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+  </Target>
+  <Import Project="$(SrcRoot)\Common.targets" />
+</Project>

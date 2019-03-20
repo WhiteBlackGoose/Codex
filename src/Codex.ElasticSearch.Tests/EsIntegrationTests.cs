@@ -91,6 +91,7 @@ namespace Codex.ElasticSearch.Tests
                     {
                         ContainerQualifiedName = "Index.Test1",
                         ShortName = "XedocImplementer",
+                        Keywords = new[] { "234" }.ToList()
                     },
                     new DefinitionSymbol()
                     {
@@ -141,6 +142,8 @@ namespace Codex.ElasticSearch.Tests
 
             await verify("index.test1.xedoc",
                 defMap["Index.Test1.XedocImplementer"]);
+
+            await verify(defMap["Index.Test1.XedocImplementer"].Keywords[0], defMap["Index.Test1.XedocImplementer"]);
 
             async Task verify(string searchText, params DefinitionSymbol[] expectedDefinitionsOverride)
             {

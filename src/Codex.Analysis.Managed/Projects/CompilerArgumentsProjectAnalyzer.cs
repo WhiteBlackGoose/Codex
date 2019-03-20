@@ -76,13 +76,22 @@ namespace Codex.Analysis.Projects
                 const string ProjectFilePrefix = "Project=";
                 var args = File.ReadAllLines(argsFile);
                 var argsFileName = Path.GetFileName(argsFile).ToLower();
-                var languageName = (argsFileName == "csc.args.txt" || argsFileName.EndsWith(".csc.args.txt")) ? LanguageNames.CSharp : LanguageNames.VisualBasic;
+                var languageName = (argsFileName == "csc.args.txt" || argsFileName.EndsWithIgnoreCase(".csc.args.txt")) ? LanguageNames.CSharp : LanguageNames.VisualBasic;
                 var projectFile = argsFile;
                 int startIndex = 0;
                 if (args[0].StartsWith(ProjectFilePrefix, StringComparison.OrdinalIgnoreCase))
                 {
                     projectFile = args[0].Substring(ProjectFilePrefix.Length);
                     startIndex++;
+                }
+
+                if (projectFile.EndsWithIgnoreCase(".csproj"))
+                {
+                    languageName = LanguageNames.CSharp;
+                }
+                else if (projectFile.EndsWithIgnoreCase(".vbproj"))
+                {
+                    languageName = LanguageNames.VisualBasic;
                 }
 
                 repo.AnalysisServices.Logger.LogMessage($"Reading args file '{argsFile}' for project '{projectFile ?? string.Empty}'");
