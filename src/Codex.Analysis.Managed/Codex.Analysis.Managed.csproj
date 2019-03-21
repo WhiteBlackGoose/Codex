@@ -82,6 +82,10 @@
       <Project>{2016a682-4d9f-4a65-a03d-d65ff2948269}</Project>
       <Name>Codex.Analysis</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Codex.Build.Tasks\Codex.Build.Tasks.csproj">
+      <Project>{a649607d-bf0e-4727-a7d0-b2d6376a618f}</Project>
+      <Name>Codex.Build.Tasks</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj">
       <Project>{2322a932-05f4-4931-8547-71377c6ab49e}</Project>
       <Name>Codex.Sdk</Name>

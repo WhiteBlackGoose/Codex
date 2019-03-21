@@ -12,6 +12,7 @@ using Codex.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.CodeAnalysis.Text;
+using static Codex.Build.Tasks.CompilerArgumentsUtilities;
 
 namespace Codex.Analysis.Projects
 {
@@ -73,8 +74,13 @@ namespace Codex.Analysis.Projects
 
             private void ReadArgsFile(string argsFile)
             {
-                const string ProjectFilePrefix = "Project=";
                 var args = File.ReadAllLines(argsFile);
+                if (args.Length == 0)
+                {
+                    // TODO: Warn empty arguments
+                    return;
+                }
+
                 var argsFileName = Path.GetFileName(argsFile).ToLower();
                 var languageName = (argsFileName == "csc.args.txt" || argsFileName.EndsWithIgnoreCase(".csc.args.txt")) ? LanguageNames.CSharp : LanguageNames.VisualBasic;
                 var projectFile = argsFile;
@@ -85,6 +91,8 @@ namespace Codex.Analysis.Projects
                     startIndex++;
                 }
 
+                var commandLineArguments = args.Skip(startIndex).Where(a => !string.IsNullOrWhiteSpace(a)).ToArray();
+
                 if (projectFile.EndsWithIgnoreCase(".csproj"))
                 {
                     languageName = LanguageNames.CSharp;
@@ -94,14 +102,23 @@ namespace Codex.Analysis.Projects
                     languageName = LanguageNames.VisualBasic;
                 }
 
-                repo.AnalysisServices.Logger.LogMessage($"Reading args file '{argsFile}' for project '{projectFile ?? string.Empty}'");
+                repo.AnalysisServices.Logger.LogMessage($"Read args file '{argsFile}' for project '{projectFile ?? string.Empty}' with {commandLineArguments.Length} argument lines.");
 
                 var invocation = new CompilerInvocation()
                 {
                     Language = languageName,
                     ProjectFile = projectFile,
-                    CommandLineArguments = args.Skip(startIndex).ToArray()
                 };
+
+                if (commandLineArguments.Length == 1)
+                {
+                    // Handle fine with single string command line
+                    invocation.CommandLine = commandLineArguments[0];
+                }
+                else
+                {
+                    invocation.CommandLineArguments = commandLineArguments;
+                }
 
                 InvocationsByProjectPath[invocation.ProjectFile] = invocation;
                 StartLoadProject(invocation);

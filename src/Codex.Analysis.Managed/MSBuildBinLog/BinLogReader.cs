@@ -2,9 +2,11 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using Codex.Build.Tasks;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.StructuredLogger;
 using Microsoft.CodeAnalysis;
+using static Codex.Build.Tasks.CompilerArgumentsUtilities;
 
 namespace Codex.Analysis.Managed
 {
@@ -96,51 +98,21 @@ namespace Codex.Analysis.Managed
                 return null;
             }
 
-            var task = args as TaskCommandLineEventArgs;
-            if (task == null)
+            var commandLine = GetCommandLineFromEventArgs(args, out var language);
+            if (commandLine == null)
             {
                 return null;
             }
-
-            var name = task.TaskName;
-            if (name != "Csc" && name != "Vbc")
-            {
-                return null;
-            }
-
-            var language = name == "Csc" ? LanguageNames.CSharp : LanguageNames.VisualBasic;
-            var commandLine = task.CommandLine;
-            commandLine = TrimCompilerExeFromCommandLine(commandLine, language);
 
             CompilerInvocation compilerInvocation;
             if (taskIdToInvocationMap.TryGetValue((targetId, projectId), out compilerInvocation))
             {
-                compilerInvocation.Language = language;
+                compilerInvocation.Language = language == CompilerKind.CSharp ? LanguageNames.CSharp : LanguageNames.VisualBasic;
                 compilerInvocation.CommandLine = commandLine;
                 taskIdToInvocationMap.Remove((targetId, projectId));
             }
 
             return compilerInvocation;
-        }
-
-        private static string TrimCompilerExeFromCommandLine(string commandLine, string language)
-        {
-            int occurrence = -1;
-            if (language == LanguageNames.CSharp)
-            {
-                occurrence = commandLine.IndexOf("csc.exe ", StringComparison.OrdinalIgnoreCase);
-            }
-            else if (language == LanguageNames.VisualBasic)
-            {
-                occurrence = commandLine.IndexOf("vbc.exe ", StringComparison.OrdinalIgnoreCase);
-            }
-
-            if (occurrence > -1)
-            {
-                commandLine = commandLine.Substring(occurrence + "csc.exe ".Length);
-            }
-
-            return commandLine;
         }
 
         private static CompilerInvocation TryGetInvocationFromTask(Task task)
@@ -153,7 +125,9 @@ namespace Codex.Analysis.Managed
 
             var language = name == "Csc" ? LanguageNames.CSharp : LanguageNames.VisualBasic;
             var commandLine = task.CommandLineArguments;
-            commandLine = TrimCompilerExeFromCommandLine(commandLine, language);
+            commandLine = TrimCompilerExeFromCommandLine(commandLine, name == "Csc" 
+                ? CompilerKind.CSharp
+                : CompilerKind.VisualBasic);
             return new CompilerInvocation
             {
                 Language = language,
