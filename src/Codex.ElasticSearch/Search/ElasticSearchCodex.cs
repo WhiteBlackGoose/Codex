@@ -130,7 +130,7 @@ namespace Codex.ElasticSearch.Search
 
         public async Task<IndexQueryResponse<IBoundSourceFile>> GetSourceAsync(GetSourceArguments arguments)
         {
-            // TODO: Add get repo for getting uploaded date and web address.
+            // TODO: Get text source if bound source is unavailable.
             return await UseClientSingle<IBoundSourceFile>(arguments, async context =>
             {
                 var client = context.Client;

@@ -31,5 +31,11 @@ namespace Codex.ElasticSearch.Tests
             var semanticStore = new CodexSemanticStore(@"C:\temp\dsc\dsc");
             semanticStore.Load();
         }
+
+        [Test]
+        public void TestComputeWebAddress()
+        {
+            Assert.Pass(StoreUtilities.GetFileWebAddress("https://ref12.visualstudio.com/Ref12/_git/_full/Codex", "foo.cs"));
+        }
     }
 }

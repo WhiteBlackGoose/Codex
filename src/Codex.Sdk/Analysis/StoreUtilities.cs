@@ -11,12 +11,12 @@ namespace Codex.Utilities
     {
         private static Tuple<Regex, string> vstsReplacement
             = Tuple.Create(
-                new Regex(@"(?<host>https?://[^/]+/)(?<project>[^/]+/)?(_git/)(?<repoName>[^/?#]+)"), 
+                new Regex(@"(?<host>https?://[^/]+/)(?<project>[^/]+/)?(_[^/]+/)+(?<repoName>[^/?#]+)"), 
                 "${host}${project}_git/${repoName}?path=");
 
         private static Tuple<Regex, string> azDevReplacement
             = Tuple.Create(
-                new Regex(@"(?<host>https?://[^/]+/[^/]+/)(?<project>[^/]+/)?(_git/)(?<repoName>[^/?#]+)"),
+                new Regex(@"(?<host>https?://[^/]+/[^/]+/)(?<project>[^/]+/)?(_[^/]+/)+(?<repoName>[^/?#]+)"),
                 "${host}${project}_git/${repoName}?path=");
 
         private static Tuple<Regex, string> githubReplacement
