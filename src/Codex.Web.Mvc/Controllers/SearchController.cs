@@ -52,7 +52,7 @@ namespace Codex.Web.Mvc.Controllers
 
                 searchResult.ThrowOnError();
 
-                if (searchResult.Result.Total == 0 || searchResult.Result.Hits[0].Definition != null)
+                if (searchResult.Result.Hits.Count == 0 || searchResult.Result.Hits[0].Definition != null)
                 {
                     return PartialSymbolSearchResultView(searchTerm, searchResult);
                 }

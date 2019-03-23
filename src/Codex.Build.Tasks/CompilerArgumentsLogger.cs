@@ -24,8 +24,6 @@ namespace Codex.Build.Tasks
         public void Initialize(IEventSource eventSource)
         {
             ParseParameters();
-            Console.WriteLine(Parameters);
-            Console.WriteLine(LogDirectory);
             Directory.CreateDirectory(LogDirectory);
             eventSource.MessageRaised += OnMessageRaised;
         }

@@ -27,6 +27,7 @@ bld/
 [Ll]og/
 /[Oo]ut/
 node_modules/
+publish/app/
 
 # Visual Studio 2015 cache/options directory
 .vs/

@@ -510,14 +510,14 @@ function addToolbar() {
     }
 
     var documentOutlineButton = document.createElement('img');
-    documentOutlineButton.setAttribute('src', '../../content/icons/DocumentOutline.png');
+    documentOutlineButton.setAttribute('src', '../../content/icons/documentoutline.png');
     documentOutlineButton.title = "Document Outline";
     documentOutlineButton.className = 'documentOutlineButton';
     documentOutlineButton.onclick = showDocumentOutline;
     editorPane.appendChild(documentOutlineButton);
 
     var projectExplorerButton = document.createElement('img');
-    var projectExplorerIcon = '../../content/icons/CSharpProjectExplorer.png';
+    var projectExplorerIcon = '../../content/icons/csharpprojectexplorer.png';
 
     projectExplorerButton.setAttribute('src', projectExplorerIcon);
     projectExplorerButton.title = "Project Explorer";
@@ -526,7 +526,7 @@ function addToolbar() {
     editorPane.appendChild(projectExplorerButton);
 
     var namespaceExplorerButton = document.createElement('img');
-    namespaceExplorerButton.setAttribute('src', '../../content/icons/NamespaceExplorer.png');
+    namespaceExplorerButton.setAttribute('src', '../../content/icons/namespaceexplorer.png');
     namespaceExplorerButton.title = "Namespace Explorer";
     namespaceExplorerButton.className = 'namespaceExplorerButton';
     namespaceExplorerButton.onclick = showNamespaceExplorer;

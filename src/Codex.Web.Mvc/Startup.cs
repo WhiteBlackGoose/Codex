@@ -50,7 +50,7 @@ namespace Codex.Web.Mvc
                 {
                     ElasticSearchStoreConfiguration configuration = new ElasticSearchStoreConfiguration()
                     {
-                        CreateIndices = true,
+                        CreateIndices = false,
                         ShardCount = 1,
                         Prefix = "test."
                     };
@@ -97,7 +97,6 @@ namespace Codex.Web.Mvc
 
             if (env.IsDevelopment())
             {
-                app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
             }
             else
