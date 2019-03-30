@@ -39,6 +39,29 @@ namespace Codex.Integration.Tests
                 "-ca", compilerArgumentsPath);
         }
 
+        [Test]
+        public void TestSaveAnalysis()
+        {
+            //
+            (var root, var compilerArgumentsPath) = GetArgumentsPath();
+
+            Environment.CurrentDirectory = Path.Combine(root, @"out\test");
+            var outputPath = Path.Combine(root, @"out\test\TestAnalysis.cdx");
+            if (Directory.Exists(outputPath))
+            {
+                Directory.Delete(outputPath, true);
+            }
+
+            CodexApplication.Main(
+                "index",
+                "-save", outputPath,
+                "-p", root,
+                "-noScan",
+                "-repoUrl", "https://github.com/Ref12/Codex/",
+                "-n", "CodexTestRepo",
+                "-ca", compilerArgumentsPath);
+        }
+
         private string FilterArguments(string compilerArgumentsPath, string includedFile)
         {
             var lines = File.ReadAllLines(compilerArgumentsPath);

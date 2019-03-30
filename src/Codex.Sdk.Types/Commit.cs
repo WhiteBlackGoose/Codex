@@ -14,6 +14,7 @@ namespace Codex
         /// <summary>
         /// The commit description describing the changes
         /// </summary>
+        [SearchBehavior(SearchBehavior.FullText)]
         string Description { get; }
 
         /// <summary>

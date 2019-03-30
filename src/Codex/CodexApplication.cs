@@ -52,6 +52,7 @@ namespace Codex.Application
         static bool disableEnumeration = false;
         static bool test = false;
         static bool projectMode = false;
+        static bool detectGit = true;
         static bool update = false;
         static List<string> externalDataDirectories = new List<string>();
         static List<string> projectDataDirectories = new List<string>();
@@ -84,7 +85,8 @@ namespace Codex.Application
                         { "ca|compilerArgumentFile=", "Adds a file specifying compiler arguments", n => compilerArgumentsFiles.Add(n) },
                         { "l|logDirectory=", "Optional. Path to log directory", n => logDirectory = n },
                         { "s|solution=", "Optionally, path to the solution to analyze.", n => solutionPath = n },
-                        { "projectMode", "Uses project indexing mode.", n => projectMode = n != null },
+                        { "projectMode", "Uses project indexing mode.", n => detectGit = !(projectMode = n != null) },
+                        { "disableDetectGit", "Disables use of LibGit2Sharp to detect git commit and branch.", n => detectGit = n == null },
                         { "newBackend", "Use new backend with stored filters Not supported.", n => newBackend = n != null },
                         { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
                     }
@@ -690,21 +692,28 @@ namespace Codex.Application
                 else
                 {
                     Placeholder.Todo("Populate commit/repo/branch with full set of real values");
-                    analysisTarget = await store.CreateRepositoryStore(
-                        new Repository(repoName)
+                    var repoData = (
+                        repository: new Repository(repoName)
                         {
                             SourceControlWebAddress = repoUrl,
                         },
-                        new Commit()
+                        commit: new Commit()
                         {
                             RepositoryName = repoName,
                             CommitId = targetIndexName,
                             DateUploaded = DateTime.UtcNow,
                         },
-                        new Branch()
+                        branch: new Branch()
                         {
                             HeadCommitId = targetIndexName,
                         });
+
+                    if (detectGit)
+                    {
+                        GitHelpers.DetectGit(repoData, rootDirectory, logger);
+                    }
+
+                    analysisTarget = await store.CreateRepositoryStore(repoData.repository, repoData.commit, repoData.branch);
                 }
 
                 if (projectDataDirectories.Count != 0)

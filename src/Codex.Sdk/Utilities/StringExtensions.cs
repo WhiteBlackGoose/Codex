@@ -26,6 +26,16 @@ namespace Codex.Utilities
             return s.EndsWith(value, StringComparison.OrdinalIgnoreCase);
         }
 
+        public static string TrimStartIgnoreCase(this string s, string value)
+        {
+            if (s.StartsWith(value, StringComparison.OrdinalIgnoreCase))
+            {
+                return s.Substring(value.Length);
+            }
+
+            return s;
+        }
+
         public static string TrimEndIgnoreCase(this string s, string value)
         {
             if (s.EndsWith(value, StringComparison.OrdinalIgnoreCase))
