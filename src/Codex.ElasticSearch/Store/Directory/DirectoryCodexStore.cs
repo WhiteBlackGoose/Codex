@@ -41,7 +41,7 @@ namespace Codex.ElasticSearch.Store
         /// </summary>
         public bool DisableOptimization { get; set; }
         public bool Clean { get; set; }
-        public bool WriteStoreInfo { get; set; } = true;
+        public bool WriteStoreInfo => string.IsNullOrEmpty(QualifierSuffix);
         public string QualifierSuffix { get; set; } = string.Empty;
 
         public DirectoryCodexStore(string directory, Logger logger = null, bool flattenDirectory = false)
