@@ -52,6 +52,7 @@ namespace Codex.Application
         static bool disableEnumeration = false;
         static bool test = false;
         static bool projectMode = false;
+        static string projectDataSuffix = "";
         static bool detectGit = true;
         static bool update = false;
         static List<string> externalDataDirectories = new List<string>();
@@ -71,6 +72,7 @@ namespace Codex.Application
                     {
                         { "ed|extData=", "Specifies one or more external data directories.", n => externalDataDirectories.Add(n) },
                         { "pd|projectData=", "Specifies one or more project data directories.", n => projectDataDirectories.Add(n) },
+                        { "pds|projectDataSuffix=", "Specifies the suffix for saving project data.", n => projectDataSuffix = n },
                         { "noScan", "Disable scanning enlistment directory.", n => disableEnumeration = n != null },
                         { "noMsBuild", "Disable loading solutions using msbuild.", n => disableMsbuild = n != null },
                         { "noMsBuildLocator", "Disable loading solutions using msbuild.", n => disableMsbuildLocator = n != null },
@@ -418,7 +420,12 @@ namespace Codex.Application
                     logDirectory = Path.Combine(saveDirectory, "logs");
                 }
 
-                store = new DirectoryCodexStore(saveDirectory) { DisableOptimization = test, Clean = clean };
+                store = new DirectoryCodexStore(saveDirectory)
+                {
+                    DisableOptimization = test,
+                    Clean = clean,
+                    QualifierSuffix = projectDataSuffix
+                };
             }
 
             try
@@ -509,8 +516,8 @@ namespace Codex.Application
                             (targetIndexName != null ? i == directories.Length : true) && finalize;
                         logger.LogMessage($"[{i} of {directories.Length}] Loading {directory}");
                         LoadCore(
-                            logger, 
-                            directory, 
+                            logger,
+                            directory,
                             clearIndicesBeforeUse,
                             finalizeRepository,
                             targetIndexName);
@@ -528,10 +535,10 @@ namespace Codex.Application
         }
 
         private static void LoadCore(
-            Logger logger, 
-            string loadDirectory, 
-            bool clearIndicesBeforeUse, 
-            bool finalizeRepository, 
+            Logger logger,
+            string loadDirectory,
+            bool clearIndicesBeforeUse,
+            bool finalizeRepository,
             string targetIndexName = null)
         {
             if (File.Exists(Path.Combine(loadDirectory, @"store\repo.cdx.json")))
@@ -723,7 +730,7 @@ namespace Codex.Application
                     foreach (var projectDataDirectory in projectDataDirectories)
                     {
                         var interceptorStore = preAnalysisAnalyzer.CreateRepositoryStore(analysisTarget);
-                        var directoryStore = new DirectoryCodexStore(projectDataDirectory, logger, flattenDirectory: true);
+                        var directoryStore = new DirectoryCodexStore(projectDataDirectory, logger);
 
                         await directoryStore.ReadAsync(interceptorStore);
                     }

@@ -41,6 +41,8 @@ namespace Codex.ElasticSearch.Store
         /// </summary>
         public bool DisableOptimization { get; set; }
         public bool Clean { get; set; }
+        public bool WriteStoreInfo { get; set; } = true;
+        public string QualifierSuffix { get; set; } = string.Empty;
 
         public DirectoryCodexStore(string directory, Logger logger = null, bool flattenDirectory = false)
         {
@@ -193,7 +195,11 @@ namespace Codex.ElasticSearch.Store
                     Branch = branch
                 };
             }
-            Write(RepositoryInitializationFileName, m_storeInfo);
+
+            if (WriteStoreInfo)
+            {
+                Write(RepositoryInitializationFileName, m_storeInfo);
+            }
 
             return Task.FromResult<ICodexRepositoryStore>(this);
         }
@@ -206,7 +212,7 @@ namespace Codex.ElasticSearch.Store
                 var stableId = kind.GetEntityStableId(entity);
                 var pathPart = pathGenerator(entity);
 
-                Write(Path.Combine(kind.Name, $"{pathPart}.{stableId}{EntityFileExtension}"), entity);
+                Write(Path.Combine(kind.Name, $"{pathPart}.{stableId}{QualifierSuffix}{EntityFileExtension}"), entity);
             }
 
             return Task.CompletedTask;
@@ -315,7 +321,10 @@ namespace Codex.ElasticSearch.Store
                 await backgroundTask;
             }
 
-            Write(RepositoryInfoFileName, m_storeInfo);
+            if (WriteStoreInfo)
+            {
+                Write(RepositoryInfoFileName, m_storeInfo);
+            }
         }
 
         private static string ToStableId(params string[] values)
