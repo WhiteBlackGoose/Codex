@@ -23,6 +23,7 @@ namespace Codex.ElasticSearch.Store
     {
         private readonly ConcurrentQueue<ValueTask<None>> backgroundTasks = new ConcurrentQueue<ValueTask<None>>();
         private readonly ConcurrentQueue<CommitFileLink> commitFiles = new ConcurrentQueue<CommitFileLink>();
+        private readonly ConcurrentDictionary<string, bool> addedFiles = new ConcurrentDictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
 
         public readonly string DirectoryPath;
         private const string EntityFileExtension = ".cdx.json";
@@ -220,11 +221,14 @@ namespace Codex.ElasticSearch.Store
 
         private void Write<T>(string relativePath, T entity)
         {
-            var fullPath = Path.Combine(DirectoryPath, relativePath);
-            Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
-            using (var streamWriter = new StreamWriter(fullPath))
+            if (addedFiles.TryAdd(relativePath, true))
             {
-                entity.SerializeEntityTo(new JsonTextWriter(streamWriter) { Formatting = Formatting.Indented }, stage: ObjectStage.StoreRaw);
+                var fullPath = Path.Combine(DirectoryPath, relativePath);
+                Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+                using (var streamWriter = new StreamWriter(fullPath))
+                {
+                    entity.SerializeEntityTo(new JsonTextWriter(streamWriter) { Formatting = Formatting.Indented }, stage: ObjectStage.StoreRaw);
+                }
             }
         }
 
