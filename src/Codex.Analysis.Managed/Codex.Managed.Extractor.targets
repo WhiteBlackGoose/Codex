@@ -21,6 +21,7 @@
     $(CodexProjectExtractionRoot) - Optional extraction root
     $(CodexRepoRoot) - the location of the root of the repository
     @(IntermediateAssembly) - the location of the intermediate output assembly
+    $(CodexAdditionalArguments) - [Optional] Additional arguments to pass to Codex.exe (e.g. -disableParallelFiles)
   
     Common:
     set CustomBeforeMicrosoftCommonTargets=
@@ -89,7 +90,7 @@
       <CodexRepoRoot Condition="'$(CodexRepoRoot)' == ''">$(MSBuildProjectFullPath)</CodexRepoRoot>
     </PropertyGroup>
 
-    <Exec Command='$(CodexExePath) index -save "$(CodexProjectExtractionRoot)" -projectMode -projectDataSuffix $(_CodexTargetFingerprint) -ca "$(CodexCompilerArgumentsFile)" -p "$(CodexRepoRoot)" -n "$(CodexRepoName)"' />
+    <Exec Command='$(CodexExePath) index -save "$(CodexProjectExtractionRoot)" -projectMode -projectDataSuffix $(_CodexTargetFingerprint) -ca "$(CodexCompilerArgumentsFile)" -p "$(CodexRepoRoot)" -n "$(CodexRepoName)" $(CodexAdditionalArguments)' />
   </Target>
 
 </Project>

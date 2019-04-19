@@ -52,6 +52,7 @@ namespace Codex.Application
         static bool disableEnumeration = false;
         static bool test = false;
         static bool projectMode = false;
+        static bool disableParallelFiles = false;
         static string projectDataSuffix = "";
         static bool detectGit = true;
         static bool update = false;
@@ -88,6 +89,7 @@ namespace Codex.Application
                         { "l|logDirectory=", "Optional. Path to log directory", n => logDirectory = n },
                         { "s|solution=", "Optionally, path to the solution to analyze.", n => solutionPath = n },
                         { "projectMode", "Uses project indexing mode.", n => detectGit = !(projectMode = n != null) },
+                        { "disableParallelFiles", "Disables use of parallel file analysis.", n => disableParallelFiles = n == null },
                         { "disableDetectGit", "Disables use of LibGit2Sharp to detect git commit and branch.", n => detectGit = n == null },
                         { "newBackend", "Use new backend with stored filters Not supported.", n => newBackend = n != null },
                         { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
@@ -758,6 +760,7 @@ namespace Codex.Application
                     {
                         RepositoryStore = analysisTarget,
                         Logger = logger,
+                        ParallelProcessProjectFiles = projectMode && !disableParallelFiles
                     })
                 {
                     AnalyzerDatas = projectAnalyzers.Select(a => new AnalyzerData() { Analyzer = a }).ToList()

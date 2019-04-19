@@ -190,7 +190,7 @@ namespace Codex.Import
             logger.WriteLine($"Reassigned files. Operation: {watch.Elapsed} Total: {totalWatch.Elapsed}");
 
             watch.Restart();
-            AnalysisServices.TaskDispatcher.SetAllowedTaskTypes(t => t == TaskType.Project);
+            AnalysisServices.TaskDispatcher.SetAllowedTaskType(TaskType.Project, true);
 
             foreach (var project in repo.Projects)
             {
@@ -209,7 +209,6 @@ namespace Codex.Import
 
             await AnalysisServices.TaskDispatcher.OnCompletion();
 
-            AnalysisServices.TaskDispatcher.SetAllowedTaskTypes(t => t == TaskType.File);
             AnalysisServices.ParallelProcessProjectFiles = true;
 
             // Explicitly analyze default repo project last so that projects with semantic information get analyzed first

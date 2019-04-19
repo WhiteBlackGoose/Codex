@@ -25,7 +25,18 @@ public class AnalysisServices
         public Logger Logger = Logger.Null;
         public string TargetIndex { get; }
         public ICodexRepositoryStore RepositoryStore;
-        public bool ParallelProcessProjectFiles = false;
+
+        public bool ParallelProcessProjectFiles
+        {
+            get => parallelProcessProjectFiles;
+            set
+            {
+                TaskDispatcher.SetAllowedTaskType(TaskType.File, value);
+                parallelProcessProjectFiles = value;
+            }
+        }
+
+        private bool parallelProcessProjectFiles;
 
         public List<RepoFileAnalyzer> FileAnalyzers { get; set; } = new List<RepoFileAnalyzer>();
         public List<RepoProjectAnalyzer> ProjectAnalyzers { get; set; } = new List<RepoProjectAnalyzer>();
@@ -53,6 +64,9 @@ public class AnalysisServices
                     }
                 }
             }
+
+            // If default is changed, be sure to update the setters which might disable this unintentionally
+            ParallelProcessProjectFiles = false;
         }
 
         public Task<Repo> CreateRepo(string name, string root = null)
@@ -136,13 +150,13 @@ public class AnalysisServices
         {
             foreach (TaskType taskType in Enum.GetValues(typeof(TaskType)))
             {
-                SetAllowedTaskType((int)taskType, isAllowed(taskType));
+                SetAllowedTaskType(taskType, isAllowed(taskType));
             }
         }
 
-        private void SetAllowedTaskType(int type, bool allowed)
+        public void SetAllowedTaskType(TaskType type, bool allowed)
         {
-            allowedTypes[type] = allowed;
+            allowedTypes[(int)type] = allowed;
         }
 
         public void CheckAllowed(TaskType type)

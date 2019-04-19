@@ -64,9 +64,9 @@ namespace Codex.Analysis
 
         public async Task<BoundSourceFile> CreateBoundSourceFile()
         {
-            var compilationWithAnalyzer = _compilation.WithAnalyzers(new DiagnosticAnalyzer[] { new DocumentDiagnosticAnalyzer() }.ToImmutableArray());
-
-            var diagnostics = await compilationWithAnalyzer.GetAnalyzerDiagnosticsAsync();
+            // When re-enabling custom analyzer, be sure that no other analyzers are getting run to collect diagnostics below
+            //var compilationWithAnalyzer = _compilation.WithAnalyzers(new DiagnosticAnalyzer[] { new DocumentDiagnosticAnalyzer() }.ToImmutableArray());
+            //var diagnostics = await compilationWithAnalyzer.GetAnalyzerDiagnosticsAsync();
             var syntaxRoot = await _document.GetSyntaxRootAsync();
             var syntaxTree = syntaxRoot.SyntaxTree;
             SemanticModel = _compilation.GetSemanticModel(syntaxTree);
