@@ -1,18 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
-    <ProjectGuid>{C6454733-C8EE-41A1-88D9-2EDC4012F499}</ProjectGuid>
-    <AssemblyName>Codex.Decompilation</AssemblyName>
-    <RootNamespace>Codex.Decompilation</RootNamespace>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <SignAssembly Condition="'$(TargetFramework)' == 'net461'">true</SignAssembly>
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
+    <PackageReference Include="ICSharpCode.Decompiler" Version="5.0.0.4688-preview1" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SrcRoot)\Common.targets" />
