@@ -5,11 +5,9 @@
     <SignAssembly Condition="'$(TargetFramework)' == 'net461'">true</SignAssembly>
     <!--<TargetFramework>netcoreapp2.0</TargetFramework>-->
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="System.ValueTuple" Version="4.3.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
   </ItemGroup>
-  
   <Import Project="$(SrcRoot)\Common.props" />
   <Import Project="..\Codex.Sdk.Types\Codex.Sdk.Types.projitems" Label="Shared" />
   <Import Project="..\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems" Label="Shared" />
