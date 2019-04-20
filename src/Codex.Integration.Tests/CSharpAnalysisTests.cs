@@ -20,6 +20,39 @@ namespace Codex.Integration.Tests
             (var root, var compilerArgumentsPath) = GetArgumentsPath();
 
             //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "SpecificReference.cs");
+            //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "OperatorOverload.cs");
+            compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "DerivedImplementation.Issue159.cs");
+
+            Environment.CurrentDirectory = Path.Combine(root, @"out\test");
+            var outputPath = Path.Combine(root, @"out\test\TestAnalysis.cdx");
+            if (Directory.Exists(outputPath))
+            {
+                Directory.Delete(outputPath, true);
+            }
+
+            using (Features.AddDefinitionForInheritedInterfaceImplementations.EnableLocal())
+            {
+                CodexApplication.Main(
+                    "dryRun",
+                    "-save", outputPath,
+                    "-p", root,
+                    "-noScan",
+                    "-repoUrl", "https://github.com/Ref12/Codex/",
+                    "-n", "CodexTestRepo",
+                    "-ca", compilerArgumentsPath);
+            }
+        }
+
+        /// <summary>
+        /// This test doesn't actually verify anything. It just provides an easy way of viewing mappings
+        /// </summary>
+        [Test]
+        public void TestHelixAnalysis()
+        {
+            //
+            (var root, var compilerArgumentsPath) = GetArgumentsPath();
+
+            //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "SpecificReference.cs");
             compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "OperatorOverload.cs");
 
             Environment.CurrentDirectory = Path.Combine(root, @"out\test");
@@ -33,10 +66,12 @@ namespace Codex.Integration.Tests
                 "dryRun",
                 "-save", outputPath,
                 "-p", root,
-                "-noScan",
+                "-projectMode",
+                "-disableParallelFiles",
                 "-repoUrl", "https://github.com/Ref12/Codex/",
                 "-n", "CodexTestRepo",
-                "-ca", compilerArgumentsPath);
+                "-ca", @"D:\Code\Helix.Ide\obj\cdx\Microsoft.Ide.Common.4C6B42D\csc.args.txt",
+                "-projectDataSuffix", "4C6B42D");
         }
 
         [Test]

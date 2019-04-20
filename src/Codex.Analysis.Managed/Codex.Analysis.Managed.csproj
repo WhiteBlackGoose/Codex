@@ -139,6 +139,9 @@
     <Compile Include="SolutionFileAnalyzer.cs" />
     <Compile Include="SolutionProjectAnalyzer.cs" />
     <Compile Include="Symbols\BaseSymbolWrapper.cs" />
+    <Compile Include="Symbols\PropertySymbolWrapper.cs" />
+    <Compile Include="Symbols\FieldSymbolWrapper.cs" />
+    <Compile Include="Symbols\EventSymbolWrapper.cs" />
     <Compile Include="Symbols\MethodSymbolWrapper.cs" />
     <Compile Include="Symbols\OperatorSymbolDisplayOverride.cs" />
     <Compile Include="WorkspaceHacks.cs" />

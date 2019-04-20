@@ -380,14 +380,7 @@ namespace Codex.Application
         {
             if (!disableMsbuild && !disableMsbuildLocator)
             {
-                try
-                {
-                    MSBuildLocator.RegisterDefaults();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error registering MSBuild locator: {ex.Message}");
-                }
+                MSBuildHelper.RegisterMSBuild();
             }
 
             if (String.IsNullOrEmpty(rootDirectory)) throw new ArgumentException("Root path is missing. Use -p to provide it.");

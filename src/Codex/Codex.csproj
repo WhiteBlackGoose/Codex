@@ -115,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodexApplication.cs" />
+    <Compile Include="MSBuildHelper.cs" />
     <Compile Include="GitHelpers.cs" />
     <Compile Include="PreAnalyzedRepoProjectAnalyzer.cs" />
   </ItemGroup>

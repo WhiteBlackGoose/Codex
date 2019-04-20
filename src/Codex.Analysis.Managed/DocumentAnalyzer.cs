@@ -24,7 +24,8 @@ namespace Codex.Analysis
         private Compilation _compilation;
         private CompilationServices CompilationServices;
 
-        private ConcurrentDictionary<INamedTypeSymbol, ILookup<ISymbol, ISymbol>> interfaceMemberImplementationMap = new ConcurrentDictionary<INamedTypeSymbol, ILookup<ISymbol, ISymbol>>();
+        private ConcurrentDictionary<INamedTypeSymbol, (ILookup<ISymbol, ISymbol> memberByImplementedLookup, IDictionary<ISymbol, ISymbol> interfaceMemberToImplementationMap)> interfaceMemberImplementationMap 
+            = new ConcurrentDictionary<INamedTypeSymbol, (ILookup<ISymbol, ISymbol> memberByImplementedLookup, IDictionary<ISymbol, ISymbol> interfaceMemberToImplementationMap)>();
         private Dictionary<ISymbol, int> localSymbolIdMap = new Dictionary<ISymbol, int>();
 
         public SemanticModel SemanticModel;
@@ -209,12 +210,11 @@ namespace Codex.Analysis
                     else
                     {
                         // This is a reference
-                        var referenceSymbol = GetReferenceSymbol(symbol, documentationId, token);
-                        var referenceSpan = symbolSpan.CreateReference(referenceSymbol);
+                        var referenceSpan = GetReferenceSpan(symbolSpan, symbol, documentationId, token);
 
                         // This parameter should not show up in find all references search
                         // but should navigate to type for go to definition
-                        referenceSymbol.ExcludeFromSearch = isThis;// token.IsKind(SyntaxKind.ThisKeyword) || token.IsKind(SyntaxKind.BaseKeyword);
+                        referenceSpan.Reference.ExcludeFromSearch = isThis;// token.IsKind(SyntaxKind.ThisKeyword) || token.IsKind(SyntaxKind.BaseKeyword);
                         references.Add(referenceSpan);
 
                         AddAdditionalReferenceSymbols(symbol, referenceSpan, token);
@@ -270,6 +270,12 @@ namespace Codex.Analysis
                 // Case: Derived class
 
                 // Case: Partial class
+
+                if (symbolSpan.Reference.ReferenceKind == nameof(ReferenceKind.InterfaceImplementation))
+                {
+                    // TODO: Add references to all member implementations that are not defined on this type specifically
+                    
+                }
             }
         }
 
@@ -359,20 +365,49 @@ namespace Codex.Analysis
             SymbolId relatedDefinition = default(SymbolId))
         {
             var declaringType = declaredSymbol.ContainingType;
-            var implementationLookup = interfaceMemberImplementationMap.GetOrAdd(declaringType, type =>
-            {
-                return type.AllInterfaces
-                    .SelectMany(implementedInterface =>
-                        implementedInterface.GetMembers()
-                            .Select(member => CreateKeyValuePair(type.FindImplementationForInterfaceMember(member), member))
-                            .Where(kvp => kvp.Key != null))
-                    .ToLookup(kvp => kvp.Key, kvp => kvp.Value);
-            });
+            ILookup<ISymbol, ISymbol> implementationLookup = GetImplementedMemberLookup(declaringType).memberByImplementedLookup;
 
             foreach (var implementedMember in implementationLookup[declaredSymbol])
             {
                 references.Add(symbolSpan.CreateReference(GetReferenceSymbol(implementedMember, ReferenceKind.InterfaceMemberImplementation), relatedDefinition));
             }
+        }
+
+        private (ILookup<ISymbol, ISymbol> memberByImplementedLookup, IDictionary<ISymbol, ISymbol> interfaceMemberToImplementationMap) GetImplementedMemberLookup(INamedTypeSymbol declaringType)
+        {
+            return interfaceMemberImplementationMap.GetOrAdd(declaringType, type =>
+            {
+                (ILookup<ISymbol, ISymbol> memberByImplementedLookup, IDictionary<ISymbol, ISymbol> interfaceMemberToImplementationMap) result = default;
+                result.interfaceMemberToImplementationMap = type.AllInterfaces
+                    .SelectMany(implementedInterface =>
+                        implementedInterface.GetMembers()
+                            .Select(member => (implementation: type.FindImplementationForInterfaceMember(member), implemented: member))
+                            .Where(kvp => kvp.implementation != null))
+                    .ToDictionary(kvp => kvp.implemented, kvp => kvp.implementation);
+
+                result.memberByImplementedLookup = result.interfaceMemberToImplementationMap.ToLookup(kvp => kvp.Value, kvp => kvp.Key);
+
+                var directInterfaceImplementations = new HashSet<INamedTypeSymbol>(type.Interfaces);
+                foreach (var entry in result.interfaceMemberToImplementationMap)
+                {
+                    var interfaceMember = entry.Key;
+                    var implementation = entry.Value;
+
+                    if (Features.AddDefinitionForInheritedInterfaceImplementations)
+                    {
+                        if (implementation.ContainingType != type && directInterfaceImplementations.Contains(interfaceMember.ContainingType))
+                        {
+                            var reparentedSymbol = BaseSymbolWrapper.WrapWithOverrideContainer(implementation, type);
+
+                            // Call to trigger addition of the symbol to the set of symbols referenced by the project
+                            // TODO: Specify that the definition should not show up in the referenced definitions
+                            GetReferenceSymbol(reparentedSymbol, ReferenceKind.Definition);
+                        }
+                    }
+                }
+
+                return result;
+            });
         }
 
         private KeyValuePair<TKey, TValue> CreateKeyValuePair<TKey, TValue>(TKey key, TValue value)
@@ -514,16 +549,18 @@ namespace Codex.Analysis
             return SymbolId.CreateFromId(id);
         }
 
-        private ReferenceSymbol GetReferenceSymbol(ISymbol symbol, string id, SyntaxToken token)
+        private ReferenceSpan GetReferenceSpan(SymbolSpan span, ISymbol symbol, string id, SyntaxToken token)
         {
-            ReferenceKind referenceKind = DetermineReferenceKind(symbol, token);
+            (ReferenceKind referenceKind, SymbolId relatedDefinitionId) = DetermineReferenceKind(symbol, token);
 
-            return GetReferenceSymbol(symbol, referenceKind, id);
+            var referenceSymbol = GetReferenceSymbol(symbol, referenceKind, id);
+
+            return span.CreateReference(referenceSymbol, relatedDefinitionId);
         }
 
-        private ReferenceKind DetermineReferenceKind(ISymbol referencedSymbol, SyntaxToken token)
+        private (ReferenceKind kind, SymbolId relatedDefinitionId) DetermineReferenceKind(ISymbol referencedSymbol, SyntaxToken token)
         {
-            var kind = ReferenceKind.Reference;
+            (ReferenceKind kind, SymbolId relatedDefinitionId) result = (ReferenceKind.Read, default);
             // Case: nameof() - Do we really care about distinguishing this case.
 
             if (referencedSymbol.Kind == SymbolKind.NamedType)
@@ -532,13 +569,13 @@ namespace Codex.Analysis
                 var typeArgumentList = (SyntaxNode)node.FirstAncestorOrSelf<Microsoft.CodeAnalysis.CSharp.Syntax.TypeArgumentListSyntax>();
                 if (typeArgumentList != null)
                 {
-                    return kind;
+                    return result;
                 }
 
                 typeArgumentList = (SyntaxNode)node.FirstAncestorOrSelf<Microsoft.CodeAnalysis.VisualBasic.Syntax.TypeArgumentListSyntax>();
                 if (typeArgumentList != null)
                 {
-                    return kind;
+                    return result;
                 }
 
                 var baseList =
@@ -556,19 +593,30 @@ namespace Codex.Analysis
                             INamedTypeSymbol baseSymbol = referencedSymbol as INamedTypeSymbol;
                             if (baseSymbol != null)
                             {
+                                void setRelatedTypeKind(ReferenceKind targetKind)
+                                {
+                                    result.relatedDefinitionId = CreateSymbolId(GetDocumentationCommentId(derivedType));
+                                    result.kind = targetKind;
+
+                                    if (targetKind == ReferenceKind.InterfaceImplementation)
+                                    {
+                                        AddSyntheticInterfaceMemberImplementations(
+                                            interfaceSymbol: baseSymbol,
+                                            implementerSymbol: derivedType);
+                                    }
+                                }
+
                                 if (baseSymbol.TypeKind == TypeKind.Class && baseSymbol.Equals(derivedType.BaseType))
                                 {
-                                    kind = ReferenceKind.DerivedType;
+                                    setRelatedTypeKind(ReferenceKind.DerivedType);
                                 }
                                 else if (baseSymbol.TypeKind == TypeKind.Interface)
                                 {
-                                    if (derivedType.TypeKind == TypeKind.Interface && derivedType.Interfaces.Contains(baseSymbol))
+                                    if (derivedType.Interfaces.Contains(baseSymbol))
                                     {
-                                        kind = ReferenceKind.InterfaceInheritance;
-                                    }
-                                    else if (derivedType.Interfaces.Contains(baseSymbol))
-                                    {
-                                        kind = ReferenceKind.InterfaceImplementation;
+                                        setRelatedTypeKind(derivedType.TypeKind == TypeKind.Interface 
+                                            ? ReferenceKind.InterfaceInheritance
+                                            : ReferenceKind.InterfaceImplementation);
                                     }
                                 }
                             }
@@ -582,11 +630,17 @@ namespace Codex.Analysis
                 var node = GetBindableParent(token);
                 if (IsWrittenTo(node))
                 {
-                    kind = ReferenceKind.Write;
+                    result.kind = ReferenceKind.Write;
                 }
             }
 
-            return kind;
+            return result;
+        }
+
+        private void AddSyntheticInterfaceMemberImplementations(INamedTypeSymbol interfaceSymbol, INamedTypeSymbol implementerSymbol)
+        {
+
+            GetImplementedMemberLookup(implementerSymbol);
         }
 
         private ReferenceSymbol GetReferenceSymbol(ISymbol symbol, ReferenceKind referenceKind, string id = null)

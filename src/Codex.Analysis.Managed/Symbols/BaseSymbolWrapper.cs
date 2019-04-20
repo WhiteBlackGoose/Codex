@@ -13,6 +13,26 @@ using VB = Microsoft.CodeAnalysis.VisualBasic;
 
 namespace Codex.Analysis.Managed.Symbols
 {
+    public class BaseSymbolWrapper
+    {
+        public static ISymbol WrapWithOverrideContainer(ISymbol symbol, ISymbol overrideContainerSymbol)
+        {
+            switch (symbol)
+            {
+                case IFieldSymbol field:
+                    return new FieldSymbolWrapper(field) { OverrideContainerSymbol = overrideContainerSymbol };
+                case IMethodSymbol method:
+                    return new MethodSymbolWrapper(method) { OverrideContainerSymbol = overrideContainerSymbol };
+                case IPropertySymbol property:
+                    return new PropertySymbolWrapper(property) { OverrideContainerSymbol = overrideContainerSymbol };
+                case IEventSymbol ev:
+                    return new EventSymbolWrapper(ev) { OverrideContainerSymbol = overrideContainerSymbol };
+                default:
+                    throw new ArgumentException();
+            }
+        }
+    }
+
     internal abstract class BaseSymbolWrapper<TSymbol> : ISymbol
         where TSymbol : ISymbol
     {
@@ -46,6 +66,29 @@ namespace Codex.Analysis.Managed.Symbols
             }
         }
 
+        public ISymbol OriginalDefinition
+        {
+            get
+            {
+                return Wrap(InnerSymbol.OriginalDefinition, OverrideContainerSymbol.OriginalDefinition);
+            }
+        }
+
+        public virtual ISymbol Wrap(ISymbol symbol, ISymbol overrideContainerSymbol)
+        {
+            if (symbol == (ISymbol)InnerSymbol && overrideContainerSymbol == OverrideContainerSymbol)
+            {
+                return this;
+            }
+
+            return WrapCore(symbol, overrideContainerSymbol);
+        }
+
+        public virtual ISymbol WrapCore(ISymbol symbol, ISymbol overrideContainerSymbol)
+        {
+            return BaseSymbolWrapper.WrapWithOverrideContainer(symbol, overrideContainerSymbol);
+        }
+
         public IAssemblySymbol ContainingAssembly
         {
             get
@@ -66,6 +109,11 @@ namespace Codex.Analysis.Managed.Symbols
         {
             get
             {
+                if (OverrideContainerSymbol is INamedTypeSymbol overrideContainingType)
+                {
+                    return overrideContainingType;
+                }
+
                 return OverrideContainerSymbol?.ContainingType ?? InnerSymbol.ContainingType;
             }
         }
@@ -171,14 +219,6 @@ namespace Codex.Analysis.Managed.Symbols
             get
             {
                 return InnerSymbol.DeclaredAccessibility;
-            }
-        }
-
-        public ISymbol OriginalDefinition
-        {
-            get
-            {
-                return InnerSymbol.OriginalDefinition;
             }
         }
 

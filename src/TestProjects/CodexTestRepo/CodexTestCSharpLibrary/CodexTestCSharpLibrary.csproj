@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cases\DerivedImplementation.Issue159.cs" />
     <Compile Include="Cases\OperatorOverload.cs" />
     <Compile Include="Cases\InterfaceImplementation.cs" />
     <Compile Include="Cases\EnumConstantValue.cs" />
