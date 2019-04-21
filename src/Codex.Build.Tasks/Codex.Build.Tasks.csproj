@@ -13,4 +13,7 @@
   <Target Name="RunTask">
     <GetImportsTask />
   </Target>
+  <ItemGroup>
+    <Reference Include="Microsoft.Build.Framework" />
+  </ItemGroup>
 </Project>
