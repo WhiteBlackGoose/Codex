@@ -1,30 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
     <TargetFramework>net461</TargetFramework>
   </PropertyGroup>
-
   <Import Project="$(SrcRoot)\Common.props" />
   <Import Project="$(SrcRoot)\Common.targets" />
-  
   <UsingTask TaskName="GetImportsTask" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <Task>
-      <Reference Include="System" />
-      <Reference Include="System.Core" />
-      <Reference Include="Microsoft.Build" />
-      <Reference Include="mscorlib" />
       <Code Type="Class" Language="cs" Source="$(MSBuildThisFileDirectory)\GetImportsTask.cs" />
     </Task>
   </UsingTask>
-  
   <Target Name="RunTask">
     <GetImportsTask />
   </Target>
-    
-  <ItemGroup>
-    <Reference Include="Microsoft.Build.Framework" />
-    <Reference Include="Microsoft.Build.Tasks.v4.0" />
-    <Reference Include="Microsoft.Build.Utilities.v4.0" />
-  </ItemGroup>
 </Project>

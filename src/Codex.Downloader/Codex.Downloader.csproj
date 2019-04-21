@@ -6,12 +6,10 @@
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.2.1" />
-    <PackageReference Include="Microsoft.TeamFoundationServer.ExtendedClient" Version="15.132.0-preview" />
-    <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="15.132.0-preview" />
+    <PackageReference Include="CommandLineParser" />
+    <PackageReference Include="Microsoft.TeamFoundationServer.ExtendedClient" />
+    <PackageReference Include="Microsoft.TeamFoundationServer.Client" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.IO.Compression" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>

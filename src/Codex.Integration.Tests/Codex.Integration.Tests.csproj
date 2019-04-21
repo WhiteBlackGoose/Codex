@@ -8,8 +8,8 @@
     <Compile Remove="Model\ElasticSearchTypes.target.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NUnit" Version="3.9.0" />
-    <PackageReference Include="Lucene.Net" Version="4.8.0-beta00005" />
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="Lucene.Net" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Codex.Analysis.Managed.Decompilation\Codex.Analysis.Managed.Decompilation.csproj" />
@@ -25,15 +25,13 @@
   </ItemGroup>
   <Target Name="CopyBindingRedirects" AfterTargets="ResolveReferences">
     <ItemGroup>
-      <_CodexExe Include="@(_ResolvedProjectReferencePaths)" Condition="'%(_ResolvedProjectReferencePaths.UseAppConfig)' == 'true'">
-      </_CodexExe>
+      <_CodexExe Include="@(_ResolvedProjectReferencePaths)" Condition="'%(_ResolvedProjectReferencePaths.UseAppConfig)' == 'true'"></_CodexExe>
     </ItemGroup>
-    
     <PropertyGroup>
-      <CodexExeDirectory>@(_CodexExe -> '%(RootDir)%(Directory)')</CodexExeDirectory>
+      <CodexExeDirectory>@(_CodexExe -&gt; '%(RootDir)%(Directory)')</CodexExeDirectory>
     </PropertyGroup>
     <ItemGroup>
-      <ContentWithTargetPath Include="@(_CodexExe -> '%(FullPath).config')">
+      <ContentWithTargetPath Include="@(_CodexExe -&gt; '%(FullPath).config')">
         <TargetPath>$(AssemblyName).dll.config</TargetPath>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </ContentWithTargetPath>

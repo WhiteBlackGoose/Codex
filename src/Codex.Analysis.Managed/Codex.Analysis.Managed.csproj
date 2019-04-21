@@ -1,95 +1,79 @@
-﻿<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
-    <ProjectGuid>{9C45EDC8-4B6F-4C70-B317-A3B6074A965A}</ProjectGuid>
-    <AssemblyName>Codex.Analysis.Managed</AssemblyName>
-    <RootNamespace>Codex.Analysis.Managed</RootNamespace>
+    <TargetFramework>net461</TargetFramework>
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
-    <PackageReference Include="ManagedEsent" Version="1.9.4" />
-    <PackageReference Include="MSBuild.StructuredLogger" Version="2.0.11" />
-    <PackageReference Include="Microsoft.Build" Version="15.8.166" />
-    <PackageReference Include="Microsoft.Build.Framework" Version="15.8.166" />
-    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.8.166" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.8.166" />
-    <PackageReference Include="Microsoft.CodeAnalysis" Version="2.10.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.6.2" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.10.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.10.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.10.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Features" Version="2.10.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="2.10.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" Version="2.10.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="2.10.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="2.10.0" />
-    <PackageReference Include="Microsoft.Composition" Version="1.0.31" />
-    <PackageReference Include="Microsoft.Language.Xml" Version="1.1.20" />
-    <PackageReference Include="System.AppContext" Version="4.3.0" />
-    <PackageReference Include="System.Collections" Version="4.3.0" />
-    <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-    <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
-    <PackageReference Include="System.Console" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.FileVersionInfo" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.StackTrace" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.Tools" Version="4.3.0" />
-    <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
-    <PackageReference Include="System.Globalization" Version="4.3.0" />
-    <PackageReference Include="System.IO.Compression" Version="4.3.0" />
-    <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
-    <PackageReference Include="System.IO.FileSystem.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Linq" Version="4.3.0" />
-    <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
-    <PackageReference Include="System.Reflection" Version="4.3.0" />
-    <PackageReference Include="System.Reflection.Metadata" Version="1.6.0" />
-    <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
-    <PackageReference Include="System.Runtime" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
-    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
-    <PackageReference Include="System.Security.Cryptography.Encoding" Version="4.3.0" />
-    <PackageReference Include="System.Security.Cryptography.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
-    <PackageReference Include="System.Text.Encoding" Version="4.3.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.4.0" />
-    <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Threading" Version="4.3.0" />
-    <PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
-    <PackageReference Include="System.Threading.Tasks.Parallel" Version="4.3.0" />
-    <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
-    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
-    <PackageReference Include="System.Xml.ReaderWriter" Version="4.3.1" />
-    <PackageReference Include="System.Xml.XDocument" Version="4.3.0" />
-    <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
-    <PackageReference Include="System.Xml.XPath" Version="4.3.0" />
-    <PackageReference Include="System.Xml.XPath.XDocument" Version="4.3.0" />
+
+    <PackageReference Include="ManagedEsent" />
+    <PackageReference Include="MSBuild.StructuredLogger" />
+    <PackageReference Include="Microsoft.Build" />
+    <PackageReference Include="Microsoft.Build.Framework" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" />
+    <PackageReference Include="Microsoft.CodeAnalysis" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Features" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" />
+    <PackageReference Include="Microsoft.Composition" />
+    <PackageReference Include="Microsoft.Language.Xml" />
+    <PackageReference Include="System.AppContext" />
+    <PackageReference Include="System.Collections" />
+    <PackageReference Include="System.Collections.Concurrent" />
+    <PackageReference Include="System.Collections.Immutable" />
+    <PackageReference Include="System.Console" />
+    <PackageReference Include="System.Diagnostics.Debug" />
+    <PackageReference Include="System.Diagnostics.FileVersionInfo" />
+    <PackageReference Include="System.Diagnostics.StackTrace" />
+    <PackageReference Include="System.Diagnostics.Tools" />
+    <PackageReference Include="System.Dynamic.Runtime" />
+    <PackageReference Include="System.Globalization" />
+    <PackageReference Include="System.IO.Compression" />
+    <PackageReference Include="System.IO.FileSystem" />
+    <PackageReference Include="System.IO.FileSystem.Primitives" />
+    <PackageReference Include="System.Linq" />
+    <PackageReference Include="System.Linq.Expressions" />
+    <PackageReference Include="System.Reflection" />
+    <PackageReference Include="System.Reflection.Metadata" />
+    <PackageReference Include="System.Resources.ResourceManager" />
+    <PackageReference Include="System.Runtime" />
+    <PackageReference Include="System.Runtime.Extensions" />
+    <PackageReference Include="System.Runtime.InteropServices" />
+    <PackageReference Include="System.Runtime.Numerics" />
+    <PackageReference Include="System.Security.Cryptography.Algorithms" />
+    <PackageReference Include="System.Security.Cryptography.Encoding" />
+    <PackageReference Include="System.Security.Cryptography.Primitives" />
+    <PackageReference Include="System.Security.Cryptography.X509Certificates" />
+    <PackageReference Include="System.Text.Encoding" />
+    <PackageReference Include="System.Text.Encoding.CodePages" />
+    <PackageReference Include="System.Text.Encoding.Extensions" />
+    <PackageReference Include="System.Threading" />
+    <PackageReference Include="System.Threading.Tasks" />
+    <PackageReference Include="System.Threading.Tasks.Parallel" />
+    <PackageReference Include="System.Threading.Thread" />
+    <PackageReference Include="System.ValueTuple" />
+    <PackageReference Include="System.Xml.ReaderWriter" />
+    <PackageReference Include="System.Xml.XDocument" />
+    <PackageReference Include="System.Xml.XmlDocument" />
+    <PackageReference Include="System.Xml.XPath" />
+    <PackageReference Include="System.Xml.XPath.XDocument" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp">
       <Aliases>global, csharp</Aliases>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Codex.Analysis\Codex.Analysis.csproj">
-      <Project>{2016a682-4d9f-4a65-a03d-d65ff2948269}</Project>
-      <Name>Codex.Analysis</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Codex.Build.Tasks\Codex.Build.Tasks.csproj">
-      <Project>{a649607d-bf0e-4727-a7d0-b2d6376a618f}</Project>
-      <Name>Codex.Build.Tasks</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj">
-      <Project>{2322a932-05f4-4931-8547-71377c6ab49e}</Project>
-      <Name>Codex.Sdk</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Codex.Analysis\Codex.Analysis.csproj" />
+    <ProjectReference Include="..\Codex.Build.Tasks\Codex.Build.Tasks.csproj" />
+    <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -110,42 +94,5 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Analyzers\DocumentDiagnosticAnalyzer.cs" />
-    <Compile Include="CompilationServices.cs" />
-    <Compile Include="CompilerInvocation.cs" />
-    <Compile Include="DisplayFormats.cs" />
-    <Compile Include="DocumentAnalyzer.cs" />
-    <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="ManagedAnalysisHost.cs" />
-    <Compile Include="ManagedProjectAnalyzer.cs" />
-    <Compile Include="ManagedSolutionProjectAnalyzer.cs" />
-    <Compile Include="MSBuildBinLog\BinLogReader.cs" />
-    <Compile Include="MSBuildFileAnalyzer.cs" />
-    <Compile Include="MSBuildSolutionProjectAnalyzer.cs" />
-    <Compile Include="MSBuild\MSBuildExpressionParser.cs" />
-    <Compile Include="MSBuild\SolutionFile\LineScanner.cs" />
-    <Compile Include="MSBuild\SolutionFile\ProjectBlock.cs" />
-    <Compile Include="MSBuild\SolutionFile\SectionBlock.cs" />
-    <Compile Include="MSBuild\SolutionFile\SolutionFile.cs" />
-    <Compile Include="MSBuild\SolutionFile\WorkspacesResources.cs" />
-    <Compile Include="ProjectCollectionAnalyzer.cs" />
-    <Compile Include="DummyReferences.cs" />
-    <Compile Include="Projects\CompilerArgumentsProjectAnalyzer.cs" />
-    <Compile Include="Projects\InvocationSolutionInfoBuilderBase.cs" />
-    <Compile Include="Projects\BinLogProjectAnalyzer.cs" />
-    <Compile Include="SemanticServices.cs" />
-    <Compile Include="SolutionFileAnalyzer.cs" />
-    <Compile Include="SolutionProjectAnalyzer.cs" />
-    <Compile Include="Symbols\BaseSymbolWrapper.cs" />
-    <Compile Include="Symbols\PropertySymbolWrapper.cs" />
-    <Compile Include="Symbols\FieldSymbolWrapper.cs" />
-    <Compile Include="Symbols\EventSymbolWrapper.cs" />
-    <Compile Include="Symbols\MethodSymbolWrapper.cs" />
-    <Compile Include="Symbols\OperatorSymbolDisplayOverride.cs" />
-    <Compile Include="WorkspaceHacks.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>

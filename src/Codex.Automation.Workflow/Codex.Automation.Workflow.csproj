@@ -5,8 +5,6 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
-  <ItemGroup>
-    <Reference Include="System.IO.Compression" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>

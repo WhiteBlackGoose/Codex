@@ -10,9 +10,9 @@
   <ItemGroup>
     <PackageReference Include="Elasticsearch.Net" Version="5.5.0" />
     <PackageReference Include="NEST" Version="5.5.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
-    <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.15.4" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="System.ValueTuple" />
+    <PackageReference Include="ILRepack.Lib.MSBuild.Task" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />

@@ -12,11 +12,11 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Elasticsearch.Net" Version="6.1.0" />
-    <PackageReference Include="Lucene.Net" Version="4.8.0-beta00005" />
     <PackageReference Include="NEST" Version="6.1.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="StrongNamer" Version="0.0.7" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.4.0" />
+    <PackageReference Include="Lucene.Net" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="StrongNamer" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />

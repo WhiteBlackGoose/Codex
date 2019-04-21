@@ -1,116 +1,69 @@
-﻿<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
-    <ProjectGuid>{2016A682-4D9F-4A65-A03D-D65FF2948269}</ProjectGuid>
-    <AssemblyName>Codex.Analysis</AssemblyName>
-    <RootNamespace>Codex.Analysis</RootNamespace>
+    <TargetFramework>net461</TargetFramework>
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.6.2">
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.10.0" />
-    <PackageReference Include="Microsoft.Language.Xml" Version="1.1.20" />
-    <PackageReference Include="Microsoft.Tpl.Dataflow" Version="4.5.24" />
-    <PackageReference Include="System.AppContext" Version="4.3.0" />
-    <PackageReference Include="System.Collections" Version="4.3.0" />
-    <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-    <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
-    <PackageReference Include="System.Console" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.FileVersionInfo" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.StackTrace" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.Tools" Version="4.3.0" />
-    <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
-    <PackageReference Include="System.Globalization" Version="4.3.0" />
-    <PackageReference Include="System.IO.Compression" Version="4.3.0" />
-    <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
-    <PackageReference Include="System.IO.FileSystem.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Linq" Version="4.3.0" />
-    <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
-    <PackageReference Include="System.Reflection" Version="4.3.0" />
-    <PackageReference Include="System.Reflection.Metadata" Version="1.6.0" />
-    <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
-    <PackageReference Include="System.Runtime" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
-    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
-    <PackageReference Include="System.Security.Cryptography.Encoding" Version="4.3.0" />
-    <PackageReference Include="System.Security.Cryptography.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
-    <PackageReference Include="System.Text.Encoding" Version="4.3.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.4.0" />
-    <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Threading" Version="4.3.0" />
-    <PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
-    <PackageReference Include="System.Threading.Tasks.Parallel" Version="4.3.0" />
-    <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
-    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
-    <PackageReference Include="System.Xml.ReaderWriter" Version="4.3.1" />
-    <PackageReference Include="System.Xml.XDocument" Version="4.3.0" />
-    <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
-    <PackageReference Include="System.Xml.XPath" Version="4.3.0" />
-    <PackageReference Include="System.Xml.XPath.XDocument" Version="4.3.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" />
+    <PackageReference Include="Microsoft.Language.Xml" />
+    <PackageReference Include="Microsoft.Tpl.Dataflow" />
+    <PackageReference Include="System.AppContext" />
+    <PackageReference Include="System.Collections" />
+    <PackageReference Include="System.Collections.Concurrent" />
+    <PackageReference Include="System.Collections.Immutable" />
+    <PackageReference Include="System.Console" />
+    <PackageReference Include="System.Diagnostics.Debug" />
+    <PackageReference Include="System.Diagnostics.FileVersionInfo" />
+    <PackageReference Include="System.Diagnostics.StackTrace" />
+    <PackageReference Include="System.Diagnostics.Tools" />
+    <PackageReference Include="System.Dynamic.Runtime" />
+    <PackageReference Include="System.Globalization" />
+    <PackageReference Include="System.IO.Compression" />
+    <PackageReference Include="System.IO.FileSystem" />
+    <PackageReference Include="System.IO.FileSystem.Primitives" />
+    <PackageReference Include="System.Linq" />
+    <PackageReference Include="System.Linq.Expressions" />
+    <PackageReference Include="System.Reflection" />
+    <PackageReference Include="System.Reflection.Metadata" />
+    <PackageReference Include="System.Resources.ResourceManager" />
+    <PackageReference Include="System.Runtime" />
+    <PackageReference Include="System.Runtime.Extensions" />
+    <PackageReference Include="System.Runtime.InteropServices" />
+    <PackageReference Include="System.Runtime.Numerics" />
+    <PackageReference Include="System.Security.Cryptography.Algorithms" />
+    <PackageReference Include="System.Security.Cryptography.Encoding" />
+    <PackageReference Include="System.Security.Cryptography.Primitives" />
+    <PackageReference Include="System.Security.Cryptography.X509Certificates" />
+    <PackageReference Include="System.Text.Encoding" />
+    <PackageReference Include="System.Text.Encoding.CodePages" />
+    <PackageReference Include="System.Text.Encoding.Extensions" />
+    <PackageReference Include="System.Threading" />
+    <PackageReference Include="System.Threading.Tasks" />
+    <PackageReference Include="System.Threading.Tasks.Parallel" />
+    <PackageReference Include="System.Threading.Thread" />
+    <PackageReference Include="System.ValueTuple" />
+    <PackageReference Include="System.Xml.ReaderWriter" />
+    <PackageReference Include="System.Xml.XDocument" />
+    <PackageReference Include="System.Xml.XmlDocument" />
+    <PackageReference Include="System.Xml.XPath" />
+    <PackageReference Include="System.Xml.XPath.XDocument" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj">
-      <Project>{2322a932-05f4-4931-8547-71377c6ab49e}</Project>
-      <Name>Codex.Sdk</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Codex.Analysis.External\CodexTypes.cs">
       <Link>External\CodexTypes.cs</Link>
     </Compile>
-    <Compile Include="AnalysisServices.cs" />
-    <Compile Include="AnalyzedProjectContext.cs" />
-    <Compile Include="BoundSourceFileBuilder.cs" />
-    <Compile Include="External\CodexTypeAdapter.cs" />
-    <Compile Include="External\ExternalRepoFileAnalyzer.cs" />
-    <Compile Include="FileSystems\BinaryFileSystemFilter.cs" />
-    <Compile Include="FileSystems\DirectoryFilter.cs" />
-    <Compile Include="FileSystems\FileSystemFilter.cs" />
-    <Compile Include="FileSystems\FileSystemWrapper.cs" />
-    <Compile Include="FileSystems\GitIgnore.cs" />
-    <Compile Include="FileSystems\GitIgnoreFilter.cs" />
-    <Compile Include="FileSystems\InclusionFileSystemFilter.cs" />
-    <Compile Include="FileSystems\MultiFileSystemFilter.cs" />
-    <Compile Include="FileSystems\RootFileSystem.cs" />
-    <Compile Include="FileSystems\UnionFileSystem.cs" />
-    <Compile Include="Import\Repo.cs" />
-    <Compile Include="Import\RepoFile.cs" />
-    <Compile Include="Import\RepoProject.cs" />
-    <Compile Include="Import\RepositoryImporter.cs" />
-    <Compile Include="NamedRoot.cs" />
-    <Compile Include="RepoFileAnalyzer.cs" />
-    <Compile Include="RepoProjectAnalyzer.cs" />
-    <Compile Include="Utilities\ActionQueue.cs" />
-    <Compile Include="Utilities\CompletionTracker.cs" />
-    <Compile Include="Utilities\FileUtilities.cs" />
-    <Compile Include="Utilities\ParsedValue.cs" />
-    <Compile Include="Utilities\SourceTextReader.cs" />
-    <Compile Include="Utilities\SubText.cs" />
-    <Compile Include="Xml\XElementExtensions.cs" />
-    <Compile Include="Xml\XmlAnalyzer.cs" />
-    <Compile Include="Xml\XmlFileAnalyzer.cs" />
-    <Compile Include="Xml\XmlSourceFileBuilder.cs" />
-    <Compile Include="Xml\XmlSyntaxExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>

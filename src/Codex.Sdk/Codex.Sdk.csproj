@@ -6,7 +6,7 @@
     <!--<TargetFramework>netcoreapp2.0</TargetFramework>-->
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
+    <PackageReference Include="System.ValueTuple" />
   </ItemGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <Import Project="..\Codex.Sdk.Types\Codex.Sdk.Types.projitems" Label="Shared" />

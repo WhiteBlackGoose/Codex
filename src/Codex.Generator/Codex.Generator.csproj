@@ -1,26 +1,16 @@
-﻿<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
-    <ProjectGuid>{FCD911F0-AFFB-4810-9816-6E67382C0D3C}</ProjectGuid>
-    <AssemblyName>Codex.Generator</AssemblyName>
-    <RootNamespace>Codex.Generator</RootNamespace>
     <SignAssembly>false</SignAssembly>
+    <TargetFramework>net461</TargetFramework>
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
-    <PackageReference Include="NUnit" Version="3.9.0" />
+    <PackageReference Include="NUnit" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Folder Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\Codex.View.Web\Views.xml">
@@ -31,9 +21,6 @@
     <Compile Include="..\Codex.View.Web\ViewsPath.cs">
       <Link>ViewsPath.cs</Link>
     </Compile>
-    <Compile Include="ElementProcessor.cs" />
-    <Compile Include="ViewGenerator.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>

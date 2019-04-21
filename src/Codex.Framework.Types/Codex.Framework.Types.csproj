@@ -1,19 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
-    <ProjectGuid>{7A980065-FAA7-446C-AE92-3629146BAEA5}</ProjectGuid>
-    <AssemblyName>Codex.Framework.Types</AssemblyName>
-    <RootNamespace>Codex.Framework.Types</RootNamespace>
+    <TargetFramework>net461</TargetFramework>
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
-  <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup />
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>

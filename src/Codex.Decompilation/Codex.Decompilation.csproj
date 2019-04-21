@@ -6,7 +6,7 @@
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
-    <PackageReference Include="ICSharpCode.Decompiler" Version="5.0.0.4688-preview1" />
+    <PackageReference Include="ICSharpCode.Decompiler" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SrcRoot)\Common.targets" />

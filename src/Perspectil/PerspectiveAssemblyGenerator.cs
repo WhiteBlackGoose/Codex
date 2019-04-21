@@ -210,8 +210,7 @@ namespace Perspectil
                 return genericParameterTarget;
             }
 
-            return declaringTypeDefinition.Module.ImportReference(typeReference, context);
-
+            //return declaringTypeDefinition.Module.ImportReference(typeReference, context);
         }
 
         private MethodDefinition CreateMethodDefinition(MethodReference reference, TypeDefinition declaringTypeDefinition, bool recursionGuard = true)

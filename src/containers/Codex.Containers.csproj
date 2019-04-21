@@ -1,10 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
     <TargetFramework>net461</TargetFramework>
   </PropertyGroup>
-
   <Import Project="$(SrcRoot)\Common.props" />
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>
