@@ -10,17 +10,13 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Codex.View.Web\Views.xml">
-      <Link>Views.xml</Link>
-    </Content>
+    <Content Include="..\Codex.View.Web\Views.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Codex.View.Web\ViewsPath.cs">
-      <Link>ViewsPath.cs</Link>
-    </Compile>
+    <Compile Include="..\Codex.View.Web\ViewsPath.cs" />
   </ItemGroup>
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>
