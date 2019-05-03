@@ -560,7 +560,7 @@ namespace Codex.Analysis
 
         private (ReferenceKind kind, SymbolId relatedDefinitionId) DetermineReferenceKind(ISymbol referencedSymbol, SyntaxToken token)
         {
-            (ReferenceKind kind, SymbolId relatedDefinitionId) result = (ReferenceKind.Read, default);
+            (ReferenceKind kind, SymbolId relatedDefinitionId) result = (ReferenceKind.Reference, default);
             // Case: nameof() - Do we really care about distinguishing this case.
 
             if (referencedSymbol.Kind == SymbolKind.NamedType)
