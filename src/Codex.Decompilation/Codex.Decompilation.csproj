@@ -1,14 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
-    <SignAssembly Condition="'$(TargetFramework)' == 'net461'">true</SignAssembly>
+    <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
+    <SignAssembly Condition="'$(TargetFramework)' == 'net472'">true</SignAssembly>
   </PropertyGroup>
-  <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
     <PackageReference Include="ICSharpCode.Decompiler" />
     <PackageReference Include="Microsoft.Net.Compilers" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SrcRoot)\Common.targets" />
 </Project>

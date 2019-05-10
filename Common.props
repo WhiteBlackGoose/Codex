@@ -58,6 +58,9 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
     <TargetFrameworkMoniker>.NETFramework,Version=v4.6.1</TargetFrameworkMoniker>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net472'">
+    <TargetFrameworkMoniker>.NETFramework,Version=v4.7.2</TargetFrameworkMoniker>
+  </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)' == 'Any CPU' OR '$(Platform)' == 'AnyCPU' OR '$(Platform)' == 'Mixed Platforms'">
     <PlatformTarget>AnyCPU</PlatformTarget>
