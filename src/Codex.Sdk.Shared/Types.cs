@@ -257,6 +257,14 @@ namespace Codex.ObjectModel
         }
     }
 
+    partial class ReferenceSpan
+    {
+        public override string ToString()
+        {
+            return $"[{Start}, {End}] {Reference?.ProjectId}::{Reference?.Id} '{LineSpanText}'";
+        }
+    }
+
     partial class SymbolSpan
     {
         public ReferenceSpan CreateReference(ReferenceSymbol referenceSymbol, SymbolId relatedDefinition = default(SymbolId))

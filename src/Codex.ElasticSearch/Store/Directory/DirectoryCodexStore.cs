@@ -224,10 +224,18 @@ namespace Codex.ElasticSearch.Store
             if (addedFiles.TryAdd(relativePath, true))
             {
                 var fullPath = Path.Combine(DirectoryPath, relativePath);
-                Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
-                using (var streamWriter = new StreamWriter(fullPath))
+                try
                 {
-                    entity.SerializeEntityTo(new JsonTextWriter(streamWriter) { Formatting = Formatting.Indented }, stage: ObjectStage.StoreRaw);
+                    Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+                    using (var streamWriter = new StreamWriter(fullPath))
+                    {
+                        entity.SerializeEntityTo(new JsonTextWriter(streamWriter) { Formatting = Formatting.Indented }, stage: ObjectStage.StoreRaw);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logger.LogExceptionError($"Writing '{fullPath}' failed:", ex);
+                    File.Delete(fullPath);
                 }
             }
         }
@@ -261,8 +269,7 @@ namespace Codex.ElasticSearch.Store
                 BoundSourceFile = boundSourceFile,
             };
 
-            result.BeforeSerialize(optimize: !DisableOptimization, optimizeLineInfo: true);
-
+            result.BeforeSerialize(optimize: !DisableOptimization, optimizeLineInfo: true, logOptimizationIssue: message => logger.LogWarning(message));
             return result;
         }
 

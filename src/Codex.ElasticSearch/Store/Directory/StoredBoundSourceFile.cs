@@ -21,9 +21,22 @@ namespace Codex.ElasticSearch.Store
 
         public ClassificationListModel CompressedClassifications { get; set; }
 
-        public void BeforeSerialize(bool optimize, bool optimizeLineInfo = true)
+        public void BeforeSerialize(bool optimize, bool optimizeLineInfo = true, Action<string> logOptimizationIssue = null)
         {
             PopulateSourceFileLines();
+
+            ReferenceSpan lastReference = null;
+            foreach (var reference in BoundSourceFile.References)
+            {
+                if (lastReference != null 
+                    && reference.Start != lastReference.Start 
+                    && reference.Start < lastReference.End())
+                {
+                    logOptimizationIssue?.Invoke($"Overlapping spans: LastReference=({lastReference}) Current=({reference})");
+                }
+
+                lastReference = reference;
+            }
 
             if (optimize)
             {
