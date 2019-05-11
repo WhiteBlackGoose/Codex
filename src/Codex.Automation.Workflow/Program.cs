@@ -206,6 +206,7 @@ namespace Codex.Automation.Workflow
                 {
                     UseShellExecute = false
                 });
+
                 runExe.WaitForExit();
 
                 if (runExe.ExitCode != 0)
@@ -251,7 +252,18 @@ namespace Codex.Automation.Workflow
                 {
                     UseShellExecute = false
                 });
-                
+
+                runExe.WaitForExit();
+
+                if (runExe.ExitCode != 0)
+                {
+                    success = false;
+                }
+            }
+
+            if (!success)
+            {
+                Console.WriteLine("##vso[task.complete result=Failed;]DONE");
             }
         }
 
