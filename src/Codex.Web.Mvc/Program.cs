@@ -19,6 +19,10 @@ namespace Codex.Web.Mvc
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((context, config) =>
+                {
+                    config.AddEnvironmentVariables("CODEX_");
+                })
                 .UseStartup<Startup>()
                 .Build();
     }

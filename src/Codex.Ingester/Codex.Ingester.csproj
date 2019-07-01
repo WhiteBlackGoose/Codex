@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFrameworks Condition="'$(DotNetCoreBuild)' != 'true'">netcoreapp2.2;net461</TargetFrameworks>
+    <TargetFramework Condition="'$(DotNetCoreBuild)' == 'true'">netcoreapp2.2</TargetFramework>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
@@ -9,12 +10,13 @@
     <PackageReference Include="CommandLineParser" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="Mono.Options" />
-    <PackageReference Include="StrongNamer" />
+    <PackageReference Include="StrongNamer" Condition="'$(TargetFramework)' == 'net461'" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Codex.Downloader\Codex.Downloader.csproj" />
-    <ProjectReference Include="..\Codex\Codex.csproj" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Codex.Storage\Codex.Storage.csproj" />
+  </ItemGroup>
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>

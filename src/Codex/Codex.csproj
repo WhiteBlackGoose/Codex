@@ -67,7 +67,6 @@
     <PackageReference Include="System.Xml.XPath" />
     <PackageReference Include="System.Xml.XPath.XDocument" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Codex.Analysis.Managed.Decompilation\Codex.Analysis.Managed.Decompilation.csproj" />
     <ProjectReference Include="..\Codex.Analysis.Managed\Codex.Analysis.Managed.csproj" />
@@ -75,6 +74,7 @@
     <ProjectReference Include="..\Codex.ElasticSearch.Legacy\Codex.ElasticSearch.Legacy.csproj" />
     <ProjectReference Include="..\Codex.ElasticSearch\Codex.ElasticSearch.csproj" />
     <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />
+    <ProjectReference Include="..\Codex.Storage\Codex.Storage.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

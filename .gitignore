@@ -263,3 +263,4 @@ paket-files/
 
 **/wwwroot/bundles/
 **/wwwroot/app_data/**/bin
+/docker/es_data

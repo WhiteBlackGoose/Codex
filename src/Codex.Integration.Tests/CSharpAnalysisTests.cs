@@ -89,7 +89,8 @@ namespace Codex.Integration.Tests
 
             CodexApplication.Main(
                 "index",
-                "-save", outputPath,
+                //"-save", outputPath,
+                "-es", "http://localhost:9200",
                 "-p", root,
                 "-noScan",
                 "-repoUrl", "https://github.com/Ref12/Codex/",

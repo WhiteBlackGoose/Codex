@@ -1,0 +1,9 @@
+**/bin/
+**/obj/
+
+out
+.vs
+.git
+docker
+packages
+docker

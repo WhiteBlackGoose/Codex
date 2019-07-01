@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
  
-  <Target Name="MergeAssemblies" AfterTargets="CoreCompile" Condition="'$(DesignTimeBuild)'!='true' AND '$(SkipCompilerExecution)'!='true'">
-    <Warning Text="ILRepack" />
+  <Target Name="MergeAssemblies_InitializeState">
+    <Warning Text="ILRepack initialize state" />
     
     <ItemGroup>
-      <InputAssemblies Include="@(IntermediateAssembly)"/>
+      <!--<InputAssemblies Include="@(IntermediateAssembly)"/>-->
       <InputAssemblies Include="@(ReferencePath)" Condition="'%(ReferencePath.NuGetPackageId)' == 'Elasticsearch.Net'"/>
       <InputAssemblies Include="@(ReferencePath)" Condition="'%(ReferencePath.NuGetPackageId)' == 'Nest'"/>
 
@@ -21,17 +21,41 @@
     <PropertyGroup>
       <SkipCopyBuildProduct>true</SkipCopyBuildProduct>
       <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
+      <RepackWorkingDirectory>$(IntermediateOutputPath)\refs</RepackWorkingDirectory>
     </PropertyGroup>
+  </Target>
+
+  <Target Name="MergeAssemblies" AfterTargets="CoreCompile" Condition="'$(DesignTimeBuild)'!='true' AND '$(SkipCompilerExecution)'!='true'"
+          DependsOnTargets="MergeAssemblies_InitializeState"
+          Inputs="@(ReferencePath);@(IntermediateAssembly)"
+          Outputs="$(TargetPath)">
+    <Warning Text="ILRepack" />
+
+    <Copy SourceFiles="@(ReferencePath)" DestinationFolder="$(RepackWorkingDirectory)" />
 
     <ILRepack
+      Condition="'$(IsNetCoreApp)' == 'true'"
+      Parallel="true"
+      DebugInfo="false"
+      AllowDuplicateResources="false"
+      MainAssembly="@(IntermediateAssembly)"
+      InputAssemblies="@(InputAssemblies)"
+      OutputType="SameAsPrimaryAssembly"
+      OutputAssembly="$(TargetPath)"
+      WorkingDirectory="$(RepackWorkingDirectory)"
+    />
+
+    <ILRepack
+      Condition="'$(IsNetCoreApp)' != 'true'"
       Parallel="true"
       DebugInfo="true"
-      LibraryPath="@(ReferencePath -> '%(RootDir)%(Directory)')"
       AllowDuplicateResources="false"
+      MainAssembly="@(IntermediateAssembly)"
       InputAssemblies="@(InputAssemblies)"
-      TargetKind="SameAsPrimaryAssembly"
+      OutputType="SameAsPrimaryAssembly"
+      OutputAssembly="$(TargetPath)"
       KeyFile="$(KeyOriginatorFile)"
-      OutputFile="$(TargetPath)"
+      WorkingDirectory="$(RepackWorkingDirectory)"
     />
   </Target>
 </Project>

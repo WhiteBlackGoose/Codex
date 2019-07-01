@@ -3,23 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex", "src\Codex\Codex.csproj", "{18F9B5DD-54B9-49F3-B788-8A066314BB98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex", "src\Codex\Codex.csproj", "{18F9B5DD-54B9-49F3-B788-8A066314BB98}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Sdk", "src\Codex.Sdk\Codex.Sdk.csproj", "{2322A932-05F4-4931-8547-71377C6AB49E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Analysis", "src\Codex.Analysis\Codex.Analysis.csproj", "{2016A682-4D9F-4A65-A03D-D65FF2948269}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Analysis", "src\Codex.Analysis\Codex.Analysis.csproj", "{2016A682-4D9F-4A65-A03D-D65FF2948269}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Analysis.Managed", "src\Codex.Analysis.Managed\Codex.Analysis.Managed.csproj", "{9C45EDC8-4B6F-4C70-B317-A3B6074A965A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Analysis.Managed", "src\Codex.Analysis.Managed\Codex.Analysis.Managed.csproj", "{9C45EDC8-4B6F-4C70-B317-A3B6074A965A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Analysis.Managed.Decompilation", "src\Codex.Analysis.Managed.Decompilation\Codex.Analysis.Managed.Decompilation.csproj", "{CE20F5F8-917F-4E24-8374-B60B698ACBA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Analysis.Managed.Decompilation", "src\Codex.Analysis.Managed.Decompilation\Codex.Analysis.Managed.Decompilation.csproj", "{CE20F5F8-917F-4E24-8374-B60B698ACBA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Decompilation", "src\Codex.Decompilation\Codex.Decompilation.csproj", "{C6454733-C8EE-41A1-88D9-2EDC4012F499}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Decompilation", "src\Codex.Decompilation\Codex.Decompilation.csproj", "{C6454733-C8EE-41A1-88D9-2EDC4012F499}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Decompilation.Perspective", "src\Codex.Decompilation.Perspective\Codex.Decompilation.Perspective.csproj", "{94BDF7DC-169D-41D7-9FC8-081A9D1D56D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Decompilation.Perspective", "src\Codex.Decompilation.Perspective\Codex.Decompilation.Perspective.csproj", "{94BDF7DC-169D-41D7-9FC8-081A9D1D56D2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.ElasticSearch", "src\Codex.ElasticSearch\Codex.ElasticSearch.csproj", "{4573F8BC-6B87-4526-A815-42F473452F8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Perspectil", "src\Perspectil\Perspectil.csproj", "{F9A05818-6D67-484A-8397-149EA1DEDCDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perspectil", "src\Perspectil\Perspectil.csproj", "{F9A05818-6D67-484A-8397-149EA1DEDCDF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{64FF0049-1E2B-4929-B944-EFF99A45C910}"
 	ProjectSection(SolutionItems) = preProject
@@ -32,7 +32,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 		vsts-ci.yml = vsts-ci.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodexTestCSharpLibrary", "src\TestProjects\CodexTestRepo\CodexTestCSharpLibrary\CodexTestCSharpLibrary.csproj", "{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodexTestCSharpLibrary", "src\TestProjects\CodexTestRepo\CodexTestCSharpLibrary\CodexTestCSharpLibrary.csproj", "{F16A9DE8-193F-4D07-9D86-1DD2FB087A96}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestProjects", "TestProjects", "{93A34DFC-EDAD-41A7-ACCC-8102695590DD}"
 EndProject
@@ -40,15 +40,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodexTestRepo", "CodexTestR
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Advanced", "Advanced", "{5B49B5ED-0C4F-47DD-8D72-6BD21518E7FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Analysis.External", "src\Codex.Analysis.External\Codex.Analysis.External.csproj", "{CD028A30-EF26-44DE-884B-6D9C41C39D64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Analysis.External", "src\Codex.Analysis.External\Codex.Analysis.External.csproj", "{CD028A30-EF26-44DE-884B-6D9C41C39D64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Framework.Generation", "src\Codex.Framework.Generation\Codex.Framework.Generation.csproj", "{E30939C5-042D-4EC2-817D-C5AFC509B330}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Framework.Generation", "src\Codex.Framework.Generation\Codex.Framework.Generation.csproj", "{E30939C5-042D-4EC2-817D-C5AFC509B330}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Codex.Sdk.Types", "src\Codex.Sdk.Types\Codex.Sdk.Types.shproj", "{F88FB26C-FAC3-4D8A-9779-E3475D18ECB1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7F4060A4-602D-4A7C-8ACF-7956D9F8D757}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.ElasticSearch.Tests", "src\Codex.ElasticSearch.Tests\Codex.ElasticSearch.Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.ElasticSearch.Tests", "src\Codex.ElasticSearch.Tests\Codex.ElasticSearch.Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Codex.Sdk.Shared", "src\Codex.Sdk.Shared\Codex.Sdk.Shared.shproj", "{D60352C9-9E89-46C0-884D-91640F484AAC}"
 EndProject
@@ -56,7 +56,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Web", "src\Codex.Web\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{25E4BE1A-D5A5-45B4-B612-F524C796082E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Generator", "src\Codex.Generator\Codex.Generator.csproj", "{FCD911F0-AFFB-4810-9816-6E67382C0D3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Generator", "src\Codex.Generator\Codex.Generator.csproj", "{FCD911F0-AFFB-4810-9816-6E67382C0D3C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Build.Nuget", "src\Codex.Build.Nuget\Codex.Build.Nuget.csproj", "{38044DCA-2FF6-4579-B06E-46BF7401D0B2}"
 EndProject
@@ -83,6 +83,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Integration.Tests", "src\Codex.Integration.Tests\Codex.Integration.Tests.csproj", "{1DBEB2CF-0424-4382-9B9B-4E74B7C0D910}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Rewriter", "src\Codex.Rewriter\Codex.Rewriter.csproj", "{AC9D5AAE-0D00-46F0-86D7-71EF4F262B5B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Storage", "src\Codex.Storage\Codex.Storage.csproj", "{917DD395-621A-4331-89F9-B2B5CFBAE7E9}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -206,6 +208,10 @@ Global
 		{AC9D5AAE-0D00-46F0-86D7-71EF4F262B5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC9D5AAE-0D00-46F0-86D7-71EF4F262B5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC9D5AAE-0D00-46F0-86D7-71EF4F262B5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{917DD395-621A-4331-89F9-B2B5CFBAE7E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{917DD395-621A-4331-89F9-B2B5CFBAE7E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{917DD395-621A-4331-89F9-B2B5CFBAE7E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{917DD395-621A-4331-89F9-B2B5CFBAE7E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

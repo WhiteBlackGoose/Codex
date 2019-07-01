@@ -1,8 +1,4 @@
 using CommandLine;
-using Microsoft.VisualStudio.Services.Common;
-using Microsoft.VisualStudio.Services.Client;
-using Microsoft.TeamFoundation.Build.WebApi;
-using Microsoft.VisualStudio.Services.WebApi;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -14,7 +10,7 @@ using System.IO.Compression;
 using CommandLine.Text;
 using Newtonsoft.Json;
 using Codex.Downloader;
-using Codex.Application;
+using Codex.Storage;
 
 namespace Codex.Ingester
 {
@@ -114,7 +110,7 @@ namespace Codex.Ingester
 
             if (!options.Preview && options.ElasticSearchUrl != null && options.RepoName != null)
             {
-                CodexApplication.Ingest(
+                new CodexStorageApplication().Ingest(
                     options.RepoName,
                     options.ElasticSearchUrl,
                     options.OutputFolder,

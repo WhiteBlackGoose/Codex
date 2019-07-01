@@ -12,7 +12,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO.Compression;
 using CommandLine.Text;
+#if !DOTNETCORE
 using Microsoft.VisualStudio.Services.Client.Controls;
+#endif
 
 namespace Codex.Downloader
 {
@@ -59,8 +61,10 @@ namespace Codex.Downloader
 
             BuildHttpClient client = new BuildHttpClient(
                new Uri(collectionUri),
+#if !DOTNETCORE
                string.IsNullOrWhiteSpace(options.PersonalAccessToken) ?
                 new VssClientCredentials(new VssFederatedCredentialPrompt()) :
+#endif
                 new VssBasicCredential(string.Empty, options.PersonalAccessToken));
 
             Console.WriteLine();

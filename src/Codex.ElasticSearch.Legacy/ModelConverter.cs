@@ -14,7 +14,7 @@ namespace Codex.Storage
         {
             Contract.Requires(analyzedProject != null);
             Contract.Ensures(Contract.Result<ProjectModel>() != null);
-
+            
             return
                 new ProjectModel(analyzedProject.ProjectId, analyzedProject.RepositoryName)
                 {

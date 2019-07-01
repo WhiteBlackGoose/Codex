@@ -212,15 +212,19 @@ namespace Codex.Utilities
             return value;
         }
 
-        public static Dictionary<TKey, TValue> ToDictionarySafe<TValue, TKey>(this IEnumerable<TValue> source, Func<TValue, TKey> keySelector)
+        public static Dictionary<TKey, TValue> ToDictionarySafe<TValue, TKey>(this IEnumerable<TValue> source, Func<TValue, TKey> keySelector, IEqualityComparer<TKey> comparer = null, bool overwrite = false)
         {
-            Dictionary<TKey, TValue> result = new Dictionary<TKey, TValue>();
+            Dictionary<TKey, TValue> result = new Dictionary<TKey, TValue>(comparer ?? EqualityComparer<TKey>.Default);
 
             foreach (var element in source)
             {
                 var key = keySelector(element);
 
-                if (!result.ContainsKey(key))
+                if (overwrite)
+                {
+                    result[key] = element;
+                }
+                else if (!result.ContainsKey(key))
                 {
                     result.Add(key, element);
                 }
@@ -233,16 +237,20 @@ namespace Codex.Utilities
         /// Converts sequence to dictionary, but accepts duplicate keys. First will win.
         /// </summary>
         public static Dictionary<TKey, TValue> ToDictionarySafe<T, TKey, TValue>(this IEnumerable<T> source, Func<T, TKey> keySelector,
-            Func<T, TValue> valueSelector)
+            Func<T, TValue> valueSelector, IEqualityComparer<TKey> comparer = null, bool overwrite = false)
         {
-            Dictionary<TKey, TValue> result = new Dictionary<TKey, TValue>();
+            Dictionary<TKey, TValue> result = new Dictionary<TKey, TValue>(comparer ?? EqualityComparer<TKey>.Default);
 
             foreach (var element in source)
             {
                 var key = keySelector(element);
                 var value = valueSelector(element);
 
-                if (!result.ContainsKey(key))
+                if (overwrite)
+                {
+                    result[key] = value;
+                }
+                else if (!result.ContainsKey(key))
                 {
                     result.Add(key, value);
                 }

@@ -127,7 +127,8 @@ namespace Codex
         public override IEnumerable<string> GetFiles(string relativeDirectoryPath)
         {
             relativeDirectoryPath = PathUtilities.EnsureTrailingSlash(relativeDirectoryPath, '\\');
-            return GetFiles().Where(n => n.Replace('/', '\\').StartsWith(relativeDirectoryPath));
+            var files = GetFiles();
+            return files.Where(n => n.Replace('/', '\\').StartsWith(relativeDirectoryPath));
         }
 
         public override void Dispose()

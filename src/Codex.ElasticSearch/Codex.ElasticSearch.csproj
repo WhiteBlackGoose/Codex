@@ -15,7 +15,7 @@
     <PackageReference Include="NEST" Version="6.1.0" />
     <PackageReference Include="Lucene.Net" />
     <PackageReference Include="Newtonsoft.Json" />
-    <PackageReference Include="StrongNamer" />
+    <PackageReference Include="StrongNamer" Condition="'$(TargetFramework)' == 'net461'" />
     <PackageReference Include="System.Threading.Tasks.Extensions" />
   </ItemGroup>
   <ItemGroup>

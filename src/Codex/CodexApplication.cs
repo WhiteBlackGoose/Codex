@@ -12,6 +12,7 @@ using Codex.Import;
 using Codex.Logging;
 using Codex.ObjectModel;
 using Codex.Sdk.Search;
+using Codex.Storage;
 using Codex.Utilities;
 using Microsoft.Build.Locator;
 using Mono.Options;
@@ -19,364 +20,97 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
 namespace Codex.Application
 {
-    public class CodexApplication
+    public class CodexApplication : CodexStorageApplication
     {
-        static string elasticSearchServer = "http://localhost:9200";
-        static bool finalize = true;
-        static bool analysisOnly = false; // Set this to disable uploading to ElasticSearch
-        static string repoName;
-        static string alias;
-        static string rootDirectory;
-        static string repoUrl;
-        static string saveDirectory;
-        static string loadDirectory;
-        static List<string> binlogSearchPaths = new List<string>();
-        static List<string> compilerArgumentsFiles = new List<string>();
-        static string solutionPath;
-        static string logDirectory = "logs";
-        static bool interactive = false;
-        static bool disableMsbuild = false;
-        static bool disableMsbuildLocator = false;
-        static ICodexStore store = Placeholder.Value<ICodexStore>("Create store (FileSystem | Elasticsearch)");
-        static ElasticSearchService service;
-        static bool reset = false;
-        static bool clean = false;
-        static bool newBackend = false;
-        static bool scan = false;
-        static bool disableEnumeration = false;
-        static bool test = false;
-        static bool projectMode = false;
-        static bool disableParallelFiles = false;
-        static string projectDataSuffix = "";
-        static bool detectGit = true;
-        static bool update = false;
-        static List<string> externalDataDirectories = new List<string>();
-        static List<string> projectDataDirectories = new List<string>();
-        static List<string> deleteIndices = new List<string>();
-        static List<string> demoteIndices = new List<string>();
-        static List<string> promoteIndices = new List<string>();
-        static OptionSet indexOptions;
+        protected bool analysisOnly = false; // Set this to disable uploading to ElasticSearch
+        protected string rootDirectory;
+        protected string repoUrl;
+        protected List<string> binlogSearchPaths = new List<string>();
+        protected List<string> compilerArgumentsFiles = new List<string>();
+        protected string solutionPath;
+        protected bool interactive = false;
+        protected bool disableMsbuild = false;
+        protected bool disableMsbuildLocator = false;
+        protected bool disableEnumeration = false;
+        protected bool projectMode = false;
+        protected bool disableParallelFiles = false;
+        protected bool detectGit = true;
+        protected List<string> externalDataDirectories = new List<string>();
+        protected List<string> projectDataDirectories = new List<string>();
+        protected OptionSet indexOptions;
 
-        static Dictionary<string, (Action act, OptionSet options)> actions = new Dictionary<string, (Action, OptionSet)>(StringComparer.OrdinalIgnoreCase)
+        protected override IEnumerable<KeyValuePair<string, (Action, OptionSet)>> GetActions()
         {
-            {
-                "index",
-                (
-                    new Action(() => Index()),
-                    indexOptions = new OptionSet
-                    {
-                        { "ed|extData=", "Specifies one or more external data directories.", n => externalDataDirectories.Add(n) },
-                        { "pd|projectData=", "Specifies one or more project data directories.", n => projectDataDirectories.Add(n) },
-                        { "pds|projectDataSuffix=", "Specifies the suffix for saving project data.", n => projectDataSuffix = n },
-                        { "noScan", "Disable scanning enlistment directory.", n => disableEnumeration = n != null },
-                        { "noMsBuild", "Disable loading solutions using msbuild.", n => disableMsbuild = n != null },
-                        { "noMsBuildLocator", "Disable loading solutions using msbuild.", n => disableMsbuildLocator = n != null },
-                        { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
-                        { "save=", "Saves the analysis information to the given directory.", n => saveDirectory = n },
-                        { "test", "Indicates that save should use test mode which disables optimization.", n => test = n != null },
-                        { "clean", "Reset target index directory when using -save option.", n => clean = n != null },
-                        { "n|name=", "Name of the repository.", n => repoName = StoreUtilities.GetSafeRepoName(n ?? string.Empty) },
-                        { "p|path=", "Path to the repo to analyze.", n => rootDirectory = Path.GetFullPath(n) },
-                        { "repoUrl=", "The URL of the repository being indexed", n => repoUrl = n },
-                        { "bld|binLogSearchDirectory=", "Adds a bin log file or directory to search for binlog files", n => binlogSearchPaths.Add(n) },
-                        { "ca|compilerArgumentFile=", "Adds a file specifying compiler arguments", n => compilerArgumentsFiles.Add(n) },
-                        { "l|logDirectory=", "Optional. Path to log directory", n => logDirectory = n },
-                        { "s|solution=", "Optionally, path to the solution to analyze.", n => solutionPath = n },
-                        { "projectMode", "Uses project indexing mode.", n => detectGit = !(projectMode = n != null) },
-                        { "disableParallelFiles", "Disables use of parallel file analysis.", n => disableParallelFiles = n == null },
-                        { "disableDetectGit", "Disables use of LibGit2Sharp to detect git commit and branch.", n => detectGit = n == null },
-                        { "newBackend", "Use new backend with stored filters Not supported.", n => newBackend = n != null },
-                        { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
-                    }
-                )
-            },
-            {
-                "dryRun",
-                (
-                    new Action(() => Analyze()),
-                    indexOptions
-                )
-            },
-            {
-                "delete",
-                (
-                    new Action(() => DeleteIndices()),
-                    new OptionSet
-                    {
-                        { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
-                        { "d=", "List the indices to delete.", n => deleteIndices.Add(n) },
-                    }
-                )
-            },
-            {
-                "change",
-                (
-                    new Action(() => ChangeIndices()),
-                    new OptionSet
-                    {
-                        { "alias=", "The alias to modify.", n => alias = n },
-                        { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
-                        { "promote=", "List the indices to promote.", n => promoteIndices.Add(n) },
-                        { "demote=", "List the indices to demote.", n => demoteIndices.Add(n) },
-                    }
-                )
-            },
-            {
-                "load",
-                (
-                    new Action(() => Load()),
-                    new OptionSet
-                    {
-                        { "n|name=", "Name of the repository.", n => repoName = StoreUtilities.GetSafeRepoName(n ?? string.Empty) },
-                        { "newBackend", "Use new backend with stored filters Not supported.", n => newBackend = n != null },
-                        { "scan", "Treats every directory under data directory as a separate store to upload.", n => scan = n != null },
-                        { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
-                        { "l|logDirectory", "Optional. Path to log directory", n => logDirectory = n },
-                        { "reset", "Reset elasticsearch for indexing new set of data.", n => reset = n != null },
-                        { "clean", "Reset target index directory when using -save option.", n => clean = n != null },
-                        { "u", "Updates the analysis data (in place).", n => update = n != null },
-                        { "d=", "The directory or a zip file containing analysis data to load.", n => loadDirectory = n },
-                        { "save=", "Saves the analysis information to the given directory.", n => saveDirectory = n },
-                        { "test", "Indicates that save should use test mode which disables optimization.", n => test = n != null },
-                    }
-                )
-            },
-            {
-                "search",
-                (
-                    new Action(() => Search()),
-                    new OptionSet
-                    {
-                        { "es|elasticsearch", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
-                        { "n|name=", "Name of the project to search.", n => repoName = n },
-                    }
-                )
-            },
-            {
-                "list",
-                (
-                    new Action(() => ListIndices()),
-                    new OptionSet
-                    {
-                        { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
-                    }
-                )
-            }
-        };
-
-        public static void Main(params string[] args)
-        {
-            if (Environment.GetEnvironmentVariable("CodexDebugOnStart") == "1")
-            {
-                System.Diagnostics.Debugger.Launch();
-            }
-
-            try
-            {
-                AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
-                AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-                Console.WriteLine("Started");
-
-                if (args.Length == 0)
+            return GetActions().Concat(
+                new Dictionary<string, (Action, OptionSet)>(StringComparer.OrdinalIgnoreCase)
                 {
-                    WriteHelpText();
-                    return;
-                }
-
-                var remaining = args.Skip(1).ToArray();
-                var verb = args[0].ToLowerInvariant();
-                if (actions.TryGetValue(verb, out var action))
-                {
-                    var remainingArguments = action.options.Parse(remaining);
-                    if (remainingArguments.Count != 0)
                     {
-                        Console.Error.WriteLine($"Invalid argument(s): '{string.Join(", ", remainingArguments)}'");
-                        WriteHelpText();
-                        return;
+                        "index",
+                        (
+                            new Action(() => Index()),
+                            indexOptions = new OptionSet
+                            {
+                                { "ed|extData=", "Specifies one or more external data directories.", n => externalDataDirectories.Add(n) },
+                                { "pd|projectData=", "Specifies one or more project data directories.", n => projectDataDirectories.Add(n) },
+                                { "pds|projectDataSuffix=", "Specifies the suffix for saving project data.", n => projectDataSuffix = n },
+                                { "noScan", "Disable scanning enlistment directory.", n => disableEnumeration = n != null },
+                                { "noMsBuild", "Disable loading solutions using msbuild.", n => disableMsbuild = n != null },
+                                { "noMsBuildLocator", "Disable loading solutions using msbuild.", n => disableMsbuildLocator = n != null },
+                                { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
+                                { "save=", "Saves the analysis information to the given directory.", n => saveDirectory = n },
+                                { "test", "Indicates that save should use test mode which disables optimization.", n => test = n != null },
+                                { "clean", "Reset target index directory when using -save option.", n => clean = n != null },
+                                { "n|name=", "Name of the repository.", n => repoName = StoreUtilities.GetSafeRepoName(n ?? string.Empty) },
+                                { "p|path=", "Path to the repo to analyze.", n => rootDirectory = Path.GetFullPath(n) },
+                                { "repoUrl=", "The URL of the repository being indexed", n => repoUrl = n },
+                                { "bld|binLogSearchDirectory=", "Adds a bin log file or directory to search for binlog files", n => binlogSearchPaths.Add(n) },
+                                { "ca|compilerArgumentFile=", "Adds a file specifying compiler arguments", n => compilerArgumentsFiles.Add(n) },
+                                { "l|logDirectory=", "Optional. Path to log directory", n => logDirectory = n },
+                                { "s|solution=", "Optionally, path to the solution to analyze.", n => solutionPath = n },
+                                { "projectMode", "Uses project indexing mode.", n => detectGit = !(projectMode = n != null) },
+                                { "disableParallelFiles", "Disables use of parallel file analysis.", n => disableParallelFiles = n == null },
+                                { "disableDetectGit", "Disables use of LibGit2Sharp to detect git commit and branch.", n => detectGit = n == null },
+                                { "newBackend", "Use new backend with stored filters Not supported.", n => newBackend = n != null },
+                                { "i|interactive", "Search newly indexed items.", n => interactive = n != null }
+                            }
+                        )
+                    },
+                    {
+                        "dryRun",
+                        (
+                            new Action(() => Analyze()),
+                            indexOptions
+                        )
                     }
-
-                    Console.WriteLine("Parsed Arguments");
-                    action.act();
-                }
-                else
-                {
-                    Console.Error.WriteLine($"Invalid verb '{verb}'");
-                    WriteHelpText();
-                }
-            }
-            catch (Exception ex)
-            {
-                Log(ex.ToString());
-            }
+                    });
         }
 
-        private static bool isReentrant = false;
-
-        private static HashSet<string> knownMessages = new HashSet<string>()
+        protected override void CurrentDomain_FirstChanceException(object sender, FirstChanceExceptionEventArgs e)
         {
-            "Unable to load DLL 'api-ms-win-core-file-l1-2-0.dll': The specified module could not be found. (Exception from HRESULT: 0x8007007E)",
-            "Invalid cast from 'System.String' to 'System.Int32[]'.",
-            "The given assembly name or codebase was invalid. (Exception from HRESULT: 0x80131047)",
-            "Value was either too large or too small for a Decimal.",
-        };
+            var ex = e.Exception;
 
-        private static void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
-        {
-            if (isReentrant)
+            if (ex is Microsoft.Build.Exceptions.InvalidProjectFileException)
             {
                 return;
             }
 
-            isReentrant = true;
-            try
-            {
-                var ex = e.Exception;
-
-                if (ex is InvalidCastException)
-                {
-                    if (ex.Message.Contains("Invalid cast from 'System.String' to"))
-                    {
-                        return;
-                    }
-
-                    if (ex.Message.Contains("Unable to cast object of type 'Microsoft.Build.Tasks.Windows.MarkupCompilePass1' to type 'Microsoft.Build.Framework.ITask'."))
-                    {
-                        return;
-                    }
-                }
-
-                if (ex is InvalidOperationException)
-                {
-                    if (ex.Message.Contains("An attempt was made to transition a task to a final state when it had already completed."))
-                    {
-                        return;
-                    }
-                }
-
-                if (ex is System.Net.WebException)
-                {
-                    if (ex.Message.Contains("(404) Not Found"))
-                    {
-                        return;
-                    }
-                }
-
-                if (ex is AggregateException || ex is OperationCanceledException)
-                {
-                    return;
-                }
-
-                if (ex is DecoderFallbackException)
-                {
-                    return;
-                }
-
-                if (ex is DirectoryNotFoundException)
-                {
-                    return;
-                }
-
-                if (ex is Microsoft.Build.Exceptions.InvalidProjectFileException)
-                {
-                    return;
-                }
-
-                if (ex is FileNotFoundException)
-                {
-                    return;
-                }
-
-                if (ex is MissingMethodException)
-                {
-                    // MSBuild evaluation has a known one
-                    return;
-                }
-
-                if (ex is XmlException && ex.Message.Contains("There are multiple root elements"))
-                {
-                    return;
-                }
-
-                if (knownMessages.Contains(ex.Message))
-                {
-                    return;
-                }
-
-                string exceptionType = ex.GetType().FullName;
-
-                if (exceptionType.Contains("UnsupportedSignatureContent"))
-                {
-                    return;
-                }
-
-                string stackTrace = ex.StackTrace;
-                if (stackTrace.Contains("at System.Guid.StringToInt"))
-                {
-                    return;
-                }
-
-                var message = DateTime.Now.ToString() + ": First chance exception: " + ex.ToString();
-
-                Log(message);
-            }
-            finally
-            {
-                isReentrant = false;
-            }
-        }
-        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            Log(e.ExceptionObject?.ToString());
-            try
-            {
-                Log(string.Join(Environment.NewLine, AppDomain.CurrentDomain.GetAssemblies().Select(a => $"{a.FullName ?? "Unknown Name"}: {a.Location ?? "Unknown Location"}")));
-            }
-            catch
-            {
-            }
+            base.CurrentDomain_FirstChanceException(sender, e);
         }
 
-        private static void Log(string text)
-        {
-            Console.Error.WriteLine(text);
-        }
-
-        private static void WriteHelpText()
-        {
-            foreach (var actionEntry in actions)
-            {
-                Console.WriteLine($"codex {actionEntry.Key} {{options}}");
-                Console.WriteLine("Options:");
-                actionEntry.Value.options.WriteOptionDescriptions(Console.Out);
-                Console.WriteLine();
-            }
-        }
-
-        static void Delete()
-        {
-            if (deleteIndices.Count != 0)
-            {
-                DeleteIndices();
-
-                Console.WriteLine("Remaining Indices:");
-                ListIndices();
-                return;
-            }
-        }
-
-        static void Analyze()
+        protected void Analyze()
         {
             analysisOnly = true;
             Index();
         }
 
-        static void Index()
+        protected void Index()
         {
             if (!disableMsbuild && !disableMsbuildLocator)
             {
@@ -440,179 +174,7 @@ namespace Codex.Application
             }
         }
 
-        private static void ChangeIndices()
-        {
-            Storage.ElasticsearchStorage storage = new Storage.ElasticsearchStorage(elasticSearchServer);
-
-            if ((promoteIndices.Count > 0) || (demoteIndices.Count > 0))
-            {
-                storage.Provider.ChangeIndices(promoteIndices: promoteIndices, demoteIndices: demoteIndices, alias: alias).GetAwaiter().GetResult();
-
-                ListIndices();
-            }
-        }
-
-        private static void DeleteIndices()
-        {
-            InitService();
-
-            foreach (var index in deleteIndices)
-            {
-                Console.Write($"Deleting {index}... ");
-                var deleted = service.DeleteIndexAsync(index).GetAwaiter().GetResult();
-                if (deleted)
-                {
-                    Console.WriteLine($"Success");
-                }
-                else
-                {
-                    Console.WriteLine($"Not Found");
-                }
-            }
-        }
-
-        private static StreamWriter OpenLogWriter()
-        {
-            logDirectory = Path.GetFullPath(logDirectory);
-            Directory.CreateDirectory(logDirectory);
-            return new StreamWriter(Path.Combine(logDirectory, "cdx.log"));
-        }
-
-        public static void Ingest(
-            string name,
-            string elasticsearchUrl,
-            string ingestionDirectory,
-            bool finalize,
-            bool useNewBackend)
-        {
-            repoName = name;
-            newBackend = useNewBackend;
-            loadDirectory = ingestionDirectory;
-            elasticSearchServer = elasticsearchUrl;
-            scan = true;
-            Load(targetIndexName: StoreUtilities.GetTargetIndexName(name), finalize: finalize);
-        }
-
-        private static void Load(string targetIndexName = null, bool finalize = true)
-        {
-            using (StreamWriter writer = OpenLogWriter())
-            using (Logger logger = new MultiLogger(
-                new ConsoleLogger(),
-                new TextLogger(TextWriter.Synchronized(writer))))
-            {
-                if (scan)
-                {
-                    var clearIndicesBeforeUse = reset;
-                    var directories = Directory.GetFileSystemEntries(loadDirectory);
-                    int i = 1;
-                    foreach (var directory in directories)
-                    {
-                        var finalizeRepository =
-                            (targetIndexName != null ? i == directories.Length : true) && finalize;
-                        logger.LogMessage($"[{i} of {directories.Length}] Loading {directory}");
-                        LoadCore(
-                            logger,
-                            directory,
-                            clearIndicesBeforeUse,
-                            finalizeRepository,
-                            targetIndexName);
-
-                        // Only clear indices on first use
-                        clearIndicesBeforeUse = false;
-                        i++;
-                    }
-                }
-                else
-                {
-                    LoadCore(logger, loadDirectory, reset, finalizeRepository: finalize, targetIndexName: targetIndexName);
-                }
-            }
-        }
-
-        private static void LoadCore(
-            Logger logger,
-            string loadDirectory,
-            bool clearIndicesBeforeUse,
-            bool finalizeRepository,
-            string targetIndexName = null)
-        {
-            if (File.Exists(Path.Combine(loadDirectory, @"store\repo.cdx.json")))
-            {
-                loadDirectory = Path.Combine(loadDirectory, "store");
-            }
-
-            LoadCoreAsync(logger, loadDirectory, finalizeRepository, targetIndexName).GetAwaiter().GetResult();
-        }
-
-        private static async Task LoadCoreAsync(Logger logger, string loadDirectory, bool finalizeRepository, string targetIndexName)
-        {
-            if (String.IsNullOrEmpty(loadDirectory)) throw new ArgumentException("Load directory must be specified. Use -d to provide it.");
-
-            if (!string.IsNullOrEmpty(saveDirectory))
-            {
-                store = new DirectoryCodexStore(saveDirectory) { Clean = clean, DisableOptimization = test };
-            }
-            else if (!string.IsNullOrEmpty(elasticSearchServer))
-            {
-                if (newBackend)
-                {
-                    InitService();
-                    store = await service.CreateStoreAsync(new ElasticSearchStoreConfiguration()
-                    {
-                        Prefix = "test.",
-                        ClearIndicesBeforeUse = reset,
-                        Logger = logger
-                    });
-                }
-                else
-                {
-                    store = new LegacyElasticSearchStore(new LegacyElasticSearchStoreConfiguration()
-                    {
-                        Endpoint = elasticSearchServer,
-                        TargetIndexName = targetIndexName
-                    });
-                }
-            }
-            else
-            {
-                store = new NullCodexRepositoryStore();
-            }
-
-            var loadDirectoryStore = new DirectoryCodexStore(loadDirectory, logger);
-            await loadDirectoryStore.ReadAsync(store, repositoryName: repoName, finalize: finalizeRepository);
-        }
-
-        private static void ListIndices()
-        {
-            Storage.ElasticsearchStorage storage = new Storage.ElasticsearchStorage(elasticSearchServer);
-
-            var indices = storage.Provider.GetIndicesAsync().GetAwaiter().GetResult();
-
-            foreach (var index in indices)
-            {
-                if (index.IsActive)
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                }
-
-                Console.WriteLine(index.IndexName + (index.IsActive ? " (IsActive)" : ""));
-            }
-
-            Console.ForegroundColor = ConsoleColor.Gray;
-        }
-
-        private static void InitService()
-        {
-            if (String.IsNullOrEmpty(elasticSearchServer)) throw new ArgumentException("Elastic Search server URL is missing. Use -es to provide it.");
-
-            service = new ElasticSearchService(new ElasticSearchServiceConfiguration(elasticSearchServer));
-        }
-
-        static async Task RunRepoImporter()
+        protected async Task RunRepoImporter()
         {
             var targetIndexName = StoreUtilities.GetTargetIndexName(repoName);
             string[] file = new string[0];
@@ -761,183 +323,6 @@ namespace Codex.Application
 
                 await importer.Import(finalizeImport: finalize);
             }
-        }
-
-        static void Search()
-        {
-            SearchAsync().Wait();
-        }
-
-        static async Task SearchAsync()
-        {
-            InitService();
-
-            var codex = await service.CreateCodexAsync(new ElasticSearchStoreConfiguration()
-            {
-            });
-
-            string line;
-            while ((line = Console.ReadLine()) != null)
-            {
-                var response = await codex.SearchAsync(new SearchArguments() { SearchString = line });
-                var results = response.Result;
-                Console.WriteLine($"Found {results.Total} matches");
-                foreach (var searchResult in results.Hits)
-                {
-                    var result = searchResult.TextLine;
-                    Console.WriteLine($@"\\{result.RepositoryName}\{result.RepoRelativePath}");
-                    Console.WriteLine($"{result.ProjectId}:{result.ProjectRelativePath} ({result.TextSpan.LineIndex}, {result.TextSpan.LineSpanStart})");
-
-                    if (!string.IsNullOrEmpty(result.TextSpan.LineSpanText))
-                    {
-                        Console.Write(result.TextSpan.LineSpanText.Substring(0, result.TextSpan.LineSpanStart));
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write(result.TextSpan.LineSpanText.Substring(result.TextSpan.LineSpanStart, result.TextSpan.Length));
-                        Console.ForegroundColor = ConsoleColor.Gray;
-                        Console.WriteLine(result.TextSpan.LineSpanText.Substring(result.TextSpan.LineSpanStart + result.TextSpan.Length));
-                    }
-                }
-
-                if (results.Total == 0)
-                {
-                    foreach (var rawQuery in response.RawQueries)
-                    {
-                        Console.WriteLine(rawQuery);
-                    }
-                }
-            }
-
-            //ElasticsearchStorage storage = new ElasticsearchStorage(elasticSearchServer);
-
-            //string[] repos = new string[] { repoName.ToLowerInvariant() };
-
-            //string line = null;
-            //Console.WriteLine("Please enter symbol short name: ");
-            //while ((line = Console.ReadLine()) != null)
-            //{
-            //    if (line.Contains("`"))
-            //    {
-            //        //results = storage.SearchAsync(repos, line, classification: null).Result;
-            //        var results = ((ElasticsearchStorage)storage).TextSearchAsync(repos, line.TrimStart('`')).Result;
-            //        Console.WriteLine($"Found {results.Count} matches");
-            //        foreach (var result in results)
-            //        {
-            //            Console.WriteLine($"{result.File} ({result.Span.LineNumber}, {result.Span.LineSpanStart})");
-            //            Console.ForegroundColor = ConsoleColor.Green;
-            //            Console.WriteLine($"{result.ReferringFilePath} in '{result.ReferringProjectId}'");
-            //            Console.ForegroundColor = ConsoleColor.Gray;
-
-            //            var bsf = storage.GetBoundSourceFileAsync(result.ReferringProjectId, result.ReferringFilePath).Result;
-
-            //            if (!string.IsNullOrEmpty(result.Span.LineSpanText))
-            //            {
-            //                Console.Write(result.Span.LineSpanText.Substring(0, result.Span.LineSpanStart));
-            //                Console.ForegroundColor = ConsoleColor.Yellow;
-            //                Console.Write(result.Span.LineSpanText.Substring(result.Span.LineSpanStart, result.Span.Length));
-            //                Console.ForegroundColor = ConsoleColor.Gray;
-            //                Console.WriteLine(result.Span.LineSpanText.Substring(result.Span.LineSpanStart + result.Span.Length));
-            //            }
-            //        }
-            //    }
-            //    else if (line.Contains("|"))
-            //    {
-            //        var parts = line.Split('|');
-            //        var symbolId = SymbolId.UnsafeCreateWithValue(parts[0]);
-            //        var projectId = parts[1];
-
-            //        var results = storage.GetReferencesToSymbolAsync(repos, new Symbol() { Id = symbolId, ProjectId = projectId }).GetAwaiter().GetResult();
-
-            //        var relatedDefinitions = storage.GetRelatedDefinitions(repos,
-            //                symbolId.Value,
-            //                projectId).GetAwaiter().GetResult();
-
-            //        var definition = results.Entries
-            //            .Where(e => e.Span.Reference.ReferenceKind == nameof(ReferenceKind.Definition))
-            //            .Select(e => e.Span.Reference)
-            //            .FirstOrDefault();
-
-            //        if (definition != null)
-            //        {
-            //            var relatedDefs = storage.Provider.GetRelatedDefinitions(repos, definition.Id.Value, definition.ProjectId)
-            //                .GetAwaiter().GetResult();
-            //        }
-
-            //        Console.WriteLine($"Found {results.Total} matches");
-            //        foreach (var result in results.Entries)
-            //        {
-            //            Console.WriteLine($"{result.File} ({result.Span.LineNumber}, {result.Span.LineSpanStart})");
-            //            if (!string.IsNullOrEmpty(result.Span.LineSpanText))
-            //            {
-            //                Console.Write(result.Span.LineSpanText.Substring(0, result.Span.LineSpanStart));
-            //                Console.ForegroundColor = ConsoleColor.Yellow;
-            //                Console.Write(result.Span.LineSpanText.Substring(result.Span.LineSpanStart, result.Span.Length));
-            //                Console.ForegroundColor = ConsoleColor.Gray;
-            //                Console.WriteLine(result.Span.LineSpanText.Substring(result.Span.LineSpanStart + result.Span.Length));
-            //            }
-            //        }
-
-            //        if (results.Entries.Count != 0)
-            //        {
-            //            var result = results.Entries[0];
-            //            Console.WriteLine($"Retrieving source file {result.ReferringFilePath} in {result.ReferringProjectId}");
-
-            //            var stopwatch = Stopwatch.StartNew();
-            //            var sourceFile = storage.GetBoundSourceFileAsync(repos, result.ReferringProjectId, result.ReferringFilePath).GetAwaiter().GetResult();
-            //            var elapsed = stopwatch.Elapsed;
-
-            //            Console.WriteLine($"Retrieved source file in {elapsed.TotalMilliseconds} ms");
-
-            //            Console.WriteLine($"Source file has { sourceFile?.Classifications.Count ?? -1 } classifications");
-            //            if (sourceFile.Classifications != null)
-            //            {
-            //                ConcurrentDictionary<string, int> classificationCounters = new ConcurrentDictionary<string, int>();
-            //                foreach (var cs in sourceFile.Classifications)
-            //                {
-            //                    classificationCounters.AddOrUpdate(cs.Classification, 1, (k, v) => v + 1);
-            //                }
-
-            //                foreach (var counter in classificationCounters)
-            //                {
-            //                    Console.WriteLine($"Source file has {counter.Value} {counter.Key} classifications");
-            //                }
-            //            }
-
-            //            Console.WriteLine($"Source file has { sourceFile?.References.Count ?? -1 } references");
-            //            Console.WriteLine($"Source file has { sourceFile?.Definitions.Count ?? -1 } definitions");
-            //        }
-            //    }
-            //    else
-            //    {
-            //        //results = storage.SearchAsync(repos, line, classification: null).Result;
-            //        var results = storage.SearchAsync(repos, line, null).Result;
-            //        Console.WriteLine($"Found {results.Total} matches");
-            //        foreach (var result in results.Entries)
-            //        {
-            //            Console.WriteLine($"{result.File} ({result.Span.LineNumber}, {result.Span.LineSpanStart})");
-            //            Console.ForegroundColor = ConsoleColor.Green;
-            //            Console.WriteLine($"{result.Symbol.Id}|{result.Symbol.ProjectId}");
-            //            Console.ForegroundColor = ConsoleColor.Gray;
-
-            //            var symbol = result.Symbol;
-            //            int index = result.DisplayName.IndexOf(symbol.ShortName);
-            //            //if (index >= 0)
-            //            //{
-            //            //    result.Span.LineSpanText = symbol.DisplayName;
-            //            //    result.Span.LineSpanStart = index;
-            //            //    result.Span.Length = symbol.ShortName.Length;
-            //            //}
-
-            //            //if (!string.IsNullOrEmpty(result.Span.LineSpanText))
-            //            //{
-            //            //    Console.Write(result.Span.LineSpanText.Substring(0, result.Span.LineSpanStart));
-            //            //    Console.ForegroundColor = ConsoleColor.Yellow;
-            //            //    Console.Write(result.Span.LineSpanText.Substring(result.Span.LineSpanStart, result.Span.Length));
-            //            //    Console.ForegroundColor = ConsoleColor.Gray;
-            //            //    Console.WriteLine(result.Span.LineSpanText.Substring(result.Span.LineSpanStart + result.Span.Length));
-            //            //}
-            //        }
-            //    }
-            //}
         }
     }
 }

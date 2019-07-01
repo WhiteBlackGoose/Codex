@@ -120,6 +120,8 @@ namespace Codex.ElasticSearch.Store
                 // TODO: Do we even need concurrency here?
                 tasks.Add(Task.Run(() =>
                 {
+                    logger.LogMessage($"Reading {kind} infos");
+
                     var kindDirectoryPath = Path.Combine(DirectoryPath, kind.Name);
                     logger.LogMessage($"Reading {kind} infos from {kindDirectoryPath}");
                     var files = fileSystem.GetFiles(kind.Name).ToList();
@@ -353,6 +355,7 @@ namespace Codex.ElasticSearch.Store
 
         private abstract class StoredEntityKind
         {
+            // NOTE: ANY KINDS ADDED MUST ALSO BE ADDED TO THE Kinds property
             public static readonly StoredEntityKind<StoredBoundSourceFile> BoundFiles = Create<StoredBoundSourceFile>(
                 (entity) => ToStableId(entity.BoundSourceFile.SourceFile.Info.ProjectId, entity.BoundSourceFile.SourceFile.Info.ProjectRelativePath),
                 (entity, repositoryStore, directoryStore) => repositoryStore.AddBoundFilesAsync(new[] { directoryStore.FromStoredBoundFile(entity) }));
@@ -366,23 +369,17 @@ namespace Codex.ElasticSearch.Store
                 (entity) => ToStableId(entity.RepoRelativePath),
                 (entity, repositoryStore, directoryStore) => repositoryStore.AddCommitFilesAsync(entity.Files));
 
-            public static IReadOnlyList<StoredEntityKind> Kinds => Inner.Kinds;
+            public static IReadOnlyList<StoredEntityKind> Kinds => new StoredEntityKind[] { BoundFiles, Projects, TextFiles, CommitDirectories };
 
             public static StoredEntityKind<T> Create<T>(Func<T, string> getEntityStableId, Func<T, ICodexRepositoryStore, DirectoryCodexStore, Task> add, [CallerMemberName] string name = null)
             {
                 var kind = new StoredEntityKind<T>(getEntityStableId, add, name);
-                Inner.Kinds.Add(kind);
                 return kind;
             }
 
             public abstract string Name { get; }
 
             public abstract Task Add(DirectoryCodexStore store, FileSystem fileSystem, string fullPath, ICodexRepositoryStore repositoryStore);
-
-            private static class Inner
-            {
-                public static readonly List<StoredEntityKind> Kinds = new List<StoredEntityKind>();
-            }
 
             public override string ToString()
             {

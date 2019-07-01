@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
+    <TargetFrameworks>netcoreapp2.2;net461</TargetFrameworks>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DefaultItemExcludes>$(DefaultItemExcludes);publish\**</DefaultItemExcludes>
+  </PropertyGroup>
+  <Import Project="$(SrcRoot)\Common.props" />
+
+  <ItemGroup>
+    <None Include="publish\*.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mono.Options" />
+    <PackageReference Include="StrongNamer" Condition="'$(TargetFramework)' == 'net461'" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Codex.ElasticSearch.Legacy\Codex.ElasticSearch.Legacy.csproj" />
+    <ProjectReference Include="..\Codex.ElasticSearch\Codex.ElasticSearch.csproj" />
+    <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />
+  </ItemGroup>
+  
+<Target Name="_IncludeWebJobFilesDuringPublish" BeforeTargets="_CopyFilesToPublishIntermediateOutputPath">
+  <Warning Text="Running _ListenToPublish" />
+</Target>
+
+  <Import Project="$(SrcRoot)\Common.targets" />
+</Project>

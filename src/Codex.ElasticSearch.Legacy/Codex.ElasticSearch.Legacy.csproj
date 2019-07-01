@@ -3,8 +3,6 @@
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
     <ProjectGuid>{7001F919-92BB-46DB-9647-66D492EF0E86}</ProjectGuid>
     <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
-    <!--<TargetFramework>netcoreapp2.0</TargetFramework>-->
-    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
@@ -12,10 +10,11 @@
     <PackageReference Include="NEST" Version="5.5.0" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="System.ValueTuple" />
-    <PackageReference Include="ILRepack.Lib.MSBuild.Task" />
+    <PackageReference Include="ILRepack.MSBuild.Task" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />
   </ItemGroup>
+  <Import Project="ILRepack.targets" />
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>
