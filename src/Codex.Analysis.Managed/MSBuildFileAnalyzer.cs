@@ -613,13 +613,13 @@ namespace Codex.Analysis.Files
             ExpressionProcessor customStringProcessor = null,
             string referencingItemName = null)
         {
-            var valueNode = element.ValueNode();
+            var valueNode = element.ValueSpan();
             if (valueNode == null)
             {
                 return Enumerable.Empty<ReferenceSpan>();
             }
 
-            return ProcessExpressions(valueNode.Start, valueNode.ToFullString(), customStringProcessor, referencingItemName);
+            return ProcessExpressions(valueNode.Start, element.Value, customStringProcessor, referencingItemName);
         }
 
         internal delegate IEnumerable<ReferenceSpan> ExpressionProcessor(int start, string text);

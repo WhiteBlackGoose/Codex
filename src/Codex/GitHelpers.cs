@@ -8,9 +8,9 @@ using Git = LibGit2Sharp;
 
 namespace Codex.Application
 {
-    internal class GitHelpers
+    public class GitHelpers
     {
-        internal static void DetectGit((Repository repository, Commit commit, Branch branch) repoData, string root, Logger logger)
+        public static void DetectGit((Repository repository, Commit commit, Branch branch) repoData, string root, Logger logger)
         {
             try
             {

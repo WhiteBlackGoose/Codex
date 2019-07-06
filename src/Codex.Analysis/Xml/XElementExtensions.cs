@@ -111,9 +111,9 @@ namespace Codex.Analysis.Xml.Linq
                     }
                     else
                     {
-                        var valueNode = syntaxElement.ValueNode();
-                        start = valueNode.Start;
-                        length = valueNode.FullWidth;
+                        var valueSpan = syntaxElement.ValueSpan();
+                        start = valueSpan.Start;
+                        length = valueSpan.Length;
                     }
 
                     if (annotation.References != null)
@@ -151,11 +151,11 @@ namespace Codex.Analysis.Xml.Linq
                         }
                         else
                         {
-                            var valueNode = attributeSyntax?.ValueNode.As<XmlStringSyntax>()?.TextTokens.Node;
-                            if (valueNode != null)
+                            var valueSpan = attributeSyntax?.ValueNode.As<XmlStringSyntax>()?.TextTokens.FullSpan;
+                            if (valueSpan != null)
                             {
-                                start = valueNode.Start;
-                                length = valueNode.FullWidth;
+                                start = valueSpan.Value.Start;
+                                length = valueSpan.Value.Length;
                             }
                         }
 

@@ -5,6 +5,8 @@ using Codex.Utilities;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.Language.Xml;
 
+using TextSpan = Microsoft.Language.Xml.TextSpan;
+
 namespace Codex.Analysis
 {
     public static class XmlSyntaxExtensions
@@ -16,12 +18,12 @@ namespace Codex.Analysis
 
         public static XmlNameSyntax NameNode(this IXmlElement element)
         {
-            return element.AsSyntaxElement.Name;
+            return element.AsSyntaxElement.NameNode;
         }
 
-        public static SyntaxNode ValueNode(this IXmlElement element)
+        public static TextSpan ValueSpan(this IXmlElement element)
         {
-            return element.As<XmlElementSyntax>()?.Content;
+            return element.As<XmlElementSyntax>().Content.FullSpan;
         }
 
         public static XmlAttributeSyntax Attribute(this IXmlElement element, string name)
@@ -49,10 +51,10 @@ namespace Codex.Analysis
             XmlAttributeSyntax attribute,
             params ReferenceSymbol[] references)
         {
-            var node = attribute?.ValueNode.As<XmlStringSyntax>()?.TextTokens.Node;
-            if (node != null)
+            var span = attribute?.ValueNode.As<XmlStringSyntax>()?.FullSpan;
+            if (span != null)
             {
-                binder.AnnotateReferences(node.Start, node.FullWidth, references);
+                binder.AnnotateReferences(span.Value.Start, span.Value.Length, references);
             }
         }
 
@@ -73,10 +75,10 @@ namespace Codex.Analysis
             XmlAttributeSyntax attribute,
             DefinitionSymbol definition)
         {
-            var node = attribute?.ValueNode.As<XmlStringSyntax>()?.TextTokens.Node;
-            if (node != null)
+            var span = attribute?.ValueNode.As<XmlStringSyntax>()?.FullSpan;
+            if (span != null)
             {
-                binder.AnnotateDefinition(node.Start, node.FullWidth, definition);
+                binder.AnnotateDefinition(span.Value.Start, span.Value.Length, definition);
             }
         }
 

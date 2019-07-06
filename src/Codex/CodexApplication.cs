@@ -174,6 +174,31 @@ namespace Codex.Application
             }
         }
 
+        protected virtual IEnumerable<RepoProjectAnalyzer> GetProjectAnalyzers(AnalyzerArguments arguments)
+        {
+            var includedSolutions = !string.IsNullOrEmpty(solutionPath) ? new string[] { Path.GetFullPath(solutionPath) } : null;
+            if (disableMsbuild)
+            {
+                includedSolutions = new string[0];
+            }
+
+            return new RepoProjectAnalyzer[]
+            {
+                new CompilerArgumentsProjectAnalyzer(compilerArgumentsFiles.ToArray()),
+                new BinLogProjectAnalyzer(arguments.Logger, binlogSearchPaths.ToArray())
+                {
+                    RequireProjectFilesExist = arguments.RequireProjectFilesExist
+                },
+                new MSBuildSolutionProjectAnalyzer(includedSolutions: includedSolutions)
+            };
+        }
+
+        protected class AnalyzerArguments
+        {
+            public Logger Logger { get; set; }
+            public bool RequireProjectFilesExist { get; set; }
+        }
+
         protected async Task RunRepoImporter()
         {
             var targetIndexName = StoreUtilities.GetTargetIndexName(repoName);
@@ -201,10 +226,7 @@ namespace Codex.Application
                 requireProjectsExist = false;
             }
 
-            using (StreamWriter writer = OpenLogWriter())
-            using (Logger logger = new MultiLogger(
-                new ConsoleLogger(),
-                new TextLogger(TextWriter.Synchronized(writer))))
+            using (var logger = GetLogger())
             {
                 FileSystem fileSystem = new CachingFileSystem(
                     new UnionFileSystem(file.Union(Enumerable.Repeat(solutionPath, String.IsNullOrEmpty(solutionPath) ? 0 : 1)),
@@ -224,21 +246,12 @@ namespace Codex.Application
                             DisableEnumeration = projectMode || disableEnumeration || file.Length != 0
                         }));
 
-                var includedSolutions = !string.IsNullOrEmpty(solutionPath) ? new string[] { Path.GetFullPath(solutionPath) } : null;
-                if (disableMsbuild)
-                {
-                    includedSolutions = new string[0];
-                }
-
-                List<RepoProjectAnalyzer> projectAnalyzers = new List<RepoProjectAnalyzer>()
-                {
-                    new CompilerArgumentsProjectAnalyzer(compilerArgumentsFiles.ToArray()),
-                    new BinLogProjectAnalyzer(logger, binlogSearchPaths.ToArray())
+                List<RepoProjectAnalyzer> projectAnalyzers = new List<RepoProjectAnalyzer>(GetProjectAnalyzers(
+                    new AnalyzerArguments()
                     {
+                        Logger = logger,
                         RequireProjectFilesExist = requireProjectsExist
-                    },
-                    new MSBuildSolutionProjectAnalyzer(includedSolutions: includedSolutions)
-                };
+                    }));
 
                 if (assembly != null)
                 {

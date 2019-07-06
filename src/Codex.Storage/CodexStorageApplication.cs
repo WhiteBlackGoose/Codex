@@ -335,6 +335,13 @@ namespace Codex.Storage
             }
         }
 
+        protected virtual Logger GetLogger()
+        {
+            return new MultiLogger(
+                new ConsoleLogger(),
+                new TextLogger(TextWriter.Synchronized(OpenLogWriter())));
+        }
+
         protected StreamWriter OpenLogWriter()
         {
             logDirectory = Path.GetFullPath(logDirectory);
@@ -359,10 +366,7 @@ namespace Codex.Storage
 
         protected void Load(string targetIndexName = null, bool finalize = true)
         {
-            using (StreamWriter writer = OpenLogWriter())
-            using (Logger logger = new MultiLogger(
-                new ConsoleLogger(),
-                new TextLogger(TextWriter.Synchronized(writer))))
+            using (var logger = GetLogger())
             {
                 if (scan)
                 {

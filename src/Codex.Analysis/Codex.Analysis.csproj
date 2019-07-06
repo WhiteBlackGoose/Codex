@@ -10,7 +10,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.Common" />
-    <PackageReference Include="Microsoft.Language.Xml" />
+    <PackageReference Include="GuiLabs.Language.Xml" />
     <PackageReference Include="Microsoft.Tpl.Dataflow" />
     <PackageReference Include="System.AppContext" />
     <PackageReference Include="System.Collections" />

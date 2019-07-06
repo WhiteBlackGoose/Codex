@@ -13,13 +13,15 @@ namespace Codex.Logging
     public class TextLogger : Logger
     {
         private readonly TextWriter writer;
+        private readonly bool leaveOpen;
         private readonly ConcurrentQueue<string> messages = new ConcurrentQueue<string>();
         private int reservation;
         private readonly Stopwatch stopwatch = Stopwatch.StartNew();
 
-        public TextLogger(TextWriter writer)
+        public TextLogger(TextWriter writer, bool leaveOpen = false)
         {
             this.writer = writer;
+            this.leaveOpen = leaveOpen;
         }
 
         public override void LogError(string error)
@@ -63,6 +65,11 @@ namespace Codex.Logging
         public override void Dispose()
         {
             FlushMessages();
+
+            if (!leaveOpen)
+            {
+                writer.Dispose();
+            }
         }
     }
 }
