@@ -42,9 +42,67 @@ namespace Codex.Analysis
             return isWrittenToDelegate(semanticModel, syntaxNode, cancellationToken);
         }
 
-        public bool IsNewKeyword(SyntaxToken token)
+        /// <summary>
+        /// Determines which tokens can possibly be semantic. Currently, implemented by exclusion,
+        /// (i.e. return true for all token kinds except those known not to be semantic)
+        /// </summary>
+        public bool IsPossibleSemanticToken(SyntaxToken token)
         {
-            return token.IsEquivalentKind(CS.SyntaxKind.NewKeyword);
+            if (language == LanguageNames.CSharp)
+            {
+                switch ((CS.SyntaxKind)token.RawKind)
+                {
+                    case CS.SyntaxKind.NamespaceKeyword:
+
+                    // Visibility
+                    case CS.SyntaxKind.PublicKeyword:
+                    case CS.SyntaxKind.ProtectedKeyword:
+                    case CS.SyntaxKind.PrivateKeyword:
+                    case CS.SyntaxKind.InternalKeyword:
+
+                    // Type declaration
+                    case CS.SyntaxKind.ClassKeyword:
+                    case CS.SyntaxKind.EnumKeyword:
+                    case CS.SyntaxKind.StructKeyword:
+                    case CS.SyntaxKind.InterfaceKeyword:
+
+                    case CS.SyntaxKind.NewKeyword:
+                    case CS.SyntaxKind.ReadOnlyKeyword:
+                    case CS.SyntaxKind.StaticKeyword:
+                    case CS.SyntaxKind.EqualsToken:
+                    case CS.SyntaxKind.ReturnKeyword:
+                    case CS.SyntaxKind.DotToken:
+                        return false;
+                }
+            }
+            else if(language == LanguageNames.VisualBasic)
+            {
+                switch ((VB.SyntaxKind)token.RawKind)
+                {
+                    case VB.SyntaxKind.NamespaceKeyword:
+                    
+                    // Visibility
+                    case VB.SyntaxKind.PublicKeyword:
+                    case VB.SyntaxKind.ProtectedKeyword:
+                    case VB.SyntaxKind.PrivateKeyword:
+
+                    // Type declaration
+                    case VB.SyntaxKind.ClassKeyword:
+                    case VB.SyntaxKind.EnumKeyword:
+                    case VB.SyntaxKind.StructureKeyword:
+                    case VB.SyntaxKind.InterfaceKeyword:
+
+                    case VB.SyntaxKind.NewKeyword:
+                    case VB.SyntaxKind.ReadOnlyKeyword:
+                    case VB.SyntaxKind.StaticKeyword:
+                    case VB.SyntaxKind.EqualsToken:
+                    case VB.SyntaxKind.ReturnKeyword:
+                    case VB.SyntaxKind.DotToken:
+                        return false;
+                }
+            }
+
+            return true;
         }
 
         public bool IsOverrideKeyword(SyntaxToken token)

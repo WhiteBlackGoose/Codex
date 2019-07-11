@@ -20,8 +20,8 @@ namespace Codex.Integration.Tests
             (var root, var compilerArgumentsPath) = GetArgumentsPath();
 
             //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "SpecificReference.cs");
-            //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "OperatorOverload.cs");
-            compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "DerivedImplementation.Issue159.cs");
+            compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "OperatorOverload.cs");
+            //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "DerivedImplementation.Issue159.cs");
 
             Environment.CurrentDirectory = Path.Combine(root, @"out\test");
             var outputPath = Path.Combine(root, @"out\test\TestAnalysis.cdx");
@@ -32,7 +32,7 @@ namespace Codex.Integration.Tests
 
             using (Features.AddDefinitionForInheritedInterfaceImplementations.EnableLocal())
             {
-                CodexApplication.Main(
+                new CodexApplication().Run(
                     "dryRun",
                     "-save", outputPath,
                     "-p", root,
@@ -62,7 +62,7 @@ namespace Codex.Integration.Tests
                 Directory.Delete(outputPath, true);
             }
 
-            CodexApplication.Main(
+            new CodexApplication().Run(
                 "dryRun",
                 "-save", outputPath,
                 "-p", root,
@@ -87,7 +87,7 @@ namespace Codex.Integration.Tests
                 Directory.Delete(outputPath, true);
             }
 
-            CodexApplication.Main(
+            new CodexApplication().Run(
                 "index",
                 //"-save", outputPath,
                 "-es", "http://localhost:9200",

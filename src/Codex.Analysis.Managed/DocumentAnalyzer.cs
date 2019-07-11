@@ -103,7 +103,7 @@ namespace Codex.Analysis
 
                 var token = syntaxRoot.FindToken(span.TextSpan.Start, findInsideTrivia: true);
 
-                if (semanticServices.IsNewKeyword(token))
+                if (!semanticServices.IsPossibleSemanticToken(token))
                 {
                     continue;
                 }

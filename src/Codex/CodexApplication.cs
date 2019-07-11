@@ -48,7 +48,7 @@ namespace Codex.Application
 
         protected override IEnumerable<KeyValuePair<string, (Action, OptionSet)>> GetActions()
         {
-            return GetActions().Concat(
+            return base.GetActions().Concat(
                 new Dictionary<string, (Action, OptionSet)>(StringComparer.OrdinalIgnoreCase)
                 {
                     {

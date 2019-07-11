@@ -600,13 +600,13 @@ namespace Codex.Analysis.Files
             ExpressionProcessor customStringProcessor = null,
             string referencingItemName = null)
         {
-            var valueNode = element?.ValueNode.As<XmlStringSyntax>()?.TextTokens.Node;
+            var valueNode = element?.ValueNode.TextTokens;
             if (valueNode == null)
             {
                 return Enumerable.Empty<ReferenceSpan>();
             }
 
-            return ProcessExpressions(valueNode.Start, valueNode.ToFullString(), customStringProcessor, referencingItemName);
+            return ProcessExpressions(valueNode.Value.Span.Start, valueNode.Value.ToFullString(), customStringProcessor, referencingItemName);
         }
 
         public static IEnumerable<ReferenceSpan> GetElementValueExpressionSpans(this IXmlElement element,

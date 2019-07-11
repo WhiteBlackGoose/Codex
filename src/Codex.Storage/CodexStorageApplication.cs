@@ -112,7 +112,7 @@ namespace Codex.Storage
             };
         }
 
-        public void Run(string[] args)
+        public void Run(params string[] args)
         {
             try
             {
