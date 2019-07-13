@@ -10,6 +10,12 @@ namespace Codex.Automation.Workflow
 {
     public static class Helpers
     {
+        public static T With<T>(this T item, Action<T> modification)
+        {
+            modification(item);
+            return item;
+        }
+
         public static void Log(string message, [CallerMemberName]string method = null)
         {
             Console.WriteLine($"{method}: {message}");

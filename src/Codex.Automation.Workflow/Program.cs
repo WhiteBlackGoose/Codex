@@ -22,6 +22,7 @@ namespace Codex.Automation.Workflow
         public string RepoName;
         public string ElasticSearchUrl;
         public string JsonFilePath;
+        public Dictionary<string, string> PersonalAccessTokens = new Dictionary<string, string>();
     }
 
     enum Mode
@@ -75,6 +76,12 @@ namespace Codex.Automation.Workflow
                 else if (MatchArg(arg, "JsonFilePath", out argValue))
                 {
                     newArgs.JsonFilePath = argValue;
+                }
+                else if (MatchArg(arg, "Pat", out argValue))
+                {
+                    var pair = argValue.Split('=');
+                    Console.WriteLine($"Adding PAT with name: '{pair[0]}'");
+                    newArgs.PersonalAccessTokens[pair[0]] = pair[1];
                 }
                 else if (MatchArg(arg, "PrintEnv", out argValue))
                 {
@@ -263,7 +270,13 @@ namespace Codex.Automation.Workflow
                     arguments.RepoName))
                 {
                     UseShellExecute = false
-                });
+                }.With(info =>
+                {
+                    foreach (var pat in arguments.PersonalAccessTokens)
+                    {
+                        info.EnvironmentVariables[pat.Key] = pat.Value;
+                    }
+                }));
 
                 runExe.WaitForExit();
 
