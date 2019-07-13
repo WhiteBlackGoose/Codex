@@ -14,9 +14,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Codex.Downloader\Codex.Downloader.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Codex.Storage\Codex.Storage.csproj" />
+    <ProjectReference Include="..\Codex\Codex.csproj" Condition="'$(TargetFramework)' == 'net461'" />
   </ItemGroup>
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>
