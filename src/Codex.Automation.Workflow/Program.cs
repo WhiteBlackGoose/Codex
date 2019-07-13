@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -74,6 +75,17 @@ namespace Codex.Automation.Workflow
                 else if (MatchArg(arg, "JsonFilePath", out argValue))
                 {
                     newArgs.JsonFilePath = argValue;
+                }
+                else if (MatchArg(arg, "PrintEnv", out argValue))
+                {
+                    Console.WriteLine($"Environment Variables:");
+
+                    foreach (DictionaryEntry envVar in Environment.GetEnvironmentVariables())
+                    {
+                        Console.WriteLine($"{envVar.Key}={envVar.Value}");
+                    }
+
+                    Console.WriteLine($"Done printing environment variables.");
                 }
                 else
                 {
