@@ -11,6 +11,7 @@ using CommandLine.Text;
 using Newtonsoft.Json;
 using Codex.Downloader;
 using Codex.Storage;
+using System.Collections;
 
 namespace Codex.Ingester
 {
@@ -41,6 +42,9 @@ namespace Codex.Ingester
 
             [Option("debug", HelpText = "Launches debugger on start.")]
             public bool Debug { get; set; }
+
+            [Option("printEnv", HelpText = "Prints all environment variables.")]
+            public bool PrintEnvironmentVariables { get; set; }
         }
 
         static void Main(string[] args)
@@ -57,6 +61,18 @@ namespace Codex.Ingester
 
         private static async Task RunAsync(Options options)
         {
+            if (options.PrintEnvironmentVariables)
+            {
+                Console.WriteLine($"Environment Variables:");
+
+                foreach (DictionaryEntry envVar in Environment.GetEnvironmentVariables())
+                {
+                    Console.WriteLine($"{envVar.Key}={envVar.Value}");
+                }
+
+                Console.WriteLine($"Done printing environment variables.");
+            }
+
             if (options.OutputFolder == null)
             {
                 options.Preview = true;

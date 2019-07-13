@@ -15,6 +15,10 @@
     <ItemGroup>
       <Content Include="$(NugetContentSourceDirectory)\*.*" />
     </ItemGroup>
+
+    <Message Importance="high" Text="Set NugetContentSourceDirectory for Azure Pipeline" />
+    <Message Importance="high" Text="##vso[task.setvariable variable=NugetContentSourceDirectory;]$(NugetContentSourceDirectory)" />
+
     
     <Message Importance="high" Text="_IncludeDependenciesInPackage Ran" />
     <Message Importance="high" Text="CodexNugetVersion: '$(CodexNugetVersion)'" />
