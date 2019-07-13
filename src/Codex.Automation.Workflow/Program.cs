@@ -80,7 +80,7 @@ namespace Codex.Automation.Workflow
                 else if (MatchArg(arg, "Pat", out argValue))
                 {
                     var pair = argValue.Split('=');
-                    Console.WriteLine($"Adding PAT with name: '{pair[0]}'");
+                    Console.WriteLine($"Adding PAT: '{pair[0]}'='{string.Empty.PadRight(Math.Max(3, pair[1].Length), '*')}'");
                     newArgs.PersonalAccessTokens[pair[0]] = pair[1];
                 }
                 else if (MatchArg(arg, "PrintEnv", out argValue))
