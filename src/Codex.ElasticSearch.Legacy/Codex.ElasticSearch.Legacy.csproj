@@ -3,6 +3,7 @@
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
     <ProjectGuid>{7001F919-92BB-46DB-9647-66D492EF0E86}</ProjectGuid>
     <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+    <DisableStrongNamer>true</DisableStrongNamer>
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
@@ -11,6 +12,7 @@
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="System.ValueTuple" />
     <PackageReference Include="ILRepack.MSBuild.Task" />
+    <PackageReference Include="StrongNamer" Condition="'$(TargetFramework)' == 'net461'" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />

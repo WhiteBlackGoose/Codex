@@ -45,6 +45,20 @@
       WorkingDirectory="$(RepackWorkingDirectory)"
     />
 
+    <PropertyGroup>
+      <_MergedAssemblyDirectory>$(IntermediateOutputPath)\merged</_MergedAssemblyDirectory>
+      <_MergedAssemblyPath>$(_MergedAssemblyDirectory)\$(TargetFileName)</_MergedAssemblyPath>
+      <_SignedMergedAssemblyDirectory>$(IntermediateOutputPath)\signed</_SignedMergedAssemblyDirectory>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <_MergedAssembly Include="$(_MergedAssemblyPath)">
+        <OriginalPath>$(_MergedAssemblyPath)</OriginalPath>
+      </_MergedAssembly>
+    </ItemGroup>
+
+    <MakeDir Directories="$(_MergedAssemblyDirectory);$(_SignedMergedAssemblyDirectory)" />
+
     <ILRepack
       Condition="'$(IsNetCoreApp)' != 'true'"
       Parallel="true"
@@ -53,9 +67,19 @@
       MainAssembly="@(IntermediateAssembly)"
       InputAssemblies="@(InputAssemblies)"
       OutputType="SameAsPrimaryAssembly"
-      OutputAssembly="$(TargetPath)"
-      KeyFile="$(KeyOriginatorFile)"
-      WorkingDirectory="$(RepackWorkingDirectory)"
-    />
+      OutputAssembly="$(_MergedAssemblyPath)"
+      WorkingDirectory="$(RepackWorkingDirectory)" />
+
+    <StrongNamer.AddStrongName
+        Condition="'$(IsNetCoreApp)' != 'true'"
+        Assemblies="@(_MergedAssembly);@(ReferencePath)"
+        SignedAssemblyFolder="$(_SignedMergedAssemblyDirectory)"
+        KeyFile="$(KeyOriginatorFile)">
+
+       <Output TaskParameter="SignedAssembliesToReference" ItemName="_SignedMergedAssembly" />
+    </StrongNamer.AddStrongName>
+
+    <Copy SourceFiles="@(_SignedMergedAssembly)" DestinationFiles="$(TargetPath)" Condition="'%(_SignedMergedAssembly.OriginalPath)' == '$(_MergedAssemblyPath)'" />
+
   </Target>
 </Project>
