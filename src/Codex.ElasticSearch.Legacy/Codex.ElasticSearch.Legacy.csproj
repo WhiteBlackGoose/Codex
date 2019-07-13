@@ -12,7 +12,7 @@
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="System.ValueTuple" />
     <PackageReference Include="ILRepack.MSBuild.Task" />
-    <PackageReference Include="StrongNamer" Condition="'$(TargetFramework)' == 'net461'" />
+    <PackageReference Include="StrongNamer" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />

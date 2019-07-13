@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Codex.Ingester\Codex.Ingester.csproj">
       <PrivateAssets>all</PrivateAssets>
+      <IsNugetContentReference>true</IsNugetContentReference>
     </ProjectReference>
   </ItemGroup>
   <Import Project="NugetContent.targets" />

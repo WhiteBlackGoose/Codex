@@ -23,27 +23,16 @@
       <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
       <RepackWorkingDirectory>$(IntermediateOutputPath)\refs</RepackWorkingDirectory>
     </PropertyGroup>
+
+    <Copy SourceFiles="@(ReferencePath)" DestinationFolder="$(RepackWorkingDirectory)" />
   </Target>
 
-  <Target Name="MergeAssemblies" AfterTargets="CoreCompile" Condition="'$(DesignTimeBuild)'!='true' AND '$(SkipCompilerExecution)'!='true'"
+  <Target Name="MergeAssembliesNetFx"
+          Condition="'$(IsNetCoreApp)' != 'true'"
           DependsOnTargets="MergeAssemblies_InitializeState"
           Inputs="@(ReferencePath);@(IntermediateAssembly)"
           Outputs="$(TargetPath)">
     <Warning Text="ILRepack" />
-
-    <Copy SourceFiles="@(ReferencePath)" DestinationFolder="$(RepackWorkingDirectory)" />
-
-    <ILRepack
-      Condition="'$(IsNetCoreApp)' == 'true'"
-      Parallel="true"
-      DebugInfo="false"
-      AllowDuplicateResources="false"
-      MainAssembly="@(IntermediateAssembly)"
-      InputAssemblies="@(InputAssemblies)"
-      OutputType="SameAsPrimaryAssembly"
-      OutputAssembly="$(TargetPath)"
-      WorkingDirectory="$(RepackWorkingDirectory)"
-    />
 
     <PropertyGroup>
       <_MergedAssemblyDirectory>$(IntermediateOutputPath)\merged</_MergedAssemblyDirectory>
@@ -80,6 +69,35 @@
     </StrongNamer.AddStrongName>
 
     <Copy SourceFiles="@(_SignedMergedAssembly)" DestinationFiles="$(TargetPath)" Condition="'%(_SignedMergedAssembly.OriginalPath)' == '$(_MergedAssemblyPath)'" />
+  </Target>
+
+  <Target Name="MergeAssembliesNetCore"
+          Condition="'$(IsNetCoreApp)' == 'true'"
+          DependsOnTargets="MergeAssemblies_InitializeState"
+          Inputs="@(ReferencePath);@(IntermediateAssembly)"
+          Outputs="$(TargetPath)">
+    <Warning Text="ILRepack" />
+
+    <ILRepack
+      Condition="'$(IsNetCoreApp)' == 'true'"
+      Parallel="true"
+      DebugInfo="false"
+      AllowDuplicateResources="false"
+      MainAssembly="@(IntermediateAssembly)"
+      InputAssemblies="@(InputAssemblies)"
+      OutputType="SameAsPrimaryAssembly"
+      OutputAssembly="$(TargetPath)"
+      WorkingDirectory="$(RepackWorkingDirectory)"
+    />
+  </Target>
+
+  <Target Name="MergeAssemblies" AfterTargets="CoreCompile" Condition="'$(DesignTimeBuild)'!='true' AND '$(SkipCompilerExecution)'!='true'"
+          DependsOnTargets="MergeAssemblies_InitializeState;MergeAssembliesNetCore;MergeAssembliesNetFx">
+    
+  <ItemGroup>
+    <FileWrites Include="$(TargetPath)" />
+    <FileWrites Include="@(DebugSymbolsProjectOutputGroupOutput)" />
+  </ItemGroup>
 
   </Target>
 </Project>

@@ -8,8 +8,12 @@
   </PropertyGroup>
 
   <Target Name="_IncludeDependenciesInPackage" AfterTargets="ResolveProjectReferences">
+    <PropertyGroup>
+      <NugetContentSourceDirectory Condition="'%(_ResolvedProjectReferencePaths.IsNugetContentReference)' == 'true'" >@(_ResolvedProjectReferencePaths -> '%(RootDir)%(Directory)')</NugetContentSourceDirectory>
+    </PropertyGroup>
+
     <ItemGroup>
-      <Content Include="$(CommonOutputDirectory)\Codex.Ingester\*.*" />
+      <Content Include="$(NugetContentSourceDirectory)\*.*" />
     </ItemGroup>
     
     <Message Importance="high" Text="_IncludeDependenciesInPackage Ran" />
