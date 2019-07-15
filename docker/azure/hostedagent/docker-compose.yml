@@ -1,0 +1,18 @@
+version: '3.3'
+
+services:
+   vsa:
+     image: ref12/azdev-ingest-agent:latest
+     environment:
+      AZP_AGENT_NAME: ${AZP_AGENT_NAME}
+      AZP_URL: ${AZP_URL}
+      AZP_TOKEN: ${AZP_TOKEN}
+      AZP_POOL: ${AZP_POOL}
+     restart: "always"
+   es:
+     image: ref12/elasticsearch-5.5.1:latest
+     restart: always
+     volumes:
+       - ${HOST_ES_MOUNT}:/usr/share/elasticsearch/data
+     ports:
+       - "9200:9200"
