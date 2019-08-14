@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -114,6 +115,8 @@ namespace Codex.Storage
 
         public void Run(params string[] args)
         {
+            ServicePointManager.Expect100Continue = true;
+
             try
             {
                 AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
