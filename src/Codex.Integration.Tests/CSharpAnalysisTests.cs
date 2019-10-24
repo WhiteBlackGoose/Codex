@@ -16,11 +16,11 @@ namespace Codex.Integration.Tests
         [Test]
         public void TestAnalysis()
         {
-            //
             (var root, var compilerArgumentsPath) = GetArgumentsPath();
 
             //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "SpecificReference.cs");
-            compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "OperatorOverload.cs");
+            //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "OperatorOverload.cs");
+            compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "MethodGroup.cs");
             //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "DerivedImplementation.Issue159.cs");
 
             Environment.CurrentDirectory = Path.Combine(root, @"out\test");

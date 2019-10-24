@@ -253,7 +253,7 @@ namespace Codex.Storage
                 }
 
                 string stackTrace = ex.StackTrace;
-                if (stackTrace.Contains("at System.Guid.StringToInt"))
+                if (stackTrace?.Contains("at System.Guid.StringToInt") == true)
                 {
                     return;
                 }

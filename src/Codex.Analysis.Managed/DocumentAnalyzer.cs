@@ -79,6 +79,7 @@ namespace Codex.Analysis
             var classificationSpans = (IReadOnlyList<ClassifiedSpan>)await Classifier.GetClassifiedSpansAsync(_document, syntaxRoot.FullSpan);
             var text = await _document.GetTextAsync();
 
+            var originalClassificationSpans = classificationSpans;
             classificationSpans = MergeSpans(classificationSpans).ToList();
             var fileClassificationSpans = new List<ClassificationSpan>();
 
@@ -224,7 +225,9 @@ namespace Codex.Analysis
 
             boundSourceFile.AddClassifications(fileClassificationSpans);
             boundSourceFile.AddReferences(references);
-            return boundSourceFile.Build();
+            var result = boundSourceFile.Build();
+            ManagedAnalysisHost.Instance.OnDocumentFinished(result);
+            return result;
         }
 
         private static SymbolSpan CreateSymbolSpan(SyntaxTree syntaxTree, SourceText text, ClassifiedSpan span, ClassificationSpan classificationSpan)
@@ -884,7 +887,7 @@ namespace Codex.Analysis
                     return false;
                 }
 
-                if (current.TextSpan.End > next.TextSpan.Start && !skippedNonWhitespace)
+                if (current.TextSpan.End < next.TextSpan.Start && (skippedNonWhitespace || !IsWhitespace(current.TextSpan.End, next.TextSpan.Start)))
                 {
                     return false;
                 }
@@ -896,6 +899,19 @@ namespace Codex.Analysis
             {
                 skippedNonWhitespace = false;
             }
+        }
+
+        bool IsWhitespace(int start, int endExclusive)
+        {
+            for (int i = start; i < endExclusive; i++)
+            {
+                if (!char.IsWhiteSpace(DocumentText[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         static bool AllowMerge(ClassifiedSpan span)
