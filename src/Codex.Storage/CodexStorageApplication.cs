@@ -458,6 +458,8 @@ namespace Codex.Storage
             Storage.ElasticsearchStorage storage = new Storage.ElasticsearchStorage(elasticSearchServer);
 
             var indices = storage.Provider.GetIndicesAsync().GetAwaiter().GetResult();
+            var nameWidth = indices.Select(i => i.IndexName.Length).Max();
+            var sizeWidth = indices.Select(i => i.Size.Length).Max();
 
             foreach (var index in indices)
             {
@@ -470,7 +472,7 @@ namespace Codex.Storage
                     Console.ForegroundColor = ConsoleColor.Gray;
                 }
 
-                Console.WriteLine(index.IndexName + (index.IsActive ? " (IsActive)" : ""));
+                Console.WriteLine($"{index.IndexName.PadRight(nameWidth)} Size={index.Size.PadLeft(sizeWidth)}" + (index.IsActive ? " (IsActive)" : ""));
             }
 
             Console.ForegroundColor = ConsoleColor.Gray;

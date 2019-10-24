@@ -344,16 +344,19 @@ namespace Codex.Storage.ElasticProviders
             });
         }
 
-        public async Task<IEnumerable<(string IndexName, bool IsActive)>> GetIndicesAsync()
+        public async Task<IEnumerable<(string IndexName, bool IsActive, string Size)>> GetIndicesAsync()
         {
             var client = CreateClient();
 
             var indices = await client.GetIndexAsync(Nest.Indices.All);
+            var catIndices = await client.CatIndicesAsync(c => c.AllIndices());
+            var indexData = catIndices.Records.ToDictionarySafe(r => r.Index);
 
             return indices.Indices.Select(i =>
             (
                 IndexName: i.Key,
-                IsActive: i.Value.Aliases.Any(alias => alias.Key.Name == CombinedSourcesIndexAlias)
+                IsActive: i.Value.Aliases.Any(alias => alias.Key.Name == CombinedSourcesIndexAlias),
+                Size: indexData.GetOrDefault(i.Key)?.StoreSize
             )).OrderBy(v => v.IndexName, StringComparer.OrdinalIgnoreCase).ToList();
         }
 
