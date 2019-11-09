@@ -33,6 +33,7 @@ namespace Codex.Automation.Workflow
         // For historical reasons, analyze only also includes upload
         AnalyzeOnly = 1 << 3 | UploadOnly,
         BuildOnly = 1 << 4,
+        GC = 1 << 5 | Prepare,
         FullAnalyze = Prepare | AnalyzeOnly,
         Ingest = Prepare | IngestOnly,
         Upload = Prepare | UploadOnly,
@@ -207,6 +208,25 @@ namespace Codex.Automation.Workflow
                 if (!string.IsNullOrEmpty(arguments.RepoName))
                 {
                     Console.WriteLine($"##vso[task.setvariable variable=CodexRepoName;]{arguments.RepoName}");
+                }
+            }
+
+            if (HasModeFlag(mode, Mode.GC))
+            {
+                // run exe
+                Console.WriteLine("Running Process:");
+                var gcArguments = $"gc --es {arguments.ElasticSearchUrl}";
+                Console.WriteLine(executablePath + " " + gcArguments);
+                Process runExe = Process.Start(new ProcessStartInfo(executablePath, gcArguments)
+                {
+                    UseShellExecute = false
+                });
+
+                runExe.WaitForExit();
+
+                if (runExe.ExitCode != 0)
+                {
+                    success = false;
                 }
             }
 
