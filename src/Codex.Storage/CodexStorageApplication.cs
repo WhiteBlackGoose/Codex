@@ -9,10 +9,12 @@ using Codex.Utilities;
 using Mono.Options;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 
@@ -59,6 +61,16 @@ namespace Codex.Storage
                         {
                             { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
                             { "d=", "List the indices to delete.", n => deleteIndices.Add(n) },
+                        }
+                    )
+                },
+                {
+                    "gc",
+                    (
+                        new Action(() => GarbageCollectIndices()),
+                        new OptionSet
+                        {
+                            { "es|elasticsearch=", "URL of the ElasticSearch server.", n => elasticSearchServer = n },
                         }
                     )
                 },
@@ -325,6 +337,48 @@ namespace Codex.Storage
             }
         }
 
+        protected void GarbageCollectIndices()
+        {
+            InitService();
+
+            Regex indexNameRegex = new Regex(@"^(?<name>.*)\.(?<date>\d{6}\.\d{6})$");
+            var indices = GetIndices();
+            var inactiveIndices = indices.Where(i => !i.IsActive).ToList();
+            var inactiveIndexGroups = inactiveIndices
+                .Where(i => indexNameRegex.IsMatch(i.IndexName))
+                .GroupBy(i => indexNameRegex.Match(i.IndexName).Groups["name"].Value);
+
+            foreach (var inactiveIndexGroup in inactiveIndexGroups)
+            {
+                var orderedIndices = inactiveIndexGroup
+                    .OrderByDescending(i => DateTime.ParseExact(indexNameRegex.Match(i.IndexName).Groups["date"].Value, "yyMMdd.HHmmss", CultureInfo.InvariantCulture))
+                    .ToList();
+
+                var retainedIndex = orderedIndices[0];
+                Console.WriteLine($"Garbage collecting: {inactiveIndexGroup.Key}");
+                Console.WriteLine($"  Retaining {GetIndexDescription(retainedIndex)}");
+
+                foreach (var index in orderedIndices.Skip(1))
+                {
+                    Console.Write($"  Deleting {GetIndexDescription(index)}... ");
+                    var deleted = service.DeleteIndexAsync(index.IndexName).GetAwaiter().GetResult();
+                    if (deleted)
+                    {
+                        Console.WriteLine($"Success");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Not Found");
+                    }
+                }
+            }
+        }
+
+        private string GetIndexDescription((string IndexName, bool IsActive, string Size) index)
+        {
+            return $"{index.IndexName} Size={index.Size}" + (index.IsActive ? " (IsActive)" : "");
+        }
+
         protected void DeleteIndices()
         {
             InitService();
@@ -461,9 +515,7 @@ namespace Codex.Storage
 
         protected void ListIndices()
         {
-            Storage.ElasticsearchStorage storage = new Storage.ElasticsearchStorage(elasticSearchServer);
-
-            var indices = storage.Provider.GetIndicesAsync().GetAwaiter().GetResult();
+            IEnumerable<(string IndexName, bool IsActive, string Size)> indices = GetIndices();
             var nameWidth = indices.Select(i => i.IndexName.Length).Max();
             var sizeWidth = indices.Select(i => i.Size.Length).Max();
 
@@ -482,6 +534,14 @@ namespace Codex.Storage
             }
 
             Console.ForegroundColor = ConsoleColor.Gray;
+        }
+
+        private IEnumerable<(string IndexName, bool IsActive, string Size)> GetIndices()
+        {
+            Storage.ElasticsearchStorage storage = new Storage.ElasticsearchStorage(elasticSearchServer);
+
+            var indices = storage.Provider.GetIndicesAsync().GetAwaiter().GetResult();
+            return indices;
         }
 
         protected void InitService()
