@@ -32,7 +32,7 @@ namespace Codex.Analysis.Projects
             this.repo = repo;
             this.logger = repo.AnalysisServices.Logger;
 
-            Workspace = new AdhocWorkspace(DesktopMefHostServices.DefaultServices);
+            Workspace = new AdhocWorkspace(MefHostServices.DefaultHost);
         }
 
         public void StartLoadProject(CompilerInvocation invocation)

@@ -76,7 +76,7 @@ namespace Codex.Analysis.Projects
         internal static void AddSolutionProjects(Repo repo, Func<Task<SolutionInfo>> solutionInfoLoader,
             bool requireProjectExists = true, string solutionName = "Anonymous solution", AdhocWorkspace workspace = null)
         {
-            workspace = workspace ?? new AdhocWorkspace(DesktopMefHostServices.DefaultServices);
+            workspace = workspace ?? new AdhocWorkspace(MefHostServices.DefaultHost);
 
             AddSolutionProjects(
                 repo, 

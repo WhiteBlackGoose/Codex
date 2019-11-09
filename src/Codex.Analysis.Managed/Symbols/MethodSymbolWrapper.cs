@@ -238,6 +238,14 @@ namespace Codex.Analysis.Managed.Symbols
             }
         }
 
+        public NullableAnnotation ReturnNullableAnnotation => InnerSymbol.ReturnNullableAnnotation;
+
+        public ImmutableArray<NullableAnnotation> TypeArgumentNullableAnnotations => InnerSymbol.TypeArgumentNullableAnnotations;
+
+        public bool IsReadOnly => InnerSymbol.IsReadOnly;
+
+        public NullableAnnotation ReceiverNullableAnnotation => InnerSymbol.ReceiverNullableAnnotation;
+
         public IMethodSymbol Construct(params ITypeSymbol[] typeArguments)
         {
             return InnerSymbol.Construct(typeArguments);
@@ -271,6 +279,11 @@ namespace Codex.Analysis.Managed.Symbols
         public override TResult Accept<TResult>(SymbolVisitor<TResult> visitor)
         {
             return visitor.VisitMethod(this);
+        }
+
+        public IMethodSymbol Construct(ImmutableArray<ITypeSymbol> typeArguments, ImmutableArray<NullableAnnotation> typeArgumentNullableAnnotations)
+        {
+            return InnerSymbol.Construct(typeArguments, typeArgumentNullableAnnotations);
         }
     }
 }

@@ -311,5 +311,10 @@ namespace Codex.Analysis.Managed.Symbols
         {
             return this.ToDisplayString();
         }
+
+        public bool Equals(ISymbol other, SymbolEqualityComparer equalityComparer)
+        {
+            throw new InvalidOperationException("Equality comparison is not allowed in wrapper symbol");
+        }
     }
 }

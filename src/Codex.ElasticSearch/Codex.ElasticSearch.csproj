@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
     <!--<TargetFramework>netcoreapp2.0</TargetFramework>-->
-    <SignAssembly Condition="'$(TargetFramework)' == 'net461'">true</SignAssembly>
-    <DisableStrongNamer Condition="'$(TargetFramework)' != 'net461'">true</DisableStrongNamer>
+    <SignAssembly Condition="'$(TargetFramework)' == 'net472'">true</SignAssembly>
+    <DisableStrongNamer Condition="'$(TargetFramework)' != 'net472'">true</DisableStrongNamer>
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
@@ -15,8 +15,9 @@
     <PackageReference Include="NEST" Version="6.1.0" />
     <PackageReference Include="Lucene.Net" />
     <PackageReference Include="Newtonsoft.Json" />
-    <PackageReference Include="StrongNamer" Condition="'$(TargetFramework)' == 'net461'" />
+    <PackageReference Include="StrongNamer" Condition="'$(TargetFramework)' == 'net472'" />
     <PackageReference Include="System.Threading.Tasks.Extensions" />
+    <PackageReference Include="System.IO.Compression" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />

@@ -103,5 +103,9 @@ namespace Codex.Analysis.Managed.Symbols
                 return InnerSymbol.OriginalDefinition;
             }
         }
+
+        public bool IsFixedSizeBuffer => InnerSymbol.IsFixedSizeBuffer;
+
+        public NullableAnnotation NullableAnnotation => InnerSymbol.NullableAnnotation;
     }
 }

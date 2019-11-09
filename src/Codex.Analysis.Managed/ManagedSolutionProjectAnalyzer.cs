@@ -67,7 +67,7 @@ namespace Codex.Analysis.Projects
                 this.solutionDirectory = Path.GetDirectoryName(solutionPath);
                 this.repo = repo;
                 extractionDirectory = Path.Combine(repo.DefaultRepoProject.ProjectDirectory, @".vs\Codex\projects");
-                workspace = new AdhocWorkspace(DesktopMefHostServices.DefaultServices);
+                workspace = new AdhocWorkspace(MefHostServices.DefaultHost);
             }
 
             public Task WaitForProjects()

@@ -87,5 +87,7 @@ namespace Codex.Analysis.Managed.Symbols
                 return InnerSymbol.OriginalDefinition;
             }
         }
+
+        public NullableAnnotation NullableAnnotation => InnerSymbol.NullableAnnotation;
     }
 }
