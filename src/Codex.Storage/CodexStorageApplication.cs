@@ -20,7 +20,7 @@ namespace Codex.Storage
 {
     public class CodexStorageApplication
     {
-        protected string elasticSearchServer = "http://localhost:9200";
+        protected string elasticSearchServer = GetEnvironmentVariableOrDefault("CodexUrl", "http://localhost:9200");
         protected bool finalize = true;
         protected string repoName;
         protected string alias;
@@ -40,6 +40,12 @@ namespace Codex.Storage
         protected List<string> demoteIndices = new List<string>();
         protected List<string> promoteIndices = new List<string>();
         protected Dictionary<string, (Action act, OptionSet options)> actions;
+
+        private static string GetEnvironmentVariableOrDefault(string name, string defaultValue = null)
+        {
+            var value = Environment.GetEnvironmentVariable(name);
+            return string.IsNullOrEmpty(value) ? defaultValue : value;
+        }
 
         protected virtual IEnumerable<KeyValuePair<string, (Action, OptionSet)>> GetActions()
         {
@@ -528,138 +534,6 @@ namespace Codex.Storage
                     }
                 }
             }
-
-            //ElasticsearchStorage storage = new ElasticsearchStorage(elasticSearchServer);
-
-            //string[] repos = new string[] { repoName.ToLowerInvariant() };
-
-            //string line = null;
-            //Console.WriteLine("Please enter symbol short name: ");
-            //while ((line = Console.ReadLine()) != null)
-            //{
-            //    if (line.Contains("`"))
-            //    {
-            //        //results = storage.SearchAsync(repos, line, classification: null).Result;
-            //        var results = ((ElasticsearchStorage)storage).TextSearchAsync(repos, line.TrimStart('`')).Result;
-            //        Console.WriteLine($"Found {results.Count} matches");
-            //        foreach (var result in results)
-            //        {
-            //            Console.WriteLine($"{result.File} ({result.Span.LineNumber}, {result.Span.LineSpanStart})");
-            //            Console.ForegroundColor = ConsoleColor.Green;
-            //            Console.WriteLine($"{result.ReferringFilePath} in '{result.ReferringProjectId}'");
-            //            Console.ForegroundColor = ConsoleColor.Gray;
-
-            //            var bsf = storage.GetBoundSourceFileAsync(result.ReferringProjectId, result.ReferringFilePath).Result;
-
-            //            if (!string.IsNullOrEmpty(result.Span.LineSpanText))
-            //            {
-            //                Console.Write(result.Span.LineSpanText.Substring(0, result.Span.LineSpanStart));
-            //                Console.ForegroundColor = ConsoleColor.Yellow;
-            //                Console.Write(result.Span.LineSpanText.Substring(result.Span.LineSpanStart, result.Span.Length));
-            //                Console.ForegroundColor = ConsoleColor.Gray;
-            //                Console.WriteLine(result.Span.LineSpanText.Substring(result.Span.LineSpanStart + result.Span.Length));
-            //            }
-            //        }
-            //    }
-            //    else if (line.Contains("|"))
-            //    {
-            //        var parts = line.Split('|');
-            //        var symbolId = SymbolId.UnsafeCreateWithValue(parts[0]);
-            //        var projectId = parts[1];
-
-            //        var results = storage.GetReferencesToSymbolAsync(repos, new Symbol() { Id = symbolId, ProjectId = projectId }).GetAwaiter().GetResult();
-
-            //        var relatedDefinitions = storage.GetRelatedDefinitions(repos,
-            //                symbolId.Value,
-            //                projectId).GetAwaiter().GetResult();
-
-            //        var definition = results.Entries
-            //            .Where(e => e.Span.Reference.ReferenceKind == nameof(ReferenceKind.Definition))
-            //            .Select(e => e.Span.Reference)
-            //            .FirstOrDefault();
-
-            //        if (definition != null)
-            //        {
-            //            var relatedDefs = storage.Provider.GetRelatedDefinitions(repos, definition.Id.Value, definition.ProjectId)
-            //                .GetAwaiter().GetResult();
-            //        }
-
-            //        Console.WriteLine($"Found {results.Total} matches");
-            //        foreach (var result in results.Entries)
-            //        {
-            //            Console.WriteLine($"{result.File} ({result.Span.LineNumber}, {result.Span.LineSpanStart})");
-            //            if (!string.IsNullOrEmpty(result.Span.LineSpanText))
-            //            {
-            //                Console.Write(result.Span.LineSpanText.Substring(0, result.Span.LineSpanStart));
-            //                Console.ForegroundColor = ConsoleColor.Yellow;
-            //                Console.Write(result.Span.LineSpanText.Substring(result.Span.LineSpanStart, result.Span.Length));
-            //                Console.ForegroundColor = ConsoleColor.Gray;
-            //                Console.WriteLine(result.Span.LineSpanText.Substring(result.Span.LineSpanStart + result.Span.Length));
-            //            }
-            //        }
-
-            //        if (results.Entries.Count != 0)
-            //        {
-            //            var result = results.Entries[0];
-            //            Console.WriteLine($"Retrieving source file {result.ReferringFilePath} in {result.ReferringProjectId}");
-
-            //            var stopwatch = Stopwatch.StartNew();
-            //            var sourceFile = storage.GetBoundSourceFileAsync(repos, result.ReferringProjectId, result.ReferringFilePath).GetAwaiter().GetResult();
-            //            var elapsed = stopwatch.Elapsed;
-
-            //            Console.WriteLine($"Retrieved source file in {elapsed.TotalMilliseconds} ms");
-
-            //            Console.WriteLine($"Source file has { sourceFile?.Classifications.Count ?? -1 } classifications");
-            //            if (sourceFile.Classifications != null)
-            //            {
-            //                ConcurrentDictionary<string, int> classificationCounters = new ConcurrentDictionary<string, int>();
-            //                foreach (var cs in sourceFile.Classifications)
-            //                {
-            //                    classificationCounters.AddOrUpdate(cs.Classification, 1, (k, v) => v + 1);
-            //                }
-
-            //                foreach (var counter in classificationCounters)
-            //                {
-            //                    Console.WriteLine($"Source file has {counter.Value} {counter.Key} classifications");
-            //                }
-            //            }
-
-            //            Console.WriteLine($"Source file has { sourceFile?.References.Count ?? -1 } references");
-            //            Console.WriteLine($"Source file has { sourceFile?.Definitions.Count ?? -1 } definitions");
-            //        }
-            //    }
-            //    else
-            //    {
-            //        //results = storage.SearchAsync(repos, line, classification: null).Result;
-            //        var results = storage.SearchAsync(repos, line, null).Result;
-            //        Console.WriteLine($"Found {results.Total} matches");
-            //        foreach (var result in results.Entries)
-            //        {
-            //            Console.WriteLine($"{result.File} ({result.Span.LineNumber}, {result.Span.LineSpanStart})");
-            //            Console.ForegroundColor = ConsoleColor.Green;
-            //            Console.WriteLine($"{result.Symbol.Id}|{result.Symbol.ProjectId}");
-            //            Console.ForegroundColor = ConsoleColor.Gray;
-
-            //            var symbol = result.Symbol;
-            //            int index = result.DisplayName.IndexOf(symbol.ShortName);
-            //            //if (index >= 0)
-            //            //{
-            //            //    result.Span.LineSpanText = symbol.DisplayName;
-            //            //    result.Span.LineSpanStart = index;
-            //            //    result.Span.Length = symbol.ShortName.Length;
-            //            //}
-
-            //            //if (!string.IsNullOrEmpty(result.Span.LineSpanText))
-            //            //{
-            //            //    Console.Write(result.Span.LineSpanText.Substring(0, result.Span.LineSpanStart));
-            //            //    Console.ForegroundColor = ConsoleColor.Yellow;
-            //            //    Console.Write(result.Span.LineSpanText.Substring(result.Span.LineSpanStart, result.Span.Length));
-            //            //    Console.ForegroundColor = ConsoleColor.Gray;
-            //            //    Console.WriteLine(result.Span.LineSpanText.Substring(result.Span.LineSpanStart + result.Span.Length));
-            //            //}
-            //        }
-            //    }
-            //}
         }
     }
 }
