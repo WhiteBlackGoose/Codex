@@ -141,13 +141,13 @@ namespace Codex.Storage
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
                 Console.WriteLine("Started");
 
+                actions = GetActions().ToDictionarySafe(kvp => kvp.Key, kvp => kvp.Value, StringComparer.OrdinalIgnoreCase, overwrite: true);
+
                 if (args.Length == 0)
                 {
                     WriteHelpText();
                     return;
                 }
-
-                actions = GetActions().ToDictionarySafe(kvp => kvp.Key, kvp => kvp.Value, StringComparer.OrdinalIgnoreCase, overwrite: true);
 
                 var remaining = args.Skip(1).ToArray();
                 var verb = args[0].ToLowerInvariant();
