@@ -11,7 +11,8 @@
     <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
     <Platform Condition="'$(Platform)'==''">Mixed Platforms</Platform>
     <BuildOutputRoot>$(SrcRoot)\out</BuildOutputRoot>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>preview</LangVersion>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Label="Intermediate Output directory">
@@ -66,16 +67,4 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
-    <Optimize>false</Optimize>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <DebugType>pdbonly</DebugType>
-    <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-  </PropertyGroup>
 </Project>
