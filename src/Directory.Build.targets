@@ -80,7 +80,7 @@
     <PackageReference Update="Elasticsearch.Net ---Conflict" Version="5.5.0" Project="Codex.ElasticSearch.Legacy\Codex.ElasticSearch.Legacy.csproj" />
     <PackageReference Update="NEST ---Conflict" Version="6.1.0" Project="Codex.ElasticSearch\Codex.ElasticSearch.csproj" />
     <PackageReference Update="NEST ---Conflict" Version="5.5.0" Project="Codex.ElasticSearch.Legacy\Codex.ElasticSearch.Legacy.csproj" />
-    <PackageReference Update="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Update="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Update="System.Threading.Tasks.Extensions" Version="4.4.0" />
     <PackageReference Update="ILRepack.MSBuild.Task" Version="2.0.13">
       <PrivateAssets>all</PrivateAssets>

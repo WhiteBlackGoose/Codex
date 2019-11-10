@@ -12,6 +12,7 @@
     <PackageReference Include="CommandLineParser" />
     <PackageReference Include="Microsoft.TeamFoundationServer.ExtendedClient" />
     <PackageReference Include="Microsoft.TeamFoundationServer.Client" />
+    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.IO.Compression" />
