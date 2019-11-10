@@ -11,7 +11,7 @@
     <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
     <Platform Condition="'$(Platform)'==''">Mixed Platforms</Platform>
     <BuildOutputRoot>$(SrcRoot)\out</BuildOutputRoot>
-    <LangVersion>preview</LangVersion>
+    <LangVersion>latest</LangVersion>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
 
