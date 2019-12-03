@@ -173,6 +173,7 @@ namespace Codex.Automation.Workflow
                     arguments.CodexRepoUrl,
                     "-n",
                     arguments.RepoName,
+                    "-test",
                     arguments.AdditionalCodexArguments,
                     "-bld",
                     binlogDirectory);
