@@ -148,6 +148,11 @@ namespace Codex.Storage.DataModel
 
         internal void ExpandData(OptimizationContext context)
         {
+            if (CompressedData == null)
+            {
+                return;
+            }
+
             Data = Convert.FromBase64String(CompressedData);
             if (DecompressedLength != 0)
             {

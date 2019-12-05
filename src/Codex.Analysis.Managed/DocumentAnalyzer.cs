@@ -876,6 +876,11 @@ namespace Codex.Analysis
                     return true;
                 }
 
+                if (current.TextSpan.Contains(next.TextSpan))
+                {
+                    return true;
+                }
+
                 if (!AllowMerge(next))
                 {
                     return false;
@@ -932,11 +937,17 @@ namespace Codex.Analysis
 
         static bool SkipSpan(ClassifiedSpan span)
         {
+            if (span.ClassificationType?.Contains("regex") == true)
+            {
+                return true;
+            }
+
             switch (span.ClassificationType)
             {
                 case ClassificationTypeNames.WhiteSpace:
                 case ClassificationTypeNames.Punctuation:
-                    return true;
+                case ClassificationTypeNames.StringEscapeCharacter:
+                        return true;
                 default:
                     return false;
             }
