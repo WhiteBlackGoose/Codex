@@ -340,8 +340,7 @@ namespace Codex.Storage
         protected void GarbageCollectIndices()
         {
             InitService();
-
-            Regex indexNameRegex = new Regex(@"^(?<name>.*)\.(?<date>\d{6}\.\d{6})$");
+            Regex indexNameRegex = GetIndexNameRegex();
             var indices = GetIndices();
             var inactiveIndices = indices.Where(i => !i.IsActive).ToList();
             var inactiveIndexGroups = inactiveIndices
@@ -372,6 +371,11 @@ namespace Codex.Storage
                     }
                 }
             }
+        }
+
+        private static Regex GetIndexNameRegex()
+        {
+            return new Regex(@"^(?<name>.*)\.(?<date>\d{6}\.\d{6})$");
         }
 
         private string GetIndexDescription((string IndexName, bool IsActive, string Size) index)

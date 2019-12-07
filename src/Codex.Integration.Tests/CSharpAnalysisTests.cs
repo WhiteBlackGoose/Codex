@@ -75,6 +75,16 @@ namespace Codex.Integration.Tests
         }
 
         [Test]
+        public void TestOptimizeAnalysis()
+        {
+            new CodexApplication().Run(
+                "load",
+                //"-save", outputPath,
+                "-d", @"D:\temp\cdx\store.zip",
+                "-save", @"D:\temp\cdx\store2.zip");
+        }
+
+        [Test]
         public void TestSaveAnalysis()
         {
             //

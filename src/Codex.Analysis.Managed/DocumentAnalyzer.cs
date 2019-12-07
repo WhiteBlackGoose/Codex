@@ -386,7 +386,7 @@ namespace Codex.Analysis
                         implementedInterface.GetMembers()
                             .Select(member => (implementation: type.FindImplementationForInterfaceMember(member), implemented: member))
                             .Where(kvp => kvp.implementation != null))
-                    .ToDictionary(kvp => kvp.implemented, kvp => kvp.implementation);
+                    .ToDictionarySafe(kvp => kvp.implemented, kvp => kvp.implementation);
 
                 result.memberByImplementedLookup = result.interfaceMemberToImplementationMap.ToLookup(kvp => kvp.Value, kvp => kvp.Key);
 

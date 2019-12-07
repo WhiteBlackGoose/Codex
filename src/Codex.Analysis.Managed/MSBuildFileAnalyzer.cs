@@ -614,7 +614,7 @@ namespace Codex.Analysis.Files
             string referencingItemName = null)
         {
             var valueNode = element.ValueSpan();
-            if (valueNode == null)
+            if (valueNode.IsEmpty)
             {
                 return Enumerable.Empty<ReferenceSpan>();
             }

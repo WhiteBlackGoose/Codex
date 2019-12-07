@@ -23,7 +23,7 @@ namespace Codex.Analysis
 
         public static TextSpan ValueSpan(this IXmlElement element)
         {
-            return element.As<XmlElementSyntax>().Content.FullSpan;
+            return element.AsSyntaxElement.Content.FullSpan;
         }
 
         public static XmlAttributeSyntax Attribute(this IXmlElement element, string name)

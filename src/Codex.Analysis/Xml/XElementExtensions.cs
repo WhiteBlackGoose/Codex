@@ -112,6 +112,11 @@ namespace Codex.Analysis.Xml.Linq
                     else
                     {
                         var valueSpan = syntaxElement.ValueSpan();
+                        if (valueSpan.IsEmpty)
+                        {
+                            continue;
+                        }
+
                         start = valueSpan.Start;
                         length = valueSpan.Length;
                     }
