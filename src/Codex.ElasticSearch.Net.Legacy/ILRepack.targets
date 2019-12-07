@@ -52,6 +52,7 @@
       Condition="'$(IsNetCoreApp)' != 'true'"
       Parallel="true"
       DebugInfo="true"
+      KeyFile="$(KeyOriginatorFile)"
       AllowDuplicateResources="false"
       MainAssembly="@(IntermediateAssembly)"
       InputAssemblies="@(InputAssemblies)"
@@ -59,16 +60,7 @@
       OutputAssembly="$(_MergedAssemblyPath)"
       WorkingDirectory="$(RepackWorkingDirectory)" />
 
-    <StrongNamer.AddStrongName
-        Condition="'$(IsNetCoreApp)' != 'true'"
-        Assemblies="@(_MergedAssembly);@(ReferencePath)"
-        SignedAssemblyFolder="$(_SignedMergedAssemblyDirectory)"
-        KeyFile="$(KeyOriginatorFile)">
-
-       <Output TaskParameter="SignedAssembliesToReference" ItemName="_SignedMergedAssembly" />
-    </StrongNamer.AddStrongName>
-
-    <Copy SourceFiles="@(_SignedMergedAssembly)" DestinationFiles="$(TargetPath)" Condition="'%(_SignedMergedAssembly.OriginalPath)' == '$(_MergedAssemblyPath)'" />
+    <Copy SourceFiles="$(_MergedAssemblyPath)" DestinationFiles="$(TargetPath)" />
   </Target>
 
   <Target Name="MergeAssembliesNetCore"
@@ -81,7 +73,7 @@
     <ILRepack
       Condition="'$(IsNetCoreApp)' == 'true'"
       Parallel="true"
-      DebugInfo="false"
+      DebugInfo="true"
       AllowDuplicateResources="false"
       MainAssembly="@(IntermediateAssembly)"
       InputAssemblies="@(InputAssemblies)"

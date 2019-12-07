@@ -464,6 +464,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <None Include="Project_Readme.html" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <None Include="Properties\PublishProfiles\Ref12TestWeb.pubxml" />
     <None Include="Properties\PublishProfiles\test.pubxml" />

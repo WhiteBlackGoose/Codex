@@ -10,7 +10,7 @@ namespace Codex.Storage.ElasticProviders
     {
         public bool Succeeded { get; set; }
 
-        protected ElasticResponse(IResponse response, int operationDuration, long? backendDuration = null)
+        internal ElasticResponse(IResponse response, int operationDuration, long? backendDuration = null)
         {
             OperationDuration = operationDuration;
             BackendDuration = backendDuration;
@@ -33,14 +33,14 @@ namespace Codex.Storage.ElasticProviders
             return new ElasticResponse(response: null, operationDuration: operationDuration, backendDuration: null);
         }
 
-        public static ElasticResponse CreateResponse(IResponse response, int operationDuration)
+        internal static ElasticResponse CreateResponse(IResponse response, int operationDuration)
         {
             Contract.Requires(response != null);
 
             return new ElasticResponse(response, operationDuration);
         }
 
-        public static ElasticResponse<T> Create<T>(IResponse response, T result, int total, int operationDuration,
+        internal static ElasticResponse<T> Create<T>(IResponse response, T result, int total, int operationDuration,
             long? backendDurationMilliseconds) where T : class
         {
             Contract.Requires(response != null);
@@ -49,7 +49,7 @@ namespace Codex.Storage.ElasticProviders
             return new ElasticResponse<T>(response, result, total, operationDuration, backendDurationMilliseconds);
         }
 
-        public static ElasticResponse<U> FromSearchResult<T, U>(ISearchResponse<T> response, U entries, Stopwatch sw) where T : class where U : class
+        internal static ElasticResponse<U> FromSearchResult<T, U>(ISearchResponse<T> response, U entries, Stopwatch sw) where T : class where U : class
         {
             return Create(response, entries, (int)response.Total, (int)sw.ElapsedMilliseconds, response.Took);
         }
@@ -96,7 +96,7 @@ namespace Codex.Storage.ElasticProviders
     /// </summary>
     public sealed class ElasticResponse<T> : ElasticResponse
     {
-        public ElasticResponse(IResponse response, T result, int total, int operationDuration, long? backendDuration)
+        internal ElasticResponse(IResponse response, T result, int total, int operationDuration, long? backendDuration)
             : base(response, operationDuration, backendDuration)
         {
             Result = result;

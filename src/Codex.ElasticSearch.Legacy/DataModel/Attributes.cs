@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Codex.Storage.DataModel
 {
-    public class DataObjectAttribute : ObjectAttribute
+    internal class DataObjectAttribute : ObjectAttribute
     {
         public DataObjectAttribute(DataInclusionOptions option = DataInclusionOptions.None)
         {
@@ -24,7 +24,7 @@ namespace Codex.Storage.DataModel
         }
     }
 
-    public class DataBooleanAttribute : BooleanAttribute
+    internal class DataBooleanAttribute : BooleanAttribute
     {
         public DataBooleanAttribute()
         {
@@ -32,7 +32,7 @@ namespace Codex.Storage.DataModel
         }
     }
 
-    public class DataIntegerAttribute : NumberAttribute
+    internal class DataIntegerAttribute : NumberAttribute
     {
         public DataIntegerAttribute()
             : base(NumberType.Integer)
@@ -42,7 +42,7 @@ namespace Codex.Storage.DataModel
     }
 
     [JsonObject(MemberSerialization.OptIn)]
-    public interface IPrefixTextProperty : ITextProperty
+    internal interface IPrefixTextProperty : ITextProperty
     {
         /// <summary>
         /// Indicates whether to store property in prefix format
@@ -52,7 +52,7 @@ namespace Codex.Storage.DataModel
     }
 
     // TODO: Use this for Definition ShortName search when 
-    public class PrefixTextAttribute : SearchStringAttribute, IPrefixTextProperty
+    internal class PrefixTextAttribute : SearchStringAttribute, IPrefixTextProperty
     {
         public IProperty SelfProperty => this;
 
@@ -64,7 +64,7 @@ namespace Codex.Storage.DataModel
         }
     }
 
-    public class SearchStringAttribute : TextAttribute
+    internal class SearchStringAttribute : TextAttribute
     {
         public SearchStringAttribute()
         {
@@ -73,7 +73,7 @@ namespace Codex.Storage.DataModel
         }
     }
 
-    public class CodexKeywordAttribute : KeywordAttribute
+    internal class CodexKeywordAttribute : KeywordAttribute
     {
         public CodexKeywordAttribute()
         {
@@ -82,7 +82,7 @@ namespace Codex.Storage.DataModel
         }
     }
 
-    public class NormalizedKeywordAttribute : KeywordAttribute
+    internal class NormalizedKeywordAttribute : KeywordAttribute
     {
         public NormalizedKeywordAttribute()
         {
@@ -92,7 +92,7 @@ namespace Codex.Storage.DataModel
         }
     }
 
-    public class SortwordAttribute : KeywordAttribute
+    internal class SortwordAttribute : KeywordAttribute
     {
         public SortwordAttribute()
         {
@@ -100,7 +100,7 @@ namespace Codex.Storage.DataModel
         }
     }
 
-    public class DataStringAttribute : CodexKeywordAttribute
+    internal class DataStringAttribute : CodexKeywordAttribute
     {
         public DataStringAttribute()
         {
@@ -111,14 +111,14 @@ namespace Codex.Storage.DataModel
     /// <summary>
     /// TODO: Set options for search a path
     /// </summary>
-    public class HierachicalPathAttribute : CodexKeywordAttribute
+    internal class HierachicalPathAttribute : CodexKeywordAttribute
     {
         public HierachicalPathAttribute()
         {
         }
     }
 
-    public class FullTextAttribute : TextAttribute
+    internal class FullTextAttribute : TextAttribute
     {
         public FullTextAttribute(DataInclusionOptions option)
         {

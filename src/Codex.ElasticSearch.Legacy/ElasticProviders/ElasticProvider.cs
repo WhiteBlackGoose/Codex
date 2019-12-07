@@ -703,7 +703,7 @@ namespace Codex.Storage.ElasticProviders
 
         //}
 
-        public async Task<ElasticResponse<SourceFileModel>> GetSourceFileAsync(
+        internal async Task<ElasticResponse<SourceFileModel>> GetSourceFileAsync(
             ICollection<string> repos,
             string projectId,
             string filePath,

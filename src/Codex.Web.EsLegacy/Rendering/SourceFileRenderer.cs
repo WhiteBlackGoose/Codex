@@ -63,7 +63,7 @@ namespace WebUI.Rendering
                             $"Span had Start of {span.Start}, which is greater than text length for file '{_sourceFile.SourceFile.Info.ProjectRelativePath}'", "BoundSourceFileMarkup");
                         break;
                     }
-                    if (prevSpan != null && span.Start == prevSpan.Start)
+                    if (prevSpan != null && span.Start < prevSpan.End)
                     {
                         //  Overlapping spans?
                         continue;

@@ -1,0 +1,1 @@
+﻿This project is used to merge ElasticSearch.Net and NEST 5.5.1 into assembly with different identity.

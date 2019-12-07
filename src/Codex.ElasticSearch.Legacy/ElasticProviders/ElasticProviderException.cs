@@ -16,7 +16,7 @@ namespace Codex.Storage.ElasticProviders
         }
     }
 
-    public sealed class ElasticProviderCommunicationException : ElasticProviderExceptionBase
+    internal sealed class ElasticProviderCommunicationException : ElasticProviderExceptionBase
     {
         public ElasticProviderCommunicationException(IResponse response, string esQuery)
             : base($"Failed to use Elasticsearch\r\n'''\r\n{esQuery}\r\n'''\r\n", response.OriginalException)
