@@ -8,6 +8,7 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="System.ValueTuple" />
+    <PackageReference Include="System.Reflection.TypeExtensions" />
     <PackageReference Include="StrongNamer" Condition="'$(TargetFramework)' == 'net472'" />
   </ItemGroup>
   <ItemGroup>

@@ -1,9 +1,13 @@
 ﻿using Codex.Application;
+using Codex.ElasticSearch;
+using Codex.ElasticSearch.Legacy.Bridge;
+using Codex.Sdk.Search;
 using NUnit.Framework;
 using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Codex.Integration.Tests
 {
@@ -20,7 +24,8 @@ namespace Codex.Integration.Tests
 
             //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "SpecificReference.cs");
             //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "OperatorOverload.cs");
-            compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "MethodGroup.cs");
+            //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "MethodGroup.cs");
+            compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "NormalizeStringClassification.cs");
             //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "DerivedImplementation.Issue159.cs");
 
             Environment.CurrentDirectory = Path.Combine(root, @"out\test");
@@ -75,13 +80,45 @@ namespace Codex.Integration.Tests
         }
 
         [Test]
-        public void TestOptimizeAnalysis()
+        public async Task TestOptimizeAnalysis()
         {
-            new CodexApplication().Run(
-                "load",
-                //"-save", outputPath,
-                "-d", @"D:\temp\cdx\store.zip",
-                "-save", @"D:\temp\cdx\store2.zip");
+            //new CodexApplication().Run(
+            //    "load",
+            //    "-clean",
+            //    //"-save", outputPath,
+            //    "-d", @"D:\temp\cdx\store.zip",
+            //    "-save", @"D:\temp\cdx\store2.zip");
+
+            //new CodexApplication().Run(
+            //    "load",
+            //    "-n", "dominotest",
+            //    "-es", "http://ddindex:9125",
+            //    "-d", @"C:\Users\lancec\Downloads\store (4).zip");
+
+            var codex = new LegacyElasticSearchCodex(new LegacyElasticSearchStoreConfiguration()
+            {
+                Endpoint = "http://ddindex:9125",
+            });
+
+            var result = await codex.SearchAsync(new SearchArguments()
+            {
+                SearchString = "class Scheduler",
+                TextSearch = true,
+                RepositoryScopeId = "dominotest.191208.001440"
+            });
+
+            var primaryResult = result.Result.Hits.First().Definition;
+
+            var path = await codex.GetFirstDefinitionFilePath(primaryResult.ProjectId, primaryResult.Id.Value);
+
+            var file = await codex.GetSourceAsync(new GetSourceArguments()
+            {
+                ProjectId = primaryResult.ProjectId,
+                ProjectRelativePath = path,
+                RepositoryScopeId = "dominotest"
+            });
+
+            var classifications = file.Result.Classifications.ToList();
         }
 
         [Test]

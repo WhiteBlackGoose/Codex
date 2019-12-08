@@ -411,7 +411,7 @@ namespace Codex.Storage.DataModel
 
             //var starts = Starts.GetReadOnlyList().ToList();
 
-            context.Stream.Position = 0;
+            context.Reset();
             var startsDataLength = Starts.Data.Length;
             context.Stream.Write(Starts.Data, 0, startsDataLength);
             var count = Starts.Count;
@@ -453,7 +453,7 @@ namespace Codex.Storage.DataModel
 
             for (int i = 0; i < count; i++)
             {
-                Starts[i] = context.StartsBuffer[i];
+                Starts.SetIndexDirect(i, context.StartsBuffer[i]);
             }
 
             var newStartsMinByteWidth = NumberUtils.GetByteWidth(max);
@@ -470,6 +470,12 @@ namespace Codex.Storage.DataModel
     {
         public MemoryStream Stream = new MemoryStream();
         public List<int> StartsBuffer = new List<int>();
+
+        public void Reset()
+        {
+            Stream.Position = 0;
+            StartsBuffer.Clear();
+        }
 
         internal byte[] Compress(byte[] data)
         {

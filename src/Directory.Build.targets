@@ -44,6 +44,7 @@
     <PackageReference Update="System.Linq.Expressions" Version="4.3.0" />
     <PackageReference Update="System.Reflection" Version="4.3.0" />
     <PackageReference Update="System.Reflection.Metadata" Version="1.6.0" />
+    <PackageReference Update="System.Reflection.TypeExtensions" Version="4.3.0" />
     <PackageReference Update="System.Resources.ResourceManager" Version="4.3.0" />
     <PackageReference Update="System.Runtime" Version="4.3.0" />
     <PackageReference Update="System.Runtime.Extensions" Version="4.3.0" />

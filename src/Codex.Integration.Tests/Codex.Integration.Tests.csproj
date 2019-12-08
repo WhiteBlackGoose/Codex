@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="NUnit" />
     <PackageReference Include="Lucene.Net" />
+    <PackageReference Include="System.Reflection.TypeExtensions" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Codex.Analysis.Managed.Decompilation\Codex.Analysis.Managed.Decompilation.csproj" />

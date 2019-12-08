@@ -2,7 +2,7 @@
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
     <ProjectGuid>{A5A46612-D516-45E9-9346-EED79252485E}</ProjectGuid>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>net472;netstandard2.0</TargetFrameworks>
     <DisableStrongNamer>true</DisableStrongNamer>
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
@@ -10,10 +10,10 @@
     <DebugType>full</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Elasticsearch.Net" Version="5.5.0" >
+    <PackageReference Include="Elasticsearch.Net" Version="5.6.6">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="NEST" Version="5.5.0">
+    <PackageReference Include="NEST" Version="5.6.6">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" />
