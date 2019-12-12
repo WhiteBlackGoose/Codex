@@ -14,10 +14,12 @@ namespace Codex.Ingester
         public string project { get; set; }
         public int id { get; set; }
         public string pat { get; set; }
+        public bool ignoreResultFilter { get; set; }
     }
 
     public class RepoList
     {
+        public bool ignoreResultFilter { get; set; }
         public List<RepoIngestionDefinition> repos { get; set; }
     }
 }

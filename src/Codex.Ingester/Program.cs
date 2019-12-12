@@ -45,6 +45,9 @@ namespace Codex.Ingester
 
             [Option("printEnv", HelpText = "Prints all environment variables.")]
             public bool PrintEnvironmentVariables { get; set; }
+
+            [Option("noResultFilter", Required = true, HelpText = "Do not filter builds by result. Only use 'CodexOutputs' tag.")]
+            public bool IgnoreResultFilter { get; set; }
         }
 
         static void Main(string[] args)
@@ -115,7 +118,8 @@ namespace Codex.Ingester
                         Destination = destination,
                         ProjectName = repo.project,
                         PersonalAccessToken = GetPersonalAccessToken(options, repo.pat),
-                        Preview = options.Preview
+                        Preview = options.Preview,
+                        IgnoreResultFilter = options.IgnoreResultFilter || repo.ignoreResultFilter || repoList.ignoreResultFilter
                     });
                 }
             }
