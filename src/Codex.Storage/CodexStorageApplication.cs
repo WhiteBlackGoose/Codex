@@ -337,6 +337,20 @@ namespace Codex.Storage
             }
         }
 
+        protected bool TryGetIndexAlias(string name, out string indexAlias)
+        {
+            Regex indexNameRegex = GetIndexNameRegex();
+            var match = indexNameRegex.Match(name);
+            if (match.Success)
+            {
+                indexAlias = match.Groups["name"].Value;
+                return true;
+            }
+
+            indexAlias = null;
+            return false;
+        }
+
         protected void GarbageCollectIndices()
         {
             InitService();

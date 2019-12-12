@@ -96,12 +96,12 @@ namespace Codex.Web.Mvc.Controllers
 
                 var definitions = definitionResponse.Result;
 
-                definitions.Hits = definitions.Hits.Distinct(m_referenceEquator).ToList();
+                var distinctHits = definitions.Hits.Distinct(m_referenceEquator).ToList();
 
-                if (definitions.Hits.Count == 1 && 
-                    definitions.Hits[0].ReferenceSpan.Reference.ReferenceKind == nameof(ReferenceKind.Definition))
+                if (distinctHits.Count == 1 &&
+                    distinctHits[0].ReferenceSpan.Reference.ReferenceKind == nameof(ReferenceKind.Definition))
                 {
-                    var definitionReference = definitions.Hits[0];
+                    var definitionReference = distinctHits[0];
                     return await Index(definitionReference.ProjectId, definitionReference.ProjectRelativePath, partial: true);
                 }
                 else

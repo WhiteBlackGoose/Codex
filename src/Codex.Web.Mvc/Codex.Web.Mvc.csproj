@@ -6,6 +6,7 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <UserSecretsId>1e5a391a-8a2b-4850-babb-ad648a5255ca</UserSecretsId>
     <DefaultItemExcludes>$(DefaultItemExcludes);publish\**</DefaultItemExcludes>
+    <ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
