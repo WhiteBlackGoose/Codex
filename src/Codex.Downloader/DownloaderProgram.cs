@@ -37,7 +37,7 @@ namespace Codex.Downloader
             [Option("pat", Required = true, HelpText = "The personal access token used to access the account.")]
             public string PersonalAccessToken { get; set; }
 
-            [Option("noResultFilter", Required = true, HelpText = "Do not filter builds by result. Only use 'CodexOutputs' tag.")]
+            [Option("noResultFilter", HelpText = "Do not filter builds by result. Only use 'CodexOutputs' tag.")]
             public bool IgnoreResultFilter { get; set; }
 
             public bool Preview { get; set; }

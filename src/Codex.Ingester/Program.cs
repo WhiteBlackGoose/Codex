@@ -46,7 +46,7 @@ namespace Codex.Ingester
             [Option("printEnv", HelpText = "Prints all environment variables.")]
             public bool PrintEnvironmentVariables { get; set; }
 
-            [Option("noResultFilter", Required = true, HelpText = "Do not filter builds by result. Only use 'CodexOutputs' tag.")]
+            [Option("noResultFilter", HelpText = "Do not filter builds by result. Only use 'CodexOutputs' tag.")]
             public bool IgnoreResultFilter { get; set; }
         }
 
