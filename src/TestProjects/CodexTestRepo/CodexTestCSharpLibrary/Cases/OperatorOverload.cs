@@ -12,6 +12,8 @@ namespace CodexTestCSharpLibrary.Cases
 
         public static TimeSpan Use()
         {
+            using var s = Stream.Null;
+
             return TimeSpan.MaxValue + TimeSpan.Zero;
         }
     }

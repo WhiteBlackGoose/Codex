@@ -123,6 +123,12 @@ namespace Codex.Analysis
 
                         return (SyntaxNode)usingStatement.Expression ?? usingStatement.Declaration?.Type;
                     }
+                    else if (node.IsKind(CS.SyntaxKind.LocalDeclarationStatement))
+                    {
+                        var usingStatement = (CS.Syntax.LocalDeclarationStatementSyntax)node;
+
+                        return usingStatement.Declaration?.Type;
+                    }
                 }
             }
             else if(language == LanguageNames.VisualBasic)

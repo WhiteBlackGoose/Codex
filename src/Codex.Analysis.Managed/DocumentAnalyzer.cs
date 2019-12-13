@@ -118,6 +118,10 @@ namespace Codex.Analysis
                 {
                     declaredSymbol = SemanticModel.GetDeclaredSymbol(token.Parent);
                 }
+                else
+                {
+
+                }
 
                 var usingExpression = semanticServices.TryGetUsingExpressionFromToken(token);
                 if (usingExpression != null)
