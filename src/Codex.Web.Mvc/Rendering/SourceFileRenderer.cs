@@ -421,6 +421,7 @@ namespace Codex.Web.Mvc.Rendering
                 { "xml - comment", Constants.ClassificationComment },
 
                 { "keyword", Constants.ClassificationKeyword },
+                { "keyword - control", Constants.ClassificationKeyword },
                 { "identifier", Constants.ClassificationIdentifier },
                 { "class name", Constants.ClassificationTypeName },
                 { "struct name", Constants.ClassificationTypeName },
