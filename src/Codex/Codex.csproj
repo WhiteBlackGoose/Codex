@@ -36,8 +36,5 @@
     <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />
     <ProjectReference Include="..\Codex.Storage\Codex.Storage.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>
