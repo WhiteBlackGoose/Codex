@@ -115,9 +115,8 @@ namespace Codex.Analysis.Projects
                         invocation.ProjectFile))
                     {
                         InvocationsByProjectPath[invocation.ProjectFile] = invocation;
+                        StartLoadProject(invocation);
                     }
-
-                    StartLoadProject(invocation);
                 }
             }
         }

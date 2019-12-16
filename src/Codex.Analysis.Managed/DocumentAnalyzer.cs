@@ -876,6 +876,13 @@ namespace Codex.Analysis
                     return true;
                 }
 
+                if (current.TextSpan.Equals(next.TextSpan) && !IsSemanticSpan(current) && IsSemanticSpan(next))
+                {
+                    // If there are completely overlapping spans. Take the span which is semantic over the span which is non-semantic.
+                    current = next;
+                    return true;
+                }
+
                 if (current.TextSpan.Contains(next.TextSpan))
                 {
                     return true;
@@ -947,6 +954,7 @@ namespace Codex.Analysis
                 case ClassificationTypeNames.WhiteSpace:
                 case ClassificationTypeNames.Punctuation:
                 case ClassificationTypeNames.StringEscapeCharacter:
+                case ClassificationTypeNames.StaticSymbol:
                         return true;
                 default:
                     return false;

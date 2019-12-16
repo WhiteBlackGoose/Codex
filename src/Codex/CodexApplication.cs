@@ -308,9 +308,7 @@ namespace Codex.Application
                     projectAnalyzers.Insert(0, preAnalysisAnalyzer);
                 }
 
-                RepositoryImporter importer = new RepositoryImporter(repoName,
-                    rootDirectory,
-                    new AnalysisServices(
+                AnalysisServices analysisServices = new AnalysisServices(
                         targetIndexName,
                         fileSystem,
                         analyzers: new RepoFileAnalyzer[]
@@ -325,11 +323,20 @@ namespace Codex.Application
                             ".config",
                             ".settings"),
                         })
-                    {
-                        RepositoryStore = analysisTarget,
-                        Logger = logger,
-                        ParallelProcessProjectFiles = projectMode && !disableParallelFiles
-                    })
+                {
+                    RepositoryStore = analysisTarget,
+                    Logger = logger,
+                    ParallelProcessProjectFiles = projectMode && !disableParallelFiles
+                };
+
+                if (analysisOnly)
+                {
+                    analysisServices.AnalysisIgnoreFilter = analysisServices.AnalysisIgnoreFilter.Combine(new RootFileSystemFilter(rootDirectory));
+                }
+
+                RepositoryImporter importer = new RepositoryImporter(repoName,
+                    rootDirectory,
+                    analysisServices)
                 {
                     AnalyzerDatas = projectAnalyzers.Select(a => new AnalyzerData() { Analyzer = a }).ToList()
                 };
