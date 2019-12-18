@@ -110,7 +110,7 @@ namespace Codex.Analysis.Projects
 
                 foreach (var invocation in BinLogReader.ExtractInvocations(binLogPath))
                 {
-                    if (repo.AnalysisServices.AnalysisIgnoreFilter.IncludeFile(
+                    if (repo.AnalysisServices.AnalysisIgnoreProjectFilter.IncludeFile(
                         repo.AnalysisServices.FileSystem, 
                         invocation.ProjectFile))
                     {

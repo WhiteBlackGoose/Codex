@@ -21,7 +21,8 @@ public class AnalysisServices
     {
         public Func<RepoProject, bool> IncludeRepoProject = (rp => true);
         public FileSystem FileSystem;
-        public FileSystemFilter AnalysisIgnoreFilter;
+        public FileSystemFilter AnalysisIgnoreProjectFilter;
+        public FileSystemFilter AnalysisIgnoreFileFilter;
         public Logger Logger = Logger.Null;
         public string TargetIndex { get; }
         public ICodexRepositoryStore RepositoryStore;
@@ -51,7 +52,8 @@ public class AnalysisServices
             Debug.Assert(!string.IsNullOrEmpty(targetIndex));
             TargetIndex = targetIndex;
             FileSystem = fileSystem;
-            AnalysisIgnoreFilter = new GitIgnoreFilter(".cdxignore");
+            AnalysisIgnoreProjectFilter = new GitIgnoreFilter(".cdxignore");
+            AnalysisIgnoreFileFilter = AnalysisIgnoreProjectFilter;
             if (analyzers != null)
             {
                 FileAnalyzers.AddRange(analyzers);

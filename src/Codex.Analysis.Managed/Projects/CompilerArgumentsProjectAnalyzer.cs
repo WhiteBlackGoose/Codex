@@ -120,8 +120,13 @@ namespace Codex.Analysis.Projects
                     invocation.CommandLineArguments = commandLineArguments;
                 }
 
-                InvocationsByProjectPath[invocation.ProjectFile] = invocation;
-                StartLoadProject(invocation);
+                if (repo.AnalysisServices.AnalysisIgnoreProjectFilter.IncludeFile(
+                        repo.AnalysisServices.FileSystem,
+                        invocation.ProjectFile))
+                {
+                    InvocationsByProjectPath[invocation.ProjectFile] = invocation;
+                    StartLoadProject(invocation);
+                }
             }
         }
     }

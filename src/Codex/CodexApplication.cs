@@ -42,6 +42,7 @@ namespace Codex.Application
         protected bool projectMode = false;
         protected bool disableParallelFiles = false;
         protected bool detectGit = true;
+        protected string fileToAnalyze = null;
         protected List<string> externalDataDirectories = new List<string>();
         protected List<string> projectDataDirectories = new List<string>();
         protected OptionSet indexOptions;
@@ -75,6 +76,7 @@ namespace Codex.Application
                                 { "l|logDirectory=", "Optional. Path to log directory", n => logDirectory = n },
                                 { "s|solution=", "Optionally, path to the solution to analyze.", n => solutionPath = n },
                                 { "projectMode", "Uses project indexing mode.", n => detectGit = !(projectMode = n != null) },
+                                { "file=", "Specifies single file to analyze.", n => fileToAnalyze = n },
                                 { "disableParallelFiles", "Disables use of parallel file analysis.", n => disableParallelFiles = n == null },
                                 { "disableDetectGit", "Disables use of LibGit2Sharp to detect git commit and branch.", n => detectGit = n == null },
                                 { "newBackend", "Use new backend with stored filters Not supported.", n => newBackend = n != null },
@@ -331,7 +333,15 @@ namespace Codex.Application
 
                 if (analysisOnly)
                 {
-                    analysisServices.AnalysisIgnoreFilter = analysisServices.AnalysisIgnoreFilter.Combine(new RootFileSystemFilter(rootDirectory));
+                    analysisServices.AnalysisIgnoreProjectFilter = analysisServices.AnalysisIgnoreProjectFilter.Combine(new RootFileSystemFilter(rootDirectory));
+                }
+
+                if (fileToAnalyze != null)
+                {
+                    analysisServices.AnalysisIgnoreFileFilter = analysisServices.AnalysisIgnoreFileFilter.Combine(new DelegateFileSystemFilter()
+                    {
+                        ShouldIncludeFile = (fs, filePath) => filePath.IndexOf(fileToAnalyze, StringComparison.OrdinalIgnoreCase) >= 0
+                    });
                 }
 
                 RepositoryImporter importer = new RepositoryImporter(repoName,

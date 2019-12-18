@@ -13,6 +13,19 @@ namespace Codex.Analysis.FileSystems
         public virtual bool IncludeFile(FileSystem fileSystem, string filePath) => true;
     }
 
+    public class DelegateFileSystemFilter : FileSystemFilter
+    {
+        public Func<FileSystem, string, bool> ShouldIncludeDirectory;
+        public Func<FileSystem, string, bool> ShouldIncludeFile;
+
+        public override bool IncludeDirectory(FileSystem fileSystem, string directoryPath)
+            => ShouldIncludeDirectory?.Invoke(fileSystem, directoryPath) ?? true;
+
+        public override bool IncludeFile(FileSystem fileSystem, string filePath)
+            => ShouldIncludeFile?.Invoke(fileSystem, filePath) ?? true;
+
+    }
+
     public static class FileSystemFilterExtensions
     {
         public static FileSystemFilter Combine(this FileSystemFilter f1, FileSystemFilter f2)

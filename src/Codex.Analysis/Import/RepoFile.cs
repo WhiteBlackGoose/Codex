@@ -119,8 +119,12 @@ namespace Codex.Import
         {
             if (Interlocked.Increment(ref m_analyzed) == 1)
             {
-                var fileAnalyzer = Analyzer ?? PrimaryProject.Repo.AnalysisServices.GetDefaultAnalyzer(FilePath);
-                return fileAnalyzer?.Analyze(this) ?? Task.CompletedTask;
+                var services = PrimaryProject.Repo.AnalysisServices;
+                if (services.AnalysisIgnoreFileFilter.IncludeFile(services.FileSystem, FilePath))
+                {
+                    var fileAnalyzer = Analyzer ?? PrimaryProject.Repo.AnalysisServices.GetDefaultAnalyzer(FilePath);
+                    return fileAnalyzer?.Analyze(this) ?? Task.CompletedTask;
+                }
             }
 
             return Task.CompletedTask;
