@@ -110,7 +110,8 @@ namespace Codex.ElasticSearch.Search
                 {
                     SymbolDisplayName = displayName,
                     Hits = searchResults,
-                    Total = referencesResult.Total
+                    Total = referencesResult.Total,
+                    /* TODO: Set RelatedDefinitions */
                 };
             });
         }

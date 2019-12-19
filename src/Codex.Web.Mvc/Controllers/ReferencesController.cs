@@ -12,12 +12,20 @@ using Codex.Sdk.Search;
 using Codex.Search;
 using Codex.Web.Mvc.Utilities;
 using Reference = Codex.Sdk.Search.IReferenceSearchResult;
+using Codex.Storage.DataModel;
 
 namespace Codex.Web.Mvc.Controllers
 {
     public class ReferencesController : Controller
     {
         private readonly ICodex Storage;
+
+        public static readonly IEqualityComparer<IReferenceSymbol> ReferenceSymbolEqualityComparer = new Codex.Utilities.EqualityComparerBuilder<IReferenceSymbol>()
+            .CompareByAfter(s => s.ProjectId)
+            .CompareByAfter(s => s.Id.Value)
+            .CompareByAfter(s => s.ReferenceKind);
+
+        public static readonly IEqualityComparer<IDefinitionSymbol> DefinitionSymbolEqualityComparer = ReferenceSymbolEqualityComparer;
 
         public ReferencesController(ICodex storage)
         {
@@ -56,7 +64,7 @@ namespace Codex.Web.Mvc.Controllers
             }
         }
 
-        private static void WriteImplementedInterfaceMembers(StringWriter writer, List<IDefinitionSymbol> implementedInterfaceMembers)
+        private static void WriteImplementedInterfaceMembers(StringWriter writer, IReadOnlyList<IDefinitionSymbol> implementedInterfaceMembers)
         {
             Write(writer, string.Format(@"<div class=""rH"" onclick=""ToggleExpandCollapse(this);return false;"">Implemented interface member{0}:</div>", implementedInterfaceMembers.Count > 1 ? "s" : ""));
 
@@ -74,7 +82,7 @@ namespace Codex.Web.Mvc.Controllers
         {
             var resultText = $@"<a onclick=""D('{searchResult.ProjectId.AsJavaScriptStringEncoded()}', '{searchResult.Id.Value.AsJavaScriptStringEncoded()}');return false;"" href=""/?rightProject={searchResult.ProjectId}&rightSymbol={searchResult.Id.Value}"">
  <div class=""resultItem"">
- <img src=""/content/icons/{searchResult.Glyph}"" height=""16"" width=""16"" /><div class=""resultKind"">{searchResult.Kind.ToLowerInvariant()}</div><div class=""resultName"">{searchResult.ShortName}</div><div class=""resultDescription"">{searchResult.DisplayName}</div>
+ <img src=""/content/icons/{searchResult.GetGlyph()}.png"" height=""16"" width=""16"" /><div class=""resultKind"">{searchResult.Kind.ToLowerInvariant()}</div><div class=""resultName"">{searchResult.ShortName}</div><div class=""resultDescription"">{searchResult.DisplayName}</div>
  </div>
  </a>";
 
@@ -111,7 +119,7 @@ namespace Codex.Web.Mvc.Controllers
                         .FirstOrDefault();
                     if (baseMember != null)
                     {
-                        WriteBaseMember(writer, baseMember);
+                        WriteBaseMember(writer, baseMember.Symbol);
                     }
 
                     var implementedMembers = symbolReferenceResult.RelatedDefinitions
@@ -120,17 +128,17 @@ namespace Codex.Web.Mvc.Controllers
 
                     if (implementedMembers.Count != 0)
                     {
-                        WriteImplementedInterfaceMembers(writer, implementedMembers);
+                        WriteImplementedInterfaceMembers(writer, implementedMembers.Select(s => s.Symbol).Distinct(DefinitionSymbolEqualityComparer).ToList());
                     }
                 }
 
                 foreach (var referenceKind in referenceKindGroups.OrderBy(t => (int)t.Item1))
                 {
                     string formatString = "";
-
                     switch (referenceKind.Item1)
                     {
                         case ReferenceKind.Reference:
+                        case ReferenceKind.UsingDispose:
                             formatString = "{0} reference{1} to {2}";
                             break;
                         case ReferenceKind.Definition:

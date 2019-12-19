@@ -105,7 +105,7 @@ namespace Codex.ElasticSearch.Legacy.Bridge
                                 definition.Id.Value,
                                 definition.ProjectId);
 
-                            result.RelatedDefinitions.AddRange(relatedDefinitions.Select(s => s.Symbol));
+                            result.RelatedDefinitions.AddRange(relatedDefinitions.Select(s => new RelatedDefinition(s.Symbol, s.ReferenceKind)));
                         }
                         else
                         {

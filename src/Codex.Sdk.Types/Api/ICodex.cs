@@ -300,7 +300,19 @@ namespace Codex.Sdk.Search
 
         public string ProjectId { get; set; }
 
-        public List<IDefinitionSymbol> RelatedDefinitions { get; } = new List<IDefinitionSymbol>();
+        public List<RelatedDefinition> RelatedDefinitions { get; } = new List<RelatedDefinition>();
+    }
+
+    public class RelatedDefinition
+    {
+        public string ReferenceKind { get; }
+        public IDefinitionSymbol Symbol { get; }
+
+        public RelatedDefinition(IDefinitionSymbol symbol, string referenceKind)
+        {
+            Symbol = symbol;
+            ReferenceKind = referenceKind;
+        }
     }
 
     public class IndexQueryHitsResponse<T> : IndexQueryResponse<IndexQueryHits<T>>
