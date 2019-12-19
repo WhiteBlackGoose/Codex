@@ -101,7 +101,7 @@ namespace Codex.Utilities
                 }
             }
 
-            return (repoSourceControlAddress.EnsureTrailingSlash() + fileRepoRelativePath).Replace("\\", "/");
+            return (repoSourceControlAddress.EnsureTrailingSlash("/") + fileRepoRelativePath).Replace("\\", "/");
         }
     }
 }
