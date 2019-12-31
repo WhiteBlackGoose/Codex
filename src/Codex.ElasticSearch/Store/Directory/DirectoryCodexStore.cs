@@ -28,6 +28,8 @@ namespace Codex.ElasticSearch.Store
         public readonly string DirectoryPath;
         private const string EntityFileExtension = ".cdx.json";
 
+        private const long FileSizeByteMax = 10 << 20;
+
         // These two files should contain the same content after finalization
         private const string RepositoryInfoFileName = "repo" + EntityFileExtension;
         private const string RepositoryInitializationFileName = "initrepo" + EntityFileExtension;
@@ -130,11 +132,10 @@ namespace Codex.ElasticSearch.Store
                         if (kind == StoredEntityKind.BoundFiles)
                         {
                             var fileSize = fileSystem.GetFileSize(file);
-                            const long threshold = 10 << 20;
-                            if (fileSize > threshold)
+                            if (fileSize > FileSizeByteMax)
                             {
                                 var i = Interlocked.Increment(ref nextIndex);
-                                logger.LogMessage($"{i}/{count}: Ignoring {kind} info at {file}. File size {fileSize} bytes > {threshold} bytes.");
+                                logger.LogMessage($"{i}/{count}: Ignoring {kind} info at {file}. File size {fileSize} bytes > {FileSizeByteMax} bytes.");
 
                                 // Ignore files larger than 10 MB
                                 continue;
@@ -223,28 +224,41 @@ namespace Codex.ElasticSearch.Store
                 var stableId = kind.GetEntityStableId(entity);
                 var pathPart = pathGenerator(entity);
 
-                Write(Path.Combine(kind.Name, $"{pathPart}.{stableId}{QualifierSuffix}{EntityFileExtension}"), entity);
+                Write(Path.Combine(kind.Name, $"{pathPart}.{stableId}{QualifierSuffix}{EntityFileExtension}"), entity, kind);
             }
 
             return Task.CompletedTask;
         }
 
-        private void Write<T>(string relativePath, T entity)
+        private void Write<T>(string relativePath, T entity, StoredEntityKind kind = null)
         {
             if (addedFiles.TryAdd(relativePath, true))
             {
                 var fullPath = Path.Combine(DirectoryPath, relativePath);
+                long fileSize = 0;
+
                 try
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
                     using (var streamWriter = new StreamWriter(fullPath))
                     {
                         entity.SerializeEntityTo(new JsonTextWriter(streamWriter) { Formatting = Formatting.Indented }, stage: ObjectStage.StoreRaw);
+                        if (kind == StoredEntityKind.BoundFiles)
+                        {
+                            fileSize = streamWriter.BaseStream.Length;
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
                     logger.LogExceptionError($"Writing '{fullPath}' failed:", ex);
+                    File.Delete(fullPath);
+                    return;
+                }
+
+                if (fileSize > FileSizeByteMax)
+                {
+                    logger.LogWarning($"Excluding '{fullPath}' because file size {fileSize} bytes > {FileSizeByteMax} bytes.");
                     File.Delete(fullPath);
                 }
             }
