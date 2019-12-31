@@ -242,7 +242,14 @@ namespace Codex.Application
                                 // This is used to ignore files which are not specified in the .gitignore files
                                 new GitIgnoreFilter(".cdxignore"),
 
-                                new BinaryFileSystemFilter(new string[] { ".exe", ".dll", "*.blob", ".db" })
+                                new BinaryFileSystemFilter(new string[] 
+                                    {
+                                        // Exclude known binary file formats
+                                        ".exe", ".dll", "*.blob", ".db", ".pdb", ".png",
+
+                                        // Exclude localization related files
+                                        ".lcl",  ".lci" 
+                                    })
                                 ))
                         {
                             DisableEnumeration = projectMode || disableEnumeration || file.Length != 0
