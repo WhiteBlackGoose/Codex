@@ -127,10 +127,18 @@ namespace Codex.ElasticSearch.Store
                     var files = fileSystem.GetFiles(kind.Name).ToList();
                     foreach (var file in files)
                     {
-                        if (kind == StoredEntityKind.BoundFiles && fileSystem.GetFileSize(file) > 10 << 20)
+                        if (kind == StoredEntityKind.BoundFiles)
                         {
-                            // Ignore files larger than 10 MB
-                            continue;
+                            var fileSize = fileSystem.GetFileSize(file);
+                            const long threshold = 10 << 20;
+                            if (fileSize > threshold)
+                            {
+                                var i = Interlocked.Increment(ref nextIndex);
+                                logger.LogMessage($"{i}/{count}: Ignoring {kind} info at {file}. File size {fileSize} bytes > {threshold} bytes.");
+
+                                // Ignore files larger than 10 MB
+                                continue;
+                            }
                         }
 
                         actionQueue.Enqueue(async () =>
