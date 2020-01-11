@@ -114,8 +114,23 @@ namespace Codex.ElasticSearch
 
         public async Task<ICodexRepositoryStore> CreateRepositoryStore(Repository repository, Commit commit, Branch branch)
         {
-            var repositoryStore = new ElasticSearchCodexRepositoryStore(this, repository, commit, branch);
+            Placeholder.Todo("Choose real values for the parameters");
+            var batcher = new ElasticSearchBatcher(this,
+               commitFilterName: $"commits/{commit.CommitId}",
+               repositoryFilterName: $"repos/{repository.Name}",
+               cumulativeCommitFilterName: $"cumulativeCommits/{commit.CommitId}",
+               commitId: commit.CommitId);
+
+            var repositoryStore = new InnerRepositoryStore(this, batcher, repository, commit, branch);
             return repositoryStore;
+        }
+
+        class InnerRepositoryStore : IndexingCodexRepositoryStoreBase<ElasticSearchStoredFilterBuilder>
+        {
+            public InnerRepositoryStore(ElasticSearchStore store, ElasticSearchBatcher batcher, Repository repository, Commit commit, Branch branch)
+                : base(batcher, store.Configuration.Logger, repository, commit, branch)
+            {
+            }
         }
     }
 

@@ -16,7 +16,7 @@ using Codex.Logging;
 
 namespace Codex.ElasticSearch
 {
-    internal class ElasticSearchBatcher
+    internal class ElasticSearchBatcher : IBatcher<ElasticSearchStoredFilterBuilder>
     {
         /// <summary>
         /// Defines stored filters for each entity type
@@ -30,11 +30,6 @@ namespace Codex.ElasticSearch
         /// This is an array because Add takes an array not a single item
         /// </remarks>
         public readonly ElasticSearchStoredFilterBuilder[] DeclaredDefinitionStoredFilter;
-
-        /// <summary>
-        /// Empty set of stored filters for passing as additional stored filters
-        /// </summary>
-        internal readonly ElasticSearchStoredFilterBuilder[] EmptyStoredFilters = Array.Empty<ElasticSearchStoredFilterBuilder>();
 
         private readonly ConcurrentQueue<ValueTask<None>> backgroundTasks = new ConcurrentQueue<ValueTask<None>>();
 
@@ -271,6 +266,18 @@ namespace Codex.ElasticSearch
             {
                 return await context.Client.RefreshAsync(store.StoredFilterStore.IndexName).ThrowOnFailure();
             });
+        }
+
+        ElasticSearchStoredFilterBuilder[] IBatcher<ElasticSearchStoredFilterBuilder>.DeclaredDefinitionStoredFilter => DeclaredDefinitionStoredFilter;
+
+        void IBatcher<ElasticSearchStoredFilterBuilder>.Add<T>(SearchType<T> searchType, T entity, params ElasticSearchStoredFilterBuilder[] additionalStoredFilters)
+        {
+            Add((ElasticSearchEntityStore<T>)store.EntityStores[searchType.Id], entity, additionalStoredFilters);
+        }
+
+        ValueTask<None> IBatcher<ElasticSearchStoredFilterBuilder>.AddAsync<T>(SearchType<T> searchType, T entity, params ElasticSearchStoredFilterBuilder[] additionalStoredFilters)
+        {
+            return AddAsync((ElasticSearchEntityStore<T>)store.EntityStores[searchType.Id], entity, additionalStoredFilters);
         }
     }
 }

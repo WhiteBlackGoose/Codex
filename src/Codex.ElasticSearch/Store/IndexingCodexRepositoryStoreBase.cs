@@ -7,46 +7,45 @@ using System.Text;
 using System.Threading.Tasks;
 using Codex.ObjectModel;
 using Codex.Utilities;
-using Codex.Storage.DataModel;
 using Codex.Storage.Utilities;
 using System.Collections.Concurrent;
-using Codex.ElasticSearch.Utilities;
 using Codex.Logging;
+using Codex.Sdk.Utilities;
+using Codex.ElasticSearch.Utilities;
+using Codex.Storage.DataModel;
 
 namespace Codex.ElasticSearch
 {
-    class ElasticSearchCodexRepositoryStore : ICodexRepositoryStore
+    public abstract class IndexingCodexRepositoryStoreBase<TStoredFilterBuilder> : ICodexRepositoryStore
     {
-        private readonly ElasticSearchStore store;
-        private readonly ElasticSearchBatcher batcher;
+        /// <summary>
+        /// Empty set of stored filters for passing as additional stored filters
+        /// </summary>
+        internal readonly TStoredFilterBuilder[] EmptyStoredFilters = Array.Empty<TStoredFilterBuilder>();
+
+        protected IBatcher<TStoredFilterBuilder> Batcher { get; }
         private readonly Repository repository;
         private readonly Commit commit;
         private readonly Branch branch;
         private readonly ConcurrentDictionary<string, CommitFileLink> commitFilesByRepoRelativePath = new ConcurrentDictionary<string, CommitFileLink>(StringComparer.OrdinalIgnoreCase);
-        internal Logger Logger => store.Configuration.Logger;
+        internal Logger Logger { get; }
 
-        public ElasticSearchCodexRepositoryStore(ElasticSearchStore store, Repository repository, Commit commit, Branch branch)
+        public IndexingCodexRepositoryStoreBase(IBatcher<TStoredFilterBuilder> batcher, Logger logger, Repository repository, Commit commit, Branch branch)
         {
-            this.store = store;
+            Batcher = batcher;
+            Logger = logger;
             this.repository = repository;
             this.commit = commit;
             this.branch = branch;
 
-            Placeholder.Todo("Choose real values for the parameters");
-            this.batcher = new ElasticSearchBatcher(store, 
-                commitFilterName: $"commits/{commit.CommitId}",
-                repositoryFilterName: $"repos/{repository.Name}",
-                cumulativeCommitFilterName: $"cumulativeCommits/{commit.CommitId}",
-                commitId: commit.CommitId);
-
-            batcher.Add(store.RepositoryStore, new RepositorySearchModel()
+            Batcher.Add(SearchTypes.Repository, new RepositorySearchModel()
             {
                 Repository = repository,
             });
 
             if (commit != null)
             {
-                batcher.Add(store.CommitStore, new CommitSearchModel()
+                Batcher.Add(SearchTypes.Commit, new CommitSearchModel()
                 {
                     Commit = commit,
                 });
@@ -87,13 +86,13 @@ namespace Codex.ElasticSearch
         {
             foreach (var project in projects)
             {
-                await batcher.AddAsync(store.ProjectStore, new ProjectSearchModel() { Project = project });
+                await Batcher.AddAsync(SearchTypes.Project, new ProjectSearchModel() { Project = project });
 
                 await AddBoundFilesAsync(project.AdditionalSourceFiles);
 
                 foreach (var projectReference in project.ProjectReferences)
                 {
-                    batcher.Add(store.ProjectReferenceStore, new ProjectReferenceSearchModel(project)
+                    Batcher.Add(SearchTypes.ProjectReference, new ProjectReferenceSearchModel(project)
                     {
                         ProjectReference = projectReference
                     });
@@ -122,10 +121,10 @@ namespace Codex.ElasticSearch
                 File = chunkFile
             };
 
-            await batcher.AddAsync(store.TextSourceStore, textModel);
+            await Batcher.AddAsync(SearchTypes.TextSource, textModel);
             foreach (var chunk in chunks)
             {
-                await batcher.AddAsync(store.TextChunkStore, chunk);
+                await Batcher.AddAsync(SearchTypes.TextChunk, chunk);
             }
 
             return textModel;
@@ -143,13 +142,13 @@ namespace Codex.ElasticSearch
                     definition.ExcludeFromDefaultSearch = true;
                 }
 
-                batcher.Add(store.DefinitionStore, new DefinitionSearchModel()
+                Batcher.Add(SearchTypes.Definition, new DefinitionSearchModel()
                 {
                     Definition = definition,
                 }, 
                 // If definition is declared in this code base, add it to declared def filter for use when boosting or searching
                 // only definitions that have source associated with them
-                declared ? batcher.DeclaredDefinitionStoredFilter : batcher.EmptyStoredFilters);
+                declared ? Batcher.DeclaredDefinitionStoredFilter : EmptyStoredFilters);
             }
         }
 
@@ -162,7 +161,7 @@ namespace Codex.ElasticSearch
 
             foreach (var property in properties)
             {
-                batcher.Add(store.PropertyStore, new PropertySearchModel()
+                Batcher.Add(SearchTypes.Property, new PropertySearchModel()
                 {
                     Key = property.Key,
                     Value = property.Value,
@@ -181,7 +180,7 @@ namespace Codex.ElasticSearch
 
             TextSourceSearchModel textModel = await AddTextFileAsync(boundSourceFile.SourceFile);
 
-            batcher.Add(store.TextSourceStore, textModel);
+            Batcher.Add(SearchTypes.TextSource, textModel);
             Logger.LogDiagnosticWithProvenance($"[Text#{textModel.Uid}] {sourceFileInfo.ProjectId}:{sourceFileInfo.ProjectRelativePath}");
 
             UpdateCommitFile(textModel);
@@ -194,7 +193,7 @@ namespace Codex.ElasticSearch
                 CompressedReferences = ReferenceListModel.CreateFrom(boundSourceFile.References)
             };
 
-            await batcher.AddAsync(store.BoundSourceStore, boundSourceModel);
+            await Batcher.AddAsync(SearchTypes.BoundSource, boundSourceModel);
 
             AddBoundSourceFileAssociatedData(boundSourceFile, boundSourceModel);
             Logger.LogDiagnosticWithProvenance($"[Bound#{boundSourceModel.Uid}|Text#{textModel.Uid}] {sourceFileInfo.ProjectId}:{sourceFileInfo.ProjectRelativePath}");
@@ -238,18 +237,18 @@ namespace Codex.ElasticSearch
                     referenceModel.CompressedSpans = new SymbolLineSpanListModel(spanList);
                 }
 
-                batcher.Add(store.ReferenceStore, referenceModel);
+                Batcher.Add(SearchTypes.Reference, referenceModel);
             }
         }
 
         public async Task FinalizeAsync()
         {
-            await batcher.AddAsync(store.CommitFilesStore, new CommitFilesSearchModel(this.commit)
+            await Batcher.AddAsync(SearchTypes.CommitFiles, new CommitFilesSearchModel(this.commit)
             {
                 CommitFiles = commitFilesByRepoRelativePath.Values.OrderBy(cf => cf.RepoRelativePath, StringComparer.OrdinalIgnoreCase).ToList()
             });
 
-            await batcher.FinalizeAsync(repository.Name);
+            await Batcher.FinalizeAsync(repository.Name);
         }
     }
 }
