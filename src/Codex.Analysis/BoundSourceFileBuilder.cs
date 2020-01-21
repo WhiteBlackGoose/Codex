@@ -11,6 +11,12 @@ namespace Codex.Analysis
 {
     public class BoundSourceFileBuilder
     {
+        private static readonly SourceHashAlgorithm[] s_checksumAlgorithms = new SourceHashAlgorithm[]
+        {
+            SourceHashAlgorithm.Sha1,
+            SourceHashAlgorithm.Sha256
+        };
+
         public readonly BoundSourceFile BoundSourceFile = new BoundSourceFile();
         private readonly List<ReferenceSpan> references;
         private readonly List<ClassificationSpan> classifications;
@@ -225,25 +231,28 @@ namespace Codex.Analysis
             SourceText text = SourceText;
             var info = BoundSourceFile.SourceFile.Info;
 
-            var checksumKey = GetChecksumKey(text.ChecksumAlgorithm);
-            if (checksumKey != null)
+            foreach (var checksumAlgorithm in s_checksumAlgorithms)
             {
-                var checksum = text.GetChecksum().ToHex();
-                info.Properties = info.Properties ?? new PropertyMap();
-                info.Properties[checksumKey] = checksum;
-                info.Lines = text.Lines.Count;
+                var checksumKey = GetChecksumKey(checksumAlgorithm);
+                if (checksumKey != null)
+                {
+                    var checksum = text.GetChecksum().ToHex();
+                    info.Properties = info.Properties ?? new PropertyMap();
+                    info.Properties[checksumKey] = checksum;
+                    info.Lines = text.Lines.Count;
 
-                AnnotateDefinition(0, 0,
-                    new DefinitionSymbol()
-                    {
-                        Id = SymbolId.CreateFromId($"{checksumKey}|{checksum}"),
-                        ShortName = checksum,
-                        ContainerQualifiedName = checksumKey,
-                        ProjectId = BoundSourceFile.ProjectId,
-                        ReferenceKind = nameof(ReferenceKind.Definition),
-                        Kind = checksumKey,
-                        IsImplicitlyDeclared = true
-                    });
+                    AnnotateDefinition(0, 0,
+                        new DefinitionSymbol()
+                        {
+                            Id = SymbolId.CreateFromId($"{checksumKey}|{checksum}"),
+                            ShortName = checksum,
+                            ContainerQualifiedName = checksumKey,
+                            ProjectId = BoundSourceFile.ProjectId,
+                            ReferenceKind = nameof(ReferenceKind.Definition),
+                            Kind = checksumKey,
+                            IsImplicitlyDeclared = true
+                        });
+                }
             }
 
             classifications.Sort((cs1, cs2) => cs1.Start.CompareTo(cs2.Start));
