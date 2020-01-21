@@ -76,7 +76,7 @@ namespace Codex.Analysis.Projects
                 workspace: Workspace);
 
             // Add additional document with command line args
-            projectInfo.WithAdditionalDocuments(
+            projectInfo = projectInfo.WithAdditionalDocuments(
                 projectInfo.AdditionalDocuments.Concat(CreateCommandLineArgumentsDocument(args, projectName)));
 
             projectInfo = projectInfo.WithOutputFilePath(outputPath).WithFilePath(projectPath);
