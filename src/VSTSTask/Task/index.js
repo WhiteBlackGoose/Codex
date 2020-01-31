@@ -13,6 +13,7 @@ const fs = require("fs");
 const request = require("request");
 const shell = require("shelljs");
 const path = require("path");
+const q_1 = require("q");
 function mkdir(directoryPath) {
     let cmdPath = tl.which('cmd');
     let tool = tl.tool(cmdPath).arg('/c').arg('mkdir ' + directoryPath);
@@ -31,8 +32,30 @@ function run() {
             var file = fs.createWriteStream(toolPath);
             yield new Promise(resolve => request.get('https://github.com/Ref12/Codex/releases/download/latest-prerel/Codex.Automation.Workflow.exe').pipe(file).on('finish', resolve));
             tool = tl.tool(toolPath).arg(workflowArguments).arg(`/codexOutputRoot:${outputDirectory}`);
-            let rc1 = yield tool.exec();
-            console.log('Task done! ' + rc1);
+            let delays = [
+                500,
+                1000,
+                2000,
+                4000,
+                8000
+            ];
+            for (var i = 0; i < delays.length + 1; i++) {
+                try {
+                    let rc1 = yield tool.exec();
+                    console.log('Task done! ' + rc1);
+                    return;
+                }
+                catch (execError) {
+                    if (i < delays.length) {
+                        var delayTime = delays[i];
+                        console.log('Error launching tool. Trying after ' + delayTime + 'ms:\n' + execError.message);
+                        yield q_1.delay(delayTime);
+                    }
+                    else {
+                        throw execError;
+                    }
+                }
+            }
         }
         catch (err) {
             tl.setResult(tl.TaskResult.Failed, err.message);
