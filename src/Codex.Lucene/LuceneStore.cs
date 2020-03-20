@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Codex.Utilities;
 using Lucene.Net.Index;
 using Lucene.Net.Documents;
+using Codex.ElasticSearch;
+using Codex.Logging;
 
 namespace Codex.Lucene.Search
 {
@@ -18,6 +20,19 @@ namespace Codex.Lucene.Search
         public Task<ICodexRepositoryStore> CreateRepositoryStore(Repository repository, Commit commit, Branch branch)
         {
             throw new NotImplementedException();
+        }
+
+        private class RepositoryStore : IndexingCodexRepositoryStoreBase<LuceneStoreFilterBuilder>
+        {
+            public RepositoryStore(IBatcher<LuceneStoreFilterBuilder> batcher, Logger logger, Repository repository, Commit commit, Branch branch) 
+                : base(batcher, logger, repository, commit, branch)
+            {
+            }
+        }
+
+        private class LuceneStoreFilterBuilder
+        {
+
         }
     }
 }
