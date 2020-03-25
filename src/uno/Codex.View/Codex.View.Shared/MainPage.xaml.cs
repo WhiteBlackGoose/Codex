@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Codex.ElasticSearch.Store;
+using Codex.ObjectModel;
+using Codex.Serialization;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +28,23 @@ namespace Codex.View
         public MainPage()
         {
             this.InitializeComponent();
+
+            Console.WriteLine("Creating entity");
+
+
+            var file = new SourceFile()
+            {
+                Content = "Hello\nWorld",
+                Info = new SourceFileInfo()
+                {
+                    ProjectId = "Codex.View"
+                }
+            };
+
+            Console.WriteLine("Created entity");
+
+            MainTextBox.Text = file.SerializeEntity();
+
         }
     }
 }

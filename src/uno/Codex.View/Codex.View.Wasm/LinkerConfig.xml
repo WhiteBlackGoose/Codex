@@ -1,5 +1,9 @@
 ﻿<linker>
   <assembly fullname="Codex.View.Wasm" />
+  <assembly fullname="Codex.Sdk" />
+  <assembly fullname="Codex.ElasticSearch" />
+  <assembly fullname="Nest" />
+  <assembly fullname="Elasticsearch.Net" />
   <assembly fullname="Uno.UI" />
 
   <assembly fullname="System.Core">
