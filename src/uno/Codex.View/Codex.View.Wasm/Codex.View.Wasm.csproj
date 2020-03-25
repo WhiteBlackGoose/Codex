@@ -43,5 +43,10 @@
     <PackageReference Include="Uno.Wasm.Bootstrap" Version="1.0.10" />
     <DotNetCliToolReference Include="Uno.Wasm.Bootstrap.Cli" Version="1.0.10" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Codex.ElasticSearch\Codex.ElasticSearch.csproj" />
+    <ProjectReference Include="..\..\..\Codex.Lucene\Codex.Lucene.csproj" />
+    <ProjectReference Include="..\..\..\Codex.Sdk\Codex.Sdk.csproj" />
+  </ItemGroup>
   <Import Project="..\Codex.View.Shared\Codex.View.Shared.projitems" Label="Shared" Condition="Exists('..\Codex.View.Shared\Codex.View.Shared.projitems')" />
 </Project>
