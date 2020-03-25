@@ -102,6 +102,18 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <ProjectReference Include="..\..\..\Codex.ElasticSearch\Codex.ElasticSearch.csproj">
+      <Project>{4573f8bc-6b87-4526-a815-42f473452f8c}</Project>
+      <Name>Codex.ElasticSearch</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Codex.Lucene\Codex.Lucene.csproj">
+      <Project>{ad6d5564-875e-40c6-b19c-fd6f9c41910a}</Project>
+      <Name>Codex.Lucene</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Codex.Sdk\Codex.Sdk.csproj">
+      <Project>{2322a932-05f4-4931-8547-71377c6ab49e}</Project>
+      <Name>Codex.Sdk</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
