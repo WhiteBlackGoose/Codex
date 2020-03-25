@@ -90,9 +90,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Lucene", "src\Codex.L
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		src\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems*{2322a932-05f4-4931-8547-71377c6ab49e}*SharedItemsImports = 4
-		src\Codex.Sdk.Types\Codex.Sdk.Types.projitems*{2322a932-05f4-4931-8547-71377c6ab49e}*SharedItemsImports = 4
+		src\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems*{2322a932-05f4-4931-8547-71377c6ab49e}*SharedItemsImports = 5
+		src\Codex.Sdk.Types\Codex.Sdk.Types.projitems*{2322a932-05f4-4931-8547-71377c6ab49e}*SharedItemsImports = 5
 		src\Codex.Sdk.Shared\Codex.Sdk.Shared.projitems*{d60352c9-9e89-46c0-884d-91640f484aac}*SharedItemsImports = 13
+		src\Codex.Sdk.Types\Codex.Sdk.Types.projitems*{e30939c5-042d-4ec2-817d-c5afc509b330}*SharedItemsImports = 5
 		src\Codex.Sdk.Types\Codex.Sdk.Types.projitems*{f88fb26c-fac3-4d8a-9779-e3475d18ecb1}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

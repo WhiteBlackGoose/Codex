@@ -17,6 +17,7 @@
     <PackageReference Include="System.IO.Compression" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Codex.ElasticSearch\Codex.ElasticSearch.csproj" />
     <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />
   </ItemGroup>
   <Import Project="$(SrcRoot)\Common.targets" />
