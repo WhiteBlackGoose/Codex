@@ -4,119 +4,167 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Codex.ObjectModel;
 
 namespace Codex.Schema
 {
-    public class SchemaDefinition
+    public class Schemas
     {
-
-    }
-
-    public class SchemaDefinition<TObject> : SchemaDefinition
-    {
-        public IReadOnlyList<FieldDefinition<TObject>> Fields { get; }
-    }
-
-    public class FieldDefinition<TObject>
-    {
-        public string Name { get; }
-    }
-
-    public abstract class FieldDefinition<TObject, TValue> : FieldDefinition<TObject>
-    {
-        public abstract TValue Get(TObject o);
-        public abstract void Set(TObject o, TValue value);
-    }
-
-    public abstract class BoundSchemaDefinition<TObject>
-    {
-        public SchemaDefinition<TObject> SerializedSchema { get; }
-        public SchemaDefinition<TObject> Schema { get; }
-
-        public IReadOnlyList<BoundFieldDefinition<TObject>> Fields { get; }
-
-        public BoundSchemaDefinition(SchemaDefinition<TObject> serializedSchema, SchemaDefinition<TObject> schema)
-        {
-        }
-
-        public abstract TObject Create();
-
-        public TObject Deserialize(ObjectReader reader)
-        {
-            // TODO: Bit field for non-default fields
-            var value = Create();
-            foreach (var field in Fields)
+        public static Lazy<ISchemaDefinition<CodeReviewCommentThread, ICodeReviewCommentThread>> CodeReviewCommentThreadSchema { get; } 
+            = new Lazy<ISchemaDefinition<CodeReviewCommentThread, ICodeReviewCommentThread>>(() =>
             {
-                field.Deserialize(reader, value);
-            }
+                return new SchemaBuilder().Create<CodeReviewCommentThread, ICodeReviewCommentThread>(() => new CodeReviewCommentThread())
+                    .Field<ILineSpan, LineSpan>(nameof(ICodeReviewCommentThread.OriginalSpan), (o, i) => o.OriginalSpan, (o, i, v) => o.OriginalSpan = v, () => LineSpanSchema.Value);
+            });
 
-            return value;
-        }
+        public static Lazy<ISchemaDefinition<ILineSpan>> LineSpanSchema { get; }
+    }
 
-        public void Serialize(ObjectWriter writer, TObject value)
+    public interface ISchemaVisitor
+    {
+        void VisitField<TObject, TValue>(FieldDefinition<TObject, TValue> field, TObject o);
+    }
+
+    public class SchemaBuilder
+    {
+        public SchemaBuilder<TMutable, TImmutable> Create<TMutable, TImmutable>(Func<TMutable> create)
+            where TMutable : TImmutable
         {
-            // TODO: Bit field for non-default fields
-            foreach (var field in Fields)
-            {
-                field.Serialize(writer, value);
-            }
+            return new SchemaBuilder<TMutable, TImmutable>(create);
         }
     }
 
-    public abstract class BoundFieldDefinition<TObject>
+    public class SchemaBuilder<TMutable, TImmutable> : ISchemaDefinition<TMutable, TImmutable>
+        where TMutable : TImmutable
     {
-        public abstract void Deserialize(ObjectReader reader, TObject target);
+        private readonly Func<TMutable> create;
+        private readonly List<IFieldDefinition<TImmutable>> fields = new List<IFieldDefinition<TImmutable>>();
 
-        public abstract void Serialize(ObjectWriter writer, TObject target);
+        public SchemaBuilder(Func<TMutable> create)
+        {
+            this.create = create;
+        }
+
+        public ISchemaDefinition<TImmutable> ImmutableSchema => throw new NotImplementedException();
+
+        public ISchemaDefinition<TMutable> MutableSchema => throw new NotImplementedException();
+
+        public SchemaBuilder<TMutable, TImmutable> Field<TValue, TMutableValue>(string name, Func<TImmutable, int, TValue> get, Action<TMutable, int, TMutableValue> set, Func<ISchemaDefinition<TValue>> getSchema)
+        {
+            throw new NotImplementedException();
+        }
     }
 
-    public abstract class BoundFieldDefinition<TObject, TValue> : BoundFieldDefinition<TObject>
+    public interface ISchemaDefinition<TObject>
     {
-        private FieldDefinition<TObject, TValue> Definition { get; }
+        TObject New();
 
-        private IValueSerializer<TValue> Serializer;
-        private Action<TObject, TValue> Set;
-        private Func<TObject, TValue> Get;
+        void Visit(ISchemaVisitor visitor, TObject o);
+    }
 
-        public BoundFieldDefinition()
+    public interface ISchemaDefinition<TMutable, TImmutable>
+        where TMutable : TImmutable
+    {
+        ISchemaDefinition<TImmutable> ImmutableSchema { get; }
+
+        ISchemaDefinition<TMutable> MutableSchema { get; }
+    }
+
+    public interface IFieldDefinition
+    {
+        string Name { get; }
+        bool IsArray { get; }
+    }
+
+    public interface IFieldDefinition<TObject> : IFieldDefinition
+    {
+        ISchemaDefinition<TObject> Schema { get; }
+
+        void Visit(ISchemaVisitor visitor, TObject o);
+    }
+
+    public interface IFieldDefinition<TObject, TValue> : IFieldDefinition<TObject>
+    {
+        int GetLength(TObject o);
+        TValue Get(TObject o, int index = 0);
+        void Set(TObject o, TValue value, int index = 0);
+    }
+
+    public class FieldDefinition<TObject, TValue> : IFieldDefinition<TObject, TValue>
+    {
+        private readonly Func<TObject, int, TValue> get;
+        private readonly Action<TObject, int, TValue> set;
+        private readonly Func<ISchemaDefinition<TValue>> getSchema;
+
+        public FieldDefinition(string name, Func<TObject, int, TValue> get, Action<TObject, int, TValue> set, Func<ISchemaDefinition<TValue>> getSchema)
         {
 
         }
 
-        public override void Deserialize(ObjectReader reader, TObject target)
+        public ISchemaDefinition<TObject> Schema => throw new NotImplementedException();
+
+        public string Name => throw new NotImplementedException();
+
+        public bool IsArray => throw new NotImplementedException();
+
+        public TValue Get(TObject o, int index = 0)
         {
-            if (Serializer.Deserialize(reader, out var value))
-            {
-                Set(target, value);
-            }
+            throw new NotImplementedException();
         }
 
-        public override void Serialize(ObjectWriter writer, TObject target)
+        public int GetLength(TObject o)
         {
-            var value = Get(target);
-            Serializer.Serialize(writer, value);
+            throw new NotImplementedException();
+        }
+
+        public void Set(TObject o, TValue value, int index = 0)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Visit(ISchemaVisitor visitor, TObject o)
+        {
+            visitor.VisitField(this, o);
         }
     }
 
-    public class ObjectReader 
-    {
-    }
+    //public abstract class SchemaDefinition<TObject> : SchemaDefinition
+    //{
+    //    public IReadOnlyList<FieldDefinition<TObject>> Fields { get; }
 
-    public class ObjectWriter
-    {
-    }
+    //    public abstract TObject New();
 
-    public interface IValueSerializer<TValue>
-    {
-        bool Deserialize(ObjectReader reader, out TValue value);
+    //    public void Visit(ISchemaVisitor visitor, TObject o)
+    //    {
+    //        foreach (var field in Fields)
+    //        {
+    //            field.Visit(visitor, o);
+    //        }
+    //    }
+    //}
 
-        void Serialize(ObjectWriter writer, TValue value);
-    }
+    //public abstract class FieldDefinition
+    //{
+    //    public abstract string Name { get; }
+    //    public abstract bool IsArray { get; }
+    //}
 
-    public abstract class ValueSerializer<TValue>
-    {
-        public abstract TValue Deserialize(ObjectReader reader);
+    //public abstract class FieldDefinition<TObject> : FieldDefinition
+    //{
+    //    public abstract void Visit(ISchemaVisitor visitor, TObject o);
+    //}
 
-        public abstract void Serialize(ObjectWriter writer, TValue value);
-    }
+    //public abstract class FieldDefinition<TObject, TValue> : FieldDefinition<TObject>
+    //{
+    //    public abstract SchemaDefinition<TValue> Schema { get; }
+    //    public abstract int GetLength(TObject o);
+    //    public abstract TValue Get(TObject o, int? index = null);
+    //    public abstract void Set(TObject o, TValue value, int? index = null);
+
+    //    public override void Visit(ISchemaVisitor visitor, TObject o)
+    //    {
+    //        visitor.VisitField(this, o);
+    //    }
+    //}
+
 }
