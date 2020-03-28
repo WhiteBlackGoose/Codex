@@ -94,7 +94,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Codex.View.Shared", "Codex.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.View.UWP", "Codex.View\Codex.View.UWP\Codex.View.UWP.csproj", "{1915A167-5C97-4BC4-91E9-1DA73F1B1374}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.View.Wasm", "Codex.View\Codex.View.Wasm\Codex.View.Wasm.csproj", "{37B618C5-A7C7-435C-9C5E-E7936D394B2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.View.Wasm", "Codex.View\Codex.View.Wasm\Codex.View.Wasm.csproj", "{37B618C5-A7C7-435C-9C5E-E7936D394B2E}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

@@ -8,8 +8,8 @@
   <ItemGroup>
     <PackageReference Include="NUnit" />
     <PackageReference Include="StrongNamer" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Compile Include="..\TestProjects\outputs\TestInputsDirectoryPath.cs">
       <Link>TestInputsDirectoryPath.cs</Link>
@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Codex.Analysis\Codex.Analysis.csproj" />
     <ProjectReference Include="..\Codex.ElasticSearch\Codex.ElasticSearch.csproj" />
+    <ProjectReference Include="..\Codex.Lucene\Codex.Lucene.csproj" />
     <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />
   </ItemGroup>
   <ItemGroup>

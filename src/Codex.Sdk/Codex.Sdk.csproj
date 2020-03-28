@@ -7,7 +7,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.ValueTuple" />
-    <PackageReference Include="System.Text.Json" />
   </ItemGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <Import Project="..\Codex.Sdk.Types\Codex.Sdk.Types.projitems" Label="Shared" />

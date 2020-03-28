@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Codex.Serialization
+namespace Codex.Schema
 {
     public class SchemaDefinition
     {

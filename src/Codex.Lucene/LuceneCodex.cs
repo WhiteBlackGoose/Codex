@@ -8,13 +8,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Codex.Utilities;
+using Lucene.Net.Index;
+using Lucene.Net.Store;
+using Lucene.Net.Search;
 
 namespace Codex.Lucene.Search
 {
     public class LuceneCodex : ICodex
     {
+        private LuceneConfiguration Configuration { get; }
+        private IndexReader Reader { get; }
+        private IndexSearcher Searcher { get; }
+
+        public LuceneCodex(LuceneConfiguration configuration)
+        {
+            Configuration = configuration;
+            Reader = DirectoryReader.Open(FSDirectory.Open(configuration.Directory));
+            Searcher = new IndexSearcher(Reader);
+        }
+
         public Task<IndexQueryResponse<ReferencesResult>> FindAllReferencesAsync(FindAllReferencesArguments arguments)
         {
+            
             throw new NotImplementedException();
         }
 

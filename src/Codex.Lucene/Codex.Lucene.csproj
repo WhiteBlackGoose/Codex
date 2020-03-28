@@ -10,10 +10,11 @@
     <Compile Remove="Model\ElasticSearchTypes.target.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Lucene.Net" />
+    <PackageReference Include="Lucene.Net" Version="4.8.0-beta00007" />
+    <PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-beta00007" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="StrongNamer" Condition="'$(TargetFramework)' == 'net472'" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" />
+    <!-- <PackageReference Include="System.Threading.Tasks.Extensions" /> -->
     <PackageReference Include="System.IO.Compression" />
   </ItemGroup>
   <ItemGroup>

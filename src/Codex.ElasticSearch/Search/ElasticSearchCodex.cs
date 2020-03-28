@@ -14,6 +14,7 @@ using Codex.Utilities;
 
 using static Codex.ElasticSearch.Utilities.ElasticUtility;
 using static Codex.ElasticSearch.StoredFilterUtilities;
+using System.Threading;
 
 namespace Codex.ElasticSearch.Search
 {
