@@ -76,7 +76,10 @@ namespace Codex.Analysis
             boundSourceFile.SourceFile.Info.Lines = DocumentText.Lines.Count;
             boundSourceFile.SourceFile.Info.Size = DocumentText.Length;
 
-            var classificationSpans = (IReadOnlyList<ClassifiedSpan>)await Classifier.GetClassifiedSpansAsync(_document, syntaxRoot.FullSpan);
+            // Cancel classification after a given interval
+            using var classificationToken = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+
+            var classificationSpans = (IReadOnlyList<ClassifiedSpan>)await Classifier.GetClassifiedSpansAsync(_document, syntaxRoot.FullSpan, classificationToken.Token);
             var text = await _document.GetTextAsync();
 
             var originalClassificationSpans = classificationSpans;
