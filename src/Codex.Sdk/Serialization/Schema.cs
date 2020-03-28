@@ -22,9 +22,10 @@ namespace Codex.Schema
         public string Name { get; }
     }
 
-    public class FieldDefinition<TObject, TValue>
+    public abstract class FieldDefinition<TObject, TValue> : FieldDefinition<TObject>
     {
-        IValueSerializer<TValue> Serializer { get; }
+        public abstract TValue Get(TObject o);
+        public abstract void Set(TObject o, TValue value);
     }
 
     public abstract class BoundSchemaDefinition<TObject>
