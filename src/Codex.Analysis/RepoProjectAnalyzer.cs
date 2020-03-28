@@ -49,11 +49,11 @@ namespace Codex.Analysis
                 {
                     if (analysisServices.ParallelProcessProjectFiles)
                     {
-                        fileTasks.Add(analysisServices.TaskDispatcher.Invoke(() => file.Analyze(), TaskType.File));
+                        fileTasks.Add(analysisServices.TaskDispatcher.Invoke(() => AnalyzeFile(file), TaskType.File));
                     }
                     else
                     {
-                        await file.Analyze();
+                        await AnalyzeFile(file);
                     }
                 }
             }
@@ -61,6 +61,19 @@ namespace Codex.Analysis
             await Task.WhenAll(fileTasks);
 
             await UploadProject(project);
+        }
+
+        private static async Task AnalyzeFile(RepoFile file)
+        {
+            try
+            {
+                await file.Analyze();
+            }
+            catch (Exception ex)
+            {
+                var logger = file.PrimaryProject.Repo.AnalysisServices.Logger;
+                logger.LogExceptionError($"Analyzing file ({file.PrimaryProject.ProjectId}::{file.FilePath}):", ex);
+            }
         }
 
         public virtual void CreateProjects(RepoFile repoFile) { }
