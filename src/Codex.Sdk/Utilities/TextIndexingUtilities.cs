@@ -1,7 +1,7 @@
-﻿using Codex.ObjectModel;
+using Codex.ObjectModel;
 using Codex.Sdk.Utilities;
-using Codex.Serialization;
 using Codex.Storage.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
@@ -44,7 +44,7 @@ namespace Codex.Utilities
             return sourceFile;
         }
 
-        public static void ToChunks(this ISourceFile sourceFile, bool excludeFromSearch, out ChunkedSourceFile chunkFile, out IReadOnlyList<TextChunkSearchModel> chunks, bool encodeFullText = true)
+        public static void ToChunks(this ISourceFile sourceFile, bool excludeFromSearch, out ChunkedSourceFile chunkFile, out IReadOnlyList<TextChunkSearchModel> chunks, Action<TextChunkSearchModel> populate, bool encodeFullText = true)
         {
             var lines = sourceFile.Content.GetLines(includeLineBreak: true);
             var lineChunks = IndexingUtilities.GetTextIndexingChunks(lines);
@@ -74,7 +74,8 @@ namespace Codex.Utilities
                     chunkSearchModel.Chunk = chunk;
                 }
 
-                chunkSearchModel.PopulateContentIdAndSize();
+                // TODO: Implement chunkSearchModel.PopulateContentIdAndSize(); at this layer
+                populate?.Invoke(chunkSearchModel);
                 chunkList.Add(chunkSearchModel);
                 chunkFile.Chunks.Add(new ChunkReference()
                 {

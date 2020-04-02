@@ -29,7 +29,6 @@ namespace Codex.Lucene.Search
 
         public Task<IndexQueryResponse<ReferencesResult>> FindAllReferencesAsync(FindAllReferencesArguments arguments)
         {
-            
             throw new NotImplementedException();
         }
 

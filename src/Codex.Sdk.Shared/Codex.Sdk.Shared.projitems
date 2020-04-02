@@ -10,6 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)EntityTypes.g.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IIndex.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ObjectModel\SearchEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SymbolKind.cs" />
     <None Include="$(MSBuildThisFileDirectory)EntityTypes.target.cs" />

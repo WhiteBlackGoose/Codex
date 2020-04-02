@@ -41,6 +41,10 @@ namespace Codex.Framework.Generation
         public List<TypeDefinition> Interfaces = new List<TypeDefinition>();
         public SearchType SearchType;
 
+        public CodeTypeReference MappingTypeReference;
+
+        public readonly CodeTypeDeclaration MappingTypeDeclaration;
+
         public TypeDefinition(Type type)
         {
             Type = type;
@@ -58,6 +62,17 @@ namespace Codex.Framework.Generation
             AllowedStages = type.GetAllowedStages();
             IsAdapter = type.GetAttribute<AdapterTypeAttribute>() != null;
 
+            MappingTypeDeclaration = new CodeTypeDeclaration(ClassName + "Mapping")
+            {
+                IsClass = true,
+                IsPartial = true,
+                TypeParameters =
+                {
+                    new CodeTypeParameter("TRoot")
+                }
+            };
+
+            MappingTypeReference = new CodeTypeReference(ClassName + "Mapping", new CodeTypeReference("TRoot"));
             Properties = type.GetProperties().Select(p => new PropertyDefinition(p)).ToList();
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Codex.ObjectModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,10 @@ namespace Codex.Sdk.Search
     public partial interface IIndex
     {
 
+    }
+
+    public partial interface IIndex<T>
+    {
     }
 
     /// <summary>

@@ -63,9 +63,9 @@ namespace Codex.ElasticSearch.Tests
                 }
             }
 
-            //var codex = new ElasticSearchCodex(configuration, service);
+            var codex = new LuceneCodex(configuration);
 
-            return (store, default);
+            return (store, codex);
         }
     }
 }

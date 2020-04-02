@@ -12,6 +12,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using System.Runtime.CompilerServices;
 using Codex.Utilities;
 using Codex.Sdk.Search;
+using System.Diagnostics;
 
 namespace Codex.Framework.Generation
 {
@@ -31,6 +32,23 @@ namespace Codex.Framework.Generation
             IsClass = true,
             IsPartial = true,
             Attributes = MemberAttributes.Static
+        };
+
+        private CodeTypeDeclaration MappingsClass = new CodeTypeDeclaration("Mappings")
+        {
+            IsClass = true,
+            IsPartial = true,
+            Attributes = MemberAttributes.Abstract,
+            TypeParameters =
+            {
+                new CodeTypeParameter("TData")
+            }
+        };
+
+        private CodeTypeDeclaration ClientInterface = new CodeTypeDeclaration("IClient")
+        {
+            IsInterface = true,
+            IsPartial = true,
         };
 
         private SymbolDisplayFormat TypeNameDisplayFormat = new SymbolDisplayFormat(genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters);
@@ -216,8 +234,11 @@ namespace Codex.Framework.Generation
             typesNamespace.Imports.Add(new CodeNamespaceImport(typeof(Task<>).Namespace));
             modelNamespace.Imports.Add(new CodeNamespaceImport(typeof(Task<>).Namespace));
             modelNamespace.Imports.Add(new CodeNamespaceImport("Codex.Framework.Types"));
+            modelNamespace.Imports.Add(new CodeNamespaceImport("Codex"));
 
             modelNamespace.Types.Add(CodexTypeUtilitiesClass);
+            modelNamespace.Types.Add(MappingsClass);
+            modelNamespace.Types.Add(ClientInterface);
 
             var typeMappingCreatorMethod = new CodeMemberMethod()
             {
@@ -262,6 +283,16 @@ namespace Codex.Framework.Generation
 
                 if (visitedSearchTypeDefinitions.Add(typeDefinition))
                 {
+                    MappingsClass.AddMappingProperty(searchType.Name,
+                        typeDefinition.MappingTypeReference.Specialize(searchType.Type.AsReference()));
+
+                    ClientInterface.Members.Add(new CodeMemberProperty()
+                    {
+                        Name = searchType.Name + "Index",
+                        Type = typeof(IIndex<>).MakeGenericTypeReference(searchType.Type.AsReference()),
+                        HasGet = true
+                    });
+
                     typeDefinition.SearchType = searchType;
                     CodeTypeDeclaration typeDeclaration = new CodeTypeDeclaration(typeDefinition.SearchDescriptorName);
                     //searchDescriptorsNamespace.Types.Add(typeDeclaration);
@@ -297,6 +328,13 @@ namespace Codex.Framework.Generation
                     IsPartial = true,
                 };
 
+                if (typeDefinition.BaseTypeDefinition != null)
+                {
+                    typeDefinition.MappingTypeDeclaration.BaseTypes.Add(typeDefinition.BaseTypeDefinition.MappingTypeReference);
+                }
+
+                MappingsClass.Members.Add(typeDefinition.MappingTypeDeclaration);
+                
                 typeDeclaration.Comments.AddRange(typeDefinition.Comments.ToArray());
 
                 typeDeclaration.CustomAttributes.Add(
@@ -401,6 +439,7 @@ namespace Codex.Framework.Generation
             TypeDefinition declarationTypeDefinition = null,
             bool isBaseChain = false)
         {
+            declarationTypeDefinition ??= typeDefinition;
             if (!visitedTypeDefinitions.Add(typeDefinition))
             {
                 return;
@@ -416,7 +455,7 @@ namespace Codex.Framework.Generation
             var copyConstructor = new CodeConstructor()
             {
                 Attributes = MemberAttributes.Public,
-            }.EnsureInitialize(declarationTypeDefinition ?? typeDefinition);
+            }.EnsureInitialize(declarationTypeDefinition);
 
             if (typeDefinition.TypeParameters.Count == 0)
             {
@@ -475,6 +514,13 @@ namespace Codex.Framework.Generation
                     Type = property.CoercedSourceType?.AsReference() ?? property.MutablePropertyType,
                 };
 
+                if (!isBaseChain && property.SearchBehavior != SearchBehavior.None && !(property.SearchBehavior == null && property.PropertyTypeDefinition == null))
+                {
+                    declarationTypeDefinition.MappingTypeDeclaration.AddMappingProperty(
+                        property.Name,
+                        property.PropertyTypeDefinition?.MappingTypeReference ?? property.PropertyType.AsReference().AsMappingType());
+                }
+
                 if (property.InitPropertyType != null)
                 {
                     if (property.IsReadOnlyList)
@@ -530,8 +576,8 @@ namespace Codex.Framework.Generation
             if (typeDefinition.BaseTypeDefinition != null)
             {
                 PopulateProperties(visitedTypeDefinitions, usedMemberNames, typeDefinition.BaseTypeDefinition, typeDeclaration,
-                    declarationTypeDefinition: declarationTypeDefinition ?? typeDefinition,
-                    isBaseChain: declarationTypeDefinition == null || isBaseChain);
+                    declarationTypeDefinition: declarationTypeDefinition,
+                    isBaseChain: declarationTypeDefinition == typeDefinition || isBaseChain);
             }
 
             if (!isBaseChain)
@@ -546,7 +592,7 @@ namespace Codex.Framework.Generation
                     //applyMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeThisReferenceExpression(), applyMethod.Name),
                     //    new CodeCastExpression(baseDefinition.Type, new CodeVariableReferenceExpression("value"))));
                     PopulateProperties(visitedTypeDefinitions, usedMemberNames, baseDefinition, typeDeclaration,
-                        declarationTypeDefinition: declarationTypeDefinition ?? typeDefinition,
+                        declarationTypeDefinition: declarationTypeDefinition,
                         isBaseChain: false);
                 }
 
@@ -719,6 +765,52 @@ namespace Codex.Framework.Generation
 
     public static class CodeDomHelper
     {
+        public static CodeThisReferenceExpression This = new CodeThisReferenceExpression();
+
+        public static CodeTypeReference AsMappingType(this CodeTypeReference type)
+        {
+            return new CodeTypeReference("Mapping", new CodeTypeReference("TRoot"), type);
+        }
+
+        public static void AddMappingProperty(this CodeTypeDeclaration declaringType, string name, CodeTypeReference propertyType)
+        {
+            AddLazyProperty(declaringType, name, propertyType, new CodeObjectCreateExpression(propertyType));
+        }
+
+        public static void AddLazyProperty(this CodeTypeDeclaration declaringType, string name, CodeTypeReference propertyType, CodeExpression initializer)
+        {
+            var field = new CodeMemberField(propertyType, $"_lazy{name}");
+            declaringType.Members.Add(field);
+
+            var property = new CodeMemberProperty()
+            {
+                Name = name,
+                Type = propertyType,
+                Attributes = MemberAttributes.Public | MemberAttributes.Final,
+                GetStatements =
+                {
+                    // if (_lazyProperty == null)
+                    // {
+                    //      _lazyProperty = {initializer}
+                    // }
+                    new CodeConditionStatement(
+                        new CodeBinaryOperatorExpression(
+                            new CodeFieldReferenceExpression(This, field.Name),
+                            CodeBinaryOperatorType.IdentityEquality,
+                            new CodeSnippetExpression("null")
+                        ),
+                        new CodeAssignStatement(
+                            new CodeFieldReferenceExpression(This, field.Name),
+                            initializer
+                        )
+                    ),
+                    new CodeMethodReturnStatement(new CodeFieldReferenceExpression(This, field.Name))
+                }
+            };
+
+            declaringType.Members.Add(property);
+        }
+
         public static CodeTypeReference AsReference(this Type type)
         {
             var result = new CodeTypeReference(type);
@@ -731,6 +823,15 @@ namespace Codex.Framework.Generation
                 }
             }
 
+            return result;
+        }
+
+        public static CodeTypeReference Specialize(this CodeTypeReference genericType, params CodeTypeReference[] typeArguments)
+        {
+            Debug.Assert(genericType.TypeArguments.Count == typeArguments.Length);
+            var result = new CodeTypeReference(genericType.BaseType);
+            result.TypeArguments.Clear();
+            result.TypeArguments.AddRange(typeArguments);
             return result;
         }
 

@@ -11,6 +11,7 @@
 namespace Codex.ObjectModel {
     using System.Threading.Tasks;
     using Codex.Framework.Types;
+    using Codex;
     
     
     public partial class CodexTypeUtilities {
@@ -173,7 +174,1829 @@ namespace Codex.ObjectModel {
             typeMapping.Add(typeof(SearchResult), typeof(Codex.Sdk.Search.ISearchResult));
             typeMapping.Add(typeof(Codex.Sdk.Search.IIndex), typeof(Index));
             typeMapping.Add(typeof(Index), typeof(Codex.Sdk.Search.IIndex));
+            typeMapping.Add(typeof(Codex.Sdk.Search.IIndex<>), typeof(Index<T>));
+            typeMapping.Add(typeof(Index<T>), typeof(Codex.Sdk.Search.IIndex<>));
             return typeMapping;
+        }
+    }
+    
+    public partial class Mappings<TData>
+     {
+        
+        private DefinitionSearchModelMapping<Codex.IDefinitionSearchModel> _lazyDefinition;
+        
+        private ReferenceSearchModelMapping<Codex.IReferenceSearchModel> _lazyReference;
+        
+        private TextChunkSearchModelMapping<Codex.ITextChunkSearchModel> _lazyTextChunk;
+        
+        private TextSourceSearchModelMapping<Codex.ITextSourceSearchModel> _lazyTextSource;
+        
+        private BoundSourceSearchModelMapping<Codex.IBoundSourceSearchModel> _lazyBoundSource;
+        
+        private LanguageSearchModelMapping<Codex.ILanguageSearchModel> _lazyLanguage;
+        
+        private RepositorySearchModelMapping<Codex.IRepositorySearchModel> _lazyRepository;
+        
+        private ProjectSearchModelMapping<Codex.IProjectSearchModel> _lazyProject;
+        
+        private CommitSearchModelMapping<Codex.ICommitSearchModel> _lazyCommit;
+        
+        private CommitFilesSearchModelMapping<Codex.ICommitFilesSearchModel> _lazyCommitFiles;
+        
+        private ProjectReferenceSearchModelMapping<Codex.IProjectReferenceSearchModel> _lazyProjectReference;
+        
+        private PropertySearchModelMapping<Codex.IPropertySearchModel> _lazyProperty;
+        
+        private StoredFilterMapping<Codex.IStoredFilter> _lazyStoredFilter;
+        
+        private StableIdMarkerMapping<Codex.IStableIdMarker> _lazyStableIdMarker;
+        
+        private RegisteredEntityMapping<Codex.IRegisteredEntity> _lazyRegisteredEntity;
+        
+        public DefinitionSearchModelMapping<Codex.IDefinitionSearchModel> Definition {
+            get {
+                if ((this._lazyDefinition == null)) {
+                    this._lazyDefinition = new DefinitionSearchModelMapping<Codex.IDefinitionSearchModel>();
+                }
+                return this._lazyDefinition;
+            }
+        }
+        
+        public ReferenceSearchModelMapping<Codex.IReferenceSearchModel> Reference {
+            get {
+                if ((this._lazyReference == null)) {
+                    this._lazyReference = new ReferenceSearchModelMapping<Codex.IReferenceSearchModel>();
+                }
+                return this._lazyReference;
+            }
+        }
+        
+        public TextChunkSearchModelMapping<Codex.ITextChunkSearchModel> TextChunk {
+            get {
+                if ((this._lazyTextChunk == null)) {
+                    this._lazyTextChunk = new TextChunkSearchModelMapping<Codex.ITextChunkSearchModel>();
+                }
+                return this._lazyTextChunk;
+            }
+        }
+        
+        public TextSourceSearchModelMapping<Codex.ITextSourceSearchModel> TextSource {
+            get {
+                if ((this._lazyTextSource == null)) {
+                    this._lazyTextSource = new TextSourceSearchModelMapping<Codex.ITextSourceSearchModel>();
+                }
+                return this._lazyTextSource;
+            }
+        }
+        
+        public BoundSourceSearchModelMapping<Codex.IBoundSourceSearchModel> BoundSource {
+            get {
+                if ((this._lazyBoundSource == null)) {
+                    this._lazyBoundSource = new BoundSourceSearchModelMapping<Codex.IBoundSourceSearchModel>();
+                }
+                return this._lazyBoundSource;
+            }
+        }
+        
+        public LanguageSearchModelMapping<Codex.ILanguageSearchModel> Language {
+            get {
+                if ((this._lazyLanguage == null)) {
+                    this._lazyLanguage = new LanguageSearchModelMapping<Codex.ILanguageSearchModel>();
+                }
+                return this._lazyLanguage;
+            }
+        }
+        
+        public RepositorySearchModelMapping<Codex.IRepositorySearchModel> Repository {
+            get {
+                if ((this._lazyRepository == null)) {
+                    this._lazyRepository = new RepositorySearchModelMapping<Codex.IRepositorySearchModel>();
+                }
+                return this._lazyRepository;
+            }
+        }
+        
+        public ProjectSearchModelMapping<Codex.IProjectSearchModel> Project {
+            get {
+                if ((this._lazyProject == null)) {
+                    this._lazyProject = new ProjectSearchModelMapping<Codex.IProjectSearchModel>();
+                }
+                return this._lazyProject;
+            }
+        }
+        
+        public CommitSearchModelMapping<Codex.ICommitSearchModel> Commit {
+            get {
+                if ((this._lazyCommit == null)) {
+                    this._lazyCommit = new CommitSearchModelMapping<Codex.ICommitSearchModel>();
+                }
+                return this._lazyCommit;
+            }
+        }
+        
+        public CommitFilesSearchModelMapping<Codex.ICommitFilesSearchModel> CommitFiles {
+            get {
+                if ((this._lazyCommitFiles == null)) {
+                    this._lazyCommitFiles = new CommitFilesSearchModelMapping<Codex.ICommitFilesSearchModel>();
+                }
+                return this._lazyCommitFiles;
+            }
+        }
+        
+        public ProjectReferenceSearchModelMapping<Codex.IProjectReferenceSearchModel> ProjectReference {
+            get {
+                if ((this._lazyProjectReference == null)) {
+                    this._lazyProjectReference = new ProjectReferenceSearchModelMapping<Codex.IProjectReferenceSearchModel>();
+                }
+                return this._lazyProjectReference;
+            }
+        }
+        
+        public PropertySearchModelMapping<Codex.IPropertySearchModel> Property {
+            get {
+                if ((this._lazyProperty == null)) {
+                    this._lazyProperty = new PropertySearchModelMapping<Codex.IPropertySearchModel>();
+                }
+                return this._lazyProperty;
+            }
+        }
+        
+        public StoredFilterMapping<Codex.IStoredFilter> StoredFilter {
+            get {
+                if ((this._lazyStoredFilter == null)) {
+                    this._lazyStoredFilter = new StoredFilterMapping<Codex.IStoredFilter>();
+                }
+                return this._lazyStoredFilter;
+            }
+        }
+        
+        public StableIdMarkerMapping<Codex.IStableIdMarker> StableIdMarker {
+            get {
+                if ((this._lazyStableIdMarker == null)) {
+                    this._lazyStableIdMarker = new StableIdMarkerMapping<Codex.IStableIdMarker>();
+                }
+                return this._lazyStableIdMarker;
+            }
+        }
+        
+        public RegisteredEntityMapping<Codex.IRegisteredEntity> RegisteredEntity {
+            get {
+                if ((this._lazyRegisteredEntity == null)) {
+                    this._lazyRegisteredEntity = new RegisteredEntityMapping<Codex.IRegisteredEntity>();
+                }
+                return this._lazyRegisteredEntity;
+            }
+        }
+        
+        public partial class CommitMapping<TRoot> : CommitScopeEntityMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyDescription;
+            
+            private Mapping<TRoot, System.DateTime> _lazyDateUploaded;
+            
+            private Mapping<TRoot, System.DateTime> _lazyDateCommitted;
+            
+            private CommitChangedFileMapping<TRoot> _lazyChangedFiles;
+            
+            public Mapping<TRoot, string> Description {
+                get {
+                    if ((this._lazyDescription == null)) {
+                        this._lazyDescription = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyDescription;
+                }
+            }
+            
+            public Mapping<TRoot, System.DateTime> DateUploaded {
+                get {
+                    if ((this._lazyDateUploaded == null)) {
+                        this._lazyDateUploaded = new Mapping<TRoot, System.DateTime>();
+                    }
+                    return this._lazyDateUploaded;
+                }
+            }
+            
+            public Mapping<TRoot, System.DateTime> DateCommitted {
+                get {
+                    if ((this._lazyDateCommitted == null)) {
+                        this._lazyDateCommitted = new Mapping<TRoot, System.DateTime>();
+                    }
+                    return this._lazyDateCommitted;
+                }
+            }
+            
+            public CommitChangedFileMapping<TRoot> ChangedFiles {
+                get {
+                    if ((this._lazyChangedFiles == null)) {
+                        this._lazyChangedFiles = new CommitChangedFileMapping<TRoot>();
+                    }
+                    return this._lazyChangedFiles;
+                }
+            }
+        }
+        
+        public partial class CommitChangedFileMapping<TRoot> : CommitFileLinkMapping<TRoot>
+         {
+        }
+        
+        public partial class CommitFileLinkMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyFileId;
+            
+            private Mapping<TRoot, string> _lazyVersionControlFileId;
+            
+            public Mapping<TRoot, string> FileId {
+                get {
+                    if ((this._lazyFileId == null)) {
+                        this._lazyFileId = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyFileId;
+                }
+            }
+            
+            public Mapping<TRoot, string> VersionControlFileId {
+                get {
+                    if ((this._lazyVersionControlFileId == null)) {
+                        this._lazyVersionControlFileId = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyVersionControlFileId;
+                }
+            }
+        }
+        
+        public partial class BranchMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyHeadCommitId;
+            
+            public Mapping<TRoot, string> HeadCommitId {
+                get {
+                    if ((this._lazyHeadCommitId == null)) {
+                        this._lazyHeadCommitId = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyHeadCommitId;
+                }
+            }
+        }
+        
+        public partial class BoundSourceFileMapping<TRoot> : BoundSourceInfoMapping<TRoot>
+         {
+            
+            private SourceFileMapping<TRoot> _lazySourceFile;
+            
+            private CommitMapping<TRoot> _lazyCommit;
+            
+            private RepositoryMapping<TRoot> _lazyRepo;
+            
+            public SourceFileMapping<TRoot> SourceFile {
+                get {
+                    if ((this._lazySourceFile == null)) {
+                        this._lazySourceFile = new SourceFileMapping<TRoot>();
+                    }
+                    return this._lazySourceFile;
+                }
+            }
+            
+            public CommitMapping<TRoot> Commit {
+                get {
+                    if ((this._lazyCommit == null)) {
+                        this._lazyCommit = new CommitMapping<TRoot>();
+                    }
+                    return this._lazyCommit;
+                }
+            }
+            
+            public RepositoryMapping<TRoot> Repo {
+                get {
+                    if ((this._lazyRepo == null)) {
+                        this._lazyRepo = new RepositoryMapping<TRoot>();
+                    }
+                    return this._lazyRepo;
+                }
+            }
+        }
+        
+        public partial class BoundSourceInfoMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, bool> _lazyExcludeFromSearch;
+            
+            public Mapping<TRoot, bool> ExcludeFromSearch {
+                get {
+                    if ((this._lazyExcludeFromSearch == null)) {
+                        this._lazyExcludeFromSearch = new Mapping<TRoot, bool>();
+                    }
+                    return this._lazyExcludeFromSearch;
+                }
+            }
+        }
+        
+        public partial class SourceControlFileInfoMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazySourceControlContentId;
+            
+            public Mapping<TRoot, string> SourceControlContentId {
+                get {
+                    if ((this._lazySourceControlContentId == null)) {
+                        this._lazySourceControlContentId = new Mapping<TRoot, string>();
+                    }
+                    return this._lazySourceControlContentId;
+                }
+            }
+        }
+        
+        public partial class SourceFileInfoMapping<TRoot>
+         {
+            
+            private EncodingDescriptionMapping<TRoot> _lazyEncoding;
+            
+            private PropertyMapMapping<TRoot> _lazyProperties;
+            
+            private Mapping<TRoot, string> _lazyRepoRelativePath;
+            
+            private Mapping<TRoot, string> _lazyRepositoryName;
+            
+            private Mapping<TRoot, string> _lazySourceControlContentId;
+            
+            private Mapping<TRoot, string> _lazyProjectRelativePath;
+            
+            private Mapping<TRoot, string> _lazyProjectId;
+            
+            public EncodingDescriptionMapping<TRoot> Encoding {
+                get {
+                    if ((this._lazyEncoding == null)) {
+                        this._lazyEncoding = new EncodingDescriptionMapping<TRoot>();
+                    }
+                    return this._lazyEncoding;
+                }
+            }
+            
+            public PropertyMapMapping<TRoot> Properties {
+                get {
+                    if ((this._lazyProperties == null)) {
+                        this._lazyProperties = new PropertyMapMapping<TRoot>();
+                    }
+                    return this._lazyProperties;
+                }
+            }
+            
+            public Mapping<TRoot, string> RepoRelativePath {
+                get {
+                    if ((this._lazyRepoRelativePath == null)) {
+                        this._lazyRepoRelativePath = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyRepoRelativePath;
+                }
+            }
+            
+            public Mapping<TRoot, string> RepositoryName {
+                get {
+                    if ((this._lazyRepositoryName == null)) {
+                        this._lazyRepositoryName = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyRepositoryName;
+                }
+            }
+            
+            public Mapping<TRoot, string> SourceControlContentId {
+                get {
+                    if ((this._lazySourceControlContentId == null)) {
+                        this._lazySourceControlContentId = new Mapping<TRoot, string>();
+                    }
+                    return this._lazySourceControlContentId;
+                }
+            }
+            
+            public Mapping<TRoot, string> ProjectRelativePath {
+                get {
+                    if ((this._lazyProjectRelativePath == null)) {
+                        this._lazyProjectRelativePath = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyProjectRelativePath;
+                }
+            }
+            
+            public Mapping<TRoot, string> ProjectId {
+                get {
+                    if ((this._lazyProjectId == null)) {
+                        this._lazyProjectId = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyProjectId;
+                }
+            }
+        }
+        
+        public partial class EncodingDescriptionMapping<TRoot>
+         {
+        }
+        
+        public partial class SourceFileBaseMapping<TRoot>
+         {
+            
+            private SourceFileInfoMapping<TRoot> _lazyInfo;
+            
+            private Mapping<TRoot, bool> _lazyExcludeFromSearch;
+            
+            public SourceFileInfoMapping<TRoot> Info {
+                get {
+                    if ((this._lazyInfo == null)) {
+                        this._lazyInfo = new SourceFileInfoMapping<TRoot>();
+                    }
+                    return this._lazyInfo;
+                }
+            }
+            
+            public Mapping<TRoot, bool> ExcludeFromSearch {
+                get {
+                    if ((this._lazyExcludeFromSearch == null)) {
+                        this._lazyExcludeFromSearch = new Mapping<TRoot, bool>();
+                    }
+                    return this._lazyExcludeFromSearch;
+                }
+            }
+        }
+        
+        public partial class SourceFileMapping<TRoot> : SourceFileBaseMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyContent;
+            
+            public Mapping<TRoot, string> Content {
+                get {
+                    if ((this._lazyContent == null)) {
+                        this._lazyContent = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyContent;
+                }
+            }
+        }
+        
+        public partial class ChunkedSourceFileMapping<TRoot> : SourceFileBaseMapping<TRoot>
+         {
+            
+            private ChunkReferenceMapping<TRoot> _lazyChunks;
+            
+            public ChunkReferenceMapping<TRoot> Chunks {
+                get {
+                    if ((this._lazyChunks == null)) {
+                        this._lazyChunks = new ChunkReferenceMapping<TRoot>();
+                    }
+                    return this._lazyChunks;
+                }
+            }
+        }
+        
+        public partial class ChunkReferenceMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyId;
+            
+            public Mapping<TRoot, string> Id {
+                get {
+                    if ((this._lazyId == null)) {
+                        this._lazyId = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyId;
+                }
+            }
+        }
+        
+        public partial class SourceFileContentChunkMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyContentLines;
+            
+            public Mapping<TRoot, string> ContentLines {
+                get {
+                    if ((this._lazyContentLines == null)) {
+                        this._lazyContentLines = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyContentLines;
+                }
+            }
+        }
+        
+        public partial class OutliningRegionMapping<TRoot>
+         {
+            
+            private LineSpanMapping<TRoot> _lazyHeader;
+            
+            private LineSpanMapping<TRoot> _lazyContent;
+            
+            public LineSpanMapping<TRoot> Header {
+                get {
+                    if ((this._lazyHeader == null)) {
+                        this._lazyHeader = new LineSpanMapping<TRoot>();
+                    }
+                    return this._lazyHeader;
+                }
+            }
+            
+            public LineSpanMapping<TRoot> Content {
+                get {
+                    if ((this._lazyContent == null)) {
+                        this._lazyContent = new LineSpanMapping<TRoot>();
+                    }
+                    return this._lazyContent;
+                }
+            }
+        }
+        
+        public partial class DefinitionSpanMapping<TRoot> : SpanMapping<TRoot>
+         {
+            
+            private DefinitionSymbolMapping<TRoot> _lazyDefinition;
+            
+            private ParameterDefinitionSpanMapping<TRoot> _lazyParameters;
+            
+            public DefinitionSymbolMapping<TRoot> Definition {
+                get {
+                    if ((this._lazyDefinition == null)) {
+                        this._lazyDefinition = new DefinitionSymbolMapping<TRoot>();
+                    }
+                    return this._lazyDefinition;
+                }
+            }
+            
+            public ParameterDefinitionSpanMapping<TRoot> Parameters {
+                get {
+                    if ((this._lazyParameters == null)) {
+                        this._lazyParameters = new ParameterDefinitionSpanMapping<TRoot>();
+                    }
+                    return this._lazyParameters;
+                }
+            }
+        }
+        
+        public partial class ParameterDefinitionSpanMapping<TRoot> : LineSpanMapping<TRoot>
+         {
+        }
+        
+        public partial class ReferenceSpanMapping<TRoot> : SymbolSpanMapping<TRoot>
+         {
+            
+            private ReferenceSymbolMapping<TRoot> _lazyReference;
+            
+            private ParameterReferenceSpanMapping<TRoot> _lazyParameters;
+            
+            public ReferenceSymbolMapping<TRoot> Reference {
+                get {
+                    if ((this._lazyReference == null)) {
+                        this._lazyReference = new ReferenceSymbolMapping<TRoot>();
+                    }
+                    return this._lazyReference;
+                }
+            }
+            
+            public ParameterReferenceSpanMapping<TRoot> Parameters {
+                get {
+                    if ((this._lazyParameters == null)) {
+                        this._lazyParameters = new ParameterReferenceSpanMapping<TRoot>();
+                    }
+                    return this._lazyParameters;
+                }
+            }
+        }
+        
+        public partial class ParameterReferenceSpanMapping<TRoot> : SymbolSpanMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, int> _lazyParameterIndex;
+            
+            public Mapping<TRoot, int> ParameterIndex {
+                get {
+                    if ((this._lazyParameterIndex == null)) {
+                        this._lazyParameterIndex = new Mapping<TRoot, int>();
+                    }
+                    return this._lazyParameterIndex;
+                }
+            }
+        }
+        
+        public partial class ClassificationSpanMapping<TRoot> : SpanMapping<TRoot>
+         {
+        }
+        
+        public partial class SymbolSpanMapping<TRoot> : TextLineSpanMapping<TRoot>
+         {
+        }
+        
+        public partial class TextLineSpanMapping<TRoot> : LineSpanMapping<TRoot>
+         {
+        }
+        
+        public partial class LineSpanMapping<TRoot> : SpanMapping<TRoot>
+         {
+        }
+        
+        public partial class SpanMapping<TRoot>
+         {
+        }
+        
+        public partial class CodeReviewMapping<TRoot>
+         {
+        }
+        
+        public partial class CodeReviewIterationMapping<TRoot>
+         {
+            
+            private CodeReviewFileMapping<TRoot> _lazyFiles;
+            
+            public CodeReviewFileMapping<TRoot> Files {
+                get {
+                    if ((this._lazyFiles == null)) {
+                        this._lazyFiles = new CodeReviewFileMapping<TRoot>();
+                    }
+                    return this._lazyFiles;
+                }
+            }
+        }
+        
+        public partial class CodeReviewerInfoMapping<TRoot>
+         {
+        }
+        
+        public partial class CodeReviewFileMapping<TRoot>
+         {
+        }
+        
+        public partial class CodeReviewCommentThreadMapping<TRoot>
+         {
+            
+            private LineSpanMapping<TRoot> _lazyOriginalSpan;
+            
+            private CodeReviewCommentMapping<TRoot> _lazyComments;
+            
+            public LineSpanMapping<TRoot> OriginalSpan {
+                get {
+                    if ((this._lazyOriginalSpan == null)) {
+                        this._lazyOriginalSpan = new LineSpanMapping<TRoot>();
+                    }
+                    return this._lazyOriginalSpan;
+                }
+            }
+            
+            public CodeReviewCommentMapping<TRoot> Comments {
+                get {
+                    if ((this._lazyComments == null)) {
+                        this._lazyComments = new CodeReviewCommentMapping<TRoot>();
+                    }
+                    return this._lazyComments;
+                }
+            }
+        }
+        
+        public partial class CodeReviewCommentMapping<TRoot>
+         {
+        }
+        
+        public partial class StableIdMarkerMapping<TRoot> : SearchEntityMapping<TRoot>
+         {
+            
+            private StableIdReservationMapping<TRoot> _lazyPendingReservations;
+            
+            public StableIdReservationMapping<TRoot> PendingReservations {
+                get {
+                    if ((this._lazyPendingReservations == null)) {
+                        this._lazyPendingReservations = new StableIdReservationMapping<TRoot>();
+                    }
+                    return this._lazyPendingReservations;
+                }
+            }
+        }
+        
+        public partial class StableIdReservationMapping<TRoot>
+         {
+        }
+        
+        public partial class LanguageInfoMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyName;
+            
+            private ClassificationStyleMapping<TRoot> _lazyClassifications;
+            
+            public Mapping<TRoot, string> Name {
+                get {
+                    if ((this._lazyName == null)) {
+                        this._lazyName = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyName;
+                }
+            }
+            
+            public ClassificationStyleMapping<TRoot> Classifications {
+                get {
+                    if ((this._lazyClassifications == null)) {
+                        this._lazyClassifications = new ClassificationStyleMapping<TRoot>();
+                    }
+                    return this._lazyClassifications;
+                }
+            }
+        }
+        
+        public partial class ClassificationStyleMapping<TRoot>
+         {
+        }
+        
+        public partial class AnalyzedProjectMapping<TRoot> : ProjectScopeEntityMapping<TRoot>
+         {
+            
+            private ProjectFileLinkMapping<TRoot> _lazyPrimaryFile;
+            
+            private ProjectFileLinkMapping<TRoot> _lazyFiles;
+            
+            private ReferencedProjectMapping<TRoot> _lazyProjectReferences;
+            
+            public ProjectFileLinkMapping<TRoot> PrimaryFile {
+                get {
+                    if ((this._lazyPrimaryFile == null)) {
+                        this._lazyPrimaryFile = new ProjectFileLinkMapping<TRoot>();
+                    }
+                    return this._lazyPrimaryFile;
+                }
+            }
+            
+            public ProjectFileLinkMapping<TRoot> Files {
+                get {
+                    if ((this._lazyFiles == null)) {
+                        this._lazyFiles = new ProjectFileLinkMapping<TRoot>();
+                    }
+                    return this._lazyFiles;
+                }
+            }
+            
+            public ReferencedProjectMapping<TRoot> ProjectReferences {
+                get {
+                    if ((this._lazyProjectReferences == null)) {
+                        this._lazyProjectReferences = new ReferencedProjectMapping<TRoot>();
+                    }
+                    return this._lazyProjectReferences;
+                }
+            }
+        }
+        
+        public partial class ReferencedProjectMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyProjectId;
+            
+            private DefinitionSymbolMapping<TRoot> _lazyDefinitions;
+            
+            private PropertyMapMapping<TRoot> _lazyProperties;
+            
+            public Mapping<TRoot, string> ProjectId {
+                get {
+                    if ((this._lazyProjectId == null)) {
+                        this._lazyProjectId = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyProjectId;
+                }
+            }
+            
+            public DefinitionSymbolMapping<TRoot> Definitions {
+                get {
+                    if ((this._lazyDefinitions == null)) {
+                        this._lazyDefinitions = new DefinitionSymbolMapping<TRoot>();
+                    }
+                    return this._lazyDefinitions;
+                }
+            }
+            
+            public PropertyMapMapping<TRoot> Properties {
+                get {
+                    if ((this._lazyProperties == null)) {
+                        this._lazyProperties = new PropertyMapMapping<TRoot>();
+                    }
+                    return this._lazyProperties;
+                }
+            }
+        }
+        
+        public partial class ProjectFileLinkMapping<TRoot> : ProjectFileScopeEntityMapping<TRoot>
+         {
+        }
+        
+        public partial class DocumentationInfoMapping<TRoot>
+         {
+            
+            private SymbolMapping<TRoot> _lazyAssociatedSymbol;
+            
+            private DocumentationReferenceSymbolMapping<TRoot> _lazyReferences;
+            
+            private TypedParameterDocumentationMapping<TRoot> _lazyArguments;
+            
+            private ParameterDocumentationMapping<TRoot> _lazyTypeParameters;
+            
+            private TypedParameterDocumentationMapping<TRoot> _lazyExceptions;
+            
+            public SymbolMapping<TRoot> AssociatedSymbol {
+                get {
+                    if ((this._lazyAssociatedSymbol == null)) {
+                        this._lazyAssociatedSymbol = new SymbolMapping<TRoot>();
+                    }
+                    return this._lazyAssociatedSymbol;
+                }
+            }
+            
+            public DocumentationReferenceSymbolMapping<TRoot> References {
+                get {
+                    if ((this._lazyReferences == null)) {
+                        this._lazyReferences = new DocumentationReferenceSymbolMapping<TRoot>();
+                    }
+                    return this._lazyReferences;
+                }
+            }
+            
+            public TypedParameterDocumentationMapping<TRoot> Arguments {
+                get {
+                    if ((this._lazyArguments == null)) {
+                        this._lazyArguments = new TypedParameterDocumentationMapping<TRoot>();
+                    }
+                    return this._lazyArguments;
+                }
+            }
+            
+            public ParameterDocumentationMapping<TRoot> TypeParameters {
+                get {
+                    if ((this._lazyTypeParameters == null)) {
+                        this._lazyTypeParameters = new ParameterDocumentationMapping<TRoot>();
+                    }
+                    return this._lazyTypeParameters;
+                }
+            }
+            
+            public TypedParameterDocumentationMapping<TRoot> Exceptions {
+                get {
+                    if ((this._lazyExceptions == null)) {
+                        this._lazyExceptions = new TypedParameterDocumentationMapping<TRoot>();
+                    }
+                    return this._lazyExceptions;
+                }
+            }
+        }
+        
+        public partial class ParameterDocumentationMapping<TRoot>
+         {
+        }
+        
+        public partial class TypedParameterDocumentationMapping<TRoot> : ParameterDocumentationMapping<TRoot>
+         {
+            
+            private DocumentationReferenceSymbolMapping<TRoot> _lazyType;
+            
+            public DocumentationReferenceSymbolMapping<TRoot> Type {
+                get {
+                    if ((this._lazyType == null)) {
+                        this._lazyType = new DocumentationReferenceSymbolMapping<TRoot>();
+                    }
+                    return this._lazyType;
+                }
+            }
+        }
+        
+        public partial class DocumentationReferenceSymbolMapping<TRoot> : ReferenceSymbolMapping<TRoot>
+         {
+        }
+        
+        public partial class PropertySearchModelMapping<TRoot> : SearchEntityMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyKey;
+            
+            private Mapping<TRoot, string> _lazyValue;
+            
+            private Mapping<TRoot, string> _lazyOwnerId;
+            
+            public Mapping<TRoot, string> Key {
+                get {
+                    if ((this._lazyKey == null)) {
+                        this._lazyKey = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyKey;
+                }
+            }
+            
+            public Mapping<TRoot, string> Value {
+                get {
+                    if ((this._lazyValue == null)) {
+                        this._lazyValue = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyValue;
+                }
+            }
+            
+            public Mapping<TRoot, string> OwnerId {
+                get {
+                    if ((this._lazyOwnerId == null)) {
+                        this._lazyOwnerId = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyOwnerId;
+                }
+            }
+        }
+        
+        public partial class PropertyMapMapping<TRoot>
+         {
+        }
+        
+        public partial class RepositoryMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyName;
+            
+            private RepositoryReferenceMapping<TRoot> _lazyRepositoryReferences;
+            
+            public Mapping<TRoot, string> Name {
+                get {
+                    if ((this._lazyName == null)) {
+                        this._lazyName = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyName;
+                }
+            }
+            
+            public RepositoryReferenceMapping<TRoot> RepositoryReferences {
+                get {
+                    if ((this._lazyRepositoryReferences == null)) {
+                        this._lazyRepositoryReferences = new RepositoryReferenceMapping<TRoot>();
+                    }
+                    return this._lazyRepositoryReferences;
+                }
+            }
+        }
+        
+        public partial class RepositoryReferenceMapping<TRoot>
+         {
+        }
+        
+        public partial class SearchEntityMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyEntityContentId;
+            
+            private Mapping<TRoot, int> _lazyStableId;
+            
+            private Mapping<TRoot, string> _lazySortKey;
+            
+            public Mapping<TRoot, string> EntityContentId {
+                get {
+                    if ((this._lazyEntityContentId == null)) {
+                        this._lazyEntityContentId = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyEntityContentId;
+                }
+            }
+            
+            public Mapping<TRoot, int> StableId {
+                get {
+                    if ((this._lazyStableId == null)) {
+                        this._lazyStableId = new Mapping<TRoot, int>();
+                    }
+                    return this._lazyStableId;
+                }
+            }
+            
+            public Mapping<TRoot, string> SortKey {
+                get {
+                    if ((this._lazySortKey == null)) {
+                        this._lazySortKey = new Mapping<TRoot, string>();
+                    }
+                    return this._lazySortKey;
+                }
+            }
+        }
+        
+        public partial class RepoScopeEntityMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyRepositoryName;
+            
+            public Mapping<TRoot, string> RepositoryName {
+                get {
+                    if ((this._lazyRepositoryName == null)) {
+                        this._lazyRepositoryName = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyRepositoryName;
+                }
+            }
+        }
+        
+        public partial class CommitScopeEntityMapping<TRoot> : RepoScopeEntityMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyCommitId;
+            
+            public Mapping<TRoot, string> CommitId {
+                get {
+                    if ((this._lazyCommitId == null)) {
+                        this._lazyCommitId = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyCommitId;
+                }
+            }
+        }
+        
+        public partial class ProjectScopeEntityMapping<TRoot> : RepoScopeEntityMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyProjectId;
+            
+            public Mapping<TRoot, string> ProjectId {
+                get {
+                    if ((this._lazyProjectId == null)) {
+                        this._lazyProjectId = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyProjectId;
+                }
+            }
+        }
+        
+        public partial class RepoFileScopeEntityMapping<TRoot> : RepoScopeEntityMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyRepoRelativePath;
+            
+            public Mapping<TRoot, string> RepoRelativePath {
+                get {
+                    if ((this._lazyRepoRelativePath == null)) {
+                        this._lazyRepoRelativePath = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyRepoRelativePath;
+                }
+            }
+        }
+        
+        public partial class ProjectFileScopeEntityMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyProjectRelativePath;
+            
+            private Mapping<TRoot, string> _lazyRepoRelativePath;
+            
+            private Mapping<TRoot, string> _lazyRepositoryName;
+            
+            private Mapping<TRoot, string> _lazyProjectId;
+            
+            public Mapping<TRoot, string> ProjectRelativePath {
+                get {
+                    if ((this._lazyProjectRelativePath == null)) {
+                        this._lazyProjectRelativePath = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyProjectRelativePath;
+                }
+            }
+            
+            public Mapping<TRoot, string> RepoRelativePath {
+                get {
+                    if ((this._lazyRepoRelativePath == null)) {
+                        this._lazyRepoRelativePath = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyRepoRelativePath;
+                }
+            }
+            
+            public Mapping<TRoot, string> RepositoryName {
+                get {
+                    if ((this._lazyRepositoryName == null)) {
+                        this._lazyRepositoryName = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyRepositoryName;
+                }
+            }
+            
+            public Mapping<TRoot, string> ProjectId {
+                get {
+                    if ((this._lazyProjectId == null)) {
+                        this._lazyProjectId = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyProjectId;
+                }
+            }
+        }
+        
+        public partial class RegisteredEntityMapping<TRoot> : SearchEntityMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyEntityUid;
+            
+            private Mapping<TRoot, string> _lazyIndexName;
+            
+            public Mapping<TRoot, string> EntityUid {
+                get {
+                    if ((this._lazyEntityUid == null)) {
+                        this._lazyEntityUid = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyEntityUid;
+                }
+            }
+            
+            public Mapping<TRoot, string> IndexName {
+                get {
+                    if ((this._lazyIndexName == null)) {
+                        this._lazyIndexName = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyIndexName;
+                }
+            }
+        }
+        
+        public partial class StoredFilterMapping<TRoot> : SearchEntityMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyName;
+            
+            private Mapping<TRoot, string> _lazyIndexName;
+            
+            private Mapping<TRoot, string> _lazyFilterHash;
+            
+            public Mapping<TRoot, string> Name {
+                get {
+                    if ((this._lazyName == null)) {
+                        this._lazyName = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyName;
+                }
+            }
+            
+            public Mapping<TRoot, string> IndexName {
+                get {
+                    if ((this._lazyIndexName == null)) {
+                        this._lazyIndexName = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyIndexName;
+                }
+            }
+            
+            public Mapping<TRoot, string> FilterHash {
+                get {
+                    if ((this._lazyFilterHash == null)) {
+                        this._lazyFilterHash = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyFilterHash;
+                }
+            }
+        }
+        
+        public partial class ChildFilterReferenceMapping<TRoot>
+         {
+        }
+        
+        public partial class GroupedStoredFilterIdsMapping<TRoot>
+         {
+        }
+        
+        public partial class DefinitionSearchModelMapping<TRoot> : SearchEntityMapping<TRoot>
+         {
+            
+            private DefinitionSymbolMapping<TRoot> _lazyDefinition;
+            
+            private Mapping<TRoot, string> _lazyKeywords;
+            
+            public DefinitionSymbolMapping<TRoot> Definition {
+                get {
+                    if ((this._lazyDefinition == null)) {
+                        this._lazyDefinition = new DefinitionSymbolMapping<TRoot>();
+                    }
+                    return this._lazyDefinition;
+                }
+            }
+            
+            public Mapping<TRoot, string> Keywords {
+                get {
+                    if ((this._lazyKeywords == null)) {
+                        this._lazyKeywords = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyKeywords;
+                }
+            }
+        }
+        
+        public partial class LanguageSearchModelMapping<TRoot> : SearchEntityMapping<TRoot>
+         {
+            
+            private LanguageInfoMapping<TRoot> _lazyLanguage;
+            
+            public LanguageInfoMapping<TRoot> Language {
+                get {
+                    if ((this._lazyLanguage == null)) {
+                        this._lazyLanguage = new LanguageInfoMapping<TRoot>();
+                    }
+                    return this._lazyLanguage;
+                }
+            }
+        }
+        
+        public partial class ReferenceSearchModelMapping<TRoot> : SearchEntityMapping<TRoot>
+         {
+            
+            private ReferenceSymbolMapping<TRoot> _lazyReference;
+            
+            private Mapping<TRoot, string> _lazyProjectRelativePath;
+            
+            private Mapping<TRoot, string> _lazyRepoRelativePath;
+            
+            private Mapping<TRoot, string> _lazyRepositoryName;
+            
+            private Mapping<TRoot, string> _lazyProjectId;
+            
+            public ReferenceSymbolMapping<TRoot> Reference {
+                get {
+                    if ((this._lazyReference == null)) {
+                        this._lazyReference = new ReferenceSymbolMapping<TRoot>();
+                    }
+                    return this._lazyReference;
+                }
+            }
+            
+            public Mapping<TRoot, string> ProjectRelativePath {
+                get {
+                    if ((this._lazyProjectRelativePath == null)) {
+                        this._lazyProjectRelativePath = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyProjectRelativePath;
+                }
+            }
+            
+            public Mapping<TRoot, string> RepoRelativePath {
+                get {
+                    if ((this._lazyRepoRelativePath == null)) {
+                        this._lazyRepoRelativePath = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyRepoRelativePath;
+                }
+            }
+            
+            public Mapping<TRoot, string> RepositoryName {
+                get {
+                    if ((this._lazyRepositoryName == null)) {
+                        this._lazyRepositoryName = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyRepositoryName;
+                }
+            }
+            
+            public Mapping<TRoot, string> ProjectId {
+                get {
+                    if ((this._lazyProjectId == null)) {
+                        this._lazyProjectId = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyProjectId;
+                }
+            }
+        }
+        
+        public partial class SourceSearchModelBaseMapping<TRoot> : SearchEntityMapping<TRoot>
+         {
+            
+            private SourceControlFileInfoMapping<TRoot> _lazySourceControlInfo;
+            
+            private ChunkedSourceFileMapping<TRoot> _lazyFile;
+            
+            public SourceControlFileInfoMapping<TRoot> SourceControlInfo {
+                get {
+                    if ((this._lazySourceControlInfo == null)) {
+                        this._lazySourceControlInfo = new SourceControlFileInfoMapping<TRoot>();
+                    }
+                    return this._lazySourceControlInfo;
+                }
+            }
+            
+            public ChunkedSourceFileMapping<TRoot> File {
+                get {
+                    if ((this._lazyFile == null)) {
+                        this._lazyFile = new ChunkedSourceFileMapping<TRoot>();
+                    }
+                    return this._lazyFile;
+                }
+            }
+        }
+        
+        public partial class BoundSourceSearchModelMapping<TRoot> : SearchEntityMapping<TRoot>
+         {
+            
+            private BoundSourceInfoMapping<TRoot> _lazyBindingInfo;
+            
+            private SourceControlFileInfoMapping<TRoot> _lazySourceControlInfo;
+            
+            private ChunkedSourceFileMapping<TRoot> _lazyFile;
+            
+            public BoundSourceInfoMapping<TRoot> BindingInfo {
+                get {
+                    if ((this._lazyBindingInfo == null)) {
+                        this._lazyBindingInfo = new BoundSourceInfoMapping<TRoot>();
+                    }
+                    return this._lazyBindingInfo;
+                }
+            }
+            
+            public SourceControlFileInfoMapping<TRoot> SourceControlInfo {
+                get {
+                    if ((this._lazySourceControlInfo == null)) {
+                        this._lazySourceControlInfo = new SourceControlFileInfoMapping<TRoot>();
+                    }
+                    return this._lazySourceControlInfo;
+                }
+            }
+            
+            public ChunkedSourceFileMapping<TRoot> File {
+                get {
+                    if ((this._lazyFile == null)) {
+                        this._lazyFile = new ChunkedSourceFileMapping<TRoot>();
+                    }
+                    return this._lazyFile;
+                }
+            }
+        }
+        
+        public partial class TextSourceSearchModelMapping<TRoot> : SearchEntityMapping<TRoot>
+         {
+            
+            private SourceControlFileInfoMapping<TRoot> _lazySourceControlInfo;
+            
+            private ChunkedSourceFileMapping<TRoot> _lazyFile;
+            
+            public SourceControlFileInfoMapping<TRoot> SourceControlInfo {
+                get {
+                    if ((this._lazySourceControlInfo == null)) {
+                        this._lazySourceControlInfo = new SourceControlFileInfoMapping<TRoot>();
+                    }
+                    return this._lazySourceControlInfo;
+                }
+            }
+            
+            public ChunkedSourceFileMapping<TRoot> File {
+                get {
+                    if ((this._lazyFile == null)) {
+                        this._lazyFile = new ChunkedSourceFileMapping<TRoot>();
+                    }
+                    return this._lazyFile;
+                }
+            }
+        }
+        
+        public partial class TextChunkSearchModelMapping<TRoot> : SearchEntityMapping<TRoot>
+         {
+            
+            private SourceFileContentChunkMapping<TRoot> _lazyChunk;
+            
+            public SourceFileContentChunkMapping<TRoot> Chunk {
+                get {
+                    if ((this._lazyChunk == null)) {
+                        this._lazyChunk = new SourceFileContentChunkMapping<TRoot>();
+                    }
+                    return this._lazyChunk;
+                }
+            }
+        }
+        
+        public partial class RepositorySearchModelMapping<TRoot> : SearchEntityMapping<TRoot>
+         {
+            
+            private RepositoryMapping<TRoot> _lazyRepository;
+            
+            public RepositoryMapping<TRoot> Repository {
+                get {
+                    if ((this._lazyRepository == null)) {
+                        this._lazyRepository = new RepositoryMapping<TRoot>();
+                    }
+                    return this._lazyRepository;
+                }
+            }
+        }
+        
+        public partial class ProjectSearchModelMapping<TRoot> : SearchEntityMapping<TRoot>
+         {
+            
+            private AnalyzedProjectMapping<TRoot> _lazyProject;
+            
+            public AnalyzedProjectMapping<TRoot> Project {
+                get {
+                    if ((this._lazyProject == null)) {
+                        this._lazyProject = new AnalyzedProjectMapping<TRoot>();
+                    }
+                    return this._lazyProject;
+                }
+            }
+        }
+        
+        public partial class ProjectReferenceSearchModelMapping<TRoot> : SearchEntityMapping<TRoot>
+         {
+            
+            private ReferencedProjectMapping<TRoot> _lazyProjectReference;
+            
+            private Mapping<TRoot, string> _lazyProjectId;
+            
+            private Mapping<TRoot, string> _lazyRepositoryName;
+            
+            public ReferencedProjectMapping<TRoot> ProjectReference {
+                get {
+                    if ((this._lazyProjectReference == null)) {
+                        this._lazyProjectReference = new ReferencedProjectMapping<TRoot>();
+                    }
+                    return this._lazyProjectReference;
+                }
+            }
+            
+            public Mapping<TRoot, string> ProjectId {
+                get {
+                    if ((this._lazyProjectId == null)) {
+                        this._lazyProjectId = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyProjectId;
+                }
+            }
+            
+            public Mapping<TRoot, string> RepositoryName {
+                get {
+                    if ((this._lazyRepositoryName == null)) {
+                        this._lazyRepositoryName = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyRepositoryName;
+                }
+            }
+        }
+        
+        public partial class CommitSearchModelMapping<TRoot> : SearchEntityMapping<TRoot>
+         {
+            
+            private CommitMapping<TRoot> _lazyCommit;
+            
+            public CommitMapping<TRoot> Commit {
+                get {
+                    if ((this._lazyCommit == null)) {
+                        this._lazyCommit = new CommitMapping<TRoot>();
+                    }
+                    return this._lazyCommit;
+                }
+            }
+        }
+        
+        public partial class CommitFilesSearchModelMapping<TRoot> : SearchEntityMapping<TRoot>
+         {
+            
+            private CommitFileLinkMapping<TRoot> _lazyCommitFiles;
+            
+            private Mapping<TRoot, string> _lazyCommitId;
+            
+            private Mapping<TRoot, string> _lazyRepositoryName;
+            
+            public CommitFileLinkMapping<TRoot> CommitFiles {
+                get {
+                    if ((this._lazyCommitFiles == null)) {
+                        this._lazyCommitFiles = new CommitFileLinkMapping<TRoot>();
+                    }
+                    return this._lazyCommitFiles;
+                }
+            }
+            
+            public Mapping<TRoot, string> CommitId {
+                get {
+                    if ((this._lazyCommitId == null)) {
+                        this._lazyCommitId = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyCommitId;
+                }
+            }
+            
+            public Mapping<TRoot, string> RepositoryName {
+                get {
+                    if ((this._lazyRepositoryName == null)) {
+                        this._lazyRepositoryName = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyRepositoryName;
+                }
+            }
+        }
+        
+        public partial class FileStatisticsMapping<TRoot>
+         {
+        }
+        
+        public partial class RepositoryStoreInfoMapping<TRoot>
+         {
+            
+            private RepositoryMapping<TRoot> _lazyRepository;
+            
+            private BranchMapping<TRoot> _lazyBranch;
+            
+            private CommitMapping<TRoot> _lazyCommit;
+            
+            public RepositoryMapping<TRoot> Repository {
+                get {
+                    if ((this._lazyRepository == null)) {
+                        this._lazyRepository = new RepositoryMapping<TRoot>();
+                    }
+                    return this._lazyRepository;
+                }
+            }
+            
+            public BranchMapping<TRoot> Branch {
+                get {
+                    if ((this._lazyBranch == null)) {
+                        this._lazyBranch = new BranchMapping<TRoot>();
+                    }
+                    return this._lazyBranch;
+                }
+            }
+            
+            public CommitMapping<TRoot> Commit {
+                get {
+                    if ((this._lazyCommit == null)) {
+                        this._lazyCommit = new CommitMapping<TRoot>();
+                    }
+                    return this._lazyCommit;
+                }
+            }
+        }
+        
+        public partial class CommitFilesDirectoryMapping<TRoot> : RepoFileScopeEntityMapping<TRoot>
+         {
+            
+            private CommitFileLinkMapping<TRoot> _lazyFiles;
+            
+            public CommitFileLinkMapping<TRoot> Files {
+                get {
+                    if ((this._lazyFiles == null)) {
+                        this._lazyFiles = new CommitFileLinkMapping<TRoot>();
+                    }
+                    return this._lazyFiles;
+                }
+            }
+        }
+        
+        public partial class DefinitionSymbolMapping<TRoot> : ReferenceSymbolMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyAbbreviatedName;
+            
+            private Mapping<TRoot, string> _lazyKeywords;
+            
+            private Mapping<TRoot, string> _lazyShortName;
+            
+            private Mapping<TRoot, string> _lazyContainerQualifiedName;
+            
+            private Mapping<TRoot, string[]> _lazyModifiers;
+            
+            private DocumentationInfoMapping<TRoot> _lazyDocumentationInfo;
+            
+            public Mapping<TRoot, string> AbbreviatedName {
+                get {
+                    if ((this._lazyAbbreviatedName == null)) {
+                        this._lazyAbbreviatedName = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyAbbreviatedName;
+                }
+            }
+            
+            public Mapping<TRoot, string> Keywords {
+                get {
+                    if ((this._lazyKeywords == null)) {
+                        this._lazyKeywords = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyKeywords;
+                }
+            }
+            
+            public Mapping<TRoot, string> ShortName {
+                get {
+                    if ((this._lazyShortName == null)) {
+                        this._lazyShortName = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyShortName;
+                }
+            }
+            
+            public Mapping<TRoot, string> ContainerQualifiedName {
+                get {
+                    if ((this._lazyContainerQualifiedName == null)) {
+                        this._lazyContainerQualifiedName = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyContainerQualifiedName;
+                }
+            }
+            
+            public Mapping<TRoot, string[]> Modifiers {
+                get {
+                    if ((this._lazyModifiers == null)) {
+                        this._lazyModifiers = new Mapping<TRoot, string[]>();
+                    }
+                    return this._lazyModifiers;
+                }
+            }
+            
+            public DocumentationInfoMapping<TRoot> DocumentationInfo {
+                get {
+                    if ((this._lazyDocumentationInfo == null)) {
+                        this._lazyDocumentationInfo = new DocumentationInfoMapping<TRoot>();
+                    }
+                    return this._lazyDocumentationInfo;
+                }
+            }
+        }
+        
+        public partial class ReferenceSymbolMapping<TRoot> : SymbolMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyReferenceKind;
+            
+            private Mapping<TRoot, bool> _lazyIsImplicitlyDeclared;
+            
+            private Mapping<TRoot, bool> _lazyExcludeFromDefaultSearch;
+            
+            public Mapping<TRoot, string> ReferenceKind {
+                get {
+                    if ((this._lazyReferenceKind == null)) {
+                        this._lazyReferenceKind = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyReferenceKind;
+                }
+            }
+            
+            public Mapping<TRoot, bool> IsImplicitlyDeclared {
+                get {
+                    if ((this._lazyIsImplicitlyDeclared == null)) {
+                        this._lazyIsImplicitlyDeclared = new Mapping<TRoot, bool>();
+                    }
+                    return this._lazyIsImplicitlyDeclared;
+                }
+            }
+            
+            public Mapping<TRoot, bool> ExcludeFromDefaultSearch {
+                get {
+                    if ((this._lazyExcludeFromDefaultSearch == null)) {
+                        this._lazyExcludeFromDefaultSearch = new Mapping<TRoot, bool>();
+                    }
+                    return this._lazyExcludeFromDefaultSearch;
+                }
+            }
+        }
+        
+        public partial class SymbolMapping<TRoot>
+         {
+            
+            private Mapping<TRoot, string> _lazyProjectId;
+            
+            private Mapping<TRoot, Codex.ObjectModel.SymbolId> _lazyId;
+            
+            private Mapping<TRoot, string> _lazyKind;
+            
+            public Mapping<TRoot, string> ProjectId {
+                get {
+                    if ((this._lazyProjectId == null)) {
+                        this._lazyProjectId = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyProjectId;
+                }
+            }
+            
+            public Mapping<TRoot, Codex.ObjectModel.SymbolId> Id {
+                get {
+                    if ((this._lazyId == null)) {
+                        this._lazyId = new Mapping<TRoot, Codex.ObjectModel.SymbolId>();
+                    }
+                    return this._lazyId;
+                }
+            }
+            
+            public Mapping<TRoot, string> Kind {
+                get {
+                    if ((this._lazyKind == null)) {
+                        this._lazyKind = new Mapping<TRoot, string>();
+                    }
+                    return this._lazyKind;
+                }
+            }
+        }
+        
+        public partial class ReferenceSearchResultMapping<TRoot> : ProjectFileScopeEntityMapping<TRoot>
+         {
+            
+            private ReferenceSpanMapping<TRoot> _lazyReferenceSpan;
+            
+            public ReferenceSpanMapping<TRoot> ReferenceSpan {
+                get {
+                    if ((this._lazyReferenceSpan == null)) {
+                        this._lazyReferenceSpan = new ReferenceSpanMapping<TRoot>();
+                    }
+                    return this._lazyReferenceSpan;
+                }
+            }
+        }
+        
+        public partial class TextLineSpanResultMapping<TRoot> : ProjectFileScopeEntityMapping<TRoot>
+         {
+            
+            private TextLineSpanMapping<TRoot> _lazyTextSpan;
+            
+            public TextLineSpanMapping<TRoot> TextSpan {
+                get {
+                    if ((this._lazyTextSpan == null)) {
+                        this._lazyTextSpan = new TextLineSpanMapping<TRoot>();
+                    }
+                    return this._lazyTextSpan;
+                }
+            }
+        }
+        
+        public partial class SearchResultMapping<TRoot>
+         {
+            
+            private TextLineSpanResultMapping<TRoot> _lazyTextLine;
+            
+            private DefinitionSymbolMapping<TRoot> _lazyDefinition;
+            
+            public TextLineSpanResultMapping<TRoot> TextLine {
+                get {
+                    if ((this._lazyTextLine == null)) {
+                        this._lazyTextLine = new TextLineSpanResultMapping<TRoot>();
+                    }
+                    return this._lazyTextLine;
+                }
+            }
+            
+            public DefinitionSymbolMapping<TRoot> Definition {
+                get {
+                    if ((this._lazyDefinition == null)) {
+                        this._lazyDefinition = new DefinitionSymbolMapping<TRoot>();
+                    }
+                    return this._lazyDefinition;
+                }
+            }
+        }
+        
+        public partial class IndexMapping<TRoot>
+         {
+        }
+        
+        public partial class Index`1Mapping<TRoot>
+         {
+        }
+    }
+    
+    public partial interface IClient {
+        
+        Codex.Sdk.Search.IIndex<Codex.IDefinitionSearchModel> DefinitionIndex {
+            get;
+        }
+        
+        Codex.Sdk.Search.IIndex<Codex.IReferenceSearchModel> ReferenceIndex {
+            get;
+        }
+        
+        Codex.Sdk.Search.IIndex<Codex.ITextChunkSearchModel> TextChunkIndex {
+            get;
+        }
+        
+        Codex.Sdk.Search.IIndex<Codex.ITextSourceSearchModel> TextSourceIndex {
+            get;
+        }
+        
+        Codex.Sdk.Search.IIndex<Codex.IBoundSourceSearchModel> BoundSourceIndex {
+            get;
+        }
+        
+        Codex.Sdk.Search.IIndex<Codex.ILanguageSearchModel> LanguageIndex {
+            get;
+        }
+        
+        Codex.Sdk.Search.IIndex<Codex.IRepositorySearchModel> RepositoryIndex {
+            get;
+        }
+        
+        Codex.Sdk.Search.IIndex<Codex.IProjectSearchModel> ProjectIndex {
+            get;
+        }
+        
+        Codex.Sdk.Search.IIndex<Codex.ICommitSearchModel> CommitIndex {
+            get;
+        }
+        
+        Codex.Sdk.Search.IIndex<Codex.ICommitFilesSearchModel> CommitFilesIndex {
+            get;
+        }
+        
+        Codex.Sdk.Search.IIndex<Codex.IProjectReferenceSearchModel> ProjectReferenceIndex {
+            get;
+        }
+        
+        Codex.Sdk.Search.IIndex<Codex.IPropertySearchModel> PropertyIndex {
+            get;
+        }
+        
+        Codex.Sdk.Search.IIndex<Codex.IStoredFilter> StoredFilterIndex {
+            get;
+        }
+        
+        Codex.Sdk.Search.IIndex<Codex.IStableIdMarker> StableIdMarkerIndex {
+            get;
+        }
+        
+        Codex.Sdk.Search.IIndex<Codex.IRegisteredEntity> RegisteredEntityIndex {
+            get;
         }
     }
     
@@ -6073,6 +7896,15 @@ namespace Codex.ObjectModel {
             return ((TTarget)(this));
         }
     }
+    
+    [Codex.SerializationInterfaceAttribute(typeof(Codex.Sdk.Search.IIndex<>))]
+    public partial class Index<T> : Codex.EntityBase, Codex.Sdk.Search.IIndex<T> {
+        
+        public virtual TTarget CopyFrom<TTarget>(Codex.Sdk.Search.IIndex<T> value)
+            where TTarget : Index<T> {
+            return ((TTarget)(this));
+        }
+    }
 }
 namespace Codex.Framework.Types {
     using System.Threading.Tasks;
@@ -6153,6 +7985,7 @@ namespace Codex.Framework.Types {
     using TextLineSpanResult = Codex.ObjectModel.TextLineSpanResult;
     using SearchResult = Codex.ObjectModel.SearchResult;
     using Index = Codex.ObjectModel.Index;
+    using Index<T> = Codex.ObjectModel.Index<T>;
     
     
     public partial interface IStore {
