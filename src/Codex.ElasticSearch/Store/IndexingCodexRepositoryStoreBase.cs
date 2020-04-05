@@ -115,7 +115,7 @@ namespace Codex.ElasticSearch
 
         private async Task<TextSourceSearchModel> AddTextFileAsync(SourceFile file)
         {
-            TextIndexingUtilities.ToChunks(file, file.ExcludeFromSearch, out var chunkFile, out var chunks, encodeFullText: true);
+            TextIndexingUtilities.ToChunks(file, file.ExcludeFromSearch, out var chunkFile, out var chunks, PopulateTextChunk,  encodeFullText: true);
             var textModel = new TextSourceSearchModel()
             {
                 File = chunkFile
@@ -128,6 +128,10 @@ namespace Codex.ElasticSearch
             }
 
             return textModel;
+        }
+
+        protected virtual void PopulateTextChunk(TextChunkSearchModel chunk)
+        {
         }
 
         private void AddDefinitions(IEnumerable<DefinitionSymbol> definitions, bool declared)

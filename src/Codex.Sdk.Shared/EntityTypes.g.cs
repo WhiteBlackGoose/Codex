@@ -174,8 +174,6 @@ namespace Codex.ObjectModel {
             typeMapping.Add(typeof(SearchResult), typeof(Codex.Sdk.Search.ISearchResult));
             typeMapping.Add(typeof(Codex.Sdk.Search.IIndex), typeof(Index));
             typeMapping.Add(typeof(Index), typeof(Codex.Sdk.Search.IIndex));
-            typeMapping.Add(typeof(Codex.Sdk.Search.IIndex<>), typeof(Index<T>));
-            typeMapping.Add(typeof(Index<T>), typeof(Codex.Sdk.Search.IIndex<>));
             return typeMapping;
         }
     }
@@ -1929,10 +1927,6 @@ namespace Codex.ObjectModel {
         }
         
         public partial class IndexMapping<TRoot>
-         {
-        }
-        
-        public partial class Index`1Mapping<TRoot>
          {
         }
     }
@@ -7896,15 +7890,6 @@ namespace Codex.ObjectModel {
             return ((TTarget)(this));
         }
     }
-    
-    [Codex.SerializationInterfaceAttribute(typeof(Codex.Sdk.Search.IIndex<>))]
-    public partial class Index<T> : Codex.EntityBase, Codex.Sdk.Search.IIndex<T> {
-        
-        public virtual TTarget CopyFrom<TTarget>(Codex.Sdk.Search.IIndex<T> value)
-            where TTarget : Index<T> {
-            return ((TTarget)(this));
-        }
-    }
 }
 namespace Codex.Framework.Types {
     using System.Threading.Tasks;
@@ -7985,7 +7970,6 @@ namespace Codex.Framework.Types {
     using TextLineSpanResult = Codex.ObjectModel.TextLineSpanResult;
     using SearchResult = Codex.ObjectModel.SearchResult;
     using Index = Codex.ObjectModel.Index;
-    using Index<T> = Codex.ObjectModel.Index<T>;
     
     
     public partial interface IStore {

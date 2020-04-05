@@ -9,7 +9,7 @@ namespace Codex.Utilities
 {
     public static partial class CollectionUtilities
     {
-        public static IReadOnlyList<TResult> SelectList<T, TResult>(this IReadOnlyCollection<T> items, Func<T, TResult> selector)
+        public static TResult[] SelectArray<T, TResult>(this IReadOnlyCollection<T> items, Func<T, TResult> selector)
         {
             TResult[] results = new TResult[items.Count];
             int i = 0;
@@ -20,6 +20,11 @@ namespace Codex.Utilities
             }
 
             return results;
+        }
+
+        public static IReadOnlyList<TResult> SelectList<T, TResult>(this IReadOnlyCollection<T> items, Func<T, TResult> selector)
+        {
+            return SelectArray(items, selector);
         }
 
         public static T SingleOrDefaultNoThrow<T>(this IEnumerable<T> items)

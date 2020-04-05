@@ -25,6 +25,7 @@ namespace Codex.Framework.Generation
         public HashSet<Type> MigratedTypes = new HashSet<Type>();
         public Dictionary<Type, TypeDefinition> DefinitionsByType = new Dictionary<Type, TypeDefinition>();
         public Dictionary<string, TypeDefinition> DefinitionsByTypeMetadataName = new Dictionary<string, TypeDefinition>();
+        public HashSet<TypeDefinition> SearchRelevantTypes = new HashSet<TypeDefinition>();
         private CSharpCompilation Compilation;
         private string ProjectDirectory;
         private CodeTypeDeclaration CodexTypeUtilitiesClass = new CodeTypeDeclaration("CodexTypeUtilities")
@@ -103,7 +104,7 @@ namespace Codex.Framework.Generation
 
             Types = assembly
                 .GetTypes()
-                .Where(t => t.IsInterface && t.GetMethods().Where(m => !m.IsSpecialName).Count() == 0)
+                .Where(t => t.IsInterface && !t.IsGenericType && t.GetMethods().Where(m => !m.IsSpecialName).Count() == 0)
                 //.Where(t => t.IsAssignableFrom(typeof(ISearchEntity)))
                 .Select(ToTypeDefinition)
                 .ToList();
@@ -207,6 +208,35 @@ namespace Codex.Framework.Generation
                             new CodeTypeReference(typeof(IReadOnlyList<object>)).Apply(ct => ct.TypeArguments[0] = property.MutablePropertyType) :
                             property.InitPropertyType;
                     }
+                }
+            }
+
+            Queue<TypeDefinition> types = new Queue<TypeDefinition>(SearchTypes.RegisteredSearchTypes
+                .Select(t => DefinitionsByType[t.Type]));
+
+            while (types.Count != 0)
+            {
+                var type = types.Dequeue();
+
+                while (type != null)
+                {
+                    if (SearchRelevantTypes.Add(type))
+                    {
+                        foreach (var property in type.Properties)
+                        {
+                            if (property.PropertyTypeDefinition != null
+                                && !SearchRelevantTypes.Contains(property.PropertyTypeDefinition))
+                            {
+                                types.Enqueue(property.PropertyTypeDefinition);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+                    type = type.BaseTypeDefinition;
                 }
             }
         }
@@ -333,7 +363,10 @@ namespace Codex.Framework.Generation
                     typeDefinition.MappingTypeDeclaration.BaseTypes.Add(typeDefinition.BaseTypeDefinition.MappingTypeReference);
                 }
 
-                MappingsClass.Members.Add(typeDefinition.MappingTypeDeclaration);
+                if (true || SearchRelevantTypes.Contains(typeDefinition))
+                {
+                    MappingsClass.Members.Add(typeDefinition.MappingTypeDeclaration);
+                }
                 
                 typeDeclaration.Comments.AddRange(typeDefinition.Comments.ToArray());
 

@@ -18,13 +18,17 @@ namespace Codex.Sdk.Search
 
     public partial interface IIndex<T>
     {
+        Task<IReadOnlyList<T>> GetAsync(
+            IStoredFilterInfo storedFilterInfo,
+            params string[] ids);
+
         Task<IIndexSearchResponse<TResult>> QueryAsync<TResult>(
             IStoredFilterInfo storedFilterInfo,
             Func<CodexQueryBuilder<T>, CodexQuery<T>> filter,
             OneOrMany<Mapping<T>> sort = null,
             int? take = null,
             Func<CodexQueryBuilder<T>, CodexQuery<T>> boost = null)
-            where TResult : T;
+        where TResult : T;
     }
 
     public static partial class IIndexExtensions
@@ -61,19 +65,16 @@ namespace Codex.Sdk.Search
         public int? Take { get; set; }
     }
 
-    public interface IIndexSearchResponse<T>
+    public interface IIndexSearchResponse<out T>
     {
         IReadOnlyCollection<ISearchHit<T>> Hits { get; }
         public int Total { get; }
     }
 
-    public interface ISearchHit<T>
+    public interface ISearchHit<out T>
     {
         public T Source { get; }
-    }
-
-    public partial interface IClient
-    {
+        public IEnumerable<TextLineSpan> Highlights { get; }
     }
 
     public enum CodexQueryKind
@@ -103,17 +104,7 @@ namespace Codex.Sdk.Search
             return new BinaryCodexQuery<T>(CodexQueryKind.And, leftQuery, rightQuery);
         }
 
-        public static CodexQuery<T> operator &(CodexQuery<T> leftQuery, CodexQuery<T> rightQuery)
-        {
-            return new BinaryCodexQuery<T>(CodexQueryKind.And, leftQuery, rightQuery);
-        }
-
         public static CodexQuery<T> operator |(CodexQuery<T> leftQuery, CodexQuery<T> rightQuery)
-        {
-            return new BinaryCodexQuery<T>(CodexQueryKind.Or, leftQuery, rightQuery);
-        }
-
-        public static CodexQuery<T> operator ||(CodexQuery<T> leftQuery, CodexQuery<T> rightQuery)
         {
             return new BinaryCodexQuery<T>(CodexQueryKind.Or, leftQuery, rightQuery);
         }

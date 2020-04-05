@@ -1,20 +1,19 @@
-﻿using Codex.ElasticSearch.Utilities;
-using Codex.ObjectModel;
-using Codex.Sdk.Search;
-using Codex.Storage.ElasticProviders;
-using Codex.Storage.Utilities;
-using Nest;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Codex.ElasticSearch.Utilities;
+using Codex.ObjectModel;
+using Codex.Sdk.Search;
+using Codex.Search;
+using Codex.Storage.ElasticProviders;
+using Codex.Storage.Utilities;
 using Codex.Utilities;
-
-using static Codex.ElasticSearch.Utilities.ElasticUtility;
+using Nest;
 using static Codex.ElasticSearch.StoredFilterUtilities;
-using System.Threading;
+using static Codex.ElasticSearch.Utilities.ElasticUtility;
+using static Codex.Search.SearchUtilities;
 
 namespace Codex.ElasticSearch.Search
 {

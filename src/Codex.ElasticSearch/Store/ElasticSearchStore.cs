@@ -1,5 +1,7 @@
 ﻿using Codex.Logging;
 using Codex.ObjectModel;
+using Codex.Search;
+using Codex.Serialization;
 using Codex.Storage.ElasticProviders;
 using Codex.Utilities;
 using Nest;
@@ -131,10 +133,15 @@ namespace Codex.ElasticSearch
                 : base(batcher, store.Configuration.Logger, repository, commit, branch)
             {
             }
+
+            protected override void PopulateTextChunk(TextChunkSearchModel chunk)
+            {
+                chunk.PopulateContentIdAndSize();
+            }
         }
     }
 
-    public class ElasticSearchStoreConfiguration
+    public class ElasticSearchStoreConfiguration : CodexBaseConfiguration
     {
         /// <summary>
         /// Prefix for indices
@@ -155,8 +162,6 @@ namespace Codex.ElasticSearch
         public bool ClearIndicesBeforeUse = true;
 
         public Logger Logger = new ConsoleLogger();
-
-        public TimeSpan CachedAliasIdRetention = TimeSpan.FromMinutes(30);
 
         /// <summary>
         /// The number of shards for created indices

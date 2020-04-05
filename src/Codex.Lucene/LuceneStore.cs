@@ -42,6 +42,12 @@ namespace Codex.Lucene.Search
                 : base(batcher, batcher.Store.Configuration.Logger, repository, commit, branch)
             {
             }
+
+            protected override void PopulateTextChunk(TextChunkSearchModel chunk)
+            {
+                Placeholder.Todo("What to do about populating text chunks with hash and content size");
+                base.PopulateTextChunk(chunk);
+            }
         }
 
         private interface ILuceneWriter<T>

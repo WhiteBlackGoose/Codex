@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Codex.Utilities;
 using System.Threading;
 using Codex.Sdk.Utilities;
+using Codex.Search;
+using static Codex.Search.SearchUtilities;
 
 namespace Codex.Search
 {
@@ -52,9 +54,17 @@ namespace Codex.Search
         }
     }
 
-    public class CodexBase<TClient> : ICodex
-       where TClient : IClient
+    public class CodexBaseConfiguration
     {
+        public TimeSpan CachedAliasIdRetention = TimeSpan.FromMinutes(30);
+    }
+
+    public abstract class CodexBase<TClient, TConfiguration> : ICodex
+       where TClient : IClient
+       where TConfiguration : CodexBaseConfiguration
+    {
+        internal readonly TConfiguration Configuration;
+
         private Mappings<None> m;
 
         private ConcurrentDictionary<string, (DateTime resolveTime, string repositorySnapshotId)> resolvedRepositoryIds = new ConcurrentDictionary<string, (DateTime resolveTime, string repositorySnapshotId)>();
@@ -184,7 +194,7 @@ namespace Codex.Search
                     //            .Routing(GetRouting(boundSearchModel.TextUid)))
                     //.ThrowOnFailure();
 
-                    var chunks = await Service.GetAsync(SearchTypes.TextChunk, IndexName(SearchTypes.TextChunk), boundSearchModel.File.Chunks.SelectList(c => c.Id));
+                    var chunks = await client.TextChunkIndex.GetAsync(context, boundSearchModel.File.Chunks.SelectArray(c => c.Id));
 
                     var repoResults = await client.RepositoryIndex.QueryAsync<RepositorySearchModel>(
                         context,
@@ -302,7 +312,6 @@ namespace Codex.Search
             return await UseClient(arguments, async context =>
             {
                 Placeholder.Todo("Allow filtering text matches by extension/path");
-                Placeholder.Todo("Extract method for getting index name from search type");
 
                 var client = context.Client;
 
@@ -313,20 +322,22 @@ namespace Codex.Search
                     bool allowReferencedDefinitions = terms.Any(t => IsAllowReferenceDefinitionsTerm(t)) || arguments.AllowReferencedDefinitions;
                     terms = terms.Where(t => !IsAllowReferenceDefinitionsTerm(t)).ToArray();
 
-                    var indexName = IndexName(SearchTypes.Definition);
-
                     var definitionsResult = await client.DefinitionIndex.SearchAsync(
                         context,
-                        cq => GetTermsFilter(terms, allowReferencedDefinitions: allowReferencedDefinitions),
+                        cq => GetTermsFilter(cq, terms),
+                        boost: cq => GetTermsFilter(cq, terms, boostOnly: true),
+                        //filterIndexName: allowReferencedDefinitions ? indexName : GetDeclaredDefinitionsIndexName(indexName)
                         take: arguments.MaxResults);
 
-                    var definitionsResult = await client.SearchAsync<IDefinitionSearchModel>(s => s
-                            .StoredFilterSearch(context, indexName, qcd => qcd.Bool(bq => bq
-                                .Filter(GetTermsFilter(terms, allowReferencedDefinitions: allowReferencedDefinitions))
-                                .Should(GetTermsFilter(terms, boostOnly: true))),
-                                filterIndexName: allowReferencedDefinitions ? indexName : GetDeclaredDefinitionsIndexName(indexName))
-                            .Take(arguments.MaxResults))
-                        .ThrowOnFailure();
+                    //var indexName = IndexName(SearchTypes.Definition);
+
+                    //var definitionsResult = await client.SearchAsync<IDefinitionSearchModel>(s => s
+                    //        .StoredFilterSearch(context, indexName, qcd => qcd.Bool(bq => bq
+                    //            .Filter(GetTermsFilter(terms, allowReferencedDefinitions: allowReferencedDefinitions))
+                    //            .Should(GetTermsFilter(terms, boostOnly: true))),
+                    //            filterIndexName: allowReferencedDefinitions ? indexName : GetDeclaredDefinitionsIndexName(indexName))
+                    //        .Take(arguments.MaxResults))
+                    //    .ThrowOnFailure();
 
                     if (definitionsResult.Hits.Count != 0 || !arguments.FallbackToTextSearch)
                     {
@@ -358,7 +369,7 @@ namespace Codex.Search
                 var textChunkResults = await client.TextChunkIndex.SearchAsync(
                     context,
                     cq => isPrefix 
-                        ? cq.MatchPhrasePrefix(m.TextChunk.Chunk.ContentLines, searchPhrase, 100)
+                        ? cq.MatchPhrasePrefix(m.TextChunk.Chunk.ContentLines, searchPhrase, maxExpansions: 100)
                         : cq.MatchPhrase(m.TextChunk.Chunk.ContentLines, searchPhrase),
                     take: arguments.MaxResults);
 
@@ -368,18 +379,22 @@ namespace Codex.Search
                     context,
                     cq => cq.Terms(m.TextSource.File.Chunks.Id, chunkIds.Keys),
                     take: arguments.MaxResults);
+
+                TextLineSpan withOffset(TextLineSpan span, int startLineNumber)
+                {
+                    span.LineNumber += startLineNumber;
+                    return span;
+                }
                 
                 var sourceFileResults =
                    (from hit in textResults.Hits
                     from chunkHit in hit.Source.File.Chunks.Select(c => (hit: chunkIds.GetOrDefault(c.Id), c.StartLineNumber)).Where(h => h.hit != null)
-                    from highlightHit in chunkHit.hit.Highlights.Values
-                    from highlight in highlightHit.Highlights
-                    from span in FullTextUtilities.ParseHighlightSpans(highlight, lineOffset: chunkHit.StartLineNumber)
+                    from highlight in chunkHit.hit.Highlights
                     select new SearchResult()
                     {
                         TextLine = new TextLineSpanResult(hit.Source.File.Info)
                         {
-                            TextSpan = span
+                            TextSpan = withOffset(highlight, chunkHit.StartLineNumber)
                         }
                     }).ToList<ISearchResult>();
 
@@ -396,11 +411,6 @@ namespace Codex.Search
             return t.Equals("@all", StringComparison.OrdinalIgnoreCase);
         }
 
-        private string IndexName(SearchType searchType)
-        {
-            return Configuration.Prefix + searchType.IndexName;
-        }
-
         //private Func<CodexQueryBuilder<IDefinitionSearchModel>, CodexQuery<IDefinitionSearchModel>> GetTermsFilter(
         //    string[] terms,
         //    bool boostOnly = false,
@@ -412,41 +422,17 @@ namespace Codex.Search
         private CodexQuery<IDefinitionSearchModel> GetTermsFilter(
             CodexQueryBuilder<IDefinitionSearchModel> cq,
             string[] terms,
-            bool boostOnly = false,
-            bool allowReferencedDefinitions = false)
+            bool boostOnly = false)
         {
             CodexQuery<IDefinitionSearchModel> query = default;
             foreach (var term in terms)
             {
-                if (term == "@all")
-                {
-                    allowReferencedDefinitions = true;
-                }
-                else
-                {
-                    query &= ApplyTermFilter(term.ToLowerInvariant(), cq, boostOnly);
-                }
+                query &= ApplyTermFilter(term.ToLowerInvariant(), cq, boostOnly);
             }
 
             if (!boostOnly)
             {
                 query&= !cq.Term(m.Definition.Definition.ExcludeFromDefaultSearch, true);
-
-                //if (!allowReferencedDefinitions)
-                //{
-                //    yield return fq => fq.Terms(
-                //        tsd => tsd
-                //            .Field(e => e.StableId)
-                //            .TermsLookup<IStoredFilter>(ld => ld
-                //                .Index(IndexName(SearchTypes.StoredFilter))
-                //                .Id(GetFilterName(
-                //                    Configuration.CombinedSourcesFilterName, 
-                //                    indexName: GetDeclaredDefinitionsIndexName(IndexName(SearchTypes.Definition))))
-                //                .Path(sf => sf.StableIds)));
-                //    // TODO: Should referenced symbols only be allowed conditionally
-                //    // Maybe it should be an option to the search arguments
-                //    //yield return fq => fq.Bool(bqd => bqd.MustNot(fq1 => fq1.Term(dss => dss.IsReferencedSymbol, true)));
-                //}
             }
 
             return query;
@@ -454,7 +440,7 @@ namespace Codex.Search
 
         private CodexQuery<IDefinitionSearchModel> KeywordFilter(string term, CodexQueryBuilder<IDefinitionSearchModel> fq)
         {
-            Placeholder.Todo("Why two different keywords fields");
+            Placeholder.Todo("Why two different keywords fields?");
             return fq.Term(m.Definition.Keywords, term.ToLowerInvariant())
                     | fq.Term(m.Definition.Definition.Keywords, term.ToLowerInvariant());
         }
@@ -475,21 +461,23 @@ namespace Codex.Search
 
         private CodexQuery<IDefinitionSearchModel> NameFilterCore(CodexQueryBuilder<IDefinitionSearchModel> fq, QualifiedNameTerms terms)
         {
-            return fq.Term(dss => dss.Definition.ShortName, terms.NameTerm)
-                                    || fq.Term(dss => dss.Definition.ShortName, terms.SecondaryNameTerm)
-                                    || fq.Term(dss => dss.Definition.AbbreviatedName, terms.RawNameTerm);
+            Placeholder.Todo("Why two different keywords fields?");
+            return fq.Term(m.Definition.Definition.ShortName, terms.NameTerm)
+                | fq.Term(m.Definition.Definition.ShortName, terms.SecondaryNameTerm)
+                | fq.Term(m.Definition.Definition.AbbreviatedName, terms.RawNameTerm);
         }
 
         private CodexQuery<IDefinitionSearchModel> QualifiedNameTermFilters(string term, CodexQueryBuilder<IDefinitionSearchModel> fq)
         {
             var terms = ParseContainerAndName(term);
 
+            Placeholder.Todo("Bring back this logic?");
             // TEMPORARY HACK: This is needed due to the max length placed on container terms
             // The analyzer should be changed to use path_hierarchy with reverse option
-            if ((terms.ContainerTerm.Length > (CustomAnalyzers.MaxGram - 2)) && terms.ContainerTerm.Contains("."))
-            {
-                terms.ContainerTerm = terms.ContainerTerm.SubstringAfterFirstOccurrence('.');
-            }
+            //if ((terms.ContainerTerm.Length > (CustomAnalyzers.MaxGram - 2)) && terms.ContainerTerm.Contains("."))
+            //{
+            //    terms.ContainerTerm = terms.ContainerTerm.SubstringAfterFirstOccurrence('.');
+            //}
 
             return NameFilterCore(fq, terms) 
                 & fq.Term(m.Definition.Definition.ContainerQualifiedName, terms.ContainerTerm);
@@ -497,7 +485,8 @@ namespace Codex.Search
 
         private CodexQuery<IDefinitionSearchModel> IndexTermFilters(string term, CodexQueryBuilder<IDefinitionSearchModel> fq)
         {
-            return fq.Term("_index", term.ToLowerInvariant());
+            return Placeholder.Value<CodexQuery<IDefinitionSearchModel>>("Determine how index queries will be represented? Probably as a stored filter");
+            //return fq.Term("_index", term.ToLowerInvariant());
         }
 
         private CodexQuery<IDefinitionSearchModel> ApplyTermFilter(string term, CodexQueryBuilder<IDefinitionSearchModel> fq, bool boostOnly)
@@ -518,40 +507,7 @@ namespace Codex.Search
             return d;
         }
 
-        private async Task<StoredFilterSearchContext<TClient>> GetStoredFilterContextAsync(ContextCodexArgumentsBase arguments, ClientContext context)
-        {
-            string resolvedAliasStoredFilterPrefix = null;
-            var repositoryId = arguments.RepositoryScopeId ?? Configuration.CombinedSourcesFilterName;
-            var aliasUid = GetStoredFilterAliasUid(repositoryId);
-
-            if (repositoryId != ContextCodexArgumentsBase.AllRepositoryScopeId)
-            {
-                if (!resolvedRepositoryIds.TryGetValue(repositoryId, out var resolvedEntry) || !GetValueFromEntry(resolvedEntry, out resolvedAliasStoredFilterPrefix))
-                {
-                    IGetResponse<PropertySearchModel> aliasResult = await context.Client.GetAsync<PropertySearchModel>(aliasUid,
-                        gd => gd.Index(IndexName(SearchTypes.Property)))
-                        .ThrowOnFailure();
-
-                    if (aliasResult.Found)
-                    {
-                        resolvedAliasStoredFilterPrefix = aliasResult.Source.Value;
-                        resolvedRepositoryIds.TryAdd(repositoryId, (DateTime.UtcNow, resolvedAliasStoredFilterPrefix));
-                    }
-                }
-
-                if (resolvedAliasStoredFilterPrefix == null)
-                {
-                    throw new Exception($"Unable to find index with name: {repositoryId}");
-                }
-            }
-
-            return new StoredFilterSearchContext<TClient>(
-                context,
-                repositoryScopeId: repositoryId,
-                storedFilterIndexName: IndexName(SearchTypes.StoredFilter),
-                // repos/{repositoryName}/{ingestId}
-                storedFilterUidPrefix: resolvedAliasStoredFilterPrefix);
-        }
+        protected abstract Task<StoredFilterSearchContext<TClient>> GetStoredFilterContextAsync(ContextCodexArgumentsBase arguments, ClientContext<TClient> context);
 
         private bool GetValueFromEntry((DateTime resolveTime, string repositorySnapshotId) resolvedEntry, out string aliasId)
         {
@@ -567,134 +523,8 @@ namespace Codex.Search
             return true;
         }
 
-        private async Task<IndexQueryHitsResponse<T>> UseClient<T>(ContextCodexArgumentsBase arguments, Func<StoredFilterSearchContext<TClient>, Task<IndexQueryHits<T>>> useClient)
-        {
-            var elasticResponse = await Service.UseClient(async context =>
-            {
-                try
-                {
-                    var sfContext = await GetStoredFilterContextAsync(arguments, context);
-                    var result = await useClient(sfContext);
-                    return new IndexQueryHitsResponse<T>()
-                    {
-                        Result = result
-                    };
-                }
-                catch (Exception ex)
-                {
-                    return new IndexQueryHitsResponse<T>()
-                    {
-                        Error = ex.ToString(),
-                    };
-                }
-            });
+        protected abstract Task<IndexQueryHitsResponse<T>> UseClient<T>(ContextCodexArgumentsBase arguments, Func<StoredFilterSearchContext<TClient>, Task<IndexQueryHits<T>>> useClient);
 
-            var response = elasticResponse.Result;
-            response.RawQueries = elasticResponse.Requests.ToList();
-            response.Duration = elasticResponse.Duration;
-            return response;
-        }
-
-        public Task<IndexQueryHitsResponse<IRegisteredEntity>> GetRegisteredEntitiesAsync(SearchType searchType)
-        {
-            var arguments = new ContextCodexArgumentsBase();
-            return UseClient<IRegisteredEntity>(arguments, async context =>
-            {
-                var client = context.Client;
-                var result = await client.SearchAllAsync<IRegisteredEntity>(s => s
-                    .Query(qcd => qcd.Bool(bq => bq.Filter(
-                        fq => fq.Term(r => r.IndexName, searchType.IndexName))))
-                    .Index(IndexName(SearchTypes.RegisteredEntity)));
-
-                return new IndexQueryHits<IRegisteredEntity>()
-                {
-                    Hits = result.SelectMany(s => s.Hits.Select(h => h.Source)).ToList(),
-                    Total = result.FirstOrDefault()?.Total ?? 0
-                };
-            });
-        }
-
-        public Task<IndexQueryHitsResponse<T>> GetLeftOnlyEntitiesAsync<T>(
-            SearchType<T> searchType,
-            string leftName,
-            string rightName)
-            where T : class, ISearchEntity
-        {
-            return UseClient<T>(new ContextCodexArgumentsBase() { RepositoryScopeId = leftName }, async leftContext =>
-            {
-                var r = await UseClient<T>(new ContextCodexArgumentsBase() { RepositoryScopeId = rightName }, async rightContext =>
-                {
-                    var client = leftContext.Client;
-
-                    var result = await client.SearchAllAsync<T>(s => s
-                        .Query(qcd => qcd.Bool(bq => bq
-                            .MustNot(q1 => q1.StoredFilterQuery(rightContext, IndexName(searchType)))
-                            .Filter(q1 => q1.StoredFilterQuery(leftContext, IndexName(searchType)))
-                            ))
-                        .Index(IndexName(searchType))
-                        .Type(searchType.Type));
-
-                    return new IndexQueryHits<T>()
-                    {
-                        Hits = result.SelectMany(s => s.Hits.Select(h => h.Source)).ToList(),
-                        Total = result.FirstOrDefault()?.Total ?? 0
-                    };
-
-                });
-
-                return r.Result;
-            });
-        }
-
-        public Task<IndexQueryHitsResponse<ISearchEntity>> GetSearchEntityInfoAsync(SearchType searchType)
-        {
-            var arguments = new ContextCodexArgumentsBase();
-            return UseClient<ISearchEntity>(arguments, async context =>
-            {
-                var client = context.Client;
-
-                await client.RefreshAsync(IndexName(searchType));
-
-                var result = await client.SearchAllAsync<ISearchEntity>(s => s
-                    .Query(qcd => qcd.MatchAll())
-                    .Index(IndexName(searchType))
-                    .Source(sf => sf.Includes(f => f.Fields(e => e.Uid, e => e.EntityVersion, e => e.StableId)))
-                    .Type(searchType.Type));
-
-                return new IndexQueryHits<ISearchEntity>()
-                {
-                    Hits = result.SelectMany(s => s.Hits.Select(h => h.Source)).ToList(),
-                    Total = result.FirstOrDefault()?.Total ?? 0
-                };
-            });
-        }
-
-        private async Task<IndexQueryResponse<T>> UseClientSingle<T>(ContextCodexArgumentsBase arguments, Func<StoredFilterSearchContext<TClient>, Task<T>> useClient)
-        {
-            var elasticResponse = await Service.UseClient(async context =>
-            {
-                try
-                {
-                    var sfContext = await GetStoredFilterContextAsync(arguments, context);
-                    var result = await useClient(sfContext);
-                    return new IndexQueryResponse<T>()
-                    {
-                        Result = result
-                    };
-                }
-                catch (Exception ex)
-                {
-                    return new IndexQueryResponse<T>()
-                    {
-                        Error = ex.ToString(),
-                    };
-                }
-            });
-
-            var response = elasticResponse.Result;
-            response.RawQueries = elasticResponse.Requests.ToList();
-            response.Duration = elasticResponse.Duration;
-            return response;
-        }
+        protected abstract Task<IndexQueryResponse<T>> UseClientSingle<T>(ContextCodexArgumentsBase arguments, Func<StoredFilterSearchContext<TClient>, Task<T>> useClient);
     }
 }

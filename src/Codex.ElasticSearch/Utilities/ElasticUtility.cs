@@ -13,30 +13,6 @@ using Codex.Storage.ElasticProviders;
 
 namespace Codex.ElasticSearch.Utilities
 {
-    public class QualifiedNameTerms
-    {
-        public string ContainerTerm = string.Empty;
-        public string RawNameTerm = string.Empty;
-        public string NameTerm = string.Empty;
-        public string SecondaryNameTerm = string.Empty;
-        public string ExactNameTerm => NameTerm + "^";
-
-        public bool HasContainerName
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(ContainerTerm);
-            }
-        }
-
-        public bool HasName
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(NameTerm);
-            }
-        }
-    }
 
     public static class ElasticUtility
     {
@@ -105,64 +81,6 @@ namespace Codex.ElasticSearch.Utilities
             }
 
             return descriptor.Term(field, term) || descriptor.Term(field, term.ToLowerInvariant());
-        }
-
-        public static QualifiedNameTerms CreateNameTerm(this string nameTerm)
-        {
-            var terms = new QualifiedNameTerms();
-            string secondaryNameTerm = string.Empty;
-            if (!string.IsNullOrEmpty(nameTerm))
-            {
-                nameTerm = nameTerm.Trim();
-                nameTerm = nameTerm.TrimStart('"');
-                if (!string.IsNullOrEmpty(nameTerm))
-                {
-                    terms.RawNameTerm = nameTerm;
-
-                    if (nameTerm.EndsWith("\""))
-                    {
-                        nameTerm = nameTerm.TrimEnd('"');
-                        nameTerm += "^";
-                    }
-
-                    if (!string.IsNullOrEmpty(nameTerm))
-                    {
-                        if (nameTerm[0] == '*')
-                        {
-                            nameTerm = nameTerm.TrimStart('*');
-                            secondaryNameTerm = nameTerm.Trim();
-                            nameTerm = "^" + secondaryNameTerm;
-                        }
-                        else
-                        {
-                            nameTerm = "^" + nameTerm;
-                        }
-                    }
-                }
-            }
-
-            terms.NameTerm = nameTerm;
-            terms.SecondaryNameTerm = secondaryNameTerm;
-
-            return terms;
-        }
-
-        public static QualifiedNameTerms ParseContainerAndName(string fullyQualifiedTerm)
-        {
-            QualifiedNameTerms terms = new QualifiedNameTerms();
-            int indexOfLastDot = fullyQualifiedTerm.LastIndexOf('.');
-            if (indexOfLastDot >= 0)
-            {
-                terms.ContainerTerm = fullyQualifiedTerm.Substring(0, indexOfLastDot);
-            }
-
-            terms.NameTerm = fullyQualifiedTerm.Substring(indexOfLastDot + 1);
-            if (terms.NameTerm.Length > 0)
-            {
-                terms.RawNameTerm = terms.NameTerm;
-                terms.NameTerm = "^" + terms.NameTerm;
-            }
-            return terms;
         }
 
         public static string SubstringAfterFirstOccurrence(this string s, char c)
