@@ -65,7 +65,7 @@ namespace Codex.Search
     {
         internal readonly TConfiguration Configuration;
 
-        private Mappings<None> m;
+        private Mappings m;
 
         private ConcurrentDictionary<string, (DateTime resolveTime, string repositorySnapshotId)> resolvedRepositoryIds = new ConcurrentDictionary<string, (DateTime resolveTime, string repositorySnapshotId)>();
 

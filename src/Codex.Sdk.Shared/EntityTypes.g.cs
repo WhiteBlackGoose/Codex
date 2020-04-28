@@ -476,6 +476,167 @@ namespace Codex.ObjectModel {
             }
         }
         
+        public partial class SourceControlFileInfoMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.ISourceControlFileInfo>
+         {
+            
+            private Mapping<TRoot, string> _lazySourceControlContentId;
+            
+            public SourceControlFileInfoMapping(Codex.ObjectModel.MappingInfo info) : 
+                    base(info) {
+            }
+            
+            public Mapping<TRoot, string> SourceControlContentId {
+                get {
+                    if ((this._lazySourceControlContentId == null)) {
+                        this._lazySourceControlContentId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("SourceControlContentId", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
+                    }
+                    return this._lazySourceControlContentId;
+                }
+            }
+            
+            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISourceControlFileInfo value) {
+                this.SourceControlContentId.Visit(visitor, value.SourceControlContentId);
+            }
+        }
+        
+        public partial class SourceFileInfoMapping<TRoot> : SourceControlFileInfoMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.ISourceFileInfo>
+         {
+            
+            private Mapping<TRoot, string> _lazyProjectRelativePath;
+            
+            private Mapping<TRoot, string> _lazyRepoRelativePath;
+            
+            private Mapping<TRoot, string> _lazyRepositoryName;
+            
+            private Mapping<TRoot, string> _lazyProjectId;
+            
+            public SourceFileInfoMapping(Codex.ObjectModel.MappingInfo info) : 
+                    base(info) {
+            }
+            
+            public Mapping<TRoot, string> ProjectRelativePath {
+                get {
+                    if ((this._lazyProjectRelativePath == null)) {
+                        this._lazyProjectRelativePath = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("ProjectRelativePath", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
+                    }
+                    return this._lazyProjectRelativePath;
+                }
+            }
+            
+            public Mapping<TRoot, string> RepoRelativePath {
+                get {
+                    if ((this._lazyRepoRelativePath == null)) {
+                        this._lazyRepoRelativePath = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("RepoRelativePath", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
+                    }
+                    return this._lazyRepoRelativePath;
+                }
+            }
+            
+            public Mapping<TRoot, string> RepositoryName {
+                get {
+                    if ((this._lazyRepositoryName == null)) {
+                        this._lazyRepositoryName = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("RepositoryName", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
+                    }
+                    return this._lazyRepositoryName;
+                }
+            }
+            
+            public Mapping<TRoot, string> ProjectId {
+                get {
+                    if ((this._lazyProjectId == null)) {
+                        this._lazyProjectId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("ProjectId", MappingInfo, Codex.SearchBehavior.Sortword));
+                    }
+                    return this._lazyProjectId;
+                }
+            }
+            
+            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISourceFileInfo value) {
+                base.Visit(visitor, value);
+            }
+        }
+        
+        public partial class SourceFileBaseMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.ISourceFileBase>
+         {
+            
+            private SourceFileInfoMapping<TRoot> _lazyInfo;
+            
+            private Mapping<TRoot, bool> _lazyExcludeFromSearch;
+            
+            public SourceFileBaseMapping(Codex.ObjectModel.MappingInfo info) : 
+                    base(info) {
+            }
+            
+            public SourceFileInfoMapping<TRoot> Info {
+                get {
+                    if ((this._lazyInfo == null)) {
+                        this._lazyInfo = new SourceFileInfoMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Info", MappingInfo, null));
+                    }
+                    return this._lazyInfo;
+                }
+            }
+            
+            public Mapping<TRoot, bool> ExcludeFromSearch {
+                get {
+                    if ((this._lazyExcludeFromSearch == null)) {
+                        this._lazyExcludeFromSearch = new Mapping<TRoot, bool>(new Codex.ObjectModel.MappingInfo("ExcludeFromSearch", MappingInfo, Codex.SearchBehavior.Term));
+                    }
+                    return this._lazyExcludeFromSearch;
+                }
+            }
+            
+            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISourceFileBase value) {
+                this.Info.Visit(visitor, value.Info);
+                this.ExcludeFromSearch.Visit(visitor, value.ExcludeFromSearch);
+            }
+        }
+        
+        public partial class ChunkedSourceFileMapping<TRoot> : SourceFileBaseMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.IChunkedSourceFile>
+         {
+            
+            private ChunkReferenceMapping<TRoot> _lazyChunks;
+            
+            public ChunkedSourceFileMapping(Codex.ObjectModel.MappingInfo info) : 
+                    base(info) {
+            }
+            
+            public ChunkReferenceMapping<TRoot> Chunks {
+                get {
+                    if ((this._lazyChunks == null)) {
+                        this._lazyChunks = new ChunkReferenceMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Chunks", MappingInfo, null));
+                    }
+                    return this._lazyChunks;
+                }
+            }
+            
+            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IChunkedSourceFile value) {
+                base.Visit(visitor, value);
+                this.Chunks.Visit(visitor, value.Chunks);
+            }
+        }
+        
+        public partial class ChunkReferenceMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IChunkReference>
+         {
+            
+            private Mapping<TRoot, string> _lazyId;
+            
+            public ChunkReferenceMapping(Codex.ObjectModel.MappingInfo info) : 
+                    base(info) {
+            }
+            
+            public Mapping<TRoot, string> Id {
+                get {
+                    if ((this._lazyId == null)) {
+                        this._lazyId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("Id", MappingInfo, Codex.SearchBehavior.Term));
+                    }
+                    return this._lazyId;
+                }
+            }
+            
+            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IChunkReference value) {
+                this.Id.Visit(visitor, value.Id);
+            }
+        }
+        
         public partial class SourceFileContentChunkMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.ISourceFileContentChunk>
          {
             
@@ -993,14 +1154,34 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public partial class ProjectFileScopeEntityMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IProjectFileScopeEntity>
+        public partial class RepoFileScopeEntityMapping<TRoot> : RepoScopeEntityMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.IRepoFileScopeEntity>
          {
-            
-            private Mapping<TRoot, string> _lazyProjectRelativePath;
             
             private Mapping<TRoot, string> _lazyRepoRelativePath;
             
-            private Mapping<TRoot, string> _lazyRepositoryName;
+            public RepoFileScopeEntityMapping(Codex.ObjectModel.MappingInfo info) : 
+                    base(info) {
+            }
+            
+            public Mapping<TRoot, string> RepoRelativePath {
+                get {
+                    if ((this._lazyRepoRelativePath == null)) {
+                        this._lazyRepoRelativePath = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("RepoRelativePath", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
+                    }
+                    return this._lazyRepoRelativePath;
+                }
+            }
+            
+            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IRepoFileScopeEntity value) {
+                base.Visit(visitor, value);
+                this.RepoRelativePath.Visit(visitor, value.RepoRelativePath);
+            }
+        }
+        
+        public partial class ProjectFileScopeEntityMapping<TRoot> : RepoFileScopeEntityMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.IProjectFileScopeEntity>
+         {
+            
+            private Mapping<TRoot, string> _lazyProjectRelativePath;
             
             private Mapping<TRoot, string> _lazyProjectId;
             
@@ -1017,24 +1198,6 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public Mapping<TRoot, string> RepoRelativePath {
-                get {
-                    if ((this._lazyRepoRelativePath == null)) {
-                        this._lazyRepoRelativePath = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("RepoRelativePath", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
-                    }
-                    return this._lazyRepoRelativePath;
-                }
-            }
-            
-            public Mapping<TRoot, string> RepositoryName {
-                get {
-                    if ((this._lazyRepositoryName == null)) {
-                        this._lazyRepositoryName = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("RepositoryName", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
-                    }
-                    return this._lazyRepositoryName;
-                }
-            }
-            
             public Mapping<TRoot, string> ProjectId {
                 get {
                     if ((this._lazyProjectId == null)) {
@@ -1045,6 +1208,7 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IProjectFileScopeEntity value) {
+                base.Visit(visitor, value);
                 this.ProjectRelativePath.Visit(visitor, value.ProjectRelativePath);
             }
         }
@@ -1261,7 +1425,43 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public partial class BoundSourceSearchModelMapping<TRoot> : SearchEntityMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.IBoundSourceSearchModel>
+        public partial class SourceSearchModelBaseMapping<TRoot> : SearchEntityMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.ISourceSearchModelBase>
+         {
+            
+            private SourceControlFileInfoMapping<TRoot> _lazySourceControlInfo;
+            
+            private ChunkedSourceFileMapping<TRoot> _lazyFile;
+            
+            public SourceSearchModelBaseMapping(Codex.ObjectModel.MappingInfo info) : 
+                    base(info) {
+            }
+            
+            public SourceControlFileInfoMapping<TRoot> SourceControlInfo {
+                get {
+                    if ((this._lazySourceControlInfo == null)) {
+                        this._lazySourceControlInfo = new SourceControlFileInfoMapping<TRoot>(new Codex.ObjectModel.MappingInfo("SourceControlInfo", MappingInfo, null));
+                    }
+                    return this._lazySourceControlInfo;
+                }
+            }
+            
+            public ChunkedSourceFileMapping<TRoot> File {
+                get {
+                    if ((this._lazyFile == null)) {
+                        this._lazyFile = new ChunkedSourceFileMapping<TRoot>(new Codex.ObjectModel.MappingInfo("File", MappingInfo, null));
+                    }
+                    return this._lazyFile;
+                }
+            }
+            
+            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISourceSearchModelBase value) {
+                base.Visit(visitor, value);
+                this.SourceControlInfo.Visit(visitor, value.SourceControlInfo);
+                this.File.Visit(visitor, value.File);
+            }
+        }
+        
+        public partial class BoundSourceSearchModelMapping<TRoot> : SourceSearchModelBaseMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.IBoundSourceSearchModel>
          {
             
             private BoundSourceInfoMapping<TRoot> _lazyBindingInfo;
@@ -1285,7 +1485,7 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public partial class TextSourceSearchModelMapping<TRoot> : SearchEntityMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.ITextSourceSearchModel>
+        public partial class TextSourceSearchModelMapping<TRoot> : SourceSearchModelBaseMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.ITextSourceSearchModel>
          {
             
             public TextSourceSearchModelMapping(Codex.ObjectModel.MappingInfo info) : 
@@ -2332,7 +2532,7 @@ namespace Codex.ObjectModel {
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ISourceFileInfo))]
-    public partial class SourceFileInfo : Codex.EntityBase, Codex.ISourceFileInfo {
+    public partial class SourceFileInfo : SourceControlFileInfo, Codex.ISourceFileInfo {
         
         private int m_Lines;
         
@@ -2346,47 +2546,38 @@ namespace Codex.ObjectModel {
         
         private PropertyMap m_Properties;
         
+        private string m_ProjectRelativePath;
+        
         private string m_RepoRelativePath;
         
         private string m_RepositoryName;
         
-        private string m_SourceControlContentId;
-        
-        private string m_ProjectRelativePath;
-        
         private string m_ProjectId;
         
         public SourceFileInfo() {
-            Initialize();
         }
         
         public SourceFileInfo(Codex.ISourceFileInfo value) {
-            Initialize();
+            this.CopyFrom<SourceFileInfo>(value);
+        }
+        
+        public SourceFileInfo(Codex.ISourceControlFileInfo value) : 
+                base(value) {
+        }
+        
+        public SourceFileInfo(Codex.IProjectFileScopeEntity value) {
             this.CopyFrom<SourceFileInfo>(value);
         }
         
         public SourceFileInfo(Codex.IRepoFileScopeEntity value) {
-            Initialize();
             this.CopyFrom<SourceFileInfo>(value);
         }
         
         public SourceFileInfo(Codex.IRepoScopeEntity value) {
-            Initialize();
-            this.CopyFrom<SourceFileInfo>(value);
-        }
-        
-        public SourceFileInfo(Codex.ISourceControlFileInfo value) {
-            Initialize();
-            this.CopyFrom<SourceFileInfo>(value);
-        }
-        
-        public SourceFileInfo(Codex.IProjectFileScopeEntity value) {
-            Initialize();
             this.CopyFrom<SourceFileInfo>(value);
         }
         
         public SourceFileInfo(Codex.IProjectScopeEntity value) {
-            Initialize();
             this.CopyFrom<SourceFileInfo>(value);
         }
         
@@ -2482,6 +2673,18 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
+        /// The project relative path of the file
+        /// </summary>
+        public virtual string ProjectRelativePath {
+            get {
+                return this.m_ProjectRelativePath;
+            }
+            set {
+                this.m_ProjectRelativePath = value;
+            }
+        }
+        
+        /// <summary>
         /// The repo relative path to the file
         /// </summary>
         public virtual string RepoRelativePath {
@@ -2502,30 +2705,6 @@ namespace Codex.ObjectModel {
             }
             set {
                 this.m_RepositoryName = value;
-            }
-        }
-        
-        /// <summary>
-        /// Unique id for the source file content as defined by the source control provider (i.e. git SHA)
-        /// </summary>
-        public virtual string SourceControlContentId {
-            get {
-                return this.m_SourceControlContentId;
-            }
-            set {
-                this.m_SourceControlContentId = value;
-            }
-        }
-        
-        /// <summary>
-        /// The project relative path of the file
-        /// </summary>
-        public virtual string ProjectRelativePath {
-            get {
-                return this.m_ProjectRelativePath;
-            }
-            set {
-                this.m_ProjectRelativePath = value;
             }
         }
         
@@ -2553,12 +2732,6 @@ namespace Codex.ObjectModel {
             return ((TTarget)(this));
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ISourceControlFileInfo value)
-            where TTarget : SourceFileInfo {
-            this.m_SourceControlContentId = ((Codex.ISourceControlFileInfo)(value)).SourceControlContentId;
-            return ((TTarget)(this));
-        }
-        
         public virtual TTarget CopyFrom<TTarget>(Codex.IProjectScopeEntity value)
             where TTarget : SourceFileInfo {
             this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
@@ -2568,8 +2741,6 @@ namespace Codex.ObjectModel {
         public virtual TTarget CopyFrom<TTarget>(Codex.IProjectFileScopeEntity value)
             where TTarget : SourceFileInfo {
             this.m_ProjectRelativePath = ((Codex.IProjectFileScopeEntity)(value)).ProjectRelativePath;
-            this.m_RepoRelativePath = ((Codex.IRepoFileScopeEntity)(value)).RepoRelativePath;
-            this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
             this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
             return ((TTarget)(this));
         }
@@ -2582,11 +2753,8 @@ namespace Codex.ObjectModel {
             this.m_WebAddress = ((Codex.ISourceFileInfo)(value)).WebAddress;
             this.m_Encoding = EntityUtilities.NullOrCopy(value.Encoding, v => new EncodingDescription().CopyFrom<EncodingDescription>(v));;
             this.m_Properties = EntityUtilities.NullOrCopy(value.Properties, v => new PropertyMap().CopyFrom<PropertyMap>(v));;
-            this.m_RepoRelativePath = ((Codex.IRepoFileScopeEntity)(value)).RepoRelativePath;
-            this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
-            this.m_SourceControlContentId = ((Codex.ISourceControlFileInfo)(value)).SourceControlContentId;
+            base.CopyFrom<SourceControlFileInfo>(((Codex.ISourceControlFileInfo)(value)));
             this.m_ProjectRelativePath = ((Codex.IProjectFileScopeEntity)(value)).ProjectRelativePath;
-            this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
             return ((TTarget)(this));
         }
     }
@@ -4456,6 +4624,14 @@ namespace Codex.ObjectModel {
                 base(value) {
         }
         
+        public ProjectFileLink(Codex.IRepoFileScopeEntity value) : 
+                base(value) {
+        }
+        
+        public ProjectFileLink(Codex.IRepoScopeEntity value) : 
+                base(value) {
+        }
+        
         /// <summary>
         /// Unique identifier for file
         /// TODO: Make this checksum and searchable and use for discovering commit from PDB.
@@ -5383,37 +5559,28 @@ namespace Codex.ObjectModel {
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IProjectFileScopeEntity))]
-    public partial class ProjectFileScopeEntity : Codex.EntityBase, Codex.IProjectFileScopeEntity {
+    public partial class ProjectFileScopeEntity : RepoFileScopeEntity, Codex.IProjectFileScopeEntity {
         
         private string m_ProjectRelativePath;
-        
-        private string m_RepoRelativePath;
-        
-        private string m_RepositoryName;
         
         private string m_ProjectId;
         
         public ProjectFileScopeEntity() {
-            Initialize();
         }
         
         public ProjectFileScopeEntity(Codex.IProjectFileScopeEntity value) {
-            Initialize();
             this.CopyFrom<ProjectFileScopeEntity>(value);
         }
         
-        public ProjectFileScopeEntity(Codex.IRepoFileScopeEntity value) {
-            Initialize();
-            this.CopyFrom<ProjectFileScopeEntity>(value);
+        public ProjectFileScopeEntity(Codex.IRepoFileScopeEntity value) : 
+                base(value) {
         }
         
-        public ProjectFileScopeEntity(Codex.IRepoScopeEntity value) {
-            Initialize();
-            this.CopyFrom<ProjectFileScopeEntity>(value);
+        public ProjectFileScopeEntity(Codex.IRepoScopeEntity value) : 
+                base(value) {
         }
         
         public ProjectFileScopeEntity(Codex.IProjectScopeEntity value) {
-            Initialize();
             this.CopyFrom<ProjectFileScopeEntity>(value);
         }
         
@@ -5430,30 +5597,6 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// The repo relative path to the file
-        /// </summary>
-        public virtual string RepoRelativePath {
-            get {
-                return this.m_RepoRelativePath;
-            }
-            set {
-                this.m_RepoRelativePath = value;
-            }
-        }
-        
-        /// <summary>
-        /// The name of the repository containing the entity
-        /// </summary>
-        public virtual string RepositoryName {
-            get {
-                return this.m_RepositoryName;
-            }
-            set {
-                this.m_RepositoryName = value;
-            }
-        }
-        
-        /// <summary>
         /// The identifier of the project containing the entity
         /// </summary>
         public virtual string ProjectId {
@@ -5465,18 +5608,6 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IRepoScopeEntity value)
-            where TTarget : ProjectFileScopeEntity {
-            this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
-            return ((TTarget)(this));
-        }
-        
-        public virtual TTarget CopyFrom<TTarget>(Codex.IRepoFileScopeEntity value)
-            where TTarget : ProjectFileScopeEntity {
-            this.m_RepoRelativePath = ((Codex.IRepoFileScopeEntity)(value)).RepoRelativePath;
-            return ((TTarget)(this));
-        }
-        
         public virtual TTarget CopyFrom<TTarget>(Codex.IProjectScopeEntity value)
             where TTarget : ProjectFileScopeEntity {
             this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
@@ -5486,8 +5617,7 @@ namespace Codex.ObjectModel {
         public virtual TTarget CopyFrom<TTarget>(Codex.IProjectFileScopeEntity value)
             where TTarget : ProjectFileScopeEntity {
             this.m_ProjectRelativePath = ((Codex.IProjectFileScopeEntity)(value)).ProjectRelativePath;
-            this.m_RepoRelativePath = ((Codex.IRepoFileScopeEntity)(value)).RepoRelativePath;
-            this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
+            base.CopyFrom<RepoFileScopeEntity>(((Codex.IRepoFileScopeEntity)(value)));
             this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
             return ((TTarget)(this));
         }
@@ -6090,8 +6220,6 @@ namespace Codex.ObjectModel {
         public virtual TTarget CopyFrom<TTarget>(Codex.IProjectFileScopeEntity value)
             where TTarget : ReferenceSearchModel {
             this.m_ProjectRelativePath = ((Codex.IProjectFileScopeEntity)(value)).ProjectRelativePath;
-            this.m_RepoRelativePath = ((Codex.IRepoFileScopeEntity)(value)).RepoRelativePath;
-            this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
             this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
             return ((TTarget)(this));
         }
@@ -6103,9 +6231,6 @@ namespace Codex.ObjectModel {
             this.m_CompressedSpans = ((Codex.IReferenceSearchModel)(value)).CompressedSpans;
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
             this.m_ProjectRelativePath = ((Codex.IProjectFileScopeEntity)(value)).ProjectRelativePath;
-            this.m_RepoRelativePath = ((Codex.IRepoFileScopeEntity)(value)).RepoRelativePath;
-            this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
-            this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
             return ((TTarget)(this));
         }
     }
@@ -6174,7 +6299,7 @@ namespace Codex.ObjectModel {
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IBoundSourceSearchModel))]
-    public partial class BoundSourceSearchModel : SearchEntity, Codex.IBoundSourceSearchModel {
+    public partial class BoundSourceSearchModel : SourceSearchModelBase, Codex.IBoundSourceSearchModel {
         
         private string m_TextUid;
         
@@ -6184,10 +6309,6 @@ namespace Codex.ObjectModel {
         
         private Codex.IReferenceList m_CompressedReferences;
         
-        private SourceControlFileInfo m_SourceControlInfo;
-        
-        private ChunkedSourceFile m_File;
-        
         public BoundSourceSearchModel() {
         }
         
@@ -6195,12 +6316,12 @@ namespace Codex.ObjectModel {
             this.CopyFrom<BoundSourceSearchModel>(value);
         }
         
-        public BoundSourceSearchModel(Codex.ISearchEntity value) : 
+        public BoundSourceSearchModel(Codex.ISourceSearchModelBase value) : 
                 base(value) {
         }
         
-        public BoundSourceSearchModel(Codex.ISourceSearchModelBase value) {
-            this.CopyFrom<BoundSourceSearchModel>(value);
+        public BoundSourceSearchModel(Codex.ISearchEntity value) : 
+                base(value) {
         }
         
         /// <summary>
@@ -6260,51 +6381,8 @@ namespace Codex.ObjectModel {
             }
         }
         
-        /// <summary>
-        /// Information about the source file from source control provider (may be null)
-        /// </summary>
-        Codex.ISourceControlFileInfo Codex.ISourceSearchModelBase.SourceControlInfo {
-            get {
-                return this.SourceControlInfo;
-            }
-        }
-        
-        /// <summary>
-        /// Information about the source file from source control provider (may be null)
-        /// </summary>
-        public virtual SourceControlFileInfo SourceControlInfo {
-            get {
-                return this.m_SourceControlInfo;
-            }
-            set {
-                this.m_SourceControlInfo = value;
-            }
-        }
-        
-        Codex.IChunkedSourceFile Codex.ISourceSearchModelBase.File {
-            get {
-                return this.File;
-            }
-        }
-        
-        public virtual ChunkedSourceFile File {
-            get {
-                return this.m_File;
-            }
-            set {
-                this.m_File = value;
-            }
-        }
-        
         public override string GetRoutingKey() {
             return this.GetRoutingKey(Codex.SearchTypes.BoundSource, this);
-        }
-        
-        public virtual TTarget CopyFrom<TTarget>(Codex.ISourceSearchModelBase value)
-            where TTarget : BoundSourceSearchModel {
-            this.m_SourceControlInfo = EntityUtilities.NullOrCopy(value.SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
-            this.m_File = EntityUtilities.NullOrCopy(value.File, v => new ChunkedSourceFile().CopyFrom<ChunkedSourceFile>(v));;
-            return ((TTarget)(this));
         }
         
         public virtual TTarget CopyFrom<TTarget>(Codex.IBoundSourceSearchModel value)
@@ -6313,19 +6391,13 @@ namespace Codex.ObjectModel {
             this.m_BindingInfo = EntityUtilities.NullOrCopy(value.BindingInfo, v => new BoundSourceInfo().CopyFrom<BoundSourceInfo>(v));;
             this.m_CompressedClassifications = ((Codex.IBoundSourceSearchModel)(value)).CompressedClassifications;
             this.m_CompressedReferences = ((Codex.IBoundSourceSearchModel)(value)).CompressedReferences;
-            base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
-            this.m_SourceControlInfo = EntityUtilities.NullOrCopy(value.SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
-            this.m_File = EntityUtilities.NullOrCopy(value.File, v => new ChunkedSourceFile().CopyFrom<ChunkedSourceFile>(v));;
+            base.CopyFrom<SourceSearchModelBase>(((Codex.ISourceSearchModelBase)(value)));
             return ((TTarget)(this));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ITextSourceSearchModel))]
-    public partial class TextSourceSearchModel : SearchEntity, Codex.ITextSourceSearchModel {
-        
-        private SourceControlFileInfo m_SourceControlInfo;
-        
-        private ChunkedSourceFile m_File;
+    public partial class TextSourceSearchModel : SourceSearchModelBase, Codex.ITextSourceSearchModel {
         
         public TextSourceSearchModel() {
         }
@@ -6334,66 +6406,21 @@ namespace Codex.ObjectModel {
             this.CopyFrom<TextSourceSearchModel>(value);
         }
         
-        public TextSourceSearchModel(Codex.ISearchEntity value) : 
+        public TextSourceSearchModel(Codex.ISourceSearchModelBase value) : 
                 base(value) {
         }
         
-        public TextSourceSearchModel(Codex.ISourceSearchModelBase value) {
-            this.CopyFrom<TextSourceSearchModel>(value);
-        }
-        
-        /// <summary>
-        /// Information about the source file from source control provider (may be null)
-        /// </summary>
-        Codex.ISourceControlFileInfo Codex.ISourceSearchModelBase.SourceControlInfo {
-            get {
-                return this.SourceControlInfo;
-            }
-        }
-        
-        /// <summary>
-        /// Information about the source file from source control provider (may be null)
-        /// </summary>
-        public virtual SourceControlFileInfo SourceControlInfo {
-            get {
-                return this.m_SourceControlInfo;
-            }
-            set {
-                this.m_SourceControlInfo = value;
-            }
-        }
-        
-        Codex.IChunkedSourceFile Codex.ISourceSearchModelBase.File {
-            get {
-                return this.File;
-            }
-        }
-        
-        public virtual ChunkedSourceFile File {
-            get {
-                return this.m_File;
-            }
-            set {
-                this.m_File = value;
-            }
+        public TextSourceSearchModel(Codex.ISearchEntity value) : 
+                base(value) {
         }
         
         public override string GetRoutingKey() {
             return this.GetRoutingKey(Codex.SearchTypes.TextSource, this);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ISourceSearchModelBase value)
-            where TTarget : TextSourceSearchModel {
-            this.m_SourceControlInfo = EntityUtilities.NullOrCopy(value.SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
-            this.m_File = EntityUtilities.NullOrCopy(value.File, v => new ChunkedSourceFile().CopyFrom<ChunkedSourceFile>(v));;
-            return ((TTarget)(this));
-        }
-        
         public virtual TTarget CopyFrom<TTarget>(Codex.ITextSourceSearchModel value)
             where TTarget : TextSourceSearchModel {
-            base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
-            this.m_SourceControlInfo = EntityUtilities.NullOrCopy(value.SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
-            this.m_File = EntityUtilities.NullOrCopy(value.File, v => new ChunkedSourceFile().CopyFrom<ChunkedSourceFile>(v));;
+            base.CopyFrom<SourceSearchModelBase>(((Codex.ISourceSearchModelBase)(value)));
             return ((TTarget)(this));
         }
     }
@@ -6645,7 +6672,6 @@ namespace Codex.ObjectModel {
             this.m_ProjectReference = EntityUtilities.NullOrCopy(value.ProjectReference, v => new ReferencedProject().CopyFrom<ReferencedProject>(v));;
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
             this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
-            this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
             return ((TTarget)(this));
         }
     }
@@ -6785,7 +6811,6 @@ namespace Codex.ObjectModel {
             this.m_CommitFiles = new System.Collections.Generic.List<CommitFileLink>(System.Linq.Enumerable.Select(((Codex.ICommitFilesSearchModel)(value)).CommitFiles, v => EntityUtilities.NullOrCopy(v, _v => new CommitFileLink().CopyFrom<CommitFileLink>(_v))));
             base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
             this.m_CommitId = ((Codex.ICommitScopeEntity)(value)).CommitId;
-            this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
             return ((TTarget)(this));
         }
     }
@@ -7476,6 +7501,14 @@ namespace Codex.ObjectModel {
                 base(value) {
         }
         
+        public ReferenceSearchResult(Codex.IRepoFileScopeEntity value) : 
+                base(value) {
+        }
+        
+        public ReferenceSearchResult(Codex.IRepoScopeEntity value) : 
+                base(value) {
+        }
+        
         Codex.IReferenceSpan Codex.Sdk.Search.IReferenceSearchResult.ReferenceSpan {
             get {
                 return this.ReferenceSpan;
@@ -7512,6 +7545,14 @@ namespace Codex.ObjectModel {
         }
         
         public TextLineSpanResult(Codex.IProjectFileScopeEntity value) : 
+                base(value) {
+        }
+        
+        public TextLineSpanResult(Codex.IRepoFileScopeEntity value) : 
+                base(value) {
+        }
+        
+        public TextLineSpanResult(Codex.IRepoScopeEntity value) : 
                 base(value) {
         }
         

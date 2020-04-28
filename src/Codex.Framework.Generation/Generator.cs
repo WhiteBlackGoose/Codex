@@ -134,10 +134,21 @@ namespace Codex.Framework.Generation
 
             foreach (var typeDefinition in DefinitionsByType.Values)
             {
-                var interfaces = typeDefinition.Type.GetInterfaces();
+                if (typeDefinition.Type == typeof(IBoundSourceSearchModel))
+                {
+
+                }
+
+                var interfaces = typeDefinition.Type.GetInterfaces().ToHashSet();
                 Type baseType = null;
                 int baseTypeCount = 0;
                 IEnumerable<Type> baseTypeEnumerable = Enumerable.Empty<Type>();
+
+                foreach (var i in interfaces.ToList())
+                {
+                    interfaces.RemoveWhere(t => t != i && t.IsAssignableFrom(i));
+                }
+
                 foreach (var i in interfaces)
                 {
                     if (i == typeof(ISearchEntity))
@@ -147,7 +158,7 @@ namespace Codex.Framework.Generation
                         break;
                     }
 
-                    if (i.GetInterfaces().Length == interfaces.Length - 1 && DefinitionsByType.ContainsKey(i))
+                    if (baseTypeCount == 0 && DefinitionsByType.ContainsKey(i))
                     {
                         baseType = i;
                         baseTypeCount++;
@@ -220,6 +231,21 @@ namespace Codex.Framework.Generation
 
             bool isSearchRelevant(TypeDefinition type)
             {
+                if (type.Type == typeof(IBoundSourceSearchModel))
+                {
+
+                }
+
+                if (type.Type == typeof(IChunkedSourceFile))
+                {
+
+                }
+
+                if (type.Type == typeof(IChunkReference))
+                {
+
+                }
+
                 if (!visitedTypes.Add(type))
                 {
                     return type.IsSearchRelevant;

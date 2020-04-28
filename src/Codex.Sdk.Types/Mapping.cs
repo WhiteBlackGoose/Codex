@@ -26,7 +26,7 @@ namespace Codex.ObjectModel
             MappingInfo = info;
         }
 
-        public IEnumerable<MappingBase> Children { get; }
+        public virtual IEnumerable<MappingBase> Children { get; }
     }
 
     public interface IMapping<T>
