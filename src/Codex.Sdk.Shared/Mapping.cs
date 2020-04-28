@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Codex.ObjectModel;
+using Codex.Sdk.Search;
 
 namespace Codex.Schema
 {
@@ -69,9 +70,28 @@ namespace Codex.ObjectModel
 {
     public class Mapping<TRoot, TValue> : Mapping<TRoot>
     {
+        public Mapping(MappingInfo info) : base(info)
+        {
+        }
+
+        public void Visit(IValueVisitor<TValue> visitor, TValue value)
+        {
+            visitor.Visit(this, value);
+        }
+
+        public void Visit(IValueVisitor<TValue> visitor, IReadOnlyList<TValue> list)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                Visit(visitor, list[i]);
+            }
+        }
     }
 
-    public class Mapping<TRoot>
+    public class Mapping<TRoot> : MappingBase
     {
+        public Mapping(MappingInfo info) : base(info)
+        {
+        }
     }
 }

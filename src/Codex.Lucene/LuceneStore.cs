@@ -29,7 +29,7 @@ namespace Codex.Lucene.Search
             Configuration = configuration;
         }
 
-        private LuceneConfiguration Configuration { get; }
+        public LuceneConfiguration Configuration { get; }
 
         public Task<ICodexRepositoryStore> CreateRepositoryStore(Repository repository, Commit commit, Branch branch)
         {

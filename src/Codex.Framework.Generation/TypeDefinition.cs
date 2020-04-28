@@ -107,6 +107,9 @@ namespace Codex.Framework.Generation
         public bool IsList;
         public bool IsReadOnlyList;
 
+        public bool ExcludeFromIndexing => SearchBehavior == Codex.SearchBehavior.None ||
+            (SearchBehavior == null && PropertyTypeDefinition == null);
+
         public PropertyDefinition(PropertyInfo propertyInfo)
         {
             Name = propertyInfo.Name;

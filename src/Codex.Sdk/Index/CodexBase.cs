@@ -461,7 +461,6 @@ namespace Codex.Search
 
         private CodexQuery<IDefinitionSearchModel> NameFilterCore(CodexQueryBuilder<IDefinitionSearchModel> fq, QualifiedNameTerms terms)
         {
-            Placeholder.Todo("Why two different keywords fields?");
             return fq.Term(m.Definition.Definition.ShortName, terms.NameTerm)
                 | fq.Term(m.Definition.Definition.ShortName, terms.SecondaryNameTerm)
                 | fq.Term(m.Definition.Definition.AbbreviatedName, terms.RawNameTerm);

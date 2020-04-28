@@ -57,7 +57,7 @@ namespace Codex
         /// </summary>
         // TODO: Consider using single CopyTo field for keywords
         [SearchBehavior(SearchBehavior.NormalizedKeyword)]
-        string[] Modifiers { get; }
+        IReadOnlyList<string> Modifiers { get; }
 
         /// <summary>
         /// The glyph
