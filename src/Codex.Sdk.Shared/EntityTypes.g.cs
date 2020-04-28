@@ -453,77 +453,6 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public partial class BranchMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IBranch>
-         {
-            
-            private Mapping<TRoot, string> _lazyHeadCommitId;
-            
-            public BranchMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public Mapping<TRoot, string> HeadCommitId {
-                get {
-                    if ((this._lazyHeadCommitId == null)) {
-                        this._lazyHeadCommitId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("HeadCommitId", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
-                    }
-                    return this._lazyHeadCommitId;
-                }
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IBranch value) {
-                this.HeadCommitId.Visit(visitor, value.HeadCommitId);
-            }
-        }
-        
-        public partial class BoundSourceFileMapping<TRoot> : BoundSourceInfoMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.IBoundSourceFile>
-         {
-            
-            private SourceFileMapping<TRoot> _lazySourceFile;
-            
-            private CommitMapping<TRoot> _lazyCommit;
-            
-            private RepositoryMapping<TRoot> _lazyRepo;
-            
-            public BoundSourceFileMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public SourceFileMapping<TRoot> SourceFile {
-                get {
-                    if ((this._lazySourceFile == null)) {
-                        this._lazySourceFile = new SourceFileMapping<TRoot>(new Codex.ObjectModel.MappingInfo("SourceFile", MappingInfo, null));
-                    }
-                    return this._lazySourceFile;
-                }
-            }
-            
-            public CommitMapping<TRoot> Commit {
-                get {
-                    if ((this._lazyCommit == null)) {
-                        this._lazyCommit = new CommitMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Commit", MappingInfo, null));
-                    }
-                    return this._lazyCommit;
-                }
-            }
-            
-            public RepositoryMapping<TRoot> Repo {
-                get {
-                    if ((this._lazyRepo == null)) {
-                        this._lazyRepo = new RepositoryMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Repo", MappingInfo, null));
-                    }
-                    return this._lazyRepo;
-                }
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IBoundSourceFile value) {
-                base.Visit(visitor, value);
-                this.SourceFile.Visit(visitor, value.SourceFile);
-                this.Commit.Visit(visitor, value.Commit);
-                this.Repo.Visit(visitor, value.Repo);
-            }
-        }
-        
         public partial class BoundSourceInfoMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IBoundSourceInfo>
          {
             
@@ -544,236 +473,6 @@ namespace Codex.ObjectModel {
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IBoundSourceInfo value) {
                 this.ExcludeFromSearch.Visit(visitor, value.ExcludeFromSearch);
-            }
-        }
-        
-        public partial class SourceControlFileInfoMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.ISourceControlFileInfo>
-         {
-            
-            private Mapping<TRoot, string> _lazySourceControlContentId;
-            
-            public SourceControlFileInfoMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public Mapping<TRoot, string> SourceControlContentId {
-                get {
-                    if ((this._lazySourceControlContentId == null)) {
-                        this._lazySourceControlContentId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("SourceControlContentId", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
-                    }
-                    return this._lazySourceControlContentId;
-                }
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISourceControlFileInfo value) {
-                this.SourceControlContentId.Visit(visitor, value.SourceControlContentId);
-            }
-        }
-        
-        public partial class SourceFileInfoMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.ISourceFileInfo>
-         {
-            
-            private EncodingDescriptionMapping<TRoot> _lazyEncoding;
-            
-            private PropertyMapMapping<TRoot> _lazyProperties;
-            
-            private Mapping<TRoot, string> _lazyRepoRelativePath;
-            
-            private Mapping<TRoot, string> _lazyRepositoryName;
-            
-            private Mapping<TRoot, string> _lazySourceControlContentId;
-            
-            private Mapping<TRoot, string> _lazyProjectRelativePath;
-            
-            private Mapping<TRoot, string> _lazyProjectId;
-            
-            public SourceFileInfoMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public EncodingDescriptionMapping<TRoot> Encoding {
-                get {
-                    if ((this._lazyEncoding == null)) {
-                        this._lazyEncoding = new EncodingDescriptionMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Encoding", MappingInfo, null));
-                    }
-                    return this._lazyEncoding;
-                }
-            }
-            
-            public PropertyMapMapping<TRoot> Properties {
-                get {
-                    if ((this._lazyProperties == null)) {
-                        this._lazyProperties = new PropertyMapMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Properties", MappingInfo, null));
-                    }
-                    return this._lazyProperties;
-                }
-            }
-            
-            public Mapping<TRoot, string> RepoRelativePath {
-                get {
-                    if ((this._lazyRepoRelativePath == null)) {
-                        this._lazyRepoRelativePath = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("RepoRelativePath", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
-                    }
-                    return this._lazyRepoRelativePath;
-                }
-            }
-            
-            public Mapping<TRoot, string> RepositoryName {
-                get {
-                    if ((this._lazyRepositoryName == null)) {
-                        this._lazyRepositoryName = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("RepositoryName", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
-                    }
-                    return this._lazyRepositoryName;
-                }
-            }
-            
-            public Mapping<TRoot, string> SourceControlContentId {
-                get {
-                    if ((this._lazySourceControlContentId == null)) {
-                        this._lazySourceControlContentId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("SourceControlContentId", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
-                    }
-                    return this._lazySourceControlContentId;
-                }
-            }
-            
-            public Mapping<TRoot, string> ProjectRelativePath {
-                get {
-                    if ((this._lazyProjectRelativePath == null)) {
-                        this._lazyProjectRelativePath = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("ProjectRelativePath", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
-                    }
-                    return this._lazyProjectRelativePath;
-                }
-            }
-            
-            public Mapping<TRoot, string> ProjectId {
-                get {
-                    if ((this._lazyProjectId == null)) {
-                        this._lazyProjectId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("ProjectId", MappingInfo, Codex.SearchBehavior.Sortword));
-                    }
-                    return this._lazyProjectId;
-                }
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISourceFileInfo value) {
-                this.Encoding.Visit(visitor, value.Encoding);
-                this.Properties.Visit(visitor, value.Properties);
-            }
-        }
-        
-        public partial class EncodingDescriptionMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IEncodingDescription>
-         {
-            
-            public EncodingDescriptionMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IEncodingDescription value) {
-            }
-        }
-        
-        public partial class SourceFileBaseMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.ISourceFileBase>
-         {
-            
-            private SourceFileInfoMapping<TRoot> _lazyInfo;
-            
-            private Mapping<TRoot, bool> _lazyExcludeFromSearch;
-            
-            public SourceFileBaseMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public SourceFileInfoMapping<TRoot> Info {
-                get {
-                    if ((this._lazyInfo == null)) {
-                        this._lazyInfo = new SourceFileInfoMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Info", MappingInfo, null));
-                    }
-                    return this._lazyInfo;
-                }
-            }
-            
-            public Mapping<TRoot, bool> ExcludeFromSearch {
-                get {
-                    if ((this._lazyExcludeFromSearch == null)) {
-                        this._lazyExcludeFromSearch = new Mapping<TRoot, bool>(new Codex.ObjectModel.MappingInfo("ExcludeFromSearch", MappingInfo, Codex.SearchBehavior.Term));
-                    }
-                    return this._lazyExcludeFromSearch;
-                }
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISourceFileBase value) {
-                this.Info.Visit(visitor, value.Info);
-                this.ExcludeFromSearch.Visit(visitor, value.ExcludeFromSearch);
-            }
-        }
-        
-        public partial class SourceFileMapping<TRoot> : SourceFileBaseMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.ISourceFile>
-         {
-            
-            private Mapping<TRoot, string> _lazyContent;
-            
-            public SourceFileMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public Mapping<TRoot, string> Content {
-                get {
-                    if ((this._lazyContent == null)) {
-                        this._lazyContent = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("Content", MappingInfo, Codex.SearchBehavior.FullText));
-                    }
-                    return this._lazyContent;
-                }
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISourceFile value) {
-                base.Visit(visitor, value);
-                this.Content.Visit(visitor, value.Content);
-            }
-        }
-        
-        public partial class ChunkedSourceFileMapping<TRoot> : SourceFileBaseMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.IChunkedSourceFile>
-         {
-            
-            private ChunkReferenceMapping<TRoot> _lazyChunks;
-            
-            public ChunkedSourceFileMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public ChunkReferenceMapping<TRoot> Chunks {
-                get {
-                    if ((this._lazyChunks == null)) {
-                        this._lazyChunks = new ChunkReferenceMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Chunks", MappingInfo, null));
-                    }
-                    return this._lazyChunks;
-                }
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IChunkedSourceFile value) {
-                base.Visit(visitor, value);
-                this.Chunks.Visit(visitor, value.Chunks);
-            }
-        }
-        
-        public partial class ChunkReferenceMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IChunkReference>
-         {
-            
-            private Mapping<TRoot, string> _lazyId;
-            
-            public ChunkReferenceMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public Mapping<TRoot, string> Id {
-                get {
-                    if ((this._lazyId == null)) {
-                        this._lazyId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("Id", MappingInfo, Codex.SearchBehavior.Term));
-                    }
-                    return this._lazyId;
-                }
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IChunkReference value) {
-                this.Id.Visit(visitor, value.Id);
             }
         }
         
@@ -800,47 +499,10 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public partial class OutliningRegionMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IOutliningRegion>
-         {
-            
-            private LineSpanMapping<TRoot> _lazyHeader;
-            
-            private LineSpanMapping<TRoot> _lazyContent;
-            
-            public OutliningRegionMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public LineSpanMapping<TRoot> Header {
-                get {
-                    if ((this._lazyHeader == null)) {
-                        this._lazyHeader = new LineSpanMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Header", MappingInfo, null));
-                    }
-                    return this._lazyHeader;
-                }
-            }
-            
-            public LineSpanMapping<TRoot> Content {
-                get {
-                    if ((this._lazyContent == null)) {
-                        this._lazyContent = new LineSpanMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Content", MappingInfo, null));
-                    }
-                    return this._lazyContent;
-                }
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IOutliningRegion value) {
-                this.Header.Visit(visitor, value.Header);
-                this.Content.Visit(visitor, value.Content);
-            }
-        }
-        
-        public partial class DefinitionSpanMapping<TRoot> : SpanMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.IDefinitionSpan>
+        public partial class DefinitionSpanMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IDefinitionSpan>
          {
             
             private DefinitionSymbolMapping<TRoot> _lazyDefinition;
-            
-            private ParameterDefinitionSpanMapping<TRoot> _lazyParameters;
             
             public DefinitionSpanMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
@@ -855,35 +517,12 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public ParameterDefinitionSpanMapping<TRoot> Parameters {
-                get {
-                    if ((this._lazyParameters == null)) {
-                        this._lazyParameters = new ParameterDefinitionSpanMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Parameters", MappingInfo, null));
-                    }
-                    return this._lazyParameters;
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IDefinitionSpan value) {
-                base.Visit(visitor, value);
                 this.Definition.Visit(visitor, value.Definition);
-                this.Parameters.Visit(visitor, value.Parameters);
             }
         }
         
-        public partial class ParameterDefinitionSpanMapping<TRoot> : LineSpanMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.IParameterDefinitionSpan>
-         {
-            
-            public ParameterDefinitionSpanMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IParameterDefinitionSpan value) {
-                base.Visit(visitor, value);
-            }
-        }
-        
-        public partial class ReferenceSpanMapping<TRoot> : SymbolSpanMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.IReferenceSpan>
+        public partial class ReferenceSpanMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IReferenceSpan>
          {
             
             private ReferenceSymbolMapping<TRoot> _lazyReference;
@@ -913,13 +552,12 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IReferenceSpan value) {
-                base.Visit(visitor, value);
                 this.Reference.Visit(visitor, value.Reference);
                 this.Parameters.Visit(visitor, value.Parameters);
             }
         }
         
-        public partial class ParameterReferenceSpanMapping<TRoot> : SymbolSpanMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.IParameterReferenceSpan>
+        public partial class ParameterReferenceSpanMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IParameterReferenceSpan>
          {
             
             private Mapping<TRoot, int> _lazyParameterIndex;
@@ -938,204 +576,19 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IParameterReferenceSpan value) {
-                base.Visit(visitor, value);
                 this.ParameterIndex.Visit(visitor, value.ParameterIndex);
-            }
-        }
-        
-        public partial class ClassificationSpanMapping<TRoot> : SpanMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.IClassificationSpan>
-         {
-            
-            public ClassificationSpanMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IClassificationSpan value) {
-                base.Visit(visitor, value);
-            }
-        }
-        
-        public partial class SymbolSpanMapping<TRoot> : TextLineSpanMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.ISymbolSpan>
-         {
-            
-            public SymbolSpanMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISymbolSpan value) {
-                base.Visit(visitor, value);
-            }
-        }
-        
-        public partial class TextLineSpanMapping<TRoot> : LineSpanMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.ITextLineSpan>
-         {
-            
-            public TextLineSpanMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ITextLineSpan value) {
-                base.Visit(visitor, value);
-            }
-        }
-        
-        public partial class LineSpanMapping<TRoot> : SpanMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.ILineSpan>
-         {
-            
-            public LineSpanMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ILineSpan value) {
-                base.Visit(visitor, value);
-            }
-        }
-        
-        public partial class SpanMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.ISpan>
-         {
-            
-            public SpanMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISpan value) {
-            }
-        }
-        
-        public partial class CodeReviewMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.ICodeReview>
-         {
-            
-            public CodeReviewMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ICodeReview value) {
-            }
-        }
-        
-        public partial class CodeReviewIterationMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.ICodeReviewIteration>
-         {
-            
-            private CodeReviewFileMapping<TRoot> _lazyFiles;
-            
-            public CodeReviewIterationMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public CodeReviewFileMapping<TRoot> Files {
-                get {
-                    if ((this._lazyFiles == null)) {
-                        this._lazyFiles = new CodeReviewFileMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Files", MappingInfo, null));
-                    }
-                    return this._lazyFiles;
-                }
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ICodeReviewIteration value) {
-                this.Files.Visit(visitor, value.Files);
-            }
-        }
-        
-        public partial class CodeReviewerInfoMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.ICodeReviewerInfo>
-         {
-            
-            public CodeReviewerInfoMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ICodeReviewerInfo value) {
-            }
-        }
-        
-        public partial class CodeReviewFileMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.ICodeReviewFile>
-         {
-            
-            public CodeReviewFileMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ICodeReviewFile value) {
-            }
-        }
-        
-        public partial class CodeReviewCommentThreadMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.ICodeReviewCommentThread>
-         {
-            
-            private LineSpanMapping<TRoot> _lazyOriginalSpan;
-            
-            private CodeReviewCommentMapping<TRoot> _lazyComments;
-            
-            public CodeReviewCommentThreadMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public LineSpanMapping<TRoot> OriginalSpan {
-                get {
-                    if ((this._lazyOriginalSpan == null)) {
-                        this._lazyOriginalSpan = new LineSpanMapping<TRoot>(new Codex.ObjectModel.MappingInfo("OriginalSpan", MappingInfo, null));
-                    }
-                    return this._lazyOriginalSpan;
-                }
-            }
-            
-            public CodeReviewCommentMapping<TRoot> Comments {
-                get {
-                    if ((this._lazyComments == null)) {
-                        this._lazyComments = new CodeReviewCommentMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Comments", MappingInfo, null));
-                    }
-                    return this._lazyComments;
-                }
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ICodeReviewCommentThread value) {
-                this.OriginalSpan.Visit(visitor, value.OriginalSpan);
-                this.Comments.Visit(visitor, value.Comments);
-            }
-        }
-        
-        public partial class CodeReviewCommentMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.ICodeReviewComment>
-         {
-            
-            public CodeReviewCommentMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ICodeReviewComment value) {
             }
         }
         
         public partial class StableIdMarkerMapping<TRoot> : SearchEntityMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.IStableIdMarker>
          {
             
-            private StableIdReservationMapping<TRoot> _lazyPendingReservations;
-            
             public StableIdMarkerMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
             }
             
-            public StableIdReservationMapping<TRoot> PendingReservations {
-                get {
-                    if ((this._lazyPendingReservations == null)) {
-                        this._lazyPendingReservations = new StableIdReservationMapping<TRoot>(new Codex.ObjectModel.MappingInfo("PendingReservations", MappingInfo, null));
-                    }
-                    return this._lazyPendingReservations;
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IStableIdMarker value) {
                 base.Visit(visitor, value);
-                this.PendingReservations.Visit(visitor, value.PendingReservations);
-            }
-        }
-        
-        public partial class StableIdReservationMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IStableIdReservation>
-         {
-            
-            public StableIdReservationMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IStableIdReservation value) {
             }
         }
         
@@ -1143,8 +596,6 @@ namespace Codex.ObjectModel {
          {
             
             private Mapping<TRoot, string> _lazyName;
-            
-            private ClassificationStyleMapping<TRoot> _lazyClassifications;
             
             public LanguageInfoMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
@@ -1159,29 +610,8 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public ClassificationStyleMapping<TRoot> Classifications {
-                get {
-                    if ((this._lazyClassifications == null)) {
-                        this._lazyClassifications = new ClassificationStyleMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Classifications", MappingInfo, null));
-                    }
-                    return this._lazyClassifications;
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ILanguageInfo value) {
                 this.Name.Visit(visitor, value.Name);
-                this.Classifications.Visit(visitor, value.Classifications);
-            }
-        }
-        
-        public partial class ClassificationStyleMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IClassificationStyle>
-         {
-            
-            public ClassificationStyleMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IClassificationStyle value) {
             }
         }
         
@@ -1240,8 +670,6 @@ namespace Codex.ObjectModel {
             
             private DefinitionSymbolMapping<TRoot> _lazyDefinitions;
             
-            private PropertyMapMapping<TRoot> _lazyProperties;
-            
             public ReferencedProjectMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
             }
@@ -1264,19 +692,9 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public PropertyMapMapping<TRoot> Properties {
-                get {
-                    if ((this._lazyProperties == null)) {
-                        this._lazyProperties = new PropertyMapMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Properties", MappingInfo, null));
-                    }
-                    return this._lazyProperties;
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IReferencedProject value) {
                 this.ProjectId.Visit(visitor, value.ProjectId);
                 this.Definitions.Visit(visitor, value.Definitions);
-                this.Properties.Visit(visitor, value.Properties);
             }
         }
         
@@ -1300,8 +718,6 @@ namespace Codex.ObjectModel {
             private DocumentationReferenceSymbolMapping<TRoot> _lazyReferences;
             
             private TypedParameterDocumentationMapping<TRoot> _lazyArguments;
-            
-            private ParameterDocumentationMapping<TRoot> _lazyTypeParameters;
             
             private TypedParameterDocumentationMapping<TRoot> _lazyExceptions;
             
@@ -1336,15 +752,6 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public ParameterDocumentationMapping<TRoot> TypeParameters {
-                get {
-                    if ((this._lazyTypeParameters == null)) {
-                        this._lazyTypeParameters = new ParameterDocumentationMapping<TRoot>(new Codex.ObjectModel.MappingInfo("TypeParameters", MappingInfo, null));
-                    }
-                    return this._lazyTypeParameters;
-                }
-            }
-            
             public TypedParameterDocumentationMapping<TRoot> Exceptions {
                 get {
                     if ((this._lazyExceptions == null)) {
@@ -1358,23 +765,11 @@ namespace Codex.ObjectModel {
                 this.AssociatedSymbol.Visit(visitor, value.AssociatedSymbol);
                 this.References.Visit(visitor, value.References);
                 this.Arguments.Visit(visitor, value.Arguments);
-                this.TypeParameters.Visit(visitor, value.TypeParameters);
                 this.Exceptions.Visit(visitor, value.Exceptions);
             }
         }
         
-        public partial class ParameterDocumentationMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IParameterDocumentation>
-         {
-            
-            public ParameterDocumentationMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IParameterDocumentation value) {
-            }
-        }
-        
-        public partial class TypedParameterDocumentationMapping<TRoot> : ParameterDocumentationMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.ITypedParameterDocumentation>
+        public partial class TypedParameterDocumentationMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.ITypedParameterDocumentation>
          {
             
             private DocumentationReferenceSymbolMapping<TRoot> _lazyType;
@@ -1393,7 +788,6 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ITypedParameterDocumentation value) {
-                base.Visit(visitor, value);
                 this.Type.Visit(visitor, value.Type);
             }
         }
@@ -1458,23 +852,10 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public partial class PropertyMapMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IPropertyMap>
-         {
-            
-            public PropertyMapMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IPropertyMap value) {
-            }
-        }
-        
         public partial class RepositoryMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IRepository>
          {
             
             private Mapping<TRoot, string> _lazyName;
-            
-            private RepositoryReferenceMapping<TRoot> _lazyRepositoryReferences;
             
             public RepositoryMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
@@ -1489,29 +870,8 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public RepositoryReferenceMapping<TRoot> RepositoryReferences {
-                get {
-                    if ((this._lazyRepositoryReferences == null)) {
-                        this._lazyRepositoryReferences = new RepositoryReferenceMapping<TRoot>(new Codex.ObjectModel.MappingInfo("RepositoryReferences", MappingInfo, null));
-                    }
-                    return this._lazyRepositoryReferences;
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IRepository value) {
                 this.Name.Visit(visitor, value.Name);
-                this.RepositoryReferences.Visit(visitor, value.RepositoryReferences);
-            }
-        }
-        
-        public partial class RepositoryReferenceMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IRepositoryReference>
-         {
-            
-            public RepositoryReferenceMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IRepositoryReference value) {
             }
         }
         
@@ -1630,30 +990,6 @@ namespace Codex.ObjectModel {
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IProjectScopeEntity value) {
                 base.Visit(visitor, value);
                 this.ProjectId.Visit(visitor, value.ProjectId);
-            }
-        }
-        
-        public partial class RepoFileScopeEntityMapping<TRoot> : RepoScopeEntityMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.IRepoFileScopeEntity>
-         {
-            
-            private Mapping<TRoot, string> _lazyRepoRelativePath;
-            
-            public RepoFileScopeEntityMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public Mapping<TRoot, string> RepoRelativePath {
-                get {
-                    if ((this._lazyRepoRelativePath == null)) {
-                        this._lazyRepoRelativePath = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("RepoRelativePath", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
-                    }
-                    return this._lazyRepoRelativePath;
-                }
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IRepoFileScopeEntity value) {
-                base.Visit(visitor, value);
-                this.RepoRelativePath.Visit(visitor, value.RepoRelativePath);
             }
         }
         
@@ -1797,28 +1133,6 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public partial class ChildFilterReferenceMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IChildFilterReference>
-         {
-            
-            public ChildFilterReferenceMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IChildFilterReference value) {
-            }
-        }
-        
-        public partial class GroupedStoredFilterIdsMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IGroupedStoredFilterIds>
-         {
-            
-            public GroupedStoredFilterIdsMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IGroupedStoredFilterIds value) {
-            }
-        }
-        
         public partial class DefinitionSearchModelMapping<TRoot> : SearchEntityMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.IDefinitionSearchModel>
          {
             
@@ -1947,50 +1261,10 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public partial class SourceSearchModelBaseMapping<TRoot> : SearchEntityMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.ISourceSearchModelBase>
-         {
-            
-            private SourceControlFileInfoMapping<TRoot> _lazySourceControlInfo;
-            
-            private ChunkedSourceFileMapping<TRoot> _lazyFile;
-            
-            public SourceSearchModelBaseMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public SourceControlFileInfoMapping<TRoot> SourceControlInfo {
-                get {
-                    if ((this._lazySourceControlInfo == null)) {
-                        this._lazySourceControlInfo = new SourceControlFileInfoMapping<TRoot>(new Codex.ObjectModel.MappingInfo("SourceControlInfo", MappingInfo, null));
-                    }
-                    return this._lazySourceControlInfo;
-                }
-            }
-            
-            public ChunkedSourceFileMapping<TRoot> File {
-                get {
-                    if ((this._lazyFile == null)) {
-                        this._lazyFile = new ChunkedSourceFileMapping<TRoot>(new Codex.ObjectModel.MappingInfo("File", MappingInfo, null));
-                    }
-                    return this._lazyFile;
-                }
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISourceSearchModelBase value) {
-                base.Visit(visitor, value);
-                this.SourceControlInfo.Visit(visitor, value.SourceControlInfo);
-                this.File.Visit(visitor, value.File);
-            }
-        }
-        
         public partial class BoundSourceSearchModelMapping<TRoot> : SearchEntityMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.IBoundSourceSearchModel>
          {
             
             private BoundSourceInfoMapping<TRoot> _lazyBindingInfo;
-            
-            private SourceControlFileInfoMapping<TRoot> _lazySourceControlInfo;
-            
-            private ChunkedSourceFileMapping<TRoot> _lazyFile;
             
             public BoundSourceSearchModelMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
@@ -2005,24 +1279,6 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public SourceControlFileInfoMapping<TRoot> SourceControlInfo {
-                get {
-                    if ((this._lazySourceControlInfo == null)) {
-                        this._lazySourceControlInfo = new SourceControlFileInfoMapping<TRoot>(new Codex.ObjectModel.MappingInfo("SourceControlInfo", MappingInfo, null));
-                    }
-                    return this._lazySourceControlInfo;
-                }
-            }
-            
-            public ChunkedSourceFileMapping<TRoot> File {
-                get {
-                    if ((this._lazyFile == null)) {
-                        this._lazyFile = new ChunkedSourceFileMapping<TRoot>(new Codex.ObjectModel.MappingInfo("File", MappingInfo, null));
-                    }
-                    return this._lazyFile;
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IBoundSourceSearchModel value) {
                 base.Visit(visitor, value);
                 this.BindingInfo.Visit(visitor, value.BindingInfo);
@@ -2032,30 +1288,8 @@ namespace Codex.ObjectModel {
         public partial class TextSourceSearchModelMapping<TRoot> : SearchEntityMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.ITextSourceSearchModel>
          {
             
-            private SourceControlFileInfoMapping<TRoot> _lazySourceControlInfo;
-            
-            private ChunkedSourceFileMapping<TRoot> _lazyFile;
-            
             public TextSourceSearchModelMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
-            }
-            
-            public SourceControlFileInfoMapping<TRoot> SourceControlInfo {
-                get {
-                    if ((this._lazySourceControlInfo == null)) {
-                        this._lazySourceControlInfo = new SourceControlFileInfoMapping<TRoot>(new Codex.ObjectModel.MappingInfo("SourceControlInfo", MappingInfo, null));
-                    }
-                    return this._lazySourceControlInfo;
-                }
-            }
-            
-            public ChunkedSourceFileMapping<TRoot> File {
-                get {
-                    if ((this._lazyFile == null)) {
-                        this._lazyFile = new ChunkedSourceFileMapping<TRoot>(new Codex.ObjectModel.MappingInfo("File", MappingInfo, null));
-                    }
-                    return this._lazyFile;
-                }
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ITextSourceSearchModel value) {
@@ -2251,88 +1485,6 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public partial class FileStatisticsMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IFileStatistics>
-         {
-            
-            public FileStatisticsMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IFileStatistics value) {
-            }
-        }
-        
-        public partial class RepositoryStoreInfoMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.IRepositoryStoreInfo>
-         {
-            
-            private RepositoryMapping<TRoot> _lazyRepository;
-            
-            private BranchMapping<TRoot> _lazyBranch;
-            
-            private CommitMapping<TRoot> _lazyCommit;
-            
-            public RepositoryStoreInfoMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public RepositoryMapping<TRoot> Repository {
-                get {
-                    if ((this._lazyRepository == null)) {
-                        this._lazyRepository = new RepositoryMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Repository", MappingInfo, null));
-                    }
-                    return this._lazyRepository;
-                }
-            }
-            
-            public BranchMapping<TRoot> Branch {
-                get {
-                    if ((this._lazyBranch == null)) {
-                        this._lazyBranch = new BranchMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Branch", MappingInfo, null));
-                    }
-                    return this._lazyBranch;
-                }
-            }
-            
-            public CommitMapping<TRoot> Commit {
-                get {
-                    if ((this._lazyCommit == null)) {
-                        this._lazyCommit = new CommitMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Commit", MappingInfo, null));
-                    }
-                    return this._lazyCommit;
-                }
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IRepositoryStoreInfo value) {
-                this.Repository.Visit(visitor, value.Repository);
-                this.Branch.Visit(visitor, value.Branch);
-                this.Commit.Visit(visitor, value.Commit);
-            }
-        }
-        
-        public partial class CommitFilesDirectoryMapping<TRoot> : RepoFileScopeEntityMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.ICommitFilesDirectory>
-         {
-            
-            private CommitFileLinkMapping<TRoot> _lazyFiles;
-            
-            public CommitFilesDirectoryMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public CommitFileLinkMapping<TRoot> Files {
-                get {
-                    if ((this._lazyFiles == null)) {
-                        this._lazyFiles = new CommitFileLinkMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Files", MappingInfo, null));
-                    }
-                    return this._lazyFiles;
-                }
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ICommitFilesDirectory value) {
-                base.Visit(visitor, value);
-                this.Files.Visit(visitor, value.Files);
-            }
-        }
-        
         public partial class DefinitionSymbolMapping<TRoot> : ReferenceSymbolMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.IDefinitionSymbol>
          {
             
@@ -2345,8 +1497,6 @@ namespace Codex.ObjectModel {
             private Mapping<TRoot, string> _lazyContainerQualifiedName;
             
             private Mapping<TRoot, string> _lazyModifiers;
-            
-            private DocumentationInfoMapping<TRoot> _lazyDocumentationInfo;
             
             public DefinitionSymbolMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
@@ -2397,15 +1547,6 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public DocumentationInfoMapping<TRoot> DocumentationInfo {
-                get {
-                    if ((this._lazyDocumentationInfo == null)) {
-                        this._lazyDocumentationInfo = new DocumentationInfoMapping<TRoot>(new Codex.ObjectModel.MappingInfo("DocumentationInfo", MappingInfo, null));
-                    }
-                    return this._lazyDocumentationInfo;
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IDefinitionSymbol value) {
                 base.Visit(visitor, value);
                 this.AbbreviatedName.Visit(visitor, value.AbbreviatedName);
@@ -2413,7 +1554,6 @@ namespace Codex.ObjectModel {
                 this.ShortName.Visit(visitor, value.ShortName);
                 this.ContainerQualifiedName.Visit(visitor, value.ContainerQualifiedName);
                 this.Modifiers.Visit(visitor, value.Modifiers);
-                this.DocumentationInfo.Visit(visitor, value.DocumentationInfo);
             }
         }
         
@@ -2509,100 +1649,6 @@ namespace Codex.ObjectModel {
                 this.ProjectId.Visit(visitor, value.ProjectId);
                 this.Id.Visit(visitor, value.Id);
                 this.Kind.Visit(visitor, value.Kind);
-            }
-        }
-        
-        public partial class ReferenceSearchResultMapping<TRoot> : ProjectFileScopeEntityMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.Sdk.Search.IReferenceSearchResult>
-         {
-            
-            private ReferenceSpanMapping<TRoot> _lazyReferenceSpan;
-            
-            public ReferenceSearchResultMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public ReferenceSpanMapping<TRoot> ReferenceSpan {
-                get {
-                    if ((this._lazyReferenceSpan == null)) {
-                        this._lazyReferenceSpan = new ReferenceSpanMapping<TRoot>(new Codex.ObjectModel.MappingInfo("ReferenceSpan", MappingInfo, null));
-                    }
-                    return this._lazyReferenceSpan;
-                }
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.Sdk.Search.IReferenceSearchResult value) {
-                base.Visit(visitor, value);
-                this.ReferenceSpan.Visit(visitor, value.ReferenceSpan);
-            }
-        }
-        
-        public partial class TextLineSpanResultMapping<TRoot> : ProjectFileScopeEntityMapping<TRoot>, Codex.ObjectModel.IMapping<Codex.Sdk.Search.ITextLineSpanResult>
-         {
-            
-            private TextLineSpanMapping<TRoot> _lazyTextSpan;
-            
-            public TextLineSpanResultMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public TextLineSpanMapping<TRoot> TextSpan {
-                get {
-                    if ((this._lazyTextSpan == null)) {
-                        this._lazyTextSpan = new TextLineSpanMapping<TRoot>(new Codex.ObjectModel.MappingInfo("TextSpan", MappingInfo, null));
-                    }
-                    return this._lazyTextSpan;
-                }
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.Sdk.Search.ITextLineSpanResult value) {
-                base.Visit(visitor, value);
-                this.TextSpan.Visit(visitor, value.TextSpan);
-            }
-        }
-        
-        public partial class SearchResultMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.Sdk.Search.ISearchResult>
-         {
-            
-            private TextLineSpanResultMapping<TRoot> _lazyTextLine;
-            
-            private DefinitionSymbolMapping<TRoot> _lazyDefinition;
-            
-            public SearchResultMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public TextLineSpanResultMapping<TRoot> TextLine {
-                get {
-                    if ((this._lazyTextLine == null)) {
-                        this._lazyTextLine = new TextLineSpanResultMapping<TRoot>(new Codex.ObjectModel.MappingInfo("TextLine", MappingInfo, null));
-                    }
-                    return this._lazyTextLine;
-                }
-            }
-            
-            public DefinitionSymbolMapping<TRoot> Definition {
-                get {
-                    if ((this._lazyDefinition == null)) {
-                        this._lazyDefinition = new DefinitionSymbolMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Definition", MappingInfo, null));
-                    }
-                    return this._lazyDefinition;
-                }
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.Sdk.Search.ISearchResult value) {
-                this.TextLine.Visit(visitor, value.TextLine);
-                this.Definition.Visit(visitor, value.Definition);
-            }
-        }
-        
-        public partial class IndexMapping<TRoot> : Codex.ObjectModel.MappingBase, Codex.ObjectModel.IMapping<Codex.Sdk.Search.IIndex>
-         {
-            
-            public IndexMapping(Codex.ObjectModel.MappingInfo info) : 
-                    base(info) {
-            }
-            
-            public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.Sdk.Search.IIndex value) {
             }
         }
     }

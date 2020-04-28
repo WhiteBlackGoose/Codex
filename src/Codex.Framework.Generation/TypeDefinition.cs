@@ -15,6 +15,8 @@ namespace Codex.Framework.Generation
     {
         public ObjectStage AllowedStages;
 
+        public bool IsSearchRelevant;
+
         public bool Migrated;
 
         public Type Type;
@@ -36,6 +38,22 @@ namespace Codex.Framework.Generation
         public INamedTypeSymbol TypeSymbol;
         public Type BaseType;
         public TypeDefinition BaseTypeDefinition;
+
+        public TypeDefinition SearchRelevantBase
+        {
+            get
+            {
+                var type = BaseTypeDefinition;
+                while (type != null)
+                {
+                    if (type.IsSearchRelevant) return type;
+                    type = type.BaseTypeDefinition;
+                }
+
+                return null;
+            }
+        }
+
         public bool IsAdapter;
 
         public List<TypeDefinition> Interfaces = new List<TypeDefinition>();
@@ -108,7 +126,8 @@ namespace Codex.Framework.Generation
         public bool IsReadOnlyList;
 
         public bool ExcludeFromIndexing => SearchBehavior == Codex.SearchBehavior.None ||
-            (SearchBehavior == null && PropertyTypeDefinition == null);
+            (SearchBehavior == null && PropertyTypeDefinition == null) ||
+            PropertyTypeDefinition?.IsSearchRelevant == false;
 
         public PropertyDefinition(PropertyInfo propertyInfo)
         {

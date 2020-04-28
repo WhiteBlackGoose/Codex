@@ -25,7 +25,6 @@ namespace Codex.Framework.Generation
         public HashSet<Type> MigratedTypes = new HashSet<Type>();
         public Dictionary<Type, TypeDefinition> DefinitionsByType = new Dictionary<Type, TypeDefinition>();
         public Dictionary<string, TypeDefinition> DefinitionsByTypeMetadataName = new Dictionary<string, TypeDefinition>();
-        public HashSet<TypeDefinition> SearchRelevantTypes = new HashSet<TypeDefinition>();
         private CSharpCompilation Compilation;
         private string ProjectDirectory;
         private CodeTypeDeclaration CodexTypeUtilitiesClass = new CodeTypeDeclaration("CodexTypeUtilities")
@@ -206,33 +205,44 @@ namespace Codex.Framework.Generation
                 }
             }
 
-            Queue<TypeDefinition> types = new Queue<TypeDefinition>(SearchTypes.RegisteredSearchTypes
-                .Select(t => DefinitionsByType[t.Type]));
+            ComputeSearchRelevantTypes();
+        }
 
-            while (types.Count != 0)
+        private void ComputeSearchRelevantTypes()
+        {
+            var visitedTypes = new HashSet<TypeDefinition>();
+
+            foreach (var type in SearchTypes.RegisteredSearchTypes
+                .Select(t => DefinitionsByType[t.Type]))
             {
-                var type = types.Dequeue();
+                isSearchRelevant(type);
+            }
 
-                while (type != null)
+            bool isSearchRelevant(TypeDefinition type)
+            {
+                if (!visitedTypes.Add(type))
                 {
-                    if (SearchRelevantTypes.Add(type))
-                    {
-                        foreach (var property in type.Properties)
-                        {
-                            if (property.PropertyTypeDefinition != null
-                                && !SearchRelevantTypes.Contains(property.PropertyTypeDefinition))
-                            {
-                                types.Enqueue(property.PropertyTypeDefinition);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        break;
-                    }
-
-                    type = type.BaseTypeDefinition;
+                    return type.IsSearchRelevant;
                 }
+
+                if (type.BaseTypeDefinition != null)
+                {
+                    type.IsSearchRelevant |= isSearchRelevant(type.BaseTypeDefinition);
+                }
+
+                foreach (var property in type.Properties)
+                {
+                    if (property.PropertyTypeDefinition != null)
+                    {
+                        type.IsSearchRelevant |= isSearchRelevant(property.PropertyTypeDefinition);
+                    }
+                    else if (!property.ExcludeFromIndexing)
+                    {
+                        type.IsSearchRelevant = true;
+                    }
+                }
+
+                return type.IsSearchRelevant;
             }
         }
 
@@ -371,16 +381,16 @@ namespace Codex.Framework.Generation
 
                 typeDefinition.MappingTypeDeclaration.Members.Add(mappingConstructor);
 
-                typeDefinition.MappingTypeDeclaration.BaseTypes.Add(typeDefinition.BaseTypeDefinition?.MappingTypeReference ?? new CodeTypeReference(typeof(ObjectModel.MappingBase)));
+                typeDefinition.MappingTypeDeclaration.BaseTypes.Add(typeDefinition.SearchRelevantBase?.MappingTypeReference ?? new CodeTypeReference(typeof(ObjectModel.MappingBase)));
 
                 typeDefinition.MappingTypeDeclaration.BaseTypes.Add(typeof(ObjectModel.IMapping<>).MakeGenericTypeReference(
                     typeDefinition.Type.AsReference()));
 
-                if (true || SearchRelevantTypes.Contains(typeDefinition))
+                if (typeDefinition.IsSearchRelevant)
                 {
                     MappingsClass.Members.Add(typeDefinition.MappingTypeDeclaration);
                 }
-                
+
                 typeDeclaration.Comments.AddRange(typeDefinition.Comments.ToArray());
 
                 typeDeclaration.CustomAttributes.Add(
@@ -463,7 +473,7 @@ namespace Codex.Framework.Generation
 
                 typeDefinition.MappingTypeDeclaration.Members.Add(visitMethod);
 
-                if (typeDefinition.BaseTypeDefinition != null)
+                if (typeDefinition.SearchRelevantBase != null)
                 {
                     visitMethod.Statements.Add(new CodeMethodInvokeExpression(
                         new CodeMethodReferenceExpression(new CodeBaseReferenceExpression(), visitMethod.Name),
@@ -887,9 +897,9 @@ namespace Codex.Framework.Generation
 
         public static void AddMappingProperty(this CodeTypeDeclaration declaringType, string name, CodeTypeReference propertyType, SearchBehavior? searchBehavior = null)
         {
-            AddLazyProperty(declaringType, name, propertyType, new CodeObjectCreateExpression(propertyType, 
+            AddLazyProperty(declaringType, name, propertyType, new CodeObjectCreateExpression(propertyType,
                 new CodeObjectCreateExpression(
-                    typeof(ObjectModel.MappingInfo), 
+                    typeof(ObjectModel.MappingInfo),
                     new CodePrimitiveExpression(name),
                     new CodeFieldReferenceExpression(null, nameof(ObjectModel.MappingBase.MappingInfo)),
                     searchBehavior == null ? (CodeExpression)new CodePrimitiveExpression(null) : new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(typeof(SearchBehavior)), searchBehavior.ToString())

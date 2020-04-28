@@ -78,6 +78,7 @@ namespace Codex
         /// Documentation for the symbol (if any)
         /// </summary>
         [Include(ObjectStage.Analysis)]
+        [SearchBehavior(SearchBehavior.None)]
         IDocumentationInfo DocumentationInfo { get; }
 
         /// <summary>
