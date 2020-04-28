@@ -27,6 +27,7 @@ namespace Codex.Lucene.Search
         public bool ShouldVisit(MappingInfo mapping)
         {
             throw new NotImplementedException();
+            IndexWriter
         }
 
         public void Visit(MappingBase mapping, string value)
@@ -34,10 +35,13 @@ namespace Codex.Lucene.Search
             switch (mapping.MappingInfo.SearchBehavior.Value)
             {
                 case SearchBehavior.Term:
-                    break;
                 case SearchBehavior.NormalizedKeyword:
+                    doc.Add(new StringField(mapping.MappingInfo.FullName, value.ToLowerInvariant(), Field.Store.NO));
                     break;
                 case SearchBehavior.Sortword:
+                    value = value.ToLowerInvariant();
+                    doc.Add(new StringField(mapping.MappingInfo.FullName, value, Field.Store.NO));
+                    doc.Add(new SortedDocValuesField(mapping.MappingInfo.FullName, new BytesRef(value)));
                     break;
                 case SearchBehavior.HierarchicalPath:
                     break;
@@ -58,6 +62,11 @@ namespace Codex.Lucene.Search
         {
             throw new NotImplementedException();
         }
+
+        private FieldType StringSortwordType = new FieldType(StringField.TYPE_NOT_STORED)
+        {
+            DocValueType = DocValuesType.SORTED
+        };
 
         private FieldType LongSortwordType = new FieldType(Int64Field.TYPE_NOT_STORED)
         {

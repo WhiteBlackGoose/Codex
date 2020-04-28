@@ -134,11 +134,6 @@ namespace Codex.Framework.Generation
 
             foreach (var typeDefinition in DefinitionsByType.Values)
             {
-                if (typeDefinition.Type == typeof(IBoundSourceSearchModel))
-                {
-
-                }
-
                 var interfaces = typeDefinition.Type.GetInterfaces().ToHashSet();
                 Type baseType = null;
                 int baseTypeCount = 0;
@@ -486,6 +481,24 @@ namespace Codex.Framework.Generation
 
                 PopulateProperties(visitedTypeDefinitions, usedMemberNames, typeDefinition, typeDeclaration);
 
+                var indexerMethod = new CodeMemberProperty()
+                {
+                    Name = "Item",
+                    Attributes = MemberAttributes.Public | MemberAttributes.Override,
+                    Type = typeof(ObjectModel.MappingBase).AsReference(),
+                    Parameters =
+                    {
+                        new CodeParameterDeclarationExpression(typeof(string), "fullName"),
+                    },
+                    GetStatements =
+                    {
+                        new CodeMethodReturnStatement(new CodeIndexerExpression(
+                            new CodeBaseReferenceExpression(),
+                            new CodeArgumentReferenceExpression("fullName")
+                            ))
+                    }
+                };
+
                 var visitMethod = new CodeMemberMethod()
                 {
                     Name = "Visit",
@@ -497,6 +510,7 @@ namespace Codex.Framework.Generation
                     }
                 };
 
+                typeDefinition.MappingTypeDeclaration.Members.Add(indexerMethod);
                 typeDefinition.MappingTypeDeclaration.Members.Add(visitMethod);
 
                 if (typeDefinition.SearchRelevantBase != null)
@@ -510,21 +524,26 @@ namespace Codex.Framework.Generation
 
                 foreach (var property in typeDefinition.Properties)
                 {
-
                     if (property.ExcludeFromIndexing)
                     {
                         continue;
-                    }
-
-                    if (property.Name == "StableIds")
-                    {
-
                     }
 
                     visitMethod.Statements.Add(new CodeMethodInvokeExpression(
                         new CodeMethodReferenceExpression(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), property.Name), visitMethod.Name),
                         new CodeArgumentReferenceExpression("visitor"),
                         new CodeFieldReferenceExpression(new CodeArgumentReferenceExpression("value"), property.Name)));
+
+                    indexerMethod.GetStatements.Insert(0, new CodeConditionStatement(
+                        new CodeMethodInvokeExpression(
+                            new CodeMethodReferenceExpression(new CodeThisReferenceExpression(), nameof(ObjectModel.MappingBase.IsMatch)),
+                            new CodeArgumentReferenceExpression("fullName"),
+                            new CodePrimitiveExpression(property.Name)),
+                        new CodeMethodReturnStatement(new CodeIndexerExpression(
+                            new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), property.Name),
+                            new CodeArgumentReferenceExpression("fullName")
+                            ))
+                        ));
 
                     //if (property.PropertyTypeDefinition != null)
                     //{
@@ -664,10 +683,7 @@ namespace Codex.Framework.Generation
 
                 if (!isBaseChain && !property.ExcludeFromIndexing)
                 {
-                    declarationTypeDefinition.MappingTypeDeclaration.AddMappingProperty(
-                        property.Name,
-                        property.PropertyTypeDefinition?.MappingTypeReference ?? property.PropertyType.AsReference().AsMappingType(),
-                        property.SearchBehavior);
+
                 }
 
                 if (property.InitPropertyType != null)
@@ -921,7 +937,9 @@ namespace Codex.Framework.Generation
             return new CodeTypeReference("Mapping", new CodeTypeReference("TRoot"), type);
         }
 
-        public static void AddMappingProperty(this CodeTypeDeclaration declaringType, string name, CodeTypeReference propertyType, SearchBehavior? searchBehavior = null)
+        public static void AddMappingProperty(this CodeTypeDeclaration declaringType, string name, CodeTypeReference propertyType,
+            CodeMemberProperty indexer,
+            SearchBehavior? searchBehavior = null)
         {
             AddLazyProperty(declaringType, name, propertyType, new CodeObjectCreateExpression(propertyType,
                 new CodeObjectCreateExpression(

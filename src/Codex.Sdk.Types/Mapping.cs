@@ -26,6 +26,22 @@ namespace Codex.ObjectModel
             MappingInfo = info;
         }
 
+        public virtual MappingBase this[string fullName] => fullName == MappingInfo.FullName ? this : null;
+
+        public bool IsMatch(string fullName, string childName)
+        {
+            var childStartIndex = MappingInfo.FullName.Length + 1;
+            var childFullNameLength = childStartIndex + childName.Length;
+
+            if (childFullNameLength <= fullName.Length 
+                && fullName.IndexOf(childName, childStartIndex, childName.Length) == childStartIndex)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public virtual IEnumerable<MappingBase> Children { get; }
     }
 
@@ -34,8 +50,11 @@ namespace Codex.ObjectModel
         void Visit(IVisitor visitor, T value);
     }
 
-    public partial class Mappings
+    public partial class Mappings : MappingBase
     {
-        public MappingInfo MappingInfo { get; }
+        public Mappings() 
+            : base(info: null)
+        {
+        }
     }
 }

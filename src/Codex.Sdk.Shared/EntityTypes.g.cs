@@ -397,6 +397,24 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "ChangedFiles")) {
+                        return this.ChangedFiles[fullName];
+                    }
+                    if (this.IsMatch(fullName, "DateCommitted")) {
+                        return this.DateCommitted[fullName];
+                    }
+                    if (this.IsMatch(fullName, "DateUploaded")) {
+                        return this.DateUploaded[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Description")) {
+                        return this.Description[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ICommit value) {
                 base.Visit(visitor, value);
                 this.Description.Visit(visitor, value.Description);
@@ -411,6 +429,12 @@ namespace Codex.ObjectModel {
             
             public CommitChangedFileMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    return base[fullName];
+                }
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ICommitChangedFile value) {
@@ -447,6 +471,18 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "VersionControlFileId")) {
+                        return this.VersionControlFileId[fullName];
+                    }
+                    if (this.IsMatch(fullName, "FileId")) {
+                        return this.FileId[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ICommitFileLink value) {
                 this.FileId.Visit(visitor, value.FileId);
                 this.VersionControlFileId.Visit(visitor, value.VersionControlFileId);
@@ -471,6 +507,15 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "ExcludeFromSearch")) {
+                        return this.ExcludeFromSearch[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IBoundSourceInfo value) {
                 this.ExcludeFromSearch.Visit(visitor, value.ExcludeFromSearch);
             }
@@ -491,6 +536,15 @@ namespace Codex.ObjectModel {
                         this._lazySourceControlContentId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("SourceControlContentId", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
                     }
                     return this._lazySourceControlContentId;
+                }
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "SourceControlContentId")) {
+                        return this.SourceControlContentId[fullName];
+                    }
+                    return base[fullName];
                 }
             }
             
@@ -550,6 +604,12 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISourceFileInfo value) {
                 base.Visit(visitor, value);
             }
@@ -584,6 +644,18 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "ExcludeFromSearch")) {
+                        return this.ExcludeFromSearch[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Info")) {
+                        return this.Info[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISourceFileBase value) {
                 this.Info.Visit(visitor, value.Info);
                 this.ExcludeFromSearch.Visit(visitor, value.ExcludeFromSearch);
@@ -605,6 +677,15 @@ namespace Codex.ObjectModel {
                         this._lazyChunks = new ChunkReferenceMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Chunks", MappingInfo, null));
                     }
                     return this._lazyChunks;
+                }
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Chunks")) {
+                        return this.Chunks[fullName];
+                    }
+                    return base[fullName];
                 }
             }
             
@@ -632,6 +713,15 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Id")) {
+                        return this.Id[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IChunkReference value) {
                 this.Id.Visit(visitor, value.Id);
             }
@@ -655,6 +745,15 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "ContentLines")) {
+                        return this.ContentLines[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISourceFileContentChunk value) {
                 this.ContentLines.Visit(visitor, value.ContentLines);
             }
@@ -675,6 +774,15 @@ namespace Codex.ObjectModel {
                         this._lazyDefinition = new DefinitionSymbolMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Definition", MappingInfo, null));
                     }
                     return this._lazyDefinition;
+                }
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Definition")) {
+                        return this.Definition[fullName];
+                    }
+                    return base[fullName];
                 }
             }
             
@@ -712,6 +820,18 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Parameters")) {
+                        return this.Parameters[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Reference")) {
+                        return this.Reference[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IReferenceSpan value) {
                 this.Reference.Visit(visitor, value.Reference);
                 this.Parameters.Visit(visitor, value.Parameters);
@@ -736,6 +856,15 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "ParameterIndex")) {
+                        return this.ParameterIndex[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IParameterReferenceSpan value) {
                 this.ParameterIndex.Visit(visitor, value.ParameterIndex);
             }
@@ -746,6 +875,12 @@ namespace Codex.ObjectModel {
             
             public StableIdMarkerMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    return base[fullName];
+                }
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IStableIdMarker value) {
@@ -768,6 +903,15 @@ namespace Codex.ObjectModel {
                         this._lazyName = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("Name", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
                     }
                     return this._lazyName;
+                }
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Name")) {
+                        return this.Name[fullName];
+                    }
+                    return base[fullName];
                 }
             }
             
@@ -816,6 +960,21 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "ProjectReferences")) {
+                        return this.ProjectReferences[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Files")) {
+                        return this.Files[fullName];
+                    }
+                    if (this.IsMatch(fullName, "PrimaryFile")) {
+                        return this.PrimaryFile[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IProject value) {
                 base.Visit(visitor, value);
                 this.PrimaryFile.Visit(visitor, value.PrimaryFile);
@@ -853,6 +1012,18 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Definitions")) {
+                        return this.Definitions[fullName];
+                    }
+                    if (this.IsMatch(fullName, "ProjectId")) {
+                        return this.ProjectId[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IReferencedProject value) {
                 this.ProjectId.Visit(visitor, value.ProjectId);
                 this.Definitions.Visit(visitor, value.Definitions);
@@ -864,6 +1035,12 @@ namespace Codex.ObjectModel {
             
             public ProjectFileLinkMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    return base[fullName];
+                }
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IProjectFileLink value) {
@@ -922,6 +1099,24 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Exceptions")) {
+                        return this.Exceptions[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Arguments")) {
+                        return this.Arguments[fullName];
+                    }
+                    if (this.IsMatch(fullName, "References")) {
+                        return this.References[fullName];
+                    }
+                    if (this.IsMatch(fullName, "AssociatedSymbol")) {
+                        return this.AssociatedSymbol[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IDocumentationInfo value) {
                 this.AssociatedSymbol.Visit(visitor, value.AssociatedSymbol);
                 this.References.Visit(visitor, value.References);
@@ -948,6 +1143,15 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Type")) {
+                        return this.Type[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ITypedParameterDocumentation value) {
                 this.Type.Visit(visitor, value.Type);
             }
@@ -958,6 +1162,12 @@ namespace Codex.ObjectModel {
             
             public DocumentationReferenceSymbolMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    return base[fullName];
+                }
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IDocumentationReferenceSymbol value) {
@@ -1005,6 +1215,21 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "OwnerId")) {
+                        return this.OwnerId[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Value")) {
+                        return this.Value[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Key")) {
+                        return this.Key[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IPropertySearchModel value) {
                 base.Visit(visitor, value);
                 this.Key.Visit(visitor, value.Key);
@@ -1028,6 +1253,15 @@ namespace Codex.ObjectModel {
                         this._lazyName = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("Name", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
                     }
                     return this._lazyName;
+                }
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Name")) {
+                        return this.Name[fullName];
+                    }
+                    return base[fullName];
                 }
             }
             
@@ -1076,6 +1310,21 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "SortKey")) {
+                        return this.SortKey[fullName];
+                    }
+                    if (this.IsMatch(fullName, "StableId")) {
+                        return this.StableId[fullName];
+                    }
+                    if (this.IsMatch(fullName, "EntityContentId")) {
+                        return this.EntityContentId[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISearchEntity value) {
                 this.EntityContentId.Visit(visitor, value.EntityContentId);
                 this.StableId.Visit(visitor, value.StableId);
@@ -1101,6 +1350,15 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "RepositoryName")) {
+                        return this.RepositoryName[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IRepoScopeEntity value) {
                 this.RepositoryName.Visit(visitor, value.RepositoryName);
             }
@@ -1121,6 +1379,15 @@ namespace Codex.ObjectModel {
                         this._lazyCommitId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("CommitId", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
                     }
                     return this._lazyCommitId;
+                }
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "CommitId")) {
+                        return this.CommitId[fullName];
+                    }
+                    return base[fullName];
                 }
             }
             
@@ -1148,6 +1415,15 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "ProjectId")) {
+                        return this.ProjectId[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IProjectScopeEntity value) {
                 base.Visit(visitor, value);
                 this.ProjectId.Visit(visitor, value.ProjectId);
@@ -1169,6 +1445,15 @@ namespace Codex.ObjectModel {
                         this._lazyRepoRelativePath = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("RepoRelativePath", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
                     }
                     return this._lazyRepoRelativePath;
+                }
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "RepoRelativePath")) {
+                        return this.RepoRelativePath[fullName];
+                    }
+                    return base[fullName];
                 }
             }
             
@@ -1207,6 +1492,15 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "ProjectRelativePath")) {
+                        return this.ProjectRelativePath[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IProjectFileScopeEntity value) {
                 base.Visit(visitor, value);
                 this.ProjectRelativePath.Visit(visitor, value.ProjectRelativePath);
@@ -1239,6 +1533,18 @@ namespace Codex.ObjectModel {
                         this._lazyIndexName = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("IndexName", MappingInfo, Codex.SearchBehavior.Term));
                     }
                     return this._lazyIndexName;
+                }
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "IndexName")) {
+                        return this.IndexName[fullName];
+                    }
+                    if (this.IsMatch(fullName, "EntityUid")) {
+                        return this.EntityUid[fullName];
+                    }
+                    return base[fullName];
                 }
             }
             
@@ -1289,6 +1595,21 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "FilterHash")) {
+                        return this.FilterHash[fullName];
+                    }
+                    if (this.IsMatch(fullName, "IndexName")) {
+                        return this.IndexName[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Name")) {
+                        return this.Name[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IStoredFilter value) {
                 base.Visit(visitor, value);
                 this.Name.Visit(visitor, value.Name);
@@ -1326,6 +1647,18 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Keywords")) {
+                        return this.Keywords[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Definition")) {
+                        return this.Definition[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IDefinitionSearchModel value) {
                 base.Visit(visitor, value);
                 this.Definition.Visit(visitor, value.Definition);
@@ -1348,6 +1681,15 @@ namespace Codex.ObjectModel {
                         this._lazyLanguage = new LanguageInfoMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Language", MappingInfo, null));
                     }
                     return this._lazyLanguage;
+                }
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Language")) {
+                        return this.Language[fullName];
+                    }
+                    return base[fullName];
                 }
             }
             
@@ -1419,6 +1761,15 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Reference")) {
+                        return this.Reference[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IReferenceSearchModel value) {
                 base.Visit(visitor, value);
                 this.Reference.Visit(visitor, value.Reference);
@@ -1454,6 +1805,18 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "File")) {
+                        return this.File[fullName];
+                    }
+                    if (this.IsMatch(fullName, "SourceControlInfo")) {
+                        return this.SourceControlInfo[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISourceSearchModelBase value) {
                 base.Visit(visitor, value);
                 this.SourceControlInfo.Visit(visitor, value.SourceControlInfo);
@@ -1479,6 +1842,15 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "BindingInfo")) {
+                        return this.BindingInfo[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IBoundSourceSearchModel value) {
                 base.Visit(visitor, value);
                 this.BindingInfo.Visit(visitor, value.BindingInfo);
@@ -1490,6 +1862,12 @@ namespace Codex.ObjectModel {
             
             public TextSourceSearchModelMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    return base[fullName];
+                }
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ITextSourceSearchModel value) {
@@ -1512,6 +1890,15 @@ namespace Codex.ObjectModel {
                         this._lazyChunk = new SourceFileContentChunkMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Chunk", MappingInfo, null));
                     }
                     return this._lazyChunk;
+                }
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Chunk")) {
+                        return this.Chunk[fullName];
+                    }
+                    return base[fullName];
                 }
             }
             
@@ -1539,6 +1926,15 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Repository")) {
+                        return this.Repository[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IRepositorySearchModel value) {
                 base.Visit(visitor, value);
                 this.Repository.Visit(visitor, value.Repository);
@@ -1560,6 +1956,15 @@ namespace Codex.ObjectModel {
                         this._lazyProject = new AnalyzedProjectMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Project", MappingInfo, null));
                     }
                     return this._lazyProject;
+                }
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Project")) {
+                        return this.Project[fullName];
+                    }
+                    return base[fullName];
                 }
             }
             
@@ -1609,6 +2014,15 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "ProjectReference")) {
+                        return this.ProjectReference[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IProjectReferenceSearchModel value) {
                 base.Visit(visitor, value);
                 this.ProjectReference.Visit(visitor, value.ProjectReference);
@@ -1630,6 +2044,15 @@ namespace Codex.ObjectModel {
                         this._lazyCommit = new CommitMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Commit", MappingInfo, null));
                     }
                     return this._lazyCommit;
+                }
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Commit")) {
+                        return this.Commit[fullName];
+                    }
+                    return base[fullName];
                 }
             }
             
@@ -1676,6 +2099,15 @@ namespace Codex.ObjectModel {
                         this._lazyRepositoryName = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("RepositoryName", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
                     }
                     return this._lazyRepositoryName;
+                }
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "CommitFiles")) {
+                        return this.CommitFiles[fullName];
+                    }
+                    return base[fullName];
                 }
             }
             
@@ -1747,6 +2179,27 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Modifiers")) {
+                        return this.Modifiers[fullName];
+                    }
+                    if (this.IsMatch(fullName, "ContainerQualifiedName")) {
+                        return this.ContainerQualifiedName[fullName];
+                    }
+                    if (this.IsMatch(fullName, "ShortName")) {
+                        return this.ShortName[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Keywords")) {
+                        return this.Keywords[fullName];
+                    }
+                    if (this.IsMatch(fullName, "AbbreviatedName")) {
+                        return this.AbbreviatedName[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IDefinitionSymbol value) {
                 base.Visit(visitor, value);
                 this.AbbreviatedName.Visit(visitor, value.AbbreviatedName);
@@ -1797,6 +2250,21 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "ExcludeFromDefaultSearch")) {
+                        return this.ExcludeFromDefaultSearch[fullName];
+                    }
+                    if (this.IsMatch(fullName, "IsImplicitlyDeclared")) {
+                        return this.IsImplicitlyDeclared[fullName];
+                    }
+                    if (this.IsMatch(fullName, "ReferenceKind")) {
+                        return this.ReferenceKind[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IReferenceSymbol value) {
                 base.Visit(visitor, value);
                 this.ReferenceKind.Visit(visitor, value.ReferenceKind);
@@ -1842,6 +2310,21 @@ namespace Codex.ObjectModel {
                         this._lazyKind = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("Kind", MappingInfo, Codex.SearchBehavior.NormalizedKeyword));
                     }
                     return this._lazyKind;
+                }
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Kind")) {
+                        return this.Kind[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Id")) {
+                        return this.Id[fullName];
+                    }
+                    if (this.IsMatch(fullName, "ProjectId")) {
+                        return this.ProjectId[fullName];
+                    }
+                    return base[fullName];
                 }
             }
             
