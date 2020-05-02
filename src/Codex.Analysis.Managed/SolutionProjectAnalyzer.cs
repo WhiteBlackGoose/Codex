@@ -203,15 +203,20 @@ namespace Codex.Analysis.Projects
 
             foreach (var document in projectInfo.AdditionalDocuments)
             {
-                AddDocumentToProject(repoProject, document);
+                var inMemoryContent = document.TextLoader is StaticTextLoader loader ? loader.Content : null;
+                var file = AddDocumentToProject(repoProject, document, inMemory: inMemoryContent != null);
+                if (file != null)
+                {
+                    file.InMemoryContent = inMemoryContent;
+                }
             }
         }
 
-        private static RepoFile AddDocumentToProject(RepoProject project, DocumentInfo document)
+        private static RepoFile AddDocumentToProject(RepoProject project, DocumentInfo document, bool inMemory = false)
         {
             try
             {
-                if (document.FilePath == null || !File.Exists(document.FilePath))
+                if (document.FilePath == null || (!inMemory && !File.Exists(document.FilePath)))
                 {
                     return null;
                 }
