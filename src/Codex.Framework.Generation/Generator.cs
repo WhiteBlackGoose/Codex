@@ -334,6 +334,9 @@ namespace Codex.Framework.Generation
 
             typesNamespace.Types.Add(storeTypeDeclaration);
 
+            CodeMemberProperty mappingsIndexer = CreateMappingIndexer();
+            MappingsClass.Members.Add(mappingsIndexer);
+
             foreach (var searchType in SearchTypes.RegisteredSearchTypes)
             {
                 var typeDefinition = DefinitionsByType[searchType.Type];
@@ -342,7 +345,8 @@ namespace Codex.Framework.Generation
                 if (visitedSearchTypeDefinitions.Add(typeDefinition))
                 {
                     MappingsClass.AddMappingProperty(searchType.Name,
-                        typeDefinition.MappingTypeReference.Specialize(searchType.Type.AsReference()));
+                        typeDefinition.MappingTypeReference.Specialize(searchType.Type.AsReference()),
+                        mappingsIndexer);
 
                     ClientInterface.Members.Add(new CodeMemberProperty()
                     {
@@ -481,42 +485,10 @@ namespace Codex.Framework.Generation
 
                 PopulateProperties(visitedTypeDefinitions, usedMemberNames, typeDefinition, typeDeclaration);
 
-                var indexerMethod = new CodeMemberProperty()
-                {
-                    Name = "Item",
-                    Attributes = MemberAttributes.Public | MemberAttributes.Override,
-                    Type = typeof(ObjectModel.MappingBase).AsReference(),
-                    Parameters =
-                    {
-                        new CodeParameterDeclarationExpression(typeof(string), "fullName"),
-                    },
-                    GetStatements =
-                    {
-                        new CodeMethodReturnStatement(new CodeIndexerExpression(
-                            new CodeBaseReferenceExpression(),
-                            new CodeArgumentReferenceExpression("fullName")
-                            ))
-                    }
-                };
-
-                var visitMethod = new CodeMemberMethod()
-                {
-                    Name = "Visit",
-                    Attributes = MemberAttributes.Public,
-                    Parameters =
-                    {
-                        new CodeParameterDeclarationExpression(typeof(ObjectModel.IVisitor), "visitor"),
-                        new CodeParameterDeclarationExpression(typeDefinition.Type, "value")
-                    }
-                };
-
-                typeDefinition.MappingTypeDeclaration.Members.Add(indexerMethod);
-                typeDefinition.MappingTypeDeclaration.Members.Add(visitMethod);
-
                 if (typeDefinition.SearchRelevantBase != null)
                 {
-                    visitMethod.Statements.Add(new CodeMethodInvokeExpression(
-                        new CodeMethodReferenceExpression(new CodeBaseReferenceExpression(), visitMethod.Name),
+                    typeDefinition.MappingVisitMethod.Statements.Add(new CodeMethodInvokeExpression(
+                        new CodeMethodReferenceExpression(new CodeBaseReferenceExpression(), typeDefinition.MappingVisitMethod.Name),
                         new CodeArgumentReferenceExpression("visitor"),
                         new CodeArgumentReferenceExpression("value")
                         ));
@@ -529,21 +501,27 @@ namespace Codex.Framework.Generation
                         continue;
                     }
 
-                    visitMethod.Statements.Add(new CodeMethodInvokeExpression(
-                        new CodeMethodReferenceExpression(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), property.Name), visitMethod.Name),
-                        new CodeArgumentReferenceExpression("visitor"),
-                        new CodeFieldReferenceExpression(new CodeArgumentReferenceExpression("value"), property.Name)));
+                    //typeDefinition.MappingTypeDeclaration.AddMappingProperty(
+                    //    property.Name,
+                    //    property.PropertyTypeDefinition?.MappingTypeReference ?? property.PropertyType.AsReference().AsMappingType(),
+                    //    indexerMethod,
+                    //    property.SearchBehavior);
 
-                    indexerMethod.GetStatements.Insert(0, new CodeConditionStatement(
-                        new CodeMethodInvokeExpression(
-                            new CodeMethodReferenceExpression(new CodeThisReferenceExpression(), nameof(ObjectModel.MappingBase.IsMatch)),
-                            new CodeArgumentReferenceExpression("fullName"),
-                            new CodePrimitiveExpression(property.Name)),
-                        new CodeMethodReturnStatement(new CodeIndexerExpression(
-                            new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), property.Name),
-                            new CodeArgumentReferenceExpression("fullName")
-                            ))
-                        ));
+                    //visitMethod.Statements.Add(new CodeMethodInvokeExpression(
+                    //    new CodeMethodReferenceExpression(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), property.Name), visitMethod.Name),
+                    //    new CodeArgumentReferenceExpression("visitor"),
+                    //    new CodeFieldReferenceExpression(new CodeArgumentReferenceExpression("value"), property.Name)));
+
+                    //typeDefinition.MappingIndexer.GetStatements.Insert(0, new CodeConditionStatement(
+                    //    new CodeMethodInvokeExpression(
+                    //        new CodeMethodReferenceExpression(new CodeThisReferenceExpression(), nameof(ObjectModel.MappingBase.IsMatch)),
+                    //        new CodeArgumentReferenceExpression("fullName"),
+                    //        new CodePrimitiveExpression(property.Name)),
+                    //    new CodeMethodReturnStatement(new CodeIndexerExpression(
+                    //        new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), property.Name),
+                    //        new CodeArgumentReferenceExpression("fullName")
+                    //        ))
+                    //    ));
 
                     //if (property.PropertyTypeDefinition != null)
                     //{
@@ -567,6 +545,9 @@ namespace Codex.Framework.Generation
                     //    }));
                     //}
                 }
+
+                typeDefinition.MappingTypeDeclaration.Members.Add(typeDefinition.MappingIndexer);
+                typeDefinition.MappingTypeDeclaration.Members.Add(typeDefinition.MappingVisitMethod);
 
                 //if (!typeDefinition.Type.IsGenericType)
                 //{
@@ -595,6 +576,27 @@ namespace Codex.Framework.Generation
                     IndentString = "    "
                 });
             }
+        }
+
+        internal static CodeMemberProperty CreateMappingIndexer()
+        {
+            return new CodeMemberProperty()
+            {
+                Name = "Item",
+                Attributes = MemberAttributes.Public | MemberAttributes.Override,
+                Type = typeof(ObjectModel.MappingBase).AsReference(),
+                Parameters =
+                    {
+                        new CodeParameterDeclarationExpression(typeof(string), "fullName"),
+                    },
+                GetStatements =
+                    {
+                        new CodeMethodReturnStatement(new CodeIndexerExpression(
+                            new CodeBaseReferenceExpression(),
+                            new CodeArgumentReferenceExpression("fullName")
+                            ))
+                    }
+            };
         }
 
         private void PopulateProperties(
@@ -683,7 +685,12 @@ namespace Codex.Framework.Generation
 
                 if (!isBaseChain && !property.ExcludeFromIndexing)
                 {
-
+                    declarationTypeDefinition.MappingTypeDeclaration.AddMappingProperty(
+                        property.Name,
+                        property.PropertyTypeDefinition?.MappingTypeReference ?? property.PropertyType.AsReference().AsMappingType(),
+                        declarationTypeDefinition.MappingIndexer,
+                        property.SearchBehavior,
+                        declarationTypeDefinition.MappingVisitMethod);
                 }
 
                 if (property.InitPropertyType != null)
@@ -939,7 +946,8 @@ namespace Codex.Framework.Generation
 
         public static void AddMappingProperty(this CodeTypeDeclaration declaringType, string name, CodeTypeReference propertyType,
             CodeMemberProperty indexer,
-            SearchBehavior? searchBehavior = null)
+            SearchBehavior? searchBehavior = null,
+            CodeMemberMethod visitMethod = null)
         {
             AddLazyProperty(declaringType, name, propertyType, new CodeObjectCreateExpression(propertyType,
                 new CodeObjectCreateExpression(
@@ -948,6 +956,25 @@ namespace Codex.Framework.Generation
                     new CodeFieldReferenceExpression(null, nameof(ObjectModel.MappingBase.MappingInfo)),
                     searchBehavior == null ? (CodeExpression)new CodePrimitiveExpression(null) : new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(typeof(SearchBehavior)), searchBehavior.ToString())
                     )));
+
+            if (visitMethod != null)
+            {
+                visitMethod.Statements.Add(new CodeMethodInvokeExpression(
+                    new CodeMethodReferenceExpression(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), name), visitMethod.Name),
+                    new CodeArgumentReferenceExpression("visitor"),
+                    new CodeFieldReferenceExpression(new CodeArgumentReferenceExpression("value"), name)));
+            }
+
+            indexer.GetStatements.Insert(0, new CodeConditionStatement(
+                new CodeMethodInvokeExpression(
+                    new CodeMethodReferenceExpression(new CodeThisReferenceExpression(), nameof(ObjectModel.MappingBase.IsMatch)),
+                    new CodeArgumentReferenceExpression("fullName"),
+                    new CodePrimitiveExpression(name)),
+                new CodeMethodReturnStatement(new CodeIndexerExpression(
+                    new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), name),
+                    new CodeArgumentReferenceExpression("fullName")
+                    ))
+                ));
         }
 
         public static void AddLazyProperty(this CodeTypeDeclaration declaringType, string name, CodeTypeReference propertyType, CodeExpression initializer)

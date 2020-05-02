@@ -211,6 +211,57 @@ namespace Codex.ObjectModel {
         
         private RegisteredEntityMapping<Codex.IRegisteredEntity> _lazyRegisteredEntity;
         
+        public override Codex.ObjectModel.MappingBase this[string fullName] {
+            get {
+                if (this.IsMatch(fullName, "RegisteredEntity")) {
+                    return this.RegisteredEntity[fullName];
+                }
+                if (this.IsMatch(fullName, "StableIdMarker")) {
+                    return this.StableIdMarker[fullName];
+                }
+                if (this.IsMatch(fullName, "StoredFilter")) {
+                    return this.StoredFilter[fullName];
+                }
+                if (this.IsMatch(fullName, "Property")) {
+                    return this.Property[fullName];
+                }
+                if (this.IsMatch(fullName, "ProjectReference")) {
+                    return this.ProjectReference[fullName];
+                }
+                if (this.IsMatch(fullName, "CommitFiles")) {
+                    return this.CommitFiles[fullName];
+                }
+                if (this.IsMatch(fullName, "Commit")) {
+                    return this.Commit[fullName];
+                }
+                if (this.IsMatch(fullName, "Project")) {
+                    return this.Project[fullName];
+                }
+                if (this.IsMatch(fullName, "Repository")) {
+                    return this.Repository[fullName];
+                }
+                if (this.IsMatch(fullName, "Language")) {
+                    return this.Language[fullName];
+                }
+                if (this.IsMatch(fullName, "BoundSource")) {
+                    return this.BoundSource[fullName];
+                }
+                if (this.IsMatch(fullName, "TextSource")) {
+                    return this.TextSource[fullName];
+                }
+                if (this.IsMatch(fullName, "TextChunk")) {
+                    return this.TextChunk[fullName];
+                }
+                if (this.IsMatch(fullName, "Reference")) {
+                    return this.Reference[fullName];
+                }
+                if (this.IsMatch(fullName, "Definition")) {
+                    return this.Definition[fullName];
+                }
+                return base[fullName];
+            }
+        }
+        
         public DefinitionSearchModelMapping<Codex.IDefinitionSearchModel> Definition {
             get {
                 if ((this._lazyDefinition == null)) {
@@ -416,11 +467,11 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ICommit value) {
-                base.Visit(visitor, value);
                 this.Description.Visit(visitor, value.Description);
                 this.DateUploaded.Visit(visitor, value.DateUploaded);
                 this.DateCommitted.Visit(visitor, value.DateCommitted);
                 this.ChangedFiles.Visit(visitor, value.ChangedFiles);
+                base.Visit(visitor, value);
             }
         }
         
@@ -606,11 +657,27 @@ namespace Codex.ObjectModel {
             
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
+                    if (this.IsMatch(fullName, "ProjectId")) {
+                        return this.ProjectId[fullName];
+                    }
+                    if (this.IsMatch(fullName, "RepositoryName")) {
+                        return this.RepositoryName[fullName];
+                    }
+                    if (this.IsMatch(fullName, "RepoRelativePath")) {
+                        return this.RepoRelativePath[fullName];
+                    }
+                    if (this.IsMatch(fullName, "ProjectRelativePath")) {
+                        return this.ProjectRelativePath[fullName];
+                    }
                     return base[fullName];
                 }
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISourceFileInfo value) {
+                this.ProjectRelativePath.Visit(visitor, value.ProjectRelativePath);
+                this.RepoRelativePath.Visit(visitor, value.RepoRelativePath);
+                this.RepositoryName.Visit(visitor, value.RepositoryName);
+                this.ProjectId.Visit(visitor, value.ProjectId);
                 base.Visit(visitor, value);
             }
         }
@@ -690,8 +757,8 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IChunkedSourceFile value) {
-                base.Visit(visitor, value);
                 this.Chunks.Visit(visitor, value.Chunks);
+                base.Visit(visitor, value);
             }
         }
         
@@ -976,10 +1043,10 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IProject value) {
-                base.Visit(visitor, value);
                 this.PrimaryFile.Visit(visitor, value.PrimaryFile);
                 this.Files.Visit(visitor, value.Files);
                 this.ProjectReferences.Visit(visitor, value.ProjectReferences);
+                base.Visit(visitor, value);
             }
         }
         
@@ -1231,10 +1298,10 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IPropertySearchModel value) {
-                base.Visit(visitor, value);
                 this.Key.Visit(visitor, value.Key);
                 this.Value.Visit(visitor, value.Value);
                 this.OwnerId.Visit(visitor, value.OwnerId);
+                base.Visit(visitor, value);
             }
         }
         
@@ -1392,8 +1459,8 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ICommitScopeEntity value) {
-                base.Visit(visitor, value);
                 this.CommitId.Visit(visitor, value.CommitId);
+                base.Visit(visitor, value);
             }
         }
         
@@ -1425,8 +1492,8 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IProjectScopeEntity value) {
-                base.Visit(visitor, value);
                 this.ProjectId.Visit(visitor, value.ProjectId);
+                base.Visit(visitor, value);
             }
         }
         
@@ -1458,8 +1525,8 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IRepoFileScopeEntity value) {
-                base.Visit(visitor, value);
                 this.RepoRelativePath.Visit(visitor, value.RepoRelativePath);
+                base.Visit(visitor, value);
             }
         }
         
@@ -1494,6 +1561,9 @@ namespace Codex.ObjectModel {
             
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
+                    if (this.IsMatch(fullName, "ProjectId")) {
+                        return this.ProjectId[fullName];
+                    }
                     if (this.IsMatch(fullName, "ProjectRelativePath")) {
                         return this.ProjectRelativePath[fullName];
                     }
@@ -1502,8 +1572,9 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IProjectFileScopeEntity value) {
-                base.Visit(visitor, value);
                 this.ProjectRelativePath.Visit(visitor, value.ProjectRelativePath);
+                this.ProjectId.Visit(visitor, value.ProjectId);
+                base.Visit(visitor, value);
             }
         }
         
@@ -1549,9 +1620,9 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IRegisteredEntity value) {
-                base.Visit(visitor, value);
                 this.EntityUid.Visit(visitor, value.EntityUid);
                 this.IndexName.Visit(visitor, value.IndexName);
+                base.Visit(visitor, value);
             }
         }
         
@@ -1611,10 +1682,10 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IStoredFilter value) {
-                base.Visit(visitor, value);
                 this.Name.Visit(visitor, value.Name);
                 this.IndexName.Visit(visitor, value.IndexName);
                 this.FilterHash.Visit(visitor, value.FilterHash);
+                base.Visit(visitor, value);
             }
         }
         
@@ -1660,9 +1731,9 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IDefinitionSearchModel value) {
-                base.Visit(visitor, value);
                 this.Definition.Visit(visitor, value.Definition);
                 this.Keywords.Visit(visitor, value.Keywords);
+                base.Visit(visitor, value);
             }
         }
         
@@ -1694,8 +1765,8 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ILanguageSearchModel value) {
-                base.Visit(visitor, value);
                 this.Language.Visit(visitor, value.Language);
+                base.Visit(visitor, value);
             }
         }
         
@@ -1763,6 +1834,18 @@ namespace Codex.ObjectModel {
             
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
+                    if (this.IsMatch(fullName, "ProjectId")) {
+                        return this.ProjectId[fullName];
+                    }
+                    if (this.IsMatch(fullName, "RepositoryName")) {
+                        return this.RepositoryName[fullName];
+                    }
+                    if (this.IsMatch(fullName, "RepoRelativePath")) {
+                        return this.RepoRelativePath[fullName];
+                    }
+                    if (this.IsMatch(fullName, "ProjectRelativePath")) {
+                        return this.ProjectRelativePath[fullName];
+                    }
                     if (this.IsMatch(fullName, "Reference")) {
                         return this.Reference[fullName];
                     }
@@ -1771,8 +1854,12 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IReferenceSearchModel value) {
-                base.Visit(visitor, value);
                 this.Reference.Visit(visitor, value.Reference);
+                this.ProjectRelativePath.Visit(visitor, value.ProjectRelativePath);
+                this.RepoRelativePath.Visit(visitor, value.RepoRelativePath);
+                this.RepositoryName.Visit(visitor, value.RepositoryName);
+                this.ProjectId.Visit(visitor, value.ProjectId);
+                base.Visit(visitor, value);
             }
         }
         
@@ -1818,9 +1905,9 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISourceSearchModelBase value) {
-                base.Visit(visitor, value);
                 this.SourceControlInfo.Visit(visitor, value.SourceControlInfo);
                 this.File.Visit(visitor, value.File);
+                base.Visit(visitor, value);
             }
         }
         
@@ -1852,8 +1939,8 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IBoundSourceSearchModel value) {
-                base.Visit(visitor, value);
                 this.BindingInfo.Visit(visitor, value.BindingInfo);
+                base.Visit(visitor, value);
             }
         }
         
@@ -1903,8 +1990,8 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ITextChunkSearchModel value) {
-                base.Visit(visitor, value);
                 this.Chunk.Visit(visitor, value.Chunk);
+                base.Visit(visitor, value);
             }
         }
         
@@ -1936,8 +2023,8 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IRepositorySearchModel value) {
-                base.Visit(visitor, value);
                 this.Repository.Visit(visitor, value.Repository);
+                base.Visit(visitor, value);
             }
         }
         
@@ -1969,8 +2056,8 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IProjectSearchModel value) {
-                base.Visit(visitor, value);
                 this.Project.Visit(visitor, value.Project);
+                base.Visit(visitor, value);
             }
         }
         
@@ -2016,6 +2103,12 @@ namespace Codex.ObjectModel {
             
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
+                    if (this.IsMatch(fullName, "RepositoryName")) {
+                        return this.RepositoryName[fullName];
+                    }
+                    if (this.IsMatch(fullName, "ProjectId")) {
+                        return this.ProjectId[fullName];
+                    }
                     if (this.IsMatch(fullName, "ProjectReference")) {
                         return this.ProjectReference[fullName];
                     }
@@ -2024,8 +2117,10 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IProjectReferenceSearchModel value) {
-                base.Visit(visitor, value);
                 this.ProjectReference.Visit(visitor, value.ProjectReference);
+                this.ProjectId.Visit(visitor, value.ProjectId);
+                this.RepositoryName.Visit(visitor, value.RepositoryName);
+                base.Visit(visitor, value);
             }
         }
         
@@ -2057,8 +2152,8 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ICommitSearchModel value) {
-                base.Visit(visitor, value);
                 this.Commit.Visit(visitor, value.Commit);
+                base.Visit(visitor, value);
             }
         }
         
@@ -2104,6 +2199,12 @@ namespace Codex.ObjectModel {
             
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
+                    if (this.IsMatch(fullName, "RepositoryName")) {
+                        return this.RepositoryName[fullName];
+                    }
+                    if (this.IsMatch(fullName, "CommitId")) {
+                        return this.CommitId[fullName];
+                    }
                     if (this.IsMatch(fullName, "CommitFiles")) {
                         return this.CommitFiles[fullName];
                     }
@@ -2112,8 +2213,10 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ICommitFilesSearchModel value) {
-                base.Visit(visitor, value);
                 this.CommitFiles.Visit(visitor, value.CommitFiles);
+                this.CommitId.Visit(visitor, value.CommitId);
+                this.RepositoryName.Visit(visitor, value.RepositoryName);
+                base.Visit(visitor, value);
             }
         }
         
@@ -2201,12 +2304,12 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IDefinitionSymbol value) {
-                base.Visit(visitor, value);
                 this.AbbreviatedName.Visit(visitor, value.AbbreviatedName);
                 this.Keywords.Visit(visitor, value.Keywords);
                 this.ShortName.Visit(visitor, value.ShortName);
                 this.ContainerQualifiedName.Visit(visitor, value.ContainerQualifiedName);
                 this.Modifiers.Visit(visitor, value.Modifiers);
+                base.Visit(visitor, value);
             }
         }
         
@@ -2266,10 +2369,10 @@ namespace Codex.ObjectModel {
             }
             
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IReferenceSymbol value) {
-                base.Visit(visitor, value);
                 this.ReferenceKind.Visit(visitor, value.ReferenceKind);
                 this.IsImplicitlyDeclared.Visit(visitor, value.IsImplicitlyDeclared);
                 this.ExcludeFromDefaultSearch.Visit(visitor, value.ExcludeFromDefaultSearch);
+                base.Visit(visitor, value);
             }
         }
         

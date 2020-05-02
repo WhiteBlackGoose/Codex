@@ -62,6 +62,8 @@ namespace Codex.Framework.Generation
         public CodeTypeReference MappingTypeReference;
 
         public readonly CodeTypeDeclaration MappingTypeDeclaration;
+        public CodeMemberProperty MappingIndexer = Generator.CreateMappingIndexer();
+        public readonly CodeMemberMethod MappingVisitMethod;
 
         public TypeDefinition(Type type)
         {
@@ -92,6 +94,17 @@ namespace Codex.Framework.Generation
 
             MappingTypeReference = new CodeTypeReference(ClassName + "Mapping", new CodeTypeReference("TRoot"));
             Properties = type.GetProperties().Select(p => new PropertyDefinition(p)).ToList();
+
+            MappingVisitMethod = new CodeMemberMethod()
+            {
+                Name = "Visit",
+                Attributes = MemberAttributes.Public,
+                Parameters =
+                    {
+                        new CodeParameterDeclarationExpression(typeof(ObjectModel.IVisitor), "visitor"),
+                        new CodeParameterDeclarationExpression(Type, "value")
+                    }
+            };
         }
     }
 
