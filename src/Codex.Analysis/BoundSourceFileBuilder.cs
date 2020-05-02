@@ -230,16 +230,19 @@ namespace Codex.Analysis
 
             SourceText text = SourceText;
             var info = BoundSourceFile.SourceFile.Info;
+            info.Properties = info.Properties ?? new PropertyMap();
+            info.Lines = text.Lines.Count;
 
             foreach (var checksumAlgorithm in s_checksumAlgorithms)
             {
                 var checksumKey = GetChecksumKey(checksumAlgorithm);
                 if (checksumKey != null)
                 {
-                    var checksum = text.GetChecksum().ToHex();
-                    info.Properties = info.Properties ?? new PropertyMap();
+                    var checksumText = text.ChecksumAlgorithm == checksumAlgorithm
+                        ? text
+                        : new ChecksumSourceText(text, checksumAlgorithm);
+                    var checksum = checksumText.GetChecksum().ToHex();
                     info.Properties[checksumKey] = checksum;
-                    info.Lines = text.Lines.Count;
 
                     AnnotateDefinition(0, 0,
                         new DefinitionSymbol()
@@ -299,6 +302,27 @@ namespace Codex.Analysis
             }
 
             return BoundSourceFile;
+        }
+
+        private class ChecksumSourceText : SourceText
+        {
+            private SourceText inner;
+            public ChecksumSourceText(SourceText inner, SourceHashAlgorithm checksumAlgorithm)
+                : base(checksumAlgorithm: checksumAlgorithm)
+            {
+                this.inner = inner;
+            }
+
+            public override char this[int position] => inner[position];
+
+            public override Encoding Encoding => inner.Encoding;
+
+            public override int Length => inner.Length;
+
+            public override void CopyTo(int sourceIndex, char[] destination, int destinationIndex, int count)
+            {
+                inner.CopyTo(sourceIndex, destination, destinationIndex, count);
+            }
         }
 
         private static string GetChecksumKey(SourceHashAlgorithm algorithm)

@@ -87,6 +87,12 @@ namespace Codex.Import
 
         public string GetLogicalPath(string path)
         {
+            if (path.StartsWith("["))
+            {
+                // Handle case where path is already tokenized
+                return path;
+            }
+
             foreach (var mount in Roots)
             {
                 if (path.StartsWith(mount.Path, StringComparison.OrdinalIgnoreCase))
