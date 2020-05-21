@@ -37,6 +37,21 @@ namespace Codex.Lucene.Framework.AutoPrefix
             {
                 PopNode();
             }
+
+            termStore.ForEachTerm(t =>
+            {
+                var consumer = inner.StartTerm(t.term);
+
+                int count = 0;
+                foreach (var doc in t.docs.Enumerate())
+                {
+                    count++;
+                    consumer.StartDoc(doc, -1);
+                    consumer.FinishDoc();
+                }
+
+                inner.FinishTerm(t.term, new TermStats(count, count));
+            });
         }
 
         public override void FinishTerm(BytesRef text, TermStats stats)
@@ -79,6 +94,25 @@ namespace Codex.Lucene.Framework.AutoPrefix
 
     public interface IOrderingTermStore
     {
+        void ForEachTerm(Action<(BytesRef term, DocIdSet docs)> action);
         void Store(BytesRef term, DocIdSet docs);
+    }
+
+    public static class Helpers
+    {
+        public static IEnumerable<int> Enumerate(this DocIdSet docs)
+        {
+            var iterator = docs.GetIterator();
+            while (true)
+            {
+                var doc = iterator.NextDoc();
+                if (doc == DocIdSetIterator.NO_MORE_DOCS)
+                {
+                    yield break;
+                }
+
+                yield return doc;
+            }
+        }
     }
 }
