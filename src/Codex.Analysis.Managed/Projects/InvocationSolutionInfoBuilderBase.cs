@@ -90,7 +90,7 @@ namespace Codex.Analysis.Projects
             yield return DocumentInfo.Create(
                 DocumentId.CreateNewId(ProjectId.CreateNewId()),
                 "CompilerArguments.txt",
-                loader: TextLoader.From(TextAndVersion.Create(SourceText.From(argumentsText), VersionStamp.Default)),
+                loader: new StaticTextLoader(argumentsText),
                 filePath: $@"[Metadata]\CompilerArguments.txt",
                 isGenerated: true);
         }

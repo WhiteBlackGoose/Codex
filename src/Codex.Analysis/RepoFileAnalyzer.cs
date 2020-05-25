@@ -60,7 +60,7 @@ namespace Codex.Analysis.Files
                     ProjectRelativePath = file.LogicalPath,
                     RepoRelativePath = file.RepoRelativePath
                 }),
-                Content = services.ReadAllText(file.FilePath)
+                Content = file.InMemoryContent ?? services.ReadAllText(file.FilePath)
             };
         }
 

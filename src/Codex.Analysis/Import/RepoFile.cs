@@ -74,6 +74,7 @@ namespace Codex.Import
         public RepoProject PrimaryProject;
         public RepoFileAnalyzer Analyzer;
         public BoundSourceFileBuilder InMemorySourceFileBuilder;
+        public string InMemoryContent;
         public bool Ignored { get; set; }
         public bool HasExplicitAnalyzer { get; set; }
 
