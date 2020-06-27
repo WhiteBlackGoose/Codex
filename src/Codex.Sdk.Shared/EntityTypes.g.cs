@@ -2502,6 +2502,174 @@ namespace Codex.ObjectModel {
         }
     }
     
+    public partial class ClientBase {
+        
+        private Codex.Sdk.Search.IIndex<Codex.IDefinitionSearchModel> _lazyDefinitionIndex;
+        
+        private Codex.Sdk.Search.IIndex<Codex.IReferenceSearchModel> _lazyReferenceIndex;
+        
+        private Codex.Sdk.Search.IIndex<Codex.ITextChunkSearchModel> _lazyTextChunkIndex;
+        
+        private Codex.Sdk.Search.IIndex<Codex.ITextSourceSearchModel> _lazyTextSourceIndex;
+        
+        private Codex.Sdk.Search.IIndex<Codex.IBoundSourceSearchModel> _lazyBoundSourceIndex;
+        
+        private Codex.Sdk.Search.IIndex<Codex.ILanguageSearchModel> _lazyLanguageIndex;
+        
+        private Codex.Sdk.Search.IIndex<Codex.IRepositorySearchModel> _lazyRepositoryIndex;
+        
+        private Codex.Sdk.Search.IIndex<Codex.IProjectSearchModel> _lazyProjectIndex;
+        
+        private Codex.Sdk.Search.IIndex<Codex.ICommitSearchModel> _lazyCommitIndex;
+        
+        private Codex.Sdk.Search.IIndex<Codex.ICommitFilesSearchModel> _lazyCommitFilesIndex;
+        
+        private Codex.Sdk.Search.IIndex<Codex.IProjectReferenceSearchModel> _lazyProjectReferenceIndex;
+        
+        private Codex.Sdk.Search.IIndex<Codex.IPropertySearchModel> _lazyPropertyIndex;
+        
+        private Codex.Sdk.Search.IIndex<Codex.IStoredFilter> _lazyStoredFilterIndex;
+        
+        private Codex.Sdk.Search.IIndex<Codex.IStableIdMarker> _lazyStableIdMarkerIndex;
+        
+        private Codex.Sdk.Search.IIndex<Codex.IRegisteredEntity> _lazyRegisteredEntityIndex;
+        
+        public Codex.Sdk.Search.IIndex<Codex.IDefinitionSearchModel> DefinitionIndex {
+            get {
+                if ((this._lazyDefinitionIndex == null)) {
+                    this._lazyDefinitionIndex = this.CreateIndex(Codex.SearchTypes.Definition);
+                }
+                return this._lazyDefinitionIndex;
+            }
+        }
+        
+        public Codex.Sdk.Search.IIndex<Codex.IReferenceSearchModel> ReferenceIndex {
+            get {
+                if ((this._lazyReferenceIndex == null)) {
+                    this._lazyReferenceIndex = this.CreateIndex(Codex.SearchTypes.Reference);
+                }
+                return this._lazyReferenceIndex;
+            }
+        }
+        
+        public Codex.Sdk.Search.IIndex<Codex.ITextChunkSearchModel> TextChunkIndex {
+            get {
+                if ((this._lazyTextChunkIndex == null)) {
+                    this._lazyTextChunkIndex = this.CreateIndex(Codex.SearchTypes.TextChunk);
+                }
+                return this._lazyTextChunkIndex;
+            }
+        }
+        
+        public Codex.Sdk.Search.IIndex<Codex.ITextSourceSearchModel> TextSourceIndex {
+            get {
+                if ((this._lazyTextSourceIndex == null)) {
+                    this._lazyTextSourceIndex = this.CreateIndex(Codex.SearchTypes.TextSource);
+                }
+                return this._lazyTextSourceIndex;
+            }
+        }
+        
+        public Codex.Sdk.Search.IIndex<Codex.IBoundSourceSearchModel> BoundSourceIndex {
+            get {
+                if ((this._lazyBoundSourceIndex == null)) {
+                    this._lazyBoundSourceIndex = this.CreateIndex(Codex.SearchTypes.BoundSource);
+                }
+                return this._lazyBoundSourceIndex;
+            }
+        }
+        
+        public Codex.Sdk.Search.IIndex<Codex.ILanguageSearchModel> LanguageIndex {
+            get {
+                if ((this._lazyLanguageIndex == null)) {
+                    this._lazyLanguageIndex = this.CreateIndex(Codex.SearchTypes.Language);
+                }
+                return this._lazyLanguageIndex;
+            }
+        }
+        
+        public Codex.Sdk.Search.IIndex<Codex.IRepositorySearchModel> RepositoryIndex {
+            get {
+                if ((this._lazyRepositoryIndex == null)) {
+                    this._lazyRepositoryIndex = this.CreateIndex(Codex.SearchTypes.Repository);
+                }
+                return this._lazyRepositoryIndex;
+            }
+        }
+        
+        public Codex.Sdk.Search.IIndex<Codex.IProjectSearchModel> ProjectIndex {
+            get {
+                if ((this._lazyProjectIndex == null)) {
+                    this._lazyProjectIndex = this.CreateIndex(Codex.SearchTypes.Project);
+                }
+                return this._lazyProjectIndex;
+            }
+        }
+        
+        public Codex.Sdk.Search.IIndex<Codex.ICommitSearchModel> CommitIndex {
+            get {
+                if ((this._lazyCommitIndex == null)) {
+                    this._lazyCommitIndex = this.CreateIndex(Codex.SearchTypes.Commit);
+                }
+                return this._lazyCommitIndex;
+            }
+        }
+        
+        public Codex.Sdk.Search.IIndex<Codex.ICommitFilesSearchModel> CommitFilesIndex {
+            get {
+                if ((this._lazyCommitFilesIndex == null)) {
+                    this._lazyCommitFilesIndex = this.CreateIndex(Codex.SearchTypes.CommitFiles);
+                }
+                return this._lazyCommitFilesIndex;
+            }
+        }
+        
+        public Codex.Sdk.Search.IIndex<Codex.IProjectReferenceSearchModel> ProjectReferenceIndex {
+            get {
+                if ((this._lazyProjectReferenceIndex == null)) {
+                    this._lazyProjectReferenceIndex = this.CreateIndex(Codex.SearchTypes.ProjectReference);
+                }
+                return this._lazyProjectReferenceIndex;
+            }
+        }
+        
+        public Codex.Sdk.Search.IIndex<Codex.IPropertySearchModel> PropertyIndex {
+            get {
+                if ((this._lazyPropertyIndex == null)) {
+                    this._lazyPropertyIndex = this.CreateIndex(Codex.SearchTypes.Property);
+                }
+                return this._lazyPropertyIndex;
+            }
+        }
+        
+        public Codex.Sdk.Search.IIndex<Codex.IStoredFilter> StoredFilterIndex {
+            get {
+                if ((this._lazyStoredFilterIndex == null)) {
+                    this._lazyStoredFilterIndex = this.CreateIndex(Codex.SearchTypes.StoredFilter);
+                }
+                return this._lazyStoredFilterIndex;
+            }
+        }
+        
+        public Codex.Sdk.Search.IIndex<Codex.IStableIdMarker> StableIdMarkerIndex {
+            get {
+                if ((this._lazyStableIdMarkerIndex == null)) {
+                    this._lazyStableIdMarkerIndex = this.CreateIndex(Codex.SearchTypes.StableIdMarker);
+                }
+                return this._lazyStableIdMarkerIndex;
+            }
+        }
+        
+        public Codex.Sdk.Search.IIndex<Codex.IRegisteredEntity> RegisteredEntityIndex {
+            get {
+                if ((this._lazyRegisteredEntityIndex == null)) {
+                    this._lazyRegisteredEntityIndex = this.CreateIndex(Codex.SearchTypes.RegisteredEntity);
+                }
+                return this._lazyRegisteredEntityIndex;
+            }
+        }
+    }
+    
     /// <summary>
     /// Describes a commit in version control
     /// </summary>

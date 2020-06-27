@@ -24,10 +24,10 @@ namespace Codex.Sdk.Search
 
         Task<IIndexSearchResponse<TResult>> QueryAsync<TResult>(
             IStoredFilterInfo storedFilterInfo,
-            Func<CodexQueryBuilder<T>, CodexQuery<T>> filter,
+            Func<ICodexQueryBuilder<T>, CodexQuery<T>> filter,
             OneOrMany<Mapping<T>> sort = null,
             int? take = null,
-            Func<CodexQueryBuilder<T>, CodexQuery<T>> boost = null)
+            Func<ICodexQueryBuilder<T>, CodexQuery<T>> boost = null)
         where TResult : T;
     }
 
@@ -36,10 +36,10 @@ namespace Codex.Sdk.Search
         public static Task<IIndexSearchResponse<T>> SearchAsync<T>(
             this IIndex<T> index,
             IStoredFilterInfo storedFilterInfo,
-            Func<CodexQueryBuilder<T>, CodexQuery<T>> filter,
+            Func<ICodexQueryBuilder<T>, CodexQuery<T>> filter,
             OneOrMany<Mapping<T>> sort = null,
             int? take = null,
-            Func<CodexQueryBuilder<T>, CodexQuery<T>> boost = null)
+            Func<ICodexQueryBuilder<T>, CodexQuery<T>> boost = null)
         {
             throw Placeholder.NotImplementedException();
         }
@@ -60,7 +60,7 @@ namespace Codex.Sdk.Search
 
     public class AdditionalSearchArguments<T>
     {
-        public Func<CodexQueryBuilder<T>, CodexQuery<T>> Boost { get; set; }
+        public Func<ICodexQueryBuilder<T>, CodexQuery<T>> Boost { get; set; }
         public List<Mapping<T>> SortFields { get; } = new List<Mapping<T>>();
         public int? Take { get; set; }
     }
@@ -84,15 +84,15 @@ namespace Codex.Sdk.Search
         Term,
     }
 
-    public class CodexQueryBuilder<T>
+    public interface ICodexQueryBuilder<T>
     {
-        public CodexQuery<T> Term<TValue>(Mapping<T, TValue> mapping, TValue term) => throw new NotImplementedException();
+        CodexQuery<T> Term<TValue>(Mapping<T, TValue> mapping, TValue term);
 
-        public CodexQuery<T> Terms<TValue>(Mapping<T, TValue> mapping, IEnumerable<TValue> terms) => throw new NotImplementedException();
+        CodexQuery<T> Terms<TValue>(Mapping<T, TValue> mapping, IEnumerable<TValue> terms);
 
-        public CodexQuery<T> MatchPhrase(Mapping<T, string> mapping, string phrase) => throw new NotImplementedException();
+        CodexQuery<T> MatchPhrase(Mapping<T, string> mapping, string phrase);
 
-        public CodexQuery<T> MatchPhrasePrefix(Mapping<T, string> mapping, string phrase, int maxExpansions) => throw new NotImplementedException();
+        CodexQuery<T> MatchPhrasePrefix(Mapping<T, string> mapping, string phrase, int maxExpansions);
     }
 
     public class CodexQuery<T>

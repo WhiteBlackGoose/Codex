@@ -12,6 +12,8 @@ using System.Threading;
 using Codex.Sdk.Utilities;
 using Codex.Search;
 using static Codex.Search.SearchUtilities;
+using System.Diagnostics;
+using Codex.Sdk;
 
 namespace Codex.Search
 {
@@ -45,9 +47,9 @@ namespace Codex.Search
 
         public string StoredFilterUidPrefix { get; }
 
-        public StoredFilterSearchContext(ClientContext<TClient> context, string repositoryScopeId, string storedFilterIndexName, string storedFilterUidPrefix)
-            : base(context)
+        public StoredFilterSearchContext(TClient client, string repositoryScopeId, string storedFilterIndexName, string storedFilterUidPrefix)
         {
+            Client = client;
             RepositoryScopeId = repositoryScopeId;
             StoredFilterIndexName = storedFilterIndexName;
             StoredFilterUidPrefix = storedFilterUidPrefix;
@@ -420,7 +422,7 @@ namespace Codex.Search
         //}
 
         private CodexQuery<IDefinitionSearchModel> GetTermsFilter(
-            CodexQueryBuilder<IDefinitionSearchModel> cq,
+            ICodexQueryBuilder<IDefinitionSearchModel> cq,
             string[] terms,
             bool boostOnly = false)
         {
@@ -438,14 +440,14 @@ namespace Codex.Search
             return query;
         }
 
-        private CodexQuery<IDefinitionSearchModel> KeywordFilter(string term, CodexQueryBuilder<IDefinitionSearchModel> fq)
+        private CodexQuery<IDefinitionSearchModel> KeywordFilter(string term, ICodexQueryBuilder<IDefinitionSearchModel> fq)
         {
             Placeholder.Todo("Why two different keywords fields?");
             return fq.Term(m.Definition.Keywords, term.ToLowerInvariant())
                     | fq.Term(m.Definition.Definition.Keywords, term.ToLowerInvariant());
         }
 
-        private CodexQuery<IDefinitionSearchModel> NameFilter(string term, CodexQueryBuilder<IDefinitionSearchModel> fq, bool boostOnly)
+        private CodexQuery<IDefinitionSearchModel> NameFilter(string term, ICodexQueryBuilder<IDefinitionSearchModel> fq, bool boostOnly)
         {
             var terms = term.CreateNameTerm();
 
@@ -459,14 +461,14 @@ namespace Codex.Search
             }
         }
 
-        private CodexQuery<IDefinitionSearchModel> NameFilterCore(CodexQueryBuilder<IDefinitionSearchModel> fq, QualifiedNameTerms terms)
+        private CodexQuery<IDefinitionSearchModel> NameFilterCore(ICodexQueryBuilder<IDefinitionSearchModel> fq, QualifiedNameTerms terms)
         {
             return fq.Term(m.Definition.Definition.ShortName, terms.NameTerm)
                 | fq.Term(m.Definition.Definition.ShortName, terms.SecondaryNameTerm)
                 | fq.Term(m.Definition.Definition.AbbreviatedName, terms.RawNameTerm);
         }
 
-        private CodexQuery<IDefinitionSearchModel> QualifiedNameTermFilters(string term, CodexQueryBuilder<IDefinitionSearchModel> fq)
+        private CodexQuery<IDefinitionSearchModel> QualifiedNameTermFilters(string term, ICodexQueryBuilder<IDefinitionSearchModel> fq)
         {
             var terms = ParseContainerAndName(term);
 
@@ -482,13 +484,13 @@ namespace Codex.Search
                 & fq.Term(m.Definition.Definition.ContainerQualifiedName, terms.ContainerTerm);
         }
 
-        private CodexQuery<IDefinitionSearchModel> IndexTermFilters(string term, CodexQueryBuilder<IDefinitionSearchModel> fq)
+        private CodexQuery<IDefinitionSearchModel> IndexTermFilters(string term, ICodexQueryBuilder<IDefinitionSearchModel> fq)
         {
             return Placeholder.Value<CodexQuery<IDefinitionSearchModel>>("Determine how index queries will be represented? Probably as a stored filter");
             //return fq.Term("_index", term.ToLowerInvariant());
         }
 
-        private CodexQuery<IDefinitionSearchModel> ApplyTermFilter(string term, CodexQueryBuilder<IDefinitionSearchModel> fq, bool boostOnly)
+        private CodexQuery<IDefinitionSearchModel> ApplyTermFilter(string term, ICodexQueryBuilder<IDefinitionSearchModel> fq, bool boostOnly)
         {
             var d = NameFilter(term, fq, boostOnly);
 
@@ -506,8 +508,6 @@ namespace Codex.Search
             return d;
         }
 
-        protected abstract Task<StoredFilterSearchContext<TClient>> GetStoredFilterContextAsync(ContextCodexArgumentsBase arguments, ClientContext<TClient> context);
-
         private bool GetValueFromEntry((DateTime resolveTime, string repositorySnapshotId) resolvedEntry, out string aliasId)
         {
             var age = DateTime.UtcNow - resolvedEntry.resolveTime;
@@ -522,8 +522,41 @@ namespace Codex.Search
             return true;
         }
 
-        protected abstract Task<IndexQueryHitsResponse<T>> UseClient<T>(ContextCodexArgumentsBase arguments, Func<StoredFilterSearchContext<TClient>, Task<IndexQueryHits<T>>> useClient);
+        protected abstract Task<StoredFilterSearchContext<TClient>> GetStoredFilterContextAsync(ContextCodexArgumentsBase arguments);
 
-        protected abstract Task<IndexQueryResponse<T>> UseClientSingle<T>(ContextCodexArgumentsBase arguments, Func<StoredFilterSearchContext<TClient>, Task<T>> useClient);
+        protected virtual async Task<TResponse> UseClientCoreAsync<TResponse, TResult>(ContextCodexArgumentsBase arguments, Func<StoredFilterSearchContext<TClient>, TResponse, Task<TResult>> useClient)
+            where TResponse : IndexQueryResponse<TResult>, new()
+        {
+            var response = new TResponse();
+            var startTime = TimestampUtilities.Timestamp;
+
+            try
+            {
+                var sfContext = await GetStoredFilterContextAsync(arguments);
+                response.RawQueries = sfContext.Requests;
+                var result = await useClient(sfContext, response);
+                response.Result = result;
+            }
+            catch (Exception ex)
+            {
+                response.Error = ex.ToString();
+            }
+            finally
+            {
+                response.Duration = TimestampUtilities.Timestamp - startTime;
+            }
+
+            return response;
+        }
+            
+        protected virtual Task<IndexQueryHitsResponse<T>> UseClient<T>(ContextCodexArgumentsBase arguments, Func<StoredFilterSearchContext<TClient>, IndexQueryHitsResponse<T>, Task<IndexQueryHits<T>>> useClient)
+        {
+            return UseClientCoreAsync(arguments, useClient);
+        }
+
+        protected virtual Task<IndexQueryResponse<T>> UseClientSingle<T>(ContextCodexArgumentsBase arguments, Func<StoredFilterSearchContext<TClient>, IndexQueryResponse<T>, Task<T>> useClient)
+        {
+            return UseClientCoreAsync(arguments, useClient);
+        }
     }
 }

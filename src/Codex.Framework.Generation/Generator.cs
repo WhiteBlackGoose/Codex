@@ -46,6 +46,12 @@ namespace Codex.Framework.Generation
             IsPartial = true,
         };
 
+        private CodeTypeDeclaration ClientBaseClass = new CodeTypeDeclaration("ClientBase")
+        {
+            IsPartial = true,
+            Attributes = MemberAttributes.Abstract | MemberAttributes.Public
+        };
+
         private SymbolDisplayFormat TypeNameDisplayFormat = new SymbolDisplayFormat(genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters);
 
         public Generator([CallerFilePath] string filePath = null)
@@ -295,6 +301,7 @@ namespace Codex.Framework.Generation
             modelNamespace.Types.Add(CodexTypeUtilitiesClass);
             modelNamespace.Types.Add(MappingsClass);
             modelNamespace.Types.Add(ClientInterface);
+            modelNamespace.Types.Add(ClientBaseClass);
 
             modelNamespace.Imports.Add(new CodeNamespaceImport("static Codex.ObjectModel.Mappings"));
 
@@ -337,6 +344,25 @@ namespace Codex.Framework.Generation
             CodeMemberProperty mappingsIndexer = CreateMappingIndexer();
             MappingsClass.Members.Add(mappingsIndexer);
 
+            //var searchTypeParameter = new CodeTypeParameter("T");
+            //CodeTypeReference searchTypeParameterReference = new CodeTypeReference(searchTypeParameter);
+            //ClientBaseClass.Members.Add(new CodeMemberMethod()
+            //{
+            //    Name = "CreateIndex",
+            //    Attributes = MemberAttributes.Abstract | MemberAttributes.Family,
+            //    ReturnType = typeof(IIndex<>).MakeGenericTypeReference(searchTypeParameterReference),
+            //    TypeParameters =
+            //    {
+            //        searchTypeParameter
+            //    },
+            //    Parameters =
+            //    {
+            //        new CodeParameterDeclarationExpression(
+            //            typeof(SearchType<>).MakeGenericTypeReference(searchTypeParameterReference), 
+            //            "searchType")
+            //    }
+            //});
+
             foreach (var searchType in SearchTypes.RegisteredSearchTypes)
             {
                 var typeDefinition = DefinitionsByType[searchType.Type];
@@ -354,6 +380,17 @@ namespace Codex.Framework.Generation
                         Type = typeof(IIndex<>).MakeGenericTypeReference(searchType.Type.AsReference()),
                         HasGet = true
                     });
+
+                    ClientBaseClass.AddLazyProperty(
+                        searchType.Name + "Index",
+                        typeof(IIndex<>).MakeGenericTypeReference(searchType.Type.AsReference()),
+                        new CodeMethodInvokeExpression(
+                                new CodeMethodReferenceExpression(
+                                    new CodeThisReferenceExpression(),
+                                    "CreateIndex"),
+                                new CodeFieldReferenceExpression(
+                                    new CodeTypeReferenceExpression(typeof(SearchTypes)),
+                                    searchType.Name)));
 
                     typeDefinition.SearchType = searchType;
                     CodeTypeDeclaration typeDeclaration = new CodeTypeDeclaration(typeDefinition.SearchDescriptorName);

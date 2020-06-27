@@ -56,11 +56,13 @@ namespace Codex.Lucene.Search
             void Write(SearchType<T> searchType, T value);
         }
 
-        private class Batcher : IBatcher<LuceneStoreFilterBuilder>, ILuceneWriter<IReferenceSearchModel>
+        private class Batcher : IBatcher<LuceneStoreFilterBuilder>
         {
             // TODO: Need a writer per search type
             private IndexWriter Writer { get; }
             public LuceneCodexStore Store { get; }
+
+            public Mappings mappings = new Mappings();
 
             public LuceneStoreFilterBuilder[] DeclaredDefinitionStoredFilter { get; } = new[] { new LuceneStoreFilterBuilder() };
 
@@ -80,10 +82,18 @@ namespace Codex.Lucene.Search
             public void Add<T>(SearchType<T> searchType, T entity, params LuceneStoreFilterBuilder[] additionalStoredFilters)
                 where T : class, ISearchEntity
             {
-                if (this is ILuceneWriter<T> writer)
+                Document doc = new Document()
                 {
-                    writer.Write(searchType, entity);
-                }
+                    new StoredField(LuceneConstants.SourceFieldName, entity.SerializeEntity(ObjectStage.Index)),
+                };
+
+                var visitor = new DocumentVisitor(doc);
+
+                var mapping = (IMapping<T>)mappings[searchType];
+
+                mapping.Visit(visitor, entity);
+
+                Writer.AddDocument(doc);
             }
 
             public ValueTask<None> AddAsync<T>(SearchType<T> searchType, T entity, params LuceneStoreFilterBuilder[] additionalStoredFilters)
@@ -91,16 +101,6 @@ namespace Codex.Lucene.Search
             {
                 Add(searchType, entity, additionalStoredFilters);
                 return new ValueTask<None>(None.Value);
-            }
-
-            public void Write(SearchType<IReferenceSearchModel> searchType, IReferenceSearchModel value)
-            {
-                Writer.AddDocument(new Document()
-                {
-                    new StoredField("_source", value.SerializeEntity(ObjectStage.Index)),
-                    new StringField("reference.projectid", value.Reference.ProjectId, Field.Store.NO),
-                    new StringField("reference.id", value.Reference.Id.Value, Field.Store.NO),
-                });
             }
         }
 

@@ -26,13 +26,13 @@
   </ItemGroup>
   <Target Name="CopyBindingRedirects" AfterTargets="ResolveReferences">
     <ItemGroup>
-      <_CodexExe Include="@(_ResolvedProjectReferencePaths)" Condition="'%(_ResolvedProjectReferencePaths.UseAppConfig)' == 'true'"></_CodexExe>
+      <_CodexExe Include="@(_ResolvedProjectReferencePaths)" Condition="'%(_ResolvedProjectReferencePaths.UseAppConfig)' == 'true'" />
     </ItemGroup>
     <PropertyGroup>
-      <CodexExeDirectory>@(_CodexExe -&gt; '%(RootDir)%(Directory)')</CodexExeDirectory>
+      <CodexExeDirectory>@(_CodexExe -> '%(RootDir)%(Directory)')</CodexExeDirectory>
     </PropertyGroup>
     <ItemGroup>
-      <ContentWithTargetPath Include="@(_CodexExe -&gt; '%(FullPath).config')">
+      <ContentWithTargetPath Include="@(_CodexExe -> '%(FullPath).config')">
         <TargetPath>$(AssemblyName).dll.config</TargetPath>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </ContentWithTargetPath>

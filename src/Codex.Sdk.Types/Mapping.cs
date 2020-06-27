@@ -52,6 +52,23 @@ namespace Codex.ObjectModel
 
     public partial class Mappings : MappingBase
     {
+        private MappingBase[] _mappingsBySearchType = new MappingBase[SearchTypes.RegisteredSearchTypes.Count];
+
+        public MappingBase this[SearchType searchType]
+        {
+            get
+            {
+                var result = _mappingsBySearchType[searchType.Id];
+                if (result == null)
+                {
+                    result = this[searchType.Name];
+                    _mappingsBySearchType[searchType.Id] = result;
+                }
+
+                return result;
+            }
+        }
+
         public Mappings() 
             : base(info: null)
         {

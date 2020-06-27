@@ -20,20 +20,25 @@ namespace Codex.Lucene.Search
     public class DocumentVisitor : IVisitor
     {
         private Document doc;
-        public DocumentVisitor()
+        public DocumentVisitor(Document doc)
         {
+            this.doc = doc;
         }
 
         public bool ShouldVisit(MappingInfo mapping)
         {
             throw new NotImplementedException();
-            IndexWriter
         }
 
         public void Visit(MappingBase mapping, string value)
         {
             switch (mapping.MappingInfo.SearchBehavior.Value)
             {
+
+                case SearchBehavior.PrefixTerm:
+                case SearchBehavior.PrefixShortName:
+                case SearchBehavior.PrefixFullName:
+                    // TODO: implement real fields for above search behaviors
                 case SearchBehavior.Term:
                 case SearchBehavior.NormalizedKeyword:
                     doc.Add(new StringField(mapping.MappingInfo.FullName, value.ToLowerInvariant(), Field.Store.NO));
@@ -46,21 +51,20 @@ namespace Codex.Lucene.Search
                 case SearchBehavior.HierarchicalPath:
                     break;
                 case SearchBehavior.FullText:
-                    break;
-                case SearchBehavior.PrefixTerm:
-                    break;
-                case SearchBehavior.PrefixShortName:
-                    break;
-                case SearchBehavior.PrefixFullName:
+                    // TODO: If we don't store field. We probably need to do something against _source
+                    // field for highlighting. Other option, is to just replay this field into the document
+                    // when requested.
+                    doc.Add(new TextField(mapping.MappingInfo.FullName, value, Field.Store.NO));
                     break;
                 default:
                     break;
             }
+
         }
 
         public void Visit(MappingBase mapping, bool value)
         {
-            throw new NotImplementedException();
+            Visit(mapping, value ? bool.TrueString : bool.FalseString);
         }
 
         private FieldType StringSortwordType = new FieldType(StringField.TYPE_NOT_STORED)
@@ -68,7 +72,12 @@ namespace Codex.Lucene.Search
             DocValueType = DocValuesType.SORTED
         };
 
-        private FieldType LongSortwordType = new FieldType(Int64Field.TYPE_NOT_STORED)
+        private FieldType Int64SortwordType = new FieldType(Int64Field.TYPE_NOT_STORED)
+        {
+            DocValueType = DocValuesType.NUMERIC
+        };
+
+        private FieldType Int32SortwordType = new FieldType(Int32Field.TYPE_NOT_STORED)
         {
             DocValueType = DocValuesType.NUMERIC
         };
@@ -81,7 +90,7 @@ namespace Codex.Lucene.Search
                     doc.Add(new Int64Field(mapping.MappingInfo.FullName, value, Field.Store.NO));
                     break;
                 case SearchBehavior.Sortword:
-                    doc.Add(new Int64Field(mapping.MappingInfo.FullName, value, LongSortwordType));
+                    doc.Add(new Int64Field(mapping.MappingInfo.FullName, value, Int64SortwordType));
                     break;
                 default:
                     throw new NotImplementedException();
@@ -100,7 +109,17 @@ namespace Codex.Lucene.Search
 
         public void Visit(MappingBase mapping, int value)
         {
-            throw new NotImplementedException();
+            switch (mapping.MappingInfo.SearchBehavior.Value)
+            {
+                case SearchBehavior.Term:
+                    doc.Add(new Int32Field(mapping.MappingInfo.FullName, value, Field.Store.NO));
+                    break;
+                case SearchBehavior.Sortword:
+                    doc.Add(new Int32Field(mapping.MappingInfo.FullName, value, Int32SortwordType));
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
         }
     }
 }

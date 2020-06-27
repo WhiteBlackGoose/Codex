@@ -64,3 +64,58 @@ IMPORTANT!!!
 	Idea: Have cron job rewalk history from beginning to end to reconstruct cumulative filters in order. Its worth noting that if a descendant commit already has integrated a prior commits incomplete cumululative filter.
 	Its sufficient to just union with the updated cumulative filter rather than reconstructing from scratch. Luckily, the cumulative stored filter is mainly useful for viewing history which is based off of git data
 	that doesn't require any special analysis.
+
+Prefix indexing with Lucene
+	Currently in ElasticSearch for a given term "SolutionProjectAnalyzer", the following terms would be added for auto prefix:
+		"^SolutionProjectAnalyzer$"
+		"ProjectAnalyzer$"
+		"Analyzer$"
+
+	Notice that the first term containing the full string will be preceded by '^' character. This is to prioritize full name matches. However, this does make for less efficient use of the trie constructed in Lucene for terms. How can we still annotate the term is  a full name match without forking the trie with terms preceded by '^' or not. Maybe move leading '^' to end. Also need "skip list" to only search full name terms.
+
+Example:
+Names: ["SolutionProjectAnalyzer", "SolutionFileAnalyzer", "ManagedSolutionProjectAnalyzer", "InvocationSolutionInfoBuilderBase"]
+
+Terms:
+[
+	// From: SolutionProjectAnalyzer
+	"^SolutionProjectAnalyzer$",
+	"ProjectAnalyzer$",
+	"Analyzer$",
+
+	// From: SolutionFileAnalyzer
+	"^SolutionFileAnalyzer$",
+	"FileAnalyzer$",
+	"Analyzer$",
+
+	// From: ManagedSolutionProjectAnalyzer
+	"^ManagedSolutionProjectAnalyzer",
+	"SolutionProjectAnalyzer$",
+	"ProjectAnalyzer$",
+	"Analyzer$",
+
+	// From: InvocationSolutionInfoBuilder
+	"^InvocationSolutionInfoBuilder$",
+	"SolutionInfoBuilder$",
+	"InfoBuilder$",
+	"Builder$",
+]
+
+Prefixes:
+[
+	"^Solution"
+	"^SolutionProjectAnalyzer$"
+	"Solution"
+	"SolutionInfoBuilder"
+	"ProjectAnalyzer$"
+	"Analyzer$"
+
+]
+
+
+	New terms:
+		[0]: "Analyzer$"
+		[1]: "ProjectAnalyzer$"
+		[2]: "SolutionProjectAnalyzer$^"
+
+	Full name skip list: [2]
