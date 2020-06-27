@@ -18,7 +18,7 @@ using Lucene.Net.Codecs.PerField;
 using Lucene.Net.Codecs;
 using Lucene.Net.Codecs.Lucene46;
 
-namespace Codex.Lucene.Framework
+namespace Codex.Lucene.Framework.AutoPrefix
 {
     public class AutoPrefixFieldsConsumer : FieldsConsumer
     {
@@ -33,53 +33,17 @@ namespace Codex.Lucene.Framework
 
         public override TermsConsumer AddField(FieldInfo field)
         {
+            return new AutoPrefixTermsConsumer(inner.AddField(field), CreateTermStore(field), state.SegmentInfo.DocCount);
+        }
+
+        private IOrderingTermStore CreateTermStore(FieldInfo field)
+        {
+            throw new NotImplementedException();
         }
 
         protected override void Dispose(bool disposing)
         {
             throw new NotImplementedException();
-        }
-
-        private class AutoPrefixTermsConsumer : TermsConsumer
-        {
-            private readonly TermsConsumer inner;
-
-            public override IComparer<BytesRef> Comparer => inner.Comparer;
-
-            public override void Finish(long sumTotalTermFreq, long sumDocFreq, int docCount)
-            {
-                throw new NotImplementedException();
-            }
-
-            public override void FinishTerm(BytesRef text, TermStats stats)
-            {
-                throw new NotImplementedException();
-            }
-
-            public override PostingsConsumer StartTerm(BytesRef text)
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        private class AutoPrefixPostingsConsumer : PostingsConsumer
-        {
-            private readonly PostingsConsumer inner;
-
-            public override void AddPosition(int position, BytesRef payload, int startOffset, int endOffset)
-            {
-                throw new NotImplementedException();
-            }
-
-            public override void FinishDoc()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override void StartDoc(int docId, int freq)
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }

@@ -25,11 +25,17 @@ namespace Codex.Lucene.Framework.AutoPrefix
     {
         private readonly IOrderingTermStore termStore;
         private readonly TermsConsumer inner;
-        private readonly int docCount;
 
         public override IComparer<BytesRef> Comparer => inner.Comparer;
 
         private AutoPrefixNode currentNode;
+
+        public AutoPrefixTermsConsumer(TermsConsumer inner, IOrderingTermStore termStore, int docCount)
+        {
+            this.inner = inner;
+            this.termStore = termStore;
+            currentNode = new AutoPrefixNode(docCount, null);
+        }
 
         public override void Finish(long sumTotalTermFreq, long sumDocFreq, int docCount)
         {
@@ -89,30 +95,6 @@ namespace Codex.Lucene.Framework.AutoPrefix
             PersistNode();
             currentNode.Pop();
             currentNode = currentNode.Prior;
-        }
-    }
-
-    public interface IOrderingTermStore
-    {
-        void ForEachTerm(Action<(BytesRef term, DocIdSet docs)> action);
-        void Store(BytesRef term, DocIdSet docs);
-    }
-
-    public static class Helpers
-    {
-        public static IEnumerable<int> Enumerate(this DocIdSet docs)
-        {
-            var iterator = docs.GetIterator();
-            while (true)
-            {
-                var doc = iterator.NextDoc();
-                if (doc == DocIdSetIterator.NO_MORE_DOCS)
-                {
-                    yield break;
-                }
-
-                yield return doc;
-            }
         }
     }
 }

@@ -33,11 +33,11 @@ namespace Codex.Lucene.Framework.AutoPrefix
         public readonly AutoPrefixNode Prior;
         public AutoPrefixNode Next;
 
-        public AutoPrefixNode(int maxDoc, AutoPrefixNode prior)
+        public AutoPrefixNode(int docCount, AutoPrefixNode prior)
         {
             Prior = prior;
-            this.docCount = maxDoc;
-            this.builder = new OpenBitSet(maxDoc);
+            this.docCount = docCount;
+            this.builder = new OpenBitSet(docCount);
         }
 
         public AutoPrefixNode Push(BytesRef term)
