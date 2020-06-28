@@ -17,7 +17,7 @@ namespace Codex.ObjectModel
         }
     }
 
-    public class MappingBase
+    public class MappingBase : IMapping
     {
         public MappingInfo MappingInfo { get; }
 
@@ -45,7 +45,12 @@ namespace Codex.ObjectModel
         public virtual IEnumerable<MappingBase> Children { get; }
     }
 
-    public interface IMapping<T>
+    public interface IMapping
+    {
+        MappingInfo MappingInfo { get; }
+    }
+
+    public interface IMapping<T> : IMapping
     {
         void Visit(IVisitor visitor, T value);
     }

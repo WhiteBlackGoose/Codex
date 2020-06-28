@@ -17,6 +17,41 @@ using Lucene.Net.Documents;
 
 namespace Codex.Lucene.Search
 {
+    public class QueryFactory : IQueryFactory<Query>
+    {
+        public static readonly QueryFactory Instance = new QueryFactory();
+
+        public Query TermQuery(MappingBase mapping, string term)
+        {
+            return new TermQuery(new Term(mapping.MappingInfo.FullName, term));
+        }
+
+        public Query TermQuery(MappingBase mapping, bool term)
+        {
+            return TermQuery(mapping, term ? bool.TrueString : bool.FalseString);
+        }
+
+        public Query TermQuery(MappingBase mapping, long term)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Query TermQuery(MappingBase mapping, SymbolId term)
+        {
+            return TermQuery(mapping, term.Value);
+        }
+
+        public Query TermQuery(MappingBase mapping, DateTime term)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Query TermQuery(MappingBase mapping, int term)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class DocumentVisitor : IVisitor
     {
         private Document doc;
@@ -104,7 +139,7 @@ namespace Codex.Lucene.Search
 
         public void Visit(MappingBase mapping, DateTime value)
         {
-            throw new NotImplementedException();
+            Visit(mapping, value.Ticks);
         }
 
         public void Visit(MappingBase mapping, int value)

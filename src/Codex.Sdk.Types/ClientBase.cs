@@ -2,7 +2,7 @@ using Codex.Sdk.Search;
 
 namespace Codex.ObjectModel
 {
-    public interface IClient { }
+    public partial interface IClient { }
 
     public abstract partial class ClientBase : IClient
     {

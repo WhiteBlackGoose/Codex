@@ -1,5 +1,6 @@
 ﻿using Codex.ObjectModel;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,10 +25,10 @@ namespace Codex.Sdk.Search
 
         Task<IIndexSearchResponse<TResult>> QueryAsync<TResult>(
             IStoredFilterInfo storedFilterInfo,
-            Func<ICodexQueryBuilder<T>, CodexQuery<T>> filter,
+            Func<CodexQueryBuilder<T>, CodexQuery<T>> filter,
             OneOrMany<Mapping<T>> sort = null,
             int? take = null,
-            Func<ICodexQueryBuilder<T>, CodexQuery<T>> boost = null)
+            Func<CodexQueryBuilder<T>, CodexQuery<T>> boost = null)
         where TResult : T;
     }
 
@@ -36,10 +37,10 @@ namespace Codex.Sdk.Search
         public static Task<IIndexSearchResponse<T>> SearchAsync<T>(
             this IIndex<T> index,
             IStoredFilterInfo storedFilterInfo,
-            Func<ICodexQueryBuilder<T>, CodexQuery<T>> filter,
+            Func<CodexQueryBuilder<T>, CodexQuery<T>> filter,
             OneOrMany<Mapping<T>> sort = null,
             int? take = null,
-            Func<ICodexQueryBuilder<T>, CodexQuery<T>> boost = null)
+            Func<CodexQueryBuilder<T>, CodexQuery<T>> boost = null)
         {
             throw Placeholder.NotImplementedException();
         }
@@ -60,7 +61,7 @@ namespace Codex.Sdk.Search
 
     public class AdditionalSearchArguments<T>
     {
-        public Func<ICodexQueryBuilder<T>, CodexQuery<T>> Boost { get; set; }
+        public Func<CodexQueryBuilder<T>, CodexQuery<T>> Boost { get; set; }
         public List<Mapping<T>> SortFields { get; } = new List<Mapping<T>>();
         public int? Take { get; set; }
     }
@@ -82,30 +83,60 @@ namespace Codex.Sdk.Search
         And,
         Or,
         Term,
+        MatchPhrase
     }
 
-    public interface ICodexQueryBuilder<T>
+    public class CodexQueryBuilder<T>
     {
-        CodexQuery<T> Term<TValue>(Mapping<T, TValue> mapping, TValue term);
+        public virtual CodexQuery<T> Term<TValue>(Mapping<T, TValue> mapping, TValue term)
+        {
+            return new TermCodexQuery<T, TValue>(mapping, term);
+        }
 
-        CodexQuery<T> Terms<TValue>(Mapping<T, TValue> mapping, IEnumerable<TValue> terms);
+        public virtual CodexQuery<T> MatchPhrase(Mapping<T, string> mapping, string phrase)
+        {
+            return MatchPhrasePrefix(mapping, phrase, maxExpansions: 0);
+        }
 
-        CodexQuery<T> MatchPhrase(Mapping<T, string> mapping, string phrase);
+        public virtual CodexQuery<T> MatchPhrasePrefix(Mapping<T, string> mapping, string phrase, int maxExpansions)
+        {
+            return new MatchPhraseCodexQuery<T>(mapping, phrase, maxExpansions);
+        }
 
-        CodexQuery<T> MatchPhrasePrefix(Mapping<T, string> mapping, string phrase, int maxExpansions);
+        public virtual CodexQuery<T> Terms<TValue>(Mapping<T, TValue> mapping, IEnumerable<TValue> terms)
+        {
+            CodexQuery<T> q = null;
+            foreach (var term in terms)
+            {
+                q |= Term(mapping, term);
+            }
+
+            return q;
+        }
     }
 
     public class CodexQuery<T>
     {
-        public CodexQueryKind Kind { get; protected set; }
+        public CodexQueryKind Kind { get; }
+
+        public CodexQuery(CodexQueryKind kind)
+        {
+            Kind = kind;
+        }
 
         public static CodexQuery<T> operator &(CodexQuery<T> leftQuery, CodexQuery<T> rightQuery)
         {
+            if (leftQuery == null) return rightQuery;
+            else if (rightQuery == null) return leftQuery;
+
             return new BinaryCodexQuery<T>(CodexQueryKind.And, leftQuery, rightQuery);
         }
 
         public static CodexQuery<T> operator |(CodexQuery<T> leftQuery, CodexQuery<T> rightQuery)
         {
+            if (leftQuery == null) return rightQuery;
+            else if (rightQuery == null) return leftQuery;
+
             return new BinaryCodexQuery<T>(CodexQueryKind.Or, leftQuery, rightQuery);
         }
 
@@ -115,25 +146,62 @@ namespace Codex.Sdk.Search
         }
     }
 
-    public class TermCodexQuery<T> : CodexQuery<T>
+    public interface ITermQuery
     {
-        public TermCodexQuery(string term)
+        IMapping Mapping { get; }
+
+        TQuery CreateQuery<TQuery>(IQueryFactory<TQuery> factory);
+    }
+
+    public class TermCodexQuery<T, TValue> : CodexQuery<T>, ITermQuery
+    {
+        public TValue Term { get; }
+        public Mapping<T, TValue> Mapping { get; }
+
+        IMapping ITermQuery.Mapping => Mapping;
+
+        public TermCodexQuery(Mapping<T, TValue> mapping, TValue tern)
+            : base(CodexQueryKind.Term)
         {
-            Kind = CodexQueryKind.Term;
+            Mapping = mapping;
+        }
+
+        public TQuery CreateQuery<TQuery>(IQueryFactory<TQuery> factory)
+        {
+            return ((IQueryFactory<TQuery, TValue>)factory).TermQuery(Mapping, Term);
         }
     }
 
     public class BinaryCodexQuery<T> : CodexQuery<T>
     {
-        private CodexQueryKind and;
-        private CodexQuery<T> leftQuery;
-        private CodexQuery<T> rightQuery;
+        public CodexQuery<T> LeftQuery { get; }
+        public CodexQuery<T> RightQuery { get; }
 
-        public BinaryCodexQuery(CodexQueryKind and, CodexQuery<T> leftQuery, CodexQuery<T> rightQuery)
+        public BinaryCodexQuery(CodexQueryKind kind, CodexQuery<T> leftQuery, CodexQuery<T> rightQuery)
+            : base(kind)
         {
-            this.and = and;
-            this.leftQuery = leftQuery;
-            this.rightQuery = rightQuery;
+            this.LeftQuery = leftQuery;
+            this.RightQuery = rightQuery;
         }
+    }
+
+    public class MatchPhraseCodexQuery<T> : CodexQuery<T>
+    {
+        public string Phrase { get; }
+        public int MaxExpansions { get; }
+        public Mapping<T, string> Mapping { get; }
+
+        public MatchPhraseCodexQuery(Mapping<T, string> mapping, string phrase, int maxExpansions)
+            : base(CodexQueryKind.MatchPhrase)
+        {
+            Mapping = mapping;
+            Phrase = phrase;
+            MaxExpansions = maxExpansions;
+        }
+
+        //public TQuery CreateQuery<TQuery>(IQueryFactory<TQuery> factory)
+        //{
+        //    return ((IQueryFactory<TQuery, TValue>)factory).TermQuery(Mapping, Term);
+        //}
     }
 }

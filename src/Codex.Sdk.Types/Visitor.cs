@@ -27,6 +27,21 @@ namespace Codex.ObjectModel
         void Visit(MappingBase mapping, TValue value);
     }
 
+    public interface IQueryFactory<TQuery> : 
+        IQueryFactory<TQuery, string>,
+        IQueryFactory<TQuery, bool>,
+        IQueryFactory<TQuery, long>,
+        IQueryFactory<TQuery, SymbolId>,
+        IQueryFactory<TQuery, DateTime>,
+        IQueryFactory<TQuery, int>
+    {
+    }
+
+    public interface IQueryFactory<TQuery, TValue>
+    {
+        TQuery TermQuery(MappingBase mapping, TValue term);
+    }
+
     public static class Visitor
     {
         public static void Visit<T>(this IMapping<T> mapping, IVisitor visitor, IReadOnlyList<T> list)

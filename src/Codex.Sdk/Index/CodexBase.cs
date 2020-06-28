@@ -65,11 +65,16 @@ namespace Codex.Search
        where TClient : IClient
        where TConfiguration : CodexBaseConfiguration
     {
-        internal readonly TConfiguration Configuration;
+        public readonly TConfiguration Configuration;
 
-        private Mappings m;
+        private Mappings m = new Mappings();
 
         private ConcurrentDictionary<string, (DateTime resolveTime, string repositorySnapshotId)> resolvedRepositoryIds = new ConcurrentDictionary<string, (DateTime resolveTime, string repositorySnapshotId)>();
+
+        public CodexBase(TConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
         public Task<IndexQueryResponse<ReferencesResult>> FindAllReferencesAsync(FindAllReferencesArguments arguments)
         {
@@ -123,7 +128,7 @@ namespace Codex.Search
 
         private async Task<IndexQueryResponse<ReferencesResult>> FindReferencesCore(FindSymbolArgumentsBase arguments, Func<StoredFilterSearchContext<TClient>, Task<IIndexSearchResponse<IReferenceSearchModel>>> getReferencesAsync)
         {
-            return await UseClientSingle(arguments, async context =>
+            return await UseClientSingle<ReferencesResult>(arguments, async (context, responseBuilder) =>
             {
                 var client = context.Client;
 
@@ -170,7 +175,7 @@ namespace Codex.Search
         public async Task<IndexQueryResponse<IBoundSourceFile>> GetSourceAsync(GetSourceArguments arguments)
         {
             // TODO: Get text source if bound source is unavailable.
-            return await UseClientSingle<IBoundSourceFile>(arguments, async context =>
+            return await UseClientSingle<IBoundSourceFile>(arguments, async (context, responseBuilder) =>
             {
                 var client = context.Client;
 
@@ -235,7 +240,7 @@ namespace Codex.Search
 
         public async Task<IndexQueryResponse<GetProjectResult>> GetProjectAsync(GetProjectArguments arguments)
         {
-            return await UseClientSingle<GetProjectResult>(arguments, async context =>
+            return await UseClientSingle<GetProjectResult>(arguments, async (context, responseBuilder) =>
             {
                 var client = context.Client;
 
@@ -311,7 +316,7 @@ namespace Codex.Search
                 };
             }
 
-            return await UseClient(arguments, async context =>
+            return await UseClient<ISearchResult>(arguments, async (context, responseBuilder) =>
             {
                 Placeholder.Todo("Allow filtering text matches by extension/path");
 
@@ -422,7 +427,7 @@ namespace Codex.Search
         //}
 
         private CodexQuery<IDefinitionSearchModel> GetTermsFilter(
-            ICodexQueryBuilder<IDefinitionSearchModel> cq,
+            CodexQueryBuilder<IDefinitionSearchModel> cq,
             string[] terms,
             bool boostOnly = false)
         {
@@ -440,14 +445,14 @@ namespace Codex.Search
             return query;
         }
 
-        private CodexQuery<IDefinitionSearchModel> KeywordFilter(string term, ICodexQueryBuilder<IDefinitionSearchModel> fq)
+        private CodexQuery<IDefinitionSearchModel> KeywordFilter(string term, CodexQueryBuilder<IDefinitionSearchModel> fq)
         {
             Placeholder.Todo("Why two different keywords fields?");
             return fq.Term(m.Definition.Keywords, term.ToLowerInvariant())
                     | fq.Term(m.Definition.Definition.Keywords, term.ToLowerInvariant());
         }
 
-        private CodexQuery<IDefinitionSearchModel> NameFilter(string term, ICodexQueryBuilder<IDefinitionSearchModel> fq, bool boostOnly)
+        private CodexQuery<IDefinitionSearchModel> NameFilter(string term, CodexQueryBuilder<IDefinitionSearchModel> fq, bool boostOnly)
         {
             var terms = term.CreateNameTerm();
 
@@ -461,14 +466,14 @@ namespace Codex.Search
             }
         }
 
-        private CodexQuery<IDefinitionSearchModel> NameFilterCore(ICodexQueryBuilder<IDefinitionSearchModel> fq, QualifiedNameTerms terms)
+        private CodexQuery<IDefinitionSearchModel> NameFilterCore(CodexQueryBuilder<IDefinitionSearchModel> fq, QualifiedNameTerms terms)
         {
             return fq.Term(m.Definition.Definition.ShortName, terms.NameTerm)
                 | fq.Term(m.Definition.Definition.ShortName, terms.SecondaryNameTerm)
                 | fq.Term(m.Definition.Definition.AbbreviatedName, terms.RawNameTerm);
         }
 
-        private CodexQuery<IDefinitionSearchModel> QualifiedNameTermFilters(string term, ICodexQueryBuilder<IDefinitionSearchModel> fq)
+        private CodexQuery<IDefinitionSearchModel> QualifiedNameTermFilters(string term, CodexQueryBuilder<IDefinitionSearchModel> fq)
         {
             var terms = ParseContainerAndName(term);
 
@@ -484,13 +489,13 @@ namespace Codex.Search
                 & fq.Term(m.Definition.Definition.ContainerQualifiedName, terms.ContainerTerm);
         }
 
-        private CodexQuery<IDefinitionSearchModel> IndexTermFilters(string term, ICodexQueryBuilder<IDefinitionSearchModel> fq)
+        private CodexQuery<IDefinitionSearchModel> IndexTermFilters(string term, CodexQueryBuilder<IDefinitionSearchModel> fq)
         {
             return Placeholder.Value<CodexQuery<IDefinitionSearchModel>>("Determine how index queries will be represented? Probably as a stored filter");
             //return fq.Term("_index", term.ToLowerInvariant());
         }
 
-        private CodexQuery<IDefinitionSearchModel> ApplyTermFilter(string term, ICodexQueryBuilder<IDefinitionSearchModel> fq, bool boostOnly)
+        private CodexQuery<IDefinitionSearchModel> ApplyTermFilter(string term, CodexQueryBuilder<IDefinitionSearchModel> fq, bool boostOnly)
         {
             var d = NameFilter(term, fq, boostOnly);
 
