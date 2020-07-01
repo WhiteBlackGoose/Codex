@@ -1,10 +1,10 @@
 version: 1.0.{build}
-image: Visual Studio 2017 Preview
+image: Visual Studio 2019
 build_script:
 - cmd: >-
     nuget restore
 
-    msbuild /m /clp:v=m Codex.sln /bl /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+    msbuild /r /m /clp:v=m Codex.sln /bl /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 artifacts:
 - path: msbuild.binlog
   name: MSBuild Log
