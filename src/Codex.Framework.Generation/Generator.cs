@@ -107,6 +107,7 @@ namespace Codex.Framework.Generation
                 .Where(t => t.IsInterface && !t.IsGenericType && t.GetMethods().Where(m => !m.IsSpecialName).Count() == 0)
                 //.Where(t => t.IsAssignableFrom(typeof(ISearchEntity)))
                 .Select(ToTypeDefinition)
+                .Where(t => !t.Exclude)
                 .ToList();
 
             foreach (var typeDefinition in Types)
@@ -145,7 +146,9 @@ namespace Codex.Framework.Generation
                 int baseTypeCount = 0;
                 IEnumerable<Type> baseTypeEnumerable = Enumerable.Empty<Type>();
 
-                foreach (var i in interfaces.ToList())
+                var allInterfaces = interfaces.ToList();
+
+                foreach (var i in allInterfaces)
                 {
                     interfaces.RemoveWhere(t => t != i && t.IsAssignableFrom(i));
                 }
@@ -173,7 +176,7 @@ namespace Codex.Framework.Generation
                     baseTypeEnumerable = new[] { baseType }.Concat(baseType.GetInterfaces());
                 }
 
-                typeDefinition.Interfaces.AddRange(interfaces.Except(baseTypeEnumerable).Where(t => DefinitionsByType.ContainsKey(t)).Select(t => DefinitionsByType[t]));
+                typeDefinition.Interfaces.AddRange(allInterfaces.Except(baseTypeEnumerable).Where(t => DefinitionsByType.ContainsKey(t)).Select(t => DefinitionsByType[t]));
             }
 
             foreach (var typeDefinition in DefinitionsByType.Values)
@@ -232,21 +235,6 @@ namespace Codex.Framework.Generation
 
             bool isSearchRelevant(TypeDefinition type)
             {
-                if (type.Type == typeof(IBoundSourceSearchModel))
-                {
-
-                }
-
-                if (type.Type == typeof(IChunkedSourceFile))
-                {
-
-                }
-
-                if (type.Type == typeof(IChunkReference))
-                {
-
-                }
-
                 if (!visitedTypes.Add(type))
                 {
                     return type.IsSearchRelevant;
@@ -727,7 +715,8 @@ namespace Codex.Framework.Generation
                         property.PropertyTypeDefinition?.MappingTypeReference ?? property.PropertyType.AsReference().AsMappingType(),
                         declarationTypeDefinition.MappingIndexer,
                         property.SearchBehavior,
-                        declarationTypeDefinition.MappingVisitMethod);
+                        declarationTypeDefinition.MappingVisitMethod,
+                        property.AllowedStages);
                 }
 
                 if (property.InitPropertyType != null)
@@ -981,23 +970,27 @@ namespace Codex.Framework.Generation
             return new CodeTypeReference("Mapping", new CodeTypeReference("TRoot"), type);
         }
 
-        public static void AddMappingProperty(this CodeTypeDeclaration declaringType, string name, CodeTypeReference propertyType,
+        public static void AddMappingProperty(this CodeTypeDeclaration declaringType, 
+            string name, 
+            CodeTypeReference propertyType,
             CodeMemberProperty indexer,
             SearchBehavior? searchBehavior = null,
-            CodeMemberMethod visitMethod = null)
+            CodeMemberMethod visitMethod = null,
+            ObjectStage objectStage = ObjectStage.All)
         {
             AddLazyProperty(declaringType, name, propertyType, new CodeObjectCreateExpression(propertyType,
                 new CodeObjectCreateExpression(
                     typeof(ObjectModel.MappingInfo),
                     new CodePrimitiveExpression(name),
                     new CodeFieldReferenceExpression(null, nameof(ObjectModel.MappingBase.MappingInfo)),
-                    searchBehavior == null ? (CodeExpression)new CodePrimitiveExpression(null) : new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(typeof(SearchBehavior)), searchBehavior.ToString())
+                    searchBehavior == null ? (CodeExpression)new CodePrimitiveExpression(null) : new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(typeof(SearchBehavior)), searchBehavior.ToString()),
+                    new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(typeof(ObjectStage)), objectStage.ToString())
                     )));
 
             if (visitMethod != null)
             {
                 visitMethod.Statements.Add(new CodeMethodInvokeExpression(
-                    new CodeMethodReferenceExpression(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), name), visitMethod.Name),
+                    new CodeMethodReferenceExpression(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), name), nameof(ObjectModel.Visitor.VisitEx)),
                     new CodeArgumentReferenceExpression("visitor"),
                     new CodeFieldReferenceExpression(new CodeArgumentReferenceExpression("value"), name)));
             }

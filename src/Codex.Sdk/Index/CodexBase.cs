@@ -93,7 +93,7 @@ namespace Codex.Search
                 context,
                 cq =>
                     cq.Term(m.Reference.Reference.ProjectId, arguments.ProjectId)
-                    & cq.Term(m.Reference.Reference.Id, Placeholder.Value<SymbolId>()),
+                    & cq.Term(m.Reference.Reference.Id, arguments.SymbolId),
                 sort: m.Reference.ProjectId,
                 take: arguments.MaxResults);
         }
@@ -112,7 +112,7 @@ namespace Codex.Search
                     context,
                     cq =>
                         cq.Term(m.Reference.Reference.ProjectId, arguments.ProjectId)
-                        & cq.Term(m.Reference.Reference.Id, Placeholder.Value<SymbolId>())
+                        & cq.Term(m.Reference.Reference.Id, arguments.SymbolId)
                         & cq.Term(m.Reference.Reference.ReferenceKind, nameof(ReferenceKind.Definition)),
                     take: arguments.MaxResults);
 
@@ -166,7 +166,7 @@ namespace Codex.Search
                     context,
                     cq =>
                         cq.Term(m.Definition.Definition.ProjectId, arguments.ProjectId)
-                        & cq.Term(m.Definition.Definition.Id, Placeholder.Value<SymbolId>()),
+                        & cq.Term(m.Definition.Definition.Id, arguments.SymbolId),
                     take: 1);
 
             return definitionsResult.Hits.FirstOrDefault()?.Source.Definition.ShortName;
@@ -505,7 +505,7 @@ namespace Codex.Search
                 d |= QualifiedNameTermFilters(term, fq);
                 d |= IndexTermFilters(term, fq);
                 d |= KeywordFilter(term, fq);
-                d |= fq.Term(m.Definition.Definition.Id, Placeholder.Value<SymbolId>(term.ToLowerInvariant()));
+                d |= fq.Term(m.Definition.Definition.Id, term.ToLowerInvariant());
                 d |= fq.Term(m.Definition.Definition.ProjectId, term);
                 d |= fq.Term(m.Definition.Definition.Kind, term);
             }

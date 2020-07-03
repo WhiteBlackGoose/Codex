@@ -62,11 +62,23 @@ namespace Codex.Lucene.Search
 
         public bool ShouldVisit(MappingInfo mapping)
         {
-            throw new NotImplementedException();
+            if (mapping == null || (mapping.ObjectStage & ObjectStage.Index) != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void Visit(MappingBase mapping, string value)
         {
+            if (string.IsNullOrEmpty(value))
+            {
+                return;
+            }
+
             switch (mapping.MappingInfo.SearchBehavior.Value)
             {
 

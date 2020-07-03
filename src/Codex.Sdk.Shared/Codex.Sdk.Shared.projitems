@@ -9,19 +9,8 @@
     <Import_RootNamespace>Codex.Sdk.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)EntityTypes.g.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IIndex.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mapping.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ObjectModel\SearchEntity.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SymbolKind.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)\**\*.cs" />
+    <Compile Remove="$(MSBuildThisFileDirectory)EntityTypes.target.cs" />
     <None Include="$(MSBuildThisFileDirectory)EntityTypes.target.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Glyph.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ObjectModel\BoundSourceInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ObjectModel\ReferenceKind.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ReferencedProject.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SymbolId.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Types.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utilities\CollectionUtilities.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utilities\SerializationUtilities.cs" />
   </ItemGroup>
 </Project>

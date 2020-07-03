@@ -18,6 +18,7 @@
     <ProjectReference Include="..\Codex.Analysis\Codex.Analysis.csproj" />
     <ProjectReference Include="..\Codex.ElasticSearch\Codex.ElasticSearch.csproj" />
     <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />
+    <ProjectReference Include="..\Codex.Lucene\Codex.Lucene.csproj" />
     <ProjectReference Include="..\Codex\Codex.csproj" UseAppConfig="true" />
     <ProjectReference Include="..\TestProjects\CodexTestRepo\CodexTestCSharpLibrary\CodexTestCSharpLibrary.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>

@@ -10,7 +10,8 @@ using Codex.Sdk.Search;
 
 namespace Codex.ObjectModel
 {
-    public interface IVisitor : 
+    [GeneratorExclude]
+    public interface IVisitor : IVisitorBase,
         IValueVisitor<string>,
         IValueVisitor<bool>,
         IValueVisitor<long>,
@@ -19,12 +20,16 @@ namespace Codex.ObjectModel
         IValueVisitor<DateTime>,
         IValueVisitor<int>
     {
-        bool ShouldVisit(MappingInfo mapping);
     }
 
-    public interface IValueVisitor<TValue>
+    public interface IValueVisitor<TValue> : IVisitorBase
     { 
         void Visit(MappingBase mapping, TValue value);
+    }
+
+    public interface IVisitorBase
+    {
+        bool ShouldVisit(MappingInfo mapping);
     }
 
     public interface IQueryFactory<TQuery> : 
@@ -54,6 +59,39 @@ namespace Codex.ObjectModel
                 {
                     mapping.Visit(visitor, item);
                 }
+            }
+        }
+
+        public static void VisitEx<T>(this IMapping<T> mapping, IVisitor visitor, T value)
+        {
+            if (visitor.ShouldVisit(mapping.MappingInfo))
+            {
+                mapping.Visit(visitor, value);
+            }
+        }
+
+        public static void VisitEx<T>(this IMapping<T> mapping, IVisitor visitor, IReadOnlyList<T> value)
+            where T : class
+        {
+            if (visitor.ShouldVisit(mapping.MappingInfo))
+            {
+                mapping.Visit(visitor, value);
+            }
+        }
+
+        public static void VisitEx<T>(this IValueMapping<T> mapping, IValueVisitor<T> visitor, T value)
+        {
+            if (visitor.ShouldVisit(mapping.MappingInfo))
+            {
+                mapping.Visit(visitor, value);
+            }
+        }
+
+        public static void VisitEx<T>(this IValueMapping<T> mapping, IValueVisitor<T> visitor, IReadOnlyList<T> value)
+        {
+            if (visitor.ShouldVisit(mapping.MappingInfo))
+            {
+                mapping.Visit(visitor, value);
             }
         }
     }

@@ -42,7 +42,7 @@ namespace Codex.Lucene.Search
             await Task.Yield();
 
             Writer = new IndexWriter(
-                    FSDirectory.Open(Store.Configuration.Directory),
+                    Store.Configuration.OpenIndexDirectory(SearchType),
                     new IndexWriterConfig(LuceneVersion.LUCENE_48, new StandardAnalyzer(LuceneVersion.LUCENE_48)));
         }
 

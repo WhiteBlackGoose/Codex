@@ -28,7 +28,14 @@ namespace Codex.ElasticSearch.Tests
         {
             (var store, var codex) = await InitializeAsync("estest.", populateCount: 1);
 
+            var result = await codex.SearchAsync(new SearchArguments()
+            {
+                SearchString = "xedocbase",
+                AllowReferencedDefinitions = false,
+                TextSearch = false
+            });
 
+            Assert.False(result.Error != null);
         }
 
         private async Task<(ICodexStore store, ICodex codex)> InitializeAsync(
@@ -43,7 +50,7 @@ namespace Codex.ElasticSearch.Tests
             string directory = Path.GetFullPath($@"tests\{testName}");
             if (Directory.Exists(directory))
             {
-                Directory.Delete(testName, true);
+                Directory.Delete(directory, true);
             }
 
             var configuration = new LuceneConfiguration(directory);

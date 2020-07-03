@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using Codex.ObjectModel;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeDom.Providers.DotNetCompilerPlatform;
 using System;
 using System.CodeDom;
@@ -55,6 +56,7 @@ namespace Codex.Framework.Generation
         }
 
         public bool IsAdapter;
+        public bool Exclude;
 
         public List<TypeDefinition> Interfaces = new List<TypeDefinition>();
         public SearchType SearchType;
@@ -68,10 +70,6 @@ namespace Codex.Framework.Generation
         public TypeDefinition(Type type)
         {
             Type = type;
-            if (type == typeof(ICodeSymbol))
-            {
-
-            }
 
             // Remove leading I from interface name
             ExplicitClassName = type.GetAttribute<GeneratedClassNameAttribute>()?.Name;
@@ -81,6 +79,7 @@ namespace Codex.Framework.Generation
             BuilderClassName = ClassName + "Builder";
             AllowedStages = type.GetAllowedStages();
             IsAdapter = type.GetAttribute<AdapterTypeAttribute>() != null;
+            Exclude = type.GetAttribute<GeneratorExcludeAttribute>() != null;
 
             MappingTypeDeclaration = new CodeTypeDeclaration(ClassName + "Mapping")
             {
@@ -97,7 +96,7 @@ namespace Codex.Framework.Generation
 
             MappingVisitMethod = new CodeMemberMethod()
             {
-                Name = "Visit",
+                Name = nameof(IMapping<bool>.Visit),
                 Attributes = MemberAttributes.Public,
                 Parameters =
                     {
@@ -105,6 +104,12 @@ namespace Codex.Framework.Generation
                         new CodeParameterDeclarationExpression(Type, "value")
                     }
             };
+
+            MappingVisitMethod.Statements.Add(new CodeConditionStatement(
+                new CodeBinaryOperatorExpression(
+                    new CodeArgumentReferenceExpression("value"),
+                    CodeBinaryOperatorType.IdentityEquality,
+                    new CodePrimitiveExpression(null)), new CodeMethodReturnStatement()));
         }
     }
 

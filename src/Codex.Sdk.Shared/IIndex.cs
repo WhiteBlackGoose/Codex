@@ -42,7 +42,12 @@ namespace Codex.Sdk.Search
             int? take = null,
             Func<CodexQueryBuilder<T>, CodexQuery<T>> boost = null)
         {
-            throw Placeholder.NotImplementedException();
+            return index.QueryAsync<T>(
+                storedFilterInfo,
+                filter,
+                sort,
+                take,
+                boost);
         }
     }
 
@@ -83,6 +88,7 @@ namespace Codex.Sdk.Search
         And,
         Or,
         Term,
+        Negate,
         MatchPhrase
     }
 
@@ -90,6 +96,11 @@ namespace Codex.Sdk.Search
     {
         public virtual CodexQuery<T> Term<TValue>(Mapping<T, TValue> mapping, TValue term)
         {
+            if (term == null)
+            {
+                return null;
+            }
+
             return new TermCodexQuery<T, TValue>(mapping, term);
         }
 
@@ -115,6 +126,19 @@ namespace Codex.Sdk.Search
         }
     }
 
+    public static class CodexQueryBuilderExtensions
+    {
+        public static CodexQuery<T> Term<T>(this CodexQueryBuilder<T> cq, Mapping<T, SymbolId> mapping, string value)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+
+            return cq.Term(mapping, SymbolId.UnsafeCreateWithValue(value));
+        }
+    }
+
     public class CodexQuery<T>
     {
         public CodexQueryKind Kind { get; }
@@ -126,8 +150,8 @@ namespace Codex.Sdk.Search
 
         public static CodexQuery<T> operator &(CodexQuery<T> leftQuery, CodexQuery<T> rightQuery)
         {
-            if (leftQuery == null) return rightQuery;
-            else if (rightQuery == null) return leftQuery;
+            if (leftQuery == null) return rightQuery ?? null;
+            else if (rightQuery == null) return leftQuery ?? null;
 
             return new BinaryCodexQuery<T>(CodexQueryKind.And, leftQuery, rightQuery);
         }
@@ -142,7 +166,9 @@ namespace Codex.Sdk.Search
 
         public static CodexQuery<T> operator !(CodexQuery<T> query)
         {
-            throw Placeholder.NotImplementedException();
+            if (query == null) return null;
+
+            return new NegateCodexQuery<T>(query);
         }
     }
 
@@ -156,19 +182,31 @@ namespace Codex.Sdk.Search
     public class TermCodexQuery<T, TValue> : CodexQuery<T>, ITermQuery
     {
         public TValue Term { get; }
-        public Mapping<T, TValue> Mapping { get; }
+        public MappingBase Mapping { get; }
 
         IMapping ITermQuery.Mapping => Mapping;
 
-        public TermCodexQuery(Mapping<T, TValue> mapping, TValue tern)
+        public TermCodexQuery(MappingBase mapping, TValue term)
             : base(CodexQueryKind.Term)
         {
             Mapping = mapping;
+            Term = term;
         }
 
         public TQuery CreateQuery<TQuery>(IQueryFactory<TQuery> factory)
         {
             return ((IQueryFactory<TQuery, TValue>)factory).TermQuery(Mapping, Term);
+        }
+    }
+
+    public class NegateCodexQuery<T> : CodexQuery<T>
+    {
+        public CodexQuery<T> InnerQuery { get; }
+
+        public NegateCodexQuery(CodexQuery<T> innerQuery)
+            : base(CodexQueryKind.Negate)
+        {
+            InnerQuery = innerQuery;
         }
     }
 

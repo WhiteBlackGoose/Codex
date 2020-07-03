@@ -24,11 +24,14 @@ namespace Codex.Lucene.Search
         {
             //Reader = DirectoryReader.Open(FSDirectory.Open(configuration.Directory));
             //Searcher = new IndexSearcher(Reader);
+            Client = new LuceneClient(this);
         }
 
-        protected override Task<StoredFilterSearchContext<LuceneClient>> GetStoredFilterContextAsync(ContextCodexArgumentsBase arguments)
+        public LuceneClient Client { get; }
+
+        protected override async Task<StoredFilterSearchContext<LuceneClient>> GetStoredFilterContextAsync(ContextCodexArgumentsBase arguments)
         {
-            throw new NotImplementedException();
+            return new StoredFilterSearchContext<LuceneClient>(Client, "", "", "");
         }
     }
 
@@ -64,7 +67,7 @@ namespace Codex.Lucene.Search
                 this.searchType = searchType;
                 mapping = (SearchEntityMapping<T>)client.mappings[searchType];
 
-                Reader = DirectoryReader.Open(FSDirectory.Open(Path.Combine(client.codex.Configuration.Directory, searchType.IndexName)));
+                Reader = DirectoryReader.Open(client.codex.Configuration.OpenIndexDirectory(searchType));
                 Searcher = new IndexSearcher(Reader);
             }
 
@@ -92,14 +95,23 @@ namespace Codex.Lucene.Search
                 {
                     case CodexQueryKind.And:
                     case CodexQueryKind.Or:
-                        var bq = new BooleanQuery();
-                        var binaryQuery = (BinaryCodexQuery<T>)query;
-                        bq.Add(FromCodexQuery(binaryQuery.LeftQuery), query.Kind == CodexQueryKind.And ? Occur.MUST : Occur.SHOULD);
-                        bq.Add(FromCodexQuery(binaryQuery.RightQuery), query.Kind == CodexQueryKind.And ? Occur.MUST : Occur.SHOULD);
-                        return bq;
+                        {
+                            var bq = new BooleanQuery();
+                            var binaryQuery = (BinaryCodexQuery<T>)query;
+                            bq.Add(FromCodexQuery(binaryQuery.LeftQuery), query.Kind == CodexQueryKind.And ? Occur.MUST : Occur.SHOULD);
+                            bq.Add(FromCodexQuery(binaryQuery.RightQuery), query.Kind == CodexQueryKind.And ? Occur.MUST : Occur.SHOULD);
+                            return bq;
+                        }
                     case CodexQueryKind.Term:
                         var tq = (ITermQuery)query;
                         return tq.CreateQuery(QueryFactory.Instance);
+                    case CodexQueryKind.Negate:
+                        {
+                            var nq = (NegateCodexQuery<T>)query;
+                            var bq = new BooleanQuery();
+                            bq.Add(FromCodexQuery(nq.InnerQuery), Occur.MUST_NOT);
+                            return bq;
+                        }
                     case CodexQueryKind.MatchPhrase:
                         //var mq = (MatchPhraseCodexQuery<T>)query;
                         //var result = new MultiPhraseQuery();

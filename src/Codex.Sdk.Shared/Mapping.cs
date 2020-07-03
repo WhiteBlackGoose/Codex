@@ -68,7 +68,7 @@ namespace Codex.Schema
 
 namespace Codex.ObjectModel
 {
-    public class Mapping<TRoot, TValue> : Mapping<TRoot>
+    public class Mapping<TRoot, TValue> : Mapping<TRoot>, IValueMapping<TValue>
     {
         public Mapping(MappingInfo info) : base(info)
         {

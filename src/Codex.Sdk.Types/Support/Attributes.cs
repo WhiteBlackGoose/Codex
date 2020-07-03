@@ -39,6 +39,11 @@ namespace Codex
     }
 
     [AttributeUsage(AttributeTargets.Interface, Inherited = false, AllowMultiple = false)]
+    public sealed class GeneratorExcludeAttribute : Attribute
+    {
+    }
+
+    [AttributeUsage(AttributeTargets.Interface, Inherited = false, AllowMultiple = false)]
     public sealed class AdapterTypeAttribute : Attribute
     {
     }

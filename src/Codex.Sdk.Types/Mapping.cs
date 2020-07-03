@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Codex.ObjectModel;
+using Codex.Utilities;
 
 namespace Codex.ObjectModel
 {
@@ -7,13 +9,16 @@ namespace Codex.ObjectModel
         public string Name { get; }
         public string FullName { get; }
         public SearchBehavior? SearchBehavior { get; }
+        public ObjectStage ObjectStage { get; }
 
-        public MappingInfo(string name, MappingInfo parent, SearchBehavior? searchBehavior)
+        public MappingInfo(string name, MappingInfo parent, SearchBehavior? searchBehavior, ObjectStage objectStage = ObjectStage.All)
         {
             Name = name;
             FullName = parent == null
                 ? Name
                 : string.Join(".", parent.Name, Name);
+            SearchBehavior = searchBehavior;
+            ObjectStage = objectStage;
         }
     }
 
@@ -30,7 +35,7 @@ namespace Codex.ObjectModel
 
         public bool IsMatch(string fullName, string childName)
         {
-            var childStartIndex = MappingInfo.FullName.Length + 1;
+            var childStartIndex = MappingInfo?.Name == null ? 0 : MappingInfo.FullName.Length + 1;
             var childFullNameLength = childStartIndex + childName.Length;
 
             if (childFullNameLength <= fullName.Length 
@@ -55,28 +60,23 @@ namespace Codex.ObjectModel
         void Visit(IVisitor visitor, T value);
     }
 
+    public interface IValueMapping<T> : IMapping
+    {
+        void Visit(IValueVisitor<T> visitor, T value);
+
+        void Visit(IValueVisitor<T> visitor, IReadOnlyList<T> value);
+    }
+
     public partial class Mappings : MappingBase
     {
-        private MappingBase[] _mappingsBySearchType = new MappingBase[SearchTypes.RegisteredSearchTypes.Count];
+        private LazySearchTypesMap<MappingBase> _mappingsByType;
 
-        public MappingBase this[SearchType searchType]
-        {
-            get
-            {
-                var result = _mappingsBySearchType[searchType.Id];
-                if (result == null)
-                {
-                    result = this[searchType.Name];
-                    _mappingsBySearchType[searchType.Id] = result;
-                }
-
-                return result;
-            }
-        }
+        public MappingBase this[SearchType searchType] => _mappingsByType[searchType];
 
         public Mappings() 
             : base(info: null)
         {
+            _mappingsByType = new LazySearchTypesMap<MappingBase>(s => this[s.Name]);
         }
     }
 }
