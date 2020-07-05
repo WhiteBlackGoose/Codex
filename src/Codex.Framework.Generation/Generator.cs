@@ -139,6 +139,9 @@ namespace Codex.Framework.Generation
                 }
             }
 
+            var propComparer = new EqualityComparerBuilder<PropertyDefinition>()
+                .CompareByAfter(p => p.Name);
+
             foreach (var typeDefinition in DefinitionsByType.Values)
             {
                 var interfaces = typeDefinition.Type.GetInterfaces().ToHashSet();
@@ -177,6 +180,9 @@ namespace Codex.Framework.Generation
                 }
 
                 typeDefinition.Interfaces.AddRange(allInterfaces.Except(baseTypeEnumerable).Where(t => DefinitionsByType.ContainsKey(t)).Select(t => DefinitionsByType[t]));
+
+                typeDefinition.GeneratedProperties = typeDefinition.Properties.Concat(typeDefinition.Interfaces.SelectMany(t => t.Properties))
+                    .Distinct(propComparer).ToList();
             }
 
             foreach (var typeDefinition in DefinitionsByType.Values)
@@ -369,7 +375,7 @@ namespace Codex.Framework.Generation
                         HasGet = true
                     });
 
-                    ClientBaseClass.AddLazyProperty(
+                    ClientBaseClass.Members.AddLazyProperty(
                         searchType.Name + "Index",
                         typeof(IIndex<>).MakeGenericTypeReference(searchType.Type.AsReference()),
                         new CodeMethodInvokeExpression(
@@ -401,7 +407,7 @@ namespace Codex.Framework.Generation
 
             foreach (var typeDefinition in this.Types)
             {
-                // Exclude interfaces for which aren't data types
+                // Exclude interfaces for which there aren't data types
                 if (typeDefinition.Type.GetMethods().Where(m => !m.IsSpecialName).Count() != 0)
                 {
                     continue;
@@ -508,7 +514,7 @@ namespace Codex.Framework.Generation
                 }
 
 
-                PopulateProperties(visitedTypeDefinitions, usedMemberNames, typeDefinition, typeDeclaration);
+                //PopulateProperties(visitedTypeDefinitions, usedMemberNames, typeDefinition, typeDeclaration);
 
                 if (typeDefinition.SearchRelevantBase != null)
                 {
@@ -582,6 +588,10 @@ namespace Codex.Framework.Generation
                 //}
             }
 
+            Types.ForEach(t => t.GenerateProperties());
+            Types.ForEach(t => t.GenerateBuilder());
+            Types.ForEach(t => t.GenerateMapping());
+
             typeMappingCreatorMethod.Statements.Add(new CodeMethodReturnStatement(new CodeVariableReferenceExpression(typeMappingVariableName)));
 
             using (var writer = new StreamWriter(ElasticSearchTypesTarget.Path))
@@ -644,7 +654,6 @@ namespace Codex.Framework.Generation
                 Attributes = MemberAttributes.Public,
                 ReturnType = new CodeTypeReference("TTarget")
             };
-
 
             var copyConstructor = new CodeConstructor()
             {
@@ -978,7 +987,7 @@ namespace Codex.Framework.Generation
             CodeMemberMethod visitMethod = null,
             ObjectStage objectStage = ObjectStage.All)
         {
-            AddLazyProperty(declaringType, name, propertyType, new CodeObjectCreateExpression(propertyType,
+            AddLazyProperty(declaringType.Members, name, propertyType, new CodeObjectCreateExpression(propertyType,
                 new CodeObjectCreateExpression(
                     typeof(ObjectModel.MappingInfo),
                     new CodePrimitiveExpression(name),
@@ -1007,10 +1016,10 @@ namespace Codex.Framework.Generation
                 ));
         }
 
-        public static void AddLazyProperty(this CodeTypeDeclaration declaringType, string name, CodeTypeReference propertyType, CodeExpression initializer)
+        public static void AddLazyProperty(this CodeTypeMemberCollection members, string name, CodeTypeReference propertyType, CodeExpression initializer)
         {
             var field = new CodeMemberField(propertyType, $"_lazy{name}");
-            declaringType.Members.Add(field);
+            members.Add(field);
 
             var property = new CodeMemberProperty()
             {
@@ -1038,7 +1047,7 @@ namespace Codex.Framework.Generation
                 }
             };
 
-            declaringType.Members.Add(property);
+            members.Add(property);
         }
 
         public static CodeTypeReference AsReference(this Type type)

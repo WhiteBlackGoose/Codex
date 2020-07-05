@@ -23,6 +23,7 @@ namespace Codex.Framework.Generation
         public Type Type;
 
         public List<PropertyDefinition> Properties;
+        public List<PropertyDefinition> GeneratedProperties;
 
         public string ExplicitClassName;
         public string ClassName;
@@ -63,7 +64,10 @@ namespace Codex.Framework.Generation
 
         public CodeTypeReference MappingTypeReference;
 
+        public readonly CodeTypeDeclaration BuilderTypeDeclaration;
+
         public readonly CodeTypeDeclaration MappingTypeDeclaration;
+
         public CodeMemberProperty MappingIndexer = Generator.CreateMappingIndexer();
         public readonly CodeMemberMethod MappingVisitMethod;
 
@@ -91,6 +95,12 @@ namespace Codex.Framework.Generation
                 }
             };
 
+            BuilderTypeDeclaration = new CodeTypeDeclaration(ClassName)
+            {
+                IsClass = true,
+                IsPartial = true
+            };
+
             MappingTypeReference = new CodeTypeReference(ClassName + "Mapping", new CodeTypeReference("TRoot"));
             Properties = type.GetProperties().Select(p => new PropertyDefinition(p)).ToList();
 
@@ -111,57 +121,50 @@ namespace Codex.Framework.Generation
                     CodeBinaryOperatorType.IdentityEquality,
                     new CodePrimitiveExpression(null)), new CodeMethodReturnStatement()));
         }
-    }
 
-    class PropertyDefinition
-    {
-        public ObjectStage AllowedStages;
-
-        public SearchBehavior? SearchBehavior;
-
-        public string Name;
-        public string BackingFieldName;
-
-        public PropertyInfo PropertyInfo;
-
-        public Type PropertyType;
-
-        public Type CoercedSourceType;
-
-        public TypeDefinition PropertyTypeDefinition;
-
-        public CodeTypeReference ImmutablePropertyType;
-        public CodeTypeReference MutablePropertyType;
-        public CodeTypeReference InitPropertyType;
-
-        public List<CodeCommentStatement> Comments = new List<CodeCommentStatement>();
-
-        public bool Inline;
-
-        public bool CoerceGet;
-
-        public bool IsList;
-        public bool IsReadOnlyList;
-
-        public bool ExcludeFromIndexing => SearchBehavior == Codex.SearchBehavior.None ||
-            (SearchBehavior == null && PropertyTypeDefinition == null) ||
-            PropertyTypeDefinition?.IsSearchRelevant == false;
-
-        public PropertyDefinition(PropertyInfo propertyInfo)
+        public void GenerateProperties()
         {
-            Name = propertyInfo.Name;
-            BackingFieldName = $"m_{Name}";
-            PropertyInfo = propertyInfo;
-            AllowedStages = propertyInfo.GetAllowedStages();
-            SearchBehavior = propertyInfo.GetSearchBehavior();
-            IsList = propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(IReadOnlyList<>);
-            IsReadOnlyList = IsList && propertyInfo.GetAttribute<ReadOnlyListAttribute>() != null;
-            Inline = propertyInfo.GetInline();
-            CoerceGet = propertyInfo.GetAttribute<CoerceGetAttribute>() != null;
-            CoercedSourceType = propertyInfo.GetAttribute<CoerceGetAttribute>()?.CoercedSourceType;
-            PropertyType = IsList ?
-                PropertyInfo.PropertyType.GenericTypeArguments[0] :
-                PropertyInfo.PropertyType;
+            foreach (var property in Properties)
+            {
+                property.GenerateBuilder();
+            }
+        }
+
+        public void GenerateBuilder()
+        {
+            // Generate constructors
+
+            // Add properties
+            foreach (var property in GeneratedProperties)
+            {
+                BuilderTypeDeclaration.Members.Add(property.BuilderField);
+                BuilderTypeDeclaration.Members.Add(property.BuilderProperty);
+                property.BuilderImplementationProperty?.Apply(m => BuilderTypeDeclaration.Members.Add(m));
+            }
+
+            // Add apply methods
+
+            foreach (var type in new[] { this }.Concat(Interfaces))
+            {
+                BuilderTypeDeclaration.BaseTypes.Add(typeof(IEntityTarget<>).MakeGenericTypeReference(type.Type.AsReference()));
+                var applyMethod = new CodeMemberMethod()
+                {
+                    Name = nameof(IEntityTarget<object>.CopyFrom),
+                    Attributes = MemberAttributes.Public,
+                };
+
+                foreach (var property in type.GeneratedProperties)
+                {
+                    applyMethod.Statements.AddRange(property.BuilderApplyMethodStatements);
+                }
+            }
+        }
+
+        public void GenerateMapping()
+        {
+            // Add properties
+
+            // Generate visitor
         }
     }
 
