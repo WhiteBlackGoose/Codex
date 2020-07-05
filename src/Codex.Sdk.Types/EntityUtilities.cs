@@ -15,5 +15,12 @@ namespace Codex
             if (obj == null) return null;
             return copy(obj);
         }
+
+        public static TTarget Apply<TTarget, TSource>(this TTarget target, TSource source)
+            where TTarget : IEntityTarget<TSource>
+        {
+            target.CopyFrom(source);
+            return target;
+        }
     }
 }

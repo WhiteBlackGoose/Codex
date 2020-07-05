@@ -414,6 +414,24 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "ChangedFiles")) {
+                        return this.ChangedFiles[fullName];
+                    }
+                    if (this.IsMatch(fullName, "DateCommitted")) {
+                        return this.DateCommitted[fullName];
+                    }
+                    if (this.IsMatch(fullName, "DateUploaded")) {
+                        return this.DateUploaded[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Description")) {
+                        return this.Description[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public Mapping<TRoot, string> Description {
                 get {
                     if ((this._lazyDescription == null)) {
@@ -450,33 +468,15 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "ChangedFiles")) {
-                        return this.ChangedFiles[fullName];
-                    }
-                    if (this.IsMatch(fullName, "DateCommitted")) {
-                        return this.DateCommitted[fullName];
-                    }
-                    if (this.IsMatch(fullName, "DateUploaded")) {
-                        return this.DateUploaded[fullName];
-                    }
-                    if (this.IsMatch(fullName, "Description")) {
-                        return this.Description[fullName];
-                    }
-                    return base[fullName];
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ICommit value) {
                 if ((value == null)) {
                     return;
                 }
+                base.Visit(visitor, value);
                 this.Description.VisitEx(visitor, value.Description);
                 this.DateUploaded.VisitEx(visitor, value.DateUploaded);
                 this.DateCommitted.VisitEx(visitor, value.DateCommitted);
                 this.ChangedFiles.VisitEx(visitor, value.ChangedFiles);
-                base.Visit(visitor, value);
             }
         }
         
@@ -512,6 +512,18 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "VersionControlFileId")) {
+                        return this.VersionControlFileId[fullName];
+                    }
+                    if (this.IsMatch(fullName, "FileId")) {
+                        return this.FileId[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public Mapping<TRoot, string> FileId {
                 get {
                     if ((this._lazyFileId == null)) {
@@ -527,18 +539,6 @@ namespace Codex.ObjectModel {
                         this._lazyVersionControlFileId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("VersionControlFileId", MappingInfo, Codex.SearchBehavior.NormalizedKeyword, Codex.ObjectStage.All));
                     }
                     return this._lazyVersionControlFileId;
-                }
-            }
-            
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "VersionControlFileId")) {
-                        return this.VersionControlFileId[fullName];
-                    }
-                    if (this.IsMatch(fullName, "FileId")) {
-                        return this.FileId[fullName];
-                    }
-                    return base[fullName];
                 }
             }
             
@@ -560,21 +560,21 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public Mapping<TRoot, bool> ExcludeFromSearch {
-                get {
-                    if ((this._lazyExcludeFromSearch == null)) {
-                        this._lazyExcludeFromSearch = new Mapping<TRoot, bool>(new Codex.ObjectModel.MappingInfo("ExcludeFromSearch", MappingInfo, Codex.SearchBehavior.Term, Codex.ObjectStage.All));
-                    }
-                    return this._lazyExcludeFromSearch;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "ExcludeFromSearch")) {
                         return this.ExcludeFromSearch[fullName];
                     }
                     return base[fullName];
+                }
+            }
+            
+            public Mapping<TRoot, bool> ExcludeFromSearch {
+                get {
+                    if ((this._lazyExcludeFromSearch == null)) {
+                        this._lazyExcludeFromSearch = new Mapping<TRoot, bool>(new Codex.ObjectModel.MappingInfo("ExcludeFromSearch", MappingInfo, Codex.SearchBehavior.Term, Codex.ObjectStage.All));
+                    }
+                    return this._lazyExcludeFromSearch;
                 }
             }
             
@@ -595,21 +595,21 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public Mapping<TRoot, string> SourceControlContentId {
-                get {
-                    if ((this._lazySourceControlContentId == null)) {
-                        this._lazySourceControlContentId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("SourceControlContentId", MappingInfo, Codex.SearchBehavior.NormalizedKeyword, Codex.ObjectStage.All));
-                    }
-                    return this._lazySourceControlContentId;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "SourceControlContentId")) {
                         return this.SourceControlContentId[fullName];
                     }
                     return base[fullName];
+                }
+            }
+            
+            public Mapping<TRoot, string> SourceControlContentId {
+                get {
+                    if ((this._lazySourceControlContentId == null)) {
+                        this._lazySourceControlContentId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("SourceControlContentId", MappingInfo, Codex.SearchBehavior.NormalizedKeyword, Codex.ObjectStage.All));
+                    }
+                    return this._lazySourceControlContentId;
                 }
             }
             
@@ -634,6 +634,24 @@ namespace Codex.ObjectModel {
             
             public SourceFileInfoMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "ProjectId")) {
+                        return this.ProjectId[fullName];
+                    }
+                    if (this.IsMatch(fullName, "ProjectRelativePath")) {
+                        return this.ProjectRelativePath[fullName];
+                    }
+                    if (this.IsMatch(fullName, "RepositoryName")) {
+                        return this.RepositoryName[fullName];
+                    }
+                    if (this.IsMatch(fullName, "RepoRelativePath")) {
+                        return this.RepoRelativePath[fullName];
+                    }
+                    return base[fullName];
+                }
             }
             
             public Mapping<TRoot, string> RepoRelativePath {
@@ -672,33 +690,15 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "ProjectId")) {
-                        return this.ProjectId[fullName];
-                    }
-                    if (this.IsMatch(fullName, "ProjectRelativePath")) {
-                        return this.ProjectRelativePath[fullName];
-                    }
-                    if (this.IsMatch(fullName, "RepositoryName")) {
-                        return this.RepositoryName[fullName];
-                    }
-                    if (this.IsMatch(fullName, "RepoRelativePath")) {
-                        return this.RepoRelativePath[fullName];
-                    }
-                    return base[fullName];
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISourceFileInfo value) {
                 if ((value == null)) {
                     return;
                 }
+                base.Visit(visitor, value);
                 this.RepoRelativePath.VisitEx(visitor, value.RepoRelativePath);
                 this.RepositoryName.VisitEx(visitor, value.RepositoryName);
                 this.ProjectRelativePath.VisitEx(visitor, value.ProjectRelativePath);
                 this.ProjectId.VisitEx(visitor, value.ProjectId);
-                base.Visit(visitor, value);
             }
         }
         
@@ -711,6 +711,18 @@ namespace Codex.ObjectModel {
             
             public SourceFileBaseMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "ExcludeFromSearch")) {
+                        return this.ExcludeFromSearch[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Info")) {
+                        return this.Info[fullName];
+                    }
+                    return base[fullName];
+                }
             }
             
             public SourceFileInfoMapping<TRoot> Info {
@@ -728,18 +740,6 @@ namespace Codex.ObjectModel {
                         this._lazyExcludeFromSearch = new Mapping<TRoot, bool>(new Codex.ObjectModel.MappingInfo("ExcludeFromSearch", MappingInfo, Codex.SearchBehavior.Term, Codex.ObjectStage.All));
                     }
                     return this._lazyExcludeFromSearch;
-                }
-            }
-            
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "ExcludeFromSearch")) {
-                        return this.ExcludeFromSearch[fullName];
-                    }
-                    if (this.IsMatch(fullName, "Info")) {
-                        return this.Info[fullName];
-                    }
-                    return base[fullName];
                 }
             }
             
@@ -761,15 +761,6 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public ChunkReferenceMapping<TRoot> Chunks {
-                get {
-                    if ((this._lazyChunks == null)) {
-                        this._lazyChunks = new ChunkReferenceMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Chunks", MappingInfo, null, Codex.ObjectStage.All));
-                    }
-                    return this._lazyChunks;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "Chunks")) {
@@ -779,12 +770,21 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public ChunkReferenceMapping<TRoot> Chunks {
+                get {
+                    if ((this._lazyChunks == null)) {
+                        this._lazyChunks = new ChunkReferenceMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Chunks", MappingInfo, null, Codex.ObjectStage.All));
+                    }
+                    return this._lazyChunks;
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IChunkedSourceFile value) {
                 if ((value == null)) {
                     return;
                 }
-                this.Chunks.VisitEx(visitor, value.Chunks);
                 base.Visit(visitor, value);
+                this.Chunks.VisitEx(visitor, value.Chunks);
             }
         }
         
@@ -797,21 +797,21 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public Mapping<TRoot, string> Id {
-                get {
-                    if ((this._lazyId == null)) {
-                        this._lazyId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("Id", MappingInfo, Codex.SearchBehavior.Term, Codex.ObjectStage.All));
-                    }
-                    return this._lazyId;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "Id")) {
                         return this.Id[fullName];
                     }
                     return base[fullName];
+                }
+            }
+            
+            public Mapping<TRoot, string> Id {
+                get {
+                    if ((this._lazyId == null)) {
+                        this._lazyId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("Id", MappingInfo, Codex.SearchBehavior.Term, Codex.ObjectStage.All));
+                    }
+                    return this._lazyId;
                 }
             }
             
@@ -832,21 +832,21 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public Mapping<TRoot, string> ContentLines {
-                get {
-                    if ((this._lazyContentLines == null)) {
-                        this._lazyContentLines = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("ContentLines", MappingInfo, Codex.SearchBehavior.FullText, Codex.ObjectStage.All));
-                    }
-                    return this._lazyContentLines;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "ContentLines")) {
                         return this.ContentLines[fullName];
                     }
                     return base[fullName];
+                }
+            }
+            
+            public Mapping<TRoot, string> ContentLines {
+                get {
+                    if ((this._lazyContentLines == null)) {
+                        this._lazyContentLines = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("ContentLines", MappingInfo, Codex.SearchBehavior.FullText, Codex.ObjectStage.All));
+                    }
+                    return this._lazyContentLines;
                 }
             }
             
@@ -867,21 +867,21 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public DefinitionSymbolMapping<TRoot> Definition {
-                get {
-                    if ((this._lazyDefinition == null)) {
-                        this._lazyDefinition = new DefinitionSymbolMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Definition", MappingInfo, null, Codex.ObjectStage.All));
-                    }
-                    return this._lazyDefinition;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "Definition")) {
                         return this.Definition[fullName];
                     }
                     return base[fullName];
+                }
+            }
+            
+            public DefinitionSymbolMapping<TRoot> Definition {
+                get {
+                    if ((this._lazyDefinition == null)) {
+                        this._lazyDefinition = new DefinitionSymbolMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Definition", MappingInfo, null, Codex.ObjectStage.All));
+                    }
+                    return this._lazyDefinition;
                 }
             }
             
@@ -904,6 +904,18 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Parameters")) {
+                        return this.Parameters[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Reference")) {
+                        return this.Reference[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public ReferenceSymbolMapping<TRoot> Reference {
                 get {
                     if ((this._lazyReference == null)) {
@@ -919,18 +931,6 @@ namespace Codex.ObjectModel {
                         this._lazyParameters = new ParameterReferenceSpanMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Parameters", MappingInfo, null, Codex.ObjectStage.All));
                     }
                     return this._lazyParameters;
-                }
-            }
-            
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "Parameters")) {
-                        return this.Parameters[fullName];
-                    }
-                    if (this.IsMatch(fullName, "Reference")) {
-                        return this.Reference[fullName];
-                    }
-                    return base[fullName];
                 }
             }
             
@@ -952,21 +952,21 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public Mapping<TRoot, int> ParameterIndex {
-                get {
-                    if ((this._lazyParameterIndex == null)) {
-                        this._lazyParameterIndex = new Mapping<TRoot, int>(new Codex.ObjectModel.MappingInfo("ParameterIndex", MappingInfo, Codex.SearchBehavior.Term, Codex.ObjectStage.All));
-                    }
-                    return this._lazyParameterIndex;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "ParameterIndex")) {
                         return this.ParameterIndex[fullName];
                     }
                     return base[fullName];
+                }
+            }
+            
+            public Mapping<TRoot, int> ParameterIndex {
+                get {
+                    if ((this._lazyParameterIndex == null)) {
+                        this._lazyParameterIndex = new Mapping<TRoot, int>(new Codex.ObjectModel.MappingInfo("ParameterIndex", MappingInfo, Codex.SearchBehavior.Term, Codex.ObjectStage.All));
+                    }
+                    return this._lazyParameterIndex;
                 }
             }
             
@@ -991,6 +991,24 @@ namespace Codex.ObjectModel {
             
             public DocumentationInfoMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Exceptions")) {
+                        return this.Exceptions[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Arguments")) {
+                        return this.Arguments[fullName];
+                    }
+                    if (this.IsMatch(fullName, "References")) {
+                        return this.References[fullName];
+                    }
+                    if (this.IsMatch(fullName, "AssociatedSymbol")) {
+                        return this.AssociatedSymbol[fullName];
+                    }
+                    return base[fullName];
+                }
             }
             
             public SymbolMapping<TRoot> AssociatedSymbol {
@@ -1029,24 +1047,6 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "Exceptions")) {
-                        return this.Exceptions[fullName];
-                    }
-                    if (this.IsMatch(fullName, "Arguments")) {
-                        return this.Arguments[fullName];
-                    }
-                    if (this.IsMatch(fullName, "References")) {
-                        return this.References[fullName];
-                    }
-                    if (this.IsMatch(fullName, "AssociatedSymbol")) {
-                        return this.AssociatedSymbol[fullName];
-                    }
-                    return base[fullName];
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IDocumentationInfo value) {
                 if ((value == null)) {
                     return;
@@ -1067,21 +1067,21 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public DocumentationReferenceSymbolMapping<TRoot> Type {
-                get {
-                    if ((this._lazyType == null)) {
-                        this._lazyType = new DocumentationReferenceSymbolMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Type", MappingInfo, null, Codex.ObjectStage.All));
-                    }
-                    return this._lazyType;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "Type")) {
                         return this.Type[fullName];
                     }
                     return base[fullName];
+                }
+            }
+            
+            public DocumentationReferenceSymbolMapping<TRoot> Type {
+                get {
+                    if ((this._lazyType == null)) {
+                        this._lazyType = new DocumentationReferenceSymbolMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Type", MappingInfo, null, Codex.ObjectStage.All));
+                    }
+                    return this._lazyType;
                 }
             }
             
@@ -1123,21 +1123,21 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public Mapping<TRoot, string> Name {
-                get {
-                    if ((this._lazyName == null)) {
-                        this._lazyName = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("Name", MappingInfo, Codex.SearchBehavior.NormalizedKeyword, Codex.ObjectStage.All));
-                    }
-                    return this._lazyName;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "Name")) {
                         return this.Name[fullName];
                     }
                     return base[fullName];
+                }
+            }
+            
+            public Mapping<TRoot, string> Name {
+                get {
+                    if ((this._lazyName == null)) {
+                        this._lazyName = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("Name", MappingInfo, Codex.SearchBehavior.NormalizedKeyword, Codex.ObjectStage.All));
+                    }
+                    return this._lazyName;
                 }
             }
             
@@ -1160,6 +1160,21 @@ namespace Codex.ObjectModel {
             
             public AnalyzedProjectMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "ProjectReferences")) {
+                        return this.ProjectReferences[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Files")) {
+                        return this.Files[fullName];
+                    }
+                    if (this.IsMatch(fullName, "PrimaryFile")) {
+                        return this.PrimaryFile[fullName];
+                    }
+                    return base[fullName];
+                }
             }
             
             public ProjectFileLinkMapping<TRoot> PrimaryFile {
@@ -1189,29 +1204,14 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "ProjectReferences")) {
-                        return this.ProjectReferences[fullName];
-                    }
-                    if (this.IsMatch(fullName, "Files")) {
-                        return this.Files[fullName];
-                    }
-                    if (this.IsMatch(fullName, "PrimaryFile")) {
-                        return this.PrimaryFile[fullName];
-                    }
-                    return base[fullName];
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IProject value) {
                 if ((value == null)) {
                     return;
                 }
+                base.Visit(visitor, value);
                 this.PrimaryFile.VisitEx(visitor, value.PrimaryFile);
                 this.Files.VisitEx(visitor, value.Files);
                 this.ProjectReferences.VisitEx(visitor, value.ProjectReferences);
-                base.Visit(visitor, value);
             }
         }
         
@@ -1224,6 +1224,18 @@ namespace Codex.ObjectModel {
             
             public ReferencedProjectMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Definitions")) {
+                        return this.Definitions[fullName];
+                    }
+                    if (this.IsMatch(fullName, "ProjectId")) {
+                        return this.ProjectId[fullName];
+                    }
+                    return base[fullName];
+                }
             }
             
             public Mapping<TRoot, string> ProjectId {
@@ -1241,18 +1253,6 @@ namespace Codex.ObjectModel {
                         this._lazyDefinitions = new DefinitionSymbolMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Definitions", MappingInfo, null, Codex.ObjectStage.Analysis));
                     }
                     return this._lazyDefinitions;
-                }
-            }
-            
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "Definitions")) {
-                        return this.Definitions[fullName];
-                    }
-                    if (this.IsMatch(fullName, "ProjectId")) {
-                        return this.ProjectId[fullName];
-                    }
-                    return base[fullName];
                 }
             }
             
@@ -1299,6 +1299,21 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "OwnerId")) {
+                        return this.OwnerId[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Value")) {
+                        return this.Value[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Key")) {
+                        return this.Key[fullName];
+                    }
+                    return base[fullName];
+                }
+            }
+            
             public Mapping<TRoot, string> Key {
                 get {
                     if ((this._lazyKey == null)) {
@@ -1326,29 +1341,14 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "OwnerId")) {
-                        return this.OwnerId[fullName];
-                    }
-                    if (this.IsMatch(fullName, "Value")) {
-                        return this.Value[fullName];
-                    }
-                    if (this.IsMatch(fullName, "Key")) {
-                        return this.Key[fullName];
-                    }
-                    return base[fullName];
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IPropertySearchModel value) {
                 if ((value == null)) {
                     return;
                 }
+                base.Visit(visitor, value);
                 this.Key.VisitEx(visitor, value.Key);
                 this.Value.VisitEx(visitor, value.Value);
                 this.OwnerId.VisitEx(visitor, value.OwnerId);
-                base.Visit(visitor, value);
             }
         }
         
@@ -1361,21 +1361,21 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public Mapping<TRoot, string> Name {
-                get {
-                    if ((this._lazyName == null)) {
-                        this._lazyName = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("Name", MappingInfo, Codex.SearchBehavior.NormalizedKeyword, Codex.ObjectStage.All));
-                    }
-                    return this._lazyName;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "Name")) {
                         return this.Name[fullName];
                     }
                     return base[fullName];
+                }
+            }
+            
+            public Mapping<TRoot, string> Name {
+                get {
+                    if ((this._lazyName == null)) {
+                        this._lazyName = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("Name", MappingInfo, Codex.SearchBehavior.NormalizedKeyword, Codex.ObjectStage.All));
+                    }
+                    return this._lazyName;
                 }
             }
             
@@ -1398,6 +1398,21 @@ namespace Codex.ObjectModel {
             
             public SearchEntityMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "SortKey")) {
+                        return this.SortKey[fullName];
+                    }
+                    if (this.IsMatch(fullName, "StableId")) {
+                        return this.StableId[fullName];
+                    }
+                    if (this.IsMatch(fullName, "EntityContentId")) {
+                        return this.EntityContentId[fullName];
+                    }
+                    return base[fullName];
+                }
             }
             
             public Mapping<TRoot, string> EntityContentId {
@@ -1427,21 +1442,6 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "SortKey")) {
-                        return this.SortKey[fullName];
-                    }
-                    if (this.IsMatch(fullName, "StableId")) {
-                        return this.StableId[fullName];
-                    }
-                    if (this.IsMatch(fullName, "EntityContentId")) {
-                        return this.EntityContentId[fullName];
-                    }
-                    return base[fullName];
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISearchEntity value) {
                 if ((value == null)) {
                     return;
@@ -1461,21 +1461,21 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public Mapping<TRoot, string> RepositoryName {
-                get {
-                    if ((this._lazyRepositoryName == null)) {
-                        this._lazyRepositoryName = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("RepositoryName", MappingInfo, Codex.SearchBehavior.NormalizedKeyword, Codex.ObjectStage.All));
-                    }
-                    return this._lazyRepositoryName;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "RepositoryName")) {
                         return this.RepositoryName[fullName];
                     }
                     return base[fullName];
+                }
+            }
+            
+            public Mapping<TRoot, string> RepositoryName {
+                get {
+                    if ((this._lazyRepositoryName == null)) {
+                        this._lazyRepositoryName = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("RepositoryName", MappingInfo, Codex.SearchBehavior.NormalizedKeyword, Codex.ObjectStage.All));
+                    }
+                    return this._lazyRepositoryName;
                 }
             }
             
@@ -1496,15 +1496,6 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public Mapping<TRoot, string> CommitId {
-                get {
-                    if ((this._lazyCommitId == null)) {
-                        this._lazyCommitId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("CommitId", MappingInfo, Codex.SearchBehavior.NormalizedKeyword, Codex.ObjectStage.All));
-                    }
-                    return this._lazyCommitId;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "CommitId")) {
@@ -1514,12 +1505,21 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public Mapping<TRoot, string> CommitId {
+                get {
+                    if ((this._lazyCommitId == null)) {
+                        this._lazyCommitId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("CommitId", MappingInfo, Codex.SearchBehavior.NormalizedKeyword, Codex.ObjectStage.All));
+                    }
+                    return this._lazyCommitId;
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ICommitScopeEntity value) {
                 if ((value == null)) {
                     return;
                 }
-                this.CommitId.VisitEx(visitor, value.CommitId);
                 base.Visit(visitor, value);
+                this.CommitId.VisitEx(visitor, value.CommitId);
             }
         }
         
@@ -1532,15 +1532,6 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public Mapping<TRoot, string> ProjectId {
-                get {
-                    if ((this._lazyProjectId == null)) {
-                        this._lazyProjectId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("ProjectId", MappingInfo, Codex.SearchBehavior.Sortword, Codex.ObjectStage.All));
-                    }
-                    return this._lazyProjectId;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "ProjectId")) {
@@ -1550,12 +1541,21 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public Mapping<TRoot, string> ProjectId {
+                get {
+                    if ((this._lazyProjectId == null)) {
+                        this._lazyProjectId = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("ProjectId", MappingInfo, Codex.SearchBehavior.Sortword, Codex.ObjectStage.All));
+                    }
+                    return this._lazyProjectId;
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IProjectScopeEntity value) {
                 if ((value == null)) {
                     return;
                 }
-                this.ProjectId.VisitEx(visitor, value.ProjectId);
                 base.Visit(visitor, value);
+                this.ProjectId.VisitEx(visitor, value.ProjectId);
             }
         }
         
@@ -1568,15 +1568,6 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public Mapping<TRoot, string> RepoRelativePath {
-                get {
-                    if ((this._lazyRepoRelativePath == null)) {
-                        this._lazyRepoRelativePath = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("RepoRelativePath", MappingInfo, Codex.SearchBehavior.NormalizedKeyword, Codex.ObjectStage.All));
-                    }
-                    return this._lazyRepoRelativePath;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "RepoRelativePath")) {
@@ -1586,12 +1577,21 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public Mapping<TRoot, string> RepoRelativePath {
+                get {
+                    if ((this._lazyRepoRelativePath == null)) {
+                        this._lazyRepoRelativePath = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("RepoRelativePath", MappingInfo, Codex.SearchBehavior.NormalizedKeyword, Codex.ObjectStage.All));
+                    }
+                    return this._lazyRepoRelativePath;
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IRepoFileScopeEntity value) {
                 if ((value == null)) {
                     return;
                 }
-                this.RepoRelativePath.VisitEx(visitor, value.RepoRelativePath);
                 base.Visit(visitor, value);
+                this.RepoRelativePath.VisitEx(visitor, value.RepoRelativePath);
             }
         }
         
@@ -1604,6 +1604,18 @@ namespace Codex.ObjectModel {
             
             public ProjectFileScopeEntityMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "ProjectId")) {
+                        return this.ProjectId[fullName];
+                    }
+                    if (this.IsMatch(fullName, "ProjectRelativePath")) {
+                        return this.ProjectRelativePath[fullName];
+                    }
+                    return base[fullName];
+                }
             }
             
             public Mapping<TRoot, string> ProjectRelativePath {
@@ -1624,25 +1636,13 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "ProjectId")) {
-                        return this.ProjectId[fullName];
-                    }
-                    if (this.IsMatch(fullName, "ProjectRelativePath")) {
-                        return this.ProjectRelativePath[fullName];
-                    }
-                    return base[fullName];
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IProjectFileScopeEntity value) {
                 if ((value == null)) {
                     return;
                 }
+                base.Visit(visitor, value);
                 this.ProjectRelativePath.VisitEx(visitor, value.ProjectRelativePath);
                 this.ProjectId.VisitEx(visitor, value.ProjectId);
-                base.Visit(visitor, value);
             }
         }
         
@@ -1655,6 +1655,18 @@ namespace Codex.ObjectModel {
             
             public RegisteredEntityMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "IndexName")) {
+                        return this.IndexName[fullName];
+                    }
+                    if (this.IsMatch(fullName, "EntityUid")) {
+                        return this.EntityUid[fullName];
+                    }
+                    return base[fullName];
+                }
             }
             
             public Mapping<TRoot, string> EntityUid {
@@ -1675,25 +1687,13 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "IndexName")) {
-                        return this.IndexName[fullName];
-                    }
-                    if (this.IsMatch(fullName, "EntityUid")) {
-                        return this.EntityUid[fullName];
-                    }
-                    return base[fullName];
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IRegisteredEntity value) {
                 if ((value == null)) {
                     return;
                 }
+                base.Visit(visitor, value);
                 this.EntityUid.VisitEx(visitor, value.EntityUid);
                 this.IndexName.VisitEx(visitor, value.IndexName);
-                base.Visit(visitor, value);
             }
         }
         
@@ -1708,6 +1708,21 @@ namespace Codex.ObjectModel {
             
             public StoredFilterMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "FilterHash")) {
+                        return this.FilterHash[fullName];
+                    }
+                    if (this.IsMatch(fullName, "IndexName")) {
+                        return this.IndexName[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Name")) {
+                        return this.Name[fullName];
+                    }
+                    return base[fullName];
+                }
             }
             
             public Mapping<TRoot, string> Name {
@@ -1737,29 +1752,14 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "FilterHash")) {
-                        return this.FilterHash[fullName];
-                    }
-                    if (this.IsMatch(fullName, "IndexName")) {
-                        return this.IndexName[fullName];
-                    }
-                    if (this.IsMatch(fullName, "Name")) {
-                        return this.Name[fullName];
-                    }
-                    return base[fullName];
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IStoredFilter value) {
                 if ((value == null)) {
                     return;
                 }
+                base.Visit(visitor, value);
                 this.Name.VisitEx(visitor, value.Name);
                 this.IndexName.VisitEx(visitor, value.IndexName);
                 this.FilterHash.VisitEx(visitor, value.FilterHash);
-                base.Visit(visitor, value);
             }
         }
         
@@ -1772,6 +1772,18 @@ namespace Codex.ObjectModel {
             
             public DefinitionSearchModelMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Keywords")) {
+                        return this.Keywords[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Definition")) {
+                        return this.Definition[fullName];
+                    }
+                    return base[fullName];
+                }
             }
             
             public DefinitionSymbolMapping<TRoot> Definition {
@@ -1792,25 +1804,13 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "Keywords")) {
-                        return this.Keywords[fullName];
-                    }
-                    if (this.IsMatch(fullName, "Definition")) {
-                        return this.Definition[fullName];
-                    }
-                    return base[fullName];
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IDefinitionSearchModel value) {
                 if ((value == null)) {
                     return;
                 }
+                base.Visit(visitor, value);
                 this.Definition.VisitEx(visitor, value.Definition);
                 this.Keywords.VisitEx(visitor, value.Keywords);
-                base.Visit(visitor, value);
             }
         }
         
@@ -1823,15 +1823,6 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public LanguageInfoMapping<TRoot> Language {
-                get {
-                    if ((this._lazyLanguage == null)) {
-                        this._lazyLanguage = new LanguageInfoMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Language", MappingInfo, null, Codex.ObjectStage.All));
-                    }
-                    return this._lazyLanguage;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "Language")) {
@@ -1841,12 +1832,21 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public LanguageInfoMapping<TRoot> Language {
+                get {
+                    if ((this._lazyLanguage == null)) {
+                        this._lazyLanguage = new LanguageInfoMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Language", MappingInfo, null, Codex.ObjectStage.All));
+                    }
+                    return this._lazyLanguage;
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ILanguageSearchModel value) {
                 if ((value == null)) {
                     return;
                 }
-                this.Language.VisitEx(visitor, value.Language);
                 base.Visit(visitor, value);
+                this.Language.VisitEx(visitor, value.Language);
             }
         }
         
@@ -1865,6 +1865,27 @@ namespace Codex.ObjectModel {
             
             public ReferenceSearchModelMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "ProjectId")) {
+                        return this.ProjectId[fullName];
+                    }
+                    if (this.IsMatch(fullName, "RepositoryName")) {
+                        return this.RepositoryName[fullName];
+                    }
+                    if (this.IsMatch(fullName, "RepoRelativePath")) {
+                        return this.RepoRelativePath[fullName];
+                    }
+                    if (this.IsMatch(fullName, "ProjectRelativePath")) {
+                        return this.ProjectRelativePath[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Reference")) {
+                        return this.Reference[fullName];
+                    }
+                    return base[fullName];
+                }
             }
             
             public ReferenceSymbolMapping<TRoot> Reference {
@@ -1912,37 +1933,16 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "ProjectId")) {
-                        return this.ProjectId[fullName];
-                    }
-                    if (this.IsMatch(fullName, "RepositoryName")) {
-                        return this.RepositoryName[fullName];
-                    }
-                    if (this.IsMatch(fullName, "RepoRelativePath")) {
-                        return this.RepoRelativePath[fullName];
-                    }
-                    if (this.IsMatch(fullName, "ProjectRelativePath")) {
-                        return this.ProjectRelativePath[fullName];
-                    }
-                    if (this.IsMatch(fullName, "Reference")) {
-                        return this.Reference[fullName];
-                    }
-                    return base[fullName];
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IReferenceSearchModel value) {
                 if ((value == null)) {
                     return;
                 }
+                base.Visit(visitor, value);
                 this.Reference.VisitEx(visitor, value.Reference);
                 this.ProjectRelativePath.VisitEx(visitor, value.ProjectRelativePath);
                 this.RepoRelativePath.VisitEx(visitor, value.RepoRelativePath);
                 this.RepositoryName.VisitEx(visitor, value.RepositoryName);
                 this.ProjectId.VisitEx(visitor, value.ProjectId);
-                base.Visit(visitor, value);
             }
         }
         
@@ -1955,6 +1955,18 @@ namespace Codex.ObjectModel {
             
             public SourceSearchModelBaseMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "File")) {
+                        return this.File[fullName];
+                    }
+                    if (this.IsMatch(fullName, "SourceControlInfo")) {
+                        return this.SourceControlInfo[fullName];
+                    }
+                    return base[fullName];
+                }
             }
             
             public SourceControlFileInfoMapping<TRoot> SourceControlInfo {
@@ -1975,25 +1987,13 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "File")) {
-                        return this.File[fullName];
-                    }
-                    if (this.IsMatch(fullName, "SourceControlInfo")) {
-                        return this.SourceControlInfo[fullName];
-                    }
-                    return base[fullName];
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ISourceSearchModelBase value) {
                 if ((value == null)) {
                     return;
                 }
+                base.Visit(visitor, value);
                 this.SourceControlInfo.VisitEx(visitor, value.SourceControlInfo);
                 this.File.VisitEx(visitor, value.File);
-                base.Visit(visitor, value);
             }
         }
         
@@ -2006,15 +2006,6 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public BoundSourceInfoMapping<TRoot> BindingInfo {
-                get {
-                    if ((this._lazyBindingInfo == null)) {
-                        this._lazyBindingInfo = new BoundSourceInfoMapping<TRoot>(new Codex.ObjectModel.MappingInfo("BindingInfo", MappingInfo, null, Codex.ObjectStage.All));
-                    }
-                    return this._lazyBindingInfo;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "BindingInfo")) {
@@ -2024,12 +2015,21 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public BoundSourceInfoMapping<TRoot> BindingInfo {
+                get {
+                    if ((this._lazyBindingInfo == null)) {
+                        this._lazyBindingInfo = new BoundSourceInfoMapping<TRoot>(new Codex.ObjectModel.MappingInfo("BindingInfo", MappingInfo, null, Codex.ObjectStage.All));
+                    }
+                    return this._lazyBindingInfo;
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IBoundSourceSearchModel value) {
                 if ((value == null)) {
                     return;
                 }
-                this.BindingInfo.VisitEx(visitor, value.BindingInfo);
                 base.Visit(visitor, value);
+                this.BindingInfo.VisitEx(visitor, value.BindingInfo);
             }
         }
         
@@ -2063,15 +2063,6 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public SourceFileContentChunkMapping<TRoot> Chunk {
-                get {
-                    if ((this._lazyChunk == null)) {
-                        this._lazyChunk = new SourceFileContentChunkMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Chunk", MappingInfo, null, Codex.ObjectStage.All));
-                    }
-                    return this._lazyChunk;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "Chunk")) {
@@ -2081,12 +2072,21 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public SourceFileContentChunkMapping<TRoot> Chunk {
+                get {
+                    if ((this._lazyChunk == null)) {
+                        this._lazyChunk = new SourceFileContentChunkMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Chunk", MappingInfo, null, Codex.ObjectStage.All));
+                    }
+                    return this._lazyChunk;
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ITextChunkSearchModel value) {
                 if ((value == null)) {
                     return;
                 }
-                this.Chunk.VisitEx(visitor, value.Chunk);
                 base.Visit(visitor, value);
+                this.Chunk.VisitEx(visitor, value.Chunk);
             }
         }
         
@@ -2099,15 +2099,6 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public RepositoryMapping<TRoot> Repository {
-                get {
-                    if ((this._lazyRepository == null)) {
-                        this._lazyRepository = new RepositoryMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Repository", MappingInfo, null, Codex.ObjectStage.All));
-                    }
-                    return this._lazyRepository;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "Repository")) {
@@ -2117,12 +2108,21 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public RepositoryMapping<TRoot> Repository {
+                get {
+                    if ((this._lazyRepository == null)) {
+                        this._lazyRepository = new RepositoryMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Repository", MappingInfo, null, Codex.ObjectStage.All));
+                    }
+                    return this._lazyRepository;
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IRepositorySearchModel value) {
                 if ((value == null)) {
                     return;
                 }
-                this.Repository.VisitEx(visitor, value.Repository);
                 base.Visit(visitor, value);
+                this.Repository.VisitEx(visitor, value.Repository);
             }
         }
         
@@ -2135,15 +2135,6 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public AnalyzedProjectMapping<TRoot> Project {
-                get {
-                    if ((this._lazyProject == null)) {
-                        this._lazyProject = new AnalyzedProjectMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Project", MappingInfo, null, Codex.ObjectStage.All));
-                    }
-                    return this._lazyProject;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "Project")) {
@@ -2153,12 +2144,21 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public AnalyzedProjectMapping<TRoot> Project {
+                get {
+                    if ((this._lazyProject == null)) {
+                        this._lazyProject = new AnalyzedProjectMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Project", MappingInfo, null, Codex.ObjectStage.All));
+                    }
+                    return this._lazyProject;
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IProjectSearchModel value) {
                 if ((value == null)) {
                     return;
                 }
-                this.Project.VisitEx(visitor, value.Project);
                 base.Visit(visitor, value);
+                this.Project.VisitEx(visitor, value.Project);
             }
         }
         
@@ -2173,6 +2173,21 @@ namespace Codex.ObjectModel {
             
             public ProjectReferenceSearchModelMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "RepositoryName")) {
+                        return this.RepositoryName[fullName];
+                    }
+                    if (this.IsMatch(fullName, "ProjectId")) {
+                        return this.ProjectId[fullName];
+                    }
+                    if (this.IsMatch(fullName, "ProjectReference")) {
+                        return this.ProjectReference[fullName];
+                    }
+                    return base[fullName];
+                }
             }
             
             public ReferencedProjectMapping<TRoot> ProjectReference {
@@ -2202,29 +2217,14 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "RepositoryName")) {
-                        return this.RepositoryName[fullName];
-                    }
-                    if (this.IsMatch(fullName, "ProjectId")) {
-                        return this.ProjectId[fullName];
-                    }
-                    if (this.IsMatch(fullName, "ProjectReference")) {
-                        return this.ProjectReference[fullName];
-                    }
-                    return base[fullName];
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IProjectReferenceSearchModel value) {
                 if ((value == null)) {
                     return;
                 }
+                base.Visit(visitor, value);
                 this.ProjectReference.VisitEx(visitor, value.ProjectReference);
                 this.ProjectId.VisitEx(visitor, value.ProjectId);
                 this.RepositoryName.VisitEx(visitor, value.RepositoryName);
-                base.Visit(visitor, value);
             }
         }
         
@@ -2237,15 +2237,6 @@ namespace Codex.ObjectModel {
                     base(info) {
             }
             
-            public CommitMapping<TRoot> Commit {
-                get {
-                    if ((this._lazyCommit == null)) {
-                        this._lazyCommit = new CommitMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Commit", MappingInfo, null, Codex.ObjectStage.All));
-                    }
-                    return this._lazyCommit;
-                }
-            }
-            
             public override Codex.ObjectModel.MappingBase this[string fullName] {
                 get {
                     if (this.IsMatch(fullName, "Commit")) {
@@ -2255,12 +2246,21 @@ namespace Codex.ObjectModel {
                 }
             }
             
+            public CommitMapping<TRoot> Commit {
+                get {
+                    if ((this._lazyCommit == null)) {
+                        this._lazyCommit = new CommitMapping<TRoot>(new Codex.ObjectModel.MappingInfo("Commit", MappingInfo, null, Codex.ObjectStage.All));
+                    }
+                    return this._lazyCommit;
+                }
+            }
+            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ICommitSearchModel value) {
                 if ((value == null)) {
                     return;
                 }
-                this.Commit.VisitEx(visitor, value.Commit);
                 base.Visit(visitor, value);
+                this.Commit.VisitEx(visitor, value.Commit);
             }
         }
         
@@ -2275,6 +2275,21 @@ namespace Codex.ObjectModel {
             
             public CommitFilesSearchModelMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "RepositoryName")) {
+                        return this.RepositoryName[fullName];
+                    }
+                    if (this.IsMatch(fullName, "CommitId")) {
+                        return this.CommitId[fullName];
+                    }
+                    if (this.IsMatch(fullName, "CommitFiles")) {
+                        return this.CommitFiles[fullName];
+                    }
+                    return base[fullName];
+                }
             }
             
             public CommitFileLinkMapping<TRoot> CommitFiles {
@@ -2304,29 +2319,14 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "RepositoryName")) {
-                        return this.RepositoryName[fullName];
-                    }
-                    if (this.IsMatch(fullName, "CommitId")) {
-                        return this.CommitId[fullName];
-                    }
-                    if (this.IsMatch(fullName, "CommitFiles")) {
-                        return this.CommitFiles[fullName];
-                    }
-                    return base[fullName];
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.ICommitFilesSearchModel value) {
                 if ((value == null)) {
                     return;
                 }
+                base.Visit(visitor, value);
                 this.CommitFiles.VisitEx(visitor, value.CommitFiles);
                 this.CommitId.VisitEx(visitor, value.CommitId);
                 this.RepositoryName.VisitEx(visitor, value.RepositoryName);
-                base.Visit(visitor, value);
             }
         }
         
@@ -2366,6 +2366,27 @@ namespace Codex.ObjectModel {
             
             public DefinitionSymbolMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Modifiers")) {
+                        return this.Modifiers[fullName];
+                    }
+                    if (this.IsMatch(fullName, "ContainerQualifiedName")) {
+                        return this.ContainerQualifiedName[fullName];
+                    }
+                    if (this.IsMatch(fullName, "ShortName")) {
+                        return this.ShortName[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Keywords")) {
+                        return this.Keywords[fullName];
+                    }
+                    if (this.IsMatch(fullName, "AbbreviatedName")) {
+                        return this.AbbreviatedName[fullName];
+                    }
+                    return base[fullName];
+                }
             }
             
             public Mapping<TRoot, string> AbbreviatedName {
@@ -2413,37 +2434,16 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "Modifiers")) {
-                        return this.Modifiers[fullName];
-                    }
-                    if (this.IsMatch(fullName, "ContainerQualifiedName")) {
-                        return this.ContainerQualifiedName[fullName];
-                    }
-                    if (this.IsMatch(fullName, "ShortName")) {
-                        return this.ShortName[fullName];
-                    }
-                    if (this.IsMatch(fullName, "Keywords")) {
-                        return this.Keywords[fullName];
-                    }
-                    if (this.IsMatch(fullName, "AbbreviatedName")) {
-                        return this.AbbreviatedName[fullName];
-                    }
-                    return base[fullName];
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IDefinitionSymbol value) {
                 if ((value == null)) {
                     return;
                 }
+                base.Visit(visitor, value);
                 this.AbbreviatedName.VisitEx(visitor, value.AbbreviatedName);
                 this.Keywords.VisitEx(visitor, value.Keywords);
                 this.ShortName.VisitEx(visitor, value.ShortName);
                 this.ContainerQualifiedName.VisitEx(visitor, value.ContainerQualifiedName);
                 this.Modifiers.VisitEx(visitor, value.Modifiers);
-                base.Visit(visitor, value);
             }
         }
         
@@ -2458,6 +2458,21 @@ namespace Codex.ObjectModel {
             
             public ReferenceSymbolMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "ExcludeFromDefaultSearch")) {
+                        return this.ExcludeFromDefaultSearch[fullName];
+                    }
+                    if (this.IsMatch(fullName, "IsImplicitlyDeclared")) {
+                        return this.IsImplicitlyDeclared[fullName];
+                    }
+                    if (this.IsMatch(fullName, "ReferenceKind")) {
+                        return this.ReferenceKind[fullName];
+                    }
+                    return base[fullName];
+                }
             }
             
             public Mapping<TRoot, string> ReferenceKind {
@@ -2487,29 +2502,14 @@ namespace Codex.ObjectModel {
                 }
             }
             
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "ExcludeFromDefaultSearch")) {
-                        return this.ExcludeFromDefaultSearch[fullName];
-                    }
-                    if (this.IsMatch(fullName, "IsImplicitlyDeclared")) {
-                        return this.IsImplicitlyDeclared[fullName];
-                    }
-                    if (this.IsMatch(fullName, "ReferenceKind")) {
-                        return this.ReferenceKind[fullName];
-                    }
-                    return base[fullName];
-                }
-            }
-            
             public virtual void Visit(Codex.ObjectModel.IVisitor visitor, Codex.IReferenceSymbol value) {
                 if ((value == null)) {
                     return;
                 }
+                base.Visit(visitor, value);
                 this.ReferenceKind.VisitEx(visitor, value.ReferenceKind);
                 this.IsImplicitlyDeclared.VisitEx(visitor, value.IsImplicitlyDeclared);
                 this.ExcludeFromDefaultSearch.VisitEx(visitor, value.ExcludeFromDefaultSearch);
-                base.Visit(visitor, value);
             }
         }
         
@@ -2524,6 +2524,21 @@ namespace Codex.ObjectModel {
             
             public SymbolMapping(Codex.ObjectModel.MappingInfo info) : 
                     base(info) {
+            }
+            
+            public override Codex.ObjectModel.MappingBase this[string fullName] {
+                get {
+                    if (this.IsMatch(fullName, "Kind")) {
+                        return this.Kind[fullName];
+                    }
+                    if (this.IsMatch(fullName, "Id")) {
+                        return this.Id[fullName];
+                    }
+                    if (this.IsMatch(fullName, "ProjectId")) {
+                        return this.ProjectId[fullName];
+                    }
+                    return base[fullName];
+                }
             }
             
             public Mapping<TRoot, string> ProjectId {
@@ -2550,21 +2565,6 @@ namespace Codex.ObjectModel {
                         this._lazyKind = new Mapping<TRoot, string>(new Codex.ObjectModel.MappingInfo("Kind", MappingInfo, Codex.SearchBehavior.NormalizedKeyword, Codex.ObjectStage.All));
                     }
                     return this._lazyKind;
-                }
-            }
-            
-            public override Codex.ObjectModel.MappingBase this[string fullName] {
-                get {
-                    if (this.IsMatch(fullName, "Kind")) {
-                        return this.Kind[fullName];
-                    }
-                    if (this.IsMatch(fullName, "Id")) {
-                        return this.Id[fullName];
-                    }
-                    if (this.IsMatch(fullName, "ProjectId")) {
-                        return this.ProjectId[fullName];
-                    }
-                    return base[fullName];
                 }
             }
             
@@ -2810,11 +2810,8 @@ namespace Codex.ObjectModel {
         }
     }
     
-    /// <summary>
-    /// Describes a commit in version control
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ICommit))]
-    public partial class Commit : CommitScopeEntity, Codex.ICommit {
+    public partial class Commit : CommitScopeEntity, Codex.ICommit, Codex.IEntityTarget<Codex.ICommit> {
         
         private string m_Description;
         
@@ -2830,15 +2827,15 @@ namespace Codex.ObjectModel {
         }
         
         public Commit(Codex.ICommit value) {
-            this.CopyFrom<Commit>(value);
+            this.CopyFrom(value);
         }
         
-        public Commit(Codex.ICommitScopeEntity value) : 
-                base(value) {
+        public Commit(Codex.ICommitScopeEntity value) {
+            this.CopyFrom(value);
         }
         
-        public Commit(Codex.IRepoScopeEntity value) : 
-                base(value) {
+        public Commit(Codex.IRepoScopeEntity value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -2880,15 +2877,6 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// The <see cref="P:Codex.ICommitScopeEntity.CommitId" /> of the parent commits
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<string> Codex.ICommit.ParentCommitIds {
-            get {
-                return this.ParentCommitIds;
-            }
-        }
-        
-        /// <summary>
-        /// The <see cref="P:Codex.ICommitScopeEntity.CommitId" /> of the parent commits
-        /// </summary>
         public virtual System.Collections.Generic.List<string> ParentCommitIds {
             get {
                 return this.m_ParentCommitIds;
@@ -2899,11 +2887,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// The files changed in the commit
+        /// The <see cref="P:Codex.ICommitScopeEntity.CommitId" /> of the parent commits
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<Codex.ICommitChangedFile> Codex.ICommit.ChangedFiles {
+        System.Collections.Generic.IReadOnlyList<string> Codex.ICommit.ParentCommitIds {
             get {
-                return this.ChangedFiles;
+                return this.ParentCommitIds;
             }
         }
         
@@ -2919,23 +2907,27 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ICommit value)
-            where TTarget : Commit {
-            this.m_Description = ((Codex.ICommit)(value)).Description;
-            this.m_DateUploaded = ((Codex.ICommit)(value)).DateUploaded;
-            this.m_DateCommitted = ((Codex.ICommit)(value)).DateCommitted;
-            this.m_ParentCommitIds = new System.Collections.Generic.List<string>(((Codex.ICommit)(value)).ParentCommitIds);
-            this.m_ChangedFiles = new System.Collections.Generic.List<CommitChangedFile>(System.Linq.Enumerable.Select(((Codex.ICommit)(value)).ChangedFiles, v => EntityUtilities.NullOrCopy(v, _v => new CommitChangedFile().CopyFrom<CommitChangedFile>(_v))));
-            base.CopyFrom<CommitScopeEntity>(((Codex.ICommitScopeEntity)(value)));
-            return ((TTarget)(this));
+        /// <summary>
+        /// The files changed in the commit
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<Codex.ICommitChangedFile> Codex.ICommit.ChangedFiles {
+            get {
+                return this.ChangedFiles;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.ICommit value) {
+            this.m_Description = value.Description;
+            this.m_DateUploaded = value.DateUploaded;
+            this.m_DateCommitted = value.DateCommitted;
+            this.m_ParentCommitIds = new System.Collections.Generic.List<string>(value.ParentCommitIds);
+            this.m_ChangedFiles = new System.Collections.Generic.List<CommitChangedFile>(System.Linq.Enumerable.Select(value.ChangedFiles, v => EntityUtilities.NullOrCopy(v, _v => new CommitChangedFile().Apply(_v))));
+            base.CopyFrom(((Codex.ICommitScopeEntity)(value)));
         }
     }
     
-    /// <summary>
-    /// Represents a changed file in a commit
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ICommitChangedFile))]
-    public partial class CommitChangedFile : CommitFileLink, Codex.ICommitChangedFile {
+    public partial class CommitChangedFile : CommitFileLink, Codex.ICommitChangedFile, Codex.IEntityTarget<Codex.ICommitChangedFile> {
         
         private Codex.FileChangeKind m_ChangeKind;
         
@@ -2945,11 +2937,11 @@ namespace Codex.ObjectModel {
         }
         
         public CommitChangedFile(Codex.ICommitChangedFile value) {
-            this.CopyFrom<CommitChangedFile>(value);
+            this.CopyFrom(value);
         }
         
-        public CommitChangedFile(Codex.ICommitFileLink value) : 
-                base(value) {
+        public CommitChangedFile(Codex.ICommitFileLink value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -2976,20 +2968,15 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ICommitChangedFile value)
-            where TTarget : CommitChangedFile {
-            this.m_ChangeKind = ((Codex.ICommitChangedFile)(value)).ChangeKind;
-            this.m_OriginalFilePath = ((Codex.ICommitChangedFile)(value)).OriginalFilePath;
-            base.CopyFrom<CommitFileLink>(((Codex.ICommitFileLink)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ICommitChangedFile value) {
+            this.m_ChangeKind = value.ChangeKind;
+            this.m_OriginalFilePath = value.OriginalFilePath;
+            base.CopyFrom(((Codex.ICommitFileLink)(value)));
         }
     }
     
-    /// <summary>
-    /// Represents a version of a repository file for a commit
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ICommitFileLink))]
-    public partial class CommitFileLink : Codex.EntityBase, Codex.ICommitFileLink {
+    public partial class CommitFileLink : Codex.EntityBase, Codex.ICommitFileLink, Codex.IEntityTarget<Codex.ICommitFileLink> {
         
         private string m_RepoRelativePath;
         
@@ -2998,12 +2985,10 @@ namespace Codex.ObjectModel {
         private string m_VersionControlFileId;
         
         public CommitFileLink() {
-            Initialize();
         }
         
         public CommitFileLink(Codex.ICommitFileLink value) {
-            Initialize();
-            this.CopyFrom<CommitFileLink>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -3043,20 +3028,15 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ICommitFileLink value)
-            where TTarget : CommitFileLink {
-            this.m_RepoRelativePath = ((Codex.ICommitFileLink)(value)).RepoRelativePath;
-            this.m_FileId = ((Codex.ICommitFileLink)(value)).FileId;
-            this.m_VersionControlFileId = ((Codex.ICommitFileLink)(value)).VersionControlFileId;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ICommitFileLink value) {
+            this.m_RepoRelativePath = value.RepoRelativePath;
+            this.m_FileId = value.FileId;
+            this.m_VersionControlFileId = value.VersionControlFileId;
         }
     }
     
-    /// <summary>
-    /// Describes a branch in a repository
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IBranch))]
-    public partial class Branch : Codex.EntityBase, Codex.IBranch {
+    public partial class Branch : Codex.EntityBase, Codex.IBranch, Codex.IEntityTarget<Codex.IBranch> {
         
         private string m_Name;
         
@@ -3065,12 +3045,10 @@ namespace Codex.ObjectModel {
         private string m_HeadCommitId;
         
         public Branch() {
-            Initialize();
         }
         
         public Branch(Codex.IBranch value) {
-            Initialize();
-            this.CopyFrom<Branch>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -3109,20 +3087,15 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IBranch value)
-            where TTarget : Branch {
-            this.m_Name = ((Codex.IBranch)(value)).Name;
-            this.m_Description = ((Codex.IBranch)(value)).Description;
-            this.m_HeadCommitId = ((Codex.IBranch)(value)).HeadCommitId;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IBranch value) {
+            this.m_Name = value.Name;
+            this.m_Description = value.Description;
+            this.m_HeadCommitId = value.HeadCommitId;
         }
     }
     
-    /// <summary>
-    /// Represents a source file with associated semantic bindings
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IBoundSourceFile))]
-    public partial class BoundSourceFile : BoundSourceInfo, Codex.IBoundSourceFile {
+    public partial class BoundSourceFile : BoundSourceInfo, Codex.IBoundSourceFile, Codex.IEntityTarget<Codex.IBoundSourceFile> {
         
         private SourceFile m_SourceFile;
         
@@ -3134,20 +3107,11 @@ namespace Codex.ObjectModel {
         }
         
         public BoundSourceFile(Codex.IBoundSourceFile value) {
-            this.CopyFrom<BoundSourceFile>(value);
+            this.CopyFrom(value);
         }
         
-        public BoundSourceFile(Codex.IBoundSourceInfo value) : 
-                base(value) {
-        }
-        
-        /// <summary>
-        /// The source file
-        /// </summary>
-        Codex.ISourceFile Codex.IBoundSourceFile.SourceFile {
-            get {
-                return this.SourceFile;
-            }
+        public BoundSourceFile(Codex.IBoundSourceInfo value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -3163,11 +3127,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// Gets the commit referencing the file.
+        /// The source file
         /// </summary>
-        Codex.ICommit Codex.IBoundSourceFile.Commit {
+        Codex.ISourceFile Codex.IBoundSourceFile.SourceFile {
             get {
-                return this.Commit;
+                return this.SourceFile;
             }
         }
         
@@ -3184,11 +3148,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// Gets the repository containing the file.
+        /// Gets the commit referencing the file.
         /// </summary>
-        Codex.IRepository Codex.IBoundSourceFile.Repo {
+        Codex.ICommit Codex.IBoundSourceFile.Commit {
             get {
-                return this.Repo;
+                return this.Commit;
             }
         }
         
@@ -3204,18 +3168,25 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IBoundSourceFile value)
-            where TTarget : BoundSourceFile {
-            this.m_SourceFile = EntityUtilities.NullOrCopy(value.SourceFile, v => new SourceFile().CopyFrom<SourceFile>(v));;
-            this.m_Commit = EntityUtilities.NullOrCopy(value.Commit, v => new Commit().CopyFrom<Commit>(v));;
-            this.m_Repo = EntityUtilities.NullOrCopy(value.Repo, v => new Repository().CopyFrom<Repository>(v));;
-            base.CopyFrom<BoundSourceInfo>(((Codex.IBoundSourceInfo)(value)));
-            return ((TTarget)(this));
+        /// <summary>
+        /// Gets the repository containing the file.
+        /// </summary>
+        Codex.IRepository Codex.IBoundSourceFile.Repo {
+            get {
+                return this.Repo;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.IBoundSourceFile value) {
+            this.m_SourceFile = EntityUtilities.NullOrCopy(value.SourceFile, v => new SourceFile().Apply(v));;
+            this.m_Commit = EntityUtilities.NullOrCopy(value.Commit, v => new Commit().Apply(v));;
+            this.m_Repo = EntityUtilities.NullOrCopy(value.Repo, v => new Repository().Apply(v));;
+            base.CopyFrom(((Codex.IBoundSourceInfo)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IBoundSourceInfo))]
-    public partial class BoundSourceInfo : Codex.EntityBase, Codex.IBoundSourceInfo {
+    public partial class BoundSourceInfo : Codex.EntityBase, Codex.IBoundSourceInfo, Codex.IEntityTarget<Codex.IBoundSourceInfo> {
         
         private System.Nullable<int> m_ReferenceCount;
         
@@ -3234,12 +3205,10 @@ namespace Codex.ObjectModel {
         private bool m_ExcludeFromSearch;
         
         public BoundSourceInfo() {
-            Initialize();
         }
         
         public BoundSourceInfo(Codex.IBoundSourceInfo value) {
-            Initialize();
-            this.CopyFrom<BoundSourceInfo>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -3282,15 +3251,6 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// References for the document. Sorted. May overlap.
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<Codex.IReferenceSpan> Codex.IBoundSourceInfo.References {
-            get {
-                return this.References;
-            }
-        }
-        
-        /// <summary>
-        /// References for the document. Sorted. May overlap.
-        /// </summary>
         public virtual System.Collections.Generic.IReadOnlyList<ReferenceSpan> References {
             get {
                 return this.m_References;
@@ -3301,11 +3261,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// Definitions for the document. Sorted. No overlap?
+        /// References for the document. Sorted. May overlap.
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<Codex.IDefinitionSpan> Codex.IBoundSourceInfo.Definitions {
+        System.Collections.Generic.IReadOnlyList<Codex.IReferenceSpan> Codex.IBoundSourceInfo.References {
             get {
-                return this.Definitions;
+                return this.References;
             }
         }
         
@@ -3322,11 +3282,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// Classifications for the document. Sorted by start index. No overlap.
+        /// Definitions for the document. Sorted. No overlap?
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<Codex.IClassificationSpan> Codex.IBoundSourceInfo.Classifications {
+        System.Collections.Generic.IReadOnlyList<Codex.IDefinitionSpan> Codex.IBoundSourceInfo.Definitions {
             get {
-                return this.Classifications;
+                return this.Definitions;
             }
         }
         
@@ -3343,11 +3303,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// Outlining regions for the document. May overlap.
+        /// Classifications for the document. Sorted by start index. No overlap.
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<Codex.IOutliningRegion> Codex.IBoundSourceInfo.OutliningRegions {
+        System.Collections.Generic.IReadOnlyList<Codex.IClassificationSpan> Codex.IBoundSourceInfo.Classifications {
             get {
-                return this.OutliningRegions;
+                return this.Classifications;
             }
         }
         
@@ -3364,6 +3324,15 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
+        /// Outlining regions for the document. May overlap.
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<Codex.IOutliningRegion> Codex.IBoundSourceInfo.OutliningRegions {
+            get {
+                return this.OutliningRegions;
+            }
+        }
+        
+        /// <summary>
         /// Indicates that the file should be excluded from text search
         /// </summary>
         public virtual bool ExcludeFromSearch {
@@ -3375,35 +3344,28 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IBoundSourceInfo value)
-            where TTarget : BoundSourceInfo {
-            this.m_ReferenceCount = ((Codex.IBoundSourceInfo)(value)).ReferenceCount;
-            this.m_DefinitionCount = ((Codex.IBoundSourceInfo)(value)).DefinitionCount;
-            this.m_Language = ((Codex.IBoundSourceInfo)(value)).Language;
-            this.m_References = new System.Collections.Generic.List<ReferenceSpan>(System.Linq.Enumerable.Select(((Codex.IBoundSourceInfo)(value)).References, v => EntityUtilities.NullOrCopy(v, _v => new ReferenceSpan().CopyFrom<ReferenceSpan>(_v))));
-            this.m_Definitions = new System.Collections.Generic.List<DefinitionSpan>(System.Linq.Enumerable.Select(((Codex.IBoundSourceInfo)(value)).Definitions, v => EntityUtilities.NullOrCopy(v, _v => new DefinitionSpan().CopyFrom<DefinitionSpan>(_v))));
-            this.m_Classifications = new System.Collections.Generic.List<ClassificationSpan>(System.Linq.Enumerable.Select(((Codex.IBoundSourceInfo)(value)).Classifications, v => EntityUtilities.NullOrCopy(v, _v => new ClassificationSpan().CopyFrom<ClassificationSpan>(_v))));
-            this.m_OutliningRegions = new System.Collections.Generic.List<OutliningRegion>(System.Linq.Enumerable.Select(((Codex.IBoundSourceInfo)(value)).OutliningRegions, v => EntityUtilities.NullOrCopy(v, _v => new OutliningRegion().CopyFrom<OutliningRegion>(_v))));
-            this.m_ExcludeFromSearch = ((Codex.IBoundSourceInfo)(value)).ExcludeFromSearch;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IBoundSourceInfo value) {
+            this.m_ReferenceCount = value.ReferenceCount;
+            this.m_DefinitionCount = value.DefinitionCount;
+            this.m_Language = value.Language;
+            this.m_References = new System.Collections.Generic.List<ReferenceSpan>(System.Linq.Enumerable.Select(value.References, v => EntityUtilities.NullOrCopy(v, _v => new ReferenceSpan().Apply(_v))));
+            this.m_Definitions = new System.Collections.Generic.List<DefinitionSpan>(System.Linq.Enumerable.Select(value.Definitions, v => EntityUtilities.NullOrCopy(v, _v => new DefinitionSpan().Apply(_v))));
+            this.m_Classifications = new System.Collections.Generic.List<ClassificationSpan>(System.Linq.Enumerable.Select(value.Classifications, v => EntityUtilities.NullOrCopy(v, _v => new ClassificationSpan().Apply(_v))));
+            this.m_OutliningRegions = new System.Collections.Generic.List<OutliningRegion>(System.Linq.Enumerable.Select(value.OutliningRegions, v => EntityUtilities.NullOrCopy(v, _v => new OutliningRegion().Apply(_v))));
+            this.m_ExcludeFromSearch = value.ExcludeFromSearch;
         }
     }
     
-    /// <summary>
-    /// Information about a source file as defined by the source control provider
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ISourceControlFileInfo))]
-    public partial class SourceControlFileInfo : Codex.EntityBase, Codex.ISourceControlFileInfo {
+    public partial class SourceControlFileInfo : Codex.EntityBase, Codex.ISourceControlFileInfo, Codex.IEntityTarget<Codex.ISourceControlFileInfo> {
         
         private string m_SourceControlContentId;
         
         public SourceControlFileInfo() {
-            Initialize();
         }
         
         public SourceControlFileInfo(Codex.ISourceControlFileInfo value) {
-            Initialize();
-            this.CopyFrom<SourceControlFileInfo>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -3418,15 +3380,13 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ISourceControlFileInfo value)
-            where TTarget : SourceControlFileInfo {
-            this.m_SourceControlContentId = ((Codex.ISourceControlFileInfo)(value)).SourceControlContentId;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ISourceControlFileInfo value) {
+            this.m_SourceControlContentId = value.SourceControlContentId;
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ISourceFileInfo))]
-    public partial class SourceFileInfo : SourceControlFileInfo, Codex.ISourceFileInfo {
+    public partial class SourceFileInfo : SourceControlFileInfo, Codex.ISourceFileInfo, Codex.IEntityTarget<Codex.ISourceFileInfo>, Codex.IEntityTarget<Codex.IRepoFileScopeEntity>, Codex.IEntityTarget<Codex.IRepoScopeEntity>, Codex.IEntityTarget<Codex.IProjectFileScopeEntity>, Codex.IEntityTarget<Codex.IProjectScopeEntity> {
         
         private int m_Lines;
         
@@ -3452,27 +3412,27 @@ namespace Codex.ObjectModel {
         }
         
         public SourceFileInfo(Codex.ISourceFileInfo value) {
-            this.CopyFrom<SourceFileInfo>(value);
-        }
-        
-        public SourceFileInfo(Codex.ISourceControlFileInfo value) : 
-                base(value) {
+            this.CopyFrom(value);
         }
         
         public SourceFileInfo(Codex.IRepoFileScopeEntity value) {
-            this.CopyFrom<SourceFileInfo>(value);
+            this.CopyFrom(value);
         }
         
         public SourceFileInfo(Codex.IRepoScopeEntity value) {
-            this.CopyFrom<SourceFileInfo>(value);
+            this.CopyFrom(value);
+        }
+        
+        public SourceFileInfo(Codex.ISourceControlFileInfo value) {
+            this.CopyFrom(value);
         }
         
         public SourceFileInfo(Codex.IProjectFileScopeEntity value) {
-            this.CopyFrom<SourceFileInfo>(value);
+            this.CopyFrom(value);
         }
         
         public SourceFileInfo(Codex.IProjectScopeEntity value) {
-            this.CopyFrom<SourceFileInfo>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -3527,15 +3487,6 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// The encoding used for the file
         /// </summary>
-        Codex.IEncodingDescription Codex.ISourceFileInfo.Encoding {
-            get {
-                return this.Encoding;
-            }
-        }
-        
-        /// <summary>
-        /// The encoding used for the file
-        /// </summary>
         public virtual EncodingDescription Encoding {
             get {
                 return this.m_Encoding;
@@ -3546,11 +3497,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// Extensible key value properties for the document.
+        /// The encoding used for the file
         /// </summary>
-        Codex.IPropertyMap Codex.ISourceFileInfo.Properties {
+        Codex.IEncodingDescription Codex.ISourceFileInfo.Encoding {
             get {
-                return this.Properties;
+                return this.Encoding;
             }
         }
         
@@ -3563,6 +3514,15 @@ namespace Codex.ObjectModel {
             }
             set {
                 this.m_Properties = value;
+            }
+        }
+        
+        /// <summary>
+        /// Extensible key value properties for the document.
+        /// </summary>
+        Codex.IPropertyMap Codex.ISourceFileInfo.Properties {
+            get {
+                return this.Properties;
             }
         }
         
@@ -3614,65 +3574,53 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IRepoScopeEntity value)
-            where TTarget : SourceFileInfo {
-            this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ISourceFileInfo value) {
+            this.m_Lines = value.Lines;
+            this.m_Size = value.Size;
+            this.m_Language = value.Language;
+            this.m_WebAddress = value.WebAddress;
+            this.m_Encoding = EntityUtilities.NullOrCopy(value.Encoding, v => new EncodingDescription().Apply(v));;
+            this.m_Properties = EntityUtilities.NullOrCopy(value.Properties, v => new PropertyMap().Apply(v));;
+            this.m_RepoRelativePath = value.RepoRelativePath;
+            this.m_RepositoryName = value.RepositoryName;
+            this.m_ProjectRelativePath = value.ProjectRelativePath;
+            this.m_ProjectId = value.ProjectId;
+            base.CopyFrom(((Codex.ISourceControlFileInfo)(value)));
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IRepoFileScopeEntity value)
-            where TTarget : SourceFileInfo {
-            this.m_RepoRelativePath = ((Codex.IRepoFileScopeEntity)(value)).RepoRelativePath;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IRepoFileScopeEntity value) {
+            this.m_RepoRelativePath = value.RepoRelativePath;
+            this.CopyFrom(((Codex.IRepoScopeEntity)(value)));
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IProjectScopeEntity value)
-            where TTarget : SourceFileInfo {
-            this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IRepoScopeEntity value) {
+            this.m_RepositoryName = value.RepositoryName;
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IProjectFileScopeEntity value)
-            where TTarget : SourceFileInfo {
-            this.m_ProjectRelativePath = ((Codex.IProjectFileScopeEntity)(value)).ProjectRelativePath;
-            this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IProjectFileScopeEntity value) {
+            this.m_ProjectRelativePath = value.ProjectRelativePath;
+            this.m_ProjectId = value.ProjectId;
+            this.CopyFrom(((Codex.IRepoFileScopeEntity)(value)));
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ISourceFileInfo value)
-            where TTarget : SourceFileInfo {
-            this.m_Lines = ((Codex.ISourceFileInfo)(value)).Lines;
-            this.m_Size = ((Codex.ISourceFileInfo)(value)).Size;
-            this.m_Language = ((Codex.ISourceFileInfo)(value)).Language;
-            this.m_WebAddress = ((Codex.ISourceFileInfo)(value)).WebAddress;
-            this.m_Encoding = EntityUtilities.NullOrCopy(value.Encoding, v => new EncodingDescription().CopyFrom<EncodingDescription>(v));;
-            this.m_Properties = EntityUtilities.NullOrCopy(value.Properties, v => new PropertyMap().CopyFrom<PropertyMap>(v));;
-            base.CopyFrom<SourceControlFileInfo>(((Codex.ISourceControlFileInfo)(value)));
-            this.m_RepoRelativePath = ((Codex.IRepoFileScopeEntity)(value)).RepoRelativePath;
-            this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
-            this.m_ProjectRelativePath = ((Codex.IProjectFileScopeEntity)(value)).ProjectRelativePath;
-            this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IProjectScopeEntity value) {
+            this.m_ProjectId = value.ProjectId;
+            this.CopyFrom(((Codex.IRepoScopeEntity)(value)));
         }
     }
     
-    /// <summary>
-    /// Describes encoding so that file may be reconstituted in a byte-identical form
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IEncodingDescription))]
-    public partial class EncodingDescription : Codex.EntityBase, Codex.IEncodingDescription {
+    public partial class EncodingDescription : Codex.EntityBase, Codex.IEncodingDescription, Codex.IEntityTarget<Codex.IEncodingDescription> {
         
         private string m_Name;
         
         private byte[] m_Preamble;
         
         public EncodingDescription() {
-            Initialize();
         }
         
         public EncodingDescription(Codex.IEncodingDescription value) {
-            Initialize();
-            this.CopyFrom<EncodingDescription>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -3699,37 +3647,24 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IEncodingDescription value)
-            where TTarget : EncodingDescription {
-            this.m_Name = ((Codex.IEncodingDescription)(value)).Name;
-            this.m_Preamble = ((Codex.IEncodingDescription)(value)).Preamble;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IEncodingDescription value) {
+            this.m_Name = value.Name;
+            this.m_Preamble = value.Preamble;
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ISourceFileBase))]
-    public partial class SourceFileBase : Codex.EntityBase, Codex.ISourceFileBase {
+    public partial class SourceFileBase : Codex.EntityBase, Codex.ISourceFileBase, Codex.IEntityTarget<Codex.ISourceFileBase> {
         
         private SourceFileInfo m_Info;
         
         private bool m_ExcludeFromSearch;
         
         public SourceFileBase() {
-            Initialize();
         }
         
         public SourceFileBase(Codex.ISourceFileBase value) {
-            Initialize();
-            this.CopyFrom<SourceFileBase>(value);
-        }
-        
-        /// <summary>
-        /// The information about the source file
-        /// </summary>
-        Codex.ISourceFileInfo Codex.ISourceFileBase.Info {
-            get {
-                return this.Info;
-            }
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -3745,6 +3680,15 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
+        /// The information about the source file
+        /// </summary>
+        Codex.ISourceFileInfo Codex.ISourceFileBase.Info {
+            get {
+                return this.Info;
+            }
+        }
+        
+        /// <summary>
         /// Indicates that the file should be excluded from text search
         /// </summary>
         public virtual bool ExcludeFromSearch {
@@ -3756,19 +3700,14 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ISourceFileBase value)
-            where TTarget : SourceFileBase {
-            this.m_Info = EntityUtilities.NullOrCopy(value.Info, v => new SourceFileInfo().CopyFrom<SourceFileInfo>(v));;
-            this.m_ExcludeFromSearch = ((Codex.ISourceFileBase)(value)).ExcludeFromSearch;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ISourceFileBase value) {
+            this.m_Info = EntityUtilities.NullOrCopy(value.Info, v => new SourceFileInfo().Apply(v));;
+            this.m_ExcludeFromSearch = value.ExcludeFromSearch;
         }
     }
     
-    /// <summary>
-    /// Defines text contents of a file and associated data
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ISourceFile))]
-    public partial class SourceFile : SourceFileBase, Codex.ISourceFile {
+    public partial class SourceFile : SourceFileBase, Codex.ISourceFile, Codex.IEntityTarget<Codex.ISourceFile> {
         
         private string m_Content;
         
@@ -3776,11 +3715,11 @@ namespace Codex.ObjectModel {
         }
         
         public SourceFile(Codex.ISourceFile value) {
-            this.CopyFrom<SourceFile>(value);
+            this.CopyFrom(value);
         }
         
-        public SourceFile(Codex.ISourceFileBase value) : 
-                base(value) {
+        public SourceFile(Codex.ISourceFileBase value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -3795,19 +3734,14 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ISourceFile value)
-            where TTarget : SourceFile {
-            this.m_Content = ((Codex.ISourceFile)(value)).Content;
-            base.CopyFrom<SourceFileBase>(((Codex.ISourceFileBase)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ISourceFile value) {
+            this.m_Content = value.Content;
+            base.CopyFrom(((Codex.ISourceFileBase)(value)));
         }
     }
     
-    /// <summary>
-    /// Defines text contents of a file and associated data
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IChunkedSourceFile))]
-    public partial class ChunkedSourceFile : SourceFileBase, Codex.IChunkedSourceFile {
+    public partial class ChunkedSourceFile : SourceFileBase, Codex.IChunkedSourceFile, Codex.IEntityTarget<Codex.IChunkedSourceFile> {
         
         private System.Collections.Generic.List<ChunkReference> m_Chunks = new System.Collections.Generic.List<ChunkReference>();
         
@@ -3815,20 +3749,11 @@ namespace Codex.ObjectModel {
         }
         
         public ChunkedSourceFile(Codex.IChunkedSourceFile value) {
-            this.CopyFrom<ChunkedSourceFile>(value);
+            this.CopyFrom(value);
         }
         
-        public ChunkedSourceFile(Codex.ISourceFileBase value) : 
-                base(value) {
-        }
-        
-        /// <summary>
-        /// The content of the file
-        /// </summary>
-        System.Collections.Generic.IReadOnlyList<Codex.IChunkReference> Codex.IChunkedSourceFile.Chunks {
-            get {
-                return this.Chunks;
-            }
+        public ChunkedSourceFile(Codex.ISourceFileBase value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -3843,28 +3768,33 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IChunkedSourceFile value)
-            where TTarget : ChunkedSourceFile {
-            this.m_Chunks = new System.Collections.Generic.List<ChunkReference>(System.Linq.Enumerable.Select(((Codex.IChunkedSourceFile)(value)).Chunks, v => EntityUtilities.NullOrCopy(v, _v => new ChunkReference().CopyFrom<ChunkReference>(_v))));
-            base.CopyFrom<SourceFileBase>(((Codex.ISourceFileBase)(value)));
-            return ((TTarget)(this));
+        /// <summary>
+        /// The content of the file
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<Codex.IChunkReference> Codex.IChunkedSourceFile.Chunks {
+            get {
+                return this.Chunks;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.IChunkedSourceFile value) {
+            this.m_Chunks = new System.Collections.Generic.List<ChunkReference>(System.Linq.Enumerable.Select(value.Chunks, v => EntityUtilities.NullOrCopy(v, _v => new ChunkReference().Apply(_v))));
+            base.CopyFrom(((Codex.ISourceFileBase)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IChunkReference))]
-    public partial class ChunkReference : Codex.EntityBase, Codex.IChunkReference {
+    public partial class ChunkReference : Codex.EntityBase, Codex.IChunkReference, Codex.IEntityTarget<Codex.IChunkReference> {
         
         private string m_Id;
         
         private int m_StartLineNumber;
         
         public ChunkReference() {
-            Initialize();
         }
         
         public ChunkReference(Codex.IChunkReference value) {
-            Initialize();
-            this.CopyFrom<ChunkReference>(value);
+            this.CopyFrom(value);
         }
         
         public virtual string Id {
@@ -3885,38 +3815,22 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IChunkReference value)
-            where TTarget : ChunkReference {
-            this.m_Id = ((Codex.IChunkReference)(value)).Id;
-            this.m_StartLineNumber = ((Codex.IChunkReference)(value)).StartLineNumber;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IChunkReference value) {
+            this.m_Id = value.Id;
+            this.m_StartLineNumber = value.StartLineNumber;
         }
     }
     
-    /// <summary>
-    /// Defines a chunk of text lines from a source file
-    /// </summary>s
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ISourceFileContentChunk))]
-    public partial class SourceFileContentChunk : Codex.EntityBase, Codex.ISourceFileContentChunk {
+    public partial class SourceFileContentChunk : Codex.EntityBase, Codex.ISourceFileContentChunk, Codex.IEntityTarget<Codex.ISourceFileContentChunk> {
         
         private System.Collections.Generic.List<string> m_ContentLines = new System.Collections.Generic.List<string>();
         
         public SourceFileContentChunk() {
-            Initialize();
         }
         
         public SourceFileContentChunk(Codex.ISourceFileContentChunk value) {
-            Initialize();
-            this.CopyFrom<SourceFileContentChunk>(value);
-        }
-        
-        /// <summary>
-        /// Lines defined as part of the chunk
-        /// </summary>
-        System.Collections.Generic.IReadOnlyList<string> Codex.ISourceFileContentChunk.ContentLines {
-            get {
-                return this.ContentLines;
-            }
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -3931,15 +3845,22 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ISourceFileContentChunk value)
-            where TTarget : SourceFileContentChunk {
-            this.m_ContentLines = new System.Collections.Generic.List<string>(((Codex.ISourceFileContentChunk)(value)).ContentLines);
-            return ((TTarget)(this));
+        /// <summary>
+        /// Lines defined as part of the chunk
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<string> Codex.ISourceFileContentChunk.ContentLines {
+            get {
+                return this.ContentLines;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.ISourceFileContentChunk value) {
+            this.m_ContentLines = new System.Collections.Generic.List<string>(value.ContentLines);
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IOutliningRegion))]
-    public partial class OutliningRegion : Codex.EntityBase, Codex.IOutliningRegion {
+    public partial class OutliningRegion : Codex.EntityBase, Codex.IOutliningRegion, Codex.IEntityTarget<Codex.IOutliningRegion> {
         
         private string m_Kind;
         
@@ -3948,12 +3869,10 @@ namespace Codex.ObjectModel {
         private LineSpan m_Content;
         
         public OutliningRegion() {
-            Initialize();
         }
         
         public OutliningRegion(Codex.IOutliningRegion value) {
-            Initialize();
-            this.CopyFrom<OutliningRegion>(value);
+            this.CopyFrom(value);
         }
         
         public virtual string Kind {
@@ -3962,15 +3881,6 @@ namespace Codex.ObjectModel {
             }
             set {
                 this.m_Kind = value;
-            }
-        }
-        
-        /// <summary>
-        /// Defines the region containing the header text of the outlining region
-        /// </summary>
-        Codex.ILineSpan Codex.IOutliningRegion.Header {
-            get {
-                return this.Header;
             }
         }
         
@@ -3987,11 +3897,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// Defines the region containing the collapsible content region of the outlining region
+        /// Defines the region containing the header text of the outlining region
         /// </summary>
-        Codex.ILineSpan Codex.IOutliningRegion.Content {
+        Codex.ILineSpan Codex.IOutliningRegion.Header {
             get {
-                return this.Content;
+                return this.Header;
             }
         }
         
@@ -4007,17 +3917,24 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IOutliningRegion value)
-            where TTarget : OutliningRegion {
-            this.m_Kind = ((Codex.IOutliningRegion)(value)).Kind;
-            this.m_Header = EntityUtilities.NullOrCopy(value.Header, v => new LineSpan().CopyFrom<LineSpan>(v));;
-            this.m_Content = EntityUtilities.NullOrCopy(value.Content, v => new LineSpan().CopyFrom<LineSpan>(v));;
-            return ((TTarget)(this));
+        /// <summary>
+        /// Defines the region containing the collapsible content region of the outlining region
+        /// </summary>
+        Codex.ILineSpan Codex.IOutliningRegion.Content {
+            get {
+                return this.Content;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.IOutliningRegion value) {
+            this.m_Kind = value.Kind;
+            this.m_Header = EntityUtilities.NullOrCopy(value.Header, v => new LineSpan().Apply(v));;
+            this.m_Content = EntityUtilities.NullOrCopy(value.Content, v => new LineSpan().Apply(v));;
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IDefinitionSpan))]
-    public partial class DefinitionSpan : Span, Codex.IDefinitionSpan {
+    public partial class DefinitionSpan : Span, Codex.IDefinitionSpan, Codex.IEntityTarget<Codex.IDefinitionSpan> {
         
         private DefinitionSymbol m_Definition;
         
@@ -4027,20 +3944,11 @@ namespace Codex.ObjectModel {
         }
         
         public DefinitionSpan(Codex.IDefinitionSpan value) {
-            this.CopyFrom<DefinitionSpan>(value);
+            this.CopyFrom(value);
         }
         
-        public DefinitionSpan(Codex.ISpan value) : 
-                base(value) {
-        }
-        
-        /// <summary>
-        /// The definition symbol referred to by the span
-        /// </summary>
-        Codex.IDefinitionSymbol Codex.IDefinitionSpan.Definition {
-            get {
-                return this.Definition;
-            }
+        public DefinitionSpan(Codex.ISpan value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -4056,11 +3964,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// Gets the definitions for parameters
+        /// The definition symbol referred to by the span
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<Codex.IParameterDefinitionSpan> Codex.IDefinitionSpan.Parameters {
+        Codex.IDefinitionSymbol Codex.IDefinitionSpan.Definition {
             get {
-                return this.Parameters;
+                return this.Definition;
             }
         }
         
@@ -4076,20 +3984,24 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IDefinitionSpan value)
-            where TTarget : DefinitionSpan {
-            this.m_Definition = EntityUtilities.NullOrCopy(value.Definition, v => new DefinitionSymbol().CopyFrom<DefinitionSymbol>(v));;
-            this.m_Parameters = new System.Collections.Generic.List<ParameterDefinitionSpan>(System.Linq.Enumerable.Select(((Codex.IDefinitionSpan)(value)).Parameters, v => EntityUtilities.NullOrCopy(v, _v => new ParameterDefinitionSpan().CopyFrom<ParameterDefinitionSpan>(_v))));
-            base.CopyFrom<Span>(((Codex.ISpan)(value)));
-            return ((TTarget)(this));
+        /// <summary>
+        /// Gets the definitions for parameters
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<Codex.IParameterDefinitionSpan> Codex.IDefinitionSpan.Parameters {
+            get {
+                return this.Parameters;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.IDefinitionSpan value) {
+            this.m_Definition = EntityUtilities.NullOrCopy(value.Definition, v => new DefinitionSymbol().Apply(v));;
+            this.m_Parameters = new System.Collections.Generic.List<ParameterDefinitionSpan>(System.Linq.Enumerable.Select(value.Parameters, v => EntityUtilities.NullOrCopy(v, _v => new ParameterDefinitionSpan().Apply(_v))));
+            base.CopyFrom(((Codex.ISpan)(value)));
         }
     }
     
-    /// <summary>
-    /// A specialized definition span referring to a parameter of a method/property
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IParameterDefinitionSpan))]
-    public partial class ParameterDefinitionSpan : LineSpan, Codex.IParameterDefinitionSpan {
+    public partial class ParameterDefinitionSpan : LineSpan, Codex.IParameterDefinitionSpan, Codex.IEntityTarget<Codex.IParameterDefinitionSpan> {
         
         private int m_ParameterIndex;
         
@@ -4099,15 +4011,15 @@ namespace Codex.ObjectModel {
         }
         
         public ParameterDefinitionSpan(Codex.IParameterDefinitionSpan value) {
-            this.CopyFrom<ParameterDefinitionSpan>(value);
+            this.CopyFrom(value);
         }
         
-        public ParameterDefinitionSpan(Codex.ILineSpan value) : 
-                base(value) {
+        public ParameterDefinitionSpan(Codex.ILineSpan value) {
+            this.CopyFrom(value);
         }
         
-        public ParameterDefinitionSpan(Codex.ISpan value) : 
-                base(value) {
+        public ParameterDefinitionSpan(Codex.ISpan value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -4134,17 +4046,15 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IParameterDefinitionSpan value)
-            where TTarget : ParameterDefinitionSpan {
-            this.m_ParameterIndex = ((Codex.IParameterDefinitionSpan)(value)).ParameterIndex;
-            this.m_Name = ((Codex.IParameterDefinitionSpan)(value)).Name;
-            base.CopyFrom<LineSpan>(((Codex.ILineSpan)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IParameterDefinitionSpan value) {
+            this.m_ParameterIndex = value.ParameterIndex;
+            this.m_Name = value.Name;
+            base.CopyFrom(((Codex.ILineSpan)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IReferenceSpan))]
-    public partial class ReferenceSpan : SymbolSpan, Codex.IReferenceSpan {
+    public partial class ReferenceSpan : SymbolSpan, Codex.IReferenceSpan, Codex.IEntityTarget<Codex.IReferenceSpan> {
         
         private Codex.ObjectModel.SymbolId m_RelatedDefinition;
         
@@ -4156,23 +4066,23 @@ namespace Codex.ObjectModel {
         }
         
         public ReferenceSpan(Codex.IReferenceSpan value) {
-            this.CopyFrom<ReferenceSpan>(value);
+            this.CopyFrom(value);
         }
         
-        public ReferenceSpan(Codex.ISymbolSpan value) : 
-                base(value) {
+        public ReferenceSpan(Codex.ISymbolSpan value) {
+            this.CopyFrom(value);
         }
         
-        public ReferenceSpan(Codex.ITextLineSpan value) : 
-                base(value) {
+        public ReferenceSpan(Codex.ITextLineSpan value) {
+            this.CopyFrom(value);
         }
         
-        public ReferenceSpan(Codex.ILineSpan value) : 
-                base(value) {
+        public ReferenceSpan(Codex.ILineSpan value) {
+            this.CopyFrom(value);
         }
         
-        public ReferenceSpan(Codex.ISpan value) : 
-                base(value) {
+        public ReferenceSpan(Codex.ISpan value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -4191,15 +4101,6 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// The reference symbol referred to by the span
         /// </summary>
-        Codex.IReferenceSymbol Codex.IReferenceSpan.Reference {
-            get {
-                return this.Reference;
-            }
-        }
-        
-        /// <summary>
-        /// The reference symbol referred to by the span
-        /// </summary>
         public virtual ReferenceSymbol Reference {
             get {
                 return this.m_Reference;
@@ -4210,11 +4111,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// Gets the references to parameters
+        /// The reference symbol referred to by the span
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<Codex.IParameterReferenceSpan> Codex.IReferenceSpan.Parameters {
+        Codex.IReferenceSymbol Codex.IReferenceSpan.Reference {
             get {
-                return this.Parameters;
+                return this.Reference;
             }
         }
         
@@ -4230,21 +4131,25 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IReferenceSpan value)
-            where TTarget : ReferenceSpan {
-            this.m_RelatedDefinition = ((Codex.IReferenceSpan)(value)).RelatedDefinition;
-            this.m_Reference = EntityUtilities.NullOrCopy(value.Reference, v => new ReferenceSymbol().CopyFrom<ReferenceSymbol>(v));;
-            this.m_Parameters = new System.Collections.Generic.List<ParameterReferenceSpan>(System.Linq.Enumerable.Select(((Codex.IReferenceSpan)(value)).Parameters, v => EntityUtilities.NullOrCopy(v, _v => new ParameterReferenceSpan().CopyFrom<ParameterReferenceSpan>(_v))));
-            base.CopyFrom<SymbolSpan>(((Codex.ISymbolSpan)(value)));
-            return ((TTarget)(this));
+        /// <summary>
+        /// Gets the references to parameters
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<Codex.IParameterReferenceSpan> Codex.IReferenceSpan.Parameters {
+            get {
+                return this.Parameters;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.IReferenceSpan value) {
+            this.m_RelatedDefinition = value.RelatedDefinition;
+            this.m_Reference = EntityUtilities.NullOrCopy(value.Reference, v => new ReferenceSymbol().Apply(v));;
+            this.m_Parameters = new System.Collections.Generic.List<ParameterReferenceSpan>(System.Linq.Enumerable.Select(value.Parameters, v => EntityUtilities.NullOrCopy(v, _v => new ParameterReferenceSpan().Apply(_v))));
+            base.CopyFrom(((Codex.ISymbolSpan)(value)));
         }
     }
     
-    /// <summary>
-    /// A specialized reference span referring to a parameter to a method/property
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IParameterReferenceSpan))]
-    public partial class ParameterReferenceSpan : SymbolSpan, Codex.IParameterReferenceSpan {
+    public partial class ParameterReferenceSpan : SymbolSpan, Codex.IParameterReferenceSpan, Codex.IEntityTarget<Codex.IParameterReferenceSpan> {
         
         private int m_ParameterIndex;
         
@@ -4252,23 +4157,23 @@ namespace Codex.ObjectModel {
         }
         
         public ParameterReferenceSpan(Codex.IParameterReferenceSpan value) {
-            this.CopyFrom<ParameterReferenceSpan>(value);
+            this.CopyFrom(value);
         }
         
-        public ParameterReferenceSpan(Codex.ISymbolSpan value) : 
-                base(value) {
+        public ParameterReferenceSpan(Codex.ISymbolSpan value) {
+            this.CopyFrom(value);
         }
         
-        public ParameterReferenceSpan(Codex.ITextLineSpan value) : 
-                base(value) {
+        public ParameterReferenceSpan(Codex.ITextLineSpan value) {
+            this.CopyFrom(value);
         }
         
-        public ParameterReferenceSpan(Codex.ILineSpan value) : 
-                base(value) {
+        public ParameterReferenceSpan(Codex.ILineSpan value) {
+            this.CopyFrom(value);
         }
         
-        public ParameterReferenceSpan(Codex.ISpan value) : 
-                base(value) {
+        public ParameterReferenceSpan(Codex.ISpan value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -4283,19 +4188,14 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IParameterReferenceSpan value)
-            where TTarget : ParameterReferenceSpan {
-            this.m_ParameterIndex = ((Codex.IParameterReferenceSpan)(value)).ParameterIndex;
-            base.CopyFrom<SymbolSpan>(((Codex.ISymbolSpan)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IParameterReferenceSpan value) {
+            this.m_ParameterIndex = value.ParameterIndex;
+            base.CopyFrom(((Codex.ISymbolSpan)(value)));
         }
     }
     
-    /// <summary>
-    /// Defines a classified span of text
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IClassificationSpan))]
-    public partial class ClassificationSpan : Span, Codex.IClassificationSpan {
+    public partial class ClassificationSpan : Span, Codex.IClassificationSpan, Codex.IEntityTarget<Codex.IClassificationSpan> {
         
         private int m_DefaultClassificationColor;
         
@@ -4307,11 +4207,11 @@ namespace Codex.ObjectModel {
         }
         
         public ClassificationSpan(Codex.IClassificationSpan value) {
-            this.CopyFrom<ClassificationSpan>(value);
+            this.CopyFrom(value);
         }
         
-        public ClassificationSpan(Codex.ISpan value) : 
-                base(value) {
+        public ClassificationSpan(Codex.ISpan value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -4352,47 +4252,43 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IClassificationSpan value)
-            where TTarget : ClassificationSpan {
-            this.m_DefaultClassificationColor = ((Codex.IClassificationSpan)(value)).DefaultClassificationColor;
-            this.m_Classification = ((Codex.IClassificationSpan)(value)).Classification;
-            this.m_LocalGroupId = ((Codex.IClassificationSpan)(value)).LocalGroupId;
-            base.CopyFrom<Span>(((Codex.ISpan)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IClassificationSpan value) {
+            this.m_DefaultClassificationColor = value.DefaultClassificationColor;
+            this.m_Classification = value.Classification;
+            this.m_LocalGroupId = value.LocalGroupId;
+            base.CopyFrom(((Codex.ISpan)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ISymbolSpan))]
-    public partial class SymbolSpan : TextLineSpan, Codex.ISymbolSpan {
+    public partial class SymbolSpan : TextLineSpan, Codex.ISymbolSpan, Codex.IEntityTarget<Codex.ISymbolSpan> {
         
         public SymbolSpan() {
         }
         
         public SymbolSpan(Codex.ISymbolSpan value) {
-            this.CopyFrom<SymbolSpan>(value);
+            this.CopyFrom(value);
         }
         
-        public SymbolSpan(Codex.ITextLineSpan value) : 
-                base(value) {
+        public SymbolSpan(Codex.ITextLineSpan value) {
+            this.CopyFrom(value);
         }
         
-        public SymbolSpan(Codex.ILineSpan value) : 
-                base(value) {
+        public SymbolSpan(Codex.ILineSpan value) {
+            this.CopyFrom(value);
         }
         
-        public SymbolSpan(Codex.ISpan value) : 
-                base(value) {
+        public SymbolSpan(Codex.ISpan value) {
+            this.CopyFrom(value);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ISymbolSpan value)
-            where TTarget : SymbolSpan {
-            base.CopyFrom<TextLineSpan>(((Codex.ITextLineSpan)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ISymbolSpan value) {
+            base.CopyFrom(((Codex.ITextLineSpan)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ITextLineSpan))]
-    public partial class TextLineSpan : LineSpan, Codex.ITextLineSpan {
+    public partial class TextLineSpan : LineSpan, Codex.ITextLineSpan, Codex.IEntityTarget<Codex.ITextLineSpan> {
         
         private string m_LineSpanText;
         
@@ -4400,15 +4296,15 @@ namespace Codex.ObjectModel {
         }
         
         public TextLineSpan(Codex.ITextLineSpan value) {
-            this.CopyFrom<TextLineSpan>(value);
+            this.CopyFrom(value);
         }
         
-        public TextLineSpan(Codex.ILineSpan value) : 
-                base(value) {
+        public TextLineSpan(Codex.ILineSpan value) {
+            this.CopyFrom(value);
         }
         
-        public TextLineSpan(Codex.ISpan value) : 
-                base(value) {
+        public TextLineSpan(Codex.ISpan value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -4424,16 +4320,14 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ITextLineSpan value)
-            where TTarget : TextLineSpan {
-            this.m_LineSpanText = ((Codex.ITextLineSpan)(value)).LineSpanText;
-            base.CopyFrom<LineSpan>(((Codex.ILineSpan)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ITextLineSpan value) {
+            this.m_LineSpanText = value.LineSpanText;
+            base.CopyFrom(((Codex.ILineSpan)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ILineSpan))]
-    public partial class LineSpan : Span, Codex.ILineSpan {
+    public partial class LineSpan : Span, Codex.ILineSpan, Codex.IEntityTarget<Codex.ILineSpan> {
         
         private System.Nullable<int> m_LineIndex;
         
@@ -4447,11 +4341,11 @@ namespace Codex.ObjectModel {
         }
         
         public LineSpan(Codex.ILineSpan value) {
-            this.CopyFrom<LineSpan>(value);
+            this.CopyFrom(value);
         }
         
-        public LineSpan(Codex.ISpan value) : 
-                base(value) {
+        public LineSpan(Codex.ISpan value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -4503,31 +4397,27 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ILineSpan value)
-            where TTarget : LineSpan {
-            this.m_LineIndex = ((Codex.ILineSpan)(value)).LineIndex;
-            this.m_LineNumber = ((Codex.ILineSpan)(value)).LineNumber;
-            this.m_LineSpanStart = ((Codex.ILineSpan)(value)).LineSpanStart;
-            this.m_LineOffset = ((Codex.ILineSpan)(value)).LineOffset;
-            base.CopyFrom<Span>(((Codex.ISpan)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ILineSpan value) {
+            this.m_LineIndex = value.LineIndex;
+            this.m_LineNumber = value.LineNumber;
+            this.m_LineSpanStart = value.LineSpanStart;
+            this.m_LineOffset = value.LineOffset;
+            base.CopyFrom(((Codex.ISpan)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ISpan))]
-    public partial class Span : Codex.EntityBase, Codex.ISpan {
+    public partial class Span : Codex.EntityBase, Codex.ISpan, Codex.IEntityTarget<Codex.ISpan> {
         
         private int m_Start;
         
         private int m_Length;
         
         public Span() {
-            Initialize();
         }
         
         public Span(Codex.ISpan value) {
-            Initialize();
-            this.CopyFrom<Span>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -4554,16 +4444,14 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ISpan value)
-            where TTarget : Span {
-            this.m_Start = ((Codex.ISpan)(value)).Start;
-            this.m_Length = ((Codex.ISpan)(value)).Length;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ISpan value) {
+            this.m_Start = value.Start;
+            this.m_Length = value.Length;
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ICodeReview))]
-    public partial class CodeReview : Codex.EntityBase, Codex.ICodeReview {
+    public partial class CodeReview : Codex.EntityBase, Codex.ICodeReview, Codex.IEntityTarget<Codex.ICodeReview> {
         
         private string m_Id;
         
@@ -4574,12 +4462,10 @@ namespace Codex.ObjectModel {
         private Codex.CodeReviewStatus m_Status;
         
         public CodeReview() {
-            Initialize();
         }
         
         public CodeReview(Codex.ICodeReview value) {
-            Initialize();
-            this.CopyFrom<CodeReview>(value);
+            this.CopyFrom(value);
         }
         
         public virtual string Id {
@@ -4621,18 +4507,16 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ICodeReview value)
-            where TTarget : CodeReview {
-            this.m_Id = ((Codex.ICodeReview)(value)).Id;
-            this.m_Description = ((Codex.ICodeReview)(value)).Description;
-            this.m_Url = ((Codex.ICodeReview)(value)).Url;
-            this.m_Status = ((Codex.ICodeReview)(value)).Status;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ICodeReview value) {
+            this.m_Id = value.Id;
+            this.m_Description = value.Description;
+            this.m_Url = value.Url;
+            this.m_Status = value.Status;
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ICodeReviewIteration))]
-    public partial class CodeReviewIteration : Codex.EntityBase, Codex.ICodeReviewIteration {
+    public partial class CodeReviewIteration : Codex.EntityBase, Codex.ICodeReviewIteration, Codex.IEntityTarget<Codex.ICodeReviewIteration> {
         
         private int m_IterationNumber;
         
@@ -4643,12 +4527,10 @@ namespace Codex.ObjectModel {
         private System.Collections.Generic.List<CodeReviewFile> m_Files = new System.Collections.Generic.List<CodeReviewFile>();
         
         public CodeReviewIteration() {
-            Initialize();
         }
         
         public CodeReviewIteration(Codex.ICodeReviewIteration value) {
-            Initialize();
-            this.CopyFrom<CodeReviewIteration>(value);
+            this.CopyFrom(value);
         }
         
         public virtual int IterationNumber {
@@ -4678,12 +4560,6 @@ namespace Codex.ObjectModel {
             }
         }
         
-        System.Collections.Generic.IReadOnlyList<Codex.ICodeReviewFile> Codex.ICodeReviewIteration.Files {
-            get {
-                return this.Files;
-            }
-        }
-        
         public virtual System.Collections.Generic.List<CodeReviewFile> Files {
             get {
                 return this.m_Files;
@@ -4693,28 +4569,30 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ICodeReviewIteration value)
-            where TTarget : CodeReviewIteration {
-            this.m_IterationNumber = ((Codex.ICodeReviewIteration)(value)).IterationNumber;
-            this.m_ReviewId = ((Codex.ICodeReviewIteration)(value)).ReviewId;
-            this.m_Description = ((Codex.ICodeReviewIteration)(value)).Description;
-            this.m_Files = new System.Collections.Generic.List<CodeReviewFile>(System.Linq.Enumerable.Select(((Codex.ICodeReviewIteration)(value)).Files, v => EntityUtilities.NullOrCopy(v, _v => new CodeReviewFile().CopyFrom<CodeReviewFile>(_v))));
-            return ((TTarget)(this));
+        System.Collections.Generic.IReadOnlyList<Codex.ICodeReviewFile> Codex.ICodeReviewIteration.Files {
+            get {
+                return this.Files;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.ICodeReviewIteration value) {
+            this.m_IterationNumber = value.IterationNumber;
+            this.m_ReviewId = value.ReviewId;
+            this.m_Description = value.Description;
+            this.m_Files = new System.Collections.Generic.List<CodeReviewFile>(System.Linq.Enumerable.Select(value.Files, v => EntityUtilities.NullOrCopy(v, _v => new CodeReviewFile().Apply(_v))));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ICodeReviewerInfo))]
-    public partial class CodeReviewerInfo : Codex.EntityBase, Codex.ICodeReviewerInfo {
+    public partial class CodeReviewerInfo : Codex.EntityBase, Codex.ICodeReviewerInfo, Codex.IEntityTarget<Codex.ICodeReviewerInfo> {
         
         private string m_Name;
         
         public CodeReviewerInfo() {
-            Initialize();
         }
         
         public CodeReviewerInfo(Codex.ICodeReviewerInfo value) {
-            Initialize();
-            this.CopyFrom<CodeReviewerInfo>(value);
+            this.CopyFrom(value);
         }
         
         public virtual string Name {
@@ -4726,15 +4604,13 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ICodeReviewerInfo value)
-            where TTarget : CodeReviewerInfo {
-            this.m_Name = ((Codex.ICodeReviewerInfo)(value)).Name;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ICodeReviewerInfo value) {
+            this.m_Name = value.Name;
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ICodeReviewFile))]
-    public partial class CodeReviewFile : Codex.EntityBase, Codex.ICodeReviewFile {
+    public partial class CodeReviewFile : Codex.EntityBase, Codex.ICodeReviewFile, Codex.IEntityTarget<Codex.ICodeReviewFile> {
         
         private int m_StartIteration;
         
@@ -4747,12 +4623,10 @@ namespace Codex.ObjectModel {
         private Codex.FileChangeKind m_ChangeKind;
         
         public CodeReviewFile() {
-            Initialize();
         }
         
         public CodeReviewFile(Codex.ICodeReviewFile value) {
-            Initialize();
-            this.CopyFrom<CodeReviewFile>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -4815,19 +4689,17 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ICodeReviewFile value)
-            where TTarget : CodeReviewFile {
-            this.m_StartIteration = ((Codex.ICodeReviewFile)(value)).StartIteration;
-            this.m_RepoRelativePath = ((Codex.ICodeReviewFile)(value)).RepoRelativePath;
-            this.m_FileId = ((Codex.ICodeReviewFile)(value)).FileId;
-            this.m_BaselineFileId = ((Codex.ICodeReviewFile)(value)).BaselineFileId;
-            this.m_ChangeKind = ((Codex.ICodeReviewFile)(value)).ChangeKind;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ICodeReviewFile value) {
+            this.m_StartIteration = value.StartIteration;
+            this.m_RepoRelativePath = value.RepoRelativePath;
+            this.m_FileId = value.FileId;
+            this.m_BaselineFileId = value.BaselineFileId;
+            this.m_ChangeKind = value.ChangeKind;
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ICodeReviewCommentThread))]
-    public partial class CodeReviewCommentThread : Codex.EntityBase, Codex.ICodeReviewCommentThread {
+    public partial class CodeReviewCommentThread : Codex.EntityBase, Codex.ICodeReviewCommentThread, Codex.IEntityTarget<Codex.ICodeReviewCommentThread> {
         
         private LineSpan m_OriginalSpan;
         
@@ -4840,21 +4712,10 @@ namespace Codex.ObjectModel {
         private System.Collections.Generic.List<CodeReviewComment> m_Comments = new System.Collections.Generic.List<CodeReviewComment>();
         
         public CodeReviewCommentThread() {
-            Initialize();
         }
         
         public CodeReviewCommentThread(Codex.ICodeReviewCommentThread value) {
-            Initialize();
-            this.CopyFrom<CodeReviewCommentThread>(value);
-        }
-        
-        /// <summary>
-        /// The original location for the comment in the originating iteration
-        /// </summary>
-        Codex.ILineSpan Codex.ICodeReviewCommentThread.OriginalSpan {
-            get {
-                return this.OriginalSpan;
-            }
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -4866,6 +4727,15 @@ namespace Codex.ObjectModel {
             }
             set {
                 this.m_OriginalSpan = value;
+            }
+        }
+        
+        /// <summary>
+        /// The original location for the comment in the originating iteration
+        /// </summary>
+        Codex.ILineSpan Codex.ICodeReviewCommentThread.OriginalSpan {
+            get {
+                return this.OriginalSpan;
             }
         }
         
@@ -4902,12 +4772,6 @@ namespace Codex.ObjectModel {
             }
         }
         
-        System.Collections.Generic.IReadOnlyList<Codex.ICodeReviewComment> Codex.ICodeReviewCommentThread.Comments {
-            get {
-                return this.Comments;
-            }
-        }
-        
         public virtual System.Collections.Generic.List<CodeReviewComment> Comments {
             get {
                 return this.m_Comments;
@@ -4917,19 +4781,23 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ICodeReviewCommentThread value)
-            where TTarget : CodeReviewCommentThread {
-            this.m_OriginalSpan = EntityUtilities.NullOrCopy(value.OriginalSpan, v => new LineSpan().CopyFrom<LineSpan>(v));;
-            this.m_StartIteration = ((Codex.ICodeReviewCommentThread)(value)).StartIteration;
-            this.m_LastUpdated = ((Codex.ICodeReviewCommentThread)(value)).LastUpdated;
-            this.m_FileRepoRelativePath = ((Codex.ICodeReviewCommentThread)(value)).FileRepoRelativePath;
-            this.m_Comments = new System.Collections.Generic.List<CodeReviewComment>(System.Linq.Enumerable.Select(((Codex.ICodeReviewCommentThread)(value)).Comments, v => EntityUtilities.NullOrCopy(v, _v => new CodeReviewComment().CopyFrom<CodeReviewComment>(_v))));
-            return ((TTarget)(this));
+        System.Collections.Generic.IReadOnlyList<Codex.ICodeReviewComment> Codex.ICodeReviewCommentThread.Comments {
+            get {
+                return this.Comments;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.ICodeReviewCommentThread value) {
+            this.m_OriginalSpan = EntityUtilities.NullOrCopy(value.OriginalSpan, v => new LineSpan().Apply(v));;
+            this.m_StartIteration = value.StartIteration;
+            this.m_LastUpdated = value.LastUpdated;
+            this.m_FileRepoRelativePath = value.FileRepoRelativePath;
+            this.m_Comments = new System.Collections.Generic.List<CodeReviewComment>(System.Linq.Enumerable.Select(value.Comments, v => EntityUtilities.NullOrCopy(v, _v => new CodeReviewComment().Apply(_v))));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ICodeReviewComment))]
-    public partial class CodeReviewComment : Codex.EntityBase, Codex.ICodeReviewComment {
+    public partial class CodeReviewComment : Codex.EntityBase, Codex.ICodeReviewComment, Codex.IEntityTarget<Codex.ICodeReviewComment> {
         
         private string m_Text;
         
@@ -4940,12 +4808,10 @@ namespace Codex.ObjectModel {
         private System.DateTime m_CommentTime;
         
         public CodeReviewComment() {
-            Initialize();
         }
         
         public CodeReviewComment(Codex.ICodeReviewComment value) {
-            Initialize();
-            this.CopyFrom<CodeReviewComment>(value);
+            this.CopyFrom(value);
         }
         
         public virtual string Text {
@@ -4993,21 +4859,16 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ICodeReviewComment value)
-            where TTarget : CodeReviewComment {
-            this.m_Text = ((Codex.ICodeReviewComment)(value)).Text;
-            this.m_Reviewer = ((Codex.ICodeReviewComment)(value)).Reviewer;
-            this.m_Importance = ((Codex.ICodeReviewComment)(value)).Importance;
-            this.m_CommentTime = ((Codex.ICodeReviewComment)(value)).CommentTime;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ICodeReviewComment value) {
+            this.m_Text = value.Text;
+            this.m_Reviewer = value.Reviewer;
+            this.m_Importance = value.Importance;
+            this.m_CommentTime = value.CommentTime;
         }
     }
     
-    /// <summary>
-    /// Defines documentation about a symbol
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IDocumentationInfo))]
-    public partial class DocumentationInfo : Codex.EntityBase, Codex.IDocumentationInfo {
+    public partial class DocumentationInfo : Codex.EntityBase, Codex.IDocumentationInfo, Codex.IEntityTarget<Codex.IDocumentationInfo> {
         
         private string m_DeclarationName;
         
@@ -5028,12 +4889,10 @@ namespace Codex.ObjectModel {
         private System.Collections.Generic.List<TypedParameterDocumentation> m_Exceptions = new System.Collections.Generic.List<TypedParameterDocumentation>();
         
         public DocumentationInfo() {
-            Initialize();
         }
         
         public DocumentationInfo(Codex.IDocumentationInfo value) {
-            Initialize();
-            this.CopyFrom<DocumentationInfo>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -5063,15 +4922,6 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// Identity of symbol which generated this documentation
         /// </summary>
-        Codex.ICodeSymbol Codex.IDocumentationInfo.AssociatedSymbol {
-            get {
-                return this.AssociatedSymbol;
-            }
-        }
-        
-        /// <summary>
-        /// Identity of symbol which generated this documentation
-        /// </summary>
         public virtual Symbol AssociatedSymbol {
             get {
                 return this.m_AssociatedSymbol;
@@ -5082,12 +4932,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// The other symbols referenced by this symbol (i.e. base type, implemented interface
-        /// or interface members, overridden members, return type of method or property type)
+        /// Identity of symbol which generated this documentation
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<Codex.IDocumentationReferenceSymbol> Codex.IDocumentationInfo.References {
+        Codex.ICodeSymbol Codex.IDocumentationInfo.AssociatedSymbol {
             get {
-                return this.References;
+                return this.AssociatedSymbol;
             }
         }
         
@@ -5101,6 +4950,16 @@ namespace Codex.ObjectModel {
             }
             set {
                 this.m_References = value;
+            }
+        }
+        
+        /// <summary>
+        /// The other symbols referenced by this symbol (i.e. base type, implemented interface
+        /// or interface members, overridden members, return type of method or property type)
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<Codex.IDocumentationReferenceSymbol> Codex.IDocumentationInfo.References {
+            get {
+                return this.References;
             }
         }
         
@@ -5131,15 +4990,6 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// Comments on arguments
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<Codex.ITypedParameterDocumentation> Codex.IDocumentationInfo.Arguments {
-            get {
-                return this.Arguments;
-            }
-        }
-        
-        /// <summary>
-        /// Comments on arguments
-        /// </summary>
         public virtual System.Collections.Generic.List<TypedParameterDocumentation> Arguments {
             get {
                 return this.m_Arguments;
@@ -5150,11 +5000,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// Comments on type parameters
+        /// Comments on arguments
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<Codex.IParameterDocumentation> Codex.IDocumentationInfo.TypeParameters {
+        System.Collections.Generic.IReadOnlyList<Codex.ITypedParameterDocumentation> Codex.IDocumentationInfo.Arguments {
             get {
-                return this.TypeParameters;
+                return this.Arguments;
             }
         }
         
@@ -5171,11 +5021,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// Information about exceptions which can be thrown
+        /// Comments on type parameters
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<Codex.ITypedParameterDocumentation> Codex.IDocumentationInfo.Exceptions {
+        System.Collections.Generic.IReadOnlyList<Codex.IParameterDocumentation> Codex.IDocumentationInfo.TypeParameters {
             get {
-                return this.Exceptions;
+                return this.TypeParameters;
             }
         }
         
@@ -5191,38 +5041,40 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IDocumentationInfo value)
-            where TTarget : DocumentationInfo {
-            this.m_DeclarationName = ((Codex.IDocumentationInfo)(value)).DeclarationName;
-            this.m_Comment = ((Codex.IDocumentationInfo)(value)).Comment;
-            this.m_AssociatedSymbol = EntityUtilities.NullOrCopy(value.AssociatedSymbol, v => new Symbol().CopyFrom<Symbol>(v));;
-            this.m_References = new System.Collections.Generic.List<DocumentationReferenceSymbol>(System.Linq.Enumerable.Select(((Codex.IDocumentationInfo)(value)).References, v => EntityUtilities.NullOrCopy(v, _v => new DocumentationReferenceSymbol().CopyFrom<DocumentationReferenceSymbol>(_v))));
-            this.m_Summary = ((Codex.IDocumentationInfo)(value)).Summary;
-            this.m_Remarks = ((Codex.IDocumentationInfo)(value)).Remarks;
-            this.m_Arguments = new System.Collections.Generic.List<TypedParameterDocumentation>(System.Linq.Enumerable.Select(((Codex.IDocumentationInfo)(value)).Arguments, v => EntityUtilities.NullOrCopy(v, _v => new TypedParameterDocumentation().CopyFrom<TypedParameterDocumentation>(_v))));
-            this.m_TypeParameters = new System.Collections.Generic.List<ParameterDocumentation>(System.Linq.Enumerable.Select(((Codex.IDocumentationInfo)(value)).TypeParameters, v => EntityUtilities.NullOrCopy(v, _v => new ParameterDocumentation().CopyFrom<ParameterDocumentation>(_v))));
-            this.m_Exceptions = new System.Collections.Generic.List<TypedParameterDocumentation>(System.Linq.Enumerable.Select(((Codex.IDocumentationInfo)(value)).Exceptions, v => EntityUtilities.NullOrCopy(v, _v => new TypedParameterDocumentation().CopyFrom<TypedParameterDocumentation>(_v))));
-            return ((TTarget)(this));
+        /// <summary>
+        /// Information about exceptions which can be thrown
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<Codex.ITypedParameterDocumentation> Codex.IDocumentationInfo.Exceptions {
+            get {
+                return this.Exceptions;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.IDocumentationInfo value) {
+            this.m_DeclarationName = value.DeclarationName;
+            this.m_Comment = value.Comment;
+            this.m_AssociatedSymbol = EntityUtilities.NullOrCopy(value.AssociatedSymbol, v => new Symbol().Apply(v));;
+            this.m_References = new System.Collections.Generic.List<DocumentationReferenceSymbol>(System.Linq.Enumerable.Select(value.References, v => EntityUtilities.NullOrCopy(v, _v => new DocumentationReferenceSymbol().Apply(_v))));
+            this.m_Summary = value.Summary;
+            this.m_Remarks = value.Remarks;
+            this.m_Arguments = new System.Collections.Generic.List<TypedParameterDocumentation>(System.Linq.Enumerable.Select(value.Arguments, v => EntityUtilities.NullOrCopy(v, _v => new TypedParameterDocumentation().Apply(_v))));
+            this.m_TypeParameters = new System.Collections.Generic.List<ParameterDocumentation>(System.Linq.Enumerable.Select(value.TypeParameters, v => EntityUtilities.NullOrCopy(v, _v => new ParameterDocumentation().Apply(_v))));
+            this.m_Exceptions = new System.Collections.Generic.List<TypedParameterDocumentation>(System.Linq.Enumerable.Select(value.Exceptions, v => EntityUtilities.NullOrCopy(v, _v => new TypedParameterDocumentation().Apply(_v))));
         }
     }
     
-    /// <summary>
-    /// Documentation for a method parameter
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IParameterDocumentation))]
-    public partial class ParameterDocumentation : Codex.EntityBase, Codex.IParameterDocumentation {
+    public partial class ParameterDocumentation : Codex.EntityBase, Codex.IParameterDocumentation, Codex.IEntityTarget<Codex.IParameterDocumentation> {
         
         private string m_Name;
         
         private string m_Comment;
         
         public ParameterDocumentation() {
-            Initialize();
         }
         
         public ParameterDocumentation(Codex.IParameterDocumentation value) {
-            Initialize();
-            this.CopyFrom<ParameterDocumentation>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -5249,19 +5101,14 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IParameterDocumentation value)
-            where TTarget : ParameterDocumentation {
-            this.m_Name = ((Codex.IParameterDocumentation)(value)).Name;
-            this.m_Comment = ((Codex.IParameterDocumentation)(value)).Comment;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IParameterDocumentation value) {
+            this.m_Name = value.Name;
+            this.m_Comment = value.Comment;
         }
     }
     
-    /// <summary>
-    /// Documentation for typed parameter
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ITypedParameterDocumentation))]
-    public partial class TypedParameterDocumentation : ParameterDocumentation, Codex.ITypedParameterDocumentation {
+    public partial class TypedParameterDocumentation : ParameterDocumentation, Codex.ITypedParameterDocumentation, Codex.IEntityTarget<Codex.ITypedParameterDocumentation> {
         
         private DocumentationReferenceSymbol m_Type;
         
@@ -5269,20 +5116,11 @@ namespace Codex.ObjectModel {
         }
         
         public TypedParameterDocumentation(Codex.ITypedParameterDocumentation value) {
-            this.CopyFrom<TypedParameterDocumentation>(value);
+            this.CopyFrom(value);
         }
         
-        public TypedParameterDocumentation(Codex.IParameterDocumentation value) : 
-                base(value) {
-        }
-        
-        /// <summary>
-        /// The type of the parameter
-        /// </summary>
-        Codex.IDocumentationReferenceSymbol Codex.ITypedParameterDocumentation.Type {
-            get {
-                return this.Type;
-            }
+        public TypedParameterDocumentation(Codex.IParameterDocumentation value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -5297,19 +5135,23 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ITypedParameterDocumentation value)
-            where TTarget : TypedParameterDocumentation {
-            this.m_Type = EntityUtilities.NullOrCopy(value.Type, v => new DocumentationReferenceSymbol().CopyFrom<DocumentationReferenceSymbol>(v));;
-            base.CopyFrom<ParameterDocumentation>(((Codex.IParameterDocumentation)(value)));
-            return ((TTarget)(this));
+        /// <summary>
+        /// The type of the parameter
+        /// </summary>
+        Codex.IDocumentationReferenceSymbol Codex.ITypedParameterDocumentation.Type {
+            get {
+                return this.Type;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.ITypedParameterDocumentation value) {
+            this.m_Type = EntityUtilities.NullOrCopy(value.Type, v => new DocumentationReferenceSymbol().Apply(v));;
+            base.CopyFrom(((Codex.IParameterDocumentation)(value)));
         }
     }
     
-    /// <summary>
-    /// Decribes a symbol related to a given documented symbol
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IDocumentationReferenceSymbol))]
-    public partial class DocumentationReferenceSymbol : ReferenceSymbol, Codex.IDocumentationReferenceSymbol {
+    public partial class DocumentationReferenceSymbol : ReferenceSymbol, Codex.IDocumentationReferenceSymbol, Codex.IEntityTarget<Codex.IDocumentationReferenceSymbol> {
         
         private string m_DisplayName;
         
@@ -5319,15 +5161,15 @@ namespace Codex.ObjectModel {
         }
         
         public DocumentationReferenceSymbol(Codex.IDocumentationReferenceSymbol value) {
-            this.CopyFrom<DocumentationReferenceSymbol>(value);
+            this.CopyFrom(value);
         }
         
-        public DocumentationReferenceSymbol(Codex.IReferenceSymbol value) : 
-                base(value) {
+        public DocumentationReferenceSymbol(Codex.IReferenceSymbol value) {
+            this.CopyFrom(value);
         }
         
-        public DocumentationReferenceSymbol(Codex.ICodeSymbol value) : 
-                base(value) {
+        public DocumentationReferenceSymbol(Codex.ICodeSymbol value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -5355,29 +5197,25 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IDocumentationReferenceSymbol value)
-            where TTarget : DocumentationReferenceSymbol {
-            this.m_DisplayName = ((Codex.IDocumentationReferenceSymbol)(value)).DisplayName;
-            this.m_Comment = ((Codex.IDocumentationReferenceSymbol)(value)).Comment;
-            base.CopyFrom<ReferenceSymbol>(((Codex.IReferenceSymbol)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IDocumentationReferenceSymbol value) {
+            this.m_DisplayName = value.DisplayName;
+            this.m_Comment = value.Comment;
+            base.CopyFrom(((Codex.IReferenceSymbol)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ILanguageInfo))]
-    public partial class LanguageInfo : Codex.EntityBase, Codex.ILanguageInfo {
+    public partial class LanguageInfo : Codex.EntityBase, Codex.ILanguageInfo, Codex.IEntityTarget<Codex.ILanguageInfo> {
         
         private string m_Name;
         
         private System.Collections.Generic.List<ClassificationStyle> m_Classifications = new System.Collections.Generic.List<ClassificationStyle>();
         
         public LanguageInfo() {
-            Initialize();
         }
         
         public LanguageInfo(Codex.ILanguageInfo value) {
-            Initialize();
-            this.CopyFrom<LanguageInfo>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -5395,15 +5233,6 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// Describes the style for classified spans. See <see cref="P:Codex.IBoundSourceInfo.Classifications" />.
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<Codex.IClassificationStyle> Codex.ILanguageInfo.Classifications {
-            get {
-                return this.Classifications;
-            }
-        }
-        
-        /// <summary>
-        /// Describes the style for classified spans. See <see cref="P:Codex.IBoundSourceInfo.Classifications" />.
-        /// </summary>
         public virtual System.Collections.Generic.List<ClassificationStyle> Classifications {
             get {
                 return this.m_Classifications;
@@ -5413,19 +5242,23 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ILanguageInfo value)
-            where TTarget : LanguageInfo {
-            this.m_Name = ((Codex.ILanguageInfo)(value)).Name;
-            this.m_Classifications = new System.Collections.Generic.List<ClassificationStyle>(System.Linq.Enumerable.Select(((Codex.ILanguageInfo)(value)).Classifications, v => EntityUtilities.NullOrCopy(v, _v => new ClassificationStyle().CopyFrom<ClassificationStyle>(_v))));
-            return ((TTarget)(this));
+        /// <summary>
+        /// Describes the style for classified spans. See <see cref="P:Codex.IBoundSourceInfo.Classifications" />.
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<Codex.IClassificationStyle> Codex.ILanguageInfo.Classifications {
+            get {
+                return this.Classifications;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.ILanguageInfo value) {
+            this.m_Name = value.Name;
+            this.m_Classifications = new System.Collections.Generic.List<ClassificationStyle>(System.Linq.Enumerable.Select(value.Classifications, v => EntityUtilities.NullOrCopy(v, _v => new ClassificationStyle().Apply(_v))));
         }
     }
     
-    /// <summary>
-    /// Describes styling for a given classification
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IClassificationStyle))]
-    public partial class ClassificationStyle : Codex.EntityBase, Codex.IClassificationStyle {
+    public partial class ClassificationStyle : Codex.EntityBase, Codex.IClassificationStyle, Codex.IEntityTarget<Codex.IClassificationStyle> {
         
         private int m_Color;
         
@@ -5434,12 +5267,10 @@ namespace Codex.ObjectModel {
         private string m_Name;
         
         public ClassificationStyle() {
-            Initialize();
         }
         
         public ClassificationStyle(Codex.IClassificationStyle value) {
-            Initialize();
-            this.CopyFrom<ClassificationStyle>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -5480,17 +5311,15 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IClassificationStyle value)
-            where TTarget : ClassificationStyle {
-            this.m_Color = ((Codex.IClassificationStyle)(value)).Color;
-            this.m_Italic = ((Codex.IClassificationStyle)(value)).Italic;
-            this.m_Name = ((Codex.IClassificationStyle)(value)).Name;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IClassificationStyle value) {
+            this.m_Color = value.Color;
+            this.m_Italic = value.Italic;
+            this.m_Name = value.Name;
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IProject))]
-    public partial class AnalyzedProject : ProjectScopeEntity, Codex.IProject {
+    public partial class AnalyzedProject : ProjectScopeEntity, Codex.IProject, Codex.IEntityTarget<Codex.IProject> {
         
         private string m_ProjectKind;
         
@@ -5504,15 +5333,15 @@ namespace Codex.ObjectModel {
         }
         
         public AnalyzedProject(Codex.IProject value) {
-            this.CopyFrom<AnalyzedProject>(value);
+            this.CopyFrom(value);
         }
         
-        public AnalyzedProject(Codex.IProjectScopeEntity value) : 
-                base(value) {
+        public AnalyzedProject(Codex.IProjectScopeEntity value) {
+            this.CopyFrom(value);
         }
         
-        public AnalyzedProject(Codex.IRepoScopeEntity value) : 
-                base(value) {
+        public AnalyzedProject(Codex.IRepoScopeEntity value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -5530,15 +5359,6 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// The primary file of the project (i.e. the .csproj file)
         /// </summary>
-        Codex.IProjectFileLink Codex.IProject.PrimaryFile {
-            get {
-                return this.PrimaryFile;
-            }
-        }
-        
-        /// <summary>
-        /// The primary file of the project (i.e. the .csproj file)
-        /// </summary>
         public virtual ProjectFileLink PrimaryFile {
             get {
                 return this.m_PrimaryFile;
@@ -5549,11 +5369,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// References to files in the project
+        /// The primary file of the project (i.e. the .csproj file)
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<Codex.IProjectFileLink> Codex.IProject.Files {
+        Codex.IProjectFileLink Codex.IProject.PrimaryFile {
             get {
-                return this.Files;
+                return this.PrimaryFile;
             }
         }
         
@@ -5570,11 +5390,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// Descriptions of referenced projects and used definitions from the projects
+        /// References to files in the project
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<Codex.IReferencedProject> Codex.IProject.ProjectReferences {
+        System.Collections.Generic.IReadOnlyList<Codex.IProjectFileLink> Codex.IProject.Files {
             get {
-                return this.ProjectReferences;
+                return this.Files;
             }
         }
         
@@ -5590,19 +5410,26 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IProject value)
-            where TTarget : AnalyzedProject {
-            this.m_ProjectKind = ((Codex.IProject)(value)).ProjectKind;
-            this.m_PrimaryFile = EntityUtilities.NullOrCopy(value.PrimaryFile, v => new ProjectFileLink().CopyFrom<ProjectFileLink>(v));;
-            this.m_Files = new System.Collections.Generic.List<ProjectFileLink>(System.Linq.Enumerable.Select(((Codex.IProject)(value)).Files, v => EntityUtilities.NullOrCopy(v, _v => new ProjectFileLink().CopyFrom<ProjectFileLink>(_v))));
-            this.m_ProjectReferences = new System.Collections.Generic.List<ReferencedProject>(System.Linq.Enumerable.Select(((Codex.IProject)(value)).ProjectReferences, v => EntityUtilities.NullOrCopy(v, _v => new ReferencedProject().CopyFrom<ReferencedProject>(_v))));
-            base.CopyFrom<ProjectScopeEntity>(((Codex.IProjectScopeEntity)(value)));
-            return ((TTarget)(this));
+        /// <summary>
+        /// Descriptions of referenced projects and used definitions from the projects
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<Codex.IReferencedProject> Codex.IProject.ProjectReferences {
+            get {
+                return this.ProjectReferences;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.IProject value) {
+            this.m_ProjectKind = value.ProjectKind;
+            this.m_PrimaryFile = EntityUtilities.NullOrCopy(value.PrimaryFile, v => new ProjectFileLink().Apply(v));;
+            this.m_Files = new System.Collections.Generic.List<ProjectFileLink>(System.Linq.Enumerable.Select(value.Files, v => EntityUtilities.NullOrCopy(v, _v => new ProjectFileLink().Apply(_v))));
+            this.m_ProjectReferences = new System.Collections.Generic.List<ReferencedProject>(System.Linq.Enumerable.Select(value.ProjectReferences, v => EntityUtilities.NullOrCopy(v, _v => new ReferencedProject().Apply(_v))));
+            base.CopyFrom(((Codex.IProjectScopeEntity)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IReferencedProject))]
-    public partial class ReferencedProject : Codex.EntityBase, Codex.IReferencedProject {
+    public partial class ReferencedProject : Codex.EntityBase, Codex.IReferencedProject, Codex.IEntityTarget<Codex.IReferencedProject> {
         
         private string m_ProjectId;
         
@@ -5613,12 +5440,10 @@ namespace Codex.ObjectModel {
         private PropertyMap m_Properties;
         
         public ReferencedProject() {
-            Initialize();
         }
         
         public ReferencedProject(Codex.IReferencedProject value) {
-            Initialize();
-            this.CopyFrom<ReferencedProject>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -5636,21 +5461,21 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// Used definitions for the project. Sorted.
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<Codex.IDefinitionSymbol> Codex.IReferencedProject.Definitions {
-            get {
-                return this.Definitions;
-            }
-        }
-        
-        /// <summary>
-        /// Used definitions for the project. Sorted.
-        /// </summary>
         public virtual System.Collections.Generic.List<DefinitionSymbol> Definitions {
             get {
                 return this.m_Definitions;
             }
             set {
                 this.m_Definitions = value;
+            }
+        }
+        
+        /// <summary>
+        /// Used definitions for the project. Sorted.
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<Codex.IDefinitionSymbol> Codex.IReferencedProject.Definitions {
+            get {
+                return this.Definitions;
             }
         }
         
@@ -5669,15 +5494,6 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// The properties of the project. Such as Version, PublicKey, etc.
         /// </summary>
-        Codex.IPropertyMap Codex.IReferencedProject.Properties {
-            get {
-                return this.Properties;
-            }
-        }
-        
-        /// <summary>
-        /// The properties of the project. Such as Version, PublicKey, etc.
-        /// </summary>
         public virtual PropertyMap Properties {
             get {
                 return this.m_Properties;
@@ -5687,21 +5503,25 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IReferencedProject value)
-            where TTarget : ReferencedProject {
-            this.m_ProjectId = ((Codex.IReferencedProject)(value)).ProjectId;
-            this.m_Definitions = new System.Collections.Generic.List<DefinitionSymbol>(System.Linq.Enumerable.Select(((Codex.IReferencedProject)(value)).Definitions, v => EntityUtilities.NullOrCopy(v, _v => new DefinitionSymbol().CopyFrom<DefinitionSymbol>(_v))));
-            this.m_DisplayName = ((Codex.IReferencedProject)(value)).DisplayName;
-            this.m_Properties = EntityUtilities.NullOrCopy(value.Properties, v => new PropertyMap().CopyFrom<PropertyMap>(v));;
-            return ((TTarget)(this));
+        /// <summary>
+        /// The properties of the project. Such as Version, PublicKey, etc.
+        /// </summary>
+        Codex.IPropertyMap Codex.IReferencedProject.Properties {
+            get {
+                return this.Properties;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.IReferencedProject value) {
+            this.m_ProjectId = value.ProjectId;
+            this.m_Definitions = new System.Collections.Generic.List<DefinitionSymbol>(System.Linq.Enumerable.Select(value.Definitions, v => EntityUtilities.NullOrCopy(v, _v => new DefinitionSymbol().Apply(_v))));
+            this.m_DisplayName = value.DisplayName;
+            this.m_Properties = EntityUtilities.NullOrCopy(value.Properties, v => new PropertyMap().Apply(v));;
         }
     }
     
-    /// <summary>
-    /// NOTE: Do not set <see cref="P:Codex.IRepoScopeEntity.RepositoryName" />
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IProjectFileLink))]
-    public partial class ProjectFileLink : ProjectFileScopeEntity, Codex.IProjectFileLink {
+    public partial class ProjectFileLink : ProjectFileScopeEntity, Codex.IProjectFileLink, Codex.IEntityTarget<Codex.IProjectFileLink> {
         
         private string m_FileId;
         
@@ -5709,19 +5529,23 @@ namespace Codex.ObjectModel {
         }
         
         public ProjectFileLink(Codex.IProjectFileLink value) {
-            this.CopyFrom<ProjectFileLink>(value);
+            this.CopyFrom(value);
         }
         
-        public ProjectFileLink(Codex.IProjectFileScopeEntity value) : 
-                base(value) {
+        public ProjectFileLink(Codex.IProjectFileScopeEntity value) {
+            this.CopyFrom(value);
         }
         
-        public ProjectFileLink(Codex.IRepoFileScopeEntity value) : 
-                base(value) {
+        public ProjectFileLink(Codex.IRepoFileScopeEntity value) {
+            this.CopyFrom(value);
         }
         
-        public ProjectFileLink(Codex.IRepoScopeEntity value) : 
-                base(value) {
+        public ProjectFileLink(Codex.IRepoScopeEntity value) {
+            this.CopyFrom(value);
+        }
+        
+        public ProjectFileLink(Codex.IProjectScopeEntity value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -5738,16 +5562,14 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IProjectFileLink value)
-            where TTarget : ProjectFileLink {
-            this.m_FileId = ((Codex.IProjectFileLink)(value)).FileId;
-            base.CopyFrom<ProjectFileScopeEntity>(((Codex.IProjectFileScopeEntity)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IProjectFileLink value) {
+            this.m_FileId = value.FileId;
+            base.CopyFrom(((Codex.IProjectFileScopeEntity)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IPropertySearchModel))]
-    public partial class PropertySearchModel : SearchEntity, Codex.IPropertySearchModel {
+    public partial class PropertySearchModel : SearchEntity, Codex.IPropertySearchModel, Codex.IEntityTarget<Codex.IPropertySearchModel> {
         
         private string m_Key;
         
@@ -5759,11 +5581,11 @@ namespace Codex.ObjectModel {
         }
         
         public PropertySearchModel(Codex.IPropertySearchModel value) {
-            this.CopyFrom<PropertySearchModel>(value);
+            this.CopyFrom(value);
         }
         
-        public PropertySearchModel(Codex.ISearchEntity value) : 
-                base(value) {
+        public PropertySearchModel(Codex.ISearchEntity value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -5806,36 +5628,30 @@ namespace Codex.ObjectModel {
             return this.GetRoutingKey(Codex.SearchTypes.Property, this);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IPropertySearchModel value)
-            where TTarget : PropertySearchModel {
-            this.m_Key = ((Codex.IPropertySearchModel)(value)).Key;
-            this.m_Value = ((Codex.IPropertySearchModel)(value)).Value;
-            this.m_OwnerId = ((Codex.IPropertySearchModel)(value)).OwnerId;
-            base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IPropertySearchModel value) {
+            this.m_Key = value.Key;
+            this.m_Value = value.Value;
+            this.m_OwnerId = value.OwnerId;
+            base.CopyFrom(((Codex.ISearchEntity)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IPropertyMap))]
-    public partial class PropertyMap : Codex.IPropertyMap {
+    public partial class PropertyMap : Codex.IPropertyMap, Codex.IEntityTarget<Codex.IPropertyMap> {
         
         public PropertyMap() {
-            Initialize();
         }
         
         public PropertyMap(Codex.IPropertyMap value) {
-            Initialize();
-            this.CopyFrom<PropertyMap>(value);
+            this.CopyFrom(value);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IPropertyMap value)
-            where TTarget : PropertyMap {
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IPropertyMap value) {
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IRepository))]
-    public partial class Repository : Codex.EntityBase, Codex.IRepository {
+    public partial class Repository : Codex.EntityBase, Codex.IRepository, Codex.IEntityTarget<Codex.IRepository> {
         
         private string m_Name;
         
@@ -5854,12 +5670,10 @@ namespace Codex.ObjectModel {
         private System.Collections.Generic.List<RepositoryReference> m_RepositoryReferences = new System.Collections.Generic.List<RepositoryReference>();
         
         public Repository() {
-            Initialize();
         }
         
         public Repository(Codex.IRepository value) {
-            Initialize();
-            this.CopyFrom<Repository>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -5940,12 +5754,6 @@ namespace Codex.ObjectModel {
             }
         }
         
-        System.Collections.Generic.IReadOnlyList<Codex.IRepositoryReference> Codex.IRepository.RepositoryReferences {
-            get {
-                return this.RepositoryReferences;
-            }
-        }
-        
         public virtual System.Collections.Generic.List<RepositoryReference> RepositoryReferences {
             get {
                 return this.m_RepositoryReferences;
@@ -5955,34 +5763,36 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IRepository value)
-            where TTarget : Repository {
-            this.m_Name = ((Codex.IRepository)(value)).Name;
-            this.m_Description = ((Codex.IRepository)(value)).Description;
-            this.m_Id = ((Codex.IRepository)(value)).Id;
-            this.m_WebAddress = ((Codex.IRepository)(value)).WebAddress;
-            this.m_SourceControlWebAddress = ((Codex.IRepository)(value)).SourceControlWebAddress;
-            this.m_FileWebAddressTransformInputRegex = ((Codex.IRepository)(value)).FileWebAddressTransformInputRegex;
-            this.m_PrimaryBranch = ((Codex.IRepository)(value)).PrimaryBranch;
-            this.m_RepositoryReferences = new System.Collections.Generic.List<RepositoryReference>(System.Linq.Enumerable.Select(((Codex.IRepository)(value)).RepositoryReferences, v => EntityUtilities.NullOrCopy(v, _v => new RepositoryReference().CopyFrom<RepositoryReference>(_v))));
-            return ((TTarget)(this));
+        System.Collections.Generic.IReadOnlyList<Codex.IRepositoryReference> Codex.IRepository.RepositoryReferences {
+            get {
+                return this.RepositoryReferences;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.IRepository value) {
+            this.m_Name = value.Name;
+            this.m_Description = value.Description;
+            this.m_Id = value.Id;
+            this.m_WebAddress = value.WebAddress;
+            this.m_SourceControlWebAddress = value.SourceControlWebAddress;
+            this.m_FileWebAddressTransformInputRegex = value.FileWebAddressTransformInputRegex;
+            this.m_PrimaryBranch = value.PrimaryBranch;
+            this.m_RepositoryReferences = new System.Collections.Generic.List<RepositoryReference>(System.Linq.Enumerable.Select(value.RepositoryReferences, v => EntityUtilities.NullOrCopy(v, _v => new RepositoryReference().Apply(_v))));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IRepositoryReference))]
-    public partial class RepositoryReference : Codex.EntityBase, Codex.IRepositoryReference {
+    public partial class RepositoryReference : Codex.EntityBase, Codex.IRepositoryReference, Codex.IEntityTarget<Codex.IRepositoryReference> {
         
         private string m_Name;
         
         private string m_Id;
         
         public RepositoryReference() {
-            Initialize();
         }
         
         public RepositoryReference(Codex.IRepositoryReference value) {
-            Initialize();
-            this.CopyFrom<RepositoryReference>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -6009,20 +5819,14 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IRepositoryReference value)
-            where TTarget : RepositoryReference {
-            this.m_Name = ((Codex.IRepositoryReference)(value)).Name;
-            this.m_Id = ((Codex.IRepositoryReference)(value)).Id;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IRepositoryReference value) {
+            this.m_Name = value.Name;
+            this.m_Id = value.Id;
         }
     }
     
-    /// <summary>
-    /// Marker interface for searchable entities
-    /// TODO: Consider moving <see cref="P:Codex.ISearchEntity.EntityContentId" /> out if its not needed by all searchable entities
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ISearchEntity))]
-    public partial class SearchEntity : Codex.EntityBase, Codex.ISearchEntity {
+    public partial class SearchEntity : Codex.EntityBase, Codex.ISearchEntity, Codex.IEntityTarget<Codex.ISearchEntity> {
         
         private string m_Uid;
         
@@ -6039,12 +5843,10 @@ namespace Codex.ObjectModel {
         private string m_SortKey;
         
         public SearchEntity() {
-            Initialize();
         }
         
         public SearchEntity(Codex.ISearchEntity value) {
-            Initialize();
-            this.CopyFrom<SearchEntity>(value);
+            this.CopyFrom(value);
         }
         
         public virtual string Uid {
@@ -6134,31 +5936,27 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ISearchEntity value)
-            where TTarget : SearchEntity {
-            this.m_Uid = ((Codex.ISearchEntity)(value)).Uid;
-            this.m_EntityContentId = ((Codex.ISearchEntity)(value)).EntityContentId;
-            this.m_EntityContentSize = ((Codex.ISearchEntity)(value)).EntityContentSize;
-            this.m_EntityVersion = ((Codex.ISearchEntity)(value)).EntityVersion;
-            this.m_RoutingGroup = ((Codex.ISearchEntity)(value)).RoutingGroup;
-            this.m_StableId = ((Codex.ISearchEntity)(value)).StableId;
-            this.m_SortKey = ((Codex.ISearchEntity)(value)).SortKey;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ISearchEntity value) {
+            this.m_Uid = value.Uid;
+            this.m_EntityContentId = value.EntityContentId;
+            this.m_EntityContentSize = value.EntityContentSize;
+            this.m_EntityVersion = value.EntityVersion;
+            this.m_RoutingGroup = value.RoutingGroup;
+            this.m_StableId = value.StableId;
+            this.m_SortKey = value.SortKey;
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IRepoScopeEntity))]
-    public partial class RepoScopeEntity : Codex.EntityBase, Codex.IRepoScopeEntity {
+    public partial class RepoScopeEntity : Codex.EntityBase, Codex.IRepoScopeEntity, Codex.IEntityTarget<Codex.IRepoScopeEntity> {
         
         private string m_RepositoryName;
         
         public RepoScopeEntity() {
-            Initialize();
         }
         
         public RepoScopeEntity(Codex.IRepoScopeEntity value) {
-            Initialize();
-            this.CopyFrom<RepoScopeEntity>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -6173,15 +5971,13 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IRepoScopeEntity value)
-            where TTarget : RepoScopeEntity {
-            this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IRepoScopeEntity value) {
+            this.m_RepositoryName = value.RepositoryName;
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ICommitScopeEntity))]
-    public partial class CommitScopeEntity : RepoScopeEntity, Codex.ICommitScopeEntity {
+    public partial class CommitScopeEntity : RepoScopeEntity, Codex.ICommitScopeEntity, Codex.IEntityTarget<Codex.ICommitScopeEntity> {
         
         private string m_CommitId;
         
@@ -6189,11 +5985,11 @@ namespace Codex.ObjectModel {
         }
         
         public CommitScopeEntity(Codex.ICommitScopeEntity value) {
-            this.CopyFrom<CommitScopeEntity>(value);
+            this.CopyFrom(value);
         }
         
-        public CommitScopeEntity(Codex.IRepoScopeEntity value) : 
-                base(value) {
+        public CommitScopeEntity(Codex.IRepoScopeEntity value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -6209,16 +6005,14 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ICommitScopeEntity value)
-            where TTarget : CommitScopeEntity {
-            this.m_CommitId = ((Codex.ICommitScopeEntity)(value)).CommitId;
-            base.CopyFrom<RepoScopeEntity>(((Codex.IRepoScopeEntity)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ICommitScopeEntity value) {
+            this.m_CommitId = value.CommitId;
+            base.CopyFrom(((Codex.IRepoScopeEntity)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IProjectScopeEntity))]
-    public partial class ProjectScopeEntity : RepoScopeEntity, Codex.IProjectScopeEntity {
+    public partial class ProjectScopeEntity : RepoScopeEntity, Codex.IProjectScopeEntity, Codex.IEntityTarget<Codex.IProjectScopeEntity> {
         
         private string m_ProjectId;
         
@@ -6226,11 +6020,11 @@ namespace Codex.ObjectModel {
         }
         
         public ProjectScopeEntity(Codex.IProjectScopeEntity value) {
-            this.CopyFrom<ProjectScopeEntity>(value);
+            this.CopyFrom(value);
         }
         
-        public ProjectScopeEntity(Codex.IRepoScopeEntity value) : 
-                base(value) {
+        public ProjectScopeEntity(Codex.IRepoScopeEntity value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -6245,16 +6039,14 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IProjectScopeEntity value)
-            where TTarget : ProjectScopeEntity {
-            this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
-            base.CopyFrom<RepoScopeEntity>(((Codex.IRepoScopeEntity)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IProjectScopeEntity value) {
+            this.m_ProjectId = value.ProjectId;
+            base.CopyFrom(((Codex.IRepoScopeEntity)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IRepoFileScopeEntity))]
-    public partial class RepoFileScopeEntity : RepoScopeEntity, Codex.IRepoFileScopeEntity {
+    public partial class RepoFileScopeEntity : RepoScopeEntity, Codex.IRepoFileScopeEntity, Codex.IEntityTarget<Codex.IRepoFileScopeEntity> {
         
         private string m_RepoRelativePath;
         
@@ -6262,11 +6054,11 @@ namespace Codex.ObjectModel {
         }
         
         public RepoFileScopeEntity(Codex.IRepoFileScopeEntity value) {
-            this.CopyFrom<RepoFileScopeEntity>(value);
+            this.CopyFrom(value);
         }
         
-        public RepoFileScopeEntity(Codex.IRepoScopeEntity value) : 
-                base(value) {
+        public RepoFileScopeEntity(Codex.IRepoScopeEntity value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -6281,16 +6073,14 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IRepoFileScopeEntity value)
-            where TTarget : RepoFileScopeEntity {
-            this.m_RepoRelativePath = ((Codex.IRepoFileScopeEntity)(value)).RepoRelativePath;
-            base.CopyFrom<RepoScopeEntity>(((Codex.IRepoScopeEntity)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IRepoFileScopeEntity value) {
+            this.m_RepoRelativePath = value.RepoRelativePath;
+            base.CopyFrom(((Codex.IRepoScopeEntity)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IProjectFileScopeEntity))]
-    public partial class ProjectFileScopeEntity : RepoFileScopeEntity, Codex.IProjectFileScopeEntity {
+    public partial class ProjectFileScopeEntity : RepoFileScopeEntity, Codex.IProjectFileScopeEntity, Codex.IEntityTarget<Codex.IProjectFileScopeEntity>, Codex.IEntityTarget<Codex.IProjectScopeEntity> {
         
         private string m_ProjectRelativePath;
         
@@ -6300,19 +6090,19 @@ namespace Codex.ObjectModel {
         }
         
         public ProjectFileScopeEntity(Codex.IProjectFileScopeEntity value) {
-            this.CopyFrom<ProjectFileScopeEntity>(value);
+            this.CopyFrom(value);
         }
         
-        public ProjectFileScopeEntity(Codex.IRepoFileScopeEntity value) : 
-                base(value) {
+        public ProjectFileScopeEntity(Codex.IRepoFileScopeEntity value) {
+            this.CopyFrom(value);
         }
         
-        public ProjectFileScopeEntity(Codex.IRepoScopeEntity value) : 
-                base(value) {
+        public ProjectFileScopeEntity(Codex.IRepoScopeEntity value) {
+            this.CopyFrom(value);
         }
         
         public ProjectFileScopeEntity(Codex.IProjectScopeEntity value) {
-            this.CopyFrom<ProjectFileScopeEntity>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -6339,30 +6129,20 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IProjectScopeEntity value)
-            where TTarget : ProjectFileScopeEntity {
-            this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IProjectFileScopeEntity value) {
+            this.m_ProjectRelativePath = value.ProjectRelativePath;
+            this.m_ProjectId = value.ProjectId;
+            base.CopyFrom(((Codex.IRepoFileScopeEntity)(value)));
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IProjectFileScopeEntity value)
-            where TTarget : ProjectFileScopeEntity {
-            this.m_ProjectRelativePath = ((Codex.IProjectFileScopeEntity)(value)).ProjectRelativePath;
-            base.CopyFrom<RepoFileScopeEntity>(((Codex.IRepoFileScopeEntity)(value)));
-            this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IProjectScopeEntity value) {
+            this.m_ProjectId = value.ProjectId;
+            this.CopyFrom(((Codex.IRepoScopeEntity)(value)));
         }
     }
     
-    /// <summary>
-    /// In order to compute a stable integral id for each entity. This type is used to store into a 'follow' index which
-    /// stores entities of this type using the <see cref="P:Codex.ISearchEntity.Uid" /> of the corresponding search entity. Then the
-    /// sequence number assigned by ElasticSearch is used as the shard stable id (<see cref="P:Codex.ISearchEntity.StableId" />)
-    /// for the entity. This approach is used in order to ensure that the stable id appears as an explicit field in the document rather
-    /// which allows configuration of how the field is indexed (not true for sequence number field without code changes to ES).
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IRegisteredEntity))]
-    public partial class RegisteredEntity : SearchEntity, Codex.IRegisteredEntity {
+    public partial class RegisteredEntity : SearchEntity, Codex.IRegisteredEntity, Codex.IEntityTarget<Codex.IRegisteredEntity> {
         
         private System.DateTime m_DateAdded;
         
@@ -6374,11 +6154,11 @@ namespace Codex.ObjectModel {
         }
         
         public RegisteredEntity(Codex.IRegisteredEntity value) {
-            this.CopyFrom<RegisteredEntity>(value);
+            this.CopyFrom(value);
         }
         
-        public RegisteredEntity(Codex.ISearchEntity value) : 
-                base(value) {
+        public RegisteredEntity(Codex.ISearchEntity value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -6421,21 +6201,16 @@ namespace Codex.ObjectModel {
             return this.GetRoutingKey(Codex.SearchTypes.RegisteredEntity, this);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IRegisteredEntity value)
-            where TTarget : RegisteredEntity {
-            this.m_DateAdded = ((Codex.IRegisteredEntity)(value)).DateAdded;
-            this.m_EntityUid = ((Codex.IRegisteredEntity)(value)).EntityUid;
-            this.m_IndexName = ((Codex.IRegisteredEntity)(value)).IndexName;
-            base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IRegisteredEntity value) {
+            this.m_DateAdded = value.DateAdded;
+            this.m_EntityUid = value.EntityUid;
+            this.m_IndexName = value.IndexName;
+            base.CopyFrom(((Codex.ISearchEntity)(value)));
         }
     }
     
-    /// <summary>
-    /// Defines a stored filter which matches entities in a particular index shard in a stable manner
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IStoredFilter))]
-    public partial class StoredFilter : SearchEntity, Codex.IStoredFilter {
+    public partial class StoredFilter : SearchEntity, Codex.IStoredFilter, Codex.IEntityTarget<Codex.IStoredFilter> {
         
         private System.DateTime m_DateUpdated;
         
@@ -6457,11 +6232,11 @@ namespace Codex.ObjectModel {
         }
         
         public StoredFilter(Codex.IStoredFilter value) {
-            this.CopyFrom<StoredFilter>(value);
+            this.CopyFrom(value);
         }
         
-        public StoredFilter(Codex.ISearchEntity value) : 
-                base(value) {
+        public StoredFilter(Codex.ISearchEntity value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -6521,18 +6296,18 @@ namespace Codex.ObjectModel {
             }
         }
         
-        System.Collections.Generic.IReadOnlyList<Codex.IChildFilterReference> Codex.IStoredFilter.Children {
-            get {
-                return this.Children;
-            }
-        }
-        
         public virtual System.Collections.Generic.List<ChildFilterReference> Children {
             get {
                 return this.m_Children;
             }
             set {
                 this.m_Children = value;
+            }
+        }
+        
+        System.Collections.Generic.IReadOnlyList<Codex.IChildFilterReference> Codex.IStoredFilter.Children {
+            get {
+                return this.Children;
             }
         }
         
@@ -6564,23 +6339,21 @@ namespace Codex.ObjectModel {
             return this.GetRoutingKey(Codex.SearchTypes.StoredFilter, this);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IStoredFilter value)
-            where TTarget : StoredFilter {
-            this.m_DateUpdated = ((Codex.IStoredFilter)(value)).DateUpdated;
-            this.m_FullPath = ((Codex.IStoredFilter)(value)).FullPath;
-            this.m_Name = ((Codex.IStoredFilter)(value)).Name;
-            this.m_IndexName = ((Codex.IStoredFilter)(value)).IndexName;
-            this.m_StableIds = ((Codex.IStoredFilter)(value)).StableIds;
-            this.m_Children = new System.Collections.Generic.List<ChildFilterReference>(System.Linq.Enumerable.Select(((Codex.IStoredFilter)(value)).Children, v => EntityUtilities.NullOrCopy(v, _v => new ChildFilterReference().CopyFrom<ChildFilterReference>(_v))));
-            this.m_FilterHash = ((Codex.IStoredFilter)(value)).FilterHash;
-            this.m_Cardinality = ((Codex.IStoredFilter)(value)).Cardinality;
-            base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IStoredFilter value) {
+            this.m_DateUpdated = value.DateUpdated;
+            this.m_FullPath = value.FullPath;
+            this.m_Name = value.Name;
+            this.m_IndexName = value.IndexName;
+            this.m_StableIds = value.StableIds;
+            this.m_Children = new System.Collections.Generic.List<ChildFilterReference>(System.Linq.Enumerable.Select(value.Children, v => EntityUtilities.NullOrCopy(v, _v => new ChildFilterReference().Apply(_v))));
+            this.m_FilterHash = value.FilterHash;
+            this.m_Cardinality = value.Cardinality;
+            base.CopyFrom(((Codex.ISearchEntity)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IChildFilterReference))]
-    public partial class ChildFilterReference : Codex.EntityBase, Codex.IChildFilterReference {
+    public partial class ChildFilterReference : Codex.EntityBase, Codex.IChildFilterReference, Codex.IEntityTarget<Codex.IChildFilterReference> {
         
         private string m_FullPath;
         
@@ -6591,12 +6364,10 @@ namespace Codex.ObjectModel {
         private int m_Cardinality;
         
         public ChildFilterReference() {
-            Initialize();
         }
         
         public ChildFilterReference(Codex.IChildFilterReference value) {
-            Initialize();
-            this.CopyFrom<ChildFilterReference>(value);
+            this.CopyFrom(value);
         }
         
         public virtual string FullPath {
@@ -6644,36 +6415,30 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IChildFilterReference value)
-            where TTarget : ChildFilterReference {
-            this.m_FullPath = ((Codex.IChildFilterReference)(value)).FullPath;
-            this.m_Uid = ((Codex.IChildFilterReference)(value)).Uid;
-            this.m_StableIds = ((Codex.IChildFilterReference)(value)).StableIds;
-            this.m_Cardinality = ((Codex.IChildFilterReference)(value)).Cardinality;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IChildFilterReference value) {
+            this.m_FullPath = value.FullPath;
+            this.m_Uid = value.Uid;
+            this.m_StableIds = value.StableIds;
+            this.m_Cardinality = value.Cardinality;
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IGroupedStoredFilterIds))]
-    public partial class GroupedStoredFilterIds : Codex.IGroupedStoredFilterIds {
+    public partial class GroupedStoredFilterIds : Codex.IGroupedStoredFilterIds, Codex.IEntityTarget<Codex.IGroupedStoredFilterIds> {
         
         public GroupedStoredFilterIds() {
-            Initialize();
         }
         
         public GroupedStoredFilterIds(Codex.IGroupedStoredFilterIds value) {
-            Initialize();
-            this.CopyFrom<GroupedStoredFilterIds>(value);
+            this.CopyFrom(value);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IGroupedStoredFilterIds value)
-            where TTarget : GroupedStoredFilterIds {
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IGroupedStoredFilterIds value) {
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IDefinitionSearchModel))]
-    public partial class DefinitionSearchModel : SearchEntity, Codex.IDefinitionSearchModel {
+    public partial class DefinitionSearchModel : SearchEntity, Codex.IDefinitionSearchModel, Codex.IEntityTarget<Codex.IDefinitionSearchModel> {
         
         private DefinitionSymbol m_Definition;
         
@@ -6683,17 +6448,11 @@ namespace Codex.ObjectModel {
         }
         
         public DefinitionSearchModel(Codex.IDefinitionSearchModel value) {
-            this.CopyFrom<DefinitionSearchModel>(value);
+            this.CopyFrom(value);
         }
         
-        public DefinitionSearchModel(Codex.ISearchEntity value) : 
-                base(value) {
-        }
-        
-        Codex.IDefinitionSymbol Codex.IDefinitionSearchModel.Definition {
-            get {
-                return this.Definition;
-            }
+        public DefinitionSearchModel(Codex.ISearchEntity value) {
+            this.CopyFrom(value);
         }
         
         public virtual DefinitionSymbol Definition {
@@ -6705,14 +6464,9 @@ namespace Codex.ObjectModel {
             }
         }
         
-        /// <summary>
-        /// Keywords are additional terms which can be used to find a given symbol.
-        /// NOTE: Keywords can only be used to select from symbols which have
-        /// a primary term match
-        /// </summary>
-        System.Collections.Generic.IReadOnlyList<string> Codex.IDefinitionSearchModel.Keywords {
+        Codex.IDefinitionSymbol Codex.IDefinitionSearchModel.Definition {
             get {
-                return this.Keywords;
+                return this.Definition;
             }
         }
         
@@ -6730,21 +6484,30 @@ namespace Codex.ObjectModel {
             }
         }
         
+        /// <summary>
+        /// Keywords are additional terms which can be used to find a given symbol.
+        /// NOTE: Keywords can only be used to select from symbols which have
+        /// a primary term match
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<string> Codex.IDefinitionSearchModel.Keywords {
+            get {
+                return this.Keywords;
+            }
+        }
+        
         public override string GetRoutingKey() {
             return this.GetRoutingKey(Codex.SearchTypes.Definition, this);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IDefinitionSearchModel value)
-            where TTarget : DefinitionSearchModel {
-            this.m_Definition = EntityUtilities.NullOrCopy(value.Definition, v => new DefinitionSymbol().CopyFrom<DefinitionSymbol>(v));;
-            this.m_Keywords = new System.Collections.Generic.List<string>(((Codex.IDefinitionSearchModel)(value)).Keywords);
-            base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IDefinitionSearchModel value) {
+            this.m_Definition = EntityUtilities.NullOrCopy(value.Definition, v => new DefinitionSymbol().Apply(v));;
+            this.m_Keywords = new System.Collections.Generic.List<string>(value.Keywords);
+            base.CopyFrom(((Codex.ISearchEntity)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ILanguageSearchModel))]
-    public partial class LanguageSearchModel : SearchEntity, Codex.ILanguageSearchModel {
+    public partial class LanguageSearchModel : SearchEntity, Codex.ILanguageSearchModel, Codex.IEntityTarget<Codex.ILanguageSearchModel> {
         
         private LanguageInfo m_Language;
         
@@ -6752,17 +6515,11 @@ namespace Codex.ObjectModel {
         }
         
         public LanguageSearchModel(Codex.ILanguageSearchModel value) {
-            this.CopyFrom<LanguageSearchModel>(value);
+            this.CopyFrom(value);
         }
         
-        public LanguageSearchModel(Codex.ISearchEntity value) : 
-                base(value) {
-        }
-        
-        Codex.ILanguageInfo Codex.ILanguageSearchModel.Language {
-            get {
-                return this.Language;
-            }
+        public LanguageSearchModel(Codex.ISearchEntity value) {
+            this.CopyFrom(value);
         }
         
         public virtual LanguageInfo Language {
@@ -6774,20 +6531,24 @@ namespace Codex.ObjectModel {
             }
         }
         
+        Codex.ILanguageInfo Codex.ILanguageSearchModel.Language {
+            get {
+                return this.Language;
+            }
+        }
+        
         public override string GetRoutingKey() {
             return this.GetRoutingKey(Codex.SearchTypes.Language, this);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ILanguageSearchModel value)
-            where TTarget : LanguageSearchModel {
-            this.m_Language = EntityUtilities.NullOrCopy(value.Language, v => new LanguageInfo().CopyFrom<LanguageInfo>(v));;
-            base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ILanguageSearchModel value) {
+            this.m_Language = EntityUtilities.NullOrCopy(value.Language, v => new LanguageInfo().Apply(v));;
+            base.CopyFrom(((Codex.ISearchEntity)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IReferenceSearchModel))]
-    public partial class ReferenceSearchModel : SearchEntity, Codex.IReferenceSearchModel {
+    public partial class ReferenceSearchModel : SearchEntity, Codex.IReferenceSearchModel, Codex.IEntityTarget<Codex.IReferenceSearchModel>, Codex.IEntityTarget<Codex.IProjectFileScopeEntity>, Codex.IEntityTarget<Codex.IRepoFileScopeEntity>, Codex.IEntityTarget<Codex.IRepoScopeEntity>, Codex.IEntityTarget<Codex.IProjectScopeEntity> {
         
         private ReferenceSymbol m_Reference;
         
@@ -6807,36 +6568,27 @@ namespace Codex.ObjectModel {
         }
         
         public ReferenceSearchModel(Codex.IReferenceSearchModel value) {
-            this.CopyFrom<ReferenceSearchModel>(value);
-        }
-        
-        public ReferenceSearchModel(Codex.ISearchEntity value) : 
-                base(value) {
+            this.CopyFrom(value);
         }
         
         public ReferenceSearchModel(Codex.IProjectFileScopeEntity value) {
-            this.CopyFrom<ReferenceSearchModel>(value);
+            this.CopyFrom(value);
         }
         
         public ReferenceSearchModel(Codex.IRepoFileScopeEntity value) {
-            this.CopyFrom<ReferenceSearchModel>(value);
+            this.CopyFrom(value);
         }
         
         public ReferenceSearchModel(Codex.IRepoScopeEntity value) {
-            this.CopyFrom<ReferenceSearchModel>(value);
+            this.CopyFrom(value);
         }
         
         public ReferenceSearchModel(Codex.IProjectScopeEntity value) {
-            this.CopyFrom<ReferenceSearchModel>(value);
+            this.CopyFrom(value);
         }
         
-        /// <summary>
-        /// The reference symbol
-        /// </summary>
-        Codex.IReferenceSymbol Codex.IReferenceSearchModel.Reference {
-            get {
-                return this.Reference;
-            }
+        public ReferenceSearchModel(Codex.ISearchEntity value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -6851,9 +6603,12 @@ namespace Codex.ObjectModel {
             }
         }
         
-        System.Collections.Generic.IReadOnlyList<Codex.ISymbolSpan> Codex.IReferenceSearchModel.Spans {
+        /// <summary>
+        /// The reference symbol
+        /// </summary>
+        Codex.IReferenceSymbol Codex.IReferenceSearchModel.Reference {
             get {
-                return this.Spans;
+                return this.Reference;
             }
         }
         
@@ -6863,6 +6618,12 @@ namespace Codex.ObjectModel {
             }
             set {
                 this.m_Spans = value;
+            }
+        }
+        
+        System.Collections.Generic.IReadOnlyList<Codex.ISymbolSpan> Codex.IReferenceSearchModel.Spans {
+            get {
+                return this.Spans;
             }
         }
         
@@ -6930,47 +6691,40 @@ namespace Codex.ObjectModel {
             return this.GetRoutingKey(Codex.SearchTypes.Reference, this);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IRepoScopeEntity value)
-            where TTarget : ReferenceSearchModel {
-            this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IReferenceSearchModel value) {
+            this.m_Reference = EntityUtilities.NullOrCopy(value.Reference, v => new ReferenceSymbol().Apply(v));;
+            this.m_Spans = new System.Collections.Generic.List<SymbolSpan>(System.Linq.Enumerable.Select(value.Spans, v => EntityUtilities.NullOrCopy(v, _v => new SymbolSpan().Apply(_v))));
+            this.m_CompressedSpans = value.CompressedSpans;
+            this.m_ProjectRelativePath = value.ProjectRelativePath;
+            this.m_RepoRelativePath = value.RepoRelativePath;
+            this.m_RepositoryName = value.RepositoryName;
+            this.m_ProjectId = value.ProjectId;
+            base.CopyFrom(((Codex.ISearchEntity)(value)));
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IRepoFileScopeEntity value)
-            where TTarget : ReferenceSearchModel {
-            this.m_RepoRelativePath = ((Codex.IRepoFileScopeEntity)(value)).RepoRelativePath;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IProjectFileScopeEntity value) {
+            this.m_ProjectRelativePath = value.ProjectRelativePath;
+            this.m_ProjectId = value.ProjectId;
+            this.CopyFrom(((Codex.IRepoFileScopeEntity)(value)));
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IProjectScopeEntity value)
-            where TTarget : ReferenceSearchModel {
-            this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IRepoFileScopeEntity value) {
+            this.m_RepoRelativePath = value.RepoRelativePath;
+            this.CopyFrom(((Codex.IRepoScopeEntity)(value)));
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IProjectFileScopeEntity value)
-            where TTarget : ReferenceSearchModel {
-            this.m_ProjectRelativePath = ((Codex.IProjectFileScopeEntity)(value)).ProjectRelativePath;
-            this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IRepoScopeEntity value) {
+            this.m_RepositoryName = value.RepositoryName;
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IReferenceSearchModel value)
-            where TTarget : ReferenceSearchModel {
-            this.m_Reference = EntityUtilities.NullOrCopy(value.Reference, v => new ReferenceSymbol().CopyFrom<ReferenceSymbol>(v));;
-            this.m_Spans = new System.Collections.Generic.List<SymbolSpan>(System.Linq.Enumerable.Select(((Codex.IReferenceSearchModel)(value)).Spans, v => EntityUtilities.NullOrCopy(v, _v => new SymbolSpan().CopyFrom<SymbolSpan>(_v))));
-            this.m_CompressedSpans = ((Codex.IReferenceSearchModel)(value)).CompressedSpans;
-            base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
-            this.m_ProjectRelativePath = ((Codex.IProjectFileScopeEntity)(value)).ProjectRelativePath;
-            this.m_RepoRelativePath = ((Codex.IRepoFileScopeEntity)(value)).RepoRelativePath;
-            this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
-            this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IProjectScopeEntity value) {
+            this.m_ProjectId = value.ProjectId;
+            this.CopyFrom(((Codex.IRepoScopeEntity)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ISourceSearchModelBase))]
-    public partial class SourceSearchModelBase : SearchEntity, Codex.ISourceSearchModelBase {
+    public partial class SourceSearchModelBase : SearchEntity, Codex.ISourceSearchModelBase, Codex.IEntityTarget<Codex.ISourceSearchModelBase> {
         
         private SourceControlFileInfo m_SourceControlInfo;
         
@@ -6980,20 +6734,11 @@ namespace Codex.ObjectModel {
         }
         
         public SourceSearchModelBase(Codex.ISourceSearchModelBase value) {
-            this.CopyFrom<SourceSearchModelBase>(value);
+            this.CopyFrom(value);
         }
         
-        public SourceSearchModelBase(Codex.ISearchEntity value) : 
-                base(value) {
-        }
-        
-        /// <summary>
-        /// Information about the source file from source control provider (may be null)
-        /// </summary>
-        Codex.ISourceControlFileInfo Codex.ISourceSearchModelBase.SourceControlInfo {
-            get {
-                return this.SourceControlInfo;
-            }
+        public SourceSearchModelBase(Codex.ISearchEntity value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -7008,9 +6753,12 @@ namespace Codex.ObjectModel {
             }
         }
         
-        Codex.IChunkedSourceFile Codex.ISourceSearchModelBase.File {
+        /// <summary>
+        /// Information about the source file from source control provider (may be null)
+        /// </summary>
+        Codex.ISourceControlFileInfo Codex.ISourceSearchModelBase.SourceControlInfo {
             get {
-                return this.File;
+                return this.SourceControlInfo;
             }
         }
         
@@ -7023,17 +6771,21 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ISourceSearchModelBase value)
-            where TTarget : SourceSearchModelBase {
-            this.m_SourceControlInfo = EntityUtilities.NullOrCopy(value.SourceControlInfo, v => new SourceControlFileInfo().CopyFrom<SourceControlFileInfo>(v));;
-            this.m_File = EntityUtilities.NullOrCopy(value.File, v => new ChunkedSourceFile().CopyFrom<ChunkedSourceFile>(v));;
-            base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
-            return ((TTarget)(this));
+        Codex.IChunkedSourceFile Codex.ISourceSearchModelBase.File {
+            get {
+                return this.File;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.ISourceSearchModelBase value) {
+            this.m_SourceControlInfo = EntityUtilities.NullOrCopy(value.SourceControlInfo, v => new SourceControlFileInfo().Apply(v));;
+            this.m_File = EntityUtilities.NullOrCopy(value.File, v => new ChunkedSourceFile().Apply(v));;
+            base.CopyFrom(((Codex.ISearchEntity)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IBoundSourceSearchModel))]
-    public partial class BoundSourceSearchModel : SourceSearchModelBase, Codex.IBoundSourceSearchModel {
+    public partial class BoundSourceSearchModel : SourceSearchModelBase, Codex.IBoundSourceSearchModel, Codex.IEntityTarget<Codex.IBoundSourceSearchModel> {
         
         private string m_TextUid;
         
@@ -7047,15 +6799,15 @@ namespace Codex.ObjectModel {
         }
         
         public BoundSourceSearchModel(Codex.IBoundSourceSearchModel value) {
-            this.CopyFrom<BoundSourceSearchModel>(value);
+            this.CopyFrom(value);
         }
         
-        public BoundSourceSearchModel(Codex.ISourceSearchModelBase value) : 
-                base(value) {
+        public BoundSourceSearchModel(Codex.ISourceSearchModelBase value) {
+            this.CopyFrom(value);
         }
         
-        public BoundSourceSearchModel(Codex.ISearchEntity value) : 
-                base(value) {
+        public BoundSourceSearchModel(Codex.ISearchEntity value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -7073,21 +6825,21 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// The binding info
         /// </summary>
-        Codex.IBoundSourceInfo Codex.IBoundSourceSearchModel.BindingInfo {
-            get {
-                return this.BindingInfo;
-            }
-        }
-        
-        /// <summary>
-        /// The binding info
-        /// </summary>
         public virtual BoundSourceInfo BindingInfo {
             get {
                 return this.m_BindingInfo;
             }
             set {
                 this.m_BindingInfo = value;
+            }
+        }
+        
+        /// <summary>
+        /// The binding info
+        /// </summary>
+        Codex.IBoundSourceInfo Codex.IBoundSourceSearchModel.BindingInfo {
+            get {
+                return this.BindingInfo;
             }
         }
         
@@ -7119,48 +6871,44 @@ namespace Codex.ObjectModel {
             return this.GetRoutingKey(Codex.SearchTypes.BoundSource, this);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IBoundSourceSearchModel value)
-            where TTarget : BoundSourceSearchModel {
-            this.m_TextUid = ((Codex.IBoundSourceSearchModel)(value)).TextUid;
-            this.m_BindingInfo = EntityUtilities.NullOrCopy(value.BindingInfo, v => new BoundSourceInfo().CopyFrom<BoundSourceInfo>(v));;
-            this.m_CompressedClassifications = ((Codex.IBoundSourceSearchModel)(value)).CompressedClassifications;
-            this.m_CompressedReferences = ((Codex.IBoundSourceSearchModel)(value)).CompressedReferences;
-            base.CopyFrom<SourceSearchModelBase>(((Codex.ISourceSearchModelBase)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IBoundSourceSearchModel value) {
+            this.m_TextUid = value.TextUid;
+            this.m_BindingInfo = EntityUtilities.NullOrCopy(value.BindingInfo, v => new BoundSourceInfo().Apply(v));;
+            this.m_CompressedClassifications = value.CompressedClassifications;
+            this.m_CompressedReferences = value.CompressedReferences;
+            base.CopyFrom(((Codex.ISourceSearchModelBase)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ITextSourceSearchModel))]
-    public partial class TextSourceSearchModel : SourceSearchModelBase, Codex.ITextSourceSearchModel {
+    public partial class TextSourceSearchModel : SourceSearchModelBase, Codex.ITextSourceSearchModel, Codex.IEntityTarget<Codex.ITextSourceSearchModel> {
         
         public TextSourceSearchModel() {
         }
         
         public TextSourceSearchModel(Codex.ITextSourceSearchModel value) {
-            this.CopyFrom<TextSourceSearchModel>(value);
+            this.CopyFrom(value);
         }
         
-        public TextSourceSearchModel(Codex.ISourceSearchModelBase value) : 
-                base(value) {
+        public TextSourceSearchModel(Codex.ISourceSearchModelBase value) {
+            this.CopyFrom(value);
         }
         
-        public TextSourceSearchModel(Codex.ISearchEntity value) : 
-                base(value) {
+        public TextSourceSearchModel(Codex.ISearchEntity value) {
+            this.CopyFrom(value);
         }
         
         public override string GetRoutingKey() {
             return this.GetRoutingKey(Codex.SearchTypes.TextSource, this);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ITextSourceSearchModel value)
-            where TTarget : TextSourceSearchModel {
-            base.CopyFrom<SourceSearchModelBase>(((Codex.ISourceSearchModelBase)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ITextSourceSearchModel value) {
+            base.CopyFrom(((Codex.ISourceSearchModelBase)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ITextChunkSearchModel))]
-    public partial class TextChunkSearchModel : SearchEntity, Codex.ITextChunkSearchModel {
+    public partial class TextChunkSearchModel : SearchEntity, Codex.ITextChunkSearchModel, Codex.IEntityTarget<Codex.ITextChunkSearchModel> {
         
         private SourceFileContentChunk m_Chunk;
         
@@ -7170,20 +6918,11 @@ namespace Codex.ObjectModel {
         }
         
         public TextChunkSearchModel(Codex.ITextChunkSearchModel value) {
-            this.CopyFrom<TextChunkSearchModel>(value);
+            this.CopyFrom(value);
         }
         
-        public TextChunkSearchModel(Codex.ISearchEntity value) : 
-                base(value) {
-        }
-        
-        /// <summary>
-        /// The text content. Set when the chunk IS searched
-        /// </summary>
-        Codex.ISourceFileContentChunk Codex.ITextChunkSearchModel.Chunk {
-            get {
-                return this.Chunk;
-            }
+        public TextChunkSearchModel(Codex.ISearchEntity value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -7199,11 +6938,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// The text content. Set when the chunk IS NOT searched
+        /// The text content. Set when the chunk IS searched
         /// </summary>
-        Codex.ISourceFileContentChunk Codex.ITextChunkSearchModel.RawChunk {
+        Codex.ISourceFileContentChunk Codex.ITextChunkSearchModel.Chunk {
             get {
-                return this.RawChunk;
+                return this.Chunk;
             }
         }
         
@@ -7219,21 +6958,28 @@ namespace Codex.ObjectModel {
             }
         }
         
+        /// <summary>
+        /// The text content. Set when the chunk IS NOT searched
+        /// </summary>
+        Codex.ISourceFileContentChunk Codex.ITextChunkSearchModel.RawChunk {
+            get {
+                return this.RawChunk;
+            }
+        }
+        
         public override string GetRoutingKey() {
             return this.GetRoutingKey(Codex.SearchTypes.TextChunk, this);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ITextChunkSearchModel value)
-            where TTarget : TextChunkSearchModel {
-            this.m_Chunk = EntityUtilities.NullOrCopy(value.Chunk, v => new SourceFileContentChunk().CopyFrom<SourceFileContentChunk>(v));;
-            this.m_RawChunk = EntityUtilities.NullOrCopy(value.RawChunk, v => new SourceFileContentChunk().CopyFrom<SourceFileContentChunk>(v));;
-            base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ITextChunkSearchModel value) {
+            this.m_Chunk = EntityUtilities.NullOrCopy(value.Chunk, v => new SourceFileContentChunk().Apply(v));;
+            this.m_RawChunk = EntityUtilities.NullOrCopy(value.RawChunk, v => new SourceFileContentChunk().Apply(v));;
+            base.CopyFrom(((Codex.ISearchEntity)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IRepositorySearchModel))]
-    public partial class RepositorySearchModel : SearchEntity, Codex.IRepositorySearchModel {
+    public partial class RepositorySearchModel : SearchEntity, Codex.IRepositorySearchModel, Codex.IEntityTarget<Codex.IRepositorySearchModel> {
         
         private Repository m_Repository;
         
@@ -7241,17 +6987,11 @@ namespace Codex.ObjectModel {
         }
         
         public RepositorySearchModel(Codex.IRepositorySearchModel value) {
-            this.CopyFrom<RepositorySearchModel>(value);
+            this.CopyFrom(value);
         }
         
-        public RepositorySearchModel(Codex.ISearchEntity value) : 
-                base(value) {
-        }
-        
-        Codex.IRepository Codex.IRepositorySearchModel.Repository {
-            get {
-                return this.Repository;
-            }
+        public RepositorySearchModel(Codex.ISearchEntity value) {
+            this.CopyFrom(value);
         }
         
         public virtual Repository Repository {
@@ -7263,20 +7003,24 @@ namespace Codex.ObjectModel {
             }
         }
         
+        Codex.IRepository Codex.IRepositorySearchModel.Repository {
+            get {
+                return this.Repository;
+            }
+        }
+        
         public override string GetRoutingKey() {
             return this.GetRoutingKey(Codex.SearchTypes.Repository, this);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IRepositorySearchModel value)
-            where TTarget : RepositorySearchModel {
-            this.m_Repository = EntityUtilities.NullOrCopy(value.Repository, v => new Repository().CopyFrom<Repository>(v));;
-            base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IRepositorySearchModel value) {
+            this.m_Repository = EntityUtilities.NullOrCopy(value.Repository, v => new Repository().Apply(v));;
+            base.CopyFrom(((Codex.ISearchEntity)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IProjectSearchModel))]
-    public partial class ProjectSearchModel : SearchEntity, Codex.IProjectSearchModel {
+    public partial class ProjectSearchModel : SearchEntity, Codex.IProjectSearchModel, Codex.IEntityTarget<Codex.IProjectSearchModel> {
         
         private AnalyzedProject m_Project;
         
@@ -7284,17 +7028,11 @@ namespace Codex.ObjectModel {
         }
         
         public ProjectSearchModel(Codex.IProjectSearchModel value) {
-            this.CopyFrom<ProjectSearchModel>(value);
+            this.CopyFrom(value);
         }
         
-        public ProjectSearchModel(Codex.ISearchEntity value) : 
-                base(value) {
-        }
-        
-        Codex.IProject Codex.IProjectSearchModel.Project {
-            get {
-                return this.Project;
-            }
+        public ProjectSearchModel(Codex.ISearchEntity value) {
+            this.CopyFrom(value);
         }
         
         public virtual AnalyzedProject Project {
@@ -7306,20 +7044,24 @@ namespace Codex.ObjectModel {
             }
         }
         
+        Codex.IProject Codex.IProjectSearchModel.Project {
+            get {
+                return this.Project;
+            }
+        }
+        
         public override string GetRoutingKey() {
             return this.GetRoutingKey(Codex.SearchTypes.Project, this);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IProjectSearchModel value)
-            where TTarget : ProjectSearchModel {
-            this.m_Project = EntityUtilities.NullOrCopy(value.Project, v => new AnalyzedProject().CopyFrom<AnalyzedProject>(v));;
-            base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IProjectSearchModel value) {
+            this.m_Project = EntityUtilities.NullOrCopy(value.Project, v => new AnalyzedProject().Apply(v));;
+            base.CopyFrom(((Codex.ISearchEntity)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IProjectReferenceSearchModel))]
-    public partial class ProjectReferenceSearchModel : SearchEntity, Codex.IProjectReferenceSearchModel {
+    public partial class ProjectReferenceSearchModel : SearchEntity, Codex.IProjectReferenceSearchModel, Codex.IEntityTarget<Codex.IProjectReferenceSearchModel>, Codex.IEntityTarget<Codex.IProjectScopeEntity>, Codex.IEntityTarget<Codex.IRepoScopeEntity> {
         
         private ReferencedProject m_ProjectReference;
         
@@ -7331,25 +7073,19 @@ namespace Codex.ObjectModel {
         }
         
         public ProjectReferenceSearchModel(Codex.IProjectReferenceSearchModel value) {
-            this.CopyFrom<ProjectReferenceSearchModel>(value);
-        }
-        
-        public ProjectReferenceSearchModel(Codex.ISearchEntity value) : 
-                base(value) {
+            this.CopyFrom(value);
         }
         
         public ProjectReferenceSearchModel(Codex.IProjectScopeEntity value) {
-            this.CopyFrom<ProjectReferenceSearchModel>(value);
+            this.CopyFrom(value);
         }
         
         public ProjectReferenceSearchModel(Codex.IRepoScopeEntity value) {
-            this.CopyFrom<ProjectReferenceSearchModel>(value);
+            this.CopyFrom(value);
         }
         
-        Codex.IReferencedProject Codex.IProjectReferenceSearchModel.ProjectReference {
-            get {
-                return this.ProjectReference;
-            }
+        public ProjectReferenceSearchModel(Codex.ISearchEntity value) {
+            this.CopyFrom(value);
         }
         
         public virtual ReferencedProject ProjectReference {
@@ -7358,6 +7094,12 @@ namespace Codex.ObjectModel {
             }
             set {
                 this.m_ProjectReference = value;
+            }
+        }
+        
+        Codex.IReferencedProject Codex.IProjectReferenceSearchModel.ProjectReference {
+            get {
+                return this.ProjectReference;
             }
         }
         
@@ -7389,30 +7131,25 @@ namespace Codex.ObjectModel {
             return this.GetRoutingKey(Codex.SearchTypes.ProjectReference, this);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IRepoScopeEntity value)
-            where TTarget : ProjectReferenceSearchModel {
-            this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IProjectReferenceSearchModel value) {
+            this.m_ProjectReference = EntityUtilities.NullOrCopy(value.ProjectReference, v => new ReferencedProject().Apply(v));;
+            this.m_ProjectId = value.ProjectId;
+            this.m_RepositoryName = value.RepositoryName;
+            base.CopyFrom(((Codex.ISearchEntity)(value)));
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IProjectScopeEntity value)
-            where TTarget : ProjectReferenceSearchModel {
-            this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IProjectScopeEntity value) {
+            this.m_ProjectId = value.ProjectId;
+            this.CopyFrom(((Codex.IRepoScopeEntity)(value)));
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IProjectReferenceSearchModel value)
-            where TTarget : ProjectReferenceSearchModel {
-            this.m_ProjectReference = EntityUtilities.NullOrCopy(value.ProjectReference, v => new ReferencedProject().CopyFrom<ReferencedProject>(v));;
-            base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
-            this.m_ProjectId = ((Codex.IProjectScopeEntity)(value)).ProjectId;
-            this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IRepoScopeEntity value) {
+            this.m_RepositoryName = value.RepositoryName;
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ICommitSearchModel))]
-    public partial class CommitSearchModel : SearchEntity, Codex.ICommitSearchModel {
+    public partial class CommitSearchModel : SearchEntity, Codex.ICommitSearchModel, Codex.IEntityTarget<Codex.ICommitSearchModel> {
         
         private Commit m_Commit;
         
@@ -7420,17 +7157,11 @@ namespace Codex.ObjectModel {
         }
         
         public CommitSearchModel(Codex.ICommitSearchModel value) {
-            this.CopyFrom<CommitSearchModel>(value);
+            this.CopyFrom(value);
         }
         
-        public CommitSearchModel(Codex.ISearchEntity value) : 
-                base(value) {
-        }
-        
-        Codex.ICommit Codex.ICommitSearchModel.Commit {
-            get {
-                return this.Commit;
-            }
+        public CommitSearchModel(Codex.ISearchEntity value) {
+            this.CopyFrom(value);
         }
         
         public virtual Commit Commit {
@@ -7442,23 +7173,24 @@ namespace Codex.ObjectModel {
             }
         }
         
+        Codex.ICommit Codex.ICommitSearchModel.Commit {
+            get {
+                return this.Commit;
+            }
+        }
+        
         public override string GetRoutingKey() {
             return this.GetRoutingKey(Codex.SearchTypes.Commit, this);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ICommitSearchModel value)
-            where TTarget : CommitSearchModel {
-            this.m_Commit = EntityUtilities.NullOrCopy(value.Commit, v => new Commit().CopyFrom<Commit>(v));;
-            base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ICommitSearchModel value) {
+            this.m_Commit = EntityUtilities.NullOrCopy(value.Commit, v => new Commit().Apply(v));;
+            base.CopyFrom(((Codex.ISearchEntity)(value)));
         }
     }
     
-    /// <summary>
-    /// The set of files present in the repository at a given commit.
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ICommitFilesSearchModel))]
-    public partial class CommitFilesSearchModel : SearchEntity, Codex.ICommitFilesSearchModel {
+    public partial class CommitFilesSearchModel : SearchEntity, Codex.ICommitFilesSearchModel, Codex.IEntityTarget<Codex.ICommitFilesSearchModel>, Codex.IEntityTarget<Codex.ICommitScopeEntity>, Codex.IEntityTarget<Codex.IRepoScopeEntity> {
         
         private System.Collections.Generic.List<CommitFileLink> m_CommitFiles = new System.Collections.Generic.List<CommitFileLink>();
         
@@ -7470,25 +7202,19 @@ namespace Codex.ObjectModel {
         }
         
         public CommitFilesSearchModel(Codex.ICommitFilesSearchModel value) {
-            this.CopyFrom<CommitFilesSearchModel>(value);
-        }
-        
-        public CommitFilesSearchModel(Codex.ISearchEntity value) : 
-                base(value) {
+            this.CopyFrom(value);
         }
         
         public CommitFilesSearchModel(Codex.ICommitScopeEntity value) {
-            this.CopyFrom<CommitFilesSearchModel>(value);
+            this.CopyFrom(value);
         }
         
         public CommitFilesSearchModel(Codex.IRepoScopeEntity value) {
-            this.CopyFrom<CommitFilesSearchModel>(value);
+            this.CopyFrom(value);
         }
         
-        System.Collections.Generic.IReadOnlyList<Codex.ICommitFileLink> Codex.ICommitFilesSearchModel.CommitFiles {
-            get {
-                return this.CommitFiles;
-            }
+        public CommitFilesSearchModel(Codex.ISearchEntity value) {
+            this.CopyFrom(value);
         }
         
         public virtual System.Collections.Generic.List<CommitFileLink> CommitFiles {
@@ -7497,6 +7223,12 @@ namespace Codex.ObjectModel {
             }
             set {
                 this.m_CommitFiles = value;
+            }
+        }
+        
+        System.Collections.Generic.IReadOnlyList<Codex.ICommitFileLink> Codex.ICommitFilesSearchModel.CommitFiles {
+            get {
+                return this.CommitFiles;
             }
         }
         
@@ -7529,33 +7261,25 @@ namespace Codex.ObjectModel {
             return this.GetRoutingKey(Codex.SearchTypes.CommitFiles, this);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IRepoScopeEntity value)
-            where TTarget : CommitFilesSearchModel {
-            this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ICommitFilesSearchModel value) {
+            this.m_CommitFiles = new System.Collections.Generic.List<CommitFileLink>(System.Linq.Enumerable.Select(value.CommitFiles, v => EntityUtilities.NullOrCopy(v, _v => new CommitFileLink().Apply(_v))));
+            this.m_CommitId = value.CommitId;
+            this.m_RepositoryName = value.RepositoryName;
+            base.CopyFrom(((Codex.ISearchEntity)(value)));
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ICommitScopeEntity value)
-            where TTarget : CommitFilesSearchModel {
-            this.m_CommitId = ((Codex.ICommitScopeEntity)(value)).CommitId;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ICommitScopeEntity value) {
+            this.m_CommitId = value.CommitId;
+            this.CopyFrom(((Codex.IRepoScopeEntity)(value)));
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ICommitFilesSearchModel value)
-            where TTarget : CommitFilesSearchModel {
-            this.m_CommitFiles = new System.Collections.Generic.List<CommitFileLink>(System.Linq.Enumerable.Select(((Codex.ICommitFilesSearchModel)(value)).CommitFiles, v => EntityUtilities.NullOrCopy(v, _v => new CommitFileLink().CopyFrom<CommitFileLink>(_v))));
-            base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
-            this.m_CommitId = ((Codex.ICommitScopeEntity)(value)).CommitId;
-            this.m_RepositoryName = ((Codex.IRepoScopeEntity)(value)).RepositoryName;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IRepoScopeEntity value) {
+            this.m_RepositoryName = value.RepositoryName;
         }
     }
     
-    /// <summary>
-    /// Marker document for tracking reservation of stable ids from a given stable id shard
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IStableIdMarker))]
-    public partial class StableIdMarker : SearchEntity, Codex.IStableIdMarker {
+    public partial class StableIdMarker : SearchEntity, Codex.IStableIdMarker, Codex.IEntityTarget<Codex.IStableIdMarker> {
         
         private int m_NextValue;
         
@@ -7567,11 +7291,11 @@ namespace Codex.ObjectModel {
         }
         
         public StableIdMarker(Codex.IStableIdMarker value) {
-            this.CopyFrom<StableIdMarker>(value);
+            this.CopyFrom(value);
         }
         
-        public StableIdMarker(Codex.ISearchEntity value) : 
-                base(value) {
+        public StableIdMarker(Codex.ISearchEntity value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -7589,15 +7313,6 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// The list of free indices
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<int> Codex.IStableIdMarker.FreeList {
-            get {
-                return this.FreeList;
-            }
-        }
-        
-        /// <summary>
-        /// The list of free indices
-        /// </summary>
         public virtual System.Collections.Generic.List<int> FreeList {
             get {
                 return this.m_FreeList;
@@ -7608,11 +7323,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// The uncommitted reservations
+        /// The list of free indices
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<Codex.IStableIdReservation> Codex.IStableIdMarker.PendingReservations {
+        System.Collections.Generic.IReadOnlyList<int> Codex.IStableIdMarker.FreeList {
             get {
-                return this.PendingReservations;
+                return this.FreeList;
             }
         }
         
@@ -7628,25 +7343,29 @@ namespace Codex.ObjectModel {
             }
         }
         
+        /// <summary>
+        /// The uncommitted reservations
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<Codex.IStableIdReservation> Codex.IStableIdMarker.PendingReservations {
+            get {
+                return this.PendingReservations;
+            }
+        }
+        
         public override string GetRoutingKey() {
             return this.GetRoutingKey(Codex.SearchTypes.StableIdMarker, this);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IStableIdMarker value)
-            where TTarget : StableIdMarker {
-            this.m_NextValue = ((Codex.IStableIdMarker)(value)).NextValue;
-            this.m_FreeList = new System.Collections.Generic.List<int>(((Codex.IStableIdMarker)(value)).FreeList);
-            this.m_PendingReservations = new System.Collections.Generic.List<StableIdReservation>(System.Linq.Enumerable.Select(((Codex.IStableIdMarker)(value)).PendingReservations, v => EntityUtilities.NullOrCopy(v, _v => new StableIdReservation().CopyFrom<StableIdReservation>(_v))));
-            base.CopyFrom<SearchEntity>(((Codex.ISearchEntity)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IStableIdMarker value) {
+            this.m_NextValue = value.NextValue;
+            this.m_FreeList = new System.Collections.Generic.List<int>(value.FreeList);
+            this.m_PendingReservations = new System.Collections.Generic.List<StableIdReservation>(System.Linq.Enumerable.Select(value.PendingReservations, v => EntityUtilities.NullOrCopy(v, _v => new StableIdReservation().Apply(_v))));
+            base.CopyFrom(((Codex.ISearchEntity)(value)));
         }
     }
     
-    /// <summary>
-    /// A reservation of a set of stable ids.
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IStableIdReservation))]
-    public partial class StableIdReservation : Codex.EntityBase, Codex.IStableIdReservation {
+    public partial class StableIdReservation : Codex.EntityBase, Codex.IStableIdReservation, Codex.IEntityTarget<Codex.IStableIdReservation> {
         
         private string m_ReservationId;
         
@@ -7655,12 +7374,10 @@ namespace Codex.ObjectModel {
         private System.Collections.Generic.List<int> m_ReservedIds = new System.Collections.Generic.List<int>();
         
         public StableIdReservation() {
-            Initialize();
         }
         
         public StableIdReservation(Codex.IStableIdReservation value) {
-            Initialize();
-            this.CopyFrom<StableIdReservation>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -7690,15 +7407,6 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// The list of reserved ids for the reservation
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<int> Codex.IStableIdReservation.ReservedIds {
-            get {
-                return this.ReservedIds;
-            }
-        }
-        
-        /// <summary>
-        /// The list of reserved ids for the reservation
-        /// </summary>
         public virtual System.Collections.Generic.List<int> ReservedIds {
             get {
                 return this.m_ReservedIds;
@@ -7708,17 +7416,24 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IStableIdReservation value)
-            where TTarget : StableIdReservation {
-            this.m_ReservationId = ((Codex.IStableIdReservation)(value)).ReservationId;
-            this.m_ReservationDate = ((Codex.IStableIdReservation)(value)).ReservationDate;
-            this.m_ReservedIds = new System.Collections.Generic.List<int>(((Codex.IStableIdReservation)(value)).ReservedIds);
-            return ((TTarget)(this));
+        /// <summary>
+        /// The list of reserved ids for the reservation
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<int> Codex.IStableIdReservation.ReservedIds {
+            get {
+                return this.ReservedIds;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.IStableIdReservation value) {
+            this.m_ReservationId = value.ReservationId;
+            this.m_ReservationDate = value.ReservationDate;
+            this.m_ReservedIds = new System.Collections.Generic.List<int>(value.ReservedIds);
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IFileStatistics))]
-    public partial class FileStatistics : Codex.EntityBase, Codex.IFileStatistics {
+    public partial class FileStatistics : Codex.EntityBase, Codex.IFileStatistics, Codex.IEntityTarget<Codex.IFileStatistics> {
         
         private long m_FileCount;
         
@@ -7735,12 +7450,10 @@ namespace Codex.ObjectModel {
         private long m_AnalyzedSize;
         
         public FileStatistics() {
-            Initialize();
         }
         
         public FileStatistics(Codex.IFileStatistics value) {
-            Initialize();
-            this.CopyFrom<FileStatistics>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -7827,24 +7540,19 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IFileStatistics value)
-            where TTarget : FileStatistics {
-            this.m_FileCount = ((Codex.IFileStatistics)(value)).FileCount;
-            this.m_Classifications = ((Codex.IFileStatistics)(value)).Classifications;
-            this.m_Definitions = ((Codex.IFileStatistics)(value)).Definitions;
-            this.m_References = ((Codex.IFileStatistics)(value)).References;
-            this.m_Lines = ((Codex.IFileStatistics)(value)).Lines;
-            this.m_Size = ((Codex.IFileStatistics)(value)).Size;
-            this.m_AnalyzedSize = ((Codex.IFileStatistics)(value)).AnalyzedSize;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IFileStatistics value) {
+            this.m_FileCount = value.FileCount;
+            this.m_Classifications = value.Classifications;
+            this.m_Definitions = value.Definitions;
+            this.m_References = value.References;
+            this.m_Lines = value.Lines;
+            this.m_Size = value.Size;
+            this.m_AnalyzedSize = value.AnalyzedSize;
         }
     }
     
-    /// <summary>
-    /// Information for creating an ICodexRepositoryStore
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IRepositoryStoreInfo))]
-    public partial class RepositoryStoreInfo : Codex.EntityBase, Codex.IRepositoryStoreInfo {
+    public partial class RepositoryStoreInfo : Codex.EntityBase, Codex.IRepositoryStoreInfo, Codex.IEntityTarget<Codex.IRepositoryStoreInfo> {
         
         private Repository m_Repository;
         
@@ -7853,21 +7561,10 @@ namespace Codex.ObjectModel {
         private Commit m_Commit;
         
         public RepositoryStoreInfo() {
-            Initialize();
         }
         
         public RepositoryStoreInfo(Codex.IRepositoryStoreInfo value) {
-            Initialize();
-            this.CopyFrom<RepositoryStoreInfo>(value);
-        }
-        
-        /// <summary>
-        /// The repository being stored
-        /// </summary>
-        Codex.IRepository Codex.IRepositoryStoreInfo.Repository {
-            get {
-                return this.Repository;
-            }
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -7883,11 +7580,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// The branch being stored
+        /// The repository being stored
         /// </summary>
-        Codex.IBranch Codex.IRepositoryStoreInfo.Branch {
+        Codex.IRepository Codex.IRepositoryStoreInfo.Repository {
             get {
-                return this.Branch;
+                return this.Repository;
             }
         }
         
@@ -7904,11 +7601,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// The commit being stored
+        /// The branch being stored
         /// </summary>
-        Codex.ICommit Codex.IRepositoryStoreInfo.Commit {
+        Codex.IBranch Codex.IRepositoryStoreInfo.Branch {
             get {
-                return this.Commit;
+                return this.Branch;
             }
         }
         
@@ -7924,20 +7621,24 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IRepositoryStoreInfo value)
-            where TTarget : RepositoryStoreInfo {
-            this.m_Repository = EntityUtilities.NullOrCopy(value.Repository, v => new Repository().CopyFrom<Repository>(v));;
-            this.m_Branch = EntityUtilities.NullOrCopy(value.Branch, v => new Branch().CopyFrom<Branch>(v));;
-            this.m_Commit = EntityUtilities.NullOrCopy(value.Commit, v => new Commit().CopyFrom<Commit>(v));;
-            return ((TTarget)(this));
+        /// <summary>
+        /// The commit being stored
+        /// </summary>
+        Codex.ICommit Codex.IRepositoryStoreInfo.Commit {
+            get {
+                return this.Commit;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.IRepositoryStoreInfo value) {
+            this.m_Repository = EntityUtilities.NullOrCopy(value.Repository, v => new Repository().Apply(v));;
+            this.m_Branch = EntityUtilities.NullOrCopy(value.Branch, v => new Branch().Apply(v));;
+            this.m_Commit = EntityUtilities.NullOrCopy(value.Commit, v => new Commit().Apply(v));;
         }
     }
     
-    /// <summary>
-    /// Represents a directory in source control
-    /// </summary>
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ICommitFilesDirectory))]
-    public partial class CommitFilesDirectory : RepoFileScopeEntity, Codex.ICommitFilesDirectory {
+    public partial class CommitFilesDirectory : RepoFileScopeEntity, Codex.ICommitFilesDirectory, Codex.IEntityTarget<Codex.ICommitFilesDirectory> {
         
         private System.Collections.Generic.List<CommitFileLink> m_Files = new System.Collections.Generic.List<CommitFileLink>();
         
@@ -7945,24 +7646,15 @@ namespace Codex.ObjectModel {
         }
         
         public CommitFilesDirectory(Codex.ICommitFilesDirectory value) {
-            this.CopyFrom<CommitFilesDirectory>(value);
+            this.CopyFrom(value);
         }
         
-        public CommitFilesDirectory(Codex.IRepoFileScopeEntity value) : 
-                base(value) {
+        public CommitFilesDirectory(Codex.IRepoFileScopeEntity value) {
+            this.CopyFrom(value);
         }
         
-        public CommitFilesDirectory(Codex.IRepoScopeEntity value) : 
-                base(value) {
-        }
-        
-        /// <summary>
-        /// The files in the directory
-        /// </summary>
-        System.Collections.Generic.IReadOnlyList<Codex.ICommitFileLink> Codex.ICommitFilesDirectory.Files {
-            get {
-                return this.Files;
-            }
+        public CommitFilesDirectory(Codex.IRepoScopeEntity value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -7977,16 +7669,23 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ICommitFilesDirectory value)
-            where TTarget : CommitFilesDirectory {
-            this.m_Files = new System.Collections.Generic.List<CommitFileLink>(System.Linq.Enumerable.Select(((Codex.ICommitFilesDirectory)(value)).Files, v => EntityUtilities.NullOrCopy(v, _v => new CommitFileLink().CopyFrom<CommitFileLink>(_v))));
-            base.CopyFrom<RepoFileScopeEntity>(((Codex.IRepoFileScopeEntity)(value)));
-            return ((TTarget)(this));
+        /// <summary>
+        /// The files in the directory
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<Codex.ICommitFileLink> Codex.ICommitFilesDirectory.Files {
+            get {
+                return this.Files;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.ICommitFilesDirectory value) {
+            this.m_Files = new System.Collections.Generic.List<CommitFileLink>(System.Linq.Enumerable.Select(value.Files, v => EntityUtilities.NullOrCopy(v, _v => new CommitFileLink().Apply(_v))));
+            base.CopyFrom(((Codex.IRepoFileScopeEntity)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IDefinitionSymbol))]
-    public partial class DefinitionSymbol : ReferenceSymbol, Codex.IDefinitionSymbol {
+    public partial class DefinitionSymbol : ReferenceSymbol, Codex.IDefinitionSymbol, Codex.IEntityTarget<Codex.IDefinitionSymbol> {
         
         private string m_Uid;
         
@@ -8018,15 +7717,15 @@ namespace Codex.ObjectModel {
         }
         
         public DefinitionSymbol(Codex.IDefinitionSymbol value) {
-            this.CopyFrom<DefinitionSymbol>(value);
+            this.CopyFrom(value);
         }
         
-        public DefinitionSymbol(Codex.IReferenceSymbol value) : 
-                base(value) {
+        public DefinitionSymbol(Codex.IReferenceSymbol value) {
+            this.CopyFrom(value);
         }
         
-        public DefinitionSymbol(Codex.ICodeSymbol value) : 
-                base(value) {
+        public DefinitionSymbol(Codex.ICodeSymbol value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -8072,9 +7771,12 @@ namespace Codex.ObjectModel {
         /// Additional search terms for the symbol.
         /// (i.e. integral value for enum field)
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<string> Codex.IDefinitionSymbol.Keywords {
+        public virtual System.Collections.Generic.List<string> Keywords {
             get {
-                return this.Keywords;
+                return this.m_Keywords;
+            }
+            set {
+                this.m_Keywords = value;
             }
         }
         
@@ -8082,12 +7784,9 @@ namespace Codex.ObjectModel {
         /// Additional search terms for the symbol.
         /// (i.e. integral value for enum field)
         /// </summary>
-        public virtual System.Collections.Generic.List<string> Keywords {
+        System.Collections.Generic.IReadOnlyList<string> Codex.IDefinitionSymbol.Keywords {
             get {
-                return this.m_Keywords;
-            }
-            set {
-                this.m_Keywords = value;
+                return this.Keywords;
             }
         }
         
@@ -8120,21 +7819,21 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// Modifiers for the symbol such as public
         /// </summary>
-        System.Collections.Generic.IReadOnlyList<string> Codex.IDefinitionSymbol.Modifiers {
-            get {
-                return this.Modifiers;
-            }
-        }
-        
-        /// <summary>
-        /// Modifiers for the symbol such as public
-        /// </summary>
         public virtual System.Collections.Generic.List<string> Modifiers {
             get {
                 return this.m_Modifiers;
             }
             set {
                 this.m_Modifiers = value;
+            }
+        }
+        
+        /// <summary>
+        /// Modifiers for the symbol such as public
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<string> Codex.IDefinitionSymbol.Modifiers {
+            get {
+                return this.Modifiers;
             }
         }
         
@@ -8165,21 +7864,21 @@ namespace Codex.ObjectModel {
         /// <summary>
         /// Documentation for the symbol (if any)
         /// </summary>
-        Codex.IDocumentationInfo Codex.IDefinitionSymbol.DocumentationInfo {
-            get {
-                return this.DocumentationInfo;
-            }
-        }
-        
-        /// <summary>
-        /// Documentation for the symbol (if any)
-        /// </summary>
         public virtual DocumentationInfo DocumentationInfo {
             get {
                 return this.m_DocumentationInfo;
             }
             set {
                 this.m_DocumentationInfo = value;
+            }
+        }
+        
+        /// <summary>
+        /// Documentation for the symbol (if any)
+        /// </summary>
+        Codex.IDocumentationInfo Codex.IDefinitionSymbol.DocumentationInfo {
+            get {
+                return this.DocumentationInfo;
             }
         }
         
@@ -8220,28 +7919,26 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IDefinitionSymbol value)
-            where TTarget : DefinitionSymbol {
-            this.m_Uid = ((Codex.IDefinitionSymbol)(value)).Uid;
-            this.m_DisplayName = ((Codex.IDefinitionSymbol)(value)).DisplayName;
-            this.m_AbbreviatedName = ((Codex.IDefinitionSymbol)(value)).AbbreviatedName;
-            this.m_Keywords = new System.Collections.Generic.List<string>(((Codex.IDefinitionSymbol)(value)).Keywords);
-            this.m_ShortName = ((Codex.IDefinitionSymbol)(value)).ShortName;
-            this.m_ContainerQualifiedName = ((Codex.IDefinitionSymbol)(value)).ContainerQualifiedName;
-            this.m_Modifiers = new System.Collections.Generic.List<string>(((Codex.IDefinitionSymbol)(value)).Modifiers);
-            this.m_Glyph = ((Codex.IDefinitionSymbol)(value)).Glyph;
-            this.m_SymbolDepth = ((Codex.IDefinitionSymbol)(value)).SymbolDepth;
-            this.m_DocumentationInfo = EntityUtilities.NullOrCopy(value.DocumentationInfo, v => new DocumentationInfo().CopyFrom<DocumentationInfo>(v));;
-            this.m_TypeName = ((Codex.IDefinitionSymbol)(value)).TypeName;
-            this.m_DeclarationName = ((Codex.IDefinitionSymbol)(value)).DeclarationName;
-            this.m_Comment = ((Codex.IDefinitionSymbol)(value)).Comment;
-            base.CopyFrom<ReferenceSymbol>(((Codex.IReferenceSymbol)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IDefinitionSymbol value) {
+            this.m_Uid = value.Uid;
+            this.m_DisplayName = value.DisplayName;
+            this.m_AbbreviatedName = value.AbbreviatedName;
+            this.m_Keywords = new System.Collections.Generic.List<string>(value.Keywords);
+            this.m_ShortName = value.ShortName;
+            this.m_ContainerQualifiedName = value.ContainerQualifiedName;
+            this.m_Modifiers = new System.Collections.Generic.List<string>(value.Modifiers);
+            this.m_Glyph = value.Glyph;
+            this.m_SymbolDepth = value.SymbolDepth;
+            this.m_DocumentationInfo = EntityUtilities.NullOrCopy(value.DocumentationInfo, v => new DocumentationInfo().Apply(v));;
+            this.m_TypeName = value.TypeName;
+            this.m_DeclarationName = value.DeclarationName;
+            this.m_Comment = value.Comment;
+            base.CopyFrom(((Codex.IReferenceSymbol)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.IReferenceSymbol))]
-    public partial class ReferenceSymbol : Symbol, Codex.IReferenceSymbol {
+    public partial class ReferenceSymbol : Symbol, Codex.IReferenceSymbol, Codex.IEntityTarget<Codex.IReferenceSymbol> {
         
         private string m_ReferenceKind;
         
@@ -8255,11 +7952,11 @@ namespace Codex.ObjectModel {
         }
         
         public ReferenceSymbol(Codex.IReferenceSymbol value) {
-            this.CopyFrom<ReferenceSymbol>(value);
+            this.CopyFrom(value);
         }
         
-        public ReferenceSymbol(Codex.ICodeSymbol value) : 
-                base(value) {
+        public ReferenceSymbol(Codex.ICodeSymbol value) {
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -8313,19 +8010,17 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.IReferenceSymbol value)
-            where TTarget : ReferenceSymbol {
-            this.m_ReferenceKind = ((Codex.IReferenceSymbol)(value)).ReferenceKind;
-            this.m_IsImplicitlyDeclared = ((Codex.IReferenceSymbol)(value)).IsImplicitlyDeclared;
-            this.m_ExcludeFromDefaultSearch = ((Codex.IReferenceSymbol)(value)).ExcludeFromDefaultSearch;
-            this.m_ExcludeFromSearch = ((Codex.IReferenceSymbol)(value)).ExcludeFromSearch;
-            base.CopyFrom<Symbol>(((Codex.ICodeSymbol)(value)));
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.IReferenceSymbol value) {
+            this.m_ReferenceKind = value.ReferenceKind;
+            this.m_IsImplicitlyDeclared = value.IsImplicitlyDeclared;
+            this.m_ExcludeFromDefaultSearch = value.ExcludeFromDefaultSearch;
+            this.m_ExcludeFromSearch = value.ExcludeFromSearch;
+            base.CopyFrom(((Codex.ICodeSymbol)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ICodeSymbol))]
-    public partial class Symbol : Codex.EntityBase, Codex.ICodeSymbol {
+    public partial class Symbol : Codex.EntityBase, Codex.ICodeSymbol, Codex.IEntityTarget<Codex.ICodeSymbol> {
         
         private string m_ProjectId;
         
@@ -8334,12 +8029,10 @@ namespace Codex.ObjectModel {
         private string m_Kind;
         
         public Symbol() {
-            Initialize();
         }
         
         public Symbol(Codex.ICodeSymbol value) {
-            Initialize();
-            this.CopyFrom<Symbol>(value);
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -8378,17 +8071,15 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ICodeSymbol value)
-            where TTarget : Symbol {
-            this.m_ProjectId = ((Codex.ICodeSymbol)(value)).ProjectId;
-            this.m_Id = ((Codex.ICodeSymbol)(value)).Id;
-            this.m_Kind = ((Codex.ICodeSymbol)(value)).Kind;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ICodeSymbol value) {
+            this.m_ProjectId = value.ProjectId;
+            this.m_Id = value.Id;
+            this.m_Kind = value.Kind;
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.Sdk.Search.IReferenceSearchResult))]
-    public partial class ReferenceSearchResult : ProjectFileScopeEntity, Codex.Sdk.Search.IReferenceSearchResult {
+    public partial class ReferenceSearchResult : ProjectFileScopeEntity, Codex.Sdk.Search.IReferenceSearchResult, Codex.IEntityTarget<Codex.Sdk.Search.IReferenceSearchResult> {
         
         private ReferenceSpan m_ReferenceSpan;
         
@@ -8396,25 +8087,23 @@ namespace Codex.ObjectModel {
         }
         
         public ReferenceSearchResult(Codex.Sdk.Search.IReferenceSearchResult value) {
-            this.CopyFrom<ReferenceSearchResult>(value);
+            this.CopyFrom(value);
         }
         
-        public ReferenceSearchResult(Codex.IProjectFileScopeEntity value) : 
-                base(value) {
+        public ReferenceSearchResult(Codex.IProjectFileScopeEntity value) {
+            this.CopyFrom(value);
         }
         
-        public ReferenceSearchResult(Codex.IRepoFileScopeEntity value) : 
-                base(value) {
+        public ReferenceSearchResult(Codex.IRepoFileScopeEntity value) {
+            this.CopyFrom(value);
         }
         
-        public ReferenceSearchResult(Codex.IRepoScopeEntity value) : 
-                base(value) {
+        public ReferenceSearchResult(Codex.IRepoScopeEntity value) {
+            this.CopyFrom(value);
         }
         
-        Codex.IReferenceSpan Codex.Sdk.Search.IReferenceSearchResult.ReferenceSpan {
-            get {
-                return this.ReferenceSpan;
-            }
+        public ReferenceSearchResult(Codex.IProjectScopeEntity value) {
+            this.CopyFrom(value);
         }
         
         public virtual ReferenceSpan ReferenceSpan {
@@ -8426,16 +8115,20 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.Sdk.Search.IReferenceSearchResult value)
-            where TTarget : ReferenceSearchResult {
-            this.m_ReferenceSpan = EntityUtilities.NullOrCopy(value.ReferenceSpan, v => new ReferenceSpan().CopyFrom<ReferenceSpan>(v));;
-            base.CopyFrom<ProjectFileScopeEntity>(((Codex.IProjectFileScopeEntity)(value)));
-            return ((TTarget)(this));
+        Codex.IReferenceSpan Codex.Sdk.Search.IReferenceSearchResult.ReferenceSpan {
+            get {
+                return this.ReferenceSpan;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.Sdk.Search.IReferenceSearchResult value) {
+            this.m_ReferenceSpan = EntityUtilities.NullOrCopy(value.ReferenceSpan, v => new ReferenceSpan().Apply(v));;
+            base.CopyFrom(((Codex.IProjectFileScopeEntity)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.Sdk.Search.ITextLineSpanResult))]
-    public partial class TextLineSpanResult : ProjectFileScopeEntity, Codex.Sdk.Search.ITextLineSpanResult {
+    public partial class TextLineSpanResult : ProjectFileScopeEntity, Codex.Sdk.Search.ITextLineSpanResult, Codex.IEntityTarget<Codex.Sdk.Search.ITextLineSpanResult> {
         
         private TextLineSpan m_TextSpan;
         
@@ -8443,25 +8136,23 @@ namespace Codex.ObjectModel {
         }
         
         public TextLineSpanResult(Codex.Sdk.Search.ITextLineSpanResult value) {
-            this.CopyFrom<TextLineSpanResult>(value);
+            this.CopyFrom(value);
         }
         
-        public TextLineSpanResult(Codex.IProjectFileScopeEntity value) : 
-                base(value) {
+        public TextLineSpanResult(Codex.IProjectFileScopeEntity value) {
+            this.CopyFrom(value);
         }
         
-        public TextLineSpanResult(Codex.IRepoFileScopeEntity value) : 
-                base(value) {
+        public TextLineSpanResult(Codex.IRepoFileScopeEntity value) {
+            this.CopyFrom(value);
         }
         
-        public TextLineSpanResult(Codex.IRepoScopeEntity value) : 
-                base(value) {
+        public TextLineSpanResult(Codex.IRepoScopeEntity value) {
+            this.CopyFrom(value);
         }
         
-        Codex.ITextLineSpan Codex.Sdk.Search.ITextLineSpanResult.TextSpan {
-            get {
-                return this.TextSpan;
-            }
+        public TextLineSpanResult(Codex.IProjectScopeEntity value) {
+            this.CopyFrom(value);
         }
         
         public virtual TextLineSpan TextSpan {
@@ -8473,37 +8164,30 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.Sdk.Search.ITextLineSpanResult value)
-            where TTarget : TextLineSpanResult {
-            this.m_TextSpan = EntityUtilities.NullOrCopy(value.TextSpan, v => new TextLineSpan().CopyFrom<TextLineSpan>(v));;
-            base.CopyFrom<ProjectFileScopeEntity>(((Codex.IProjectFileScopeEntity)(value)));
-            return ((TTarget)(this));
+        Codex.ITextLineSpan Codex.Sdk.Search.ITextLineSpanResult.TextSpan {
+            get {
+                return this.TextSpan;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.Sdk.Search.ITextLineSpanResult value) {
+            this.m_TextSpan = EntityUtilities.NullOrCopy(value.TextSpan, v => new TextLineSpan().Apply(v));;
+            base.CopyFrom(((Codex.IProjectFileScopeEntity)(value)));
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.Sdk.Search.ISearchResult))]
-    public partial class SearchResult : Codex.EntityBase, Codex.Sdk.Search.ISearchResult {
+    public partial class SearchResult : Codex.EntityBase, Codex.Sdk.Search.ISearchResult, Codex.IEntityTarget<Codex.Sdk.Search.ISearchResult> {
         
         private TextLineSpanResult m_TextLine;
         
         private DefinitionSymbol m_Definition;
         
         public SearchResult() {
-            Initialize();
         }
         
         public SearchResult(Codex.Sdk.Search.ISearchResult value) {
-            Initialize();
-            this.CopyFrom<SearchResult>(value);
-        }
-        
-        /// <summary>
-        /// The text span for a text result
-        /// </summary>
-        Codex.Sdk.Search.ITextLineSpanResult Codex.Sdk.Search.ISearchResult.TextLine {
-            get {
-                return this.TextLine;
-            }
+            this.CopyFrom(value);
         }
         
         /// <summary>
@@ -8519,11 +8203,11 @@ namespace Codex.ObjectModel {
         }
         
         /// <summary>
-        /// The definition of the search result
+        /// The text span for a text result
         /// </summary>
-        Codex.IDefinitionSymbol Codex.Sdk.Search.ISearchResult.Definition {
+        Codex.Sdk.Search.ITextLineSpanResult Codex.Sdk.Search.ISearchResult.TextLine {
             get {
-                return this.Definition;
+                return this.TextLine;
             }
         }
         
@@ -8539,44 +8223,45 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.Sdk.Search.ISearchResult value)
-            where TTarget : SearchResult {
-            this.m_TextLine = EntityUtilities.NullOrCopy(value.TextLine, v => new TextLineSpanResult().CopyFrom<TextLineSpanResult>(v));;
-            this.m_Definition = EntityUtilities.NullOrCopy(value.Definition, v => new DefinitionSymbol().CopyFrom<DefinitionSymbol>(v));;
-            return ((TTarget)(this));
+        /// <summary>
+        /// The definition of the search result
+        /// </summary>
+        Codex.IDefinitionSymbol Codex.Sdk.Search.ISearchResult.Definition {
+            get {
+                return this.Definition;
+            }
+        }
+        
+        public virtual void CopyFrom(Codex.Sdk.Search.ISearchResult value) {
+            this.m_TextLine = EntityUtilities.NullOrCopy(value.TextLine, v => new TextLineSpanResult().Apply(v));;
+            this.m_Definition = EntityUtilities.NullOrCopy(value.Definition, v => new DefinitionSymbol().Apply(v));;
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.Sdk.Search.IIndex))]
-    public partial class Index : Codex.EntityBase, Codex.Sdk.Search.IIndex {
+    public partial class Index : Codex.EntityBase, Codex.Sdk.Search.IIndex, Codex.IEntityTarget<Codex.Sdk.Search.IIndex> {
         
         public Index() {
-            Initialize();
         }
         
         public Index(Codex.Sdk.Search.IIndex value) {
-            Initialize();
-            this.CopyFrom<Index>(value);
+            this.CopyFrom(value);
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.Sdk.Search.IIndex value)
-            where TTarget : Index {
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.Sdk.Search.IIndex value) {
         }
     }
     
     [Codex.SerializationInterfaceAttribute(typeof(Codex.ObjectModel.IMapping))]
-    public partial class Mapping : Codex.EntityBase, Codex.ObjectModel.IMapping {
+    public partial class Mapping : Codex.EntityBase, Codex.ObjectModel.IMapping, Codex.IEntityTarget<Codex.ObjectModel.IMapping> {
         
         private Codex.ObjectModel.MappingInfo m_MappingInfo;
         
         public Mapping() {
-            Initialize();
         }
         
         public Mapping(Codex.ObjectModel.IMapping value) {
-            Initialize();
-            this.CopyFrom<Mapping>(value);
+            this.CopyFrom(value);
         }
         
         public virtual Codex.ObjectModel.MappingInfo MappingInfo {
@@ -8588,10 +8273,8 @@ namespace Codex.ObjectModel {
             }
         }
         
-        public virtual TTarget CopyFrom<TTarget>(Codex.ObjectModel.IMapping value)
-            where TTarget : Mapping {
-            this.m_MappingInfo = ((Codex.ObjectModel.IMapping)(value)).MappingInfo;
-            return ((TTarget)(this));
+        public virtual void CopyFrom(Codex.ObjectModel.IMapping value) {
+            this.m_MappingInfo = value.MappingInfo;
         }
     }
 }

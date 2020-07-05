@@ -142,7 +142,8 @@ namespace Codex.Framework.Generation
 
         private CodeExpression GetPropertyApplyExpression()
         {
-            var valuePropertyReferenceExpression = new CodeFieldReferenceExpression(new CodeCastExpression(PropertyInfo.DeclaringType.AsReference(), new CodeVariableReferenceExpression("value")), Name);
+            //var valuePropertyReferenceExpression = new CodeFieldReferenceExpression(new CodeCastExpression(PropertyInfo.DeclaringType.AsReference(), new CodeVariableReferenceExpression("value")), Name);
+            var valuePropertyReferenceExpression = new CodeFieldReferenceExpression(new CodeVariableReferenceExpression("value"), Name);
             if (!IsList)
             {
                 if (PropertyTypeDefinition == null)
@@ -153,7 +154,7 @@ namespace Codex.Framework.Generation
                 else
                 {
                     // new PropertyType().CopyFrom(value.Property);
-                    return new CodeSnippetExpression($"EntityUtilities.NullOrCopy(value.{valuePropertyReferenceExpression.FieldName}, v => new {PropertyTypeDefinition.ClassName}().CopyFrom<{PropertyTypeDefinition.ClassName}>(v));");
+                    return new CodeSnippetExpression($"EntityUtilities.NullOrCopy(value.{valuePropertyReferenceExpression.FieldName}, v => new {PropertyTypeDefinition.ClassName}().Apply(v));");
                 }
             }
             else
@@ -171,7 +172,7 @@ namespace Codex.Framework.Generation
                     return new CodeObjectCreateExpression(InitPropertyType,
                         new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeTypeReferenceExpression(typeof(Enumerable)), nameof(Enumerable.Select)),
                         valuePropertyReferenceExpression,
-                            new CodeSnippetExpression($"v => EntityUtilities.NullOrCopy(v, _v => new {PropertyTypeDefinition.ClassName}().CopyFrom<{PropertyTypeDefinition.ClassName}>(_v))")));
+                            new CodeSnippetExpression($"v => EntityUtilities.NullOrCopy(v, _v => new {PropertyTypeDefinition.ClassName}().Apply(_v))")));
                 }
 
             }

@@ -6,6 +6,11 @@ namespace Codex
 {
     public class EntityBase : ISerializableEntity
     {
+        public EntityBase()
+        {
+            Initialize();
+        }
+
         protected virtual void Initialize()
         {
         }

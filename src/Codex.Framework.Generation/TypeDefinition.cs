@@ -60,6 +60,7 @@ namespace Codex.Framework.Generation
         public bool Exclude;
 
         public List<TypeDefinition> Interfaces = new List<TypeDefinition>();
+        public List<Type> AllInterfaces = new List<Type>();
         public SearchType SearchType;
 
         public CodeTypeReference MappingTypeReference;
@@ -99,7 +100,12 @@ namespace Codex.Framework.Generation
             {
                 IsClass = true,
                 IsPartial = true
-            };
+            }.AddComments(Comments.ToArray());
+
+            BuilderTypeDeclaration.CustomAttributes.Add(
+                    new CodeAttributeDeclaration(
+                        typeof(SerializationInterfaceAttribute).AsReference(),
+                        new CodeAttributeArgument(new CodeTypeOfExpression(Type))));
 
             MappingTypeReference = new CodeTypeReference(ClassName + "Mapping", new CodeTypeReference("TRoot"));
             Properties = type.GetProperties().Select(p => new PropertyDefinition(p)).ToList();
@@ -134,6 +140,17 @@ namespace Codex.Framework.Generation
         {
             // Generate constructors
 
+            if (BaseTypeDefinition != null)
+            {
+                BuilderTypeDeclaration.BaseTypes.Add(BaseTypeDefinition.ClassName);
+            }
+            else if (!IsAdapter)
+            {
+                BuilderTypeDeclaration.BaseTypes.Add(typeof(EntityBase));
+            }
+
+            BuilderTypeDeclaration.BaseTypes.Add(Type);
+
             // Add properties
             foreach (var property in GeneratedProperties)
             {
@@ -142,20 +159,60 @@ namespace Codex.Framework.Generation
                 property.BuilderImplementationProperty?.Apply(m => BuilderTypeDeclaration.Members.Add(m));
             }
 
-            // Add apply methods
+            // Add empty constructor
+            BuilderTypeDeclaration.Members.Add(new CodeConstructor()
+            {
+                Attributes = MemberAttributes.Public
+            });
 
+            // Add copy constructors
+            foreach (var type in new[] { Type }.Concat(AllInterfaces).Except(new[] { typeof(ISearchEntityBase) }))
+            {
+                var copyConstructor = new CodeConstructor()
+                {
+                    Attributes = MemberAttributes.Public
+                };
+
+                copyConstructor.Parameters.Add(new CodeParameterDeclarationExpression(
+                    type.AsReference(),
+                    "value"));
+
+                copyConstructor.Statements.Add(new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(
+                    new CodeThisReferenceExpression(), nameof(IEntityTarget<object>.CopyFrom)),
+                    new CodeVariableReferenceExpression("value")));
+
+                BuilderTypeDeclaration.Members.Add(copyConstructor);
+            }
+
+            // Add apply methods
             foreach (var type in new[] { this }.Concat(Interfaces))
             {
                 BuilderTypeDeclaration.BaseTypes.Add(typeof(IEntityTarget<>).MakeGenericTypeReference(type.Type.AsReference()));
+
                 var applyMethod = new CodeMemberMethod()
                 {
                     Name = nameof(IEntityTarget<object>.CopyFrom),
                     Attributes = MemberAttributes.Public,
                 };
 
+                applyMethod.Parameters.Add(new CodeParameterDeclarationExpression(
+                    type.Type.AsReference(),
+                    "value"));
+
+
+                BuilderTypeDeclaration.Members.Add(applyMethod);
+
                 foreach (var property in type.GeneratedProperties)
                 {
                     applyMethod.Statements.AddRange(property.BuilderApplyMethodStatements);
+                }
+
+                if (type.BaseTypeDefinition != null)
+                {
+                    applyMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(
+                        type == this ? (CodeExpression)new CodeBaseReferenceExpression() : new CodeThisReferenceExpression(),
+                        applyMethod.Name),
+                        new CodeCastExpression(type.BaseTypeDefinition.Type, new CodeVariableReferenceExpression("value"))));
                 }
             }
         }
@@ -163,6 +220,18 @@ namespace Codex.Framework.Generation
         public void GenerateMapping()
         {
             // Add properties
+            foreach (var property in GeneratedProperties)
+            {
+                if (property.ExcludeFromIndexing) continue;
+
+                MappingTypeDeclaration.AddMappingProperty(
+                        property.Name,
+                        property.PropertyTypeDefinition?.MappingTypeReference ?? property.PropertyType.AsReference().AsMappingType(),
+                        MappingIndexer,
+                        property.SearchBehavior,
+                        MappingVisitMethod,
+                        property.AllowedStages);
+            }
 
             // Generate visitor
         }

@@ -140,13 +140,13 @@ namespace Codex.Search
                     (from hit in referencesResult.Hits
                      let referenceSearchModel = hit.Source
                      from span in referenceSearchModel.Spans
-                     select new ReferenceSearchResult(referenceSearchModel)
+                     select new ReferenceSearchResult()
                      {
-                         ReferenceSpan = new ReferenceSpan(span)
+                         ReferenceSpan = new ReferenceSpan()
                          {
-                             Reference = new ReferenceSymbol(referenceSearchModel.Reference)
-                         }
-                     }).ToList<IReferenceSearchResult>();
+                             Reference = new ReferenceSymbol().Apply(referenceSearchModel.Reference)
+                         }.Apply(span)
+                     }.Apply((IProjectFileScopeEntity)referenceSearchModel)).ToList<IReferenceSearchResult>();
 
 
                 return new ReferencesResult()
@@ -226,12 +226,12 @@ namespace Codex.Search
                         sourceFile.Info.WebAddress = StoreUtilities.GetFileWebAddress(repo.SourceControlWebAddress, sourceFile.Info.RepoRelativePath);
                     }
 
-                    return new BoundSourceFile(boundSearchModel.BindingInfo)
+                    return new BoundSourceFile()
                     {
                         SourceFile = TextIndexingUtilities.FromChunks(boundSearchModel.File, chunks),
                         Commit = commit,
                         Repo = repo
-                    };
+                    }.Apply((IBoundSourceInfo)boundSearchModel.BindingInfo);
                 }
 
                 throw new Exception("Unable to find source file");
@@ -353,7 +353,7 @@ namespace Codex.Search
                             Hits = new List<ISearchResult>(definitionsResult.Hits.Select(hit =>
                                 new SearchResult()
                                 {
-                                    Definition = new DefinitionSymbol(hit.Source.Definition)
+                                    Definition = new DefinitionSymbol().Apply(hit.Source.Definition)
                                 })),
                             Total = definitionsResult.Total
                         };
@@ -399,10 +399,10 @@ namespace Codex.Search
                     from highlight in chunkHit.hit.Highlights
                     select new SearchResult()
                     {
-                        TextLine = new TextLineSpanResult(hit.Source.File.Info)
+                        TextLine = new TextLineSpanResult()
                         {
                             TextSpan = withOffset(highlight, chunkHit.StartLineNumber)
-                        }
+                        }.Apply((IProjectFileScopeEntity)hit.Source.File.Info)
                     }).ToList<ISearchResult>();
 
                 return new IndexQueryHits<ISearchResult>()

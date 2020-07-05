@@ -63,7 +63,6 @@ namespace Codex.Framework.Generation
         public void Generate(string path)
         {
             LoadTypeInformation();
-            GenerateBuilders();
             GenerateSearchDescriptors();
         }
 
@@ -149,9 +148,9 @@ namespace Codex.Framework.Generation
                 int baseTypeCount = 0;
                 IEnumerable<Type> baseTypeEnumerable = Enumerable.Empty<Type>();
 
-                var allInterfaces = interfaces.ToList();
+                typeDefinition.AllInterfaces.AddRange(interfaces);
 
-                foreach (var i in allInterfaces)
+                foreach (var i in typeDefinition.AllInterfaces)
                 {
                     interfaces.RemoveWhere(t => t != i && t.IsAssignableFrom(i));
                 }
@@ -179,7 +178,7 @@ namespace Codex.Framework.Generation
                     baseTypeEnumerable = new[] { baseType }.Concat(baseType.GetInterfaces());
                 }
 
-                typeDefinition.Interfaces.AddRange(allInterfaces.Except(baseTypeEnumerable).Where(t => DefinitionsByType.ContainsKey(t)).Select(t => DefinitionsByType[t]));
+                typeDefinition.Interfaces.AddRange(typeDefinition.AllInterfaces.Except(baseTypeEnumerable).Where(t => DefinitionsByType.ContainsKey(t)).Select(t => DefinitionsByType[t]));
 
                 typeDefinition.GeneratedProperties = typeDefinition.Properties.Concat(typeDefinition.Interfaces.SelectMany(t => t.Properties))
                     .Distinct(propComparer).ToList();
@@ -415,11 +414,7 @@ namespace Codex.Framework.Generation
 
                 visitedTypeDefinitions.Clear();
                 usedMemberNames.Clear();
-                var typeDeclaration = new CodeTypeDeclaration(typeDefinition.ClassName)
-                {
-                    IsClass = true,
-                    IsPartial = true,
-                };
+                var builderTypeDeclaration = typeDefinition.BuilderTypeDeclaration;
 
                 var mappingConstructor = new CodeConstructor()
                 {
@@ -446,13 +441,6 @@ namespace Codex.Framework.Generation
                 {
                     MappingsClass.Members.Add(typeDefinition.MappingTypeDeclaration);
                 }
-
-                typeDeclaration.Comments.AddRange(typeDefinition.Comments.ToArray());
-
-                typeDeclaration.CustomAttributes.Add(
-                    new CodeAttributeDeclaration(
-                        typeof(SerializationInterfaceAttribute).AsReference(),
-                        new CodeAttributeArgument(new CodeTypeOfExpression(typeDefinition.Type))));
 
                 typeMappingCreatorMethod.Statements.Add(new CodeMethodInvokeExpression(
                     new CodeVariableReferenceExpression(typeMappingVariableName),
@@ -499,22 +487,11 @@ namespace Codex.Framework.Generation
                                 new CodeThisReferenceExpression()
                         )));
 
-                    typeDeclaration.Members.Add(routingKeyMethod);
+                    builderTypeDeclaration.Members.Add(routingKeyMethod);
                 }
 
                 var nspace = typeDefinition.Migrated ? modelNamespace : typesNamespace;
-                nspace.Types.Add(typeDeclaration);
-
-                if (typeDefinition.TypeParameters.Count == 0)
-                {
-                    typeDeclaration.Members.Add(new CodeConstructor()
-                    {
-                        Attributes = MemberAttributes.Public
-                    }.EnsureInitialize(typeDefinition));
-                }
-
-
-                //PopulateProperties(visitedTypeDefinitions, usedMemberNames, typeDefinition, typeDeclaration);
+                nspace.Types.Add(builderTypeDeclaration);
 
                 if (typeDefinition.SearchRelevantBase != null)
                 {
@@ -531,61 +508,10 @@ namespace Codex.Framework.Generation
                     {
                         continue;
                     }
-
-                    //typeDefinition.MappingTypeDeclaration.AddMappingProperty(
-                    //    property.Name,
-                    //    property.PropertyTypeDefinition?.MappingTypeReference ?? property.PropertyType.AsReference().AsMappingType(),
-                    //    indexerMethod,
-                    //    property.SearchBehavior);
-
-                    //visitMethod.Statements.Add(new CodeMethodInvokeExpression(
-                    //    new CodeMethodReferenceExpression(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), property.Name), visitMethod.Name),
-                    //    new CodeArgumentReferenceExpression("visitor"),
-                    //    new CodeFieldReferenceExpression(new CodeArgumentReferenceExpression("value"), property.Name)));
-
-                    //typeDefinition.MappingIndexer.GetStatements.Insert(0, new CodeConditionStatement(
-                    //    new CodeMethodInvokeExpression(
-                    //        new CodeMethodReferenceExpression(new CodeThisReferenceExpression(), nameof(ObjectModel.MappingBase.IsMatch)),
-                    //        new CodeArgumentReferenceExpression("fullName"),
-                    //        new CodePrimitiveExpression(property.Name)),
-                    //    new CodeMethodReturnStatement(new CodeIndexerExpression(
-                    //        new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), property.Name),
-                    //        new CodeArgumentReferenceExpression("fullName")
-                    //        ))
-                    //    ));
-
-                    //if (property.PropertyTypeDefinition != null)
-                    //{
-
-                    //    //).ApplyIf(property.IsList, m =>
-                    //    //{
-                    //    //    m.Parameters.Add(new CodeSnippetExpression($"(item, v, m) => item.Visit(v, m)"));
-                    //    //    return m;
-                    //    //}));
-                    //}
-                    //else
-                    //{
-                    //    visitMethod.Statements.Add(new CodeMethodInvokeExpression(
-                    //        new CodeMethodReferenceExpression(new CodeArgumentReferenceExpression("visitor"), visitMethod.Name),
-                    //        new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), property.Name),
-                    //        new CodeFieldReferenceExpression(new CodeArgumentReferenceExpression("value"), property.Name)
-                    //    ).ApplyIf(property.IsList, m =>
-                    //    {
-                    //        m.Parameters.Add(new CodeSnippetExpression($"(item, v, m) => v.Visit(m, item)"));
-                    //        return m;
-                    //    }));
-                    //}
                 }
 
                 typeDefinition.MappingTypeDeclaration.Members.Add(typeDefinition.MappingIndexer);
                 typeDefinition.MappingTypeDeclaration.Members.Add(typeDefinition.MappingVisitMethod);
-
-                //if (!typeDefinition.Type.IsGenericType)
-                //{
-                //    typeDeclaration.BaseTypes.Add(new CodeTypeReference(typeof(IMutable<object, object>))
-                //        .Apply(tp => tp.TypeArguments[0] = new CodeTypeReference(typeDeclaration.Name))
-                //        .Apply(tp => tp.TypeArguments[1] = new CodeTypeReference(typeDefinition.Type)));
-                //}
             }
 
             Types.ForEach(t => t.GenerateProperties());
@@ -632,223 +558,6 @@ namespace Codex.Framework.Generation
                             ))
                     }
             };
-        }
-
-        private void PopulateProperties(
-            HashSet<TypeDefinition> visitedTypeDefinitions,
-            HashSet<string> usedMemberNames,
-            TypeDefinition typeDefinition,
-            CodeTypeDeclaration typeDeclaration,
-            TypeDefinition declarationTypeDefinition = null,
-            bool isBaseChain = false)
-        {
-            declarationTypeDefinition ??= typeDefinition;
-            if (!visitedTypeDefinitions.Add(typeDefinition))
-            {
-                return;
-            }
-
-            var applyMethod = new CodeMemberMethod()
-            {
-                Name = "CopyFrom",
-                Attributes = MemberAttributes.Public,
-                ReturnType = new CodeTypeReference("TTarget")
-            };
-
-            var copyConstructor = new CodeConstructor()
-            {
-                Attributes = MemberAttributes.Public,
-            }.EnsureInitialize(declarationTypeDefinition);
-
-            if (typeDefinition.TypeParameters.Count == 0)
-            {
-                typeDeclaration.Members.Add(copyConstructor);
-            }
-
-            applyMethod.TypeParameters.Add(new CodeTypeParameter("TTarget").Apply(tp => tp.Constraints.Add(typeDeclaration.Name)));
-            applyMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeDefinition.Type.AsReference(), "value"));
-            copyConstructor.Parameters.AddRange(applyMethod.Parameters);
-            if (!isBaseChain)
-            {
-                copyConstructor.Statements.Add(new CodeMethodInvokeExpression(new CodeThisReferenceExpression(), applyMethod.Name, new CodeVariableReferenceExpression("value"))
-                    .Apply(invoke => invoke.Method.TypeArguments.Add(new CodeTypeReference(typeDeclaration.Name))));
-            }
-            else
-            {
-                copyConstructor.BaseConstructorArgs.Add(new CodeVariableReferenceExpression("value"));
-            }
-
-            foreach (var property in typeDefinition.Properties)
-            {
-                AddPropertyApplyStatement(applyMethod, property);
-
-                if (isBaseChain)
-                {
-                    usedMemberNames.Add(property.Name);
-                    continue;
-                }
-
-                if (property.PropertyTypeDefinition != null || property.IsList)
-                {
-                    // Need to add explicit interface implementation for
-                    // complex property types as the interface specifies the
-                    // interface but the property specifies the class
-
-                    typeDeclaration.Members.Add(new CodeMemberProperty()
-                    {
-                        Type = property.ImmutablePropertyType,
-                        Name = property.Name,
-                        HasGet = true,
-                        PrivateImplementationType = property.PropertyInfo.DeclaringType.AsReference()
-                    }
-                    .AddComments(property.Comments)
-                    .Apply(p => p.GetStatements.Add(new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), property.Name)))));
-                }
-
-                if (!usedMemberNames.Add(property.Name))
-                {
-                    continue;
-                }
-
-                CodeMemberField backingField = new CodeMemberField()
-                {
-                    Name = property.BackingFieldName,
-                    Attributes = MemberAttributes.Private,
-                    Type = property.CoercedSourceType?.AsReference() ?? property.MutablePropertyType,
-                };
-
-                if (!isBaseChain && !property.ExcludeFromIndexing)
-                {
-                    declarationTypeDefinition.MappingTypeDeclaration.AddMappingProperty(
-                        property.Name,
-                        property.PropertyTypeDefinition?.MappingTypeReference ?? property.PropertyType.AsReference().AsMappingType(),
-                        declarationTypeDefinition.MappingIndexer,
-                        property.SearchBehavior,
-                        declarationTypeDefinition.MappingVisitMethod,
-                        property.AllowedStages);
-                }
-
-                if (property.InitPropertyType != null)
-                {
-                    if (property.IsReadOnlyList)
-                    {
-                        backingField.InitExpression = new CodePropertyReferenceExpression(
-                            new CodeTypeReferenceExpression(typeof(CollectionUtilities.Empty<>).MakeGenericTypeReference(property.MutablePropertyType.TypeArguments[0])),
-                            nameof(CollectionUtilities.Empty<int>.Array));
-                    }
-                    else
-                    {
-                        backingField.InitExpression = new CodeObjectCreateExpression(property.InitPropertyType);
-                    }
-                }
-
-                typeDeclaration.Members.Add(backingField);
-
-                string coercePropertyMethodName = $"Coerce{property.Name}";
-
-                typeDeclaration.Members.Add(new CodeMemberProperty()
-                {
-                    Type = property.MutablePropertyType,
-                    Name = property.Name,
-                    Attributes = MemberAttributes.Public,
-                    HasGet = true,
-                }
-                .AddComments(property.Comments)
-                .Apply(p => p.GetStatements.Add(new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), backingField.Name)
-                    .ApplyIf<CodeExpression>(property.CoerceGet, exp => new CodeMethodInvokeExpression(new CodeThisReferenceExpression(), coercePropertyMethodName, exp)))))
-                .Apply(p =>
-                {
-                    p.HasSet = true;
-                    p.SetStatements.Add(new CodeAssignStatement(left: new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), backingField.Name), right: new CodePropertySetValueReferenceExpression()));
-                }));
-            }
-
-            if (visitedTypeDefinitions.Count == 1)
-            {
-                if (typeDefinition.BaseTypeDefinition != null)
-                {
-                    typeDeclaration.BaseTypes.Add(typeDefinition.BaseTypeDefinition.ClassName);
-                    applyMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeBaseReferenceExpression(), applyMethod.Name)
-                        .Apply(mr => mr.TypeArguments.Add(typeDefinition.BaseTypeDefinition.ClassName)),
-                        new CodeCastExpression(new CodeTypeReference(typeDefinition.BaseType), new CodeVariableReferenceExpression("value"))));
-                }
-                else if (!typeDefinition.IsAdapter)
-                {
-                    typeDeclaration.BaseTypes.Add(typeof(EntityBase));
-                }
-
-                typeDeclaration.BaseTypes.Add(typeDefinition.Type.AsReference());
-            }
-
-            if (typeDefinition.BaseTypeDefinition != null)
-            {
-                PopulateProperties(visitedTypeDefinitions, usedMemberNames, typeDefinition.BaseTypeDefinition, typeDeclaration,
-                    declarationTypeDefinition: declarationTypeDefinition,
-                    isBaseChain: declarationTypeDefinition == typeDefinition || isBaseChain);
-            }
-
-            if (!isBaseChain)
-            {
-                foreach (var baseDefinition in typeDefinition.Interfaces)
-                {
-                    foreach (var property in baseDefinition.Properties)
-                    {
-                        AddPropertyApplyStatement(applyMethod, property);
-                    }
-
-                    //applyMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeThisReferenceExpression(), applyMethod.Name),
-                    //    new CodeCastExpression(baseDefinition.Type, new CodeVariableReferenceExpression("value"))));
-                    PopulateProperties(visitedTypeDefinitions, usedMemberNames, baseDefinition, typeDeclaration,
-                        declarationTypeDefinition: declarationTypeDefinition,
-                        isBaseChain: false);
-                }
-
-                applyMethod.Statements.Add(new CodeMethodReturnStatement(new CodeCastExpression("TTarget", new CodeThisReferenceExpression())));
-                typeDeclaration.Members.Add(applyMethod);
-            }
-        }
-
-        private void AddPropertyApplyStatement(CodeMemberMethod applyMethod, PropertyDefinition property)
-        {
-            applyMethod.Statements.Add(new CodeAssignStatement(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), property.BackingFieldName),
-                GetPropertyApplyExpression(property)));
-        }
-
-        private CodeExpression GetPropertyApplyExpression(PropertyDefinition property)
-        {
-            var valuePropertyReferenceExpression = new CodeFieldReferenceExpression(new CodeCastExpression(property.PropertyInfo.DeclaringType.AsReference(), new CodeVariableReferenceExpression("value")), property.Name);
-            if (!property.IsList)
-            {
-                if (property.PropertyTypeDefinition == null)
-                {
-                    // value.Property;
-                    return valuePropertyReferenceExpression;
-                }
-                else
-                {
-                    // new PropertyType().CopyFrom(value.Property);
-                    return new CodeSnippetExpression($"EntityUtilities.NullOrCopy(value.{valuePropertyReferenceExpression.FieldName}, v => new {property.PropertyTypeDefinition.ClassName}().CopyFrom<{property.PropertyTypeDefinition.ClassName}>(v));");
-                }
-            }
-            else
-            {
-
-                if (property.PropertyTypeDefinition == null)
-                {
-                    // new List<PropertyType>(value.Property);
-                    return new CodeObjectCreateExpression(property.InitPropertyType,
-                        valuePropertyReferenceExpression);
-                }
-                else
-                {
-                    // new List<PropertyType>(value.Property.Select(v => new PropertyType().CopyFrom(v)));
-                    return new CodeObjectCreateExpression(property.InitPropertyType,
-                        new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeTypeReferenceExpression(typeof(Enumerable)), nameof(Enumerable.Select)),
-                        valuePropertyReferenceExpression,
-                            new CodeSnippetExpression($"v => EntityUtilities.NullOrCopy(v, _v => new {property.PropertyTypeDefinition.ClassName}().CopyFrom<{property.PropertyTypeDefinition.ClassName}>(_v))")));
-                }
-
-            }
         }
 
         private void PopulateIndexProperties(
@@ -906,66 +615,6 @@ namespace Codex.Framework.Generation
                         PopulateIndexProperties(visitedTypeDefinitions, usedMemberNames, searchType, property.PropertyTypeDefinition, typeDeclaration);
                     }
                 }
-            }
-        }
-
-        public void GenerateBuilders()
-        {
-
-        }
-
-        public void GenerateBuilder(TypeDefinition type)
-        {
-            CodeTypeDeclaration builder = new CodeTypeDeclaration(type.ClassName + "Builder");
-            builder.IsClass = true;
-            builder.IsPartial = true;
-            // WIP: Private class nested in Builder type 
-            builder.Attributes = MemberAttributes.Private;
-
-            var constructor = new CodeConstructor()
-            {
-                Name = builder.Name,
-                Attributes = MemberAttributes.Public,
-            };
-
-            builder.Members.Add(constructor);
-
-            foreach (var property in type.Properties)
-            {
-                var propertyDeclaration = new CodeMemberProperty()
-                {
-                    Name = property.Name,
-                    Attributes = MemberAttributes.Public,
-                    HasGet = true,
-                    HasSet = !property.IsList,
-                    Type = GetBuilderPropertyTypeName(property.PropertyInfo.PropertyType)
-                };
-
-                // Create the lists in the constructor
-                if (property.IsList)
-                {
-                    constructor.Statements.Add(
-                        new CodeObjectCreateExpression(propertyDeclaration.Type));
-                }
-
-                builder.Members.Add(propertyDeclaration);
-            }
-        }
-
-        public CodeTypeReference GetBuilderPropertyTypeName(Type type)
-        {
-            TypeDefinition typeDefinition;
-            if (type.GetGenericTypeDefinition() == typeof(IReadOnlyList<>))
-            {
-                return new CodeTypeReference("List", GetBuilderPropertyTypeName(type.GetGenericArguments()[0]));
-            }
-            else if (DefinitionsByType.TryGetValue(type, out typeDefinition))
-            {
-                return new CodeTypeReference(typeDefinition.BuilderClassName);
-            }
-            else
-            {
-                return new CodeTypeReference(type);
             }
         }
     }
