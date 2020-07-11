@@ -43,6 +43,8 @@ namespace Codex.ElasticSearch.Store
         /// Disables optimized serialization for use when testing
         /// </summary>
         public bool DisableOptimization { get; set; }
+
+        public int MaxParallelism { get; set; } = 32;
         public bool Clean { get; set; }
         public bool WriteStoreInfo => string.IsNullOrEmpty(QualifierSuffix);
         public string QualifierSuffix { get; set; } = string.Empty;
@@ -167,7 +169,7 @@ namespace Codex.ElasticSearch.Store
 
             count = actionQueue.Count;
             tasks.Clear();
-            for (int i = 0; i < Math.Min(Environment.ProcessorCount, 32); i++)
+            for (int i = 0; i < Math.Min(Environment.ProcessorCount, MaxParallelism); i++)
             {
                 tasks.Add(Task.Factory.StartNew(() =>
                 {

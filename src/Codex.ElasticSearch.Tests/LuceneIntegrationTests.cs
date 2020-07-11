@@ -28,14 +28,24 @@ namespace Codex.ElasticSearch.Tests
         {
             (var store, var codex) = await InitializeAsync("estest.", populateCount: 1);
 
+            var refResult = await codex.FindAllReferencesAsync(new FindAllReferencesArguments()
+            {
+                ProjectId = "CodexTestCSharpLibrary",
+                SymbolId = "mrmqhpalox2j"
+            });
+
+            Assert.False(refResult.Error == null);
+            Assert.False(refResult.Result.Total == 3);
+
             var result = await codex.SearchAsync(new SearchArguments()
             {
                 SearchString = "xedocbase",
                 AllowReferencedDefinitions = false,
-                TextSearch = false
+                TextSearch = false,
+                FallbackToTextSearch = false
             });
 
-            Assert.False(result.Error != null);
+            Assert.False(result.Error == null);
         }
 
         private async Task<(ICodexStore store, ICodex codex)> InitializeAsync(
@@ -62,6 +72,7 @@ namespace Codex.ElasticSearch.Tests
             if (populate)
             {
                 DirectoryCodexStore originalStore = DirectoryCodexStoreTests.CreateInputStore();
+                originalStore.MaxParallelism = 1;
                 //await store.FinalizeAsync();
 
                 for (int i = 0; i < populateCount; i++)

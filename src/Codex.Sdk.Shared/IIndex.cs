@@ -1,4 +1,5 @@
 ﻿using Codex.ObjectModel;
+using Codex.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -53,14 +54,21 @@ namespace Codex.Sdk.Search
 
     public class OneOrMany<T>
     {
+        public T[] Values { get; }
+
+        public OneOrMany(params T[] values)
+        {
+            Values = values;
+        }
+
         public static implicit operator OneOrMany<T>(T[] values)
         {
-            throw Placeholder.NotImplementedException();
+            return new OneOrMany<T>(values);
         }
 
         public static implicit operator OneOrMany<T>(T value)
         {
-            throw Placeholder.NotImplementedException();
+            return new OneOrMany<T>(value);
         }
     }
 
@@ -75,6 +83,22 @@ namespace Codex.Sdk.Search
     {
         IReadOnlyCollection<ISearchHit<T>> Hits { get; }
         public int Total { get; }
+    }
+
+    public class IndexSearchResponse<T> : IIndexSearchResponse<T>
+    {
+        public List<SearchHit<T>> Hits { get; set; } = new List<SearchHit<T>>();
+
+        public int Total { get; set; }
+
+        IReadOnlyCollection<ISearchHit<T>> IIndexSearchResponse<T>.Hits => Hits;
+    }
+
+    public class SearchHit<T> : ISearchHit<T>
+    {
+        public T Source { get; set; }
+
+        public IEnumerable<TextLineSpan> Highlights { get; set; } = CollectionUtilities.Empty<TextLineSpan>.Array;
     }
 
     public interface ISearchHit<out T>

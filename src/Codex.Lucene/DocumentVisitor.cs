@@ -23,7 +23,7 @@ namespace Codex.Lucene.Search
 
         public Query TermQuery(MappingBase mapping, string term)
         {
-            return new TermQuery(new Term(mapping.MappingInfo.FullName, term));
+            return new TermQuery(new Term(mapping.MappingInfo.FullName, term?.ToLowerInvariant()));
         }
 
         public Query TermQuery(MappingBase mapping, bool term)

@@ -12,6 +12,7 @@ using Lucene.Net.Index;
 using Lucene.Net.Store;
 using Lucene.Net.Search;
 using Codex.Search;
+using Codex.Serialization;
 using static Codex.ObjectModel.Mappings;
 using System.IO;
 
@@ -86,7 +87,19 @@ namespace Codex.Lucene.Search
 
                 var topDocs = Searcher.Search(luceneQuery, take ?? 1000);
 
-                throw new NotImplementedException();
+                var results = topDocs.ScoreDocs
+                    .Select(sd => Reader.Document(sd.Doc).GetField(LuceneConstants.SourceFieldName))
+                    .Select(f => new StringReader(f.GetStringValue()).DeserializeEntity<TResult>())
+                    .Select(r => new SearchHit<TResult>()
+                    {
+                        Source = r
+                    });
+
+                return new IndexSearchResponse<TResult>()
+                {
+                    Hits = results.ToList(),
+                    Total = topDocs.TotalHits
+                };
             }
 
             public Query FromCodexQuery(CodexQuery<T> query)
