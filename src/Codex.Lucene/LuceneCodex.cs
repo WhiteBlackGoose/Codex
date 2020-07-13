@@ -104,6 +104,7 @@ namespace Codex.Lucene.Search
 
             public Query FromCodexQuery(CodexQuery<T> query)
             {
+                const bool flattenQueries = true;
                 switch (query.Kind)
                 {
                     case CodexQueryKind.And:
@@ -111,8 +112,31 @@ namespace Codex.Lucene.Search
                         {
                             var bq = new BooleanQuery();
                             var binaryQuery = (BinaryCodexQuery<T>)query;
-                            bq.Add(FromCodexQuery(binaryQuery.LeftQuery), query.Kind == CodexQueryKind.And ? Occur.MUST : Occur.SHOULD);
-                            bq.Add(FromCodexQuery(binaryQuery.RightQuery), query.Kind == CodexQueryKind.And ? Occur.MUST : Occur.SHOULD);
+
+                            addClauses(binaryQuery.LeftQuery);
+                            addClauses(binaryQuery.RightQuery);
+
+                            void addClauses(CodexQuery<T> q)
+                            {
+                                Query lq = FromCodexQuery(q);
+                                if (flattenQueries
+                                    && (q.Kind == query.Kind || (q.Kind == CodexQueryKind.Negate && query.Kind == CodexQueryKind.And)) 
+                                    && lq is BooleanQuery boolQuery)
+                                {
+                                    foreach (var clause in boolQuery.Clauses)
+                                    {
+                                        // Only include MUST_NOT clauses from Negate queries
+                                        if (q.Kind != CodexQueryKind.Negate || clause.Occur == Occur.MUST_NOT)
+                                        {
+                                            bq.Add(clause);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    bq.Add(lq, query.Kind == CodexQueryKind.And ? Occur.MUST : Occur.SHOULD);
+                                }
+                            }
                             return bq;
                         }
                     case CodexQueryKind.Term:
@@ -123,6 +147,7 @@ namespace Codex.Lucene.Search
                             var nq = (NegateCodexQuery<T>)query;
                             var bq = new BooleanQuery();
                             bq.Add(FromCodexQuery(nq.InnerQuery), Occur.MUST_NOT);
+                            bq.Add(new MatchAllDocsQuery(), Occur.MUST);
                             return bq;
                         }
                     case CodexQueryKind.MatchPhrase:

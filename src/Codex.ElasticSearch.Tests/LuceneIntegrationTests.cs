@@ -34,18 +34,19 @@ namespace Codex.ElasticSearch.Tests
                 SymbolId = "mrmqhpalox2j"
             });
 
-            Assert.False(refResult.Error == null);
-            Assert.False(refResult.Result.Total == 3);
+            Assert.True(refResult.Error == null);
+            Assert.True(refResult.Result.Total == 3);
 
             var result = await codex.SearchAsync(new SearchArguments()
             {
-                SearchString = "xedocbase",
+                SearchString = "*xedocbase",
                 AllowReferencedDefinitions = false,
                 TextSearch = false,
                 FallbackToTextSearch = false
             });
 
-            Assert.False(result.Error == null);
+            Assert.True(result.Error == null);
+            Assert.True(result.Result.Total == 1);
         }
 
         private async Task<(ICodexStore store, ICodex codex)> InitializeAsync(

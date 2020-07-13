@@ -57,7 +57,6 @@ namespace Codex.Lucene.Search
 
         private class Batcher : IBatcher<LuceneStoreFilterBuilder>
         {
-            // TODO: Need a writer per search type
             private LazySearchTypesMap<IndexWriter> Writers { get; }
             public LuceneCodexStore Store { get; }
 
