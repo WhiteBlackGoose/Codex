@@ -1,0 +1,4 @@
+[submodule "lucenenet"]
+	path = lucenenet
+	url = https://github.com/apache/lucenenet
+	branch = master
