@@ -28,6 +28,14 @@ namespace Codex.ElasticSearch.Tests
         {
             (var store, var codex) = await InitializeAsync("estest.", populateCount: 1);
 
+            var result = await codex.SearchAsync(new SearchArguments()
+            {
+                SearchString = "*xedocbase",
+                AllowReferencedDefinitions = false,
+                TextSearch = false,
+                FallbackToTextSearch = false
+            });
+
             var refResult = await codex.FindAllReferencesAsync(new FindAllReferencesArguments()
             {
                 ProjectId = "CodexTestCSharpLibrary",
@@ -36,14 +44,6 @@ namespace Codex.ElasticSearch.Tests
 
             Assert.True(refResult.Error == null);
             Assert.True(refResult.Result.Total == 3);
-
-            var result = await codex.SearchAsync(new SearchArguments()
-            {
-                SearchString = "*xedocbase",
-                AllowReferencedDefinitions = false,
-                TextSearch = false,
-                FallbackToTextSearch = false
-            });
 
             Assert.True(result.Error == null);
             Assert.True(result.Result.Total == 1);

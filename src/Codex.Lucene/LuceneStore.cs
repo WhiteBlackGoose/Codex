@@ -19,6 +19,7 @@ using Lucene.Net.Store;
 using Lucene.Net.Util;
 using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.Standard;
+using Codex.Lucene.Framework;
 
 namespace Codex.Lucene.Search
 {
@@ -70,10 +71,22 @@ namespace Codex.Lucene.Search
 
                 Writers = new LazySearchTypesMap<IndexWriter>(
                     s =>
-                    new IndexWriter(
-                        Store.Configuration.OpenIndexDirectory(s),
-                        new IndexWriterConfig(LuceneVersion.LUCENE_48, new StandardAnalyzer(LuceneVersion.LUCENE_48))),
+                    CreateWriter(s),
                     initializeAll: true);
+            }
+
+            private IndexWriter CreateWriter(SearchType s)
+            {
+                var codec = new FieldMappingCodec(mappings[s]);
+
+                return new IndexWriter(
+                            Store.Configuration.OpenIndexDirectory(s),
+                            new IndexWriterConfig(
+                                LuceneVersion.LUCENE_48,
+                                new StandardAnalyzer(LuceneVersion.LUCENE_48))
+                            {
+                                Codec = codec
+                            });
             }
 
             public Task FinalizeAsync(string repositoryName)

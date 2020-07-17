@@ -20,10 +20,43 @@ using Lucene.Net.Codecs.Lucene46;
 
 namespace Codex.Lucene.Framework.AutoPrefix
 {
+    public readonly struct BytesRefString
+    {
+        public BytesRef Value { get; }
+
+        public int Length => Value.Length;
+
+        public byte[] Bytes => Value.Bytes;
+
+        public byte this[int i] => Bytes[i + Value.Offset];
+
+        public BytesRefString(BytesRef value)
+        {
+            Value = value;
+        }
+
+        public static implicit operator BytesRefString(BytesRef value)
+        {
+            return new BytesRefString(value);
+        }
+
+        public static implicit operator BytesRef(BytesRefString value)
+        {
+            return value.Value;
+        }
+
+        public override string ToString()
+        {
+            return $"{Value?.Utf8ToString()} [{Value?.Length ?? -1}]";
+        }
+    }
+
     public class AutoPrefixNode : PostingsConsumer
     {
-        public BytesRef Term;
+        private static readonly BytesRef Empty = new BytesRef();
+        public BytesRefString Term = Empty;
         public int NumTerms;
+        public int Height;
         private OpenBitSet builder;
 
         public DocIdSet Docs => builder;
@@ -37,10 +70,11 @@ namespace Codex.Lucene.Framework.AutoPrefix
         {
             Prior = prior;
             this.docCount = docCount;
+            Height = (prior?.Height ?? 0) + 1;
             this.builder = new OpenBitSet(docCount);
         }
 
-        public AutoPrefixNode Push(BytesRef term)
+        public AutoPrefixNode Push(BytesRefString term)
         {
             if (Next != null)
             {
@@ -49,6 +83,7 @@ namespace Codex.Lucene.Framework.AutoPrefix
             else
             {
                 Next = new AutoPrefixNode(docCount, this);
+                Next.Term = BytesRef.DeepCopyOf(term);
             }
 
             return Next;
@@ -60,16 +95,37 @@ namespace Codex.Lucene.Framework.AutoPrefix
             return this;
         }
 
-        public void Reset(BytesRef term)
+        public void Reset(BytesRefString term)
         {
             NumTerms = 0;
-            Term = term;
+            if (Term.Value.Bytes.Length < term.Length)
+            {
+                Term.Value.Bytes = new byte[term.Length * 2];
+            }
+
+            Array.Copy(term.Bytes, term.Value.Offset, Term.Value.Bytes, 0, term.Length);
+            Term.Value.Length = term.Length;
+
             this.builder = new OpenBitSet(docCount);
         }
 
-        internal BytesRef GetCommonPrefix(BytesRef text)
+        internal BytesRefString GetCommonPrefix(BytesRefString text)
         {
-            throw new NotImplementedException();
+            var length = Math.Min(text.Length, Term.Length);
+            var commonLength = 0;
+            for (commonLength = 0; commonLength < length; commonLength++)
+            {
+                if (text[commonLength] != Term[commonLength])
+                {
+                    break;
+                }
+            }
+
+            if (commonLength == 0) return Empty;
+
+            var bytes = new byte[commonLength];
+            Array.Copy(text.Bytes, text.Value.Offset, bytes, 0, commonLength);
+            return new BytesRef(bytes);
         }
 
         public void Add(OpenBitSet bitSet)

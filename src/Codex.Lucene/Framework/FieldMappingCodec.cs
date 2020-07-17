@@ -17,15 +17,31 @@ using Lucene.Net.Documents;
 using Lucene.Net.Codecs.PerField;
 using Lucene.Net.Codecs;
 using Lucene.Net.Codecs.Lucene46;
+using Codex.Lucene.Framework.AutoPrefix;
 
 namespace Codex.Lucene.Framework
 {
     public class FieldMappingCodec : Lucene46Codec
     {
-        Mappings m;
+        private readonly MappingBase typeMapping;
+
+        private AutoPrefixPostingsFormat AutoPrefixPostingsFormat { get; }
+
+        public FieldMappingCodec(MappingBase typeMapping)
+        {
+            this.typeMapping = typeMapping;
+
+            AutoPrefixPostingsFormat = new AutoPrefixPostingsFormat(base.GetPostingsFormatForField(""));
+        }
 
         public override PostingsFormat GetPostingsFormatForField(string field)
         {
+            var fieldMapping = typeMapping[field];
+            if (fieldMapping != null && fieldMapping.MappingInfo.SearchBehavior == SearchBehavior.PrefixShortName)
+            {
+                return AutoPrefixPostingsFormat;
+            }
+
             return base.GetPostingsFormatForField(field);
         }
     }

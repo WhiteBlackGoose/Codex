@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Update="LibGit2Sharp" Version="0.26.0" />
-    <PackageReference Update="Lucene.Net" Version="4.8.0-beta00007" />
+    <PackageReference Update="Lucene.Net" Version="4.8.0-beta00009" />
     <PackageReference Update="ManagedEsent" Version="1.9.4" />
     <PackageReference Update="Microsoft.Build.Framework" Version="16.4.0" />
     <PackageReference Update="Microsoft.Build.Locator" Version="1.0.31" />

@@ -33,17 +33,18 @@ namespace Codex.Lucene.Framework.AutoPrefix
 
         public override TermsConsumer AddField(FieldInfo field)
         {
-            return new AutoPrefixTermsConsumer(inner.AddField(field), CreateTermStore(field), state.SegmentInfo.DocCount);
+            var innerTermsConsumer = inner.AddField(field);
+            return new AutoPrefixTermsConsumer(innerTermsConsumer, CreateTermStore(field, innerTermsConsumer.Comparer), state.SegmentInfo.DocCount);
         }
 
-        private IOrderingTermStore CreateTermStore(FieldInfo field)
+        private IOrderingTermStore CreateTermStore(FieldInfo field, IComparer<BytesRef> comparer)
         {
-            throw new NotImplementedException();
+            return new MemoryOrderingTermStore(comparer);
         }
 
         protected override void Dispose(bool disposing)
         {
-            throw new NotImplementedException();
+            inner.Dispose();
         }
     }
 }

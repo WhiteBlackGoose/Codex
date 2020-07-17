@@ -14,7 +14,7 @@ namespace Codex.ObjectModel
         public MappingInfo(string name, MappingInfo parent, SearchBehavior? searchBehavior, ObjectStage objectStage = ObjectStage.All)
         {
             Name = name;
-            FullName = parent == null
+            FullName = parent?.Name == null
                 ? Name
                 : string.Join(".", parent.Name, Name);
             SearchBehavior = searchBehavior;
@@ -33,7 +33,7 @@ namespace Codex.ObjectModel
 
         public virtual MappingBase this[string fullName] => fullName == MappingInfo.FullName ? this : null;
 
-        public bool IsMatch(string fullName, string childName)
+        public virtual bool IsMatch(string fullName, string childName)
         {
             var childStartIndex = MappingInfo?.Name == null ? 0 : MappingInfo.FullName.Length + 1;
             var childFullNameLength = childStartIndex + childName.Length;
@@ -77,6 +77,11 @@ namespace Codex.ObjectModel
             : base(info: null)
         {
             _mappingsByType = new LazySearchTypesMap<MappingBase>(s => this[s.Name]);
+        }
+
+        public override bool IsMatch(string fullName, string childName)
+        {
+            return fullName == childName;
         }
     }
 }

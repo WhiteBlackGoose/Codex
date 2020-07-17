@@ -636,10 +636,11 @@ namespace Codex.Framework.Generation
             CodeMemberMethod visitMethod = null,
             ObjectStage objectStage = ObjectStage.All)
         {
+            bool isRoot = visitMethod == null;
             AddLazyProperty(declaringType.Members, name, propertyType, new CodeObjectCreateExpression(propertyType,
                 new CodeObjectCreateExpression(
                     typeof(ObjectModel.MappingInfo),
-                    new CodePrimitiveExpression(name),
+                    new CodePrimitiveExpression(isRoot ? null : name),
                     new CodeFieldReferenceExpression(null, nameof(ObjectModel.MappingBase.MappingInfo)),
                     searchBehavior == null ? (CodeExpression)new CodePrimitiveExpression(null) : new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(typeof(SearchBehavior)), searchBehavior.ToString()),
                     new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(typeof(ObjectStage)), objectStage.ToString())
@@ -658,9 +659,12 @@ namespace Codex.Framework.Generation
                     new CodeMethodReferenceExpression(new CodeThisReferenceExpression(), nameof(ObjectModel.MappingBase.IsMatch)),
                     new CodeArgumentReferenceExpression("fullName"),
                     new CodePrimitiveExpression(name)),
-                new CodeMethodReturnStatement(new CodeIndexerExpression(
-                    new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), name),
-                    new CodeArgumentReferenceExpression("fullName")
+                new CodeMethodReturnStatement(
+                    isRoot 
+                    ? (CodeExpression)new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), name)
+                    : new CodeIndexerExpression(
+                        new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), name),
+                        new CodeArgumentReferenceExpression("fullName")
                     ))
                 ));
         }

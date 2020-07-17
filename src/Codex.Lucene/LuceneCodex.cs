@@ -15,6 +15,9 @@ using Codex.Search;
 using Codex.Serialization;
 using static Codex.ObjectModel.Mappings;
 using System.IO;
+using Lucene.Net.Util;
+using Lucene.Net.QueryParsers.Simple;
+using Lucene.Net.Analysis.Standard;
 
 namespace Codex.Lucene.Search
 {
@@ -85,6 +88,10 @@ namespace Codex.Lucene.Search
                 var query = filter(queryBuilder);
                 var luceneQuery = FromCodexQuery(query);
 
+                var terms = Reader.Leaves[0].AtomicReader.GetTerms(client.mappings.Definition.Definition.ShortName.MappingInfo.FullName);
+                var te = terms.GetIterator(null);
+                bool found = te.SeekExact(new BytesRef("xedocbase"));
+
                 var topDocs = Searcher.Search(luceneQuery, take ?? 1000);
 
                 var results = topDocs.ScoreDocs
@@ -151,9 +158,21 @@ namespace Codex.Lucene.Search
                             return bq;
                         }
                     case CodexQueryKind.MatchPhrase:
-                        //var mq = (MatchPhraseCodexQuery<T>)query;
-                        //var result = new MultiPhraseQuery();
-                        //return result;
+                        var mq = (MatchPhraseCodexQuery<T>)query;
+
+                        var fieldName = mq.Mapping.MappingInfo.FullName;
+                        var simpleQueryParser = new SimpleQueryParser(
+                            new StandardAnalyzer(LuceneVersion.LUCENE_48),
+                            fieldName);
+
+                        string phrase = mq.Phrase;
+                        if (mq.MaxExpansions > 0)
+                        {
+                            phrase += "*";
+                        }
+
+                        var parsedQuery = simpleQueryParser.CreatePhraseQuery(fieldName, phrase);
+                        return parsedQuery;
                     default:
                         throw new NotImplementedException();
                 }

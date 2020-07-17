@@ -216,49 +216,49 @@ namespace Codex.ObjectModel {
         public override Codex.ObjectModel.MappingBase this[string fullName] {
             get {
                 if (this.IsMatch(fullName, "RegisteredEntity")) {
-                    return this.RegisteredEntity[fullName];
+                    return this.RegisteredEntity;
                 }
                 if (this.IsMatch(fullName, "StableIdMarker")) {
-                    return this.StableIdMarker[fullName];
+                    return this.StableIdMarker;
                 }
                 if (this.IsMatch(fullName, "StoredFilter")) {
-                    return this.StoredFilter[fullName];
+                    return this.StoredFilter;
                 }
                 if (this.IsMatch(fullName, "Property")) {
-                    return this.Property[fullName];
+                    return this.Property;
                 }
                 if (this.IsMatch(fullName, "ProjectReference")) {
-                    return this.ProjectReference[fullName];
+                    return this.ProjectReference;
                 }
                 if (this.IsMatch(fullName, "CommitFiles")) {
-                    return this.CommitFiles[fullName];
+                    return this.CommitFiles;
                 }
                 if (this.IsMatch(fullName, "Commit")) {
-                    return this.Commit[fullName];
+                    return this.Commit;
                 }
                 if (this.IsMatch(fullName, "Project")) {
-                    return this.Project[fullName];
+                    return this.Project;
                 }
                 if (this.IsMatch(fullName, "Repository")) {
-                    return this.Repository[fullName];
+                    return this.Repository;
                 }
                 if (this.IsMatch(fullName, "Language")) {
-                    return this.Language[fullName];
+                    return this.Language;
                 }
                 if (this.IsMatch(fullName, "BoundSource")) {
-                    return this.BoundSource[fullName];
+                    return this.BoundSource;
                 }
                 if (this.IsMatch(fullName, "TextSource")) {
-                    return this.TextSource[fullName];
+                    return this.TextSource;
                 }
                 if (this.IsMatch(fullName, "TextChunk")) {
-                    return this.TextChunk[fullName];
+                    return this.TextChunk;
                 }
                 if (this.IsMatch(fullName, "Reference")) {
-                    return this.Reference[fullName];
+                    return this.Reference;
                 }
                 if (this.IsMatch(fullName, "Definition")) {
-                    return this.Definition[fullName];
+                    return this.Definition;
                 }
                 return base[fullName];
             }
@@ -267,7 +267,7 @@ namespace Codex.ObjectModel {
         public DefinitionSearchModelMapping<Codex.IDefinitionSearchModel> Definition {
             get {
                 if ((this._lazyDefinition == null)) {
-                    this._lazyDefinition = new DefinitionSearchModelMapping<Codex.IDefinitionSearchModel>(new Codex.ObjectModel.MappingInfo("Definition", MappingInfo, null, Codex.ObjectStage.All));
+                    this._lazyDefinition = new DefinitionSearchModelMapping<Codex.IDefinitionSearchModel>(new Codex.ObjectModel.MappingInfo(null, MappingInfo, null, Codex.ObjectStage.All));
                 }
                 return this._lazyDefinition;
             }
@@ -276,7 +276,7 @@ namespace Codex.ObjectModel {
         public ReferenceSearchModelMapping<Codex.IReferenceSearchModel> Reference {
             get {
                 if ((this._lazyReference == null)) {
-                    this._lazyReference = new ReferenceSearchModelMapping<Codex.IReferenceSearchModel>(new Codex.ObjectModel.MappingInfo("Reference", MappingInfo, null, Codex.ObjectStage.All));
+                    this._lazyReference = new ReferenceSearchModelMapping<Codex.IReferenceSearchModel>(new Codex.ObjectModel.MappingInfo(null, MappingInfo, null, Codex.ObjectStage.All));
                 }
                 return this._lazyReference;
             }
@@ -285,7 +285,7 @@ namespace Codex.ObjectModel {
         public TextChunkSearchModelMapping<Codex.ITextChunkSearchModel> TextChunk {
             get {
                 if ((this._lazyTextChunk == null)) {
-                    this._lazyTextChunk = new TextChunkSearchModelMapping<Codex.ITextChunkSearchModel>(new Codex.ObjectModel.MappingInfo("TextChunk", MappingInfo, null, Codex.ObjectStage.All));
+                    this._lazyTextChunk = new TextChunkSearchModelMapping<Codex.ITextChunkSearchModel>(new Codex.ObjectModel.MappingInfo(null, MappingInfo, null, Codex.ObjectStage.All));
                 }
                 return this._lazyTextChunk;
             }
@@ -294,7 +294,7 @@ namespace Codex.ObjectModel {
         public TextSourceSearchModelMapping<Codex.ITextSourceSearchModel> TextSource {
             get {
                 if ((this._lazyTextSource == null)) {
-                    this._lazyTextSource = new TextSourceSearchModelMapping<Codex.ITextSourceSearchModel>(new Codex.ObjectModel.MappingInfo("TextSource", MappingInfo, null, Codex.ObjectStage.All));
+                    this._lazyTextSource = new TextSourceSearchModelMapping<Codex.ITextSourceSearchModel>(new Codex.ObjectModel.MappingInfo(null, MappingInfo, null, Codex.ObjectStage.All));
                 }
                 return this._lazyTextSource;
             }
@@ -303,7 +303,7 @@ namespace Codex.ObjectModel {
         public BoundSourceSearchModelMapping<Codex.IBoundSourceSearchModel> BoundSource {
             get {
                 if ((this._lazyBoundSource == null)) {
-                    this._lazyBoundSource = new BoundSourceSearchModelMapping<Codex.IBoundSourceSearchModel>(new Codex.ObjectModel.MappingInfo("BoundSource", MappingInfo, null, Codex.ObjectStage.All));
+                    this._lazyBoundSource = new BoundSourceSearchModelMapping<Codex.IBoundSourceSearchModel>(new Codex.ObjectModel.MappingInfo(null, MappingInfo, null, Codex.ObjectStage.All));
                 }
                 return this._lazyBoundSource;
             }
@@ -312,7 +312,7 @@ namespace Codex.ObjectModel {
         public LanguageSearchModelMapping<Codex.ILanguageSearchModel> Language {
             get {
                 if ((this._lazyLanguage == null)) {
-                    this._lazyLanguage = new LanguageSearchModelMapping<Codex.ILanguageSearchModel>(new Codex.ObjectModel.MappingInfo("Language", MappingInfo, null, Codex.ObjectStage.All));
+                    this._lazyLanguage = new LanguageSearchModelMapping<Codex.ILanguageSearchModel>(new Codex.ObjectModel.MappingInfo(null, MappingInfo, null, Codex.ObjectStage.All));
                 }
                 return this._lazyLanguage;
             }
@@ -321,7 +321,7 @@ namespace Codex.ObjectModel {
         public RepositorySearchModelMapping<Codex.IRepositorySearchModel> Repository {
             get {
                 if ((this._lazyRepository == null)) {
-                    this._lazyRepository = new RepositorySearchModelMapping<Codex.IRepositorySearchModel>(new Codex.ObjectModel.MappingInfo("Repository", MappingInfo, null, Codex.ObjectStage.All));
+                    this._lazyRepository = new RepositorySearchModelMapping<Codex.IRepositorySearchModel>(new Codex.ObjectModel.MappingInfo(null, MappingInfo, null, Codex.ObjectStage.All));
                 }
                 return this._lazyRepository;
             }
@@ -330,7 +330,7 @@ namespace Codex.ObjectModel {
         public ProjectSearchModelMapping<Codex.IProjectSearchModel> Project {
             get {
                 if ((this._lazyProject == null)) {
-                    this._lazyProject = new ProjectSearchModelMapping<Codex.IProjectSearchModel>(new Codex.ObjectModel.MappingInfo("Project", MappingInfo, null, Codex.ObjectStage.All));
+                    this._lazyProject = new ProjectSearchModelMapping<Codex.IProjectSearchModel>(new Codex.ObjectModel.MappingInfo(null, MappingInfo, null, Codex.ObjectStage.All));
                 }
                 return this._lazyProject;
             }
@@ -339,7 +339,7 @@ namespace Codex.ObjectModel {
         public CommitSearchModelMapping<Codex.ICommitSearchModel> Commit {
             get {
                 if ((this._lazyCommit == null)) {
-                    this._lazyCommit = new CommitSearchModelMapping<Codex.ICommitSearchModel>(new Codex.ObjectModel.MappingInfo("Commit", MappingInfo, null, Codex.ObjectStage.All));
+                    this._lazyCommit = new CommitSearchModelMapping<Codex.ICommitSearchModel>(new Codex.ObjectModel.MappingInfo(null, MappingInfo, null, Codex.ObjectStage.All));
                 }
                 return this._lazyCommit;
             }
@@ -348,7 +348,7 @@ namespace Codex.ObjectModel {
         public CommitFilesSearchModelMapping<Codex.ICommitFilesSearchModel> CommitFiles {
             get {
                 if ((this._lazyCommitFiles == null)) {
-                    this._lazyCommitFiles = new CommitFilesSearchModelMapping<Codex.ICommitFilesSearchModel>(new Codex.ObjectModel.MappingInfo("CommitFiles", MappingInfo, null, Codex.ObjectStage.All));
+                    this._lazyCommitFiles = new CommitFilesSearchModelMapping<Codex.ICommitFilesSearchModel>(new Codex.ObjectModel.MappingInfo(null, MappingInfo, null, Codex.ObjectStage.All));
                 }
                 return this._lazyCommitFiles;
             }
@@ -357,7 +357,7 @@ namespace Codex.ObjectModel {
         public ProjectReferenceSearchModelMapping<Codex.IProjectReferenceSearchModel> ProjectReference {
             get {
                 if ((this._lazyProjectReference == null)) {
-                    this._lazyProjectReference = new ProjectReferenceSearchModelMapping<Codex.IProjectReferenceSearchModel>(new Codex.ObjectModel.MappingInfo("ProjectReference", MappingInfo, null, Codex.ObjectStage.All));
+                    this._lazyProjectReference = new ProjectReferenceSearchModelMapping<Codex.IProjectReferenceSearchModel>(new Codex.ObjectModel.MappingInfo(null, MappingInfo, null, Codex.ObjectStage.All));
                 }
                 return this._lazyProjectReference;
             }
@@ -366,7 +366,7 @@ namespace Codex.ObjectModel {
         public PropertySearchModelMapping<Codex.IPropertySearchModel> Property {
             get {
                 if ((this._lazyProperty == null)) {
-                    this._lazyProperty = new PropertySearchModelMapping<Codex.IPropertySearchModel>(new Codex.ObjectModel.MappingInfo("Property", MappingInfo, null, Codex.ObjectStage.All));
+                    this._lazyProperty = new PropertySearchModelMapping<Codex.IPropertySearchModel>(new Codex.ObjectModel.MappingInfo(null, MappingInfo, null, Codex.ObjectStage.All));
                 }
                 return this._lazyProperty;
             }
@@ -375,7 +375,7 @@ namespace Codex.ObjectModel {
         public StoredFilterMapping<Codex.IStoredFilter> StoredFilter {
             get {
                 if ((this._lazyStoredFilter == null)) {
-                    this._lazyStoredFilter = new StoredFilterMapping<Codex.IStoredFilter>(new Codex.ObjectModel.MappingInfo("StoredFilter", MappingInfo, null, Codex.ObjectStage.All));
+                    this._lazyStoredFilter = new StoredFilterMapping<Codex.IStoredFilter>(new Codex.ObjectModel.MappingInfo(null, MappingInfo, null, Codex.ObjectStage.All));
                 }
                 return this._lazyStoredFilter;
             }
@@ -384,7 +384,7 @@ namespace Codex.ObjectModel {
         public StableIdMarkerMapping<Codex.IStableIdMarker> StableIdMarker {
             get {
                 if ((this._lazyStableIdMarker == null)) {
-                    this._lazyStableIdMarker = new StableIdMarkerMapping<Codex.IStableIdMarker>(new Codex.ObjectModel.MappingInfo("StableIdMarker", MappingInfo, null, Codex.ObjectStage.All));
+                    this._lazyStableIdMarker = new StableIdMarkerMapping<Codex.IStableIdMarker>(new Codex.ObjectModel.MappingInfo(null, MappingInfo, null, Codex.ObjectStage.All));
                 }
                 return this._lazyStableIdMarker;
             }
@@ -393,7 +393,7 @@ namespace Codex.ObjectModel {
         public RegisteredEntityMapping<Codex.IRegisteredEntity> RegisteredEntity {
             get {
                 if ((this._lazyRegisteredEntity == null)) {
-                    this._lazyRegisteredEntity = new RegisteredEntityMapping<Codex.IRegisteredEntity>(new Codex.ObjectModel.MappingInfo("RegisteredEntity", MappingInfo, null, Codex.ObjectStage.All));
+                    this._lazyRegisteredEntity = new RegisteredEntityMapping<Codex.IRegisteredEntity>(new Codex.ObjectModel.MappingInfo(null, MappingInfo, null, Codex.ObjectStage.All));
                 }
                 return this._lazyRegisteredEntity;
             }

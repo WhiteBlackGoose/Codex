@@ -356,7 +356,9 @@ namespace Codex.ElasticSearch.Formats
                     Contract.Assert(denseBuffer == null);
                     if (currentBlockCardinality > 0)
                     {
-                        sets[currentBlock] = new ShortArrayDocIdSet(Arrays.CopyOf(buffer, currentBlockCardinality), false);
+                        var blockBuffer = new ushort[currentBlockCardinality];
+                        Array.Copy(buffer, blockBuffer, currentBlockCardinality);
+                        sets[currentBlock] = new ShortArrayDocIdSet(blockBuffer, false);
                     }
                 }
                 else
@@ -436,11 +438,11 @@ namespace Codex.ElasticSearch.Formats
             /**
              * Add the content of the provided {@link DocIdSetIterator}.
              */
-            public Builder Add(DocIdSetIterator disi)
+            public Builder Add(DocIdSetIterator disi, int offset = 0)
             {
                 for (int doc = disi.NextDoc(); doc != DocIdSetIterator.NO_MORE_DOCS; doc = disi.NextDoc())
                 {
-                    Add(doc);
+                    Add(doc + offset);
                 }
                 return this;
             }

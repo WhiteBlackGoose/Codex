@@ -18,6 +18,7 @@ using Lucene.Net.Codecs.PerField;
 using Lucene.Net.Codecs;
 using Lucene.Net.Codecs.Lucene46;
 using Lucene.Net.Util.Packed;
+using System.Diagnostics;
 
 namespace Codex.Lucene.Framework.AutoPrefix
 {
@@ -56,6 +57,7 @@ namespace Codex.Lucene.Framework.AutoPrefix
                     consumer.FinishDoc();
                 }
 
+                Print($"Finish.FinishTerm {count}", t.term);
                 inner.FinishTerm(t.term, new TermStats(count, count));
             });
         }
@@ -64,9 +66,13 @@ namespace Codex.Lucene.Framework.AutoPrefix
         {
         }
 
-        public override PostingsConsumer StartTerm(BytesRef text)
+        public override PostingsConsumer StartTerm(BytesRef textRef)
         {
-            BytesRef commonPrefix = currentNode.GetCommonPrefix(text);
+            BytesRefString text = textRef;
+            Print("Start", text);
+            Print("StartNode", currentNode);
+            BytesRefString commonPrefix = currentNode.GetCommonPrefix(text);
+            Print("CommonPrefix", commonPrefix);
 
             while (commonPrefix.Length < currentNode.Term.Length)
             {
@@ -81,20 +87,38 @@ namespace Codex.Lucene.Framework.AutoPrefix
                 PopNode();
             }
 
+            Print("BeforePush", currentNode);
             currentNode = currentNode.Push(text);
+            Print("AfterPush", currentNode);
             return currentNode;
         }
 
         private void PersistNode()
         {
+            Print("Persist", currentNode);
             termStore.Store(currentNode.Term, currentNode.Docs);
         }
 
         private void PopNode()
         {
             PersistNode();
+            Print("BeforePop", currentNode);
             currentNode.Pop();
             currentNode = currentNode.Prior;
+            Print("AfterPop", currentNode);
+        }
+
+        [Conditional("DEBUG")]
+        private void Print(string message, AutoPrefixNode node)
+        {
+            Print($"{message} #:{node?.Height}", node?.Term);
+        }
+
+        [Conditional("DEBUG")]
+        private void Print(string message, BytesRefString? term)
+        {
+            System.Diagnostics.Debug.WriteLine($"{message} '{term}'");
+            Console.WriteLine($"{message.PadRight(20, ' ')} '{term}'");
         }
     }
 }
