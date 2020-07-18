@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Codex.Web.Mvc
 {
@@ -35,7 +36,7 @@ namespace Codex.Web.Mvc
                 StartElasticSearch();
             }
 
-            services.AddMvc();
+            services.AddRazorPages();
 
             var useCommitModel = Configuration["USE_COMMITMODEL"];
             if (useCommitModel != "1")
@@ -90,7 +91,7 @@ namespace Codex.Web.Mvc
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.Use(async (context, next) =>
             {
@@ -108,15 +109,19 @@ namespace Codex.Web.Mvc
 
             app.UseStaticFiles();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+            app.UseRouting();
 
-                routes.MapRoute(
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
                     name: "Repos",
-                    template: "repos/{repoName}/{controller=Home}/{action=Index}/{id?}");
+                    pattern: "repos/{repoName}/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
