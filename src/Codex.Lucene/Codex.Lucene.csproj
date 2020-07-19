@@ -10,9 +10,9 @@
     <Compile Remove="Model\ElasticSearchTypes.target.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Lucene.Net" Version="4.8.0-beta00009" />
-    <PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-beta00009" />
-    <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00009" />
+    <!--<PackageReference Include="Lucene.Net" Version="4.8.0-beta00009" />-->
+    <!--<PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-beta00009" />-->
+    <!--<PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00009" />-->
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="StrongNamer" Condition="'$(TargetFramework)' == 'net472'" />
     <!-- <PackageReference Include="System.Threading.Tasks.Extensions" /> -->
@@ -21,6 +21,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Codex.ElasticSearch\Codex.ElasticSearch.csproj" />
     <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />
+
+    <ProjectReference Include="..\..\lucenenet\src\Lucene.Net\Lucene.Net.csproj" />
+    <ProjectReference Include="..\..\lucenenet\src\Lucene.Net.Analysis.Common\Lucene.Net.Analysis.Common.csproj" />
+    <ProjectReference Include="..\..\lucenenet\src\Lucene.Net.QueryParser\Lucene.Net.QueryParser.csproj" />
   </ItemGroup>
   <Import Project="$(SrcRoot)\Common.targets" />
 </Project>

@@ -13,7 +13,7 @@
   <ItemGroup>
     <PackageReference Include="Elasticsearch.Net" Version="6.1.0" />
     <PackageReference Include="NEST" Version="6.1.0" />
-    <PackageReference Include="Lucene.Net" />
+    <!--<PackageReference Include="Lucene.Net" />-->
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="StrongNamer" Condition="'$(TargetFramework)' == 'net472'" />
     <PackageReference Include="System.Threading.Tasks.Extensions" />
@@ -21,6 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Codex.Sdk\Codex.Sdk.csproj" />
+    <ProjectReference Include="..\..\lucenenet\src\Lucene.Net\Lucene.Net.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Model\ElasticSearchTypes.target.cs" />
