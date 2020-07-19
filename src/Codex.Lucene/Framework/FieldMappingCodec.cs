@@ -23,6 +23,16 @@ namespace Codex.Lucene.Framework
 {
     public class FieldMappingCodec : Lucene46Codec
     {
+        static FieldMappingCodec()
+        {
+            PostingsFormat.SetPostingsFormatFactory(new PostingsFormatFactory());
+        }
+
+        public static void EnsureRegistered()
+        {
+            // Just calling this will trigger static constructor which will register factories
+        }
+
         private readonly MappingBase typeMapping;
 
         private AutoPrefixPostingsFormat AutoPrefixPostingsFormat { get; }
@@ -31,7 +41,7 @@ namespace Codex.Lucene.Framework
         {
             this.typeMapping = typeMapping;
 
-            AutoPrefixPostingsFormat = new AutoPrefixPostingsFormat(base.GetPostingsFormatForField(""));
+            AutoPrefixPostingsFormat = new AutoPrefixPostingsFormat();
         }
 
         public override PostingsFormat GetPostingsFormatForField(string field)
@@ -44,5 +54,27 @@ namespace Codex.Lucene.Framework
 
             return base.GetPostingsFormatForField(field);
         }
+
+        private class PostingsFormatFactory : DefaultPostingsFormatFactory
+        {
+            protected override void Initialize()
+            {
+                PutPostingsFormatType(typeof(AutoPrefixPostingsFormat));
+                base.Initialize();
+            }
+        }
     }
+
+    //public class FieldMappingCodecFactory : ICodecFactory
+    //{
+    //    public static void Set()
+    //    {
+    //        Codec.SetCodecFactory(new FieldMappingCodecFactory());
+    //    }
+
+    //    public Codec GetCodec(string name)
+    //    {
+    //        return new FieldMappingCodec()
+    //    }
+    //}
 }

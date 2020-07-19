@@ -18,6 +18,7 @@ using System.IO;
 using Lucene.Net.Util;
 using Lucene.Net.QueryParsers.Simple;
 using Lucene.Net.Analysis.Standard;
+using Codex.Lucene.Framework;
 
 namespace Codex.Lucene.Search
 {
@@ -26,6 +27,8 @@ namespace Codex.Lucene.Search
         public LuceneCodex(LuceneConfiguration configuration)
             : base(configuration)
         {
+            FieldMappingCodec.EnsureRegistered();
+
             //Reader = DirectoryReader.Open(FSDirectory.Open(configuration.Directory));
             //Searcher = new IndexSearcher(Reader);
             Client = new LuceneClient(this);
@@ -88,9 +91,14 @@ namespace Codex.Lucene.Search
                 var query = filter(queryBuilder);
                 var luceneQuery = FromCodexQuery(query);
 
-                var terms = Reader.Leaves[0].AtomicReader.GetTerms(client.mappings.Definition.Definition.ShortName.MappingInfo.FullName);
-                var te = terms.GetIterator(null);
-                bool found = te.SeekExact(new BytesRef("xedocbase"));
+                //var terms = Reader.Leaves[0].AtomicReader.GetTerms(client.mappings.Definition.Definition.ShortName.MappingInfo.FullName);
+                //var te = terms.GetIterator(null);
+                //while (true)
+                //{
+                //    var term = te.Next();
+                //    if (term == null) break;
+                //}
+                //bool found = te.SeekExact(new BytesRef("xedocbase"));
 
                 var topDocs = Searcher.Search(luceneQuery, take ?? 1000);
 

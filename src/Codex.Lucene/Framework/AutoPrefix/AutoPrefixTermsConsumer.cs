@@ -60,6 +60,8 @@ namespace Codex.Lucene.Framework.AutoPrefix
                 Print($"Finish.FinishTerm {count}", t.term);
                 inner.FinishTerm(t.term, new TermStats(count, count));
             });
+
+            inner.Finish(sumTotalTermFreq, sumDocFreq, docCount);
         }
 
         public override void FinishTerm(BytesRef text, TermStats stats)

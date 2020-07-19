@@ -21,14 +21,14 @@ using Lucene.Net.Codecs.Lucene41;
 
 namespace Codex.Lucene.Framework.AutoPrefix
 {
-    [PostingsFormatName("Lucene41")]
+    [PostingsFormatName("Lucene41AutoPrefix")]
     public class AutoPrefixPostingsFormat : PostingsFormat
     {
         private readonly PostingsFormat inner;
 
-        public AutoPrefixPostingsFormat(PostingsFormat inner)
+        public AutoPrefixPostingsFormat()
         {
-            this.inner = inner;
+            this.inner = PostingsFormat.ForName("Lucene41");
         }
 
         public override FieldsConsumer FieldsConsumer(SegmentWriteState state)
@@ -42,4 +42,5 @@ namespace Codex.Lucene.Framework.AutoPrefix
             return inner.FieldsProducer(state);
         }
     }
+
 }
