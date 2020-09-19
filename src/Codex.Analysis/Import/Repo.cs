@@ -69,6 +69,7 @@ namespace Codex.Import
             Roots.Add(new NamedRoot("Temp", Environment.GetEnvironmentVariable("Temp")));
             Roots.Add(new NamedRoot("UserProfile", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)));
             Roots.Add(new NamedRoot("ProgramData", Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)));
+            Roots.RemoveAll(r => string.IsNullOrEmpty(r.Path));
             Roots.Sort((m1, m2) => -m1.Path.Length.CompareTo(m2.Path.Length));
             Roots = Roots.Select(m => new NamedRoot(m.Name, PathUtilities.EnsureTrailingSlash(m.Path))).ToList();
 
