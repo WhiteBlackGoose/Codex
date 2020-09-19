@@ -38,6 +38,8 @@
       <_MergedAssemblyDirectory>$(IntermediateOutputPath)\merged</_MergedAssemblyDirectory>
       <_MergedAssemblyPath>$(_MergedAssemblyDirectory)\$(TargetFileName)</_MergedAssemblyPath>
       <_SignedMergedAssemblyDirectory>$(IntermediateOutputPath)\signed</_SignedMergedAssemblyDirectory>
+      <ILRepackDebugInfo Condition="$(ILRepackDebugInfo) == '' AND $(OS)=='Windows_NT'">true</ILRepackDebugInfo>
+      <ILRepackDebugInfo Condition="$(ILRepackDebugInfo) == ''">false</ILRepackDebugInfo>
     </PropertyGroup>
 
     <ItemGroup>
@@ -51,7 +53,7 @@
     <ILRepack
       Condition="'$(IsNetCoreApp)' != 'true'"
       Parallel="true"
-      DebugInfo="true"
+      DebugInfo="$(ILRepackDebugInfo)"
       KeyFile="$(KeyOriginatorFile)"
       AllowDuplicateResources="false"
       MainAssembly="@(IntermediateAssembly)"
