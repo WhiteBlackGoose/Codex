@@ -7,3 +7,5 @@ How to regenerate:
 5. install typescript: npm install -g typescript
 6. npm install
 7. tsc
+8. from parent directory: tfx extension create --manifest-globs vss-extension.json
+9. https://marketplace.visualstudio.com/manage/publishers/ref12 -> Update the extension and publish the VSIX
