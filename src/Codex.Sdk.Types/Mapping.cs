@@ -8,6 +8,7 @@ namespace Codex.ObjectModel
     {
         public string Name { get; }
         public string FullName { get; }
+        public string NGramFullName { get; }
         public SearchBehavior? SearchBehavior { get; }
         public ObjectStage ObjectStage { get; }
 
@@ -17,6 +18,8 @@ namespace Codex.ObjectModel
             FullName = parent?.Name == null
                 ? Name
                 : string.Join(".", parent.Name, Name);
+
+            NGramFullName = $"{FullName}-ngram";
             SearchBehavior = searchBehavior;
             ObjectStage = objectStage;
         }

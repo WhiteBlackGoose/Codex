@@ -14,6 +14,7 @@ using Lucene.Net.Search;
 using Lucene.Net.Util;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
+using Lucene.Net.Analysis;
 
 namespace Codex.Lucene.Search
 {
@@ -98,6 +99,7 @@ namespace Codex.Lucene.Search
                 case SearchBehavior.HierarchicalPath:
                     break;
                 case SearchBehavior.FullText:
+                    
                     // TODO: If we don't store field. We probably need to do something against _source
                     // field for highlighting. Other option, is to just replay this field into the document
                     // when requested.
