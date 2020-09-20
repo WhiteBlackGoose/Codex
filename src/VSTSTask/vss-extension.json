@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "ref12-analyze-task",
   "name": "Ref12 Analyze",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "publisher": "Ref12",
   "icons": {
         "default": "ref12icon.png"
