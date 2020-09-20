@@ -1,8 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework Condition="'$(RunningToolPack)' == 'true'">netcoreapp3.1</TargetFramework>
+    <TargetFrameworks Condition="'$(RunningToolPack)' != 'true'">net472;netcoreapp3.1</TargetFrameworks>
     <OutputType>Exe</OutputType>
+    <PackageId>Ref12.Codex.Automation.Workflow</PackageId>
+    <Authors>Ref12</Authors>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>codextask</ToolCommandName>
+    <PackageVersion>1.0.12</PackageVersion>
   </PropertyGroup>
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup />
