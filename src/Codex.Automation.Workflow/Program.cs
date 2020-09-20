@@ -6,6 +6,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -214,20 +215,8 @@ namespace Codex.Automation.Workflow
             if (HasModeFlag(mode, Mode.GC))
             {
                 // run exe
-                Console.WriteLine("Running Process:");
                 var gcArguments = $"gc --es {arguments.ElasticSearchUrl}";
-                Console.WriteLine(executablePath + " " + gcArguments);
-                Process runExe = Process.Start(new ProcessStartInfo(executablePath, gcArguments)
-                {
-                    UseShellExecute = false
-                });
-
-                runExe.WaitForExit();
-
-                if (runExe.ExitCode != 0)
-                {
-                    success = false;
-                }
+                success &= RunProcess(executablePath, gcArguments);
             }
 
             if (HasModeFlag(mode, Mode.BuildOnly))
@@ -239,19 +228,7 @@ namespace Codex.Automation.Workflow
             if (HasModeFlag(mode, Mode.AnalyzeOnly))
             {
                 // run exe
-                Console.WriteLine("Running Process:");
-                Console.WriteLine(executablePath + " " + analysisArguments);
-                Process runExe = Process.Start(new ProcessStartInfo(executablePath, analysisArguments)
-                {
-                    UseShellExecute = false
-                });
-
-                runExe.WaitForExit();
-
-                if (runExe.ExitCode != 0)
-                {
-                    success = false;
-                }
+                success &= RunProcess(executablePath, analysisArguments);
             }
 
             if (HasModeFlag(mode, Mode.UploadOnly))
@@ -279,37 +256,54 @@ namespace Codex.Automation.Workflow
             {
                 string ingesterExecutablePath = Path.Combine(codexBinDirectory, "Codex.Ingester.exe");
                 string storeFolder = Path.Combine(arguments.CodexOutputRoot, "store");
-                Process runExe = Process.Start(new ProcessStartInfo(ingesterExecutablePath, string.Join(" ",
-                    "--file",
-                    arguments.JsonFilePath,
-                    "--out",
-                    storeFolder,
-                    "--es",
-                    arguments.ElasticSearchUrl,
-                    "--name",
-                    arguments.RepoName))
-                {
-                    UseShellExecute = false
-                }.With(info =>
-                {
-                    foreach (var pat in arguments.PersonalAccessTokens)
-                    {
-                        info.EnvironmentVariables[pat.Key] = pat.Value;
-                    }
-                }));
-
-                runExe.WaitForExit();
-
-                if (runExe.ExitCode != 0)
-                {
-                    success = false;
-                }
+                success &= RunProcess(
+                    exePath: ingesterExecutablePath,
+                    arguments: string.Join(" ",
+                        "--file",
+                        arguments.JsonFilePath,
+                        "--out",
+                        storeFolder,
+                        "--es",
+                        arguments.ElasticSearchUrl,
+                        "--name",
+                        arguments.RepoName), 
+                    envVars: arguments.PersonalAccessTokens);
             }
 
             if (!success)
             {
                 Console.WriteLine("##vso[task.complete result=Failed;]DONE");
             }
+        }
+
+        private static bool RunProcess(string exePath, string arguments, IDictionary<string, string> envVars = null)
+        {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                arguments = string.Join(" ", QuoteIfNecessary(exePath), arguments);
+                exePath = "mono";
+            }
+
+            Console.WriteLine("Running Process:");
+            Console.WriteLine(exePath + " " + arguments);
+
+            var process = Process.Start(new ProcessStartInfo(exePath, arguments)
+            {
+                UseShellExecute = false
+            }
+            .With(info =>
+            {
+                if (envVars != null)
+                {
+                    foreach (var kvp in envVars)
+                    {
+                        info.EnvironmentVariables[kvp.Key] = kvp.Value;
+                    }
+                }
+            }));
+
+            process.WaitForExit();
+            return process.ExitCode == 0;
         }
 
         private static string GetRepoName(Arguments arguments)
