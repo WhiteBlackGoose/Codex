@@ -27,7 +27,7 @@ namespace Codex.Analysis.Projects
             // Explicitly add "CheckForSystemRuntimeDependency = true" property to correctly resolve facade references.
             // See https://github.com/dotnet/roslyn/issues/560
             propertiesOpt = propertiesOpt.Add("CheckForSystemRuntimeDependency", "true");
-            propertiesOpt = propertiesOpt.Add("VisualStudioVersion", "15.0");
+            propertiesOpt = propertiesOpt.Add("VisualStudioVersion", "16.0");
             propertiesOpt = propertiesOpt.Add("AlwaysCompileMarkupFilesInSeparateDomain", "false");
 
             loader = new MSBuildProjectLoader(workspace, propertiesOpt)

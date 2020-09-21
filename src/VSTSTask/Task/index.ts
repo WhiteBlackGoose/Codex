@@ -8,27 +8,34 @@ import path = require('path');
 import os = require('os');
 import { delay } from 'q';
 
-function mkdir(directoryPath: string) {
-    let cmdPath = tl.which('cmd');
-    let tool = tl.tool(cmdPath).arg('/c').arg('mkdir ' + directoryPath);
-    tool.execSync();
-}
-
 async function run() {
     try {
+        var isWin = tl.osType() === 'Windows_NT'; // /^win/.test(process.platform);
+
         let workflowArguments = tl.getDelimitedInput("WorkflowArguments", "\n", true);
-        let outputDirectory = tl.getPathInput('CodexOutputRoot', true);        
+        let outputDirectory = tl.getPathInput('CodexOutputRoot', true);
         let codexBootstrapDirectory = path.join(outputDirectory, "bootstrap");
-        let toolPath =path.join(codexBootstrapDirectory, "Codex.Automation.Workflow.exe");
+        let toolPath = path.join(codexBootstrapDirectory, "Codex.Automation.Workflow.exe");
         let tool: trm.ToolRunner;
         
         shell.mkdir("-p", codexBootstrapDirectory);
 
-        //download file
         var file = fs.createWriteStream(toolPath);
 
         await new Promise(resolve => request.get('https://github.com/Ref12/Codex/releases/download/latest-prerel/Codex.Automation.Workflow.exe').pipe(file).on('finish', resolve));
-        tool = tl.tool(toolPath).arg(workflowArguments).arg(`/codexOutputRoot:${outputDirectory}`);
+
+        if (isWin)
+        {
+            tool = tl.tool(toolPath);
+        }
+        else
+        {
+            tool = tl.tool(tl.which('mono', true));
+            tool.arg(toolPath);
+        }
+
+        tool.arg(workflowArguments);
+        tool.arg(`/codexOutputRoot:${outputDirectory}`);
 
         let delays =
         [

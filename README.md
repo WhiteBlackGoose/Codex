@@ -16,7 +16,7 @@ An extensible platform for indexing and exploring inspired by Source Browser.
         * `-es _____` specifies URL to the ElasticSearch server, if it runs on another machine 
         * `-i` (without any args) lets you search through results
 * To run the Codex website,
-    * Run **Codex.Web** project
+    * Run **Codex.Web.Mvc** project
  
 * To run the Codex website (with [Monaco editor](https://microsoft.github.io/monaco-editor/)),
     * Run **Codex.Web.Monaco** project

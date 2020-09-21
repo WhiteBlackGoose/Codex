@@ -37,7 +37,10 @@ namespace Codex.Web.Mvc
                 StartElasticSearch();
             }
 
-            services.AddRazorPages();
+            services.AddMvc(mvcOptions =>
+            {
+                mvcOptions.EnableEndpointRouting = false;
+            });
 
             var lucenePath = Configuration["LUCENE_PATH"];
             Console.WriteLine($"Lucene Path: {lucenePath}");

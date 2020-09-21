@@ -9,6 +9,7 @@
   <Import Project="$(SrcRoot)\Common.props" />
   <ItemGroup>
     <PackageReference Include="LibGit2Sharp" />
+    <PackageReference Include="LibGit2Sharp.NativeBinaries" />
     <PackageReference Include="Lucene.Net" />
     <PackageReference Include="ManagedEsent" />
     <PackageReference Include="Microsoft.Build.Framework" />
@@ -25,6 +26,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" />
     <PackageReference Include="Microsoft.Composition" />
     <PackageReference Include="Mono.Options" />
+    <PackageReference Include="SQLitePCLRaw.Core" />
     <PackageReference Include="StrongNamer" />
   </ItemGroup>
   <ItemGroup>

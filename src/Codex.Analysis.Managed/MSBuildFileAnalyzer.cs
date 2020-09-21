@@ -229,7 +229,7 @@ namespace Codex.Analysis.Files
             {
                 try
                 {
-                    Project project = new Project(file.FilePath, null, "15.0", scope.Collection,
+                    Project project = new Project(file.FilePath, null, "Current", scope.Collection,
                         ProjectLoadSettings.IgnoreMissingImports | ProjectLoadSettings.RecordDuplicateButNotCircularImports);
 
                     foreach (var item in project.ItemsIgnoringCondition)

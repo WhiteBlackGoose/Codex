@@ -34,7 +34,7 @@ namespace Codex.Web.Mvc.Controllers
 
                 if (boundSourceFile == null)
                 {
-                    return PartialView("~/Views/DocumentOutline/DocumentOutline.cshtml", new EditorModel { Error = $"Bound source file for {filePath} in {projectId} not found." });
+                    return PartialView("~/Views/DocumentOutline/DocumentOutline.cshtml", $"Bound source file for {filePath} in {projectId} not found.");
                 }
 
                 var renderer = new DocumentOutlineRenderer(projectId, boundSourceFile);
