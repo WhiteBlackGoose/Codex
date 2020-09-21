@@ -35,7 +35,10 @@ namespace Codex.Web.Mvc
                 StartElasticSearch();
             }
 
-            services.AddMvc();
+            services.AddMvc(mvcOptions =>
+            {
+                mvcOptions.EnableEndpointRouting = false;
+            });
 
             var useCommitModel = Configuration["USE_COMMITMODEL"];
             if (useCommitModel != "1")
