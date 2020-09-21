@@ -38,7 +38,7 @@ img{
 
     pre a:focus {
         color: inherit;
-        background-color: #288;
+        background-color: #255;
     }
 
     pre b {
@@ -213,7 +213,7 @@ a i, div i {
 
 .t, a.t,
 .l, .lineNumber {
-    color: #2b91af;
+    color: #4EC9B0;
 }
 
 .c {
