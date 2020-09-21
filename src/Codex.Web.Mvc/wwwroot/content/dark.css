@@ -103,7 +103,7 @@ a i, div i {
 }
 
 .rN, .resultGroupFileName {
-    background-color: #333;
+    background-color: #222;
     color: gray;
 }
 
@@ -170,14 +170,6 @@ a i, div i {
     .currentResult:hover {
         background-color: #222;
     }
-
-.resultKind {
-    color: #569CD6;
-}
-
-.resultDescription {
-    color: silver;
-}
 
 .rH {
     background-color: #7988BD;
@@ -437,14 +429,13 @@ ol a, ol a:link, ol a:hover, ol a:focus, ol a:active,
         background-color: #222;
     }
 
-
 .resultKind {
     color: #569CD6;
     background-color: transparent;
 }
 
 .resultDescription {
-    color: silver;
+    color: #555;
     background-color: transparent;
 }
 
