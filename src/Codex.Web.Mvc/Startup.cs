@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Codex.ElasticSearch;
 using Codex.ElasticSearch.Legacy.Bridge;
 using Codex.ElasticSearch.Search;
+using Codex.Lucene.Search;
 using Codex.Sdk.Search;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,30 +39,42 @@ namespace Codex.Web.Mvc
 
             services.AddRazorPages();
 
-            var useCommitModel = Configuration["USE_COMMITMODEL"];
-            if (useCommitModel != "1")
+            var lucenePath = Configuration["LUCENE_PATH"];
+            Console.WriteLine($"Lucene Path: {lucenePath}");
+            if (!string.IsNullOrEmpty(lucenePath))
             {
-                services.Add(ServiceDescriptor.Singleton<ICodex>(_ => new LegacyElasticSearchCodex(
-                    new LegacyElasticSearchStoreConfiguration()
-                    {
-                        Endpoint = elasticSearchEndpoint
-                    })));
+                services.Add(ServiceDescriptor.Singleton<ICodex>(new LuceneCodex
+                (
+                    new LuceneConfiguration(lucenePath)
+                )));
             }
             else
             {
-                services.Add(ServiceDescriptor.Singleton<ICodex>(_ =>
+                var useCommitModel = Configuration["USE_COMMITMODEL"];
+                if (useCommitModel != "1")
                 {
-                    ElasticSearchStoreConfiguration configuration = new ElasticSearchStoreConfiguration()
+                    services.Add(ServiceDescriptor.Singleton<ICodex>(_ => new LegacyElasticSearchCodex(
+                        new LegacyElasticSearchStoreConfiguration()
+                        {
+                            Endpoint = elasticSearchEndpoint
+                        })));
+                }
+                else
+                {
+                    services.Add(ServiceDescriptor.Singleton<ICodex>(_ =>
                     {
-                        CreateIndices = false,
-                        ShardCount = 1,
-                        Prefix = "test."
-                    };
+                        ElasticSearchStoreConfiguration configuration = new ElasticSearchStoreConfiguration()
+                        {
+                            CreateIndices = false,
+                            ShardCount = 1,
+                            Prefix = "test."
+                        };
 
-                    ElasticSearchService service = new ElasticSearchService(new ElasticSearchServiceConfiguration(elasticSearchEndpoint));
+                        ElasticSearchService service = new ElasticSearchService(new ElasticSearchServiceConfiguration(elasticSearchEndpoint));
 
-                    return new ElasticSearchCodex(configuration, service);
-                }));
+                        return new ElasticSearchCodex(configuration, service);
+                    }));
+                }
             }
         }
 
