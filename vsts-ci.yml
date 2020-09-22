@@ -1,4 +1,5 @@
-pool: windows-2019
+pool:
+  vmImage: 'windows-2019'
 
 steps:
 - task: UseDotNet@2
