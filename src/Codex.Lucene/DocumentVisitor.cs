@@ -15,6 +15,7 @@ using Lucene.Net.Util;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Analysis;
+using Codex.Lucene.Framework.AutoPrefix;
 
 namespace Codex.Lucene.Search
 {
@@ -24,7 +25,18 @@ namespace Codex.Lucene.Search
 
         public Query TermQuery(MappingBase mapping, string term)
         {
-            return new TermQuery(new Term(mapping.MappingInfo.FullName, term?.ToLowerInvariant()));
+            term = term?.ToLowerInvariant() ?? string.Empty;
+
+            if (!string.IsNullOrEmpty(term))
+            {
+                switch (mapping.MappingInfo.SearchBehavior.Value)
+                {
+                    case SearchBehavior.PrefixShortName:
+                        return new AutoPrefixQuery(new Term(mapping.MappingInfo.FullName, term));
+                }
+            }
+
+            return new TermQuery(new Term(mapping.MappingInfo.FullName, term));
         }
 
         public Query TermQuery(MappingBase mapping, bool term)
@@ -82,11 +94,13 @@ namespace Codex.Lucene.Search
 
             switch (mapping.MappingInfo.SearchBehavior.Value)
             {
-
-                case SearchBehavior.PrefixTerm:
                 case SearchBehavior.PrefixShortName:
+                case SearchBehavior.PrefixTerm:
                 case SearchBehavior.PrefixFullName:
-                    // TODO: implement real fields for above search behaviors
+                    Placeholder.Todo("Long term handling (hash full term)");
+                    Placeholder.Todo("implement real fields for above search behaviors");
+                    doc.Add(new StringField(mapping.MappingInfo.FullName, "^" + value.ToLowerInvariant(), Field.Store.NO));
+                    break;
                 case SearchBehavior.Term:
                 case SearchBehavior.NormalizedKeyword:
                     doc.Add(new StringField(mapping.MappingInfo.FullName, value.ToLowerInvariant(), Field.Store.NO));
@@ -115,6 +129,11 @@ namespace Codex.Lucene.Search
         {
             Visit(mapping, value ? bool.TrueString : bool.FalseString);
         }
+
+        private FieldType StringPrefixShortNameType = new FieldType(StringField.TYPE_NOT_STORED)
+        {
+            DocValueType = DocValuesType.BINARY
+        };
 
         private FieldType StringSortwordType = new FieldType(StringField.TYPE_NOT_STORED)
         {

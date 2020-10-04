@@ -1,0 +1,136 @@
+
+Prefix indexing with Lucene
+	Currently in ElasticSearch for a given term "SolutionProjectAnalyzer", the following terms would be added for auto prefix:
+		"^SolutionProjectAnalyzer$"
+		"ProjectAnalyzer$"
+		"Analyzer$"
+
+	Notice that the first term containing the full string will be preceded by '^' character. This is to prioritize full name matches. However, this does make for less efficient use of the trie constructed in Lucene for terms. How can we still annotate the term is  a full name match without forking the trie with terms preceded by '^' or not. Maybe move leading '^' to end. Also need "skip list" to only search full name terms.
+
+Example:
+Names: 
+[
+    "SolutionProjectAnalyzer", 
+    "SolutionFileAnalyzer", 
+    "ManagedSolutionProjectAnalyzer", 
+    "InvocationSolutionInfoBuilderBase"
+]
+
+Terms:
+[
+	// From: SolutionProjectAnalyzer
+	"^solutionprojectanalyzer$",
+	"projectanalyzer$",
+	"analyzer$",
+
+	// From: SolutionFileAnalyzer
+	"^solutionfileanalyzer$",
+	"fileanalyzer$",
+	"analyzer$",
+
+	// From: ManagedSolutionProjectAnalyzer
+	"^managedsolutionprojectanalyzer",
+	"solutionprojectanalyzer$",
+	"projectanalyzer$",
+	"analyzer$",
+
+	// From: InvocationSolutionInfoBuilder
+	"^invocationsolutioninfobuilder$",
+	"solutioninfobuilder$",
+	"infobuilder$",
+	"builder$",
+]
+
+// Terms with docs
+	"^solutionprojectanalyzer$"         : [0],
+	"projectanalyzer$"                  : [0],
+	"analyzer$"                         : [0],
+
+	"^solutionfileanalyzer$"            : [1],
+	"fileanalyzer$"                     : [1],
+	"analyzer$"                         : [1],
+
+	"^managedsolutionprojectanalyzer"   : [2],
+	"solutionprojectanalyzer$"          : [2],
+	"projectanalyzer$"                  : [2],
+	"analyzer$"                         : [2],
+
+	"^invocationsolutioninfobuilder$"   : [3],
+	"solutioninfobuilder$"              : [3],
+	"infobuilder$"                      : [3],
+	"builder$"                          : [3],
+
+// Terms with docs 
+// String start char '^' moved to end
+	"solutionprojectanalyzer$^"         : [0],
+	"projectanalyzer$"                  : [0],
+	"analyzer$"                         : [0],
+
+	"solutionfileanalyzer$^"            : [1],
+	"fileanalyzer$"                     : [1],
+	"analyzer$"                         : [1],
+
+	"managedsolutionprojectanalyzer$^"  : [2],
+	"solutionprojectanalyzer$"          : [2],
+	"projectanalyzer$"                  : [2],
+	"analyzer$"                         : [2],
+
+	"invocationsolutioninfobuilder$^"   : [3],
+	"solutioninfobuilder$"              : [3],
+	"infobuilder$"                      : [3],
+	"builder$"                          : [3],
+
+// Terms with docs 
+// String start char '^' moved to end
+// Sorted
+	"analyzer$"                         : [0],
+	"analyzer$"                         : [1],
+	"analyzer$"                         : [2],
+	"builder$"                          : [3],
+	"fileanalyzer$"                     : [1],
+	"infobuilder$"                      : [3],
+	"invocationsolutioninfobuilder$^"   : [3],
+	"managedsolutionprojectanalyzer$^"  : [2],
+	"projectanalyzer$"                  : [0],
+	"projectanalyzer$"                  : [2],
+	"solutionfileanalyzer$^"            : [1],
+	"solutioninfobuilder$"              : [3],
+	"solutionprojectanalyzer$"          : [2],
+	"solutionprojectanalyzer$^"         : [0],
+
+// Terms with docs 
+// String start char '^' moved to end
+// Sorted
+// Coalesced
+	"analyzer$"                         : [0, 1, 2],
+	"builder$"                          : [3],
+	"fileanalyzer$"                     : [1],
+	"infobuilder$"                      : [3],
+	"invocationsolutioninfobuilder$^"   : [3],
+	"managedsolutionprojectanalyzer$^"  : [2],
+	"projectanalyzer$"                  : [0, 2],
+	"solutionfileanalyzer$^"            : [1],
+	"solutioninfobuilder$"              : [3],
+	"solutionprojectanalyzer$"          : [2],
+	"solutionprojectanalyzer$^"         : [0],
+
+// Terms with docs 
+// String start char '^' moved to end
+// Sorted
+// Coalesced
+// AutoPrefix
+	"analyzer$"                         : [0, 1, 2],
+	"builder$"                          : [3],
+	"fileanalyzer$"                     : [1],
+	"infobuilder$"                      : [3],
+	"invocationsolutioninfobuilder$^"   : [3],
+	"managedsolutionprojectanalyzer$^"  : [2],
+	"projectanalyzer$"                  : [0, 2],
+	"solutionfileanalyzer$^"            : [1],
+	"solutioninfobuilder$"              : [3],
+	"solutionprojectanalyzer$"          : [2],
+	"solutionprojectanalyzer$^"         : [0],
+
+
+
+

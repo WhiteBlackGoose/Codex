@@ -38,7 +38,7 @@ namespace Codex.Lucene.Framework.AutoPrefix
 
         public override FieldsProducer FieldsProducer(SegmentReadState state)
         {
-            // TODO: Need some special logic to only return full terms for sake of merge
+            Placeholder.Todo("Need some special logic to only return full terms for sake of merge");
             return inner.FieldsProducer(state);
         }
     }

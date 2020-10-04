@@ -84,23 +84,28 @@ namespace Codex.Lucene.Search
                 return results.Hits.SelectArray(h => h.Source);
             }
 
+            private static readonly TopDocs EmptyTopDocs = new TopDocs(0, Array.Empty<ScoreDoc>(), 0);
+
             public async Task<IIndexSearchResponse<TResult>> QueryAsync<TResult>(IStoredFilterInfo storedFilterInfo, Func<CodexQueryBuilder<T>, CodexQuery<T>> filter, OneOrMany<Mapping<T>> sort = null, int? take = null, Func<CodexQueryBuilder<T>, CodexQuery<T>> boost = null) where TResult : T
             {
-                await Task.Yield();
-
                 var query = filter(queryBuilder);
                 var luceneQuery = FromCodexQuery(query);
 
-                //var terms = Reader.Leaves[0].AtomicReader.GetTerms(client.mappings.Definition.Definition.ShortName.MappingInfo.FullName);
-                //var te = terms.GetIterator(null);
-                //while (true)
-                //{
-                //    var term = te.Next();
-                //    if (term == null) break;
-                //}
-                //bool found = te.SeekExact(new BytesRef("xedocbase"));
+                await Task.Yield();
 
-                var topDocs = Searcher.Search(luceneQuery, take ?? 1000);
+                //if (searchType == SearchTypes.Definition)
+                //{
+                //    var terms = Reader.Leaves[0].AtomicReader.GetTerms(client.mappings.Definition.Definition.ShortName.MappingInfo.FullName);
+                //    var te = terms?.GetIterator(null);
+                //    while (true)
+                //    {
+                //        var term = te?.Next();
+                //        if (term == null) break;
+                //    }
+                //    bool found = te.SeekExact(new BytesRef("xedocbase"));
+                //}
+
+                var topDocs = luceneQuery == null ? EmptyTopDocs : Searcher.Search(luceneQuery, take ?? 1000);
 
                 var results = topDocs.ScoreDocs
                     .Select(sd => Reader.Document(sd.Doc).GetField(LuceneConstants.SourceFieldName))
@@ -119,6 +124,8 @@ namespace Codex.Lucene.Search
 
             public Query FromCodexQuery(CodexQuery<T> query)
             {
+                if (query == null) return null;
+
                 const bool flattenQueries = true;
                 switch (query.Kind)
                 {
@@ -134,6 +141,8 @@ namespace Codex.Lucene.Search
                             void addClauses(CodexQuery<T> q)
                             {
                                 Query lq = FromCodexQuery(q);
+                                if (lq == null) return;
+
                                 if (flattenQueries
                                     && (q.Kind == query.Kind || (q.Kind == CodexQueryKind.Negate && query.Kind == CodexQueryKind.And)) 
                                     && lq is BooleanQuery boolQuery)

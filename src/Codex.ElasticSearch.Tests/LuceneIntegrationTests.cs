@@ -30,7 +30,7 @@ namespace Codex.ElasticSearch.Tests
 
             var result = await codex.SearchAsync(new SearchArguments()
             {
-                SearchString = "*xedocbase",
+                SearchString = "xedocbase",
                 AllowReferencedDefinitions = false,
                 TextSearch = false,
                 FallbackToTextSearch = false
