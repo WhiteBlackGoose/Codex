@@ -26,5 +26,10 @@ namespace Codex.Uno
         {
             this.InitializeComponent();
         }
+
+        public async void SearchTextChanged(object sender, TextChangedEventArgs e)
+        {
+            
+        }
     }
 }

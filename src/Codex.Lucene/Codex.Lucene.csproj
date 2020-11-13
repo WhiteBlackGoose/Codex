@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <SrcRoot>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Common.props))</SrcRoot>
-    <TargetFrameworks>net472;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
     <SignAssembly Condition="'$(TargetFramework)' == 'net472'">true</SignAssembly>
     <DisableStrongNamer Condition="'$(TargetFramework)' != 'net472'">true</DisableStrongNamer>
   </PropertyGroup>

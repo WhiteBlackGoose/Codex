@@ -9,9 +9,14 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Filter" Version="1.1.1" />
     <PackageReference Include="Uno.UI.Skia.Wpf" Version="3.1.6" />
     <PackageReference Include="Uno.UI.RemoteControl" Version="3.1.6" Condition="'$(Configuration)'=='Debug'" />
+    <PackageReference Include="Uno.Microsoft.Toolkit.Uwp.UI.Controls" Version="6.1.0-build.191.gc988bdd4ff" />
   </ItemGroup>
   <ItemGroup>
     <UpToDateCheckInput Include="..\Codex.Uno.Shared\**\*.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Codex.Lucene\Codex.Lucene.csproj" />
+    <ProjectReference Include="..\..\..\Codex.Sdk\Codex.Sdk.csproj" />
   </ItemGroup>
   <Import Project="..\Codex.Uno.Shared\Codex.Uno.Shared.projitems" Label="Shared" />
 </Project>

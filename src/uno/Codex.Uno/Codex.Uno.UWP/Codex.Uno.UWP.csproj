@@ -10,6 +10,9 @@
 			-->
       <Version>6.2.9</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
+      <Version>6.1.1</Version>
+    </PackageReference>
     <PackageReference Include="Uno.Core" Version="2.0.0" />
     <PackageReference Include="Uno.UI" Version="3.1.6" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.1" />
@@ -18,7 +21,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>10ff1e82-dc1b-4de8-b1e1-9760176d47ad</ProjectGuid>
+    <ProjectGuid>{10FF1E82-DC1B-4DE8-B1E1-9760176D47AD}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Codex.Uno</RootNamespace>
@@ -127,6 +130,23 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <!--<ProjectReference Include="..\..\..\..\lucenenet\src\Lucene.Net.Analysis.Common\Lucene.Net.Analysis.Common.csproj">
+      <Project>{0339ae74-da15-4d01-8259-817053dbec69}</Project>
+      <Name>Lucene.Net.Analysis.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\lucenenet\src\Lucene.Net.Queries\Lucene.Net.Queries.csproj">
+      <Project>{c3662b08-df40-4082-b15f-17b73066062d}</Project>
+      <Name>Lucene.Net.Queries</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\lucenenet\src\Lucene.Net\Lucene.Net.csproj">
+      <Project>{101744ba-2a8e-4f91-b683-4bd90643804a}</Project>
+      <Name>Lucene.Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Codex.Lucene\Codex.Lucene.csproj" />-->
+    <ProjectReference Include="..\..\..\Codex.Sdk\Codex.Sdk.csproj">
+      <Project>{2322a932-05f4-4931-8547-71377c6ab49e}</Project>
+      <Name>Codex.Sdk</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
