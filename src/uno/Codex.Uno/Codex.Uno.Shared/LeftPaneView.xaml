@@ -27,7 +27,7 @@
                 </Button>
             </DataTemplate>
 
-            <DataTemplate x:Key="TextSpanSearchResultViewModel}" x:DataType="c:TextSpanSearchResultViewModel">
+            <DataTemplate x:Key="TextSpanSearchResultViewModel" x:DataType="c:TextSpanSearchResultViewModel">
                 <Button Style="{StaticResource ResultButtonStyle}"
                 Command="{x:Bind Command}"
                 CommandParameter="{x:Bind SearchResult}">
@@ -48,7 +48,7 @@
                 </Button>
             </DataTemplate>
 
-            <DataTemplate x:Key="FileResultsViewModel}" x:DataType="c:FileResultsViewModel">
+            <DataTemplate x:Key="FileResultsViewModel" x:DataType="c:FileResultsViewModel">
                 <t:HeaderedContentControl Style="{StaticResource HeaderedContentControlStyle}" HorizontalContentAlignment="Stretch">
                     <t:HeaderedContentControl.Header>
                         <Border Background="#f6f6f6" Padding="12, 4, 4, 4">
@@ -73,7 +73,7 @@
                 </Style.Triggers>
             </Style>
 
-            <DataTemplate x:Key="ProjectGroupResultsViewModel}" x:DataType="c:ProjectGroupResultsViewModel">
+            <DataTemplate x:Key="ProjectGroupResultsViewModel" x:DataType="c:ProjectGroupResultsViewModel">
                 <t:Expander Style="{StaticResource ProjectHeaderStyle}" IsExpanded="True" Margin="0, 0, 0, 16">
                     <t:Expander.Header>
                         <TextBlock Text="{Binding ProjectName}" Margin="5" Foreground="Black" FontSize="18" FontWeight="Bold" />
@@ -82,11 +82,11 @@
                 </t:Expander>
             </DataTemplate>
 
-            <DataTemplate x:Key="ProjectResultsViewModel}">
+            <DataTemplate x:Key="ProjectResultsViewModel" x:DataType="c:ProjectResultsViewModel">
                 <ItemsControl ItemsSource="{Binding ProjectGroups}" />
             </DataTemplate>
 
-            <DataTemplate x:Key="CategoryGroupSearchResultsViewModel}">
+            <DataTemplate x:Key="CategoryGroupSearchResultsViewModel" x:DataType="c:CategoryGroupSearchResultsViewModel">
                 <t:Expander Background="#7988BD" Style="{StaticResource TreeExpanderStyle}" IsExpanded="True">
                     <t:Expander.Header>
                         <TextBlock Text="{Binding Header}" Margin="4,6" Foreground="White" FontSize="16" />
@@ -95,7 +95,7 @@
                 </t:Expander>
             </DataTemplate>
 
-            <DataTemplate x:Key="CategorizedSearchResultsViewModel}">
+            <DataTemplate x:Key="CategorizedSearchResultsViewModel" x:DataType="c:CategorizedSearchResultsViewModel">
                 <ItemsControl ItemsSource="{Binding Categories}" />
             </DataTemplate>
         </ResourceDictionary>
