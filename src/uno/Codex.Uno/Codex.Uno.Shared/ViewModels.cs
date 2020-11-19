@@ -1,5 +1,6 @@
 ﻿using Codex.ObjectModel;
 using Codex.Sdk.Search;
+using Codex.Uno.Shared;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,7 +16,6 @@ namespace Codex.View
 {
     public partial class TextSpanSearchResultViewModel : FileItemResultViewModel
     {
-        public ICommand Command { get; }
         public ITextLineSpanResult TextResult;
         public IReferenceSearchResult ReferenceResult;
         public object SearchResult { get; }
@@ -56,14 +56,54 @@ namespace Codex.View
                 SuffixText = lineSpanText.Substring(referringSpan.LineSpanStart + referringSpan.Length);
             }
         }
+
+        public void OnExecuted()
+        {
+            if (TextResult != null)
+            {
+                MainController.App.GoToSpanExecuted(TextResult);
+            }
+            else
+            {
+                MainController.App.GoToReferenceExecuted(ReferenceResult);
+            }
+        }
+
+        public override UIElement CreateView()
+        {
+            return LeftPaneView.Create(this);
+        }
     }
 
-    public partial class ProjectItemResultViewModel
+    public class ValueBinding
     {
     }
 
-    public partial class FileItemResultViewModel
+    public class Bound<T>
     {
+        // TODO: Change updates
+        public T Value { get; set; }
+
+        public static implicit operator T(Bound<T> bound)
+        {
+            return bound.Value;
+        }
+
+        public ValueBinding OnUpdate(Action<T> update)
+        {
+            update(Value);
+            return default;
+        }
+    }
+
+    public abstract class ProjectItemResultViewModel
+    {
+        public abstract UIElement CreateView();
+    }
+
+    public abstract class FileItemResultViewModel
+    {
+        public abstract UIElement CreateView();
     }
 
     public partial class FileResultsViewModel : ProjectItemResultViewModel, IResultsStats
@@ -71,6 +111,11 @@ namespace Codex.View
         public Counter Counter { get; } = new Counter();
         public string Path { get; set; }
         public IReadOnlyList<FileItemResultViewModel> Items { get; set; }
+
+        public override UIElement CreateView()
+        {
+            return LeftPaneView.Create(this);
+        }
     }
 
     public partial class SymbolResultViewModel : ProjectItemResultViewModel
@@ -92,6 +137,11 @@ namespace Codex.View
             DisplayName = symbol.DisplayName;
             ProjectId = symbol.ProjectId;
             SymbolKind = symbol.Kind?.ToLowerInvariant();
+        }
+
+        public override UIElement CreateView()
+        {
+            return LeftPaneView.Create(this);
         }
     }
 
@@ -127,6 +177,11 @@ namespace Codex.View
                 .AddFrom(projectCounter)
                 .AddTo(Counter);
             }).ToList();
+        }
+
+        public override UIElement CreateView()
+        {
+            return LeftPaneView.Create(this);
         }
     }
 
@@ -191,21 +246,27 @@ namespace Codex.View
                 return new CategoryGroupSearchResultsViewModel(referenceKind, symbolName, referenceGroup).AddTo(Counter);
             }).ToList();
         }
+
+        public override UIElement CreateView()
+        {
+            return LeftPaneView.Create(this);
+        }
     }
 
     public abstract partial class LeftPaneContent
     {
+        public abstract UIElement CreateView();
     }
 
     public partial class LeftPaneViewModel : PaneViewModelBase
     {
-        public Visibility SearchInfoVisibility => !string.IsNullOrEmpty(SearchInfo) ? Visibility.Visible : Visibility.Collapsed;
+        public string SearchInfo { get => SearchInfoBinding.Value; set => SearchInfoBinding.Value = value; }
 
-        public string SearchInfo { get; set; } = null;
+        public Bound<string> SearchInfoBinding { get; } = new Bound<string>();
 
-        public Visibility ContentVisibility => Content != null ? Visibility.Visible : Visibility.Collapsed;
+        public LeftPaneContent Content { get => ContentBinding.Value; set => ContentBinding.Value = value; }
 
-        public LeftPaneContent Content { get; set; }
+        public Bound<LeftPaneContent> ContentBinding { get; set; }
 
         public static readonly LeftPaneViewModel Initial = new LeftPaneViewModel()
         {
@@ -272,11 +333,7 @@ namespace Codex.View
 
     public partial class RightPaneViewModel : PaneViewModelBase
     {
-        public Visibility ErrorVisibility => !string.IsNullOrEmpty(Error) ? Visibility.Visible : Visibility.Collapsed;
-
-        public string Error { get; }
-
-        public Visibility EditorVisibility => SourceFile != null ? Visibility.Visible : Visibility.Collapsed;
+        public string Error { get; set; }
 
         public IBoundSourceFile SourceFile { get; }
 

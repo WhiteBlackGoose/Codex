@@ -9,9 +9,9 @@
     mc:Ignorable="d">
     <Page.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
+            <!--<ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styling.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary.MergedDictionaries>-->
 
             <LinearGradientBrush x:Key="LinearGradientBrush1" StartPoint="0,0" EndPoint="1,1">
                 <GradientStop Color="#744482" Offset="0.0" />

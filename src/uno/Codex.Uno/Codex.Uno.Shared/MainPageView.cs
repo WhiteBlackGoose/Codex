@@ -1,4 +1,5 @@
-﻿using Microsoft.Toolkit.Uwp.UI.Controls;
+﻿using Codex.View;
+using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,11 +28,10 @@ namespace Codex.Uno.Shared
             }
         };
 
-        public static FrameworkElement Create()
+        public static FrameworkElement Create(ViewModelDataContext viewModel)
         {
             return new DockPanel().WithChildren(
-                Top
-                (
+                Top(
                     new Grid()
                     {
                         Height = 58,
@@ -57,7 +57,8 @@ namespace Codex.Uno.Shared
                                 Width = 492,
                                 Padding = new Thickness(32, 5, 5, 5),
                                 Margin = new Thickness(8, 8, 0, 8),
-                            },
+                            }
+                            .OnTextChanged(text => OnSearchTextChanged(text)),
                             new Border() { VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(10), Width = 95.5 }.WithChild(
                                 new Image() { Source = RelativeImageSource("Assets/Images/microsoftlogo.png") }
                             ),
@@ -81,9 +82,29 @@ namespace Codex.Uno.Shared
                         new ColumnDefinition() { Width = GridLength.Auto },
                         new ColumnDefinition()
                     }
-                }
-
+                }.WithChildren(
+                    Column(0,
+                        LeftPaneView.Create(viewModel.LeftPane)
+                    ),
+                    Column(1,
+                        new GridSplitter()
+                        {
+                            Background = B(Colors.Gainsboro),
+                            VerticalAlignment = VerticalAlignment.Stretch,
+                            HorizontalAlignment = HorizontalAlignment.Left,
+                            Width = 20
+                        }
+                    ),
+                    Column(2,
+                        LeftPaneView.Create(viewModel.LeftPane)
+                    )
+                )
             );
+        }
+
+        private static void OnSearchTextChanged(string text)
+        {
+            throw new NotImplementedException();
         }
     }
 }
