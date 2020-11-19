@@ -12,8 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Uno.UI.WpfHost;
 
-namespace Codex.Uno.WPF.Host
+namespace Codex.Uno.Wpf
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -24,7 +25,7 @@ namespace Codex.Uno.WPF.Host
         {
             InitializeComponent();
 
-            root.Content = new global::Uno.UI.Skia.Platform.WpfHost(Dispatcher, () => new Codex.Uno.App());
+            UnoHostView.Init(() => Codex.Uno.Wasm.Program.Main(new string[0]), $@"..\..\..\..\Codex.Uno.Wasm\bin\Debug\netstandard2.0\dist");
         }
     }
 }

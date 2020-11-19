@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Codex.Uno.Shared;
+using Codex.View;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +27,8 @@ namespace Codex.Uno
         public MainPage()
         {
             this.InitializeComponent();
+
+            Content = MainPageView.Create(MainController.App.ViewModel);
         }
 
         public async void SearchTextChanged(object sender, TextChangedEventArgs e)

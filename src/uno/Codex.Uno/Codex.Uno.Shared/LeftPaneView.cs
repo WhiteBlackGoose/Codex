@@ -26,8 +26,8 @@ namespace Codex.Uno.Shared
                     new Border()
                     {
                         Height = 38,
-                        Background = B(Color(0xFFFFE0)),
-                        BorderBrush = B(Color(0xF0E68C)),
+                        Background = B(C(0xFFFFE0)),
+                        BorderBrush = B(C(0xF0E68C)),
                         BorderThickness = new Thickness(1),
                         Margin = new Thickness(8),
                         VerticalAlignment = VerticalAlignment.Top,
@@ -40,7 +40,7 @@ namespace Codex.Uno.Shared
                             VerticalAlignment = VerticalAlignment.Center,
                             FontSize = 16,
                         }
-                        .Bind(TextBlock.TextProperty, () => viewModel.SearchInfo)
+                        .Bind(viewModel.SearchInfoBinding, (t, value) => t.Text = value)
                     )
                 ),
                 new ContentControl()

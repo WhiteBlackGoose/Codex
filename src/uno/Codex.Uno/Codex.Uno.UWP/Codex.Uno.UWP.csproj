@@ -13,6 +13,9 @@
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
       <Version>6.1.1</Version>
     </PackageReference>
+    <PackageReference Include="Monaco.Editor">
+      <Version>0.8.1-alpha</Version>
+    </PackageReference>
     <PackageReference Include="Uno.Core" Version="2.0.0" />
     <PackageReference Include="Uno.UI" Version="3.1.6" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.1" />

@@ -100,13 +100,15 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Codex.Uno.Shared", "src\uno
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Uno.UWP", "src\uno\Codex.Uno\Codex.Uno.UWP\Codex.Uno.UWP.csproj", "{10FF1E82-DC1B-4DE8-B1E1-9760176D47AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Uno.Wasm", "src\uno\Codex.Uno\Codex.Uno.Wasm\Codex.Uno.Wasm.csproj", "{25C8C0D3-7F9D-48C2-AD4E-7148FB686F26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Uno.Wasm", "src\uno\Codex.Uno\Codex.Uno.Wasm\Codex.Uno.Wasm.csproj", "{25C8C0D3-7F9D-48C2-AD4E-7148FB686F26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Uno.Skia.Wpf.Host", "src\uno\Codex.Uno\Codex.Uno.Skia.Wpf.Host\Codex.Uno.Skia.Wpf.Host.csproj", "{4C35E54B-3225-4FAA-BBB1-8A23B4F6DEE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Uno.Skia.Wpf.Host", "src\uno\Codex.Uno\Codex.Uno.Skia.Wpf.Host\Codex.Uno.Skia.Wpf.Host.csproj", "{4C35E54B-3225-4FAA-BBB1-8A23B4F6DEE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Uno.Skia.Wpf", "src\uno\Codex.Uno\Codex.Uno.Skia.Wpf\Codex.Uno.Skia.Wpf.csproj", "{FA48729B-ED7F-4388-8DA6-722F76762A93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Uno.Skia.Wpf", "src\uno\Codex.Uno\Codex.Uno.Skia.Wpf\Codex.Uno.Skia.Wpf.csproj", "{FA48729B-ED7F-4388-8DA6-722F76762A93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Uno.Skia.Gtk", "src\uno\Codex.Uno\Codex.Uno.Skia.Gtk\Codex.Uno.Skia.Gtk.csproj", "{08D88F32-5CA0-4DAC-8E37-ED1008B40EF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codex.Uno.Skia.Gtk", "src\uno\Codex.Uno\Codex.Uno.Skia.Gtk\Codex.Uno.Skia.Gtk.csproj", "{08D88F32-5CA0-4DAC-8E37-ED1008B40EF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codex.Uno.Wpf", "src\Uno\Codex.Uno.Wpf\Codex.Uno.Wpf.csproj", "{0DD23509-D758-4EFB-9056-7A5EA3370634}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -879,6 +881,26 @@ Global
 		{08D88F32-5CA0-4DAC-8E37-ED1008B40EF3}.Release|x64.Build.0 = Release|Any CPU
 		{08D88F32-5CA0-4DAC-8E37-ED1008B40EF3}.Release|x86.ActiveCfg = Release|Any CPU
 		{08D88F32-5CA0-4DAC-8E37-ED1008B40EF3}.Release|x86.Build.0 = Release|Any CPU
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Debug|ARM.Build.0 = Debug|Any CPU
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Debug|x64.Build.0 = Debug|Any CPU
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Debug|x86.ActiveCfg = Debug|x86
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Debug|x86.Build.0 = Debug|x86
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Release|ARM.ActiveCfg = Release|Any CPU
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Release|ARM.Build.0 = Release|Any CPU
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Release|ARM64.Build.0 = Release|Any CPU
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Release|x64.ActiveCfg = Release|Any CPU
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Release|x64.Build.0 = Release|Any CPU
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Release|x86.ActiveCfg = Release|Any CPU
+		{0DD23509-D758-4EFB-9056-7A5EA3370634}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -913,6 +935,7 @@ Global
 		{4C35E54B-3225-4FAA-BBB1-8A23B4F6DEE8} = {72149AC6-5FEC-455F-92AA-DF66B37FC6BF}
 		{FA48729B-ED7F-4388-8DA6-722F76762A93} = {72149AC6-5FEC-455F-92AA-DF66B37FC6BF}
 		{08D88F32-5CA0-4DAC-8E37-ED1008B40EF3} = {72149AC6-5FEC-455F-92AA-DF66B37FC6BF}
+		{0DD23509-D758-4EFB-9056-7A5EA3370634} = {72149AC6-5FEC-455F-92AA-DF66B37FC6BF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BA03C0DC-5D0A-4126-9F26-77704FB5FD5B}

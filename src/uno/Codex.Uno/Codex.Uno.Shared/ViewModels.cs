@@ -442,37 +442,11 @@ namespace Codex.View
 
     public class ViewModelDataContext : NotifyPropertyChangedBase
     {
-        private LeftPaneViewModel leftPane;
+        public Bound<LeftPaneViewModel> LeftPaneBinding { get; } = new Bound<LeftPaneViewModel>();
+        public LeftPaneViewModel LeftPane { get => LeftPaneBinding.Value; set => LeftPaneBinding.Value = value; }
 
-        public LeftPaneViewModel LeftPane
-        {
-            get
-            {
-                return leftPane;
-            }
-
-            set
-            {
-                leftPane = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private RightPaneViewModel rightPane = new RightPaneViewModel();
-
-        public RightPaneViewModel RightPane
-        {
-            get
-            {
-                return rightPane;
-            }
-
-            set
-            {
-                rightPane = value;
-                OnPropertyChanged();
-            }
-        }
+        public Bound<RightPaneViewModel> RightPaneBinding { get; } = new Bound<RightPaneViewModel>();
+        public RightPaneViewModel RightPane { get => RightPaneBinding.Value; set => RightPaneBinding.Value = value; }
 
         public void Initialize()
         {

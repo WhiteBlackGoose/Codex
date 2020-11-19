@@ -7,56 +7,5 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:t="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d">
-    <Page.Resources>
-        <ResourceDictionary>
-            <!--<ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styling.xaml" />
-            </ResourceDictionary.MergedDictionaries>-->
-
-            <LinearGradientBrush x:Key="LinearGradientBrush1" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#744482" Offset="0.0" />
-                <GradientStop Color="#7db9e8" Offset="0.80" />
-                <GradientStop Color="#b7fff9" Offset="1.0" />
-            </LinearGradientBrush>
-        </ResourceDictionary>
-    </Page.Resources>
-    <t:DockPanel>
-        <Grid t:DockPanel.Dock="Top" Name="PageHeader" Height="58" Background="{StaticResource LinearGradientBrush1}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition x:Name="SearchBoxAndImagesColumn" Width="Auto" />
-                <ColumnDefinition />
-                <ColumnDefinition  x:Name="HeaderMenuColumn" Width="Auto"  />
-            </Grid.ColumnDefinitions>
-            <StackPanel VerticalAlignment="Stretch" Orientation="Horizontal">
-                <TextBox x:Name="SearchBox" FontFamily="Arial" FontSize="21.333" 
-                         Foreground="Black"
-                         Background="White"
-                         VerticalContentAlignment="Center" MaxLength="260"
-                         Width="492" 
-                         Padding="32, 5, 5, 5"
-                         Margin="8, 8, 0, 8"
-                         TextChanged="SearchTextChanged"/>
-                <Border  VerticalAlignment="Center" Margin="10" Width="95.5">
-                    <Image Source="Assets/Images/microsoftlogo.png" />
-                </Border>
-                <TextBlock Text="Codex" Foreground="White" 
-                           VerticalAlignment="Center" FontSize="20" Width="56" Margin="0, 0, 0, 4" />
-            </StackPanel>
-            
-        </Grid>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="500" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-
-            <!--<c:LeftPaneView x:Name="LeftPane" ViewModel="{Binding LeftPane}" />-->
-
-            <t:GridSplitter Background="Gainsboro" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="20" />
-
-            <!--<c:RightPaneView Grid.Column="2" DataContext="{Binding RightPane}" />-->
-        </Grid>
-    </t:DockPanel>
 
 </Page>

@@ -22,9 +22,9 @@ namespace Codex.Uno.Shared
             EndPoint = new Point(1, 1),
             GradientStops =
             {
-                new GradientStop { Color = Color(0x744482), Offset = 0 },
-                new GradientStop { Color = Color(0x7db9e8), Offset = 0.8 },
-                new GradientStop { Color = Color(0xb7fff9), Offset = 1 },
+                new GradientStop { Color = C(0x744482), Offset = 0 },
+                new GradientStop { Color = C(0x7db9e8), Offset = 0.8 },
+                new GradientStop { Color = C(0xb7fff9), Offset = 1 },
             }
         };
 
@@ -84,7 +84,7 @@ namespace Codex.Uno.Shared
                     }
                 }.WithChildren(
                     Column(0,
-                        LeftPaneView.Create(viewModel.LeftPane)
+                        BindContent(viewModel.LeftPaneBinding, vm => LeftPaneView.Create(vm))
                     ),
                     Column(1,
                         new GridSplitter()
@@ -96,7 +96,7 @@ namespace Codex.Uno.Shared
                         }
                     ),
                     Column(2,
-                        LeftPaneView.Create(viewModel.LeftPane)
+                        BindContent(viewModel.RightPaneBinding, vm => RightPaneView.Create(vm))
                     )
                 )
             );
@@ -104,7 +104,6 @@ namespace Codex.Uno.Shared
 
         private static void OnSearchTextChanged(string text)
         {
-            throw new NotImplementedException();
         }
     }
 }

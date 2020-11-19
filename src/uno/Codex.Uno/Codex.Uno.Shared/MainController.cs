@@ -9,11 +9,11 @@ namespace Codex.View
 {
     public class MainController
     {
-        public static MainController App { get; }
+        public static MainController App { get; } = new MainController();
 
         public ICodex CodexService { get; }
 
-        private ViewModelDataContext ViewModel = new ViewModelDataContext();
+        public ViewModelDataContext ViewModel { get; } = new ViewModelDataContext();
 
         //public async void SearchTextChanged(object sender, TextChangedEventArgs e)
         //{

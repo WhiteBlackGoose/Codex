@@ -8,6 +8,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace Codex.Uno.Shared
 {
@@ -26,7 +27,7 @@ namespace Codex.Uno.Shared
 
         public static ImageSource RelativeImageSource(string path)
         {
-            throw new NotImplementedException();
+            return new BitmapImage(new Uri(path));
         }
 
         public static Border WithChild(this Border border, FrameworkElement element)
@@ -47,9 +48,16 @@ namespace Codex.Uno.Shared
             return element;
         }
 
-        public static Color Color(int value)
+        public static Color C(int value)
         {
-            throw new NotImplementedException();
+            unchecked
+            {
+                return Color.FromArgb(
+                    (byte)(value >> 24),
+                    (byte)(value >> 16),
+                    (byte)(value >> 8),
+                    (byte)value);
+            }
         }
 
         public static Brush B(Color color)
@@ -59,7 +67,7 @@ namespace Codex.Uno.Shared
 
         public static Brush B(int color)
         {
-            return B(Color(color));
+            return B(C(color));
         }
 
         public static FontFamily F(string name)
@@ -84,9 +92,10 @@ namespace Codex.Uno.Shared
             return b;
         }
 
-        public static T Bind<T>(this T element, DependencyProperty property, Func<object> value)
+        public static ContentControl BindContent<T>(Bound<T> bound, Func<T, UIElement> onUpdate)
         {
-            throw new NotImplementedException();
+            return new ContentControl()
+                .Bind(bound, (control, value) => control.Content = onUpdate(value));
         }
 
         public static void Add(this ItemCollection collection, IEnumerable<UIElement> items)
@@ -100,13 +109,14 @@ namespace Codex.Uno.Shared
         public static TElement HideIfNull<TElement, TValue>(this TElement element, Bound<TValue> bound)
             where TElement : UIElement
         {
-            bound.OnUpdate(value => element.Visibility = value != null ? Visibility.Visible : Visibility.Collapsed);
+            element.Bind(bound, (e, value) => e.Visibility = value != null ? Visibility.Visible : Visibility.Collapsed);
             return element;
         }
 
         public static T Bind<T, TValue>(this T element, Bound<TValue> bound, Action<T, TValue> onUpdate)
         {
             bound.OnUpdate(value => onUpdate(element, value));
+            onUpdate(element, bound.Value);
             return element;
         }
 
