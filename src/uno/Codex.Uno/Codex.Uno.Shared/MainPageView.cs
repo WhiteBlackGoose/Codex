@@ -35,7 +35,7 @@ namespace Codex.Uno.Shared
                     new Grid()
                     {
                         Height = 58,
-                        Background = PageHeaderBrush,
+                        Background = B(Colors.Purple),
                         ColumnDefinitions =
                         {
                             // SearchBoxAndImagesColumn
@@ -84,7 +84,11 @@ namespace Codex.Uno.Shared
                     }
                 }.WithChildren(
                     Column(0,
-                        BindContent(viewModel.LeftPaneBinding, vm => LeftPaneView.Create(vm))
+                        BindContent(viewModel.LeftPaneBinding, vm =>
+                        {
+                            Console.WriteLine($"Left pane = {vm}");
+                            return LeftPaneView.Create(vm);
+                        })
                     ),
                     Column(1,
                         new GridSplitter()

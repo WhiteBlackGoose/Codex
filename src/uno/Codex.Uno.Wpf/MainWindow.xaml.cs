@@ -24,8 +24,9 @@ namespace Codex.Uno.Wpf
         public MainWindow()
         {
             InitializeComponent();
+            var path = System.IO.Path.GetFullPath($@"..\..\..\..\Codex.Uno\Codex.Uno.Wasm\bin\Debug\netstandard2.0\dist");
 
-            UnoHostView.Init(() => Codex.Uno.Wasm.Program.Main(new string[0]), $@"..\..\..\..\Codex.Uno.Wasm\bin\Debug\netstandard2.0\dist");
+            UnoHostView.Init(() => Codex.Uno.Wasm.Program.Main(new string[0]), path);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Windows.UI;
 using Windows.UI.Xaml;
@@ -27,7 +28,7 @@ namespace Codex.Uno.Shared
 
         public static ImageSource RelativeImageSource(string path)
         {
-            return new BitmapImage(new Uri(path));
+            return new BitmapImage(new Uri(path, UriKind.Relative));
         }
 
         public static Border WithChild(this Border border, FrameworkElement element)
@@ -92,10 +93,11 @@ namespace Codex.Uno.Shared
             return b;
         }
 
-        public static ContentControl BindContent<T>(Bound<T> bound, Func<T, UIElement> onUpdate)
+        public static FrameworkElement BindContent<T>(Bound<T> bound, Func<T, UIElement> onUpdate)
         {
-            return new ContentControl()
-                .Bind(bound, (control, value) => control.Content = onUpdate(value));
+            Console.WriteLine($"TESTING: {bound.Value}");
+            return new ContentPresenter()
+                .Bind(bound, (control, value) => control.Content = value == null ? null : onUpdate(value));
         }
 
         public static void Add(this ItemCollection collection, IEnumerable<UIElement> items)
@@ -156,7 +158,7 @@ namespace Codex.Uno.Shared
 
         public virtual void AddToPanel(TPanel panel)
         {
-            panel.Children.Add(panel);
+            panel.Children.Add(ChildElement);
         }
 
         public static implicit operator PanelChild<TPanel>(FrameworkElement childElement)

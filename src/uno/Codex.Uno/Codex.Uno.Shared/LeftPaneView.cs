@@ -37,6 +37,7 @@ namespace Codex.Uno.Shared
                     .WithChild(
                         new TextBlock()
                         {
+                            Foreground = B(Colors.Black),
                             VerticalAlignment = VerticalAlignment.Center,
                             FontSize = 16,
                         }
@@ -45,7 +46,7 @@ namespace Codex.Uno.Shared
                 ),
                 new ContentControl()
                 .HideIfNull(viewModel.ContentBinding)
-                .Bind(viewModel.ContentBinding, (control, value) => control.Content = value.CreateView())
+                .Bind(viewModel.ContentBinding, (control, value) => control.Content = value?.CreateView())
             );
         }
 

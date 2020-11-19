@@ -266,7 +266,7 @@ namespace Codex.View
 
         public LeftPaneContent Content { get => ContentBinding.Value; set => ContentBinding.Value = value; }
 
-        public Bound<LeftPaneContent> ContentBinding { get; set; }
+        public Bound<LeftPaneContent> ContentBinding { get; set; } = new Bound<LeftPaneContent>();
 
         public static readonly LeftPaneViewModel Initial = new LeftPaneViewModel()
         {
@@ -448,7 +448,7 @@ namespace Codex.View
         public Bound<RightPaneViewModel> RightPaneBinding { get; } = new Bound<RightPaneViewModel>();
         public RightPaneViewModel RightPane { get => RightPaneBinding.Value; set => RightPaneBinding.Value = value; }
 
-        public void Initialize()
+        public ViewModelDataContext()
         {
             LeftPane = LeftPaneViewModel.Initial;
         }
