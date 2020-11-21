@@ -129,6 +129,7 @@
     <PackageReference Include="Uno.UI.WpfHost">
       <Version>2.5.0-dev.15</Version>
     </PackageReference>
+    <PackageReference Include="Uno.SourceGenerationTasks" Version="3.0.0-dev.18" ExcludeAssets="all" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -82,7 +82,22 @@ namespace Codex.View
     public class Bound<T>
     {
         // TODO: Change updates
-        public T Value { get; set; }
+        private T _value;
+        public T Value
+        {
+            get => _value;
+            set
+            {
+                _value = value;
+                onUpdate?.Invoke(value);
+            }
+        }
+
+        public Action<T> onUpdate;
+
+        //public T Value { get; set; }
+
+        //public List<Action<T>> onUpdate = new List<Action<T>>();
 
         public static implicit operator T(Bound<T> bound)
         {
@@ -91,6 +106,8 @@ namespace Codex.View
 
         public ValueBinding OnUpdate(Action<T> update)
         {
+            onUpdate += update;
+            //onUpdate.Add(update);
             update(Value);
             return default;
         }

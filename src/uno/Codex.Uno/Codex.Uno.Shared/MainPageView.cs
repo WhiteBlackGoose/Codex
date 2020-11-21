@@ -35,7 +35,7 @@ namespace Codex.Uno.Shared
                     new Grid()
                     {
                         Height = 58,
-                        Background = B(Colors.Purple),
+                        Background = PageHeaderBrush,//B(Colors.Purple),
                         ColumnDefinitions =
                         {
                             // SearchBoxAndImagesColumn
@@ -58,7 +58,7 @@ namespace Codex.Uno.Shared
                                 Padding = new Thickness(32, 5, 5, 5),
                                 Margin = new Thickness(8, 8, 0, 8),
                             }
-                            .OnTextChanged(text => OnSearchTextChanged(text)),
+                            .OnTextChanged(text => MainController.App.SearchTextChanged(text)),
                             new Border() { VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(10), Width = 95.5 }.WithChild(
                                 new Image() { Source = RelativeImageSource("Assets/Images/microsoftlogo.png") }
                             ),
@@ -104,10 +104,6 @@ namespace Codex.Uno.Shared
                     )
                 )
             );
-        }
-
-        private static void OnSearchTextChanged(string text)
-        {
         }
     }
 }

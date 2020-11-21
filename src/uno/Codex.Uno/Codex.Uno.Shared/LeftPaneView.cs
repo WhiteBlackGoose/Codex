@@ -52,13 +52,7 @@ namespace Codex.Uno.Shared
 
         internal static UIElement Create(CategorizedSearchResultsViewModel viewModel)
         {
-            return new ItemsControl()
-            {
-                Items =
-                {
-                    viewModel.Categories.Select(Create)
-                }
-            };
+            return new ItemsControl().Add(viewModel.Categories.Select(Create));
         }
 
         internal static UIElement Create(CategoryGroupSearchResultsViewModel viewModel)
@@ -139,26 +133,22 @@ namespace Codex.Uno.Shared
 
         internal static UIElement Create(ProjectGroupResultsViewModel viewModel)
         {
-            return new Expander()
-            {
-                Margin = new Thickness(0, 0, 0, 16),
-                IsExpanded = true,
-                Header = new TextBlock()
-                {
-                    Text = viewModel.ProjectName,
-                    Margin = new Thickness(5),
-                    Foreground = B(Colors.Black),
-                    FontSize = 18,
-                    FontWeight = FontWeights.Bold
-                },
-                Content = new ItemsControl()
-                {
-                    Items =
-                    {
-                        viewModel.Items.Select(i => i.CreateView())
-                    }
-                }
-            };
+            //return new Expander()
+            //{
+            //    Margin = new Thickness(0, 0, 0, 16),
+            //    IsExpanded = true,
+            //    Height = 50,
+            //    Header = new TextBlock()
+            //    {
+            //        Text = viewModel.ProjectName,
+            //        Margin = new Thickness(5),
+            //        Foreground = B(Colors.Black),
+            //        FontSize = 18,
+            //        FontWeight = FontWeights.Bold
+            //    },
+            //    //Content = new ItemsControl().Add(viewModel.Items.Select(i => i.CreateView()))
+            //};
+            return new ItemsControl().Add(viewModel.Items.Select(i => i.CreateView()));
         }
 
         internal static UIElement Create(FileResultsViewModel viewModel)
@@ -177,25 +167,14 @@ namespace Codex.Uno.Shared
                         FontSize = 16
                     }
                 },
-                Content = new ItemsControl()
-                {
-                    Items =
-                    {
-                        viewModel.Items.Select(i => i.CreateView())
-                    }
-                }
+                Content = new ItemsControl().Add(viewModel.Items.Select(i => i.CreateView()))
             };
         }
 
         internal static UIElement Create(ProjectResultsViewModel viewModel)
         {
-            return new ItemsControl()
-            {
-                Items =
-                {
-                    viewModel.ProjectGroups.Select(Create)
-                }
-            };
+            //return new Border { Background = B(Colors.Pink), Height = 30, Width = 40 };
+            return new ItemsControl().Add(viewModel.ProjectGroups.Select(Create));
         }
 
         internal static UIElement Create(SymbolResultViewModel viewModel)

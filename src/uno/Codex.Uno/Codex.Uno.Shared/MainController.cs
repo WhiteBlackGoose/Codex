@@ -11,31 +11,30 @@ namespace Codex.View
     {
         public static MainController App { get; } = new MainController();
 
-        public ICodex CodexService { get; }
+        public ICodex CodexService { get; set; }
 
         public ViewModelDataContext ViewModel { get; } = new ViewModelDataContext();
 
-        //public async void SearchTextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    var searchString = SearchBox.Text;
-        //    searchString = searchString.Trim();
+        public async void SearchTextChanged(string searchString)
+        {
+            searchString = searchString.Trim();
 
-        //    if (searchString.Length < 3)
-        //    {
-        //        ViewModel.LeftPane = new LeftPaneViewModel()
-        //        {
-        //            SearchInfo = "Enter at least 3 characters."
-        //        };
-        //        return;
-        //    }
+            if (searchString.Length < 3)
+            {
+                ViewModel.LeftPane = new LeftPaneViewModel()
+                {
+                    SearchInfo = "Enter at least 3 characters."
+                };
+                return;
+            }
 
-        //    var response = await CodexService.SearchAsync(new SearchArguments()
-        //    {
-        //        SearchString = searchString
-        //    });
+            var response = await CodexService.SearchAsync(new SearchArguments()
+            {
+                SearchString = searchString
+            });
 
-        //    ViewModel.LeftPane = LeftPaneViewModel.FromSearchResponse(searchString, response);
-        //}
+            ViewModel.LeftPane = LeftPaneViewModel.FromSearchResponse(searchString, response);
+        }
 
         public async void GoToSpanExecuted(ITextLineSpanResult lineSpan)
         {

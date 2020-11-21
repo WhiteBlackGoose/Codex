@@ -1,9 +1,16 @@
 ﻿<linker>
   <assembly fullname="Codex.Uno.Wasm" />
+  <assembly fullname="Lucene.Net" />
+  <assembly fullname="Codex.Sdk" />
+  <assembly fullname="Codex.Lucene" />
   <assembly fullname="Uno.UI" />
 
-  <assembly fullname="System.Core">
-	<!-- This is required by JSon.NET and any expression.Compile caller -->
+  <!-- Required for debugging -->
+  <assembly fullname="mscorlib" />
+  <assembly fullname="System.Core" />
+
+  <!--<assembly fullname="System.Core">
+	--><!-- This is required by JSon.NET and any expression.Compile caller --><!--
 	<type fullname="System.Linq.Expressions*" />
-  </assembly>
+  </assembly>-->
 </linker>

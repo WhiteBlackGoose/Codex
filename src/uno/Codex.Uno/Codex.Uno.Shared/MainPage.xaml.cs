@@ -28,6 +28,7 @@ namespace Codex.Uno
         {
             this.InitializeComponent();
 
+            MainController.App.ViewModel.RightPane = new RightPaneViewModel();
             Content = MainPageView.Create(MainController.App.ViewModel);
         }
 

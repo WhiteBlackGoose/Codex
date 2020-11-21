@@ -16,7 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)**/*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
-
     <Page Include="$(MSBuildThisFileDirectory)**/*.xaml" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);@(ApplicationDefinition)" Condition="'$(EnableDefaultPageItems)' != 'false'">
       <Generator>MSBuild:Compile</Generator>
     </Page>

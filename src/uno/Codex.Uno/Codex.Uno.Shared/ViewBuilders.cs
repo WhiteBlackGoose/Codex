@@ -54,7 +54,7 @@ namespace Codex.Uno.Shared
             unchecked
             {
                 return Color.FromArgb(
-                    (byte)(value >> 24),
+                    byte.MaxValue,
                     (byte)(value >> 16),
                     (byte)(value >> 8),
                     (byte)value);
@@ -100,12 +100,14 @@ namespace Codex.Uno.Shared
                 .Bind(bound, (control, value) => control.Content = value == null ? null : onUpdate(value));
         }
 
-        public static void Add(this ItemCollection collection, IEnumerable<UIElement> items)
+        public static ItemsControl Add(this ItemsControl control, IEnumerable<UIElement> items)
         {
             foreach (var item in items)
             {
-                collection.Add(item);
+                control.Items.Add(item);
             }
+
+            return control;
         }
 
         public static TElement HideIfNull<TElement, TValue>(this TElement element, Bound<TValue> bound)
