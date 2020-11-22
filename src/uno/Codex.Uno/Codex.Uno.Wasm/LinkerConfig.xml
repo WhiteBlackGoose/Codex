@@ -3,6 +3,8 @@
   <assembly fullname="Lucene.Net" />
   <assembly fullname="Codex.Sdk" />
   <assembly fullname="Codex.Lucene" />
+  <assembly fullname="Codex.ElasticSearch" />
+  <assembly fullname="MonacoEditorComponent" />
   <assembly fullname="Uno.UI" />
 
   <!-- Required for debugging -->

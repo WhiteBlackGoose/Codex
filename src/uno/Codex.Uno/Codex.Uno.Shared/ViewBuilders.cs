@@ -49,6 +49,12 @@ namespace Codex.Uno.Shared
             return element;
         }
 
+        public static PanelChild<Grid> Row(int row, FrameworkElement element)
+        {
+            Grid.SetRow(element, row);
+            return element;
+        }
+
         public static Color C(int value)
         {
             unchecked

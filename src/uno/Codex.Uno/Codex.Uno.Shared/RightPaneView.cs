@@ -1,4 +1,5 @@
 using Codex.View;
+using Codex.Web.Mvc.Rendering;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using Monaco;
 using System;
@@ -22,10 +23,39 @@ namespace Codex.Uno.Shared
     {
         public static FrameworkElement Create(RightPaneViewModel viewModel)
         {
-            return new CodeEditor
+            var content = viewModel.SourceFile == null ? "Empty" : new SourceFileRenderer(viewModel.SourceFile).RenderHtml();
+
+            return new Grid()
             {
-                Text = "Hello"
+                RowDefinitions =
+                {
+                    new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) },
+                    new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) },
+                    new RowDefinition() { Height = GridLength.Auto }
+                },
+            }.WithChildren(
+                Row(0, new WasmHtmlContentControl
+                {
+                    HtmlContent = content
+                }),
+                Row(1, CreateEditor(viewModel)),
+                Row(2, new Border()
+                {
+                    Height = 56,
+                    Background = B(Colors.Purple)
+                })
+            );
+        }
+
+        private static CodeEditor CreateEditor(RightPaneViewModel viewModel)
+        {
+            var editor = new CodeEditor();
+            editor.Loading += (s, e) =>
+            {
+                editor.Text = viewModel.SourceFile?.SourceFile.Content ?? "Test me";
             };
+
+            return editor;
         }
     }
 }

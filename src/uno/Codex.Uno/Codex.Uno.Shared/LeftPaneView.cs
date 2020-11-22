@@ -57,10 +57,11 @@ namespace Codex.Uno.Shared
 
         internal static UIElement Create(CategoryGroupSearchResultsViewModel viewModel)
         {
-            return new Expander()
+            return new HeaderedContentControl()
+            //return new Expander()
             {
                 Background = B(0x7988BD),
-                IsExpanded = true,
+                //IsExpanded = true,
                 Header = new TextBlock()
                 {
                     Text = viewModel.Header,
@@ -133,22 +134,21 @@ namespace Codex.Uno.Shared
 
         internal static UIElement Create(ProjectGroupResultsViewModel viewModel)
         {
+            return new HeaderedContentControl()
             //return new Expander()
-            //{
-            //    Margin = new Thickness(0, 0, 0, 16),
-            //    IsExpanded = true,
-            //    Height = 50,
-            //    Header = new TextBlock()
-            //    {
-            //        Text = viewModel.ProjectName,
-            //        Margin = new Thickness(5),
-            //        Foreground = B(Colors.Black),
-            //        FontSize = 18,
-            //        FontWeight = FontWeights.Bold
-            //    },
-            //    //Content = new ItemsControl().Add(viewModel.Items.Select(i => i.CreateView()))
-            //};
-            return new ItemsControl().Add(viewModel.Items.Select(i => i.CreateView()));
+            {
+                Margin = new Thickness(0, 0, 0, 16),
+                //IsExpanded = true,
+                Header = new TextBlock()
+                {
+                    Text = viewModel.ProjectName,
+                    Margin = new Thickness(5),
+                    Foreground = B(Colors.Black),
+                    FontSize = 18,
+                    FontWeight = FontWeights.Bold
+                },
+                Content = new ItemsControl().Add(viewModel.Items.Select(i => i.CreateView()))
+            };
         }
 
         internal static UIElement Create(FileResultsViewModel viewModel)
@@ -173,7 +173,6 @@ namespace Codex.Uno.Shared
 
         internal static UIElement Create(ProjectResultsViewModel viewModel)
         {
-            //return new Border { Background = B(Colors.Pink), Height = 30, Width = 40 };
             return new ItemsControl().Add(viewModel.ProjectGroups.Select(Create));
         }
 
