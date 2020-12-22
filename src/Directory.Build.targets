@@ -1,37 +1,63 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup>
-    <RoslynPackageReferenceVersion>3.3.1</RoslynPackageReferenceVersion>
+    <RoslynPackageReferenceVersion>3.8.0</RoslynPackageReferenceVersion>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Update="CommandLineParser" Version="2.2.1" />
+    <PackageReference Update="Elasticsearch.Net ---Conflict" Version="5.5.0" Project="Codex.ElasticSearch.Legacy\Codex.ElasticSearch.Legacy.csproj" />
+    <PackageReference Update="Elasticsearch.Net ---Conflict" Version="6.1.0" Project="Codex.ElasticSearch\Codex.ElasticSearch.csproj" />
+    <PackageReference Update="GuiLabs.Language.Xml" Version="1.2.38" />
+    <PackageReference Update="ICSharpCode.Decompiler" Version="5.0.0.4688-preview1" />
+    <PackageReference Update="ILRepack.MSBuild.Task" Version="2.0.14" PrivateAssets="all"/>
     <PackageReference Update="LibGit2Sharp" Version="0.26.0" />
     <PackageReference Update="LibGit2Sharp.NativeBinaries" Version="2.0.267" />
     <PackageReference Update="Lucene.Net" Version="4.8.0-beta00007" />
     <PackageReference Update="ManagedEsent" Version="1.9.4" />
+    <PackageReference Update="Microsoft.Build" Version="16.4.0" />
     <PackageReference Update="Microsoft.Build.Framework" Version="16.4.0" />
     <PackageReference Update="Microsoft.Build.Locator" Version="1.0.31" />
     <PackageReference Update="Microsoft.Build.Tasks.Core" Version="16.4.0" />
     <PackageReference Update="Microsoft.Build.Utilities.Core" Version="16.4.0" />
-    <PackageReference Update="Microsoft.CodeAnalysis.Analyzers" Version="2.9.6" />
-    <PackageReference Update="Microsoft.Net.Compilers" Version="$(RoslynPackageReferenceVersion)" />
     <PackageReference Update="Microsoft.CodeAnalysis" Version="$(RoslynPackageReferenceVersion)" />
-    <PackageReference Update="Microsoft.CodeAnalysis.Features" Version="$(RoslynPackageReferenceVersion)" />
+    <PackageReference Update="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" />
     <PackageReference Update="Microsoft.CodeAnalysis.Common" Version="$(RoslynPackageReferenceVersion)" />
     <PackageReference Update="Microsoft.CodeAnalysis.CSharp" Version="$(RoslynPackageReferenceVersion)" />
     <PackageReference Update="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="$(RoslynPackageReferenceVersion)" />
+    <PackageReference Update="Microsoft.CodeAnalysis.Features" Version="$(RoslynPackageReferenceVersion)" />
     <PackageReference Update="Microsoft.CodeAnalysis.VisualBasic" Version="$(RoslynPackageReferenceVersion)" />
     <PackageReference Update="Microsoft.CodeAnalysis.VisualBasic.Workspaces" Version="$(RoslynPackageReferenceVersion)" />
     <PackageReference Update="Microsoft.CodeAnalysis.Workspaces.Common" Version="$(RoslynPackageReferenceVersion)" />
     <PackageReference Update="Microsoft.CodeAnalysis.Workspaces.Desktop" Version="$(RoslynPackageReferenceVersion)" />
     <PackageReference Update="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="$(RoslynPackageReferenceVersion)" />
+    <PackageReference Update="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="2.0.1" />
     <PackageReference Update="Microsoft.Composition" Version="1.0.31" />
+    <PackageReference Update="Microsoft.Language.Xml" Version="1.1.20" />
+    <PackageReference Update="Microsoft.Net.Compilers" Version="$(RoslynPackageReferenceVersion)" />
+    <PackageReference Update="Microsoft.TeamFoundationServer.Client" Version="15.132.0-preview" />
+    <PackageReference Update="Microsoft.TeamFoundationServer.ExtendedClient" Version="15.132.0-preview" />
+    <PackageReference Update="Microsoft.Tpl.Dataflow" Version="4.5.24" />
+    <PackageReference Update="Mono.Cecil" Version="0.10.0" />
     <PackageReference Update="Mono.Options" Version="5.3.0.1" />
+    <PackageReference Update="MSBuild.StructuredLogger" Version="2.1.133" />
+    <PackageReference Update="NEST ---Conflict" Version="5.5.0" Project="Codex.ElasticSearch.Legacy\Codex.ElasticSearch.Legacy.csproj" />
+    <PackageReference Update="NEST ---Conflict" Version="6.1.0" Project="Codex.ElasticSearch\Codex.ElasticSearch.csproj" />
+    <PackageReference Update="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Update="NUnit" Version="3.9.0" />
+    <PackageReference Update="RocksDbNative" Version="5.4.6.10" />
+    <PackageReference Update="RocksDbSharp" Version="5.4.6.10" />
     <PackageReference Update="SQLitePCLRaw.Core" Version="2.0.2" />
     <PackageReference Update="StrongNamer" Version="0.0.8" />
     <PackageReference Update="System.AppContext" Version="4.3.0" />
     <PackageReference Update="System.Collections" Version="4.3.0" />
     <PackageReference Update="System.Collections.Concurrent" Version="4.3.0" />
-    <PackageReference Update="System.Collections.Immutable" Version="1.5.0" />
+    <PackageReference Update="System.Collections.Immutable" Version="5.0.0" />
+    <PackageReference Update="System.Composition" Version="1.1.0" />
+    <PackageReference Update="System.Composition.AttributedModel" Version="1.1.0" />
+    <PackageReference Update="System.Composition.Convention" Version="1.1.0" />
+    <PackageReference Update="System.Composition.Hosting" Version="1.1.0" />
+    <PackageReference Update="System.Composition.Runtime" Version="1.1.0" />
+    <PackageReference Update="System.Composition.TypedParts" Version="1.1.0" />
     <PackageReference Update="System.Console" Version="4.3.0" />
     <PackageReference Update="System.Diagnostics.Debug" Version="4.3.0" />
     <PackageReference Update="System.Diagnostics.FileVersionInfo" Version="4.3.0" />
@@ -62,6 +88,7 @@
     <PackageReference Update="System.Text.Json" Version="4.3.0" />
     <PackageReference Update="System.Threading" Version="4.3.0" />
     <PackageReference Update="System.Threading.Tasks" Version="4.3.0" />
+    <PackageReference Update="System.Threading.Tasks.Extensions" Version="4.5.4" />
     <PackageReference Update="System.Threading.Tasks.Parallel" Version="4.3.0" />
     <PackageReference Update="System.Threading.Thread" Version="4.3.0" />
     <PackageReference Update="System.ValueTuple" Version="4.4.0" />
@@ -70,34 +97,5 @@
     <PackageReference Update="System.Xml.XmlDocument" Version="4.3.0" />
     <PackageReference Update="System.Xml.XPath" Version="4.3.0" />
     <PackageReference Update="System.Xml.XPath.XDocument" Version="4.3.0" />
-    <PackageReference Update="Microsoft.Language.Xml" Version="1.1.20" />
-    <PackageReference Update="GuiLabs.Language.Xml" Version="1.2.38" />
-    <PackageReference Update="Microsoft.Tpl.Dataflow" Version="4.5.24" />
-    <PackageReference Update="MSBuild.StructuredLogger" Version="2.1.133" />
-    <PackageReference Update="Microsoft.Build" Version="16.4.0" />
-    <PackageReference Update="Mono.Cecil" Version="0.10.0" />
-    <PackageReference Update="ICSharpCode.Decompiler" Version="5.0.0.4688-preview1" />
-    <PackageReference Update="CommandLineParser" Version="2.2.1" />
-    <PackageReference Update="Microsoft.TeamFoundationServer.ExtendedClient" Version="15.132.0-preview" />
-    <PackageReference Update="Microsoft.TeamFoundationServer.Client" Version="15.132.0-preview" />
-    <PackageReference Update="Elasticsearch.Net ---Conflict" Version="6.1.0" Project="Codex.ElasticSearch\Codex.ElasticSearch.csproj" />
-    <PackageReference Update="Elasticsearch.Net ---Conflict" Version="5.5.0" Project="Codex.ElasticSearch.Legacy\Codex.ElasticSearch.Legacy.csproj" />
-    <PackageReference Update="NEST ---Conflict" Version="6.1.0" Project="Codex.ElasticSearch\Codex.ElasticSearch.csproj" />
-    <PackageReference Update="NEST ---Conflict" Version="5.5.0" Project="Codex.ElasticSearch.Legacy\Codex.ElasticSearch.Legacy.csproj" />
-    <PackageReference Update="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Update="System.Threading.Tasks.Extensions" Version="4.5.3" />
-    <PackageReference Update="ILRepack.MSBuild.Task" Version="2.0.14">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Update="NUnit" Version="3.9.0" />
-    <PackageReference Update="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="2.0.1" />
-    <PackageReference Update="System.Composition" Version="1.1.0" />
-    <PackageReference Update="System.Composition.AttributedModel" Version="1.1.0" />
-    <PackageReference Update="System.Composition.Convention" Version="1.1.0" />
-    <PackageReference Update="System.Composition.Hosting" Version="1.1.0" />
-    <PackageReference Update="System.Composition.Runtime" Version="1.1.0" />
-    <PackageReference Update="System.Composition.TypedParts" Version="1.1.0" />
-    <PackageReference Update="RocksDbNative" Version="5.4.6.10" />
-    <PackageReference Update="RocksDbSharp" Version="5.4.6.10" />
   </ItemGroup>
 </Project>
