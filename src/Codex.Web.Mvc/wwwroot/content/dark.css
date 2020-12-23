@@ -4,7 +4,7 @@
 }
 
 body {
-    background: black;
+    background: #1B1B1B;
 }
 
 .header {
@@ -16,8 +16,9 @@ body {
 }
 
 #search-box {
-    background: black;
+    background: #1E1E1E;
     border-color: #555;
+    color: #DCDCDC;
 }
 
 h1 {

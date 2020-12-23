@@ -25,7 +25,8 @@ namespace Codex.Integration.Tests
             //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "SpecificReference.cs");
             //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "OperatorOverload.cs");
             //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "MethodGroup.cs");
-            compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "NormalizeStringClassification.cs");
+            //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "NormalizeStringClassification.cs");
+            compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "Records.cs");
             //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "DerivedImplementation.Issue159.cs");
 
             Environment.CurrentDirectory = Path.Combine(root, @"out\test");

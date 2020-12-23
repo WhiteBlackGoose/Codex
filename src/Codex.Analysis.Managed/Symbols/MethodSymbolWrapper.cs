@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -245,6 +246,14 @@ namespace Codex.Analysis.Managed.Symbols
         public bool IsReadOnly => InnerSymbol.IsReadOnly;
 
         public NullableAnnotation ReceiverNullableAnnotation => InnerSymbol.ReceiverNullableAnnotation;
+
+        public bool IsInitOnly => InnerSymbol.IsInitOnly;
+
+        public SignatureCallingConvention CallingConvention => InnerSymbol.CallingConvention;
+
+        public ImmutableArray<INamedTypeSymbol> UnmanagedCallingConventionTypes => InnerSymbol.UnmanagedCallingConventionTypes;
+
+        public bool IsConditional => InnerSymbol.IsConditional;
 
         public IMethodSymbol Construct(params ITypeSymbol[] typeArguments)
         {

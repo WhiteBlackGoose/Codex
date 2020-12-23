@@ -1012,6 +1012,7 @@ namespace Codex.Analysis
                 case ClassificationTypeNames.Identifier:
                 case ClassificationTypeNames.Operator:
                 case ClassificationTypeNames.ClassName:
+                case ClassificationTypeNames.RecordName:
                 case ClassificationTypeNames.InterfaceName:
                 case ClassificationTypeNames.StructName:
                 case ClassificationTypeNames.EnumName:

@@ -27,7 +27,7 @@ namespace Codex.Analysis
                 Delegate.CreateDelegate(typeof(Func<SemanticModel, SyntaxNode, CancellationToken, bool>), semanticFactsService, isWrittenTo);
 
             var syntaxFactsServiceType = syntaxFactsService.GetType();
-            var getBindableParent = syntaxFactsServiceType.GetMethod("GetBindableParent");
+            var getBindableParent = syntaxFactsServiceType.GetMethod("TryGetBindableParent");
             getBindableParentDelegate = (Func<SyntaxToken, SyntaxNode>)
                 Delegate.CreateDelegate(typeof(Func<SyntaxToken, SyntaxNode>), syntaxFactsService, getBindableParent);
         }

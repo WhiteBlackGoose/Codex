@@ -1,22 +1,15 @@
-steps:
-- task: NuGetToolInstaller@0
-  displayName: Use NuGet 4.3.0
+pool:
+  vmImage: 'windows-2019'
 
-- task: NuGetCommand@2
-  displayName: NuGet restore
-  inputs:
-    restoreSolution: Codex.sln
-    feedsToUse: config
-    nugetConfigPath: nuget.config
+steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET Core SDK'
 
 - task: VSBuild@1
   displayName: Build solution Codex.sln
   inputs:
     solution: Codex.sln
-    vsVersion: 15.0
-    msbuildArgs: '/bl:$(Build.StagingDirectory)\Codex.binlog'
-    configuration: Debug
-    maximumCpuCount: true
+    msbuildArgs: '/r /m /bl:$(Build.StagingDirectory)\Codex.binlog'
 
 - task: CmdLine@1
   displayName: Index using newly built Codex
