@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup>
-    <RoslynPackageReferenceVersion>3.8.0</RoslynPackageReferenceVersion>
+    <RoslynPackageReferenceVersion>3.9.0-2.final</RoslynPackageReferenceVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Update="CommandLineParser" Version="2.2.1" />
