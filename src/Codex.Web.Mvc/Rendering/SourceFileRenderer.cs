@@ -429,6 +429,7 @@ namespace Codex.Web.Mvc.Rendering
                 { "enum name", Constants.ClassificationTypeName },
                 { "delegate name", Constants.ClassificationTypeName },
                 { "module name", Constants.ClassificationTypeName },
+                { "record name", Constants.ClassificationTypeName },
                 { "type parameter name", Constants.ClassificationTypeName },
                 { "preprocessor keyword", Constants.ClassificationKeyword },
                 { "xml doc comment - delimiter", Constants.ClassificationComment },
