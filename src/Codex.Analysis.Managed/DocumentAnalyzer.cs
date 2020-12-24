@@ -999,6 +999,8 @@ namespace Codex.Analysis
                 case ClassificationTypeNames.PropertyName:
                 case ClassificationTypeNames.EventName:
                     return ClassificationTypeNames.Identifier;
+                case ClassificationTypeNames.RecordName:
+                    return ClassificationTypeNames.ClassName;
                 default:
                     return span.ClassificationType;
             }
