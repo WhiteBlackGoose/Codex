@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <!-- This file is to prevent test projects from inheriting root Directory.Build.props-->
+</Project>

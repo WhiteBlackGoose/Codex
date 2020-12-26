@@ -18,7 +18,7 @@ namespace Codex.View
     {
         public ITextLineSpanResult TextResult;
         public IReferenceSearchResult ReferenceResult;
-        public IProjectFileScopeEntity SearchResult => TextResult ?? ReferenceResult;
+        public IProjectFileScopeEntity SearchResult => (IProjectFileScopeEntity)TextResult ?? ReferenceResult;
 
         public int LineNumber { get; }
         public string PrefixText { get; }
