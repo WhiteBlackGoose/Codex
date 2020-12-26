@@ -9,6 +9,7 @@ using Monaco.Languages;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,9 +58,17 @@ namespace Codex.Uno.Shared
 
                 async void loadOverview()
                 {
+                    var overviewPath = Path.GetFullPath("overview");
+
                     var file = await StorageFile.GetFileFromApplicationUriAsync(new System.Uri("ms-appx:///Assets/Overview.html"));
+
                     var newFile = await file.CopyAsync(Windows.Storage.ApplicationData.Current.LocalFolder, file.Name, NameCollisionOption.ReplaceExisting);
-                    var text = await FileIO.ReadTextAsync(newFile, Windows.Storage.Streams.UnicodeEncoding.Utf8);
+
+                    using var stream = await newFile.OpenStreamForReadAsync();
+                    using var reader = new StreamReader(stream);
+
+                    var text = reader.ReadToEnd();
+
                     control.HtmlContent = text;
                 }
             }
