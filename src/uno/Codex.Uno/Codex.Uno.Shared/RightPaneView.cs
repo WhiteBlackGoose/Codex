@@ -1,6 +1,7 @@
 using Codex.ObjectModel;
 using Codex.View;
 using Codex.Web.Mvc.Rendering;
+using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using Monaco;
 using Monaco.Editor;
@@ -13,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Uno.Extensions;
 using Windows.Foundation;
+using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
@@ -28,28 +30,41 @@ namespace Codex.Uno.Shared
     {
         public static FrameworkElement Create(RightPaneViewModel viewModel)
         {
-            var content = viewModel.SourceFile == null ? "Empty" : new SourceFileRenderer(viewModel.SourceFile).RenderHtml();
 
             return new Grid()
+                .WithChildren(
+                    Row(Star, CreateViewPane(viewModel)),
+                    //Row(1, viewModel.SourceFile == null ? new Border() { Background = B(Colors.OrangeRed) } : CreateEditor(viewModel.SourceFile)),
+                    Row(Auto, new Border()
+                    {
+                        Height = 56,
+                        Background = B(Colors.Purple)
+                    })
+                );
+        }
+
+        private static WasmHtmlContentControl CreateViewPane(RightPaneViewModel viewModel)
+        {
+            var content = viewModel.SourceFile == null ? "" : new SourceFileRenderer(viewModel.SourceFile).RenderHtml();
+            var control = new WasmHtmlContentControl
             {
-                RowDefinitions =
+                HtmlContent = content
+            };
+
+            if (viewModel.SourceFile == null)
+            {
+                loadOverview();
+
+                async void loadOverview()
                 {
-                    new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) },
-                    new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) },
-                    new RowDefinition() { Height = GridLength.Auto }
-                },
-            }.WithChildren(
-                Row(0, new WasmHtmlContentControl
-                {
-                    HtmlContent = content
-                }),
-                Row(1, viewModel.SourceFile == null ? new Border() { Background = B(Colors.OrangeRed) } : CreateEditor(viewModel.SourceFile)),
-                Row(2, new Border()
-                {
-                    Height = 56,
-                    Background = B(Colors.Purple)
-                })
-            );
+                    var file = await StorageFile.GetFileFromApplicationUriAsync(new System.Uri("ms-appx:///Assets/Overview.html"));
+                    var newFile = await file.CopyAsync(Windows.Storage.ApplicationData.Current.LocalFolder, file.Name, NameCollisionOption.ReplaceExisting);
+                    var text = await FileIO.ReadTextAsync(newFile, Windows.Storage.Streams.UnicodeEncoding.Utf8);
+                    control.HtmlContent = text;
+                }
+            }
+
+            return control;
         }
 
         private static FrameworkElement CreateEditor(IBoundSourceFile sourceFile)
@@ -65,6 +80,7 @@ namespace Codex.Uno.Shared
                 {
                     Id = "Codex"
                 });
+
                 await editor.Languages.RegisterColorProviderAsync("Codex", new CodexEditorLanguage(sourceFile));
                 Console.WriteLine("Setting language");
 

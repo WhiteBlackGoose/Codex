@@ -28,7 +28,7 @@ namespace Codex.Web.Mvc.Rendering
         {
             EditorModel model = Render();
             return $@"
-<div id='editorPaneWrapper'>
+<div id='editorPaneWrapper' style='pointer-events: all; overflow: auto'>
     <div id='editorPane' class='cz' data-filepath='{model.FilePath}'>
         <table class='tb' cellpadding='0' cellspacing='0'>
             <tr>
@@ -445,6 +445,7 @@ namespace Codex.Web.Mvc.Rendering
                 { "enum name", Constants.ClassificationTypeName },
                 { "delegate name", Constants.ClassificationTypeName },
                 { "module name", Constants.ClassificationTypeName },
+                { "record name", Constants.ClassificationTypeName },
                 { "type parameter name", Constants.ClassificationTypeName },
                 { "preprocessor keyword", Constants.ClassificationKeyword },
                 { "xml doc comment - delimiter", Constants.ClassificationComment },

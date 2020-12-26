@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
     <NoWarn>NU1701</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
@@ -18,7 +19,7 @@
     <UpToDateCheckInput Include="..\Codex.Uno.Shared\**\*.xaml" />
   </ItemGroup>
   <ItemGroup>
-<EmbeddedResource Include="WasmCSS\**\*.css" />
+    <EmbeddedResource Include="WasmCSS\**\*.css" />
 		<EmbeddedResource Include="WasmScripts\**\*.js" />
   </ItemGroup>
   <ItemGroup>

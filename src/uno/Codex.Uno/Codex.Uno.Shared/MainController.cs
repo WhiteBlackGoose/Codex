@@ -1,5 +1,7 @@
 using Codex.ObjectModel;
 using Codex.Sdk.Search;
+using Microsoft.Toolkit.Uwp.Helpers;
+using Monaco;
 using System;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -36,17 +38,6 @@ namespace Codex.View
             ViewModel.LeftPane = LeftPaneViewModel.FromSearchResponse(searchString, response);
         }
 
-        public async void GoToSpanExecuted(ITextLineSpanResult lineSpan)
-        {
-            var sourceFileResponse = await CodexService.GetSourceAsync(new GetSourceArguments()
-            {
-                ProjectId = lineSpan.ProjectId,
-                ProjectRelativePath = lineSpan.ProjectRelativePath,
-            });
-
-            ViewModel.RightPane = new RightPaneViewModel(sourceFileResponse);
-        }
-
         public async void GoToReferenceExecuted(IReferenceSearchResult referenceResult)
         {
             var sourceFileResponse = await CodexService.GetSourceAsync(new GetSourceArguments()
@@ -58,13 +49,31 @@ namespace Codex.View
             ViewModel.RightPane = new RightPaneViewModel(sourceFileResponse);
         }
 
-        public async void FindAllReferencesExecuted(IReferenceSymbol symbol)
+        public async void GoToSpanExecuted(IProjectFileScopeEntity lineSpan, int lineNumber)
         {
-            var response = await CodexService.FindAllReferencesAsync(new FindAllReferencesArguments()
+            var sourceFileResponse = await CodexService.GetSourceAsync(new GetSourceArguments()
+            {
+                ProjectId = lineSpan.ProjectId,
+                ProjectRelativePath = lineSpan.ProjectRelativePath,
+            });
+
+            ViewModel.RightPane = new RightPaneViewModel(sourceFileResponse);
+        }
+
+        public void FindAllReferencesExecuted(IReferenceSymbol symbol)
+        {
+            FindAllReferencesArguments arguments = new FindAllReferencesArguments()
             {
                 ProjectId = symbol.ProjectId,
                 SymbolId = symbol.Id.Value,
-            });
+            };
+            
+            FindAllReferences(arguments);
+        }
+
+        public async void FindAllReferences(FindAllReferencesArguments arguments)
+        {
+            var response = await CodexService.FindAllReferencesAsync(arguments);
 
             ViewModel.LeftPane = LeftPaneViewModel.FromReferencesResponse(response);
         }

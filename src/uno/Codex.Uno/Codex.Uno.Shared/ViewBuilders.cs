@@ -55,6 +55,14 @@ namespace Codex.Uno.Shared
             return element;
         }
 
+        public static PanelChild<Grid> Row(GridLengthEx height, FrameworkElement element, GridExtent? extent = default)
+        {
+            return new GridChild(element)
+            {
+                RowDefinition = new RowDefinition() { Height = height }
+            };
+        }
+
         public static Color C(int value)
         {
             unchecked
@@ -144,14 +152,85 @@ namespace Codex.Uno.Shared
 
             return textBox;
         }
+
+        public static GridLengthEx Star { get; } = new GridLengthEx() { Type = GridUnitType.Star, Value = 1 };
+        public static GridLengthEx Auto { get; } = new GridLengthEx() { Type = GridUnitType.Auto, Value = 1 };
     }
 
-    public class GridExtent
+    public struct GridExtent
     {
-        public int Column { get; set; }
-        public int ColumnSpan { get; set; }
-        public int Row { get; set; }
-        public int RowSpan { get; set; }
+        public int? Column { get; set; }
+        public int? ColumnSpan { get; set; }
+        public int? Row { get; set; }
+        public int? RowSpan { get; set; }
+
+        public void Apply(FrameworkElement element)
+        {
+            if (Column != null) Grid.SetColumn(element, Column.Value);
+            if (ColumnSpan != null) Grid.SetColumnSpan(element, ColumnSpan.Value);
+            if (Row != null) Grid.SetRow(element, Row.Value);
+            if (RowSpan != null) Grid.SetRowSpan(element, RowSpan.Value);
+        }
+    }
+
+    public struct GridLengthEx
+    {
+        public double Value { get; set; }
+        public GridUnitType Type { get; set; }
+
+        public static GridLengthEx operator *(GridLengthEx l, double factor)
+        {
+            l.Value *= factor;
+            return l;
+        }
+
+        public static implicit operator GridLength(GridLengthEx l)
+        {
+            if (l.Type == GridUnitType.Auto)
+            {
+                return GridLength.Auto;
+            }
+
+            return new GridLength(l.Value, l.Type);
+        }
+
+        public static implicit operator GridLengthEx(double value)
+        {
+            return new GridLengthEx() { Type = GridUnitType.Pixel, Value = 1 };
+        }
+    }
+
+    public class GridChild : PanelChild<Grid>
+    {
+        public RowDefinition RowDefinition { get; set; }
+        public ColumnDefinition ColumnDefinition { get; set; }
+        public GridExtent Extent { get; set; }
+
+        public GridChild(FrameworkElement childElement) 
+            : base(childElement)
+        {
+        }
+
+        public override void AddToPanel(Grid panel)
+        {
+            var extent = Extent;
+            if (RowDefinition != null)
+            {
+                extent.Row = panel.RowDefinitions.Count;
+                panel.RowDefinitions.Add(RowDefinition);
+            }
+
+            if (ColumnDefinition != null)
+            {
+                extent.Column = panel.ColumnDefinitions.Count;
+                panel.ColumnDefinitions.Add(ColumnDefinition);
+            }
+
+            extent.Apply(ChildElement);
+
+            base.AddToPanel(panel);
+        }
+
     }
 
     public class PanelChild<TPanel>

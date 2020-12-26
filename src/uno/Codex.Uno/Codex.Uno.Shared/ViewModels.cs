@@ -18,7 +18,7 @@ namespace Codex.View
     {
         public ITextLineSpanResult TextResult;
         public IReferenceSearchResult ReferenceResult;
-        public object SearchResult { get; }
+        public IProjectFileScopeEntity SearchResult => TextResult ?? ReferenceResult;
 
         public int LineNumber { get; }
         public string PrefixText { get; }
@@ -29,7 +29,6 @@ namespace Codex.View
         {
             //Command = Commands.GoToSpan;
             TextResult = result;
-            SearchResult = result;
             var referringSpan = result.TextSpan;
             LineNumber = referringSpan.LineNumber;
             string lineSpanText = referringSpan.LineSpanText;
@@ -45,7 +44,6 @@ namespace Codex.View
         {
             //Command = Commands.GoToReference;
             ReferenceResult = result;
-            SearchResult = result;
             var referringSpan = result.ReferenceSpan;
             LineNumber = referringSpan.LineNumber;
             string lineSpanText = referringSpan.LineSpanText;
@@ -59,14 +57,7 @@ namespace Codex.View
 
         public void OnExecuted()
         {
-            if (TextResult != null)
-            {
-                MainController.App.GoToSpanExecuted(TextResult);
-            }
-            else
-            {
-                MainController.App.GoToReferenceExecuted(ReferenceResult);
-            }
+            MainController.App.GoToSpanExecuted(SearchResult, LineNumber);
         }
 
         public override UIElement CreateView()
