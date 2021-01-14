@@ -37,13 +37,29 @@ namespace Codex.Analysis.Projects
 
         public void StartLoadProject(CompilerInvocation invocation)
         {
-            var projectPath = invocation.ProjectFile;
-            var projectName = Path.GetFileNameWithoutExtension(projectPath);
+            string[] args = Array.Empty<string>();
 
-            ProjectInfo projectInfo = GetCommandLineProject(projectPath, projectName, invocation.Language, invocation.GetCommandLineArguments());
-            var assemblyName = Path.GetFileNameWithoutExtension(projectInfo.OutputFilePath);
-            ProjectInfoBuilder info = GetProjectInfo(assemblyName);
-            info.ProjectInfo = projectInfo;
+            try
+            {
+                var projectPath = invocation.ProjectFile;
+                var projectName = Path.GetFileNameWithoutExtension(projectPath);
+
+                args = invocation.GetCommandLineArguments();
+                ProjectInfo projectInfo = GetCommandLineProject(projectPath, projectName, invocation.Language, args);
+                var assemblyName = Path.GetFileNameWithoutExtension(projectInfo.OutputFilePath);
+                ProjectInfoBuilder info = GetProjectInfo(assemblyName);
+                info.ProjectInfo = projectInfo;
+            }
+            catch (Exception ex) when (TraceException(ex, invocation, args))
+            {
+            }
+        }
+
+        private bool TraceException(Exception ex, CompilerInvocation invocation, string[] args)
+        {
+            logger.LogError($"Failed loading project '{invocation.ProjectFile}' with args '{string.Join(Environment.NewLine, args)}'");
+
+            return false;
         }
 
         private ProjectInfoBuilder GetProjectInfo(string assemblyName)
