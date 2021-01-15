@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.CodeAnalysis;
@@ -17,7 +18,10 @@ namespace Codex.Analysis.Managed
 
         public string[] GetCommandLineArguments()
         {
-            return CommandLineArguments ?? CommandLineParser.SplitCommandLineIntoArguments(CommandLine, removeHashComments: false).ToArray();
+            var args = CommandLineArguments ?? CommandLineParser.SplitCommandLineIntoArguments(CommandLine, removeHashComments: false);
+
+            // Remove duplicate arguments.
+            return args.Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
         }
 
         public CommandLineArguments GetParsedCommandLineArguments()

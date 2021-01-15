@@ -112,7 +112,7 @@ namespace Codex.Analysis.Projects
 
                 if (commandLineArguments.Length == 1)
                 {
-                    // Handle fine with single string command line
+                    // Handle file with single string command line
                     invocation.CommandLine = commandLineArguments[0];
                 }
                 else
