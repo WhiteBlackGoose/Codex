@@ -1,7 +1,6 @@
 using Codex.ObjectModel;
 using Codex.Sdk.Search;
 using Microsoft.Toolkit.Uwp.Helpers;
-using Monaco;
 using System;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;

@@ -3,9 +3,11 @@ using Codex.View;
 using Codex.Web.Mvc.Rendering;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.Toolkit.Uwp.UI.Controls;
+#if __WASM__
 using Monaco;
 using Monaco.Editor;
 using Monaco.Languages;
+#endif
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Uno.Extensions;
 using Windows.Foundation;
 using Windows.Storage;
@@ -36,11 +39,7 @@ namespace Codex.Uno.Shared
                 .WithChildren(
                     Row(Star, CreateViewPane(viewModel)),
                     //Row(1, viewModel.SourceFile == null ? new Border() { Background = B(Colors.OrangeRed) } : CreateEditor(viewModel.SourceFile)),
-                    Row(Auto, new Border()
-                    {
-                        Height = 56,
-                        Background = B(Colors.Purple)
-                    })
+                    Row(Auto, CreateDetailsPane(viewModel.SourceFile))
                 );
         }
 
@@ -54,6 +53,7 @@ namespace Codex.Uno.Shared
 
             if (viewModel.SourceFile == null)
             {
+#if __WASM__
                 loadOverview();
 
                 async void loadOverview()
@@ -71,45 +71,87 @@ namespace Codex.Uno.Shared
 
                     control.HtmlContent = text;
                 }
+#endif
             }
 
             return control;
         }
 
+        private static FrameworkElement CreateDetailsPane(IBoundSourceFile sourceFile)
+        {
+            var info = sourceFile?.SourceFile?.Info;
+            if (info == null)
+            {
+                var random = new Random();
+                return new Border()
+                {
+                    Height = 56,
+                    Background = B(random.Next())
+                };
+            }
+
+            var encodedFilePath = HttpUtility.UrlEncode(info.ProjectRelativePath);
+
+            return new Grid()
+            .WithChildren
+            (
+                Column(Star),
+                Column(Star),
+                Row(Auto),
+                Row(Auto),
+
+                Row(0, Column(0, Text(
+                    "File: ", 
+                    Link(info.ProjectRelativePath, $"/?leftProject={info.ProjectId}&file={encodedFilePath}"), 
+                    "(", Link("Download", $"/download/{info.ProjectId}/?filePath={encodedFilePath}"), ")"))),
+                Row(1, Column(0, Text(
+                    "Project: ", Link(info.ProjectId, $"/?leftProject={info.ProjectId}")))),
+                Row(0, Column(1, Text(Link(info.RepoRelativePath, info.WebAddress)))),
+                Row(1, Column(1, Tip(
+                    Text("Indexed on: ", sourceFile.Commit?.DateUploaded.ToLocalTime().ToString() ?? "Unknown"),
+                    $"Index: {sourceFile.Commit?.CommitId}")))
+            );
+        }
+
         private static FrameworkElement CreateEditor(IBoundSourceFile sourceFile)
         {
-            var editor = new CodeEditor()
+            //var editor = new CodeEditor()
+            //{
+            //    Text = sourceFile?.SourceFile.Content ?? "EMPTY",
+            //};
+
+            //async void hookLanguage()
+            //{
+            //    await editor.Languages.RegisterAsync(new ILanguageExtensionPoint()
+            //    {
+            //        Id = "Codex"
+            //    });
+
+            //    await editor.Languages.RegisterColorProviderAsync("Codex", new CodexEditorLanguage(sourceFile));
+            //    Console.WriteLine("Setting language");
+
+            //    editor.CodeLanguage = "Codex";
+
+            //    Console.WriteLine("Set language");
+
+            //}
+            //editor.Loaded += (s, e) =>
+            //{
+            //    if (editor.IsEditorLoaded)
+            //    {
+            //        hookLanguage();
+            //    }
+            //};
+
+            var editor = new ContentControl()
             {
-                Text = sourceFile?.SourceFile.Content ?? "EMPTY",
-            };
-
-            async void hookLanguage()
-            {
-                await editor.Languages.RegisterAsync(new ILanguageExtensionPoint()
-                {
-                    Id = "Codex"
-                });
-
-                await editor.Languages.RegisterColorProviderAsync("Codex", new CodexEditorLanguage(sourceFile));
-                Console.WriteLine("Setting language");
-
-                editor.CodeLanguage = "Codex";
-
-                Console.WriteLine("Set language");
-
-            }
-            editor.Loaded += (s, e) =>
-            {
-                if (editor.IsEditorLoaded)
-                {
-                    hookLanguage();
-                }
+                Content = "NO EDITOR"
             };
 
             return editor;
         }
 
-        private class CodexEditorLanguage : DocumentColorProvider
+        private class CodexEditorLanguage
         {
             private static IDictionary<string, Color> ClassificationMap = new Dictionary<string, Color>
             {
@@ -158,121 +200,6 @@ namespace Codex.Uno.Shared
                 { "string - verbatim", Constants.ClassificationLiteral },
                 { "excluded code", Constants.ClassificationExcludedCode },
             };
-
-            private static Dictionary<int, ColorPresentation[]> presentationByColorMap = new Dictionary<int, ColorPresentation[]>();
-
-            public IBoundSourceFile SourceFile { get; }
-            private string sourceText;
-
-            public CodexEditorLanguage(IBoundSourceFile sourceFile)
-            {
-                SourceFile = sourceFile;
-                sourceText = sourceFile?.SourceFile.Content;
-            }
-
-            public IAsyncOperation<IEnumerable<ColorPresentation>> ProvideColorPresentationsAsync(IModel model, ColorInformation colorInfo)
-            {
-                return AsAsyncOperation(() => Task.FromResult<IEnumerable<ColorPresentation>>(Array.Empty<ColorPresentation>()));
-            }
-
-            public IAsyncOperation<IEnumerable<ColorInformation>> ProvideDocumentColorsAsync(IModel model)
-            {
-                return AsAsyncOperation<IEnumerable<ColorInformation>>(() =>
-                {
-                    return Task.FromResult(GetColorInformation().ToList().AsEnumerable());
-                });
-            }
-
-            private IEnumerable<ColorInformation> GetColorInformation()
-            {
-                if (sourceText == null)
-                {
-                    yield break;
-                }
-
-                var lineLengths = TextUtilities.GetLineLengths(sourceText);
-                int position = 0;
-                int line = 0;
-                int column = 0;
-                int lineLength = lineLengths[0];
-
-                IClassificationSpan prevSpan = null;
-
-                bool finished = false;
-
-                foreach (var span in SourceFile.Classifications.OrderBy(c => c.Start))
-                {
-                    if (span.Start > sourceText.Length)
-                    { //Not sure how this happened but a span is off the end of our text
-                        Console.Error.WriteLine(
-                            $"Span had Start of {span.Start}, which is greater than text length for file '{SourceFile.ProjectRelativePath}'");
-                        break;
-                    }
-                    if (prevSpan != null && span.Start == prevSpan.Start)
-                    {
-                        //  Overlapping spans?
-                        continue;
-                    }
-
-                    prevSpan = span;
-
-                    //Console.WriteLine("Classifying span: ")
-
-                    if (!ClassificationMap.TryGetValue(span.Classification, out var color) || color.A == 0)
-                    {
-                        continue;
-                    }
-
-                    (uint line, uint column) getEditorPosition(int targetPosition)
-                    {
-                        var positionOffset = targetPosition - position;
-                        while (line < lineLengths.Length && positionOffset > 0)
-                        {
-                            var remaining = lineLength - column;
-                            if (remaining > positionOffset)
-                            {
-                                column += positionOffset;
-                                positionOffset = 0;
-                                break;
-                            }
-                            else
-                            {
-                                positionOffset -= remaining;
-                                column = 0;
-                                line++;
-                                if (line < lineLengths.Length)
-                                {
-                                    lineLength = lineLengths[line];
-                                }
-                            }
-                        }
-
-                        if (positionOffset != 0)
-                        {
-                            finished = true;
-                            return default;
-                        }
-
-                        position = targetPosition;
-                        return ((uint)line + 1, (uint)column + 1);
-                    }
-
-                    if (finished)
-                    {
-                        yield break;
-                    }
-
-                    var start = getEditorPosition(span.Start);
-                    var end = getEditorPosition(span.End());
-
-                    yield return new ColorInformation(color, new Range(start.line, start.column, end.line, end.column));
-                }
-            }
-
-            private static IAsyncOperation<T> AsAsyncOperation<T>(Func<Task<T>> taskFactory)
-            {
-                return WindowsRuntimeSystemExtensions.AsAsyncOperation(taskFactory());
-            }
 
             public class Constants
             {

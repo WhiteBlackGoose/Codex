@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
   <ItemGroup> 
     <Compile Include="$(MSBuildThisFileDirectory)\shared\IsExternalInit.cs" />
   </ItemGroup>
