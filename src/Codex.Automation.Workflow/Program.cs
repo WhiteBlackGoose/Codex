@@ -23,6 +23,7 @@ namespace Codex.Automation.Workflow
         public string RepoName;
         public string ElasticSearchUrl;
         public string JsonFilePath;
+        public bool NoClone;
         public Dictionary<string, string> PersonalAccessTokens = new Dictionary<string, string>();
     }
 
@@ -49,6 +50,7 @@ namespace Codex.Automation.Workflow
             foreach (string arg in args)
             {
                 string argValue;
+                bool switchValue;
                 if (MatchArg(arg, "SourcesDirectory", out argValue))
                 {
                     newArgs.SourcesDirectory = argValue;
@@ -62,6 +64,10 @@ namespace Codex.Automation.Workflow
                 else if (MatchArg(arg, "CodexOutputRoot", out argValue))
                 {
                     newArgs.CodexOutputRoot = argValue;
+                }
+                else if (MatchSwitch(arg, "NoClone", out switchValue))
+                {
+                    newArgs.NoClone = switchValue;
                 }
                 else if (MatchArg(arg, "CodexRepoUrl", out argValue))
                 {
@@ -112,6 +118,33 @@ namespace Codex.Automation.Workflow
                 return true;
             }
             argValue = null;
+            return false;
+        }
+
+        private static bool MatchSwitch(string arg, string argName, out bool argValue)
+        {
+            var prefix = $"/{argName}";
+            if (arg.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+            {
+                if (arg.Length == prefix.Length)
+                {
+                    argValue = true;
+                    return true;
+                }
+                else if (arg.Length == (prefix.Length + 1))
+                {
+                    switch (arg[prefix.Length])
+                    {
+                        case '-':
+                            argValue = false;
+                            return true;
+                        case '+':
+                            argValue = true;
+                            return true;
+                    }
+                }
+            }
+            argValue = false;
             return false;
         }
 
