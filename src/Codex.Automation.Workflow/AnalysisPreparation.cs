@@ -28,7 +28,8 @@ namespace Codex.Automation.Workflow
 
         public void Run()
         {
-            bool successfullyCloned = Invoke("git.exe", "clone", arguments.CodexRepoUrl, arguments.SourcesDirectory);
+            bool successfullyCloned = arguments.NoClone
+                || Invoke("git.exe", "clone", arguments.CodexRepoUrl, arguments.SourcesDirectory);
             if (!successfullyCloned)
             {
                 throw new Exception($"Failed to clone {arguments.CodexRepoUrl}");
