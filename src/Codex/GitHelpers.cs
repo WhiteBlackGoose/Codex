@@ -53,15 +53,26 @@ namespace Codex.Application
                 return name;
             }
 
+            // Try to find master or main branch
             foreach (var branch in repo.Branches)
             {
-                if (branch.IsRemote && branch.Tip.Id == head.Tip.Id)
+                if (branch.IsRemote)
                 {
                     var canonicalName = branch.UpstreamBranchCanonicalName;
                     if (canonicalName == "refs/heads/main" || canonicalName == "refs/heads/master")
                     {
                         return canonicalName.Substring("refs/heads/".Length);
                     }
+                }
+            }
+
+            // Try find current branch remote
+            foreach (var branch in repo.Branches)
+            {
+                if (branch.IsRemote && branch.Tip.Id == head.Tip.Id)
+                {
+                    var canonicalName = branch.UpstreamBranchCanonicalName;
+                    return canonicalName.Substring("refs/heads/".Length);
                 }
             }
 
