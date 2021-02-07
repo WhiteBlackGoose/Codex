@@ -43,7 +43,7 @@ namespace Codex.Application
         {
             var head = repo.Head;
             var name = head.TrackedBranch?.FriendlyName;
-            if (name != null)
+            if (name != null && (name.Contains("master") || name.Contains("main")))
             {
                 if (head.RemoteName != null)
                 {
@@ -74,6 +74,16 @@ namespace Codex.Application
                     var canonicalName = branch.UpstreamBranchCanonicalName;
                     return canonicalName.Substring("refs/heads/".Length);
                 }
+            }
+
+            if (name != null)
+            {
+                if (head.RemoteName != null)
+                {
+                    return name.TrimStartIgnoreCase(head.RemoteName).TrimStart('/');
+                }
+
+                return name;
             }
 
             return head.FriendlyName;
