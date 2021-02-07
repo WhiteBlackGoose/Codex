@@ -22,7 +22,7 @@ namespace Codex.Utilities
         private static Tuple<Regex, string> githubReplacement
             = Tuple.Create(
                 new Regex(@"(?<host>https?://[^/]+/)(?<owner>[^/]+/)(?<project>[^/]+)/?"), 
-                "${host}${owner}${project}/blob/master/");
+                "${host}${owner}${project}/blob/%branch%/");
 
         public static string GetSafeRepoName(string repoName)
         {
@@ -62,7 +62,7 @@ namespace Codex.Utilities
             value = replacementParameters.Item1.Replace(value, replacementParameters.Item2);
         }
 
-        public static string GetFileWebAddress(string repoSourceControlAddress, string fileRepoRelativePath)
+        public static string GetFileWebAddress(string repoSourceControlAddress, string fileRepoRelativePath, string branch = null)
         {
             repoSourceControlAddress = repoSourceControlAddress.Trim();
 
@@ -100,6 +100,14 @@ namespace Codex.Utilities
                     ApplyReplacement(ref repoSourceControlAddress, githubReplacement);
                 }
             }
+
+            if (branch == null || branch.Contains("("))
+            {
+                // Default to master if unspecified or branch == "(no branch)" i.e. detached head case
+                branch = "master";
+            }
+
+            repoSourceControlAddress.Replace("%branch%", branch);
 
             return (repoSourceControlAddress.EnsureTrailingSlash("/") + fileRepoRelativePath).Replace("\\", "/");
         }

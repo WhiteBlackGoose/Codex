@@ -7,6 +7,10 @@ namespace Codex.Utilities
 {
     public static class Paths
     {
+        public static readonly char DirectorySeparatorChar = Path.DirectorySeparatorChar;
+        public static readonly string DirectorySeparator = Path.DirectorySeparatorChar.ToString();
+        public static readonly string RelativeParentDir = ".." + Path.DirectorySeparatorChar.ToString();
+
         /// <summary>
         /// Returns a path to <paramref name="filePath"/> if you start in a folder where the file
         /// <paramref name="relativeToPath"/> is located.
@@ -29,22 +33,22 @@ namespace Codex.Utilities
         /// <returns>..\..\A\B\1.txt</returns>
         public static string MakeRelativeToFolder(string filePath, string relativeToPath)
         {
-            if (relativeToPath.EndsWith("\\"))
+            if (relativeToPath.EndsWith(DirectorySeparator))
             {
-                relativeToPath = relativeToPath.TrimEnd('\\');
+                relativeToPath = relativeToPath.TrimEnd(DirectorySeparatorChar);
             }
 
             StringBuilder result = new StringBuilder();
             while (!EnsureTrailingSlash(filePath).StartsWith(EnsureTrailingSlash(relativeToPath), StringComparison.OrdinalIgnoreCase))
             {
-                result.Append(@"..\");
+                result.Append(RelativeParentDir);
                 relativeToPath = Path.GetDirectoryName(relativeToPath);
             }
 
             if (filePath.Length > relativeToPath.Length)
             {
                 filePath = filePath.Substring(relativeToPath.Length);
-                if (filePath.StartsWith("\\"))
+                if (filePath.StartsWith(DirectorySeparator))
                 {
                     filePath = filePath.Substring(1);
                 }
@@ -124,8 +128,9 @@ namespace Codex.Utilities
                 !folderName.EndsWith(":");
         }
 
-        public static string EnsureTrailingSlash(this string path, string slash = "\\")
+        public static string EnsureTrailingSlash(this string path, string slash = null)
         {
+            slash ??= DirectorySeparator;
             if (string.IsNullOrEmpty(path))
             {
                 return path;
@@ -159,7 +164,7 @@ namespace Codex.Utilities
             var sb = new StringBuilder();
             for (int i = 0; i < depth; i++)
             {
-                sb.Append("../");
+                sb.Append(RelativeParentDir);
             }
 
             return sb.ToString();
@@ -189,8 +194,8 @@ namespace Codex.Utilities
                 return rootedFilePath;
             }
 
-            var folderParts = folder.Split(Path.DirectorySeparatorChar);
-            var rootedFilePathParts = rootedFilePath.Split(Path.DirectorySeparatorChar);
+            var folderParts = folder.Split(DirectorySeparatorChar);
+            var rootedFilePathParts = rootedFilePath.Split(DirectorySeparatorChar);
             int commonParts = 0;
             for (int i = 0; i < Math.Min(folderParts.Length, rootedFilePathParts.Length); i++)
             {
@@ -204,7 +209,7 @@ namespace Codex.Utilities
                 }
             }
 
-            var relativePath = string.Join(Path.DirectorySeparatorChar.ToString(), rootedFilePathParts.Skip(commonParts));
+            var relativePath = string.Join(DirectorySeparator, rootedFilePathParts.Skip(commonParts));
             relativePath = relativePath.Replace(":", "");
             rootedFilePath = Path.Combine(folder, relativePath);
             return rootedFilePath;

@@ -27,7 +27,7 @@ namespace Codex.ElasticSearch.Legacy.Bridge
         public Task<ICodexRepositoryStore> CreateRepositoryStore(Repository repository, Commit commit, Branch branch)
         {
             repository.Name = repository.Name ?? commit.RepositoryName;
-            var repositoryStore = new RepositoryStore(this, repository);
+            var repositoryStore = new RepositoryStore(this, repository, branch);
             return repositoryStore.InitializeAsync();
         }
 
@@ -35,13 +35,15 @@ namespace Codex.ElasticSearch.Legacy.Bridge
         {
             private readonly LegacyElasticSearchStore store;
             private readonly Repository repository;
+            private readonly Branch branch;
             private ElasticsearchStorage Storage => store.Storage;
             private readonly string targetIndex;
 
-            public RepositoryStore(LegacyElasticSearchStore store, Repository repository)
+            public RepositoryStore(LegacyElasticSearchStore store, Repository repository, Branch branch)
             {
                 this.store = store;
                 this.repository = repository;
+                this.branch = branch;
                 this.targetIndex = store.Configuration.TargetIndexName ?? StoreUtilities.GetTargetIndexName(repository.Name);
             }
 
@@ -57,7 +59,7 @@ namespace Codex.ElasticSearch.Legacy.Bridge
                 {
                     if (repository.SourceControlWebAddress != null && file.RepoRelativePath != null)
                     {
-                        file.SourceFile.Info.WebAddress = StoreUtilities.GetFileWebAddress(repository.SourceControlWebAddress, file.RepoRelativePath);
+                        file.SourceFile.Info.WebAddress = StoreUtilities.GetFileWebAddress(repository.SourceControlWebAddress, file.RepoRelativePath, branch?.Name);
                     }
 
                     await Storage.UploadAsync(targetIndex, file);

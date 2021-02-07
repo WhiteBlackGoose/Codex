@@ -26,7 +26,7 @@ namespace Codex.Application
                     commit.DateCommitted = Set(logger, "commit.DateCommited", () => tip.Committer.When.DateTime.ToUniversalTime());
                     commit.Description = Set(logger, "commit.Description", () => tip.Message?.Trim());
                     commit.ParentCommitIds.AddRange(Set(logger, "commit.ParentCommitIds", () => tip.Parents?.Select(c => c.Sha).ToArray() ?? CollectionUtilities.Empty<string>.Array, v => string.Join(", ", v)));
-                    branch.Name = Set(logger, "branch.Name", () => GetBranchName(repo.Head));
+                    branch.Name = Set(logger, "branch.Name", () => GetBranchName(repo));
                     branch.HeadCommitId = Set(logger, "branch.HeadCommitId", () => commit.CommitId);
                     repository.SourceControlWebAddress = Set(logger, "repository.SourceControlWebAddress", () => firstRemote?.Url?.TrimEndIgnoreCase(".git"), defaultValue: repository.SourceControlWebAddress);
                     
@@ -39,8 +39,9 @@ namespace Codex.Application
             }
         }
 
-        private static string GetBranchName(Git.Branch head)
+        private static string GetBranchName(Git.Repository repo)
         {
+            var head = repo.Head;
             var name = head.TrackedBranch?.FriendlyName;
             if (name != null)
             {
@@ -50,6 +51,18 @@ namespace Codex.Application
                 }
 
                 return name;
+            }
+
+            foreach (var branch in repo.Branches)
+            {
+                if (branch.IsRemote && branch.Tip.Id == head.Tip.Id)
+                {
+                    var canonicalName = branch.UpstreamBranchCanonicalName;
+                    if (canonicalName == "refs/heads/main" || canonicalName == "refs/heads/master")
+                    {
+                        return canonicalName.Substring("refs/heads/".Length);
+                    }
+                }
             }
 
             return head.FriendlyName;

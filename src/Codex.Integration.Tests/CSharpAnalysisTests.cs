@@ -1,19 +1,29 @@
 ﻿using Codex.Application;
 using Codex.ElasticSearch;
 using Codex.ElasticSearch.Legacy.Bridge;
+using Codex.ObjectModel;
 using Codex.Sdk.Search;
+using Codex.Sdk;
 using NUnit.Framework;
 using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Codex.Logging;
 
 namespace Codex.Integration.Tests
 {
     [TestFixture]
     public class CSharpAnalysisTests
     {
+        [Test]
+        public void TestGit()
+        {
+            var data = (new Repository(), new Commit(), new Branch());
+            GitHelpers.DetectGit(data, @"E:\code\CloudStore", Logger.Null);
+        }
+
         /// <summary>
         /// This test doesn't actually verify anything. It just provides an easy way of viewing mappings
         /// </summary>
