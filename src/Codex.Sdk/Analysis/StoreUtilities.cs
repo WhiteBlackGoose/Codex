@@ -107,7 +107,7 @@ namespace Codex.Utilities
                 branch = "master";
             }
 
-            repoSourceControlAddress.Replace("%branch%", branch);
+            repoSourceControlAddress = repoSourceControlAddress.Replace("%branch%", branch);
 
             return (repoSourceControlAddress.EnsureTrailingSlash("/") + fileRepoRelativePath).Replace("\\", "/");
         }
