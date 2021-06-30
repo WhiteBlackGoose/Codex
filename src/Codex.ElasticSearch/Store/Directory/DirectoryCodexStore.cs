@@ -127,8 +127,11 @@ namespace Codex.ElasticSearch.Store
                     var kindDirectoryPath = Path.Combine(DirectoryPath, kind.Name);
                     logger.LogMessage($"Reading {kind} infos from {kindDirectoryPath}");
                     var files = fileSystem.GetFiles(kind.Name).ToList();
+                    int index = 0;
                     foreach (var file in files)
                     {
+                        logger.LogMessage($"{++index}/{files.Count}: Queuing {kind} info at {file}");
+
                         if (kind == StoredEntityKind.BoundFiles)
                         {
                             var fileSize = fileSystem.GetFileSize(file);
@@ -159,8 +162,7 @@ namespace Codex.ElasticSearch.Store
                             logger.LogMessage($"{i}/{count}: Added {file} to store.");
                         });
                     }
-                }
-                ));
+                }));
             }
 
             await Task.WhenAll(tasks);
