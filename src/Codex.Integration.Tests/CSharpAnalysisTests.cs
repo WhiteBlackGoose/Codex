@@ -36,7 +36,8 @@ namespace Codex.Integration.Tests
             //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "OperatorOverload.cs");
             //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "MethodGroup.cs");
             //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "NormalizeStringClassification.cs");
-            compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "Records.cs");
+            //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "Records.cs");
+            compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "ValueTuple.cs");
             //compilerArgumentsPath = FilterArguments(compilerArgumentsPath, "DerivedImplementation.Issue159.cs");
 
             Environment.CurrentDirectory = Path.Combine(root, @"out\test");
@@ -49,7 +50,7 @@ namespace Codex.Integration.Tests
             using (Features.AddDefinitionForInheritedInterfaceImplementations.EnableLocal())
             {
                 new CodexApplication().Run(
-                    "dryRun",
+                    "index",
                     "-save", outputPath,
                     "-p", root,
                     "-noScan",

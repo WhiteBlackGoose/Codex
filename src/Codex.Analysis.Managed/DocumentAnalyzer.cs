@@ -202,11 +202,18 @@ namespace Codex.Analysis
                     {
                         // This is a definition
                         var definitionSymbol = GetDefinitionSymbol(symbol, documentationId);
-                        var definitionSpan = symbolSpan.CreateDefinition(definitionSymbol);
-                        boundSourceFile.AddDefinition(definitionSpan);
+
+                        bool addReferenceDefinitions = false;
+                        if (definitionSymbol.ProjectId == _analyzedProject.ProjectId)
+                        {
+                            // Definitions can only be added for the current project. This is mainly targeted at value tuples
+                            var definitionSpan = symbolSpan.CreateDefinition(definitionSymbol);
+                            boundSourceFile.AddDefinition(definitionSpan);
+                            addReferenceDefinitions = true;
+                        }
 
                         // A reference symbol for the definition is added so the definition is found in find all references
-                        var definitionReferenceSymbol = GetReferenceSymbol(symbol, referenceKind: ReferenceKind.Definition);
+                        var definitionReferenceSymbol = GetReferenceSymbol(symbol, referenceKind: ReferenceKind.Definition, addReferenceDefinitions: addReferenceDefinitions);
                         references.Add(symbolSpan.CreateReference(definitionReferenceSymbol));
 
                         ProcessDefinitionAndAddAdditionalReferenceSymbols(symbol, symbolSpan, definitionSymbol, token);
@@ -649,7 +656,7 @@ namespace Codex.Analysis
             GetImplementedMemberLookup(implementerSymbol);
         }
 
-        private ReferenceSymbol GetReferenceSymbol(ISymbol symbol, ReferenceKind referenceKind, string id = null)
+        private ReferenceSymbol GetReferenceSymbol(ISymbol symbol, ReferenceKind referenceKind, string id = null, bool addReferenceDefinitions = true)
         {
             // Use unspecialized generic
             // TODO: Consider adding reference symbol for specialized generic as well so one can find all references
@@ -665,7 +672,7 @@ namespace Codex.Analysis
                 IsImplicitlyDeclared = symbol.IsImplicitlyDeclared
             };
 
-            if (!string.IsNullOrEmpty(symbol.Name))
+            if (!string.IsNullOrEmpty(symbol.Name) && addReferenceDefinitions)
             {
                 DefinitionSymbol definition;
                 if (!context.ReferenceDefinitionMap.TryGetValue(boundSymbol.Id.Value, out definition))
