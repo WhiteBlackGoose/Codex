@@ -323,7 +323,7 @@ function LoadProjectExplorer(project) {
 }
 
 function LoadProjectExplorerCore(project) {
-    var url = "/projectexplorer/" + encodeURI(project) + "/";
+    var url = codexWebRootPrefix + "/projectexplorer/" + encodeURI(project) + "/";
     callServer(url, function (data) {
         setLeftPane(data);
         trackActiveItemInSolutionExplorer();
