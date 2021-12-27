@@ -37,6 +37,7 @@
     <PropertyGroup>
       <_MergedAssemblyDirectory>$(IntermediateOutputPath)\merged</_MergedAssemblyDirectory>
       <_MergedAssemblyPath>$(_MergedAssemblyDirectory)\$(TargetFileName)</_MergedAssemblyPath>
+      <_MergedPdbPath>$([System.IO.Path]::ChangeExtension($(_MergedAssemblyPath), '.pdb'))</_MergedPdbPath>
       <_SignedMergedAssemblyDirectory>$(IntermediateOutputPath)\signed</_SignedMergedAssemblyDirectory>
       <ILRepackDebugInfo Condition="$(ILRepackDebugInfo) == '' AND $(OS)=='Windows_NT'">true</ILRepackDebugInfo>
       <ILRepackDebugInfo Condition="$(ILRepackDebugInfo) == ''">false</ILRepackDebugInfo>
@@ -63,6 +64,7 @@
       WorkingDirectory="$(RepackWorkingDirectory)" />
 
     <Copy SourceFiles="$(_MergedAssemblyPath)" DestinationFiles="$(TargetPath)" />
+    <Copy Condition="Exists($(_MergedPdbPath))" SourceFiles="$(_MergedPdbPath)" DestinationFiles="$([System.IO.Path]::ChangeExtension($(TargetPath), '.pdb'))" />
   </Target>
 
   <Target Name="MergeAssembliesNetCore"
